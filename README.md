@@ -16,6 +16,17 @@ It supports the following Mustache features:
 - lambda sections
 - partials and recursive partials
 
+Embedding on your XCode project
+-------------------------------
+
+Add to your project all files contained in the `Classes` folder.
+
+Import `GRMustache.h` in order to access all GRMustache features.
+
+Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
+
+All other headers contain public and stable declarations.
+
 Simple example
 --------------
 
