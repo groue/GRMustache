@@ -239,6 +239,20 @@
 	STAssertEquals(renderedCalls, 1, @"");
 }
 
+- (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
+	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
+	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+		return [wrapperTemplate renderObject:context];
+	});
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+							 wrapperLambda, @"wrapper",
+							 @"Gwendal", @"name",
+							 nil];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
+}
+
 - (void)testLotsOfStaches {
 	NSString *templateString = @"{{{{foo}}}}";
 	NSError *error;
