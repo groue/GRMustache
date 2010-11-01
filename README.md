@@ -177,14 +177,14 @@ You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. Th
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
 	                                                 NSString *templateString,
 	                                                 GRMustacheRenderer render) {
-	    return render(templateString);
+	    return render(templateString, nil);
 	});
 
 The `context` argument provides the lambda with the rendering context.
 
 The `templateString` argument contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
-The `render` argument is a block which is able to render a string in the current context.
+The `render` argument is a block which takes a string and renders it in the current context. Its second argument is a `NSError**` which may be returned in case of a parsing error.
 
 You may inspect the context, and provide any string to the `render` block:
 
@@ -192,7 +192,7 @@ You may inspect the context, and provide any string to the `render` block:
 	                                                 NSString *templateString,
 	                                                 GRMustacheRenderer render) {
 	  if ([context valueForKey:@"hidden"]) return @"";
-	  return render([templateString uppercaseString]);
+	  return render([templateString uppercaseString], nil);
 	});
 
 Note that passing to the `render` argument a string which is not `templateString` will trigger a template parsing each time the lambda is invoked. This could affect performances.
