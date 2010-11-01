@@ -16,7 +16,7 @@ It supports the following Mustache features:
 - lambda sections
 - partials and recursive partials
 
-Embedding on your XCode project
+Embedding in your XCode project
 -------------------------------
 
 Add to your project all files contained in the `Classes` folder.
