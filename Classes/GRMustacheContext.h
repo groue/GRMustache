@@ -8,7 +8,7 @@
 @protocol GRMustacheContext
 @end
 
-@interface GRMustacheContext: NSObject {
+@interface GRMustacheContext: NSObject<GRMustacheContext> {
 	NSMutableArray *objects;
 }
 - (id)valueForKey:(NSString *)key;
