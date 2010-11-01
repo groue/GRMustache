@@ -219,7 +219,7 @@ Otherwise, the section is rendered within the same context.
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
-Such a section is rendered iff the `{{#name}}...{{/name}}` would not: if the value for key `name` in the context is `nil`, `[NSNull null]`, or an empty enumerable.
+Such a section is rendered *iff* the `{{#name}}...{{/name}}` would not: if the value for key `name` in the context is `nil`, `[NSNull null]`, or an empty enumerable.
 
 ### Partials `{{>name}}`
 
