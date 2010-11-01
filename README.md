@@ -180,7 +180,7 @@ You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. Th
 	    return render(templateString);
 	});
 
-The `context` argument provide the lambda with the rendering context.
+The `context` argument provides the lambda with the rendering context.
 
 The `templateString` argument contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
