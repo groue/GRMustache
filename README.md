@@ -186,7 +186,7 @@ The `templateString` argument contains the litteral section block, unrendered : 
 
 The `render` argument is a block which is able to render a string in the current context.
 
-You may inspect the context, and provide any string to the render block:
+You may inspect the context, and provide any string to the `render` block:
 
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
 	                                                 NSString *templateString,
