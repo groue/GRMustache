@@ -212,7 +212,7 @@ Depending on the method which has been used to create the original template, the
 - Methods which will look in the current working directory:
 	- `renderObject:fromString:error:`
 	- `parseString:error:`
-- Methods which will look in the parent directory of the provided url:
+- Methods which will look relatively to the URL of the including template:
 	- `renderObject:fromContentsOfURL:error:`
 	- `parseContentsOfURL:error:`
 - Methods which will look in the bundle:
