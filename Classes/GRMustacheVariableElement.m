@@ -40,7 +40,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if (value != nil) {
+	if (value != nil && value != [NSNull null]) {
 		if (raw) {
 			return [value description];
 		} else {
