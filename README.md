@@ -185,6 +185,8 @@ The `templateString` and `render` help the lambda actually rendering the context
 	          [render(templateString) stringByAppendingString:@"</b>"]];
 	});
 
+Note that passing to the `render` argument a string which is not `templateString` will trigger a template parsing each time the lambda is invoked. This could affect performances.
+
 ### Boolean sections `{{#name}}...{{/name}}`
 
 Such a section is rendered according to the value for key `name` in the context.
@@ -203,7 +205,7 @@ Such a section is rendered iff the `{{#name}}...{{/name}}` would not: if the val
 
 A `{{>name}}` tag is rendered as a partial loaded from the file system.
 
-The partial must have the same extension as their including template.
+The partial must have the same extension as its including template.
 
 Depending on the method which has been used to create the original template, the partial will be looked in different places :
 
@@ -219,7 +221,7 @@ Depending on the method which has been used to create the original template, the
 	- `parseResource:bundle:error:`
 	- `parseResource:withExtension:bundle:error:`
 
-
+Recursive partials are possible. Just avoid infinite loops in your context objects.
 
 Errors
 ------
