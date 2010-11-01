@@ -240,9 +240,10 @@
 }
 
 - (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
-	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
+	NSString *templateString = @"{{#wrapper}}  {{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+		STAssertEqualObjects(templateString, @"", nil);
 		return [wrapperTemplate renderObject:context];
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
