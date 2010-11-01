@@ -162,7 +162,7 @@ Such a section is rendered with the string returned by a block of code if the va
 
 You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. This function takes a block which returns the string that should be rendered, as in the example below:
 
-	// A lambda which normally renders its section
+	// A lambda which renders its section without any special effect:
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
 	                                                 NSString *templateString,
 	                                                 GRMustacheRenderer render) {
@@ -171,21 +171,30 @@ You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. Th
 
 The `context` argument provide the lambda with the rendering context.
 
-The `templateString` and `render` help the lambda actually rendering the context.
+The `templateString` argument contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
+
+The `render` argument is a block which is able to render a string in the current context.
+
+You may inspect the context, and provide any string to the render block:
 
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
 	                                                 NSString *templateString,
 	                                                 GRMustacheRenderer render) {
-	  if ([context valueForKey:@"hidden"]) {
-	    // hide...
-	    return @"";
-	  }
-	  // or render bold
-	  return [@"<b>" stringByAppendingString:
-	          [render(templateString) stringByAppendingString:@"</b>"]];
+	  if ([context valueForKey:@"hidden"]) return @"";
+	  return render([templateString uppercaseString]);
 	});
 
 Note that passing to the `render` argument a string which is not `templateString` will trigger a template parsing each time the lambda is invoked. This could affect performances.
+
+If you want to render a different template, you should compile it first, and have it render the context. For instance:
+
+	GRMustacheTemplate *overridingTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
+	GRMustacheLambda overridingLambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
+	                                                           NSString *templateString,
+	                                                           GRMustacheRenderer render) {
+		return [overridingTemplate renderObject:context];
+	});
+
 
 ### Boolean sections `{{#name}}...{{/name}}`
 
