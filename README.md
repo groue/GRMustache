@@ -165,7 +165,7 @@ Otherwise, it is rendered with the `description` of the value, without HTML esca
 
 If the value for key `name` in the context is an enumerable, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered. The section is rendered with an empty string if the enumerable is empty.
 
-GRMustache consider enumerable all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary` and those conforming to the `GRMustacheContext` protocol.
+GRMustache considers enumerable all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary` and those conforming to the `GRMustacheContext` protocol.
 
 ### Lambda sections `{{#name}}...{{/name}}`
 
