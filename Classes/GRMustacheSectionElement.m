@@ -133,7 +133,7 @@
 			
 		default:
 			// should not be here
-			NSAssert(NO, @"");
+			NSAssert(NO, nil);
 	}
 	
 	return buffer;

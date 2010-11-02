@@ -459,7 +459,7 @@
 	};
 	
     //should never be here
-	NSAssert(NO, @"");
+	NSAssert(NO, nil);
 	return nil;
 }
 
@@ -497,7 +497,7 @@
     }
 	
     //should never be here
-	NSAssert(NO, @"");
+	NSAssert(NO, nil);
     return nil;
 }
 
@@ -522,7 +522,7 @@
     }
 	
     //should never be here
-	NSAssert(NO, @"");
+	NSAssert(NO, nil);
 }
 
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
