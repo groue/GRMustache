@@ -195,17 +195,6 @@ You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. Th
 - `context` is the current context object.
 - `templateString` contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
-You may use all three arguments for any purpose:
-
-	GRMustacheLambda uppercaseLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                          GRMustacheContext *context,
-	                                                          NSString *templateString) {
-	  if ([context valueForKey:@"important"]) {
-	    return [renderer() uppercase];
-	  }
-	  return renderer();
-	});
-
 You may implement caching:
 
 	__block NSString *cache = nil;
@@ -223,6 +212,19 @@ You may also render a totally different template:
 	                                                           GRMustacheContext *context,
 	                                                           NSString *templateString) {
 		return [outerspaceTemplate renderObject:context];
+	});
+
+Actually, you may use all three arguments for any purpose:
+
+	GRMustacheLambda weirdLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                      GRMustacheContext *context,
+	                                                      NSString *templateString) {
+	  if ([context valueForKey:@"important"]) {
+	    return [renderer() uppercase];
+	  }
+	  return [GRMustacheTemplate renderObject:context
+	                             fromString:[templateString stringByAppendingString:@"{{foo}}"]
+	                             error:nil];
 	});
 
 
