@@ -46,6 +46,10 @@
 	return block(context, templateString, renderer);
 }
 
+- (NSString *)description {
+	return @"<GRMustacheLambda>";
+}
+
 - (void)dealloc {
 	[block release];
 	[super dealloc];
