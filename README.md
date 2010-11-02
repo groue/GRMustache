@@ -40,6 +40,8 @@ Simple example
 	[GRMustacheTemplate renderObject:object fromString:@"Hi {{name}}!" error:nil];
 	// returns @"Hi Mom!"
 
+That's just for a start. We'll cover a more practical example below.
+
 Rendering methods
 -----------------
 
@@ -305,6 +307,86 @@ The `userInfo` dictionary of parse errors contain the `GRMustacheErrorURL` and `
 
 	extern NSString* const GRMustacheErrorURL;
 	extern NSString* const GRMustacheErrorLine;
+
+
+A practical example
+-------------------
+
+Let's be totally mad, and display a list of people and their birthdays in a `UIWebView` embedded in our iOS application.
+
+We'll most certainly have a `UIViewController` for displaying the web view:
+
+	@interface PersonListViewController: UIViewController
+	@property (nonatomic, retain) NSArray *persons;
+	@property (nonatomic, retain) IBOutlet UIWebView *webView;
+	@end
+
+The `persons` array contains some instances of our `Person` model:
+
+	@interface Person: NSObject
+	@property (nonatomic, retain) NSString *name;
+	@property (nonatomic, retain) NSDate *birthdate;
+	@end
+
+A `PersonListViewController` instance and its array of persons is a graph of objects that is already perfectly suitable for rendering our template:
+
+	PersonListViewController.mustache:
+	
+	<html>
+	<body>
+	<dl>
+	  {{#persons}}
+	  <dt>{{name}}</dt>
+	  <dd>{{localizedBirthdate}}</dd>
+	  {{/persons}}
+	</dl>
+	</body>
+	</html>
+
+We already see the match between the `persons` and `name` keys. More on the `birthdate` vs. `localizedBirthdate` later.
+
+We should already be able to render most of our template:
+
+	@implementation PersonListViewController
+	- (void)viewWillAppear:(BOOL)animated {
+	  // Let's use self as the rendering context:
+	  NSString *html = [GRMustacheTemplate renderObject:self
+	                                       fromResource:@"PersonListViewController"
+	                                       bundle:nil
+	                                       error:nil];
+	  [self.webView loadHTMLString:html baseURL:nil];
+	}
+	@end
+
+Since our `PersonListViewController` instance, and, later, its persons, are the mustache rendering contexts, and that we want the keys like `persons` and `name` to be fetched with KVC, we have to declare those classes as KVC-enabled for GRMustache.
+
+This is done by having them conform to the `GRMustacheContext` protocol. Let's rewrite our interfaces:
+
+	@interface PersonListViewController: UIViewController<GRMustacheContext>
+	@interface Person: NSObject<GRMustacheContext>
+
+Now our `{{#persons}}` enumerable section and `{{name}}` variable tag will perfectly render.
+
+What about the `{{localizedBirthdate}}` tag?
+
+Since we don't want to pollute our nice and clean Person model, let's add a category to it:
+
+	@interface Person(GRMustacheContext)
+	@end
+
+	static NSDateFormatter *dateFormatter = nil;
+	@implementation Person(GRMustacheContext)
+	- (NSString *)localizedBirthdate {
+	  if (dateFormatter == nil) {
+	    dateFormatter = [[NSDateFormatter alloc] init];
+	    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+	    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+	  }
+	  return [dateFormatter stringFromDate:date];
+	}
+	@end
+
+And we're ready to go!
 
 License
 -------
