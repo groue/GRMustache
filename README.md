@@ -18,7 +18,7 @@ It supports the following Mustache features:
 
 It supports some extensions to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
 
-- `{{.}}` dot variable tag
+- dot variable tag: `{{.}}`
 
 Embedding in your XCode project
 -------------------------------
@@ -277,7 +277,7 @@ This allows both those templates to render the same thing, when the key `name` r
 
 But this means you can not access, for instance, the length of a string in a template:
 
-	{{#name}}{{length}}{{/name}}  won't render the length of the string
+	{{#name}}{{length}}{{/name}}  won't raise, but won't render the length of the string
 
 Errors
 ------
