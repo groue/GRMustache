@@ -265,7 +265,7 @@ For instance:
 	                         @"Groue's shopping cart", @"name",
 	                         [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
 	                         nil];
-	// Returns @"Groue's shopping cart: <ul><li>bear</li><li>ham</li></ul>"
+	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
 	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 
 Beware that only dictionaries and objects conforming to `GRMustacheContext` protocol are the only objects whose KVC capabilities are used.
