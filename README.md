@@ -317,7 +317,7 @@ The `userInfo` dictionary of parse errors contain the `GRMustacheErrorURL` and `
 A practical example
 -------------------
 
-Let's be totally mad, and display a list of people and their birthdays in a `UIWebView` embedded in our iOS application.
+Let's be totally mad, and display a list of people and their birthdates in a `UIWebView` embedded in our iOS application.
 
 We'll most certainly have a `UIViewController` for displaying the web view:
 
