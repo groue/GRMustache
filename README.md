@@ -272,9 +272,12 @@ Beware that only dictionaries and objects conforming to `GRMustacheContext` prot
 
 This allows both those templates to render the same thing, when the key `name` refers to a `NSString`:
 
-	@"{{#name}}{{.}}{{/name}}"
-	@"{{#name}}{{name}}{{/name}}"	// would raise if key `name` was loaded from a string
+	{{#name}}{{.}}{{/name}}
+	{{#name}}{{name}}{{/name}}    would raise NSUndefinedKeyException if key `name` was loaded from a string
 
+But this means you can not access, for instance, the length of a string in a template:
+
+	{{#name}}{{length}}{{/name}}  won't render the length of the string
 
 Errors
 ------
