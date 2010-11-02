@@ -167,7 +167,7 @@
 
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
-	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
 		dead = YES;
 		return templateString;
 	});
@@ -224,15 +224,15 @@
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
 	
-	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = render(templateString, nil);
+			cache = renderer();
 		}
 		return cache;
 	});
 	
-	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
 		return templateString;
 	});
 	
@@ -260,7 +260,7 @@
 - (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}  {{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheContext *context, NSString *templateString, GRMustacheRenderer render) {
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
 		STAssertEqualObjects(templateString, @"", nil);
 		return [wrapperTemplate renderObject:context];
 	});

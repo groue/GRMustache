@@ -24,8 +24,8 @@
 #import "GRMustacheContext.h"
 
 
-typedef NSString *(^GRMustacheRenderer)(NSString *, NSError **);
-typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheContext *, NSString *, GRMustacheRenderer);
+typedef NSString *(^GRMustacheRenderer)();
+typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheRenderer, GRMustacheContext *, NSString *);
 typedef id GRMustacheLambda;
 
 GRMustacheLambda GRMustacheLambdaMake(GRMustacheLambdaBlock block);

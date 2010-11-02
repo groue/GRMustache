@@ -108,22 +108,12 @@
 			
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				GRMustacheRenderer renderer = ^(NSString *rewrittenTemplateString, NSError **outError) {
-					NSString *result = nil;
-					if (rewrittenTemplateString == templateString) {
-						// the lambda didn't alter the templateString: don't recompile
-						result = [NSMutableString stringWithCapacity:1024];
-						for (GRMustacheElement *elem in elems) {
-							[(NSMutableString *)result appendString:[elem renderContext:context]];
-						}
-					} else {
-						// reparse
-						GRMustacheTemplate *template = [GRMustacheTemplate templateWithString:rewrittenTemplateString url:nil templateLoader:templateLoader];
-						if ([template parseAndReturnError:outError]) {
-							result = [template renderContext:context];
-						}
+				GRMustacheRenderer renderer = ^{
+					NSMutableString *result = [NSMutableString stringWithCapacity:1024];
+					for (GRMustacheElement *elem in elems) {
+						[result appendString:[elem renderContext:context]];
 					}
-					return result;
+					return (NSString *)result;
 				};
 				[buffer appendString:[(GRMustacheLambdaBlockWrapper *)value renderContext:context
 																			  fromString:templateString

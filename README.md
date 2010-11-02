@@ -178,36 +178,44 @@ Such a section is rendered with the string returned by a block of code if the va
 You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. This function takes a block which returns the string that should be rendered, as in the example below:
 
 	// A lambda which renders its section without any special effect:
-	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
-	                                                 NSString *templateString,
-	                                                 GRMustacheRenderer render) {
-	    return render(templateString, nil);
+	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                 GRMustacheContext *context,
+	                                                 NSString *templateString) {
+	    return renderer();
 	});
 
-The `context` argument provides the lambda with the rendering context.
+- `renderer` is a block without argument which returns the normal rendering of the section.
+- `context` is the current context object.
+- `templateString` contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
-The `templateString` argument contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
+You may use all three arguments for any purpose:
 
-The `render` argument is a block which takes a string and renders it in the current context. Its second argument is a `NSError**` which may be returned in case of a parsing error.
-
-You may inspect the context, and provide any string to the `render` block:
-
-	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
-	                                                 NSString *templateString,
-	                                                 GRMustacheRenderer render) {
-	  if ([context valueForKey:@"hidden"]) return @"";
-	  return render([templateString uppercaseString], nil);
+	GRMustacheLambda uppercaseLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                          GRMustacheContext *context,
+	                                                          NSString *templateString) {
+	  if ([context valueForKey:@"important"]) {
+	    return [renderer() uppercase];
+	  }
+	  return renderer();
 	});
 
-Note that passing to the `render` argument a string which is not `templateString` will trigger a template parsing each time the lambda is invoked. This could affect performances.
+You may implement caching:
 
-If you want to render a different template, you should compile it first, and have it render the context. For instance:
+	__block NSString *cache = nil;
+	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                      GRMustacheContext *context,
+	                                                      NSString *templateString) {
+	  if (cache == nil) { cache = renderer(); }
+	  return cache;
+	});
 
-	GRMustacheTemplate *overridingTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda overridingLambda = GRMustacheLambdaMake(^(GRMustacheContext *context,
-	                                                           NSString *templateString,
-	                                                           GRMustacheRenderer render) {
-		return [overridingTemplate renderObject:context];
+You may also render a totally different template:
+
+	GRMustacheTemplate *outerspaceTemplate = [GRMustacheTemplate parseString:@"..." error:nil];
+	GRMustacheLambda outerspaceLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                           GRMustacheContext *context,
+	                                                           NSString *templateString) {
+		return [outerspaceTemplate renderObject:context];
 	});
 
 

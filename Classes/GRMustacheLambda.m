@@ -43,7 +43,7 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer {
-	return block(context, templateString, renderer);
+	return block(renderer, context, templateString);
 }
 
 - (NSString *)description {
