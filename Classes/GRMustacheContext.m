@@ -126,7 +126,7 @@
 		@catch (NSException *exception) {
 			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
 				[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
-				[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] != key)
+				![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
 			{
 				// that's some exception we are not related to
 				@throw;
