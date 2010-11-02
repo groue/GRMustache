@@ -350,7 +350,7 @@ A `PersonListViewController` instance and its array of persons is a graph of obj
 	</body>
 	</html>
 
-We already see the match between the `persons` and `name` keys. More on the `birthdate` vs. `localizedBirthdate` later.
+We already see the match between our classes' properties, and the `persons` and `name` keys. More on the `birthdate` vs. `localizedBirthdate` later.
 
 We should already be able to render most of our template:
 
