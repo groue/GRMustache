@@ -107,17 +107,43 @@
 - (id)valueForKey:(NSString *)key {
 	id value;
 	BOOL dotKey = [key isEqualToString:@"."];
+	NSException *firstCatchedException = nil;
+	BOOL valueForKeyDidSucceedAtLeastOnce = NO;
+	
 	for (id object in [objects reverseObjectEnumerator]) {
 		if (object == [NSNull null]) {
 			continue;
 		}
+		
 		if (dotKey) {
 			return object;
 		}
-		value = [object valueForKey:key];
+		
+		@try {
+			value = [object valueForKey:key];
+			valueForKeyDidSucceedAtLeastOnce = YES;
+		}
+		@catch (NSException *exception) {
+			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
+				[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+				[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] != key)
+			{
+				// that's some exception we are not related to
+				@throw;
+			}
+			if (firstCatchedException == nil) {
+				firstCatchedException = exception;
+			}
+			continue;
+		}
+		
 		if (value != nil) {
 			return value;
 		}
+	}
+	
+	if (valueForKeyDidSucceedAtLeastOnce == NO && firstCatchedException != nil) {
+		@throw firstCatchedException;
 	}
 	
 	return nil;
