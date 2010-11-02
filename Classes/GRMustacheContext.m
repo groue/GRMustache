@@ -24,6 +24,45 @@
 #import "GRMustacheContext_private.h"
 
 
+@interface GRMustacheValueWrapper: NSObject<GRMustacheContext> {
+	id value;
+}
+@property (nonatomic, retain) id value;
++ (id)wrapperWithValue:(id)value;
+- (id)initWithValue:(id)value;
+@end
+
+@implementation GRMustacheValueWrapper
+@synthesize value;
+
++ (id)wrapperWithValue:(id)value {
+	return [[[self alloc] initWithValue:value] autorelease];
+}
+
+- (id)initWithValue:(id)theValue {
+	if (self = [self init]) {
+		value = [theValue retain];
+	}
+	return self;
+}
+
+- (NSString *)description {
+	return [value description];
+}
+
+- (id)valueForKey:(NSString *)key {
+	return nil;
+}
+
+- (void)dealloc {
+	[value release];
+	[super dealloc];
+}
+
+@end
+
+
+
 @interface GRMustacheContext()
 - (id)initWithObject:(id)object;
 @end
@@ -50,11 +89,13 @@
 			[objects addObject:[NSNull null]];
 			break;
 		case GRMustacheObjectKindContext:
-		case GRMustacheObjectKindLambda:
 			[objects addObject:object];
 			break;
+		case GRMustacheObjectKindTrueValue:
+			[objects addObject:[GRMustacheValueWrapper wrapperWithValue:object]];
+			break;
 		default:
-			NSAssert(NO, @"object is not a NSDictionary, or does not conform to GRMustacheContext protocol, or is not a GRMustacheLambda.");
+			NSAssert(NO, ([NSString stringWithFormat:@"Invalid context object: %@", object]));
 			break;
 	}
 }
@@ -65,9 +106,13 @@
 
 - (id)valueForKey:(NSString *)key {
 	id value;
+	BOOL dotKey = [key isEqualToString:@"."];
 	for (id object in [objects reverseObjectEnumerator]) {
 		if (object == [NSNull null]) {
 			continue;
+		}
+		if (dotKey) {
+			return object;
 		}
 		value = [object valueForKey:key];
 		if (value != nil) {

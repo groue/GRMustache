@@ -73,13 +73,6 @@
 			break;
 			
 		case GRMustacheObjectKindTrueValue:
-			if (!inverted) {
-				for (GRMustacheElement *elem in elems) {
-					[buffer appendString:[elem renderContext:context]];
-				}
-			}
-			break;
-			
 		case GRMustacheObjectKindContext:
 			if (!inverted) {
 				[context pushObject:value];

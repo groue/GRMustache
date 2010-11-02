@@ -23,5 +23,8 @@
 #import "GRMustacheTestBase.h"
 
 
-@interface PPartialTest : GRMustacheTestBase
+@interface GRExtensionsTest : GRMustacheTestBase {
+
+}
+
 @end

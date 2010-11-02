@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
 
-It's been highly inspired by the Mustache [go implementation](http://github.com/hoisie/mustache.go/). Its tests are based on the [Ruby](http://github.com/defunkt/mustache) one, that we have considered as a reference.
+Its implementation has been highly inspired by the Mustache [go implementation](http://github.com/hoisie/mustache.go/). Its tests are based on the [Ruby](http://github.com/defunkt/mustache) one, that we have considered as a reference.
 
 It supports the following Mustache features:
 
@@ -15,6 +15,10 @@ It supports the following Mustache features:
 - inverted sections
 - lambda sections
 - partials and recursive partials
+
+It supports some extensions to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
+
+- `{{.}}` dot variable tag
 
 Embedding in your XCode project
 -------------------------------
@@ -213,9 +217,7 @@ Such a section is rendered according to the value for key `name` in the context.
 
 When `nil`, `[NSNull null]`, or empty enumerable object, the section is rendered with an empty string.
 
-If the value is a `NSDictionary`, or conforms to the `GRMustacheContext` protocol, the section is rendered within a context extended by the value.
-
-Otherwise, the section is rendered within the same context.
+Otherwise, the section is rendered within a context extended by the value.
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
@@ -242,6 +244,37 @@ Depending on the method which has been used to create the original template, the
 	- `parseResource:withExtension:bundle:error:`
 
 Recursive partials are possible. Just avoid infinite loops in your context objects.
+
+Extensions
+----------
+
+The Mustache syntax is described at [http://mustache.github.com/mustache.5.html](http://mustache.github.com/mustache.5.html).
+
+GRMustache adds the following extensions:
+
+### Dot Variable tag `{{.}}`
+
+This extension has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
+
+This variable tags output the `description` of the current context.
+
+For instance:
+
+	NSString *templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+	                         @"Groue's shopping cart", @"name",
+	                         [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
+	                         nil];
+	// Returns @"Groue's shopping cart: <ul><li>bear</li><li>ham</li></ul>"
+	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+
+Beware that only dictionaries and objects conforming to `GRMustacheContext` protocol are the only objects whose KVC capabilities are used.
+
+This allows both those templates to render the same thing, when the key `name` refers to a `NSString`:
+
+	@"{{#name}}{{.}}{{/name}}"
+	@"{{#name}}{{name}}{{/name}}"	// would raise if key `name` was loaded from a string
+
 
 Errors
 ------
