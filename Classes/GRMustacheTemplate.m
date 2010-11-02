@@ -528,14 +528,32 @@
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 	
-	[userInfo setObject:description
-				 forKey:NSLocalizedDescriptionKey];
-	[userInfo setObject:[NSNumber numberWithInteger:line]
-				 forKey:GRMustacheErrorLine];
 	if (url) {
 		[userInfo setObject:url
 					 forKey:GRMustacheErrorURL];
+		NSURL *mainBundleURL = [[NSBundle mainBundle].bundleURL URLByStandardizingPath];
+		NSURL *templateURL = url;
+		NSURL *directoryURL = nil;
+		while (YES) {
+			directoryURL = [[templateURL URLByDeletingLastPathComponent] URLByStandardizingPath];
+			if ([directoryURL isEqual:templateURL]) {
+				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, url, description]
+							 forKey:NSLocalizedDescriptionKey];
+				break;
+			}
+			if ([directoryURL isEqual:mainBundleURL]) {
+				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, [[[url URLByStandardizingPath] absoluteString] stringByReplacingOccurrencesOfString:[directoryURL absoluteString] withString:@""], description]
+							 forKey:NSLocalizedDescriptionKey];
+				break;
+			}
+			templateURL = directoryURL;
+		}
+	} else {
+		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
+					 forKey:NSLocalizedDescriptionKey];
 	}
+	[userInfo setObject:[NSNumber numberWithInteger:line]
+				 forKey:GRMustacheErrorLine];
 	
 	return [NSError errorWithDomain:GRMustacheErrorDomain
 							   code:GRMustacheErrorCodeParseError
