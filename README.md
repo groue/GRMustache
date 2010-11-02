@@ -271,7 +271,7 @@ GRMustache adds the following extensions:
 
 This extension has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
 
-This variable tags output the `description` of the current context.
+This tag renders the `description` of the current context.
 
 For instance:
 
