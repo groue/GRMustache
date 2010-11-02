@@ -147,6 +147,13 @@ Tag types
 
 We'll now cover all mustache tag types, and how they are rendered.
 
+But let's give some definitions first:
+
+- GRMustache considers *enumerable* all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary` and those conforming to the `GRMustacheContext` protocol.
+
+- GRMustache considers *false* `[NSNull null]`, `nil` and the empty string `@""`.
+
+
 ### Comments `{{!...}}`
 
 Comments tags are not rendered.
@@ -155,7 +162,7 @@ Comments tags are not rendered.
 
 Such a tag is rendered according to the value for key `name` in the context.
 
-If the value is `nil` or `[NSNull null]`, the tag is rendered with the empty string.
+If the value is *false*, the tag is rendered with the empty string.
 
 Otherwise, it is rendered with the `description` of the value, HTML escaped.
 
@@ -163,15 +170,13 @@ Otherwise, it is rendered with the `description` of the value, HTML escaped.
 
 Such a tag is rendered according to the value for key `name` in the context.
 
-If the value is `nil` or `[NSNull null]`, the tag is rendered with the empty string.
+If the value is *false*, the tag is rendered with the empty string.
 
 Otherwise, it is rendered with the `description` of the value, without HTML escaping.
 
 ### Enumerable sections `{{#name}}...{{/name}}`
 
-If the value for key `name` in the context is an enumerable, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered. The section is rendered with an empty string if the enumerable is empty.
-
-GRMustache considers enumerable all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary` and those conforming to the `GRMustacheContext` protocol.
+If the value for key `name` in the context is *enumerable*, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered. The section is rendered with an empty string if the enumerable is empty.
 
 ### Lambda sections `{{#name}}...{{/name}}`
 
@@ -225,13 +230,13 @@ You may also render a totally different template:
 
 Such a section is rendered according to the value for key `name` in the context.
 
-When `nil`, `[NSNull null]`, or empty enumerable object, the section is rendered with an empty string.
+When *false*, the section is rendered with an empty string.
 
 Otherwise, the section is rendered within a context extended by the value.
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
-Such a section is rendered *iff* the `{{#name}}...{{/name}}` would not: if the value for key `name` in the context is `nil`, `[NSNull null]`, or an empty enumerable.
+Such a section is rendered *iff* the `{{#name}}...{{/name}}` would not: if the value for key `name` in the context is *false*, or an empty *enumerable*.
 
 ### Partials `{{>name}}`
 

@@ -27,7 +27,7 @@
 @implementation GRMustache
 
 + (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null]) {
+	if (object == nil || object == [NSNull null] || [object description].length == 0) {
 		return GRMustacheObjectKindFalseValue;
 	}
 	if ([object isKindOfClass:[NSDictionary class]]) {
