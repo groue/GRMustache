@@ -268,7 +268,7 @@ For instance:
 	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
 	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 
-Beware that only dictionaries and objects conforming to `GRMustacheContext` protocol are the only objects whose KVC capabilities are used.
+Beware that dictionaries and objects conforming to `GRMustacheContext` protocol are the only objects whose KVC capabilities are used.
 
 This allows both those templates to render the same thing, when the key `name` refers to a `NSString`:
 
