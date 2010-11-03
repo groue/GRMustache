@@ -23,5 +23,5 @@
 #import "GRMustacheTestBase.h"
 
 
-@interface GRMustacheTest : GRMustacheTestBase
+@interface GRMustacheTemplateTest : GRMustacheTestBase
 @end

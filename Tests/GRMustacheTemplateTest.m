@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTest.h"
+#import "GRMustacheTemplateTest.h"
 
 
-@implementation GRMustacheTest
+@implementation GRMustacheTemplateTest
 
 - (void)testPassenger {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
