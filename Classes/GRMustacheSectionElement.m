@@ -107,10 +107,11 @@
 			
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				GRMustacheRenderer renderer = ^{
+				GRMustacheRenderer renderer = ^(id object){
+					GRMustacheContext *renderedContext = [GRMustacheContext contextWithObject:object];
 					NSMutableString *result = [NSMutableString stringWithCapacity:1024];
 					for (GRMustacheElement *elem in elems) {
-						[result appendString:[elem renderContext:context]];
+						[result appendString:[elem renderContext:renderedContext]];
 					}
 					return (NSString *)result;
 				};

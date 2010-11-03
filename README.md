@@ -185,10 +185,10 @@ You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This f
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
 	                                                 GRMustacheContext *context,
 	                                                 NSString *templateString) {
-	    return renderer();
+	    return renderer(context);
 	});
 
-- `renderer` is a block without argument which returns the normal rendering of the section.
+- `renderer` is a block which renders the inner section with its argument as a context.
 - `context` is the current context object.
 - `templateString` contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
@@ -198,7 +198,7 @@ You may implement caching:
 	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
 	                                                      GRMustacheContext *context,
 	                                                      NSString *templateString) {
-	  if (cache == nil) { cache = renderer(); }
+	  if (cache == nil) { cache = renderer(context); }
 	  return cache;
 	});
 
@@ -217,7 +217,7 @@ Actually, you may use all three arguments for any purpose:
 	                                                      GRMustacheContext *context,
 	                                                      NSString *templateString) {
 	  if ([context valueForKey:@"important"]) {
-	    return [renderer() uppercase];
+	    return [renderer(context) uppercase];
 	  }
 	  return [GRMustacheTemplate renderObject:context
 	                             fromString:[templateString stringByAppendingString:@"{{foo}}"]

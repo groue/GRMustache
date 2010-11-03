@@ -227,7 +227,7 @@
 	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = renderer();
+			cache = renderer(context);
 		}
 		return cache;
 	});

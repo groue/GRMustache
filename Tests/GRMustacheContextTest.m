@@ -121,7 +121,7 @@
 
 - (void)testContextInitedWithLambdaIsInvalid {
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
-		return renderer();
+		return renderer(context);
 	});
 	STAssertThrows([GRMustacheContext contextWithObject:lambda], nil);
 }
