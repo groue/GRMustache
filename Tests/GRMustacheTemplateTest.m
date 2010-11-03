@@ -350,5 +350,11 @@
 	// TODO
 }
 
+- (void)testVariableElementDoesntRenderNSNull {
+	NSString *templateString = @"name:{{name}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"name"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"name:", nil);
+}
 
 @end
