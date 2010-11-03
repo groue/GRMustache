@@ -39,6 +39,7 @@
 		561159B7127F2D5F00F01AD0 /* inner_partial.txt in Resources */ = {isa = PBXBuildFile; fileRef = 561159B5127F2D5F00F01AD0 /* inner_partial.txt */; };
 		561159B8127F2D5F00F01AD0 /* template_partial.txt in Resources */ = {isa = PBXBuildFile; fileRef = 561159B6127F2D5F00F01AD0 /* template_partial.txt */; };
 		56115B6E127FE08C00F01AD0 /* GRExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115B6D127FE08C00F01AD0 /* GRExtensionsTest.m */; };
+		56115C4312812BD800F01AD0 /* GRMustacheContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115C4212812BD800F01AD0 /* GRMustacheContextTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +98,8 @@
 		56115A3B127F32EA00F01AD0 /* GRMustacheTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GRMustacheTest-Info.plist"; sourceTree = "<group>"; };
 		56115B6C127FE08C00F01AD0 /* GRExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRExtensionsTest.h; sourceTree = "<group>"; };
 		56115B6D127FE08C00F01AD0 /* GRExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRExtensionsTest.m; sourceTree = "<group>"; };
+		56115C4112812BD800F01AD0 /* GRMustacheContextTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContextTest.h; sourceTree = "<group>"; };
+		56115C4212812BD800F01AD0 /* GRMustacheContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextTest.m; sourceTree = "<group>"; };
 		56CF962A127EC5540043796D /* GRMustacheTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustacheTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -201,6 +204,8 @@
 				56115994127F2B9300F01AD0 /* GRPartialTest.m */,
 				56115B6C127FE08C00F01AD0 /* GRExtensionsTest.h */,
 				56115B6D127FE08C00F01AD0 /* GRExtensionsTest.m */,
+				56115C4112812BD800F01AD0 /* GRMustacheContextTest.h */,
+				56115C4212812BD800F01AD0 /* GRMustacheContextTest.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -338,6 +343,7 @@
 				5611586B127F17A000F01AD0 /* GRMustacheTemplateTest.m in Sources */,
 				56115995127F2B9300F01AD0 /* GRPartialTest.m in Sources */,
 				56115B6E127FE08C00F01AD0 /* GRExtensionsTest.m in Sources */,
+				56115C4312812BD800F01AD0 /* GRMustacheContextTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
