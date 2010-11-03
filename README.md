@@ -357,8 +357,6 @@ There is still a way for using booleans in KVC context, and it's the unbeloved C
 	- (bool)dead;   // KVC-compatible boolean, even without property declaration
 	@end
 
-KVC encodes `bool` values in [`CFBoolean`](http://developer.apple.com/library/mac/#documentation/CoreFoundation/Reference/CFBooleanRef/Reference/reference.html) objects, which we can directly introspect.
-
 
 Extensions
 ----------
