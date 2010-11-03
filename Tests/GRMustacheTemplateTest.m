@@ -258,10 +258,9 @@
 }
 
 - (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
-	NSString *templateString = @"{{#wrapper}}  {{/wrapper}}";
+	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
-		STAssertEqualObjects(templateString, @"", nil);
 		return [wrapperTemplate renderObject:context];
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -355,6 +354,16 @@
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"name"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"name:", nil);
+}
+
+- (void)testLambdasGetLeftTrimmedLitteral {
+	NSString *templateString = @"{{#wrapper}} \n\tfoo \t\n{{/wrapper}}";
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+		STAssertEqualObjects(templateString, @"foo \t\n", nil);
+		return @"";
+	});
+	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
+	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 }
 
 @end
