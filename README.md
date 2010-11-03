@@ -333,7 +333,7 @@ Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered fals
 
 Well, thanks to Objective-C runtime, we know that the Person class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
 
-Well again, the statement above is not 100% exact. Let's be honest: what we know is that the Person class did declare the `dead` property with the same type as properties declared as BOOL. Curious reader will be happy reading the [list of types distinguished by the runtime](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
+Well again, the statement above is not 100% exact. Let's be honest: what we know is that the Person class did declare the `dead` property with a runtime type equivalent to BOOL. Curious reader will be happy reading the [list of Objective-C runtime types](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
 
 `<objc/obj_c.h>` defines BOOL as:
 
@@ -351,10 +351,10 @@ The strict mode is triggered this way:
 
 In strict boolean mode, BOOL properties won't be interpreted as booleans.
 
-There is still a way for using booleans in KVC context, and it's the C99 `bool` type:
+There is still a way for using booleans in KVC context, and it's the unbeloved C99 `bool` type:
 
 	@interface Person: NSObject
-	- (bool) dead;   // KVC-compatible boolean, even without property declaration
+	- (bool)dead;   // KVC-compatible boolean, even without property declaration
 	@end
 
 KVC encodes `bool` values in [`CFBoolean`](http://developer.apple.com/library/mac/#documentation/CoreFoundation/Reference/CFBooleanRef/Reference/reference.html) objects, which we can directly introspect.
