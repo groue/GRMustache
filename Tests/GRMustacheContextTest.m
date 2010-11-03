@@ -115,8 +115,12 @@
 	STAssertNoThrow([GRMustacheContext contextWithObject:[NSNull null]], nil);
 }
 
-- (void)testContextInitedWithRegularObjectIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:@"foo"], nil);
+- (void)testContextInitedWithGRNoIsValid {
+	STAssertNoThrow([GRMustacheContext contextWithObject:[GRNo no]], nil);
+}
+
+- (void)testContextInitedWithGRYesIsValid {
+	STAssertNoThrow([GRMustacheContext contextWithObject:[GRYes yes]], nil);
 }
 
 - (void)testContextInitedWithLambdaIsInvalid {
@@ -137,6 +141,10 @@
 
 - (void)testContextInitedWithDictionaryIsInvalid {
 	STAssertNoThrow([GRMustacheContext contextWithObject:[NSDictionary dictionary]], nil);
+}
+
+- (void)testContextInitedWithRegularObjectIsValid {
+	STAssertNoThrow([GRMustacheContext contextWithObject:@"foo"], nil);
 }
 
 - (void)testOneDepthContextForwardsValueForKeyToItsObject {

@@ -45,14 +45,14 @@
 
 - (void)testSingleLineSections {
 	NSString *templateString = @"<p class=\"flash-notice\" {{# no_flash }}style=\"display: none;\"{{/ no_flash }}>";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"no_flash"];
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"no_flash"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<p class=\"flash-notice\" style=\"display: none;\">", nil);
 }
 
 - (void)testMultiLineSectionsPreserveTrailingNewline {
 	NSString *templateString = @"{{#something}}\nyay\n{{/something}}\nHowday.\n";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"something"];
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"something"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"yay\nHowday.\n", nil);
 }
@@ -69,7 +69,7 @@
 							 @"Gwendal", @"name",
 							 [NSNumber numberWithInteger:value], @"value",
 							 [NSNumber numberWithFloat:value*0.6], @"taxed_value",
-							 [NSNumber numberWithBool:YES], @"in_ca",
+							 [GRYes yes], @"in_ca",
 							 nil];
 	NSString *result = [self renderObject:context fromResource:@"simple"];
 	// Slight difference with the ruby test here: 6000.0 is rendered as "6000", not "6000.0"
@@ -106,7 +106,7 @@
 
 - (void)testDoubleSection {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [NSNumber numberWithBool:YES], @"t",
+							 [GRYes yes], @"t",
 							 @"second", @"two",
 							 nil];
 	NSString *result = [self renderObject:context fromResource:@"double_section"];
@@ -115,7 +115,7 @@
 
 - (void)testInvertedSection {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [NSNull null], @"t",
+							 [GRNo no], @"t",
 							 @"second", @"two",
 							 nil];
 	NSString *result = [self renderObject:context fromResource:@"inverted_section"];
@@ -322,8 +322,8 @@
 	NSString *templateString = @"<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>";
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 							 @"3", @"id",
-							 [NSNumber numberWithBool:YES], @"has_a?",
-							 [NSNumber numberWithBool:YES], @"has_b?",
+							 [GRYes yes], @"has_a?",
+							 [GRYes yes], @"has_b?",
 							 nil];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<div>3</div>\n<div>3</div>\n<div>3</div>", nil);
@@ -398,11 +398,25 @@
 	STAssertEqualObjects(result, @"NO", nil);
 }
 
+- (void)testGRNoIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
 - (void)testEmptyStringIsAFalseValue {
 	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testGRYesIsATrueValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"YES", nil);
 }
 
 @end
