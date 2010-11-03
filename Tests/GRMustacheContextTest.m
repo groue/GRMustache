@@ -59,6 +59,24 @@
 }
 @end
 
+@interface ThrowingObject: NSObject
+@end
+
+@implementation ThrowingObject
+
+- (id)valueForKey:(NSString *)key {
+	if ([key isEqualToString:@"NonNSUndefinedKeyException"]) {
+		NSAssert(NO, nil);
+	}
+	if ([key isEqualToString:@"OtherNSUndefinedKeyException"]) {
+		return [@"" valueForKey:@"foo"];
+	}
+	return [super valueForKey:key];
+}
+
+@end
+
+
 @interface GRKVCRecorderTest: SenTestCase
 @end
 
@@ -175,6 +193,24 @@
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"foo", nil);
+}
+
+- (void)testContextRethrowsNonNSUndefinedKeyException {
+	ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
+	STAssertThrows([context valueForKey:@"NonNSUndefinedKeyException"], nil);
+}
+
+- (void)testContextRethrowsOtherNSUndefinedKeyException {
+	ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
+	STAssertThrows([context valueForKey:@"OtherNSUndefinedKeyException"], nil);
+}
+
+- (void)testContextSwallowsSelfNSUndefinedKeyException {
+	ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
+	STAssertNoThrow([context valueForKey:@"SelfNSUndefinedKeyException"], nil);
 }
 
 @end
