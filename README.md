@@ -266,7 +266,7 @@ This section is quite long. Here is a summary of the main things you should reme
 
 - *Never* use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
 - Use boolean singletons `[GRNo no]` and `[GRYes yes]` in your context dictionaries.
-- *Always* declare your boolean properties with the `@property` keyword.
+- *Always* declare your BOOL properties with the `@property` keyword.
 
 ### When good old NSNumber drops
 
@@ -306,9 +306,9 @@ GRMustache provides two singletons for you to use as explicit boolean objects, w
 	                         [GRYes yes], @"dead",
 	                         nil];
 
-### `BOOL` properties
+### BOOL properties
 
-Now that we know how to put booleans in our dictionaries, let's talk about `BOOL` properties.
+Now that we know how to put booleans in our dictionaries, let's talk about BOOL properties.
 
 Here is a nice model:
 
@@ -325,21 +325,21 @@ And here is a template for iterating over an array of persons:
 
 The good news is that, out of the box, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only.
 
-### In-depth discussion of `BOOL` properties
+### In-depth discussion of BOOL properties
 
-Now some readers may hold their breath, because they know that the `valueForKey:` returns `NSNumber` instances for `BOOL` properties.
+Now some readers may hold their breath, because they know that the `valueForKey:` returns `NSNumber` instances for BOOL properties.
 
 Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered false?
 
-Well, thanks to Objective-C runtime, we know that the `Person` class did declare the `dead` property as `BOOL`. And that's why we are able to interpret this zero number as a false boolean.
+Well, thanks to Objective-C runtime, we know that the `Person` class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
 
-Well again, the statement above is not 100% exact. Let's be honest: what we know is that the `Person` class did declare the `dead` property with the same type as properties declared as `BOOL`. Curious reader will be happy reading the [list of types distinguished by the runtime](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
+Well again, the statement above is not 100% exact. Let's be honest: what we know is that the `Person` class did declare the `dead` property with the same type as properties declared as BOOL. Curious reader will be happy reading the [list of types distinguished by the runtime](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
 
-`<objc/obj_c.h>` defines `BOOL` as:
+`<objc/obj_c.h>` defines BOOL as:
 
 	typedef signed char BOOL;
 
-What GRMustache actually does, is *considering false all zeros returned by signed character properties*. When Apple decides to change the `BOOL` definition to, for instance, `unsigned long long`, GRMustache will automatically consider false all zeros returned by properties declared as such.
+What GRMustache actually does, is *considering false all zeros returned by signed character properties*. When Apple decides to change the BOOL definition to, for instance, `unsigned long long`, GRMustache will automatically consider false all zeros returned by properties declared as such.
 
 Should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
@@ -349,7 +349,7 @@ The strict mode is triggered this way:
 
 	[GRMustacheContext setStrictBooleanMode:YES];
 
-In strict boolean mode, `BOOL` properties won't be interpreted as booleans.
+In strict boolean mode, BOOL properties won't be interpreted as booleans.
 
 There is still a way for using booleans in KVC context, and it's the C99 `bool` type:
 
