@@ -327,7 +327,7 @@ The good news is that, out of the box, GRMustache would process the `dead` boole
 
 ### In-depth discussion of BOOL properties
 
-Now some readers may hold their breath, because they know that the `valueForKey:` returns NSNumber instances for BOOL properties.
+Now some readers may hold their breath, because they know that `valueForKey:` returns NSNumber instances for BOOL properties.
 
 Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered false?
 
