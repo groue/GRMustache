@@ -366,4 +366,14 @@
 	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 }
 
+- (void)testLambdasCanReturnNil {
+	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+		return (NSString *)nil;
+	});
+	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"foobar", nil);
+}
+
 @end
