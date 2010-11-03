@@ -356,6 +356,13 @@
 	STAssertEqualObjects(result, @"name:", nil);
 }
 
+- (void)testVariableElementDoesntRenderGRNo {
+	NSString *templateString = @"name:{{name}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"name"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"name:", nil);
+}
+
 - (void)testLambdasGetLeftTrimmedLitteral {
 	NSString *templateString = @"{{#wrapper}} \n\tfoo \t\n{{/wrapper}}";
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {

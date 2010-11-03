@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRBoolean.h"
 #import "GRMustacheError.h"
 #import "GRMustacheContext.h"
 #import "GRMustacheLambda.h"

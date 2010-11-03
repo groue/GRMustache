@@ -20,26 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustacheTestBase.h"
 
 
-@implementation GRMustache
+@interface GRBooleanTest: GRMustacheTestBase
+@end
 
-+ (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object description].length == 0) {
-		return GRMustacheObjectKindFalseValue;
-	}
-	if ([object isKindOfClass:[NSDictionary class]]) {
-		return GRMustacheObjectKindTrueValue;
-	}
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-		return GRMustacheObjectKindEnumerable;
-	}
-	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]]) {
-		return GRMustacheObjectKindLambda;
-	}
-	return GRMustacheObjectKindTrueValue;
+@interface GRBooleanKVCTestStrictBooleanMode: GRMustacheTestBase {
+	GRMustacheContext *context;
+	BOOL strictBooleanMode;
 }
+@end
 
+@interface GRBooleanKVCTestNotStrictBooleanMode: GRMustacheTestBase {
+	GRMustacheContext *context;
+	BOOL strictBooleanMode;
+}
 @end

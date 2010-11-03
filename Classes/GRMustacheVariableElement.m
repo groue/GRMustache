@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache.h"
 #import "GRMustacheVariableElement_private.h"
 
 
@@ -58,7 +59,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if (value != nil && value != [NSNull null]) {
+	if (value != nil && value != [NSNull null] && value != [GRNo no]) {
 		if (raw) {
 			return [value description];
 		} else {

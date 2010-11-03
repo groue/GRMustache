@@ -20,17 +20,92 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#if (TARGET_OS_IPHONE)
+// http://iphonedevelopment.blogspot.com/2008/10/device-vs-simulator.html
+#import <objc/runtime.h>
+#import <objc/message.h>
+#else
+#import <objc/objc-runtime.h>
+#endif
+
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 
 
+static BOOL strictBooleanMode = NO;
+static NSInteger BOOLPropertyType = NSNotFound;
+
+@interface GRMustacheProperty: NSObject
+@property BOOL BOOLProperty;
++ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName;
+@end
+
+@implementation GRMustacheProperty
+@dynamic BOOLProperty;
+
++ (NSInteger)typeForPropertyNamed:(NSString *)propertyName ofClass:(Class)class {
+	objc_property_t property = class_getProperty(class, [propertyName cStringUsingEncoding:NSUTF8StringEncoding]);
+	if (property != NULL) {
+		const char *attributesCString = property_getAttributes(property);
+		while (attributesCString) {
+			if (attributesCString[0] == 'T') {
+				return attributesCString[1];
+			}
+			attributesCString = strchr(attributesCString, ',');
+			if (attributesCString) {
+				attributesCString++;
+			}
+		}
+	}
+	return NSNotFound;
+}
+
++ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName {
+	static NSMutableDictionary *classes = nil;
+	
+	if (classes == nil) {
+		classes = [[NSMutableDictionary dictionaryWithCapacity:12] retain];
+	}
+	
+	NSMutableDictionary *propertyNames = [classes objectForKey:class];
+	if (propertyNames == nil) {
+		propertyNames = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
+		[classes setObject:propertyNames forKey:class];
+	}
+	
+	NSNumber *boolNumber = [propertyNames objectForKey:propertyName];
+	if (boolNumber == nil) {
+		if (BOOLPropertyType == NSNotFound) {
+			BOOLPropertyType = [self typeForPropertyNamed:@"BOOLProperty" ofClass:self];
+		}
+		BOOL booleanProperty = ([self typeForPropertyNamed:propertyName ofClass:class] == BOOLPropertyType);
+		[propertyNames setObject:[NSNumber numberWithBool:booleanProperty] forKey:propertyName];
+		return booleanProperty;
+	}
+	
+	return [boolNumber boolValue];
+
+}
+
+@end
+
+
 @interface GRMustacheContext()
 - (id)initWithObject:(id)object;
+- (BOOL)shouldConsiderObject:(id)object value:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
 @end
 
 
 @implementation GRMustacheContext
 @synthesize objects;
+
++ (BOOL)strictBooleanMode {
+	return strictBooleanMode;
+}
+
++ (void)setStrictBooleanMode:(BOOL)aBool {
+	strictBooleanMode = aBool;
+}
 
 + (id)contextWithObject:(id)object {
 	return [[[self alloc] initWithObject:object] autorelease];
@@ -90,6 +165,14 @@
 		}
 		
 		if (value != nil) {
+			BOOL boolValue;
+			if ([self shouldConsiderObject:object value:value forKey:key asBoolean:&boolValue]) {
+				if (boolValue) {
+					return [GRYes yes];
+				} else {
+					return [GRNo no];
+				}
+			}
 			return value;
 		}
 	}
@@ -100,6 +183,25 @@
 - (void)dealloc {
 	[objects release];
 	[super dealloc];
+}
+
+- (BOOL)shouldConsiderObject:(id)object value:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool {
+	// C99 bool type
+	if (CFBooleanGetTypeID() == CFGetTypeID(value)) {
+		if (outBool) {
+			*outBool = CFBooleanGetValue((CFBooleanRef)value);
+		}
+		return YES;
+	}
+	
+	if (!strictBooleanMode && [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key]) {
+		if (outBool) {
+			*outBool = [(NSNumber *)value boolValue];
+		}
+		return YES;
+	}
+	
+	return NO;
 }
 
 @end

@@ -26,5 +26,7 @@
 @interface GRMustacheContext: NSObject {
 	NSMutableArray *objects;
 }
++ (BOOL)strictBooleanMode;
++ (void)setStrictBooleanMode:(BOOL)aBool;
 - (id)valueForKey:(NSString *)key;
 @end
