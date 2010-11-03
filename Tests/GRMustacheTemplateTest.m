@@ -376,4 +376,26 @@
 	STAssertEqualObjects(result, @"foobar", nil);
 }
 
+- (void)testNilIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionary];
+	STAssertNil([context valueForKey:@"bool"], nil);
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testNSNullIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testEmptyStringIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
 @end
