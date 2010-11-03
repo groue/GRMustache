@@ -339,7 +339,7 @@ Well again, the statement above is not 100% exact. Let's be honest: what we know
 
 	typedef signed char BOOL;
 
-What GRMustache actually does, is *considering false all zeros returned by signed character properties*. When Apple decides to change the BOOL definition to, for instance, `unsigned long long`, GRMustache will automatically consider false all zeros returned by properties declared as such.
+What GRMustache actually does, is *considering false all zeros returned by signed character properties*.
 
 Should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
