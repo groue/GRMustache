@@ -325,6 +325,8 @@ And here is a template for iterating over an array of persons:
 
 The good news is that, out of the box, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only.
 
+Note that GRMustache can only handle BOOL properties which have been declared with the `@property` keyword.
+
 ### In-depth discussion of BOOL properties
 
 Now some readers may hold their breath, because they know that `valueForKey:` returns NSNumber instances for BOOL properties.
