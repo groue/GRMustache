@@ -45,7 +45,7 @@ That's just for a start. We'll cover a more practical example below.
 Rendering methods
 -----------------
 
-The main rendering methods provided by the `GRMustacheTemplate` class are:
+The main rendering methods provided by the GRMustacheTemplate class are:
 
 	// Renders the provided templateString.
 	+ (NSString *)renderObject:(id)object
@@ -75,7 +75,7 @@ All methods may return errors, described in the "Errors" section below.
 Compiling templates
 -------------------
 
-If you are planning to render the same template multiple times, it is more efficient to parse it once, with the compiling methods of the `GRMustacheTemplate` class:
+If you are planning to render the same template multiple times, it is more efficient to parse it once, with the compiling methods of the GRMustacheTemplate class:
 
 	// Parses the templateString.
 	+ (id)parseString:(NSString *)templateString
@@ -96,7 +96,7 @@ If you are planning to render the same template multiple times, it is more effic
 	             bundle:(NSBundle *)bundle
 	              error:(NSError **)outError;
 
-Those methods return `GRMustacheTemplate` instances, which render objects with the following method:
+Those methods return GRMustacheTemplate instances, which render objects with the following method:
 
 	- (NSString *)renderObject:(id)object;
 
@@ -146,7 +146,7 @@ We'll now cover all mustache tag types, and how they are rendered.
 
 But let's give some definitions first:
 
-- GRMustache considers *enumerable* all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary`.
+- GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary.
 
 - GRMustache considers *false* the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans" section.
 
@@ -161,7 +161,7 @@ Such a tag is rendered according to the value for key `name` in the context.
 
 If the value is *false*, the tag is rendered with the empty string.
 
-Otherwise, it is rendered with the `description` of the value, HTML escaped.
+Otherwise, it is rendered with the regular string description of the value, HTML escaped.
 
 ### Unescaped variable tags `{{{name}}}` and `{{&name}}`
 
@@ -169,7 +169,7 @@ Such a tag is rendered according to the value for key `name` in the context.
 
 If the value is *false*, the tag is rendered with the empty string.
 
-Otherwise, it is rendered with the `description` of the value, without HTML escaping.
+Otherwise, it is rendered with the regular string description of the value, without HTML escaping.
 
 ### Enumerable sections `{{#name}}...{{/name}}`
 
@@ -177,9 +177,9 @@ If the value for key `name` in the context is *enumerable*, the text between the
 
 ### Lambda sections `{{#name}}...{{/name}}`
 
-Such a section is rendered with the string returned by a block of code if the value for key `name` in the context is a `GRMustacheLambda`.
+Such a section is rendered with the string returned by a block of code if the value for key `name` in the context is a GRMustacheLambda.
 
-You will build a `GRMustacheLambda` with the `GRMustacheLambdaMake` function. This function takes a block which returns the string that should be rendered, as in the example below:
+You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
 
 	// A lambda which renders its section without any special effect:
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
@@ -272,11 +272,11 @@ This section is quite long. Here is a summary of the main things you should reme
 
 Objective-C doesn't provide native boolean objects, which you can put, for instance, in an array or a dictionary.
 
-It's quite common to implement them with `NSNumber`:
+It's quite common to implement them with NSNumber:
 
 	id falseObject = [NSNumber numberWithBool:NO];
 
-Unfortunately, `[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInt:0]`, and there is no way, provided with an `NSNumber` containing zero, to tell whether its a false boolean, or a zero integer.
+Unfortunately, `[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInt:0]`, and there is no way, provided with an NSNumber containing zero, to tell whether its a false boolean, or a zero integer.
 
 Why is that a problem?
 
@@ -327,13 +327,13 @@ The good news is that, out of the box, GRMustache would process the `dead` boole
 
 ### In-depth discussion of BOOL properties
 
-Now some readers may hold their breath, because they know that the `valueForKey:` returns `NSNumber` instances for BOOL properties.
+Now some readers may hold their breath, because they know that the `valueForKey:` returns NSNumber instances for BOOL properties.
 
 Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered false?
 
-Well, thanks to Objective-C runtime, we know that the `Person` class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
+Well, thanks to Objective-C runtime, we know that the Person class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
 
-Well again, the statement above is not 100% exact. Let's be honest: what we know is that the `Person` class did declare the `dead` property with the same type as properties declared as BOOL. Curious reader will be happy reading the [list of types distinguished by the runtime](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
+Well again, the statement above is not 100% exact. Let's be honest: what we know is that the Person class did declare the `dead` property with the same type as properties declared as BOOL. Curious reader will be happy reading the [list of types distinguished by the runtime](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
 
 `<objc/obj_c.h>` defines BOOL as:
 
@@ -371,7 +371,7 @@ GRMustache adds the following extensions:
 
 This extension has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
 
-This tag renders the `description` of the current context.
+This tag renders the regular string description of the current context.
 
 For instance:
 
@@ -387,18 +387,18 @@ For instance:
 Errors
 ------
 
-The GRMustache library may return errors whose domain is `GRMustacheErrorDomain`.
+The GRMustache library may return errors whose domain is GRMustacheErrorDomain.
 
 	extern NSString* const GRMustacheErrorDomain;
 
-Their error codes may be interpreted with the `GRMustacheErrorCode` enumeration:
+Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
 
 	typedef enum {
 		GRMustacheErrorCodeParseError,
 		GRMustacheErrorCodePartialNotFound,
 	} GRMustacheErrorCode;
 
-The `userInfo` dictionary of parse errors contain the `GRMustacheErrorURL` and `GRMustacheErrorLine` keys, which provide with the URL of the erroneous template, and the line where the error occurred.
+The `userInfo` dictionary of parse errors contain the GRMustacheErrorURL and GRMustacheErrorLine keys, which provide with the URL of the erroneous template, and the line where the error occurred.
 
 	extern NSString* const GRMustacheErrorURL;
 	extern NSString* const GRMustacheErrorLine;
@@ -407,23 +407,23 @@ The `userInfo` dictionary of parse errors contain the `GRMustacheErrorURL` and `
 A practical example
 -------------------
 
-Let's be totally mad, and display a list of people and their birthdates in a `UIWebView` embedded in our iOS application.
+Let's be totally mad, and display a list of people and their birthdates in a UIWebView embedded in our iOS application.
 
-We'll most certainly have a `UIViewController` for displaying the web view:
+We'll most certainly have a UIViewController for displaying the web view:
 
 	@interface PersonListViewController: UIViewController
 	@property (nonatomic, retain) NSArray *persons;
 	@property (nonatomic, retain) IBOutlet UIWebView *webView;
 	@end
 
-The `persons` array contains some instances of our `Person` model:
+The `persons` array contains some instances of our Person model:
 
 	@interface Person: NSObject
 	@property (nonatomic, retain) NSString *name;
 	@property (nonatomic, retain) NSDate *birthdate;
 	@end
 
-A `PersonListViewController` instance and its array of persons is a graph of objects that is already perfectly suitable for rendering our template:
+A PersonListViewController instance and its array of persons is a graph of objects that is already perfectly suitable for rendering our template:
 
 	PersonListViewController.mustache:
 	
