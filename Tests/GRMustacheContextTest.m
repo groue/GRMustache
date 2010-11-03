@@ -24,28 +24,68 @@
 #import "GRMustacheContext_private.h"
 
 
-@interface GRPerson: NSObject {
-	NSString *name;
+@interface GRKVCRecorder: NSObject {
+	NSString *lastAccessedKey;
+	NSArray *keys;
 }
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *lastAccessedKey;
+@property (nonatomic, retain) NSArray *keys;
 @end
 
-@implementation GRPerson
-@synthesize name;
-+ (id)personWithName:(NSString *)name {
-	GRPerson *person = [[[self alloc] init] autorelease];
-	person.name = name;
-	return person;
+@implementation GRKVCRecorder
+@synthesize lastAccessedKey;
+@synthesize keys;
++ (id)recorderWithRecognizedKeys:(NSArray *)keys {
+	GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
+	recorder.keys = keys;
+	return recorder;
+}
++ (id)recorderWithRecognizedKey:(NSString *)key {
+	GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
+	recorder.keys = [NSArray arrayWithObject:key];
+	return recorder;
+}
+- (id)valueForKey:(NSString *)key {
+	self.lastAccessedKey = key;
+	if ([keys indexOfObject:key] == NSNotFound) {
+		return [super valueForKey:key];
+	}
+	return key;
 }
 - (void)dealloc {
-	[name release];
+	[lastAccessedKey release];
+	[keys release];
 	[super dealloc];
 }
 @end
 
-@interface GRPersonContext:GRPerson<GRMustacheContext>
+@interface GRKVCRecorderTest: SenTestCase
 @end
 
+@implementation GRKVCRecorderTest
+
+- (void)testRecorderKnownKey {
+	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
+	STAssertNoThrow([recorder valueForKey:@"foo"], nil);
+}
+
+- (void)testRecorderUnknownKey {
+	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
+	STAssertThrows([recorder valueForKey:@"bar"], nil);
+}
+
+- (void)testRecorderRecordsKey {
+	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
+	[recorder valueForKey:@"foo"];
+	STAssertEqualObjects(recorder.lastAccessedKey, @"foo", nil);
+}
+
+- (void)testRecorderValueForKeyReturnsKey {
+	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
+	STAssertEqualObjects([recorder valueForKey:@"foo"], @"foo", nil);
+}
+
+@end
 
 @implementation GRMustacheContextTest
 
@@ -79,6 +119,62 @@
 
 - (void)testContextInitedWithDictionaryIsInvalid {
 	STAssertNoThrow([GRMustacheContext contextWithObject:[NSDictionary dictionary]], nil);
+}
+
+- (void)testOneDepthContextForwardsValueForKeyToItsObject {
+	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:recorder];
+	[context valueForKey:@"foo"];
+	STAssertEqualObjects(recorder.lastAccessedKey, @"foo", nil);
+}
+
+- (void)testTwoDepthContextForwardsValueForKeyToTopObjectOnlyIfTopObjectHasKey {
+	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
+	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
+	[context pushObject:topRecorder];
+	STAssertEqualObjects([context valueForKey:@"top"], @"top", nil);
+	STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
+	STAssertNil(rootRecorder.lastAccessedKey, nil);
+}
+
+- (void)testTwoDepthContextForwardsValueForKeyToBothObjectIfTopObjectMisses {
+	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
+	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
+	[context pushObject:topRecorder];
+	STAssertEqualObjects([context valueForKey:@"root"], @"root", nil);
+	STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
+	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
+}
+
+- (void)testTwoDepthContextMissesIfBothObjectMisses {
+	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
+	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
+	[context pushObject:topRecorder];
+	STAssertNil([context valueForKey:@"foo"], nil);
+	STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
+	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
+}
+
+- (void)testOneDepthContextTemplate {
+	NSString *result = [GRMustacheTemplate renderObject:@"foo" fromString:@"{{length}}" error:nil];
+	STAssertEqualObjects(result, @"3", nil);
+}
+
+- (void)testTwoDepthContextTemplateWithTopObjectSuccess {
+	NSString *templateString = @"{{#name}}{{length}}{{/name}}";
+	id context = [GRKVCRecorder recorderWithRecognizedKey:@"name"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"4", nil);
+}
+
+- (void)testTwoDepthContextTemplateWithTopObjectMiss {
+	NSString *templateString = @"{{#name}}{{name}}{{/name}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"foo", nil);
 }
 
 @end

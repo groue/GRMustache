@@ -31,10 +31,7 @@
 		return GRMustacheObjectKindFalseValue;
 	}
 	if ([object isKindOfClass:[NSDictionary class]]) {
-		return GRMustacheObjectKindContext;
-	}
-	if ([object conformsToProtocol:@protocol(GRMustacheContext)]) {
-		return GRMustacheObjectKindContext;
+		return GRMustacheObjectKindTrueValue;
 	}
 	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
 		return GRMustacheObjectKindEnumerable;

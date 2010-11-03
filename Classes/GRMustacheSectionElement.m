@@ -73,7 +73,6 @@
 			break;
 			
 		case GRMustacheObjectKindTrueValue:
-		case GRMustacheObjectKindContext:
 			if (!inverted) {
 				[context pushObject:value];
 				for (GRMustacheElement *elem in elems) {

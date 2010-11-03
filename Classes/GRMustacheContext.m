@@ -24,45 +24,6 @@
 #import "GRMustacheContext_private.h"
 
 
-@interface GRMustacheValueWrapper: NSObject<GRMustacheContext> {
-	id value;
-}
-@property (nonatomic, retain) id value;
-+ (id)wrapperWithValue:(id)value;
-- (id)initWithValue:(id)value;
-@end
-
-@implementation GRMustacheValueWrapper
-@synthesize value;
-
-+ (id)wrapperWithValue:(id)value {
-	return [[[self alloc] initWithValue:value] autorelease];
-}
-
-- (id)initWithValue:(id)theValue {
-	if (self = [self init]) {
-		value = [theValue retain];
-	}
-	return self;
-}
-
-- (NSString *)description {
-	return [value description];
-}
-
-- (id)valueForKey:(NSString *)key {
-	return nil;
-}
-
-- (void)dealloc {
-	[value release];
-	[super dealloc];
-}
-
-@end
-
-
-
 @interface GRMustacheContext()
 - (id)initWithObject:(id)object;
 @end
@@ -88,11 +49,8 @@
 		case GRMustacheObjectKindFalseValue:
 			[objects addObject:[NSNull null]];
 			break;
-		case GRMustacheObjectKindContext:
-			[objects addObject:object];
-			break;
 		case GRMustacheObjectKindTrueValue:
-			[objects addObject:[GRMustacheValueWrapper wrapperWithValue:object]];
+			[objects addObject:object];
 			break;
 		default:
 			NSAssert(NO, ([NSString stringWithFormat:@"Invalid context object: %@", object]));
@@ -107,8 +65,6 @@
 - (id)valueForKey:(NSString *)key {
 	id value;
 	BOOL dotKey = [key isEqualToString:@"."];
-	NSException *firstCatchedException = nil;
-	BOOL valueForKeyDidSucceedAtLeastOnce = NO;
 	
 	for (id object in [objects reverseObjectEnumerator]) {
 		if (object == [NSNull null]) {
@@ -121,7 +77,6 @@
 		
 		@try {
 			value = [object valueForKey:key];
-			valueForKeyDidSucceedAtLeastOnce = YES;
 		}
 		@catch (NSException *exception) {
 			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
@@ -131,19 +86,12 @@
 				// that's some exception we are not related to
 				@throw;
 			}
-			if (firstCatchedException == nil) {
-				firstCatchedException = exception;
-			}
 			continue;
 		}
 		
 		if (value != nil) {
 			return value;
 		}
-	}
-	
-	if (valueForKeyDidSucceedAtLeastOnce == NO && firstCatchedException != nil) {
-		@throw firstCatchedException;
 	}
 	
 	return nil;

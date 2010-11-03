@@ -118,11 +118,9 @@ You will provide a rendering method with a context object.
 
 Mustache tag names are looked in the context object, through standard Key-Value Coding.
 
-The most obvious objects which support KVC are dictionaries. You may also provide with any other object, as long as it conforms to the `GRMustacheContext` protocol.
+The most obvious objects which support KVC are dictionaries. You may also provide with any other object:
 
-For instance:
-
-	@interface Person: NSObject<GRMustacheContext>
+	@interface Person: NSObject
 	+ (id)personWithName:(NSString *)name;
 	- (NSString *)name;
 	@end
@@ -132,11 +130,9 @@ For instance:
 	                      fromString:@"Hi {{name}}!"
 	                           error:nil];
 
-Note that the KVC method `valueForKey:` raises a `NSUndefinedKeyException` exception in case of key miss. Dictionaries never miss, but your `GRMustacheContext` class could.
+Key misses are OK:
 
-For instance:
-
-	// raises an exception, because Person has no `blame` accessor
+	// raises @"Hi !"
 	[GRMustacheTemplate renderObject:[Person personWithName:@"Mom"]
 	                      fromString:@"Hi {{blame}}!"
 	                           error:nil];
@@ -149,7 +145,7 @@ We'll now cover all mustache tag types, and how they are rendered.
 
 But let's give some definitions first:
 
-- GRMustache considers *enumerable* all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary` and those conforming to the `GRMustacheContext` protocol.
+- GRMustache considers *enumerable* all objects conforming to the `NSFastEnumeration` protocol, but `NSDictionary`.
 
 - GRMustache considers *false* `[NSNull null]`, `nil` and the empty string `@""`.
 
@@ -282,19 +278,9 @@ For instance:
 	                         @"Groue's shopping cart", @"name",
 	                         [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
 	                         nil];
+	
 	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
 	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-
-Beware that dictionaries and objects conforming to `GRMustacheContext` protocol are the only objects whose KVC capabilities are used.
-
-This allows both those templates to render the same thing, when the key `name` refers to a `NSString`:
-
-	{{#name}}{{.}}{{/name}}
-	{{#name}}{{name}}{{/name}}    would raise NSUndefinedKeyException if key `name` was loaded from a string
-
-But this means you can not access, for instance, the length of a string in a template:
-
-	{{#name}}{{length}}{{/name}}  won't raise, but won't render the length of the string
 
 Errors
 ------
@@ -364,13 +350,6 @@ We should already be able to render most of our template:
 	  [self.webView loadHTMLString:html baseURL:nil];
 	}
 	@end
-
-Since our `PersonListViewController` instance, and, later, its persons, are the mustache rendering contexts, and that we want the keys like `persons` and `name` to be fetched with KVC, we have to declare those classes as KVC-enabled for GRMustache.
-
-This is done by having them conform to the `GRMustacheContext` protocol. Let's rewrite our interfaces:
-
-	@interface PersonListViewController: UIViewController<GRMustacheContext>
-	@interface Person: NSObject<GRMustacheContext>
 
 Now our `{{#persons}}` enumerable section and `{{name}}` variable tag will perfectly render.
 
