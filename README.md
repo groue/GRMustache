@@ -300,7 +300,7 @@ Undeclared BOOL properties, that is to say: selectors implemented without corres
 
 #### Boolean signed characters
 
-All declared properties as `signed char` will be considered as booleans:
+All properties declared as signed character will be considered as booleans:
 
 	@interface Person: NSObject
 	@property char initial;	// will be considered as boolean!
