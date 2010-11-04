@@ -202,29 +202,6 @@ You may implement caching:
 	  return cache;
 	});
 
-You may also render a totally different template:
-
-	GRMustacheTemplate *outerspaceTemplate = [GRMustacheTemplate parseString:@"..." error:nil];
-	GRMustacheLambda outerspaceLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                           GRMustacheContext *context,
-	                                                           NSString *templateString) {
-		return [outerspaceTemplate renderObject:context];
-	});
-
-Actually, you may use all three arguments for any purpose:
-
-	GRMustacheLambda weirdLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                      GRMustacheContext *context,
-	                                                      NSString *templateString) {
-	  if ([context valueForKey:@"important"]) {
-	    return [renderer(context) uppercase];
-	  }
-	  return [GRMustacheTemplate renderObject:context
-	                             fromString:[templateString stringByAppendingString:@"{{foo}}"]
-	                             error:nil];
-	});
-
-
 ### Boolean sections `{{#name}}...{{/name}}`
 
 Such a section is rendered according to the value for key `name` in the context.
