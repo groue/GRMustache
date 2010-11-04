@@ -192,7 +192,7 @@ You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This f
 - `context` is the current context object.
 - `templateString` contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
 
-You may implement caching:
+You may, for instance, implement caching:
 
 	__block NSString *cache = nil;
 	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
