@@ -264,9 +264,9 @@ Booleans
 
 This section is quite long. Here is a summary of the main things you should remember, and that we'll discuss below:
 
-- *Never* use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
-- Use boolean singletons `[GRNo no]` and `[GRYes yes]` in your context dictionaries.
-- *Always* declare your BOOL properties with the `@property` keyword.
+- Don't use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
+- Use `[GRNo no]` and `[GRYes yes]` in your context dictionaries.
+- Declare your BOOL properties with the `@property` keyword.
 
 ### When good old NSNumber drops
 
