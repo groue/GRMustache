@@ -259,7 +259,7 @@ We'll explain each rule below.
 
 In order to be consistent with implementations in other languages, GRMustache treats `[NSNumber numberWithBool:NO]` as a number, and not as false.
 
-That is why you should not use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
+That is why you should not use `[NSNumber numberWithBool:]` for controlling boolean sections.
 
 ### Introducing GRYes and GRNo
 
@@ -290,11 +290,15 @@ In the following template, GRMustache would process the `dead` boolean property 
 
 ### In-depth BOOL properties
 
+#### Undeclared BOOL properties
+
 Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers (see comments on NSNumber above):
 
 	@interface Person: NSObject
 	- (BOOL) dead;	// will be considered as 0 and 1 integers
 	@end
+
+#### Boolean signed characters
 
 All declared properties as `signed char` will be considered as booleans:
 
@@ -304,9 +308,13 @@ All declared properties as `signed char` will be considered as booleans:
 
 We thought that, besides BOOL, it would be pretty rare that you would use such a value in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
+#### Boolean Strict Mode
+
+Enter the boolean strict mode with the following statement:
+
 	[GRMustacheContext setStrictBooleanMode:YES];
 
-In strict boolean mode, BOOL properties will be considered as numbers.
+In strict boolean mode, signed char and BOOL properties will be considered as numbers.
 
 ### The case for C99 bool
 
