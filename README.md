@@ -130,15 +130,6 @@ The most obvious objects which support KVC are dictionaries. You may also provid
 	                      fromString:@"Hi {{name}}!"
 	                           error:nil];
 
-Key misses are OK:
-
-	// raises @"Hi !"
-	[GRMustacheTemplate renderObject:[Person personWithName:@"Mom"]
-	                      fromString:@"Hi {{blame}}!"
-	                           error:nil];
-
-The case of booleans in a KVC context is quite particular. We'll cover it in the "Booleans" section below.
-
 Tag types
 ---------
 
@@ -148,8 +139,7 @@ But let's give some definitions first:
 
 - GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary. The most obvious enumerable is NSArray.
 
-- GRMustache considers *false* the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans" section.
-
+- GRMustache considers *false* the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
 
 ### Comments `{{!...}}`
 
@@ -218,7 +208,7 @@ Otherwise, that is to say, if the value is not enumerable, false, or lambda, the
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
-Such a section is rendered *iff* the `{{#name}}...{{/name}}` would not: if the value for key `name` in the context is *false*, or an empty *enumerable*.
+Such a section is rendered when the `{{#name}}...{{/name}}` section would not.
 
 ### Partials `{{>name}}`
 
@@ -242,8 +232,8 @@ Depending on the method which has been used to create the original template, the
 
 Recursive partials are possible. Just avoid infinite loops in your context objects.
 
-Booleans
---------
+Booleans Values
+---------------
 
 There are a few rules to follow to help GRMustache behave correctly regarding booleans:
 
@@ -298,15 +288,15 @@ Undeclared BOOL properties, that is to say: selectors implemented without corres
 	- (BOOL) dead;	// will be considered as 0 and 1 integers
 	@end
 
-#### Boolean signed characters
+#### Collateral damage: signed characters
 
 All properties declared as signed character will be considered as booleans:
 
 	@interface Person: NSObject
-	@property char initial;	// will be considered as boolean!
+	@property char initial;	// will be considered as boolean
 	@end
 
-We thought that, besides BOOL, it would be pretty rare that you would use such a value in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
+We thought that, besides BOOL, it would be pretty rare that you would use a value of such a type in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
 #### Boolean Strict Mode
 
