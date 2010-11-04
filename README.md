@@ -351,7 +351,7 @@ The strict mode is triggered this way:
 
 	[GRMustacheContext setStrictBooleanMode:YES];
 
-In strict boolean mode, BOOL properties won't be interpreted as booleans.
+In strict boolean mode, BOOL properties will be considered as numbers.
 
 There is still a way for using booleans in KVC context, and it's the unbeloved C99 `bool` type:
 
