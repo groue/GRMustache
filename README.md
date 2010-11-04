@@ -292,7 +292,7 @@ In the following template, GRMustache would process the `dead` boolean property 
 
 #### Undeclared BOOL properties
 
-Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers (see comments on NSNumber above):
+Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers:
 
 	@interface Person: NSObject
 	- (BOOL) dead;	// will be considered as 0 and 1 integers
