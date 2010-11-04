@@ -356,7 +356,7 @@ In strict boolean mode, BOOL properties will be considered as numbers.
 There is still a way for using booleans in KVC context, and it's the unbeloved C99 `bool` type:
 
 	@interface Person: NSObject
-	- (bool)dead;   // KVC-compatible boolean, even without property declaration
+	- (bool)dead;   // KVC-compatible boolean, even without @property declaration
 	@end
 
 
