@@ -262,37 +262,21 @@ Recursive partials are possible. Just avoid infinite loops in your context objec
 Booleans
 --------
 
-This section is quite long. Here is a summary of the main things you should remember, and that we'll discuss below:
+There are a few rules to follow to help GRMustache behave correctly regarding booleans:
 
 - Don't use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
-- Use `[GRNo no]` and `[GRYes yes]` in your context dictionaries.
+- Use `[GRNo no]` and `[GRYes yes]`.
 - Declare your BOOL properties with the `@property` keyword.
+
+We'll explain each rule below.
 
 ### When good old NSNumber drops
 
-Objective-C doesn't provide native boolean objects, which you can put, for instance, in an array or a dictionary.
+`[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInteger:0]`. There is no way, provided with a NSNumber, to tell whether its a false boolean, or a zero integer.
 
-It's quite common to implement them with NSNumber:
+In order to be consistent with implementations in other languages, GRMustache treats zero as a number, and not as false.
 
-	id falseObject = [NSNumber numberWithBool:NO];
-
-Unfortunately, `[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInt:0]`, and there is no way, provided with an NSNumber containing zero, to tell whether its a false boolean, or a zero integer.
-
-Why is that a problem?
-
-Well, provided with the following template, mustache should render `"0"`:
-
-	NSDictionary *object = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0]
-	                                                   forKey:@"zero"];
-	[GRMustacheTemplate renderObject:object
-	                      fromString:@"{{#zero}}{{zero}}{{/zero}}"
-	                           error:nil];
-
-The `{{#zero}}...{{/zero}}` boolean section should be rendered, because 0 is not false. And the `{{zero}}` variable tag should, as well, be rendered.
-
-Conclusion: GRMustache does *not* consider `[NSNumber numberWithBool:NO]` as false.
-
-Practical conclusion for you: *Never use `[NSNumber numberWithBool:NO]` when you mean false*.
+That is why you should not use `[NSNumber numberWithBool:NO]` for controlling boolean sections: it would be considered as true as the 0 number.
 
 ### Introducing GRYes and GRNo
 
@@ -308,50 +292,30 @@ GRMustache provides two singletons for you to use as explicit boolean objects, w
 
 ### BOOL properties
 
-Now that we know how to put booleans in our dictionaries, let's talk about BOOL properties.
-
-Here is a nice model:
+BOOL properties which have been declared with the `@property` keyword are handled by GRMustache:
 
 	@interface Person: NSObject
 	@property BOOL dead;
 	@property NSString *name;
 	@end
 
-And here is a template for iterating over an array of persons:
+In the following template, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only:
 
 	{{#persons}}
 	- {{name}} {{#dead}}(RIP){{/dead}}
 	{{/persons}}
 
-The good news is that, out of the box, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only.
+Undeclared BOOL properties, that is to say, selectors implemented without `@property` keyword in some `@interface` block, will be considered as numbers (see comments on NSNumber above).
 
-Note that GRMustache can only handle BOOL properties which have been declared with the `@property` keyword.
+Actually, all `signed char` properties returning 0 will be regarded as false. Not only BOOL ones.
 
-### In-depth discussion of BOOL properties
-
-Now some readers may hold their breath, because they know that `valueForKey:` returns NSNumber instances for BOOL properties.
-
-Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered false?
-
-Well, thanks to Objective-C runtime, we know that the Person class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
-
-Well again, the naked truth is that *GRMustache is considering false all zeros returned by signed character properties*.
-
-That's because objc/obj_c.h defines BOOL as:
-
-	typedef signed char BOOL;
-
-Should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
-
-### Strict boolean mode
-
-The strict mode is triggered this way:
+We thought that, besides BOOL, it would be pretty rare that you would use such a value in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
 	[GRMustacheContext setStrictBooleanMode:YES];
 
 In strict boolean mode, BOOL properties will be considered as numbers.
 
-There is still a way for using booleans in KVC context, and it's the unbeloved C99 `bool` type:
+There is still a way for using booleans, and it's the unbeloved C99 `bool` type:
 
 	@interface Person: NSObject
 	- (bool)dead;   // KVC-compatible boolean, even without @property declaration
