@@ -325,10 +325,13 @@ We thought that, besides BOOL, it would be pretty rare that you would use such a
 
 In strict boolean mode, BOOL properties will be considered as numbers.
 
-There is still a way for using booleans, and it's the unbeloved C99 `bool` type:
+### The case for C99 bool
+
+You may consider using the unbeloved C99 `bool` type:
 
 	@interface Person: NSObject
-	- (bool)dead;   // KVC-compatible boolean, even without @property declaration
+	- (bool)dead;   // Works in and out of strict boolean mode
+	                // even without @property declaration
 	@end
 
 
