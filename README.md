@@ -146,7 +146,7 @@ We'll now cover all mustache tag types, and how they are rendered.
 
 But let's give some definitions first:
 
-- GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary.
+- GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary. The most obvious enumerable is NSArray.
 
 - GRMustache considers *false* the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans" section.
 
@@ -159,7 +159,7 @@ Comments tags are not rendered.
 
 Such a tag is rendered according to the value for key `name` in the context.
 
-If the value is *false*, the tag is rendered with the empty string.
+If the value is *false*, the tag is not rendered.
 
 Otherwise, it is rendered with the regular string description of the value, HTML escaped.
 
@@ -167,17 +167,27 @@ Otherwise, it is rendered with the regular string description of the value, HTML
 
 Such a tag is rendered according to the value for key `name` in the context.
 
-If the value is *false*, the tag is rendered with the empty string.
+If the value is *false*, the tag is not rendered.
 
 Otherwise, it is rendered with the regular string description of the value, without HTML escaping.
 
-### Enumerable sections `{{#name}}...{{/name}}`
+### Sections `{{#name}}...{{/name}}`
 
-If the value for key `name` in the context is *enumerable*, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered. The section is rendered with an empty string if the enumerable is empty.
+Sections are rendered differently, depending on the value for key `name` in the context:
 
-### Lambda sections `{{#name}}...{{/name}}`
+#### False sections
 
-Such a section is rendered with the string returned by a block of code if the value for key `name` in the context is a GRMustacheLambda.
+If the value is *false*, the section is not rendered.
+
+#### Enumerable sections
+
+If the value is *enumerable*, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered.
+
+The section is not rendered if the enumerable is empty.
+
+#### Lambda sections
+
+If the value is a GRMustacheLambda, the section is rendered with the string returned by a block of code.
 
 You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
 
@@ -202,13 +212,9 @@ You may, for instance, implement caching:
 	  return cache;
 	});
 
-### Boolean sections `{{#name}}...{{/name}}`
+#### Other sections
 
-Such a section is rendered according to the value for key `name` in the context.
-
-When *false*, the section is rendered with an empty string.
-
-Otherwise, the section is rendered within a context extended by the value.
+Otherwise, that is to say, if the value is not enumerable, false, or lambda, the section is rendered within a context extended by the value.
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
