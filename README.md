@@ -264,8 +264,8 @@ Booleans
 
 There are a few rules to follow to help GRMustache behave correctly regarding booleans:
 
-- Don't use `[NSNumber numberWithBool:NO]` for controlling boolean sections.
-- Use `[GRNo no]` and `[GRYes yes]`.
+- Don't use `[NSNumber numberWithBool:]` for controlling boolean sections.
+- Use `[GRNo no]` and `[GRYes yes]` instead.
 - Declare your BOOL properties with the `@property` keyword.
 
 We'll explain each rule below.
