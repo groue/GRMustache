@@ -29,8 +29,6 @@ Import `GRMustache.h` in order to access all GRMustache features.
 
 Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
 
-All other headers contain public and stable declarations.
-
 Simple example
 --------------
 
