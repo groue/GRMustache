@@ -32,7 +32,6 @@
 #import "GRMustacheContext_private.h"
 
 
-static BOOL strictBooleanMode = NO;
 static NSInteger BOOLPropertyType = NSNotFound;
 
 @interface GRMustacheProperty: NSObject
@@ -91,6 +90,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 
 
 @interface GRMustacheContext()
+@property (nonatomic, retain) NSMutableArray *objects;
 - (id)initWithObject:(id)object;
 - (BOOL)shouldConsiderObject:(id)object value:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
 @end
@@ -98,14 +98,6 @@ static NSInteger BOOLPropertyType = NSNotFound;
 
 @implementation GRMustacheContext
 @synthesize objects;
-
-+ (BOOL)strictBooleanMode {
-	return strictBooleanMode;
-}
-
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
-}
 
 + (id)contextWithObject:(id)object {
 	return [[[self alloc] initWithObject:object] autorelease];
@@ -194,7 +186,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		return YES;
 	}
 	
-	if (!strictBooleanMode && [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key]) {
+	if (![GRMustache strictBooleanMode] && [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key]) {
 		if (outBool) {
 			*outBool = [(NSNumber *)value boolValue];
 		}

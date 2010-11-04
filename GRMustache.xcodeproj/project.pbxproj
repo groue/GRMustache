@@ -50,7 +50,6 @@
 		56115417127EC67F00F01AD0 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache.h; sourceTree = "<group>"; };
 		56115418127EC67F00F01AD0 /* GRMustache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustache.m; sourceTree = "<group>"; };
 		56115419127EC67F00F01AD0 /* GRMustache_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache_private.h; sourceTree = "<group>"; };
-		5611541A127EC68000F01AD0 /* GRMustacheContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContext.h; sourceTree = "<group>"; };
 		5611541B127EC68000F01AD0 /* GRMustacheContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContext.m; sourceTree = "<group>"; };
 		5611541C127EC68000F01AD0 /* GRMustacheContext_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContext_private.h; sourceTree = "<group>"; };
 		5611541D127EC68000F01AD0 /* GRMustacheElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheElement.h; sourceTree = "<group>"; };
@@ -172,7 +171,6 @@
 				56115417127EC67F00F01AD0 /* GRMustache.h */,
 				56115418127EC67F00F01AD0 /* GRMustache.m */,
 				56115419127EC67F00F01AD0 /* GRMustache_private.h */,
-				5611541A127EC68000F01AD0 /* GRMustacheContext.h */,
 				5611541B127EC68000F01AD0 /* GRMustacheContext.m */,
 				5611541C127EC68000F01AD0 /* GRMustacheContext_private.h */,
 				5611541D127EC68000F01AD0 /* GRMustacheElement.h */,

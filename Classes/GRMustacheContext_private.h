@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheContext.h"
 
-
-@interface GRMustacheContext()
-@property (nonatomic, retain) NSMutableArray *objects;
+@interface GRMustacheContext: NSObject {
+	NSMutableArray *objects;
+}
 + (id)contextWithObject:(id)object;
+- (id)valueForKey:(NSString *)key;
 - (void)pushObject:(id)object;
 - (void)pop;
 @end

@@ -188,20 +188,20 @@ You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This f
 
 	// A lambda which renders its section without any special effect:
 	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                 GRMustacheContext *context,
+	                                                 id context,
 	                                                 NSString *templateString) {
 	    return renderer(context);
 	});
 
 - `renderer` is a block which renders the inner section with its argument as a context.
-- `context` is the current context object.
+- `context` is the current rendering context.
 - `templateString` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
 
 You may, for instance, implement caching:
 
 	__block NSString *cache = nil;
 	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                      GRMustacheContext *context,
+	                                                      id context,
 	                                                      NSString *templateString) {
 	  if (cache == nil) { cache = renderer(context); }
 	  return cache;
@@ -210,7 +210,7 @@ You may, for instance, implement caching:
 You may also implement helper functions:
 
 	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                      GRMustacheContext *context,
+	                                                      id context,
 	                                                      NSString *templateString) {
 	  NSMutableString *result = [NSMutableString string];
 	  [result appendString:@"<a href=\"];
@@ -338,7 +338,7 @@ We thought that, besides BOOL, it would be pretty rare that you would use a valu
 
 Enter the boolean strict mode with the following statement:
 
-	[GRMustacheContext setStrictBooleanMode:YES];
+	[GRMustache setStrictBooleanMode:YES];
 
 In strict boolean mode, signed char and BOOL properties will be considered as numbers.
 
@@ -451,11 +451,11 @@ What about the `{{localizedBirthdate}}` tag?
 
 Since we don't want to pollute our nice and clean Person model, let's add a category to it:
 
-	@interface Person(GRMustacheContext)
+	@interface Person(GRMustache)
 	@end
 
 	static NSDateFormatter *dateFormatter = nil;
-	@implementation Person(GRMustacheContext)
+	@implementation Person(GRMustache)
 	- (NSString *)localizedBirthdate {
 	  if (dateFormatter == nil) {
 	    dateFormatter = [[NSDateFormatter alloc] init];

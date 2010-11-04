@@ -31,7 +31,7 @@ typedef enum {
 } GRMustacheObjectKind;
 
 
-@interface GRMustache: NSObject
+@interface GRMustache()
 + (GRMustacheObjectKind)objectKind:(id)object;
 @end
 

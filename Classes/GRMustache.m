@@ -24,7 +24,17 @@
 #import "GRMustacheLambda_private.h"
 
 
+static BOOL strictBooleanMode = NO;
+
 @implementation GRMustache
+
++ (BOOL)strictBooleanMode {
+	return strictBooleanMode;
+}
+
++ (void)setStrictBooleanMode:(BOOL)aBool {
+	strictBooleanMode = aBool;
+}
 
 + (GRMustacheObjectKind)objectKind:(id)object {
 	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object description].length == 0) {

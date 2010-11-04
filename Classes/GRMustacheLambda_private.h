@@ -26,5 +26,5 @@
 @interface GRMustacheLambdaBlockWrapper: NSObject {
 	GRMustacheLambdaBlock block;
 }
-- (NSString *)renderContext:(GRMustacheContext *)context fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer;
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer;
 @end

@@ -167,7 +167,7 @@
 
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
-	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		dead = YES;
 		return templateString;
 	});
@@ -224,7 +224,7 @@
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
 	
-	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		if (cache == nil) {
 			renderedCalls++;
 			cache = renderer(context);
@@ -232,7 +232,7 @@
 		return cache;
 	});
 	
-	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		return templateString;
 	});
 	
@@ -260,7 +260,7 @@
 - (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		return [wrapperTemplate renderObject:context];
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -365,7 +365,7 @@
 
 - (void)testLambdasGetLeftTrimmedLitteral {
 	NSString *templateString = @"{{#wrapper}} \n\tfoo \t\n{{/wrapper}}";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		STAssertEqualObjects(templateString, @"foo \t\n", nil);
 		return @"";
 	});
@@ -375,7 +375,7 @@
 
 - (void)testLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, GRMustacheContext *context, NSString *templateString) {
+	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		return (NSString *)nil;
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];

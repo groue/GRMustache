@@ -21,11 +21,10 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheContext.h"
 
 
 typedef NSString *(^GRMustacheRenderer)(id object);
-typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheRenderer, GRMustacheContext *, NSString *);
+typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheRenderer, id, NSString *);
 typedef id GRMustacheLambda;
 
 GRMustacheLambda GRMustacheLambdaMake(GRMustacheLambdaBlock block);

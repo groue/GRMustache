@@ -23,8 +23,11 @@
 #import <Foundation/Foundation.h>
 #import "GRBoolean.h"
 #import "GRMustacheError.h"
-#import "GRMustacheContext.h"
 #import "GRMustacheLambda.h"
 #import "GRMustacheTemplateLoader.h"
 #import "GRMustacheTemplate.h"
 
+@interface GRMustache: NSObject
++ (BOOL)strictBooleanMode;
++ (void)setStrictBooleanMode:(BOOL)aBool;
+@end

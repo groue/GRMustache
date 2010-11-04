@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTestBase.h"
+#import "GRMustacheContext_private.h"
 
 
 @interface GRBooleanTest: GRMustacheTestBase

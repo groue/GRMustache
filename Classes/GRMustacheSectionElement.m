@@ -115,7 +115,7 @@
 					}
 					return (NSString *)result;
 				};
-				[buffer appendString:[(GRMustacheLambdaBlockWrapper *)value renderContext:context
+				[buffer appendString:[(GRMustacheLambdaBlockWrapper *)value renderObject:context
 																			  fromString:templateString
 																				renderer:renderer]];
 			}

@@ -42,8 +42,8 @@
 	return self;
 }
 
-- (NSString *)renderContext:(GRMustacheContext *)context fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer {
-	NSString *result = block(renderer, context, templateString);
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer {
+	NSString *result = block(renderer, object, templateString);
 	if (result == nil) {
 		return @"";
 	}

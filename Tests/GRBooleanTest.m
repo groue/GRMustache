@@ -84,14 +84,14 @@
 @implementation GRStrictBooleanModeTest
 
 - (void)setUp {
-	strictBooleanMode = [GRMustacheContext strictBooleanMode];
-	[GRMustacheContext setStrictBooleanMode:YES];
+	strictBooleanMode = [GRMustache strictBooleanMode];
+	[GRMustache setStrictBooleanMode:YES];
 	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
 	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
 }
 
 - (void)tearDown {
-	[GRMustacheContext setStrictBooleanMode:strictBooleanMode];
+	[GRMustache setStrictBooleanMode:strictBooleanMode];
 	[context release];
 	[inheritingContext release];
 }
@@ -184,14 +184,14 @@
 @implementation GRNotStrictBooleanModeTest
 
 - (void)setUp {
-	strictBooleanMode = [GRMustacheContext strictBooleanMode];
-	[GRMustacheContext setStrictBooleanMode:NO];
+	strictBooleanMode = [GRMustache strictBooleanMode];
+	[GRMustache setStrictBooleanMode:NO];
 	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
 	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
 }
 
 - (void)tearDown {
-	[GRMustacheContext setStrictBooleanMode:strictBooleanMode];
+	[GRMustache setStrictBooleanMode:strictBooleanMode];
 	[context release];
 	[inheritingContext release];
 }
