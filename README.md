@@ -316,7 +316,7 @@ Enter the boolean strict mode with the following statement:
 
 In strict boolean mode, signed char and BOOL properties will be considered as numbers.
 
-### The case for C99 bool
+#### The case for C99 bool
 
 You may consider using the unbeloved C99 `bool` type:
 
