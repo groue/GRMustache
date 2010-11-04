@@ -40,8 +40,6 @@ Simple example
 	[GRMustacheTemplate renderObject:object fromString:@"Hi {{name}}!" error:nil];
 	// returns @"Hi Mom!"
 
-That's just for a start. We'll cover a more practical example below.
-
 Rendering methods
 -----------------
 
@@ -171,9 +169,16 @@ If the value is *false*, the section is not rendered.
 
 #### Enumerable sections
 
-If the value is *enumerable*, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable. Each item will extend the context while being rendered.
+If the value is *enumerable*, the text between the `{{#name}}` and `{{/name}}` tags is rendered once for each item in the enumerable.
 
-The section is not rendered if the enumerable is empty.
+Each item becomes the context while being rendered. This is how you iterate over a collection of objects:
+
+	My shopping list:
+	{{#items}}
+	- {{name}}
+	{{/items}}
+
+When a key is missed at the item level, it is looked into the enclosing context.
 
 #### Lambda sections
 
@@ -190,7 +195,7 @@ You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This f
 
 - `renderer` is a block which renders the inner section with its argument as a context.
 - `context` is the current context object.
-- `templateString` contains the litteral section block, unrendered : `{{tags}}` will not have been expanded.
+- `templateString` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
 
 You may, for instance, implement caching:
 
@@ -202,13 +207,44 @@ You may, for instance, implement caching:
 	  return cache;
 	});
 
+You may also implement helper functions:
+
+	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
+	                                                      GRMustacheContext *context,
+	                                                      NSString *templateString) {
+	  NSMutableString *result = [NSMutableString string];
+	  [result appendString:@"<a href=\"];
+	  [result appendString:[context valueForKey:@"url"]]; // url comes from current context
+	  [result appendString:@"\">"];
+	  [result appendString:renderer(context)]; // link text comes from the inner section
+	  [result appendString:@"</a>"];
+	  return result;
+	});
+
 #### Other sections
 
-Otherwise, that is to say, if the value is not enumerable, false, or lambda, the section is rendered within a context extended by the value.
+Otherwise - if the value is not enumerable, false, or lambda - the content of the section is rendered once.
+
+The value becomes the context while being rendered. This is how you traverse an object hierarchy:
+
+	{{#me}}
+	  {{#mother}}
+	    {{#father}}
+	      My mother's father was named {{name}}.
+	    {{/father}}
+	  {{/mother}}
+	{{/me}}
+
+When a key is missed, it is looked into the enclosing context. This is the base mechanism for templates like:
+
+	{{! If there is a title, render it in a <h1> tag }}
+	{{#title}}
+	  <h1>{{title}}</h1>
+	{{/title}}
 
 ### Inverted sections `{{^name}}...{{/name}}`
 
-Such a section is rendered when the `{{#name}}...{{/name}}` section would not.
+Such a section is rendered when the `{{#name}}...{{/name}}` section would not: in the case of false values, or empty enumerables.
 
 ### Partials `{{>name}}`
 
@@ -258,10 +294,10 @@ GRMustache provides two singletons for you to use as explicit boolean objects, w
 	// [GRYes yes] represents a true value
 	// [GRNo no] represents a false value
 	
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-	                         @"Michael Jackson", @"name",
-	                         [GRYes yes], @"dead",
-	                         nil];
+	context = [NSDictionary dictionaryWithObjectsAndKeys:
+	           @"Michael Jackson", @"name",
+	           [GRYes yes], @"dead",
+	           nil];
 
 ### BOOL properties
 
@@ -331,11 +367,11 @@ This tag renders the regular string description of the current context.
 
 For instance:
 
-	NSString *templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-	                         @"Groue's shopping cart", @"name",
-	                         [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
-	                         nil];
+	templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
+	context = [NSDictionary dictionaryWithObjectsAndKeys:
+	           @"Groue's shopping cart", @"name",
+	           [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
+	           nil];
 	
 	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
 	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
@@ -360,8 +396,8 @@ The `userInfo` dictionary of parse errors contain the GRMustacheErrorURL and GRM
 	extern NSString* const GRMustacheErrorLine;
 
 
-A practical example
--------------------
+A less simple example
+---------------------
 
 Let's be totally mad, and display a list of people and their birthdates in a UIWebView embedded in our iOS application.
 
