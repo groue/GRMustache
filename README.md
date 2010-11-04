@@ -305,9 +305,19 @@ In the following template, GRMustache would process the `dead` boolean property 
 	- {{name}} {{#dead}}(RIP){{/dead}}
 	{{/persons}}
 
-Undeclared BOOL properties, that is to say, selectors implemented without `@property` keyword in some `@interface` block, will be considered as numbers (see comments on NSNumber above).
+### In-depth BOOL properties
 
-Actually, all `signed char` properties returning 0 will be regarded as false. Not only BOOL ones.
+Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers (see comments on NSNumber above):
+
+	@interface Person: NSObject
+	- (BOOL) dead;	// will be considered as 0 and 1 integers
+	@end
+
+All declared properties as `signed char` will be considered as booleans:
+
+	@interface Person: NSObject
+	@property char initial;	// will be considered as boolean!
+	@end
 
 We thought that, besides BOOL, it would be pretty rare that you would use such a value in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
