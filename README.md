@@ -335,13 +335,11 @@ Haven't we said above that `[NSNumber numberWithBool:NO]` is not considered fals
 
 Well, thanks to Objective-C runtime, we know that the Person class did declare the `dead` property as BOOL. And that's why we are able to interpret this zero number as a false boolean.
 
-Well again, the statement above is not 100% exact. Let's be honest: what we know is that the Person class did declare the `dead` property with a runtime type equivalent to BOOL. Curious reader will be happy reading the [list of Objective-C runtime types](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html).
+Well again, the naked truth is that *GRMustache is considering false all zeros returned by signed character properties*.
 
-`<objc/obj_c.h>` defines BOOL as:
+That's because objc/obj_c.h defines BOOL as:
 
 	typedef signed char BOOL;
-
-What GRMustache actually does, is *considering false all zeros returned by signed character properties*.
 
 Should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
 
