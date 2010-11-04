@@ -81,156 +81,200 @@
 
 
 
-@implementation GRBooleanKVCTestStrictBooleanMode
+@implementation GRStrictBooleanModeTest
 
 - (void)setUp {
 	strictBooleanMode = [GRMustacheContext strictBooleanMode];
 	[GRMustacheContext setStrictBooleanMode:YES];
 	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
+	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
 }
 
 - (void)tearDown {
 	[GRMustacheContext setStrictBooleanMode:strictBooleanMode];
 	[context release];
+	[inheritingContext release];
 }
 
-- (void)test_boolFalseDeclared_isFalseObject {
+- (void)test_boolFalseDeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_boolTrueDeclared_isTrueObject {
+- (void)test_boolTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLFalseDeclared_isTrueObject {
+- (void)test_BOOLFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLTrueDeclared_isTrueObject {
+- (void)test_BOOLTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charFalseDeclared_isTrueObject {
+- (void)test_charFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charTrueDeclared_isTrueObject {
+- (void)test_charTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charFalseDeclared_isTrueObject {
+- (void)test_unsigned_charFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charTrueDeclared_isTrueObject {
+- (void)test_unsigned_charTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intFalseDeclared_isTrueObject {
+- (void)test_intFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intTrueDeclared_isTrueObject {
+- (void)test_intTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_boolFalseUndeclared_isFalseObject {
+- (void)test_boolFalseUndeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolFalseUndeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolFalseUndeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_boolTrueUndeclared_isTrueObject {
+- (void)test_boolTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLFalseUndeclared_isTrueObject {
+- (void)test_BOOLFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLTrueUndeclared_isTrueObject {
+- (void)test_BOOLTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charFalseUndeclared_isTrueObject {
+- (void)test_charFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charTrueUndeclared_isTrueObject {
+- (void)test_charTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charFalseUndeclared_isTrueObject {
+- (void)test_unsigned_charFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charTrueUndeclared_isTrueObject {
+- (void)test_unsigned_charTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intFalseUndeclared_isTrueObject {
+- (void)test_intFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intTrueUndeclared_isTrueObject {
+- (void)test_intTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
 
 @end
 
 
 
-@implementation GRBooleanKVCTestNotStrictBooleanMode
+@implementation GRNotStrictBooleanModeTest
 
 - (void)setUp {
 	strictBooleanMode = [GRMustacheContext strictBooleanMode];
 	[GRMustacheContext setStrictBooleanMode:NO];
 	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
+	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
 }
 
 - (void)tearDown {
 	[GRMustacheContext setStrictBooleanMode:strictBooleanMode];
 	[context release];
+	[inheritingContext release];
 }
 
-- (void)test_boolFalseDeclared_isFalseObject {
+- (void)test_boolFalseDeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_boolTrueDeclared_isTrueObject {
+- (void)test_boolTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLFalseDeclared_isFalseObject {
+- (void)test_BOOLFalseDeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_BOOLTrueDeclared_isTrueObject {
+- (void)test_BOOLTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charFalseDeclared_isFalseObject {
+- (void)test_charFalseDeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charFalseDeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_charTrueDeclared_isTrueObject {
+- (void)test_charTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charFalseDeclared_isTrueObject {
+- (void)test_unsigned_charFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charTrueDeclared_isTrueObject {
+- (void)test_unsigned_charTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intFalseDeclared_isTrueObject {
+- (void)test_intFalseDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intFalseDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intTrueDeclared_isTrueObject {
+- (void)test_intTrueDeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intTrueDeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_boolFalseUndeclared_isFalseObject {
+- (void)test_boolFalseUndeclared_isFalseValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolFalseUndeclared"]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolFalseUndeclared"]], GRMustacheObjectKindFalseValue, nil);
 }
-- (void)test_boolTrueUndeclared_isTrueObject {
+- (void)test_boolTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"boolTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"boolTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLFalseUndeclared_isTrueObject {
+- (void)test_BOOLFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_BOOLTrueUndeclared_isTrueObject {
+- (void)test_BOOLTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"BOOLTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"BOOLTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charFalseUndeclared_isTrueObject {
+- (void)test_charFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_charTrueUndeclared_isTrueObject {
+- (void)test_charTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charFalseUndeclared_isTrueObject {
+- (void)test_unsigned_charFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_unsigned_charTrueUndeclared_isTrueObject {
+- (void)test_unsigned_charTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"unsigned_charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"unsigned_charTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intFalseUndeclared_isTrueObject {
+- (void)test_intFalseUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intFalseUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
-- (void)test_intTrueUndeclared_isTrueObject {
+- (void)test_intTrueUndeclared_isTrueValue {
 	STAssertEquals([GRMustache objectKind:[context valueForKey:@"intTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustache objectKind:[inheritingContext valueForKey:@"intTrueUndeclared"]], GRMustacheObjectKindTrueValue, nil);
 }
 
 @end

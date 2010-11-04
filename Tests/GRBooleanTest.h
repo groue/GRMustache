@@ -26,14 +26,17 @@
 @interface GRBooleanTest: GRMustacheTestBase
 @end
 
-@interface GRBooleanKVCTestStrictBooleanMode: GRMustacheTestBase {
+@interface GRStrictBooleanModeTest: GRMustacheTestBase {
 	GRMustacheContext *context;
+	GRMustacheContext *inheritingContext;
 	BOOL strictBooleanMode;
 }
 @end
 
-@interface GRBooleanKVCTestNotStrictBooleanMode: GRMustacheTestBase {
+@interface GRNotStrictBooleanModeTest: GRMustacheTestBase {
 	GRMustacheContext *context;
+	GRMustacheContext *inheritingContext;
 	BOOL strictBooleanMode;
 }
+
 @end
