@@ -23,7 +23,7 @@
 #import "GRMustacheTestBase.h"
 
 
-@interface GRExtensionsTest : GRMustacheTestBase {
+@interface GRDotKeyTest : GRMustacheTestBase {
 
 }
 

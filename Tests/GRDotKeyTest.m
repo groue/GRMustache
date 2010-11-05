@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRExtensionsTest.h"
+#import "GRDotKeyTest.h"
 
 
-@implementation GRExtensionsTest
+@implementation GRDotKeyTest
 
 - (void)testDotVariable {
 	NSString *templateString = @"{{.}}";
