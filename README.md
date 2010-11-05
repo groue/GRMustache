@@ -126,6 +126,13 @@ The most obvious objects which support KVC are dictionaries. You may also provid
 	                      fromString:@"Hi {{name}}!"
 	                           error:nil];
 
+GRMustache catches NSUndefinedKeyException exceptions:
+
+	// doesn't throw, and returns @"Hi !"
+	[GRMustacheTemplate renderObject:[Person personWithName:@"Mom"]
+	                      fromString:@"Hi {{blame}}!"
+	                           error:nil];
+
 Tag types
 ---------
 
@@ -135,7 +142,7 @@ But let's give some definitions first:
 
 - GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary. The most obvious enumerable is NSArray.
 
-- GRMustache considers *false* the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
+- GRMustache considers *false* KVC keys misses, and the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
 
 ### Comments `{{!...}}`
 
