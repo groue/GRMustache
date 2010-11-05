@@ -126,7 +126,7 @@ The most obvious objects which support KVC are dictionaries. You may also provid
 	                      fromString:@"Hi {{name}}!"
 	                           error:nil];
 
-GRMustache catches NSUndefinedKeyException exceptions:
+GRMustache catches NSUndefinedKeyException:
 
 	// doesn't throw, and returns @"Hi !"
 	[GRMustacheTemplate renderObject:[Person personWithName:@"Mom"]
