@@ -22,6 +22,7 @@
 
 #import "GRMustache.h"
 #import "GRMustacheVariableElement_private.h"
+#import "GRMustacheRendering_private.h"
 
 
 @interface GRMustacheVariableElement()
@@ -61,9 +62,9 @@
 	id value = [context valueForKey:name];
 	if (value != nil && value != [NSNull null] && value != [GRNo no]) {
 		if (raw) {
-			return [value description];
+			return [value GRMustacheDescription];
 		} else {
-			return [self htmlEscape:[value description]];
+			return [self htmlEscape:[value GRMustacheDescription]];
 		}
 	}
 	return @"";

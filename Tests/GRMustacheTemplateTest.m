@@ -419,4 +419,11 @@
 	STAssertEqualObjects(result, @"YES", nil);
 }
 
+- (void)testNSDataIsRenderedAsNSUTF8StringEncoding {
+	NSString *templateString = @"{{.}}";
+	NSData *data = [@"中文" dataUsingEncoding:NSUTF8StringEncoding];
+	NSString *result = [GRMustacheTemplate renderObject:data fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"中文", nil);
+}
+
 @end

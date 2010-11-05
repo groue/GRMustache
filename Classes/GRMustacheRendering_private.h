@@ -20,37 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
-#import "GRMustacheLambda_private.h"
-#import "GRMustacheRendering_private.h"
+#import <Foundation/Foundation.h>
 
 
-static BOOL strictBooleanMode = NO;
-
-@implementation GRMustache
-
-+ (BOOL)strictBooleanMode {
-	return strictBooleanMode;
-}
-
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
-}
-
-+ (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object GRMustacheDescription].length == 0) {
-		return GRMustacheObjectKindFalseValue;
-	}
-	if ([object isKindOfClass:[NSDictionary class]]) {
-		return GRMustacheObjectKindTrueValue;
-	}
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-		return GRMustacheObjectKindEnumerable;
-	}
-	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]]) {
-		return GRMustacheObjectKindLambda;
-	}
-	return GRMustacheObjectKindTrueValue;
-}
-
+@interface NSObject(GRMustacheRendering)
+- (NSString *)GRMustacheDescription;
 @end

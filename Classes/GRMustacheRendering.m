@@ -20,37 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
 #import "GRMustacheLambda_private.h"
-#import "GRMustacheRendering_private.h"
 
 
-static BOOL strictBooleanMode = NO;
+@implementation NSObject(GRMustacheRendering)
 
-@implementation GRMustache
-
-+ (BOOL)strictBooleanMode {
-	return strictBooleanMode;
+- (NSString *)GRMustacheDescription {
+	return [self description];
 }
 
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
-}
+@end
 
-+ (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object GRMustacheDescription].length == 0) {
-		return GRMustacheObjectKindFalseValue;
-	}
-	if ([object isKindOfClass:[NSDictionary class]]) {
-		return GRMustacheObjectKindTrueValue;
-	}
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-		return GRMustacheObjectKindEnumerable;
-	}
-	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]]) {
-		return GRMustacheObjectKindLambda;
-	}
-	return GRMustacheObjectKindTrueValue;
+@interface NSData(GRMustacheRendering)
+- (NSString *)GRMustacheDescription;
+@end
+
+@implementation NSData(GRMustacheRendering)
+
+- (NSString *)GRMustacheDescription {
+	return [[[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding] autorelease];
 }
 
 @end
