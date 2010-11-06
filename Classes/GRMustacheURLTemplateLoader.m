@@ -32,7 +32,7 @@
 	return self;
 }
 
-- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
 	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
 	return [NSString stringWithContentsOfURL:(NSURL*)templateId
 									encoding:NSUTF8StringEncoding

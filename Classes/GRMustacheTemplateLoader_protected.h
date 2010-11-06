@@ -26,7 +26,13 @@
 
 @interface GRMustacheTemplateLoader()
 @property (nonatomic, readonly, retain) NSString *extension;
+
+// The designated initializer
 - (id)initWithExtension:(NSString *)ext;
+
+// Override this method, and return an object which uniquely identifies a template
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
-- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError;
+
+// Override this method, and return a template string
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError;
 @end

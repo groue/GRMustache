@@ -80,7 +80,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	GRMustacheTemplate *template = [templatesById objectForKey:templateId];
 	
 	if (template == nil) {
-		NSString *templateString = [self templateStringWithTemplateId:templateId error:outError];
+		NSString *templateString = [self templateStringForTemplateId:templateId error:outError];
 		if (!templateString) {
 			return nil;
 		}
@@ -133,7 +133,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	return nil;
 }
 
-- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
 	NSAssert(NO, @"abstract method");
 	return nil;
 }

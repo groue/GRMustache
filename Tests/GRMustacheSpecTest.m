@@ -54,7 +54,7 @@
 	return name;
 }
 
-- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
 	return [partialsByName objectForKey:templateId];
 }
 
