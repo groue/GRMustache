@@ -1,3 +1,3 @@
 [submodule "Mustache-Spec"]
 	path = Mustache-Spec
-	url = https://github.com/pvande/Mustache-Spec.git
+	url = https://github.com/mustache/spec.git
