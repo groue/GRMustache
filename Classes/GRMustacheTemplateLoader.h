@@ -30,6 +30,7 @@
 	NSString *extension;
 	NSMutableDictionary *templatesById;
 }
++ (id)templateLoaderWithCurrentWorkingDirectory;
 + (id)templateLoaderWithURL:(NSURL *)url;
 + (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;

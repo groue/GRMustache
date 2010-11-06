@@ -37,6 +37,10 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @implementation GRMustacheTemplateLoader
 @synthesize extension;
 
++ (id)templateLoaderWithCurrentWorkingDirectory {
+	return [self templateLoaderWithURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]];
+}
+
 + (id)templateLoaderWithURL:(NSURL *)url {
 	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:nil] autorelease];
 }

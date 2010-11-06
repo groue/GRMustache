@@ -89,7 +89,7 @@
 }
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]]
+	return [[GRMustacheTemplateLoader templateLoaderWithBundle:[NSBundle mainBundle]]
 			parseString:templateString
 			error:outError];
 }

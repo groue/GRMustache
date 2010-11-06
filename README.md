@@ -260,20 +260,21 @@ Recursive partials are possible. Just avoid infinite loops in your context objec
 
 Depending on the method which has been used to create the original template, partials will be looked in different places :
 
-- In the current working directory:
+- In the main bundle:
 	- `renderObject:fromString:error:`
 	- `parseString:error:`
-- Relatively to the URL of the including template:
-	- `renderObject:fromContentsOfURL:error:`
-	- `parseContentsOfURL:error:`
-- In the bundle:
+- In the specified bundle:
 	- `renderObject:fromResource:bundle:error:`
 	- `renderObject:fromResource:withExtension:bundle:error:`
 	- `parseResource:bundle:error:`
 	- `parseResource:withExtension:bundle:error:`
+- Relatively to the URL of the including template:
+	- `renderObject:fromContentsOfURL:error:`
+	- `parseContentsOfURL:error:`
 
 You can actually load partials from anywhere in the file system. First create a GRMustacheTemplateLoader instance with any of those class methods:
 
+	+ (id)templateLoaderWithCurrentWorkingDirectory;
 	+ (id)templateLoaderWithURL:(NSURL *)url;
 	+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
