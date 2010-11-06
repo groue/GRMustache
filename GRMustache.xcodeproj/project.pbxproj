@@ -49,6 +49,7 @@
 		56D87ED4128578D100F5CF76 /* YAMLCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECD128578D100F5CF76 /* YAMLCategories.m */; };
 		56D87ED5128578D100F5CF76 /* YAMLCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECF128578D100F5CF76 /* YAMLCocoaCategories.m */; };
 		56D87EE41285793E00F5CF76 /* GRMustacheSpecTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87EE31285793E00F5CF76 /* GRMustacheSpecTest.m */; };
+		56D87F0912857C7B00F5CF76 /* specs in Resources */ = {isa = PBXBuildFile; fileRef = 56D87F0012857C7B00F5CF76 /* specs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +130,7 @@
 		56D87ED0128578D100F5CF76 /* YamlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YamlController.h; sourceTree = "<group>"; };
 		56D87EE21285793E00F5CF76 /* GRMustacheSpecTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSpecTest.h; sourceTree = "<group>"; };
 		56D87EE31285793E00F5CF76 /* GRMustacheSpecTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSpecTest.m; sourceTree = "<group>"; };
+		56D87F0012857C7B00F5CF76 /* specs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = specs; path = "Mustache-Spec/specs"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +175,6 @@
 				56115A3B127F32EA00F01AD0 /* GRMustacheTest-Info.plist */,
 				56115416127EC67F00F01AD0 /* Classes */,
 				56115431127EC68000F01AD0 /* Tests */,
-				56115443127EC79700F01AD0 /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -229,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				56D87EC4128578D100F5CF76 /* syck */,
+				56115443127EC79700F01AD0 /* Resources */,
 				56115504127ED04F00F01AD0 /* GRMustacheTestBase.h */,
 				56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */,
 				56115869127F17A000F01AD0 /* GRMustacheTemplateTest.h */,
@@ -250,6 +252,7 @@
 		56115443127EC79700F01AD0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				56D87F0012857C7B00F5CF76 /* specs */,
 				561157DD127F0C9400F01AD0 /* comments.mustache */,
 				561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */,
 				561157E0127F0C9400F01AD0 /* delimiters.mustache */,
@@ -269,7 +272,8 @@
 				56115983127F2A5200F01AD0 /* utf8.mustache */,
 				56115985127F2A5E00F01AD0 /* utf8_partial.mustache */,
 			);
-			path = Resources;
+			name = Resources;
+			path = ../Resources;
 			sourceTree = "<group>";
 		};
 		56D87EC4128578D100F5CF76 /* syck */ = {
@@ -359,6 +363,7 @@
 				561159A4127F2C7900F01AD0 /* inner_partial.mustache in Resources */,
 				561159B7127F2D5F00F01AD0 /* inner_partial.txt in Resources */,
 				561159B8127F2D5F00F01AD0 /* template_partial.txt in Resources */,
+				56D87F0912857C7B00F5CF76 /* specs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
