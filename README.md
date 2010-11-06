@@ -217,13 +217,10 @@ You may also implement helper functions:
 	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
 	                                                      id context,
 	                                                      NSString *templateString) {
-	  NSMutableString *result = [NSMutableString string];
-	  [result appendString:@"<a href=\"];
-	  [result appendString:[context valueForKey:@"url"]]; // url comes from current context
-	  [result appendString:@"\">"];
-	  [result appendString:renderer(context)]; // link text comes from the inner section
-	  [result appendString:@"</a>"];
-	  return result;
+	  return [NSString stringWithFormat:
+	          @"<a href=\"%@\">%@</a>",
+	          [context valueForKey:@"url"], // url comes from current context
+	          renderer(context)]            // link text comes from the inner section
 	});
 
 #### Other sections
