@@ -34,6 +34,6 @@
 + (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
-- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
 @end
