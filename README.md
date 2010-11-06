@@ -276,7 +276,7 @@ GRMustache is shipped with built-in ability to load partials from the file syste
 
 If this does not fit your needs, you may subclass the GRMustacheTemplateLoader class.
 
-We provide below the implementation of a template loader which loads partials from a dictionary:
+We provide below the implementation of a template loader which loads partials from a dictionary containing template strings:
 
 	// Include this header dedicated to GRMustacheTemplateLoader subclasses:
 	#import "GRMustacheTemplateLoader_protected.h"
