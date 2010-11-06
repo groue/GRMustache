@@ -28,13 +28,14 @@
 // The extension of loaded templates (if applicable)
 @property (nonatomic, readonly, retain) NSString *extension;
 
-// The designated initializer
+// The designated initializer. Subclasses which ignore extensions may pass nil as the ext argument.
 - (id)initWithExtension:(NSString *)ext;
 
 // Override this method, and return an object which uniquely identifies a template.
 // Beware that this unicity is the key to recursive partials.
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
 
-// Override this method, and return a template string
+// Override this method, and return a template string.
+// If applicable, it is your responsability to use the extension property in order to load the correct template.
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError;
 @end
