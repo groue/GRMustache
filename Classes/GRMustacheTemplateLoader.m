@@ -80,8 +80,22 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	GRMustacheTemplate *template = [templatesById objectForKey:templateId];
 	
 	if (template == nil) {
+		// templateStringForTemplateId is a method that GRMustache users may implement.
+		// We have to take extra care of error handling here.
+		if (outError != NULL) {
+			*outError = nil;
+		}
 		NSString *templateString = [self templateStringForTemplateId:templateId error:outError];
 		if (!templateString) {
+			if (outError != NULL) {
+				// make sure we return an error
+				if (*outError == nil) {
+					*outError = [NSError errorWithDomain:GRMustacheErrorDomain
+													code:GRMustacheErrorCodeTemplateNotFound
+												userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
+																					 forKey:NSLocalizedDescriptionKey]];
+				}
+			}
 			return nil;
 		}
 		
