@@ -95,7 +95,7 @@
 }
 
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]]
+	return [[GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]]
 			parseContentsOfURL:url
 			error:outError];
 }

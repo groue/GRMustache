@@ -30,9 +30,8 @@
 	NSString *extension;
 	NSMutableDictionary *templatesById;
 }
-+ (id)templateLoaderWithCurrentWorkingDirectory;
-+ (id)templateLoaderWithURL:(NSURL *)url;
-+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
++ (id)templateLoaderWithBaseURL:(NSURL *)url;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;

@@ -38,14 +38,14 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @synthesize extension;
 
 + (id)templateLoaderWithCurrentWorkingDirectory {
-	return [self templateLoaderWithURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]];
+	return [self templateLoaderWithBaseURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]];
 }
 
-+ (id)templateLoaderWithURL:(NSURL *)url {
++ (id)templateLoaderWithBaseURL:(NSURL *)url {
 	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:nil] autorelease];
 }
 
-+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext {
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext {
 	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:ext] autorelease];
 }
 

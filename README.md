@@ -274,9 +274,8 @@ Depending on the method which has been used to create the original template, par
 
 You can actually load partials from anywhere in the file system. First create a GRMustacheTemplateLoader instance with any of those class methods:
 
-	+ (id)templateLoaderWithCurrentWorkingDirectory;
-	+ (id)templateLoaderWithURL:(NSURL *)url;
-	+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
+	+ (id)templateLoaderWithBaseURL:(NSURL *)url;
+	+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
 
