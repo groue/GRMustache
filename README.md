@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
 
-Its parser has been inspired by the Mustache [go implementation](http://github.com/hoisie/mustache.go/). Its tests are based on the [Ruby](http://github.com/defunkt/mustache) one, that we have considered as a reference. We also include tests from [Mustache-Spec](https://github.com/pvande/Mustache-Spec).
+Its parser has been inspired by the Mustache [go implementation](http://github.com/hoisie/mustache.go/). Its tests are based on the [Ruby](http://github.com/defunkt/mustache) one, that we have considered as a reference. We also include a set of chosen tests from [Mustache-Spec](https://github.com/pvande/Mustache-Spec).
 
 It supports the following Mustache features:
 
