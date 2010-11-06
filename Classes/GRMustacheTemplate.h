@@ -89,7 +89,10 @@
 			  error:(NSError **)outError;
 
 
-// Renders.
+// Renders with a context object
 - (NSString *)renderObject:(id)object;
+
+// Renders without context
+- (NSString *)render;
 
 @end

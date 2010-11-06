@@ -122,6 +122,10 @@
 	[super dealloc];
 }
 
+- (NSString *)render {
+	return [self renderObject:nil];
+}
+
 - (NSString *)renderObject:(id)object {
 	return [self renderContext:[GRMustacheContext contextWithObject:object]];
 }
