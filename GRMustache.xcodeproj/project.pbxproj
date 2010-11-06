@@ -43,6 +43,12 @@
 		56115CF31281DD3300F01AD0 /* GRBoolean.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115CF21281DD3300F01AD0 /* GRBoolean.m */; };
 		56115CFD1281E2FF00F01AD0 /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115CFC1281E2FF00F01AD0 /* GRBooleanTest.m */; };
 		56115FEB1283D3E300F01AD0 /* GRMustacheRendering.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115FEA1283D3E300F01AD0 /* GRMustacheRendering.m */; };
+		56D87ED1128578D100F5CF76 /* GSNSDataExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87EC6128578D100F5CF76 /* GSNSDataExtensions.m */; };
+		56D87ED2128578D100F5CF76 /* libsyck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56D87EC7128578D100F5CF76 /* libsyck.a */; };
+		56D87ED3128578D100F5CF76 /* SyckInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECA128578D100F5CF76 /* SyckInput.m */; };
+		56D87ED4128578D100F5CF76 /* YAMLCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECD128578D100F5CF76 /* YAMLCategories.m */; };
+		56D87ED5128578D100F5CF76 /* YAMLCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECF128578D100F5CF76 /* YAMLCocoaCategories.m */; };
+		56D87EE41285793E00F5CF76 /* GRMustacheSpecTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87EE31285793E00F5CF76 /* GRMustacheSpecTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +115,20 @@
 		56115FE91283D3E300F01AD0 /* GRMustacheRendering_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRendering_private.h; sourceTree = "<group>"; };
 		56115FEA1283D3E300F01AD0 /* GRMustacheRendering.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheRendering.m; sourceTree = "<group>"; };
 		56CF962A127EC5540043796D /* GRMustacheTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustacheTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		56D87EC5128578D100F5CF76 /* GSNSDataExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNSDataExtensions.h; sourceTree = "<group>"; };
+		56D87EC6128578D100F5CF76 /* GSNSDataExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSNSDataExtensions.m; sourceTree = "<group>"; };
+		56D87EC7128578D100F5CF76 /* libsyck.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsyck.a; sourceTree = "<group>"; };
+		56D87EC8128578D100F5CF76 /* syck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syck.h; sourceTree = "<group>"; };
+		56D87EC9128578D100F5CF76 /* syck_st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syck_st.h; sourceTree = "<group>"; };
+		56D87ECA128578D100F5CF76 /* SyckInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyckInput.m; sourceTree = "<group>"; };
+		56D87ECB128578D100F5CF76 /* YAML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YAML.h; sourceTree = "<group>"; };
+		56D87ECC128578D100F5CF76 /* YAMLCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YAMLCategories.h; sourceTree = "<group>"; };
+		56D87ECD128578D100F5CF76 /* YAMLCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YAMLCategories.m; sourceTree = "<group>"; };
+		56D87ECE128578D100F5CF76 /* YAMLCocoaCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YAMLCocoaCategories.h; sourceTree = "<group>"; };
+		56D87ECF128578D100F5CF76 /* YAMLCocoaCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YAMLCocoaCategories.m; sourceTree = "<group>"; };
+		56D87ED0128578D100F5CF76 /* YamlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YamlController.h; sourceTree = "<group>"; };
+		56D87EE21285793E00F5CF76 /* GRMustacheSpecTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSpecTest.h; sourceTree = "<group>"; };
+		56D87EE31285793E00F5CF76 /* GRMustacheSpecTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSpecTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D87ED2128578D100F5CF76 /* libsyck.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +228,7 @@
 		56115431127EC68000F01AD0 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				56D87EC4128578D100F5CF76 /* syck */,
 				56115504127ED04F00F01AD0 /* GRMustacheTestBase.h */,
 				56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */,
 				56115869127F17A000F01AD0 /* GRMustacheTemplateTest.h */,
@@ -217,6 +239,8 @@
 				56115B6D127FE08C00F01AD0 /* GRDotKeyTest.m */,
 				56115C4112812BD800F01AD0 /* GRMustacheContextTest.h */,
 				56115C4212812BD800F01AD0 /* GRMustacheContextTest.m */,
+				56D87EE21285793E00F5CF76 /* GRMustacheSpecTest.h */,
+				56D87EE31285793E00F5CF76 /* GRMustacheSpecTest.m */,
 				56115CFB1281E2FF00F01AD0 /* GRBooleanTest.h */,
 				56115CFC1281E2FF00F01AD0 /* GRBooleanTest.m */,
 			);
@@ -247,6 +271,25 @@
 			);
 			path = Resources;
 			sourceTree = "<group>";
+		};
+		56D87EC4128578D100F5CF76 /* syck */ = {
+			isa = PBXGroup;
+			children = (
+				56D87EC5128578D100F5CF76 /* GSNSDataExtensions.h */,
+				56D87EC6128578D100F5CF76 /* GSNSDataExtensions.m */,
+				56D87EC7128578D100F5CF76 /* libsyck.a */,
+				56D87EC8128578D100F5CF76 /* syck.h */,
+				56D87EC9128578D100F5CF76 /* syck_st.h */,
+				56D87ECA128578D100F5CF76 /* SyckInput.m */,
+				56D87ECB128578D100F5CF76 /* YAML.h */,
+				56D87ECC128578D100F5CF76 /* YAMLCategories.h */,
+				56D87ECD128578D100F5CF76 /* YAMLCategories.m */,
+				56D87ECE128578D100F5CF76 /* YAMLCocoaCategories.h */,
+				56D87ECF128578D100F5CF76 /* YAMLCocoaCategories.m */,
+				56D87ED0128578D100F5CF76 /* YamlController.h */,
+			);
+			path = syck;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -360,6 +403,11 @@
 				56115CF31281DD3300F01AD0 /* GRBoolean.m in Sources */,
 				56115CFD1281E2FF00F01AD0 /* GRBooleanTest.m in Sources */,
 				56115FEB1283D3E300F01AD0 /* GRMustacheRendering.m in Sources */,
+				56D87ED1128578D100F5CF76 /* GSNSDataExtensions.m in Sources */,
+				56D87ED3128578D100F5CF76 /* SyckInput.m in Sources */,
+				56D87ED4128578D100F5CF76 /* YAMLCategories.m in Sources */,
+				56D87ED5128578D100F5CF76 /* YAMLCocoaCategories.m in Sources */,
+				56D87EE41285793E00F5CF76 /* GRMustacheSpecTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,6 +429,11 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "GRMustacheTest-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/syck\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -407,6 +460,11 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "PMustacheTest-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/syck\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
