@@ -455,7 +455,7 @@ Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
 
 	typedef enum {
 		GRMustacheErrorCodeParseError,
-		GRMustacheErrorCodePartialNotFound,
+		GRMustacheErrorCodeTemplateNotFound,
 	} GRMustacheErrorCode;
 
 The `userInfo` dictionary of parse errors contain the GRMustacheErrorLine key, which provides with the line where the error occurred.
