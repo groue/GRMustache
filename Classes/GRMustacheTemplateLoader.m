@@ -31,7 +31,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
 @interface GRMustacheTemplateLoader()
-//- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
@@ -79,7 +78,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 		}
 		return nil;
 	}
-//	return [self parseContentsOfURL:url error:outError];
 	
 	GRMustacheTemplate *template = [templatesById objectForKey:templateId];
 	
