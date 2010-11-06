@@ -261,9 +261,20 @@
 				}
 				tag = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				NSArray *newTags = [tag componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
-				if (newTags.count == 2) {
-					self.otag = [newTags objectAtIndex:0];
-					self.ctag = [newTags objectAtIndex:1];
+				NSIndexSet *indexes = [newTags indexesOfObjectsPassingTest:^(id obj, NSUInteger idx, BOOL *stop) {
+					return (BOOL)(((NSString*)obj).length > 0);
+				}];
+				
+				if (indexes.count == 2) {
+					NSUInteger index1 = [indexes firstIndex];
+					NSUInteger index2 = [indexes lastIndex];
+					if (index1 < index2) {
+						self.otag = [newTags objectAtIndex:index1];
+						self.ctag = [newTags objectAtIndex:index2];
+					} else {
+						self.otag = [newTags objectAtIndex:index2];
+						self.ctag = [newTags objectAtIndex:index1];
+					}
 				} else {
 					if (outError != NULL) {
 						*outError = [self parseErrorAtLine:curline description:[NSString stringWithFormat:@"Invalid meta tag %@=%@=%@", otag, tag, ctag, nil]];
@@ -423,9 +434,20 @@
 				}
 				tag = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				NSArray *newTags = [tag componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
-				if (newTags.count == 2) {
-					self.otag = [newTags objectAtIndex:0];
-					self.ctag = [newTags objectAtIndex:1];
+				NSIndexSet *indexes = [newTags indexesOfObjectsPassingTest:^(id obj, NSUInteger idx, BOOL *stop) {
+					return (BOOL)(((NSString*)obj).length > 0);
+				}];
+				
+				if (indexes.count == 2) {
+					NSUInteger index1 = [indexes firstIndex];
+					NSUInteger index2 = [indexes lastIndex];
+					if (index1 < index2) {
+						self.otag = [newTags objectAtIndex:index1];
+						self.ctag = [newTags objectAtIndex:index2];
+					} else {
+						self.otag = [newTags objectAtIndex:index2];
+						self.ctag = [newTags objectAtIndex:index1];
+					}
 				} else {
 					if (outError != NULL) {
 						*outError = [self parseErrorAtLine:curline description:[NSString stringWithFormat:@"Invalid meta tag %@=%@=%@", otag, tag, ctag, nil]];
