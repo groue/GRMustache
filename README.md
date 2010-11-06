@@ -252,25 +252,46 @@ Such a section is rendered when the `{{#name}}...{{/name}}` section would not: i
 
 A `{{>name}}` tag is rendered as a partial loaded from the file system.
 
-The partial must have the same extension as its including template.
+Partials must have the same extension as their including template.
 
-Depending on the method which has been used to create the original template, the partial will be looked in different places :
+Recursive partials are possible. Just avoid infinite loops in your context objects.
 
-- Methods which will look in the current working directory:
+Depending on the method which has been used to create the original template, partials will be looked in different places :
+
+- In the current working directory:
 	- `renderObject:fromString:error:`
 	- `parseString:error:`
-- Methods which will look relatively to the URL of the including template:
+- Relatively to the URL of the including template:
 	- `renderObject:fromContentsOfURL:error:`
 	- `parseContentsOfURL:error:`
-- Methods which will look in the bundle:
+- In the bundle:
 	- `renderObject:fromResource:bundle:error:`
 	- `renderObject:fromResource:withExtension:bundle:error:`
 	- `parseResource:bundle:error:`
 	- `parseResource:withExtension:bundle:error:`
 
-Recursive partials are possible. Just avoid infinite loops in your context objects.
+You can actually load partials from anywhere in the file system. First create a GRMustacheTemplateLoader instance with any of those class methods:
 
-#### Implementing your own partial loading strategy
+	+ (id)templateLoaderWithURL:(NSURL *)url;
+	+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
+	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
+	+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
+
+Once you have a GRMustacheTemplateLoader object, you may load a template from its location:
+
+	GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader ...];
+	GRMustacheTemplate *template = [loader parseTemplateNamed:@"document" error:nil];
+
+You may also have the loader parse a template string. Only partials would then be loaded from the loader's location:
+
+	GRMustacheTemplate *template = [loader parseString:@"..." error:nil];
+
+The rendering is done as usual:
+
+	NSString *rendering = [template renderObject:...];
+
+
+#### Implementing your own GRMustacheTemplateLoader
 
 GRMustache is shipped with built-in ability to load partials from the file system, or from a bundle, as seen above.
 
