@@ -106,6 +106,8 @@ For instance:
 	[template renderObject:[NSDictionary dictionaryWithObject:@"Dad" forKey:@"name"]];
 	// @"Hi !"
 	[template renderObject:nil];
+	// @"Hi !", shortcut to renderObject:nil
+	[template render];
 
 Context objects
 ---------------
