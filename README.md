@@ -270,6 +270,72 @@ Depending on the method which has been used to create the original template, the
 
 Recursive partials are possible. Just avoid infinite loops in your context objects.
 
+#### Implementing your own partial loading strategy
+
+GRMustache is shipped with built-in ability to load partials from the file system, or from a bundle, as seen above.
+
+If this does not fit your needs, you may subclass the GRMustacheTemplateLoader class.
+
+We provide below the implementation of a template loader which loads partials from a dictionary:
+
+	// Include this header dedicated to GRMustacheTemplateLoader subclasses:
+	#import "GRMustacheTemplateLoader_protected.h"
+	
+	@interface DictionaryTemplateLoader : GRMustacheTemplateLoader {
+	  NSDictionary *templatesByName;
+	}
+	+ (id)loaderWithDictionary:(NSDictionary *)templatesByName;
+	- (id)initWithDictionary:(NSDictionary *)templatesByName;
+	@end
+	
+	@implementation DictionaryTemplateLoader
+	
+	+ (id)loaderWithDictionary:(NSDictionary *)templatesByName {
+	  return [[[self alloc] initWithDictionary:templatesByName] autorelease];
+	}
+	
+	- (id)initWithDictionary:(NSDictionary *)theTemplatesByName {
+	  // initWithExtension: is the GRMustacheTemplateLoader designated initializer
+	  if (self == [self initWithExtension:nil]) {
+	    templatesByName = [theTemplatesByName retain];
+	  }
+	  return self;
+	}
+	
+	- (void)dealloc {
+	  [templatesByName release];
+	  [super dealloc];
+	}
+	
+	// This method must be implemented by GRMustacheTemplateLoader subclasses.
+	// Provided with a partial name, returns an object which uniquely identifies a template.
+	- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+	  return name;
+	}
+	
+	// This method must be implemented by GRMustacheTemplateLoader subclasses.
+	// Returns a template string.
+	- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+	  return [templatesByName objectForKey:templateId];
+	}
+
+	@end
+
+Now you may instanciate one:
+
+	DictionaryTemplateLoader *loader = [DictionaryTemplateLoader loaderWithDictionary:
+	                                    [NSDictionary dictionaryWithObject:@"It works!"
+	                                                                forKey:@"partial"]];
+
+Then load a template from it:
+
+	NSString *templateString = "{{>partial}}";
+	GRMustacheTemplate *template = [loader parseString:templateString error:nil];
+
+And finally render:
+
+	[template render];	// "It works!"
+
 Booleans Values
 ---------------
 
