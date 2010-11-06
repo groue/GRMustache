@@ -481,10 +481,6 @@ Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
 		GRMustacheErrorCodeTemplateNotFound,
 	} GRMustacheErrorCode;
 
-The `userInfo` dictionary of parse errors contain the GRMustacheErrorLine key, which provides with the line where the error occurred.
-
-	extern NSString* const GRMustacheErrorLine;
-
 
 A less simple example
 ---------------------
