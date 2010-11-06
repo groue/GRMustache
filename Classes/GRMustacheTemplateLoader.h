@@ -35,4 +35,5 @@
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
 @end
