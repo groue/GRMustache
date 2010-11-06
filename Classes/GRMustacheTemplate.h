@@ -28,7 +28,7 @@
 
 @interface GRMustacheTemplate: GRMustacheElement {
 	GRMustacheTemplateLoader *templateLoader;
-	NSURL *url;
+	NSString *templateId;
 	NSString *templateString;
 	NSString *otag;
 	NSString *ctag;

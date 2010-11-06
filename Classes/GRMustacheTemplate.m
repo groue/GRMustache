@@ -37,7 +37,7 @@
 @property (nonatomic) NSInteger p;
 @property (nonatomic) NSInteger curline;
 @property (nonatomic, retain) NSMutableArray *elems;
-- (id)initWithString:(NSString *)templateString url:(NSURL *)url templateLoader:(GRMustacheTemplateLoader *)templateLoader;
+- (id)initWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader;
 - (GRMustacheSectionElement *)parseSectionWithName:(NSString *)name inverted:(BOOL)inverted startline:(NSInteger)line error:(NSError **)outError;
 - (NSString *)readString:(NSString *)s eof:(BOOL *)eof;
 - (void)skipWhiteSpace;
@@ -46,7 +46,7 @@
 
 
 @implementation GRMustacheTemplate
-@synthesize url;
+@synthesize templateId;
 @synthesize templateLoader;
 @synthesize templateString;
 @synthesize otag;
@@ -89,13 +89,9 @@
 }
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
-	GRMustacheTemplate *template = [self templateWithString:templateString
-													   url:nil
-											templateLoader:[GRMustacheTemplateLoader templateLoaderWithURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]]];
-	if ([template parseAndReturnError:outError]) {
-		return template;
-	}
-	return nil;
+	return [[GRMustacheTemplateLoader templateLoaderWithURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]]
+			parseString:templateString
+			error:outError];
 }
 
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
@@ -117,7 +113,7 @@
 }
 
 - (void)dealloc {
-	[url release];
+	[templateId release];
 	[templateLoader release];
 	[templateString release];
 	[otag release];
@@ -139,15 +135,15 @@
 }
 
 
-+ (id)templateWithString:(NSString *)templateString url:(NSURL *)url templateLoader:(GRMustacheTemplateLoader *)templateLoader {
-	return [[[self alloc] initWithString:templateString url:url templateLoader:templateLoader] autorelease];
++ (id)templateWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader {
+	return [[[self alloc] initWithString:templateString templateId:templateId templateLoader:templateLoader] autorelease];
 }
 
-- (id)initWithString:(NSString *)theTemplateString url:(NSURL *)theURL templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader {
+- (id)initWithString:(NSString *)theTemplateString templateId:(id)theTemplateId templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader {
 	NSAssert(theTemplateLoader, @"Can't init GRMustacheTemplate with nil template loader");
 	NSAssert(theTemplateString, @"Can't init GRMustacheTemplate with nil template string");
 	if (self == [self init]) {
-		self.url = theURL;
+		self.templateId = theTemplateId;
 		self.templateLoader = theTemplateLoader;
 		self.templateString = theTemplateString;
 		self.otag = @"{{";
@@ -550,26 +546,28 @@
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 	
-	if (url) {
-		[userInfo setObject:url
-					 forKey:GRMustacheErrorURL];
-		NSURL *mainBundleURL = [[NSBundle mainBundle].bundleURL URLByStandardizingPath];
-		NSURL *templateURL = url;
-		NSURL *directoryURL = nil;
-		while (YES) {
-			directoryURL = [[templateURL URLByDeletingLastPathComponent] URLByStandardizingPath];
-			if ([directoryURL isEqual:templateURL]) {
-				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, url, description]
-							 forKey:NSLocalizedDescriptionKey];
-				break;
-			}
-			if ([directoryURL isEqual:mainBundleURL]) {
-				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, [[[url URLByStandardizingPath] absoluteString] stringByReplacingOccurrencesOfString:[directoryURL absoluteString] withString:@""], description]
-							 forKey:NSLocalizedDescriptionKey];
-				break;
-			}
-			templateURL = directoryURL;
-		}
+	if (templateId) {
+//		[userInfo setObject:url
+//					 forKey:GRMustacheErrorURL];
+//		NSURL *mainBundleURL = [[NSBundle mainBundle].bundleURL URLByStandardizingPath];
+//		NSURL *templateURL = url;
+//		NSURL *directoryURL = nil;
+//		while (YES) {
+//			directoryURL = [[templateURL URLByDeletingLastPathComponent] URLByStandardizingPath];
+//			if ([directoryURL isEqual:templateURL]) {
+//				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, url, description]
+//							 forKey:NSLocalizedDescriptionKey];
+//				break;
+//			}
+//			if ([directoryURL isEqual:mainBundleURL]) {
+//				[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, [[[url URLByStandardizingPath] absoluteString] stringByReplacingOccurrencesOfString:[directoryURL absoluteString] withString:@""], description]
+//							 forKey:NSLocalizedDescriptionKey];
+//				break;
+//			}
+//			templateURL = directoryURL;
+//		}
+		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d of %@: %@", line, templateId, description]
+					 forKey:NSLocalizedDescriptionKey];
 	} else {
 		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
 					 forKey:NSLocalizedDescriptionKey];

@@ -23,31 +23,19 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheURLTemplateLoader_private.h"
+#import "GRMustacheBundleTemplateLoader_private.h"
 
 
 NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
-@interface GRMustacheURLTemplateLoader: GRMustacheTemplateLoader {
-	NSURL *url;
-}
-- (id)initWithURL:(NSURL *)url extension:(NSString *)ext;
-@end
-
-
-@interface GRMustacheBundleTemplateLoader: GRMustacheTemplateLoader {
-	NSBundle *bundle;
-}
-- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
-@end
-
-
 @interface GRMustacheTemplateLoader()
-- (id)initWithExtension:(NSString *)ext;
-- (NSURL *)urlForTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template;
+//- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
+@synthesize extension;
 
 + (id)templateLoaderWithURL:(NSURL *)url {
 	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:nil] autorelease];
@@ -65,122 +53,98 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	return [[[GRMustacheBundleTemplateLoader alloc] initWithBundle:bundle extension:ext] autorelease];
 }
 
-- (id)initWithExtension:(NSString *)ext {
+- (id)initWithExtension:(NSString *)theExtension {
 	if (self = [self init]) {
-		if (ext.length == 0) {
-			ext = GRMustacheDefaultExtension;
+		if (theExtension.length == 0) {
+			theExtension = GRMustacheDefaultExtension;
 		}
-		extension = [ext retain];
-		templatesByURL = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
+		extension = [theExtension retain];
+		templatesById = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
 	}
 	return self;
 }
 
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template error:(NSError **)outError {
-	NSURL *url = [self urlForTemplateNamed:name relativeToTemplate:template];
-	if (url == nil) {
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)baseTemplate error:(NSError **)outError {
+	id templateId = [self templateIdForTemplateNamed:name relativeToTemplateId:baseTemplate.templateId];
+	if (templateId == nil) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:GRMustacheErrorDomain
-											code:GRMustacheErrorCodePartialNotFound
+											code:GRMustacheErrorCodeTemplateNotFound
 										userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
 																			 forKey:NSLocalizedDescriptionKey]];
 		}
 		return nil;
 	}
-	return [self parseContentsOfURL:url error:outError];
+//	return [self parseContentsOfURL:url error:outError];
+	
+	GRMustacheTemplate *template = [templatesById objectForKey:templateId];
+	
+	if (template == nil) {
+		NSString *templateString = [self templateStringWithTemplateId:templateId error:outError];
+		if (!templateString) {
+			return nil;
+		}
+		
+		template = [GRMustacheTemplate templateWithString:templateString templateId:templateId templateLoader:self];
+		
+		// store template before parsing, so that we support recursive templates
+		[self setTemplate:template forTemplateId:templateId];
+		
+		if (![template parseAndReturnError:outError]) {
+			// remove template if parsing fails
+			[self setTemplate:nil forTemplateId:templateId];
+			return nil;
+		}
+	}
+	
+	return template;
 }
 
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {
 	return [self parseTemplateNamed:name relativeToTemplate:nil error:outError];
 }
 
-- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	NSAssert(url, @"Can't build template with nil url");
-	GRMustacheTemplate *template = [templatesByURL objectForKey:url];
-	if (template == nil) {
-		NSString *templateString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:outError];
-		if (!templateString) {
-			return nil;
-		}
-		template = [GRMustacheTemplate templateWithString:templateString url:url templateLoader:self];
-		
-		// store template before parsing, so that we support recursive templates
-		[templatesByURL setObject:template forKey:url];
-		
-		if (![template parseAndReturnError:outError]) {
-			// remove template if parsing fails
-			[templatesByURL removeObjectForKey:url];
-			return nil;
-		}
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate templateWithString:templateString templateId:nil templateLoader:self];
+	if (![template parseAndReturnError:outError]) {
+		return nil;
 	}
 	return template;
 }
 
-- (NSURL *)urlForTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template {
+- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
+	NSString *templateString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:outError];
+	if (!templateString) {
+		return nil;
+	}
+	return [self parseString:templateString error:outError];
+}
+
+- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId {
+	if (template) {
+		[templatesById setObject:template forKey:templateId];
+	} else {
+		[templatesById removeObjectForKey:templateId];
+	}
+}
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+	NSAssert(NO, @"abstract method");
+	return nil;
+}
+
+- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
 	NSAssert(NO, @"abstract method");
 	return nil;
 }
 
 - (void)dealloc {
 	[extension release];
-	[templatesByURL release];
+	[templatesById release];
 	[super dealloc];
 }
 
 @end
 
-
-#pragma mark -
-
-
-@implementation GRMustacheURLTemplateLoader
-
-- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext {
-	if (self = [super initWithExtension:ext]) {
-		url = [theURL retain];
-	}
-	return self;
-}
-
-- (NSURL *)urlForTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template {
-	if (template.url) {
-		return [NSURL URLWithString:[name stringByAppendingPathExtension:extension] relativeToURL:template.url];
-	}
-	return [[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:extension];
-}
-
-- (void)dealloc {
-	[url release];
-	[super dealloc];
-}
-
-@end
-
-
-#pragma mark -
-
-
-@implementation GRMustacheBundleTemplateLoader
-
-- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext {
-	if (self = [self initWithExtension:ext]) {
-		if (theBundle == nil) {
-			theBundle = [NSBundle mainBundle];
-		}
-		bundle = [theBundle retain];
-	}
-	return self;
-}
-
-- (NSURL *)urlForTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template {
-	return [bundle URLForResource:name withExtension:extension];
-}
-
-- (void)dealloc {
-	[bundle release];
-	[super dealloc];
-}
-
-@end
 
 

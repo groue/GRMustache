@@ -26,7 +26,7 @@
 @class GRMustacheSectionElement;
 
 @interface GRMustacheTemplate()
-@property (nonatomic, retain) NSURL *url;
-+ (id)templateWithString:(NSString *)templateString url:(NSURL *)url templateLoader:(GRMustacheTemplateLoader *)templateLoader;
+@property (nonatomic, retain) NSString *templateId;
++ (id)templateWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader;
 - (BOOL)parseAndReturnError:(NSError **)outError;
 @end

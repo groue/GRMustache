@@ -21,18 +21,12 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheTemplateLoader.h"
 
 
-@class GRMustacheTemplate;
-
-@interface GRMustacheTemplateLoader: NSObject {
-@private
-	NSString *extension;
-	NSMutableDictionary *templatesById;
-}
-+ (id)templateLoaderWithURL:(NSURL *)url;
-+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+@interface GRMustacheTemplateLoader()
+@property (nonatomic, readonly, retain) NSString *extension;
+- (id)initWithExtension:(NSString *)ext;
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
+- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError;
 @end

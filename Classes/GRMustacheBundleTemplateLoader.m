@@ -20,19 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheBundleTemplateLoader_private.h"
 
 
-@class GRMustacheTemplate;
+@implementation GRMustacheBundleTemplateLoader
 
-@interface GRMustacheTemplateLoader: NSObject {
-@private
-	NSString *extension;
-	NSMutableDictionary *templatesById;
+- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext {
+	if (self = [self initWithExtension:ext]) {
+		if (theBundle == nil) {
+			theBundle = [NSBundle mainBundle];
+		}
+		bundle = [theBundle retain];
+	}
+	return self;
 }
-+ (id)templateLoaderWithURL:(NSURL *)url;
-+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+
+- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
+	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
+	return [NSString stringWithContentsOfURL:(NSURL*)templateId
+									encoding:NSUTF8StringEncoding
+									   error:outError];
+}
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+	return [bundle URLForResource:name withExtension:self.extension];
+}
+
+- (void)dealloc {
+	[bundle release];
+	[super dealloc];
+}
+
 @end

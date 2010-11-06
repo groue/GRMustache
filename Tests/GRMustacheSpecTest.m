@@ -22,6 +22,44 @@
 
 #import "GRMustacheSpecTest.h"
 #import "YAML.h"
+#import "GRMustacheTemplateLoader_protected.h"
+
+
+@interface GRMustacheSpecTemplateLoader : GRMustacheTemplateLoader {
+	NSDictionary *partialsByName;
+}
++ (id)loaderWithDictionary:(NSDictionary *)partialsByName;
+- (id)initWithDictionary:(NSDictionary *)partialsByName;
+@end
+
+@implementation GRMustacheSpecTemplateLoader
+
++ (id)loaderWithDictionary:(NSDictionary *)partialsByName {
+	return [[[self alloc] initWithDictionary:partialsByName] autorelease];
+}
+
+- (id)initWithDictionary:(NSDictionary *)thePartialsByName {
+	if (self == [self initWithExtension:nil]) {
+		partialsByName = [thePartialsByName retain];
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[partialsByName release];
+	[super dealloc];
+}
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+	return name;
+}
+
+- (NSString *)templateStringWithTemplateId:(id)templateId error:(NSError **)outError {
+	return [partialsByName objectForKey:templateId];
+}
+
+@end
+
 
 
 @interface GRMustacheSpecTest()
@@ -58,22 +96,22 @@
 }
 
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName {
-//- name: Inline
-//  desc: Comment blocks should be removed from the template.
-//  data: { }
-//  template: '12345{{! Comment Block! }}67890'
-//  expected: '1234567890'
-	
 	NSString *testName = [suiteTest objectForKey:@"name"];
 	NSString *testDescription = [suiteTest objectForKey:@"desc"];
-	NSString *context = [suiteTest objectForKey:@"data"];
+	id context = [suiteTest objectForKey:@"data"];
 	NSString *templateString = [suiteTest objectForKey:@"template"];
 	NSString *expected = [suiteTest objectForKey:@"expected"];
-	
+	NSDictionary *partials = [suiteTest objectForKey:@"partials"];
+	if (partials == nil) {
+		partials = [NSDictionary dictionary];
+	}
+	GRMustacheTemplateLoader *loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
+
 	NSError *error;
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:&error];
-	STAssertNotNil(result, [NSString stringWithFormat:@"%@/%@(%@): %@", suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
-	if (result) {
+	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
+	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@(%@): %@", suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
+	if (template) {
+		NSString *result = [template renderObject:context];
 		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@(%@)", suiteName, testName, testDescription]);
 	}
 }

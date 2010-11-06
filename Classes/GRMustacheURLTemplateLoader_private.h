@@ -20,19 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheTemplateLoader_private.h"
 
 
-@class GRMustacheTemplate;
-
-@interface GRMustacheTemplateLoader: NSObject {
-@private
-	NSString *extension;
-	NSMutableDictionary *templatesById;
+@interface GRMustacheURLTemplateLoader: GRMustacheTemplateLoader {
+	NSURL *url;
 }
-+ (id)templateLoaderWithURL:(NSURL *)url;
-+ (id)templateLoaderWithURL:(NSURL *)url extension:(NSString *)ext;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+- (id)initWithURL:(NSURL *)url extension:(NSString *)ext;
 @end

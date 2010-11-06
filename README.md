@@ -392,9 +392,8 @@ Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
 		GRMustacheErrorCodePartialNotFound,
 	} GRMustacheErrorCode;
 
-The `userInfo` dictionary of parse errors contain the GRMustacheErrorURL and GRMustacheErrorLine keys, which provide with the URL of the erroneous template, and the line where the error occurred.
+The `userInfo` dictionary of parse errors contain the GRMustacheErrorLine key, which provides with the line where the error occurred.
 
-	extern NSString* const GRMustacheErrorURL;
 	extern NSString* const GRMustacheErrorLine;
 
 
