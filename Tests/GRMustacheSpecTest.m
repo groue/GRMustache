@@ -40,6 +40,10 @@
 
 - (id)initWithDictionary:(NSDictionary *)thePartialsByName {
 	if (self == [self initWithExtension:nil]) {
+		if (thePartialsByName == nil) {
+			thePartialsByName = [NSDictionary dictionary];
+		}
+		NSAssert([thePartialsByName isKindOfClass:[NSDictionary class]], nil);
 		partialsByName = [thePartialsByName retain];
 	}
 	return self;
@@ -90,31 +94,25 @@
 }
 
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName {
-	CFBooleanRef support = (CFBooleanRef)[suiteTest objectForKey:@"GRMustache_support"];
-	if (support == nil || CFBooleanGetValue(support)) {
-		NSString *testName = [suiteTest objectForKey:@"name"];
-		NSString *testDescription = [suiteTest objectForKey:@"desc"];
-		id context = [suiteTest objectForKey:@"data"];
-		NSString *templateString = [suiteTest objectForKey:@"template"];
-		NSString *expected = [suiteTest objectForKey:@"expected"];
-		NSDictionary *partials = [suiteTest objectForKey:@"partials"];
-		if (partials == nil) {
-			partials = [NSDictionary dictionary];
-		}
-		GRMustacheTemplateLoader *loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
+	NSString *testName = [suiteTest objectForKey:@"name"];
+	NSString *testDescription = [suiteTest objectForKey:@"desc"];
+	id context = [suiteTest objectForKey:@"data"];
+	NSString *templateString = [suiteTest objectForKey:@"template"];
+	NSString *expected = [suiteTest objectForKey:@"expected"];
+	NSDictionary *partials = [suiteTest objectForKey:@"partials"];
+	GRMustacheTemplateLoader *loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
 
-		NSError *error;
-		GRMustacheTemplate *template = [loader parseString:templateString error:&error];
-		STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@(%@): %@", suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
-		if (template) {
-			NSString *result = [template renderObject:context];
-			if (![result isEqual:expected]) {
-				// render again and debug
-				template = [loader parseString:templateString error:&error];
-				[template renderObject:context];
-			}
-			STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@(%@)", suiteName, testName, testDescription]);
+	NSError *error;
+	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
+	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@(%@): %@", suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
+	if (template) {
+		NSString *result = [template renderObject:context];
+		if (![result isEqual:expected]) {
+			// render again and debug
+			template = [loader parseString:templateString error:&error];
+			[template renderObject:context];
 		}
+		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@(%@)", suiteName, testName, testDescription]);
 	}
 }
 
