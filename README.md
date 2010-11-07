@@ -163,6 +163,24 @@ If the value is *false*, the tag is not rendered.
 
 Otherwise, it is rendered with the regular string description of the value, HTML escaped.
 
+#### Dot Variable tag `{{.}}`
+
+This extension to the [Mustache syntax](http://mustache.github.com/mustache.5.html) has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
+
+This tag renders the regular string description of the current context itself.
+
+For instance:
+
+	templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
+	context = [NSDictionary dictionaryWithObjectsAndKeys:
+	           @"Groue's shopping cart", @"name",
+	           [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
+	           nil];
+	
+	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
+	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+
+
 ### Unescaped variable tags `{{{name}}}` and `{{&name}}`
 
 Such a tag is rendered according to the value for key `name` in the context.
@@ -460,30 +478,6 @@ You may consider using the unbeloved C99 `bool` type:
 	                // even without @property declaration
 	@end
 
-
-Extension
----------
-
-The Mustache syntax is described at [http://mustache.github.com/mustache.5.html](http://mustache.github.com/mustache.5.html).
-
-GRMustache adds the following extension:
-
-### Dot Variable tag `{{.}}`
-
-This extension has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
-
-This tag renders the regular string description of the current context.
-
-For instance:
-
-	templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
-	context = [NSDictionary dictionaryWithObjectsAndKeys:
-	           @"Groue's shopping cart", @"name",
-	           [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
-	           nil];
-	
-	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
-	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 
 Errors
 ------
