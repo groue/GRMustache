@@ -194,16 +194,6 @@
 	STAssertEqualObjects(result, @"name:", nil);
 }
 
-- (void)testLambdasGetLeftTrimmedLitteral {
-	NSString *templateString = @"{{#wrapper}} \n\tfoo \t\n{{/wrapper}}";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		STAssertEqualObjects(templateString, @"foo \t\n", nil);
-		return @"";
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
-	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-}
-
 - (void)testLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {

@@ -40,7 +40,6 @@
 - (id)initWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader;
 - (GRMustacheSectionElement *)parseSectionWithName:(NSString *)name inverted:(BOOL)inverted startline:(NSInteger)line error:(NSError **)outError;
 - (NSString *)readString:(NSString *)s eof:(BOOL *)eof;
-- (void)skipWhiteSpace;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
 @end
 
@@ -223,7 +222,6 @@
 				
 			case '#':
 			case '^':
-				[self skipWhiteSpace];
 				name = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				element = [self parseSectionWithName:name
 											inverted:(tagUnichar == '^')
@@ -382,7 +380,6 @@
 				
 			case '#':
 			case '^':
-				[self skipWhiteSpace];
 				name = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				element = [self parseSectionWithName:name
 											inverted:(tagUnichar == '^')
@@ -520,30 +517,6 @@
     //should never be here
 	NSAssert(NO, nil);
     return nil;
-}
-
-- (void)skipWhiteSpace {
-	unichar templateUnichar;
-	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceCharacterSet];
-    while (YES) {
-		if (p+1 > templateString.length) {
-			return;
-        }
-		
-		templateUnichar = [templateString characterAtIndex:p];
-		
-		if (templateUnichar == '\n') {
-			p++;
-			curline++;
-		} else if ([whitespaceCharacterSet characterIsMember:templateUnichar]) {
-			p++;
-		} else {
-			return;
-		}
-    }
-	
-    //should never be here
-	NSAssert(NO, nil);
 }
 
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
