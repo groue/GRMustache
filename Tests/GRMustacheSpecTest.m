@@ -74,7 +74,7 @@
 @implementation GRMustacheSpecTest
 
 - (void)testMustacheSpecSuite {
-	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:@"specs"];
+	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:@"core"];
 	for (NSURL *suiteURL in suiteURLs) {
 		[self testSuiteAtURL:suiteURL];
 	}
@@ -82,6 +82,9 @@
 
 - (void)testSuiteAtURL:(NSURL *)suiteURL {
 	NSString *suiteName = [[suiteURL lastPathComponent] stringByDeletingPathExtension];
+	if ([suiteName isEqualToString:@"lambdas"]) {
+		return;
+	}
 	NSString *yamlString = [NSString stringWithContentsOfURL:suiteURL encoding:NSUTF8StringEncoding error:nil];
 	id suite = yaml_parse(yamlString);
 	STAssertNotNil(suite, nil);
