@@ -408,6 +408,16 @@ In the following template, GRMustache would process the `dead` boolean property 
 	- {{name}} {{#dead}}(RIP){{/dead}}
 	{{/persons}}
 
+If you declare a custom getter for your property, make sure you don't use it in the template:
+
+	@interface Person: NSObject
+	@property (getter=isDead) BOOL dead;
+	@end
+
+	{{person}}
+	  {{#dead}}Don't use the isDead getter in templates!{{/dead}}
+	{{/person}}
+
 ### In-depth BOOL properties
 
 #### Undeclared BOOL properties
@@ -415,7 +425,7 @@ In the following template, GRMustache would process the `dead` boolean property 
 Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers:
 
 	@interface Person: NSObject
-	- (BOOL) dead;	// will be considered as 0 and 1 integers
+	- (BOOL)dead;	// will be considered as 0 and 1 integers
 	@end
 
 #### Collateral damage: signed characters
