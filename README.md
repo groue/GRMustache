@@ -3,8 +3,6 @@ GRMustache
 
 GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
 
-Its parser has been inspired by the Mustache [go implementation](http://github.com/hoisie/mustache.go/). Its tests are based on the [Ruby](http://github.com/defunkt/mustache) one, that we have considered as a reference. We also comply to the core subset of the [Mustache-Spec](https://github.com/groue/Mustache-Spec).
-
 It supports the following Mustache features:
 
 - comments
@@ -16,18 +14,25 @@ It supports the following Mustache features:
 - lambda sections
 - partials and recursive partials
 
-It supports some extensions to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
+It supports an extension to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
 
 - dot variable tag: `{{.}}`
 
 Embedding in your XCode project
 -------------------------------
 
-Add to your project all files contained in the `Classes` folder.
+GRMustache is a standalone library made of the Objective-C files contained in the `Classes` folder. Just add them to your XCode project.
 
 Import `GRMustache.h` in order to access all GRMustache features.
 
 Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
+
+Testing
+-------
+
+Open and build the GRMustache.xcodeproj project. If the build succeeds, all the tests pass!
+
+GRMustache is tested against the core subset of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
 Simple example
 --------------
@@ -456,12 +461,12 @@ You may consider using the unbeloved C99 `bool` type:
 	@end
 
 
-Extensions
-----------
+Extension
+---------
 
 The Mustache syntax is described at [http://mustache.github.com/mustache.5.html](http://mustache.github.com/mustache.5.html).
 
-GRMustache adds the following extensions:
+GRMustache adds the following extension:
 
 ### Dot Variable tag `{{.}}`
 
