@@ -78,19 +78,6 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testComments {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"A Comedy of Errors" forKey:@"title"];
-	NSString *result = [self renderObject:context fromResource:@"comments"];
-	STAssertEqualObjects(result, @"<h1>A Comedy of Errors</h1>\n", nil);
-}
-
-- (void)testMultiLineComments {
-	NSString *templateString = @"<h1>{{title}}{{! just something interesting... \n#or not... }}</h1>\n";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"A Comedy of Errors" forKey:@"title"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<h1>A Comedy of Errors</h1>\n", nil);
-}
-
 - (void)testEscaped {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"Bear > Shark" forKey:@"title"];
 	NSString *result = [self renderObject:context fromResource:@"escaped"];
