@@ -32,6 +32,8 @@ Testing
 
 Open and build the GRMustache.xcodeproj project. If the build succeeds, all the tests pass!
 
+You may also run the `make` command from the Terminal.
+
 GRMustache is tested against the core subset of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
 Simple example
