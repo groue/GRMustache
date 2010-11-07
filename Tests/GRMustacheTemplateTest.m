@@ -50,19 +50,6 @@
 	STAssertEqualObjects(result, @"yay\nHowday.\n", nil);
 }
 
-- (void)testSimple {
-	NSInteger value = 10000;
-	NSInteger cutValue = 6000;
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"Gwendal", @"name",
-							 [NSNumber numberWithInteger:value], @"value",
-							 [NSNumber numberWithInteger:cutValue], @"taxed_value",
-							 [GRYes yes], @"in_ca",
-							 nil];
-	NSString *result = [self renderObject:context fromResource:@"simple"];
-	STAssertEqualObjects(result, @"Hello Gwendal\nYou have just won $10000!\nWell, $6000, after taxes.\n", nil);
-}
-
 - (void)testDictionaryAssignment {
 	// TODO
 }

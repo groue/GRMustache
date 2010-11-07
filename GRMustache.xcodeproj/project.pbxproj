@@ -23,7 +23,6 @@
 		561157FF127F0C9400F01AD0 /* node.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E9127F0C9400F01AD0 /* node.mustache */; };
 		56115801127F0C9400F01AD0 /* passenger.conf in Resources */ = {isa = PBXBuildFile; fileRef = 561157EB127F0C9400F01AD0 /* passenger.conf */; };
 		5611582D127F138700F01AD0 /* recursive.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5611582C127F138700F01AD0 /* recursive.mustache */; };
-		56115836127F15AB00F01AD0 /* simple.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115835127F15AB00F01AD0 /* simple.mustache */; };
 		5611586B127F17A000F01AD0 /* GRMustacheTemplateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5611586A127F17A000F01AD0 /* GRMustacheTemplateTest.m */; };
 		56115984127F2A5200F01AD0 /* utf8.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115983127F2A5200F01AD0 /* utf8.mustache */; };
 		56115986127F2A5E00F01AD0 /* utf8_partial.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115985127F2A5E00F01AD0 /* utf8_partial.mustache */; };
@@ -84,7 +83,6 @@
 		561157E9127F0C9400F01AD0 /* node.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = node.mustache; sourceTree = "<group>"; };
 		561157EB127F0C9400F01AD0 /* passenger.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passenger.conf; sourceTree = "<group>"; };
 		5611582C127F138700F01AD0 /* recursive.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = recursive.mustache; sourceTree = "<group>"; };
-		56115835127F15AB00F01AD0 /* simple.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simple.mustache; sourceTree = "<group>"; };
 		56115869127F17A000F01AD0 /* GRMustacheTemplateTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateTest.h; sourceTree = "<group>"; };
 		5611586A127F17A000F01AD0 /* GRMustacheTemplateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateTest.m; sourceTree = "<group>"; };
 		56115983127F2A5200F01AD0 /* utf8.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf8.mustache; sourceTree = "<group>"; };
@@ -265,7 +263,6 @@
 				561157E9127F0C9400F01AD0 /* node.mustache */,
 				561157EB127F0C9400F01AD0 /* passenger.conf */,
 				5611582C127F138700F01AD0 /* recursive.mustache */,
-				56115835127F15AB00F01AD0 /* simple.mustache */,
 				561159A1127F2C6F00F01AD0 /* template_partial.mustache */,
 				561159B6127F2D5F00F01AD0 /* template_partial.txt */,
 				56115983127F2A5200F01AD0 /* utf8.mustache */,
@@ -349,7 +346,6 @@
 				561157FF127F0C9400F01AD0 /* node.mustache in Resources */,
 				56115801127F0C9400F01AD0 /* passenger.conf in Resources */,
 				5611582D127F138700F01AD0 /* recursive.mustache in Resources */,
-				56115836127F15AB00F01AD0 /* simple.mustache in Resources */,
 				56115984127F2A5200F01AD0 /* utf8.mustache in Resources */,
 				56115986127F2A5E00F01AD0 /* utf8_partial.mustache in Resources */,
 				561159A2127F2C6F00F01AD0 /* template_partial.mustache in Resources */,
