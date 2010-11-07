@@ -180,33 +180,6 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
-- (void)testNestedSectionsSameNames {
-	NSString *templateString = @"{{#items}}start{{#items}}{{a}}{{/items}}end{{/items}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																[NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																									[NSDictionary dictionaryWithObject:@"1" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"2" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"3" forKey:@"a"],
-																									nil]
-																							forKey:@"items"],
-																[NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																									[NSDictionary dictionaryWithObject:@"4" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"5" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"6" forKey:@"a"],
-																									nil]
-																							forKey:@"items"],
-																[NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																									[NSDictionary dictionaryWithObject:@"7" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"8" forKey:@"a"],
-																									[NSDictionary dictionaryWithObject:@"9" forKey:@"a"],
-																									nil]
-																							forKey:@"items"],
-																nil]
-														forKey:@"items"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"start123endstart456endstart789end", nil);
-}
-
 - (void)testIdWithNestedContent {
 	NSString *templateString = @"<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>";
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
