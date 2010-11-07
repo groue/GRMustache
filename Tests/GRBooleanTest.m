@@ -77,6 +77,42 @@
 	STAssertEquals([GRMustache objectKind:[GRNo no]], GRMustacheObjectKindFalseValue, nil);
 }
 
+- (void)testNilIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionary];
+	STAssertNil([context valueForKey:@"bool"], nil);
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testNSNullIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testGRNoIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testEmptyStringIsAFalseValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"NO", nil);
+}
+
+- (void)testGRYesIsATrueValue {
+	NSString *templateString = @"{{#bool}}YES{{/bool}}{{^bool}}NO{{/bool}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"bool"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"YES", nil);
+}
+
 @end
 
 
