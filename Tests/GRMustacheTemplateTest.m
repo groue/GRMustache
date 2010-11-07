@@ -78,15 +78,6 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testInvertedSection {
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [GRNo no], @"t",
-							 @"second", @"two",
-							 nil];
-	NSString *result = [self renderObject:context fromResource:@"inverted_section"];
-	STAssertEqualObjects(result, @"* first\n* second\n* third\n", nil);
-}
-
 - (void)testComments {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"A Comedy of Errors" forKey:@"title"];
 	NSString *result = [self renderObject:context fromResource:@"comments"];

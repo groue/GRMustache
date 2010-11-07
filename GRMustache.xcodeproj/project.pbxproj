@@ -21,7 +21,6 @@
 		561157F3127F0C9400F01AD0 /* comments.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157DD127F0C9400F01AD0 /* comments.mustache */; };
 		561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */; };
 		561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E2127F0C9400F01AD0 /* escaped.mustache */; };
-		561157FB127F0C9400F01AD0 /* inverted_section.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E5127F0C9400F01AD0 /* inverted_section.mustache */; };
 		561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E6127F0C9400F01AD0 /* lambda.mustache */; };
 		561157FF127F0C9400F01AD0 /* node.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E9127F0C9400F01AD0 /* node.mustache */; };
 		56115801127F0C9400F01AD0 /* passenger.conf in Resources */ = {isa = PBXBuildFile; fileRef = 561157EB127F0C9400F01AD0 /* passenger.conf */; };
@@ -86,7 +85,6 @@
 		561157DD127F0C9400F01AD0 /* comments.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = comments.mustache; sourceTree = "<group>"; };
 		561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crazy_recursive.mustache; sourceTree = "<group>"; };
 		561157E2127F0C9400F01AD0 /* escaped.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escaped.mustache; sourceTree = "<group>"; };
-		561157E5127F0C9400F01AD0 /* inverted_section.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = inverted_section.mustache; sourceTree = "<group>"; };
 		561157E6127F0C9400F01AD0 /* lambda.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lambda.mustache; sourceTree = "<group>"; };
 		561157E9127F0C9400F01AD0 /* node.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = node.mustache; sourceTree = "<group>"; };
 		561157EB127F0C9400F01AD0 /* passenger.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passenger.conf; sourceTree = "<group>"; };
@@ -271,7 +269,6 @@
 				561157E2127F0C9400F01AD0 /* escaped.mustache */,
 				561159A3127F2C7900F01AD0 /* inner_partial.mustache */,
 				561159B5127F2D5F00F01AD0 /* inner_partial.txt */,
-				561157E5127F0C9400F01AD0 /* inverted_section.mustache */,
 				561157E6127F0C9400F01AD0 /* lambda.mustache */,
 				561157E9127F0C9400F01AD0 /* node.mustache */,
 				561157EB127F0C9400F01AD0 /* passenger.conf */,
@@ -359,7 +356,6 @@
 				561157F3127F0C9400F01AD0 /* comments.mustache in Resources */,
 				561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */,
 				561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */,
-				561157FB127F0C9400F01AD0 /* inverted_section.mustache in Resources */,
 				561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */,
 				561157FF127F0C9400F01AD0 /* node.mustache in Resources */,
 				56115801127F0C9400F01AD0 /* passenger.conf in Resources */,
