@@ -301,8 +301,7 @@ If this does not fit your needs, you may subclass the GRMustacheTemplateLoader c
 
 We provide below the implementation of a template loader which loads partials from a dictionary containing template strings:
 
-	// Include this header dedicated to GRMustacheTemplateLoader subclasses:
-	#import "GRMustacheTemplateLoader_protected.h"
+	#import "GRMustache.h"
 	
 	@interface DictionaryTemplateLoader : GRMustacheTemplateLoader {
 	  NSDictionary *templatesByName;
@@ -311,6 +310,10 @@ We provide below the implementation of a template loader which loads partials fr
 	- (id)initWithDictionary:(NSDictionary *)templatesByName;
 	@end
 	
+	// In your implementation file, import the GRMustacheTemplateLoader_protected.h
+	// header, dedicated to GRMustacheTemplateLoader subclasses:
+	#import "GRMustacheTemplateLoader_protected.h"
+	
 	@implementation DictionaryTemplateLoader
 	
 	+ (id)loaderWithDictionary:(NSDictionary *)templatesByName {
@@ -318,7 +321,7 @@ We provide below the implementation of a template loader which loads partials fr
 	}
 	
 	- (id)initWithDictionary:(NSDictionary *)theTemplatesByName {
-	  // initWithExtension: is the GRMustacheTemplateLoader designated initializer
+	  // initWithExtension: is the designated initializer
 	  if (self == [self initWithExtension:nil]) {
 	    templatesByName = [theTemplatesByName retain];
 	  }
