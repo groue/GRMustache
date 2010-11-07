@@ -78,15 +78,6 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testDoubleSection {
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [GRYes yes], @"t",
-							 @"second", @"two",
-							 nil];
-	NSString *result = [self renderObject:context fromResource:@"double_section"];
-	STAssertEqualObjects(result, @"* first\n* second\n* third\n", nil);
-}
-
 - (void)testInvertedSection {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 							 [GRNo no], @"t",

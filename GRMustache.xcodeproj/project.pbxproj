@@ -20,7 +20,6 @@
 		56115506127ED04F00F01AD0 /* GRMustacheTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */; };
 		561157F3127F0C9400F01AD0 /* comments.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157DD127F0C9400F01AD0 /* comments.mustache */; };
 		561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */; };
-		561157F7127F0C9400F01AD0 /* double_section.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E1127F0C9400F01AD0 /* double_section.mustache */; };
 		561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E2127F0C9400F01AD0 /* escaped.mustache */; };
 		561157FB127F0C9400F01AD0 /* inverted_section.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E5127F0C9400F01AD0 /* inverted_section.mustache */; };
 		561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E6127F0C9400F01AD0 /* lambda.mustache */; };
@@ -86,7 +85,6 @@
 		56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTestBase.m; sourceTree = "<group>"; };
 		561157DD127F0C9400F01AD0 /* comments.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = comments.mustache; sourceTree = "<group>"; };
 		561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crazy_recursive.mustache; sourceTree = "<group>"; };
-		561157E1127F0C9400F01AD0 /* double_section.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = double_section.mustache; sourceTree = "<group>"; };
 		561157E2127F0C9400F01AD0 /* escaped.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escaped.mustache; sourceTree = "<group>"; };
 		561157E5127F0C9400F01AD0 /* inverted_section.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = inverted_section.mustache; sourceTree = "<group>"; };
 		561157E6127F0C9400F01AD0 /* lambda.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lambda.mustache; sourceTree = "<group>"; };
@@ -270,7 +268,6 @@
 				56D882661286B60E00F5CF76 /* core */,
 				561157DD127F0C9400F01AD0 /* comments.mustache */,
 				561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */,
-				561157E1127F0C9400F01AD0 /* double_section.mustache */,
 				561157E2127F0C9400F01AD0 /* escaped.mustache */,
 				561159A3127F2C7900F01AD0 /* inner_partial.mustache */,
 				561159B5127F2D5F00F01AD0 /* inner_partial.txt */,
@@ -361,7 +358,6 @@
 			files = (
 				561157F3127F0C9400F01AD0 /* comments.mustache in Resources */,
 				561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */,
-				561157F7127F0C9400F01AD0 /* double_section.mustache in Resources */,
 				561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */,
 				561157FB127F0C9400F01AD0 /* inverted_section.mustache in Resources */,
 				561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */,
