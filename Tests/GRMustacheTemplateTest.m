@@ -78,19 +78,6 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testDelimiters {
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"It worked the first time.", @"start",
-							 [NSArray arrayWithObjects:
-							  [NSDictionary dictionaryWithObject:@"And it worked the second time." forKey:@"item"],
-							  [NSDictionary dictionaryWithObject:@"As well as the third." forKey:@"item"],
-							  nil], @"middle",
-							 @"Then, surprisingly, it worked the final time.", @"final",
-							 nil];
-	NSString *result = [self renderObject:context fromResource:@"delimiters"];
-	STAssertEqualObjects(result, @"\n* It worked the first time.\n\n* And it worked the second time.\n* As well as the third.\n\n* Then, surprisingly, it worked the final time.\n", nil);
-}
-
 - (void)testDoubleSection {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 							 [GRYes yes], @"t",
