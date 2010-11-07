@@ -82,7 +82,10 @@
 
 - (void)testSuiteAtURL:(NSURL *)suiteURL {
 	NSString *suiteName = [[suiteURL lastPathComponent] stringByDeletingPathExtension];
-	if ([suiteName isEqualToString:@"lambdas"]) {
+	if ([suiteName isEqualToString:@"lambda_sections"]) {
+		return;
+	}
+	if ([suiteName isEqualToString:@"lambda_variables"]) {
 		return;
 	}
 	NSString *yamlString = [NSString stringWithContentsOfURL:suiteURL encoding:NSUTF8StringEncoding error:nil];
