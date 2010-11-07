@@ -120,30 +120,6 @@
 	STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
 }
 
-- (void)testEnumerableSectionsAcceptADictionaryAsAContext {
-	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/list}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"1234"
-																						   forKey:@"item"]
-														forKey:@"list"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<li>1234</li> ", nil);
-}
-
-- (void)testNotFoundInContextRendersEmptyString {
-	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/list}}";
-	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"", nil);
-}
-
-- (void)testNotFoundInNestedContextRendersEmptyString {
-	NSString *templateString = @"{{#list}} <li>{{prefix}}{{item}}</li> {{/list}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"1234"
-																						   forKey:@"item"]
-														forKey:@"list"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<li>1234</li> ", nil);
-}
-
 - (void)testSectionsReturningLambdasGetCalledWithText {
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
