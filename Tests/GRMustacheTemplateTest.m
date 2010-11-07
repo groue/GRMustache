@@ -180,17 +180,6 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
-- (void)testLiberalTagNames {
-	NSString *templateString = @"{{first-name}} {{middle_name!}} {{lastName?}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"Gwendal", @"first-name",
-							 @"Gw", @"middle_name!",
-							 @"Roué", @"lastName?",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"Gwendal Gw Roué", nil);
-}
-
 - (void)testNestedSectionsSameNames {
 	NSString *templateString = @"{{#items}}start{{#items}}{{a}}{{/items}}end{{/items}}";
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
