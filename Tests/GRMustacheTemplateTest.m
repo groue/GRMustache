@@ -43,13 +43,6 @@
 	// TODO
 }
 
-- (void)testMultiLineSectionsPreserveTrailingNewline {
-	NSString *templateString = @"{{#something}}\nyay\n{{/something}}\nHowday.\n";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"something"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"yay\nHowday.\n", nil);
-}
-
 - (void)testDictionaryAssignment {
 	// TODO
 }
@@ -82,7 +75,7 @@
 		dead = YES;
 		return templateString;
 	});
-	NSString *templateString = @"{{#show}} <li>{{die}}</li> {{/show}} yay";
+	NSString *templateString = @"{{#show}}<li>{{die}}</li>{{/show}}yay";
 	NSDictionary *context = [NSDictionary dictionaryWithObject:dieLambda forKey:@"die"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"yay", nil);
@@ -132,15 +125,15 @@
 	NSString *result;
 	
 	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"Hi Gwendal.\nHi {{name}}.\n", @"");
+	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
 	STAssertEquals(renderedCalls, 1, @"");
 	
 	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"Hi Gwendal.\nHi {{name}}.\n", @"");
+	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
 	STAssertEquals(renderedCalls, 1, @"");
 	
 	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"Hi Gwendal.\nHi {{name}}.\n", @"");
+	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
 	STAssertEquals(renderedCalls, 1, @"");
 }
 

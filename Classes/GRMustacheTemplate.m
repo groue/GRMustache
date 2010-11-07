@@ -395,7 +395,6 @@
 				break;
 				
 			case '/':
-				[self skipWhiteSpace];
 				name = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				
 				if ([name isEqualToString:sectionName]) {

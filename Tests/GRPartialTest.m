@@ -55,7 +55,7 @@
 - (void)testRecursivePartial {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"show"];
 	NSString *result = [self renderObject:context fromResource:@"recursive"];
-	STAssertEqualObjects(result, @"It works!\n", @"");
+	STAssertEqualObjects(result, @"It works!", @"");
 }
 
 - (void)testCrazyRecursivePartial {
@@ -91,7 +91,7 @@
 																nil]
 														forKey:@"top_nodes"];
 	NSString *result = [self renderObject:context fromResource:@"crazy_recursive"];
-	STAssertEqualObjects(result, @"<html>\n  <body>\n    <ul>\n      <li>\n  1\n  <ul>\n    <li>\n  2\n  <ul>\n    <li>\n  3\n  <ul>\n    </ul>\n</li>\n    </ul>\n</li>\n    <li>\n  4\n  <ul>\n    <li>\n  5\n  <ul>\n    <li>\n  6\n  <ul>\n    </ul>\n</li>\n    </ul>\n</li>\n    </ul>\n</li>\n    </ul>\n</li>\n      </ul>\n  </body>\n</html>", @"");
+	STAssertEqualObjects(result, @"<html><body><ul><li>1<ul><li>2<ul><li>3<ul></ul></li></ul></li><li>4<ul><li>5<ul><li>6<ul></ul></li></ul></li></ul></li></ul></li></ul></body></html>", @"");
 }
 
 
