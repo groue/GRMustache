@@ -67,6 +67,16 @@
 @implementation GRBooleanTestSupportSubClass
 @end
 
+@interface GRBooleanTestCustomGetter: NSObject {
+	BOOL dead;
+}
+@property (getter=isDead) BOOL dead;
+@end
+
+@implementation GRBooleanTestCustomGetter
+@synthesize dead;
+@end
+
 @implementation GRBooleanTest
 
 - (void)testGRYesIsTrueObject {
@@ -230,6 +240,21 @@
 	[GRMustache setStrictBooleanMode:strictBooleanMode];
 	[context release];
 	[inheritingContext release];
+}
+
+- (void)testCustomGetterForBOOLPropertyIsTrueValue {
+	GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
+	NSString *templateString = @"{{#dead}}dead{{/dead}}{{#isDead}}isDead{{/isDead}}";
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+	NSString *result;
+	
+	object.dead = NO;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"isDead", nil);
+	
+	object.dead = YES;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"deadisDead", nil);
 }
 
 - (void)test_boolFalseDeclared_isFalseValue {
