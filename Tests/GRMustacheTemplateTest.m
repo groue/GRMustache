@@ -43,13 +43,6 @@
 	// TODO
 }
 
-- (void)testSingleLineSections {
-	NSString *templateString = @"<p class=\"flash-notice\" {{# no_flash }}style=\"display: none;\"{{/ no_flash }}>";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"no_flash"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<p class=\"flash-notice\" style=\"display: none;\">", nil);
-}
-
 - (void)testMultiLineSectionsPreserveTrailingNewline {
 	NSString *templateString = @"{{#something}}\nyay\n{{/something}}\nHowday.\n";
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"something"];
@@ -57,22 +50,16 @@
 	STAssertEqualObjects(result, @"yay\nHowday.\n", nil);
 }
 
-- (void)testSingleLineInvertedSections {
-	NSString *templateString = @"<p class=\"flash-notice\" {{^ flash }}style=\"display: none;\"{{/ flash }}>";
-	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<p class=\"flash-notice\" style=\"display: none;\">", nil);
-}
-
 - (void)testSimple {
 	NSInteger value = 10000;
+	NSInteger cutValue = 6000;
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 							 @"Gwendal", @"name",
 							 [NSNumber numberWithInteger:value], @"value",
-							 [NSNumber numberWithFloat:value*0.6], @"taxed_value",
+							 [NSNumber numberWithInteger:cutValue], @"taxed_value",
 							 [GRYes yes], @"in_ca",
 							 nil];
 	NSString *result = [self renderObject:context fromResource:@"simple"];
-	// Slight difference with the ruby test here: 6000.0 is rendered as "6000", not "6000.0"
 	STAssertEqualObjects(result, @"Hello Gwendal\nYou have just won $10000!\nWell, $6000, after taxes.\n", nil);
 }
 
