@@ -19,13 +19,11 @@
 		5611543B127EC68000F01AD0 /* GRMustacheVariableElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 5611542F127EC68000F01AD0 /* GRMustacheVariableElement.m */; };
 		56115506127ED04F00F01AD0 /* GRMustacheTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */; };
 		561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */; };
-		561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E2127F0C9400F01AD0 /* escaped.mustache */; };
 		561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E6127F0C9400F01AD0 /* lambda.mustache */; };
 		561157FF127F0C9400F01AD0 /* node.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 561157E9127F0C9400F01AD0 /* node.mustache */; };
 		56115801127F0C9400F01AD0 /* passenger.conf in Resources */ = {isa = PBXBuildFile; fileRef = 561157EB127F0C9400F01AD0 /* passenger.conf */; };
 		5611582D127F138700F01AD0 /* recursive.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5611582C127F138700F01AD0 /* recursive.mustache */; };
 		56115836127F15AB00F01AD0 /* simple.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115835127F15AB00F01AD0 /* simple.mustache */; };
-		56115857127F16DE00F01AD0 /* unescaped.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115856127F16DE00F01AD0 /* unescaped.mustache */; };
 		5611586B127F17A000F01AD0 /* GRMustacheTemplateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5611586A127F17A000F01AD0 /* GRMustacheTemplateTest.m */; };
 		56115984127F2A5200F01AD0 /* utf8.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115983127F2A5200F01AD0 /* utf8.mustache */; };
 		56115986127F2A5E00F01AD0 /* utf8_partial.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56115985127F2A5E00F01AD0 /* utf8_partial.mustache */; };
@@ -82,13 +80,11 @@
 		56115504127ED04F00F01AD0 /* GRMustacheTestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTestBase.h; sourceTree = "<group>"; };
 		56115505127ED04F00F01AD0 /* GRMustacheTestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTestBase.m; sourceTree = "<group>"; };
 		561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = crazy_recursive.mustache; sourceTree = "<group>"; };
-		561157E2127F0C9400F01AD0 /* escaped.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = escaped.mustache; sourceTree = "<group>"; };
 		561157E6127F0C9400F01AD0 /* lambda.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lambda.mustache; sourceTree = "<group>"; };
 		561157E9127F0C9400F01AD0 /* node.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = node.mustache; sourceTree = "<group>"; };
 		561157EB127F0C9400F01AD0 /* passenger.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passenger.conf; sourceTree = "<group>"; };
 		5611582C127F138700F01AD0 /* recursive.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = recursive.mustache; sourceTree = "<group>"; };
 		56115835127F15AB00F01AD0 /* simple.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simple.mustache; sourceTree = "<group>"; };
-		56115856127F16DE00F01AD0 /* unescaped.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unescaped.mustache; sourceTree = "<group>"; };
 		56115869127F17A000F01AD0 /* GRMustacheTemplateTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateTest.h; sourceTree = "<group>"; };
 		5611586A127F17A000F01AD0 /* GRMustacheTemplateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateTest.m; sourceTree = "<group>"; };
 		56115983127F2A5200F01AD0 /* utf8.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf8.mustache; sourceTree = "<group>"; };
@@ -263,7 +259,6 @@
 			children = (
 				56D882661286B60E00F5CF76 /* core */,
 				561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */,
-				561157E2127F0C9400F01AD0 /* escaped.mustache */,
 				561159A3127F2C7900F01AD0 /* inner_partial.mustache */,
 				561159B5127F2D5F00F01AD0 /* inner_partial.txt */,
 				561157E6127F0C9400F01AD0 /* lambda.mustache */,
@@ -273,7 +268,6 @@
 				56115835127F15AB00F01AD0 /* simple.mustache */,
 				561159A1127F2C6F00F01AD0 /* template_partial.mustache */,
 				561159B6127F2D5F00F01AD0 /* template_partial.txt */,
-				56115856127F16DE00F01AD0 /* unescaped.mustache */,
 				56115983127F2A5200F01AD0 /* utf8.mustache */,
 				56115985127F2A5E00F01AD0 /* utf8_partial.mustache */,
 			);
@@ -351,13 +345,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				561157F5127F0C9400F01AD0 /* crazy_recursive.mustache in Resources */,
-				561157F8127F0C9400F01AD0 /* escaped.mustache in Resources */,
 				561157FC127F0C9400F01AD0 /* lambda.mustache in Resources */,
 				561157FF127F0C9400F01AD0 /* node.mustache in Resources */,
 				56115801127F0C9400F01AD0 /* passenger.conf in Resources */,
 				5611582D127F138700F01AD0 /* recursive.mustache in Resources */,
 				56115836127F15AB00F01AD0 /* simple.mustache in Resources */,
-				56115857127F16DE00F01AD0 /* unescaped.mustache in Resources */,
 				56115984127F2A5200F01AD0 /* utf8.mustache in Resources */,
 				56115986127F2A5E00F01AD0 /* utf8_partial.mustache in Resources */,
 				561159A2127F2C6F00F01AD0 /* template_partial.mustache in Resources */,

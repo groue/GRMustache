@@ -78,25 +78,6 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testEscaped {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"Bear > Shark" forKey:@"title"];
-	NSString *result = [self renderObject:context fromResource:@"escaped"];
-	STAssertEqualObjects(result, @"<h1>Bear &gt; Shark</h1>", nil);
-}
-
-- (void)testUnescaped {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"Bear > Shark" forKey:@"title"];
-	NSString *result = [self renderObject:context fromResource:@"unescaped"];
-	STAssertEqualObjects(result, @"<h1>Bear > Shark</h1>", nil);
-}
-
-- (void)testUnescapedAmpersand {
-	NSString *templateString = @"<h1>{{& title}}</h1>";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"Bear > Shark" forKey:@"title"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<h1>Bear > Shark</h1>", nil);
-}
-
 - (void)testRenderFromFile {
 	NSURL *url = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"passenger.conf"];
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
