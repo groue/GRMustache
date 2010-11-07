@@ -180,17 +180,6 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
-- (void)testIdWithNestedContent {
-	NSString *templateString = @"<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>";
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"3", @"id",
-							 [GRYes yes], @"has_a?",
-							 [GRYes yes], @"has_b?",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<div>3</div>\n<div>3</div>\n<div>3</div>", nil);
-}
-
 - (void)testUTF8 {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"中文" forKey:@"test"];
 	NSString *result = [self renderObject:context fromResource:@"utf8"];
