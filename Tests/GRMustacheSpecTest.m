@@ -67,20 +67,26 @@
 
 
 @interface GRMustacheSpecTest()
-- (void)testSuiteAtURL:(NSURL *)suiteURL;
-- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName;
+- (void)testSubsetNamed:(NSString *)subsetName;
+- (void)testSuiteAtURL:(NSURL *)suiteURL inSubsetNamed:(NSString *)subsetName;
+- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName;
 @end
 
 @implementation GRMustacheSpecTest
 
-- (void)testMustacheSpecSuite {
-	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:@"core"];
+- (void)testMustacheSpec {
+	[self testSubsetNamed:@"core"];
+	[self testSubsetNamed:@"dot_key"];
+}
+
+- (void)testSubsetNamed:(NSString *)subsetName {
+	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:subsetName];
 	for (NSURL *suiteURL in suiteURLs) {
-		[self testSuiteAtURL:suiteURL];
+		[self testSuiteAtURL:suiteURL inSubsetNamed:subsetName];
 	}
 }
 
-- (void)testSuiteAtURL:(NSURL *)suiteURL {
+- (void)testSuiteAtURL:(NSURL *)suiteURL inSubsetNamed:(NSString *)subsetName {
 	NSString *suiteName = [[suiteURL lastPathComponent] stringByDeletingPathExtension];
 	if ([suiteName isEqualToString:@"lambda_sections"]) {
 		return;
@@ -95,11 +101,11 @@
 	NSArray *suiteTests = [(NSDictionary *)suite objectForKey:@"tests"];
 	STAssertNotNil(suiteTests, nil);
 	for (NSDictionary *suiteTest in suiteTests) {
-		[self testSuiteTest:suiteTest inSuiteNamed:suiteName];
+		[self testSuiteTest:suiteTest inSuiteNamed:suiteName inSubsetNamed:subsetName];
 	}
 }
 
-- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName {
+- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName {
 	NSString *testName = [suiteTest objectForKey:@"name"];
 	NSString *testDescription = [suiteTest objectForKey:@"desc"];
 	id context = [suiteTest objectForKey:@"data"];
@@ -110,7 +116,7 @@
 
 	NSError *error;
 	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
-	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@(%@): %@", suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
+	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@/%@(%@): %@", subsetName, suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
 	if (template) {
 		NSString *result = [template renderObject:context];
 		if (![result isEqual:expected]) {
@@ -118,7 +124,7 @@
 			template = [loader parseString:templateString error:&error];
 			[template renderObject:context];
 		}
-		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@(%@)", suiteName, testName, testDescription]);
+		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@/%@(%@)", subsetName, suiteName, testName, testDescription]);
 	}
 }
 

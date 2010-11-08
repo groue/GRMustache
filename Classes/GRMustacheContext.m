@@ -117,6 +117,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			[objects addObject:[NSNull null]];
 			break;
 		case GRMustacheObjectKindTrueValue:
+		case GRMustacheObjectKindEnumerable:
 			[objects addObject:object];
 			break;
 		default:

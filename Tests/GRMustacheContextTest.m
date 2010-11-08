@@ -135,8 +135,9 @@
 	STAssertNoThrow([GRMustacheContext contextWithObject:context], nil);
 }
 
-- (void)testContextInitedWithEnumerableIsInvalid {
-	STAssertThrows([GRMustacheContext contextWithObject:[NSArray array]], nil);
+- (void)testContextInitedWithEnumerableIsValid {
+	// Useful for dot-key only
+	STAssertNoThrow([GRMustacheContext contextWithObject:[NSArray array]], nil);
 }
 
 - (void)testContextInitedWithDictionaryIsInvalid {
