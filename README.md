@@ -402,7 +402,7 @@ We'll explain each rule below.
 
 `[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInteger:0]`. There is no way, provided with a NSNumber, to tell whether its a false boolean, or a zero integer.
 
-In order to be consistent with implementations in other languages, GRMustache treats `[NSNumber numberWithBool:NO]` as the zero number, and not as false.
+In order to be consistent with implementations of {{ mustache }} in other languages, GRMustache treats `[NSNumber numberWithBool:NO]` as the zero number, and not as false.
 
 That is why you should not use `[NSNumber numberWithBool:]` for controlling boolean sections.
 
