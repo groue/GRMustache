@@ -152,7 +152,7 @@ But let's give some definitions first:
 
 - GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary. The most obvious enumerable is NSArray.
 
-- GRMustache considers *false* KVC keys misses, and the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
+- GRMustache considers *false* KVC key misses, and the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
 
 ### Comments `{{!...}}`
 
