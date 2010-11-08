@@ -129,6 +129,10 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			continue;
 		}
 		if ([component isEqualToString:@".."]) {
+			if (parent == nil) {
+				// went too far
+				return nil;
+			}
 			context = parent;
 			continue;
 		}
