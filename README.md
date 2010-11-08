@@ -17,7 +17,7 @@ It supports the following Mustache features:
 It supports extensions to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
 
 - dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
-- extended paths, as in `{{../name}}` (introduced by [Handlebar.js](https://github.com/wycats/handlebars.js))
+- extended paths, as in `{{../name}}` (introduced by [Handlebars.js](https://github.com/wycats/handlebars.js))
 
 Embedding in your XCode project
 -------------------------------
