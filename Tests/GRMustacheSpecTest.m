@@ -108,7 +108,6 @@
 
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName {
 	NSString *testName = [suiteTest objectForKey:@"name"];
-	NSString *testDescription = [suiteTest objectForKey:@"desc"];
 	id context = [suiteTest objectForKey:@"data"];
 	NSString *templateString = [suiteTest objectForKey:@"template"];
 	NSString *expected = [suiteTest objectForKey:@"expected"];
@@ -117,7 +116,7 @@
 
 	NSError *error;
 	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
-	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@/%@(%@): %@", subsetName, suiteName, testName, testDescription, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
+	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@ - %@: %@", subsetName, suiteName, testName, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
 	if (template) {
 		NSString *result = [template renderObject:context];
 		if (![result isEqual:expected]) {
@@ -125,7 +124,7 @@
 			template = [loader parseString:templateString error:&error];
 			[template renderObject:context];
 		}
-		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@/%@(%@)", subsetName, suiteName, testName, testDescription]);
+		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@ - %@", subsetName, suiteName, testName]);
 	}
 }
 
