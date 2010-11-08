@@ -69,19 +69,6 @@
 	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
 
-- (void)testDoesntExecuteWhatItDoesntNeedTo {
-	__block BOOL dead = NO;
-	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		dead = YES;
-		return templateString;
-	});
-	NSString *templateString = @"{{#show}}<li>{{die}}</li>{{/show}}yay";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:dieLambda forKey:@"die"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"yay", nil);
-	STAssertEquals(dead, NO, nil);
-}
-
 - (void)testReportsUnclosedSections {
 	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
@@ -98,57 +85,6 @@
 	STAssertNil(template, nil);
 	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 	STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
-}
-
-- (void)testSectionsReturningLambdasGetCalledWithText {
-	__block int renderedCalls = 0;
-	__block NSString *cache = nil;
-	
-	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		if (cache == nil) {
-			renderedCalls++;
-			cache = renderer(context);
-		}
-		return cache;
-	});
-	
-	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		return templateString;
-	});
-	
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 renderedLambda, @"rendered",
-							 notRenderedLambda, @"not_rendered",
-							 @"Gwendal", @"name",
-							 nil];
-	
-	NSString *result;
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
-}
-
-- (void)testLambdasCanRenderCurrentContextInSpecificTemplate {
-	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
-	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		return [wrapperTemplate renderObject:context];
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 wrapperLambda, @"wrapper",
-							 @"Gwendal", @"name",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
 }
 
 - (void)testLotsOfStaches {
@@ -192,16 +128,6 @@
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"name"];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"name:", nil);
-}
-
-- (void)testLambdasCanReturnNil {
-	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		return (NSString *)nil;
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foobar", nil);
 }
 
 @end
