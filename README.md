@@ -14,9 +14,10 @@ It supports the following Mustache features:
 - lambda sections
 - partials and recursive partials
 
-It supports an extension to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
+It supports extensions to the regular [Mustache syntax](http://mustache.github.com/mustache.5.html):
 
-- dot variable tag: `{{.}}`
+- dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
+- extended paths, as in `{{../name}}` (introduced by [Handlebar.js](https://github.com/wycats/handlebars.js))
 
 Embedding in your XCode project
 -------------------------------
@@ -34,7 +35,7 @@ Open and build the GRMustache.xcodeproj project. If the build succeeds, all the 
 
 You may also run the `make` command from the Terminal.
 
-GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/) and [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/) subsets of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
+GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) subsets of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
 Simple example
 --------------
@@ -167,7 +168,7 @@ Otherwise, it is rendered with the regular string description of the value, HTML
 
 #### Dot Variable tag `{{.}}`
 
-This extension to the [Mustache syntax](http://mustache.github.com/mustache.5.html) has been inspired by the dot variable tag introduced in [mustache.js](http://github.com/janl/mustache.js).
+This variable tag is an extension to the [Mustache syntax](http://mustache.github.com/mustache.5.html).
 
 This tag renders the regular string description of the current context itself.
 

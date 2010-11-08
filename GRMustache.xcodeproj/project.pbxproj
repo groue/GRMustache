@@ -38,6 +38,7 @@
 		56C99CA912872AFA00A25402 /* core in Resources */ = {isa = PBXBuildFile; fileRef = 56C99C9D12872AFA00A25402 /* core */; };
 		56C99DD11288840800A25402 /* GRMustacheLambdaSectionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C99DD01288840800A25402 /* GRMustacheLambdaSectionTest.m */; };
 		56C99DF812888B2A00A25402 /* dot_key in Resources */ = {isa = PBXBuildFile; fileRef = 56C99DF312888B2A00A25402 /* dot_key */; };
+		56C99ECA1288A61D00A25402 /* extended_path in Resources */ = {isa = PBXBuildFile; fileRef = 56C99EC71288A61D00A25402 /* extended_path */; };
 		56D87ED1128578D100F5CF76 /* GSNSDataExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87EC6128578D100F5CF76 /* GSNSDataExtensions.m */; };
 		56D87ED2128578D100F5CF76 /* libsyck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56D87EC7128578D100F5CF76 /* libsyck.a */; };
 		56D87ED3128578D100F5CF76 /* SyckInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECA128578D100F5CF76 /* SyckInput.m */; };
@@ -107,6 +108,7 @@
 		56C99DCF1288840800A25402 /* GRMustacheLambdaSectionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheLambdaSectionTest.h; sourceTree = "<group>"; };
 		56C99DD01288840800A25402 /* GRMustacheLambdaSectionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheLambdaSectionTest.m; sourceTree = "<group>"; };
 		56C99DF312888B2A00A25402 /* dot_key */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dot_key; path = "Mustache-Spec/specs/dot_key"; sourceTree = SOURCE_ROOT; };
+		56C99EC71288A61D00A25402 /* extended_path */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extended_path; path = "Mustache-Spec/specs/extended_path"; sourceTree = SOURCE_ROOT; };
 		56CF962A127EC5540043796D /* GRMustacheTest.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustacheTest.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D87EC5128578D100F5CF76 /* GSNSDataExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSNSDataExtensions.h; sourceTree = "<group>"; };
 		56D87EC6128578D100F5CF76 /* GSNSDataExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSNSDataExtensions.m; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 			children = (
 				56C99C9D12872AFA00A25402 /* core */,
 				56C99DF312888B2A00A25402 /* dot_key */,
+				56C99EC71288A61D00A25402 /* extended_path */,
 				561157DF127F0C9400F01AD0 /* crazy_recursive.mustache */,
 				561159A3127F2C7900F01AD0 /* inner_partial.mustache */,
 				561159B5127F2D5F00F01AD0 /* inner_partial.txt */,
@@ -357,6 +360,7 @@
 				561159B8127F2D5F00F01AD0 /* template_partial.txt in Resources */,
 				56C99CA912872AFA00A25402 /* core in Resources */,
 				56C99DF812888B2A00A25402 /* dot_key in Resources */,
+				56C99ECA1288A61D00A25402 /* extended_path in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

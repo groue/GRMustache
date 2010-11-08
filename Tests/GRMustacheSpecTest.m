@@ -77,6 +77,7 @@
 - (void)testMustacheSpec {
 	[self testSubsetNamed:@"core"];
 	[self testSubsetNamed:@"dot_key"];
+	[self testSubsetNamed:@"extended_path"];
 }
 
 - (void)testSubsetNamed:(NSString *)subsetName {
