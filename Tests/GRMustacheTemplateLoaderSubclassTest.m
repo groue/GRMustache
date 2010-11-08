@@ -52,7 +52,7 @@
 @implementation GRMustacheTemplateLoaderSubclassTest
 
 - (void)testThatTemplateLoaderSubclassFailingOnTemplateIdGeneratesGRMustacheErrorCodeTemplateNotFound {
-	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateIdTemplateLoader alloc] initWithExtension:nil] autorelease];
+	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateIdTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
 	NSError *error;
 	GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
 	STAssertNil(template, nil);
@@ -61,7 +61,7 @@
 }
 
 - (void)testThatLazyTemplateLoaderSubclassFailingOnTemplateStringGeneratesGRMustacheErrorCodeTemplateNotFound {
-	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringLazyTemplateLoader alloc] initWithExtension:nil] autorelease];
+	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringLazyTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
 	NSError *error;
 	GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
 	STAssertNil(template, nil);

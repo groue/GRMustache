@@ -25,8 +25,8 @@
 
 @implementation GRMustacheBundleTemplateLoader
 
-- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext {
-	if (self = [self initWithExtension:ext]) {
+- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
+	if (self = [self initWithExtension:ext encoding:encoding]) {
 		if (theBundle == nil) {
 			theBundle = [NSBundle mainBundle];
 		}
@@ -38,7 +38,7 @@
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
 	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
 	return [NSString stringWithContentsOfURL:(NSURL*)templateId
-									encoding:NSUTF8StringEncoding
+									encoding:self.encoding
 									   error:outError];
 }
 

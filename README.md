@@ -295,12 +295,13 @@ You can actually load partials from anywhere in the file system. First create a 
 
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url;
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
+	+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
+	+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 
 Once you have a GRMustacheTemplateLoader object, you may load a template from its location:
 
-	GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader ...];
 	GRMustacheTemplate *template = [loader parseTemplateNamed:@"document" error:nil];
 
 You may also have the loader parse a template string. Only partials would then be loaded from the loader's location:
@@ -340,8 +341,9 @@ We provide below the implementation of a template loader which loads partials fr
 	}
 	
 	- (id)initWithDictionary:(NSDictionary *)theTemplatesByName {
-	  // initWithExtension: is the designated initializer
-	  if (self == [self initWithExtension:nil]) {
+	  // initWithExtension:encoding: is the designated initializer.
+	  // provide it with some values, even if we won't use them.
+	  if (self == [self initWithExtension:nil encoding:NSUTF8StringEncoding]) {
 	    templatesByName = [theTemplatesByName retain];
 	  }
 	  return self;

@@ -22,7 +22,6 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheLambda_private.h"
-#import "GRMustacheRendering_private.h"
 
 
 static BOOL strictBooleanMode = NO;
@@ -38,7 +37,7 @@ static BOOL strictBooleanMode = NO;
 }
 
 + (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object GRMustacheDescription].length == 0) {
+	if (object == nil || object == [NSNull null] || object == [GRNo no] || [object description].length == 0) {
 		return GRMustacheObjectKindFalseValue;
 	}
 	if ([object isKindOfClass:[NSDictionary class]]) {

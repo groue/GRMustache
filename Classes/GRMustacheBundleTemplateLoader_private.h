@@ -26,5 +26,5 @@
 @interface GRMustacheBundleTemplateLoader: GRMustacheTemplateLoader {
 	NSBundle *bundle;
 }
-- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
+- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 @end

@@ -39,7 +39,7 @@
 }
 
 - (id)initWithDictionary:(NSDictionary *)thePartialsByName {
-	if (self == [self initWithExtension:nil]) {
+	if (self == [self initWithExtension:nil encoding:NSUTF8StringEncoding]) {
 		if (thePartialsByName == nil) {
 			thePartialsByName = [NSDictionary dictionary];
 		}

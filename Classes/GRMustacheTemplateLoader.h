@@ -28,12 +28,15 @@
 @interface GRMustacheTemplateLoader: NSObject {
 @private
 	NSString *extension;
+	NSStringEncoding encoding;
 	NSMutableDictionary *templatesById;
 }
 + (id)templateLoaderWithBaseURL:(NSURL *)url;
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
 @end

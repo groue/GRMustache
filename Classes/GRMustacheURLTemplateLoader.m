@@ -25,8 +25,8 @@
 
 @implementation GRMustacheURLTemplateLoader
 
-- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext {
-	if (self = [super initWithExtension:ext]) {
+- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
+	if (self = [super initWithExtension:ext encoding:encoding]) {
 		url = [theURL retain];
 	}
 	return self;
@@ -35,7 +35,7 @@
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
 	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
 	return [NSString stringWithContentsOfURL:(NSURL*)templateId
-									encoding:NSUTF8StringEncoding
+									encoding:self.encoding
 									   error:outError];
 }
 

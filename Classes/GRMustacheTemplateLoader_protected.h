@@ -28,8 +28,11 @@
 // The extension of loaded templates (if applicable)
 @property (nonatomic, readonly, retain) NSString *extension;
 
+// The encoding of loaded templates (if applicable)
+@property (nonatomic, readonly) NSStringEncoding encoding;
+
 // The designated initializer. Subclasses which ignore extensions may pass nil as the ext argument.
-- (id)initWithExtension:(NSString *)ext;
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 
 // Override this method, and return an object which uniquely identifies a template.
 // Beware that this unicity is the key to recursive partials.
