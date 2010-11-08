@@ -107,47 +107,6 @@
 
 @implementation GRMustacheContextTest
 
-- (void)testContextInitedWithNilIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:nil], nil);
-}
-
-- (void)testContextInitedWithNSNullIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:[NSNull null]], nil);
-}
-
-- (void)testContextInitedWithGRNoIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:[GRNo no]], nil);
-}
-
-- (void)testContextInitedWithGRYesIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:[GRYes yes]], nil);
-}
-
-- (void)testContextInitedWithLambdaIsInvalid {
-	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		return renderer(context);
-	});
-	STAssertThrows([GRMustacheContext contextWithObject:lambda], nil);
-}
-
-- (void)testContextInitedWithContextIsValid {
-	GRMustacheContext *context = [GRMustacheContext contextWithObject:nil];
-	STAssertNoThrow([GRMustacheContext contextWithObject:context], nil);
-}
-
-- (void)testContextInitedWithEnumerableIsValid {
-	// Useful for dot-key only
-	STAssertNoThrow([GRMustacheContext contextWithObject:[NSArray array]], nil);
-}
-
-- (void)testContextInitedWithDictionaryIsInvalid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:[NSDictionary dictionary]], nil);
-}
-
-- (void)testContextInitedWithRegularObjectIsValid {
-	STAssertNoThrow([GRMustacheContext contextWithObject:@"foo"], nil);
-}
-
 - (void)testOneDepthContextForwardsValueForKeyToItsObject {
 	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:recorder];
@@ -159,7 +118,7 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	[context pushObject:topRecorder];
+	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
 	STAssertEqualObjects([context valueForKey:@"top"], @"top", nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
 	STAssertNil(rootRecorder.lastAccessedKey, nil);
@@ -169,7 +128,7 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	[context pushObject:topRecorder];
+	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
 	STAssertEqualObjects([context valueForKey:@"root"], @"root", nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
 	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
@@ -179,10 +138,34 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	[context pushObject:topRecorder];
+	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
 	STAssertNil([context valueForKey:@"foo"], nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
 	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
+}
+
+- (void)testNilDoesNotStopsExploration {
+	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+	dictionary = [NSDictionary dictionary];
+	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	STAssertEqualObjects([context valueForKey:@"key"], @"foo", nil);
+}
+
+- (void)testNSNullDoesStopExploration {
+	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+	dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
+	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	STAssertEqualObjects([context valueForKey:@"key"], [NSNull null], nil);
+}
+
+- (void)testGRNoDoesStopExploration {
+	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+	dictionary = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"key"];
+	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	STAssertEqualObjects([context valueForKey:@"key"], [GRNo no], nil);
 }
 
 - (void)testOneDepthContextTemplate {

@@ -74,11 +74,10 @@
 			
 		case GRMustacheObjectKindTrueValue:
 			if (!inverted) {
-				[context pushObject:value];
+				GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:value parent:context];
 				for (GRMustacheElement *elem in elems) {
-					[buffer appendString:[elem renderContext:context]];
+					[buffer appendString:[elem renderContext:innerContext]];
 				}
-				[context pop];
 			}
 			break;
 			
@@ -96,11 +95,10 @@
 				}
 			} else {
 				for (id object in value) {
-					[context pushObject:object];
+					GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:object parent:context];
 					for (GRMustacheElement *elem in elems) {
-						[buffer appendString:[elem renderContext:context]];
+						[buffer appendString:[elem renderContext:innerContext]];
 					}
-					[context pop];
 				}
 			}
 			break;
@@ -108,7 +106,12 @@
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
 				GRMustacheRenderer renderer = ^(id object){
-					GRMustacheContext *renderedContext = [GRMustacheContext contextWithObject:object];
+					GRMustacheContext *renderedContext;
+					if ([object isKindOfClass:[GRMustacheContext class]]) {
+						renderedContext = object;
+					} else {
+						renderedContext = [GRMustacheContext contextWithObject:object parent:context];
+					}
 					NSMutableString *result = [NSMutableString stringWithCapacity:1024];
 					for (GRMustacheElement *elem in elems) {
 						[result appendString:[elem renderContext:renderedContext]];

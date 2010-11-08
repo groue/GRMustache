@@ -22,10 +22,10 @@
 
 
 @interface GRMustacheContext: NSObject {
-	NSMutableArray *objects;
+	id object;
+	GRMustacheContext *parent;
 }
 + (id)contextWithObject:(id)object;
++ (id)contextWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (id)valueForKey:(NSString *)key;
-- (void)pushObject:(id)object;
-- (void)pop;
 @end

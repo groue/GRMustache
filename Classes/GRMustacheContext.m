@@ -90,95 +90,94 @@ static NSInteger BOOLPropertyType = NSNotFound;
 
 
 @interface GRMustacheContext()
-@property (nonatomic, retain) NSMutableArray *objects;
-- (id)initWithObject:(id)object;
-- (BOOL)shouldConsiderObject:(id)object value:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
+@property (nonatomic, retain) id object;
+@property (nonatomic, retain) GRMustacheContext *parent;
+- (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
+- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
+- (id)valueForKeyComponent:(NSString *)key;
 @end
 
 
 @implementation GRMustacheContext
-@synthesize objects;
+@synthesize object;
+@synthesize parent;
 
 + (id)contextWithObject:(id)object {
-	return [[[self alloc] initWithObject:object] autorelease];
+	return [self contextWithObject:object parent:nil];
 }
 
-- (id)initWithObject:(id)object {
++ (id)contextWithObject:(id)object parent:(GRMustacheContext *)parent {
+	return [[[self alloc] initWithObject:object parent:parent] autorelease];
+}
+
+- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
 	if (self = [self init]) {
-		objects = [[NSMutableArray arrayWithCapacity:4] retain];
-		[self pushObject:object];
+		object = [theObject retain];
+		parent = [theParent retain];
 	}
 	return self;
 }
 
-- (void)pushObject:(id)object {
-	switch ([GRMustache objectKind:object]) {
-		case GRMustacheObjectKindFalseValue:
-			[objects addObject:[NSNull null]];
-			break;
-		case GRMustacheObjectKindTrueValue:
-		case GRMustacheObjectKindEnumerable:
-			[objects addObject:object];
-			break;
-		default:
-			NSAssert(NO, ([NSString stringWithFormat:@"Invalid context object: %@", object]));
-			break;
-	}
-}
-
-- (void)pop {
-	[objects removeLastObject];
-}
-
 - (id)valueForKey:(NSString *)key {
-	id value;
-	BOOL dotKey = [key isEqualToString:@"."];
-	
-	for (id object in [objects reverseObjectEnumerator]) {
-		if (object == [NSNull null]) {
+	GRMustacheContext *context = self;
+	NSArray *components = [key componentsSeparatedByString:@"/"];
+	for (NSString *component in components) {
+		if (component.length == 0) {
 			continue;
 		}
-		
-		if (dotKey) {
-			return object;
-		}
-		
-		@try {
-			value = [object valueForKey:key];
-		}
-		@catch (NSException *exception) {
-			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-				[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
-				![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
-			{
-				// that's some exception we are not related to
-				@throw;
-			}
+		if ([component isEqualToString:@"."]) {
 			continue;
 		}
-		
-		if (value != nil) {
-			BOOL boolValue;
-			if ([self shouldConsiderObject:object value:value forKey:key asBoolean:&boolValue]) {
-				if (boolValue) {
-					return [GRYes yes];
-				} else {
-					return [GRNo no];
-				}
-			}
-			return value;
+		if ([component isEqualToString:@".."]) {
+			context = parent;
+			continue;
 		}
+		context = [GRMustacheContext contextWithObject:[context valueForKeyComponent:component] parent:context];
 	}
-	
-	return nil;
+	return context.object;
 }
 
 - (void)dealloc {
-	[objects release];
+	[object release];
+	[parent release];
 	[super dealloc];
 }
 
-- (BOOL)shouldConsiderObject:(id)object value:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool {
+- (id)valueForKeyComponent:(NSString *)key {
+	id value = nil;
+	@try {
+		value = [object valueForKey:key];
+	}
+	@catch (NSException *exception) {
+		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
+			[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+			![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
+		{
+			// that's some exception we are not related to
+			@throw;
+		}
+	}
+	
+	if (value != nil) {
+		BOOL boolValue;
+		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&boolValue]) {
+			if (boolValue) {
+				return [GRYes yes];
+			} else {
+				return [GRNo no];
+			}
+		}
+		return value;
+	}
+	
+	if (parent == nil) {
+		return nil;
+	}
+	
+	return [parent valueForKeyComponent:key];
+}
+
+- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool {
 	// C99 bool type
 	if (CFBooleanGetTypeID() == CFGetTypeID(value)) {
 		if (outBool) {
