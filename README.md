@@ -219,31 +219,25 @@ If the value is a GRMustacheLambda, the section is rendered with the string retu
 You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
 
 	// A lambda which renders its section without any special effect:
-	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                 id context,
-	                                                 NSString *templateString) {
+	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
 	    return renderer(context);
 	});
 
 - `renderer` is a block which renders the inner section with its argument as a context.
 - `context` is the current rendering context.
-- `templateString` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
+- `text` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
 
 You may, for instance, implement caching:
 
 	__block NSString *cache = nil;
-	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                      id context,
-	                                                      NSString *templateString) {
+	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
 	  if (cache == nil) { cache = renderer(context); }
 	  return cache;
 	});
 
 You may also implement helper functions:
 
-	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer,
-	                                                      id context,
-	                                                      NSString *templateString) {
+	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"%@\">%@</a>",
 	          [context valueForKey:@"url"], // url comes from current context
