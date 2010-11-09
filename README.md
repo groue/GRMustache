@@ -166,24 +166,6 @@ If the value is *false*, the tag is not rendered.
 
 Otherwise, it is rendered with the regular string description of the value, HTML escaped.
 
-#### Dot Variable tag `{{.}}`
-
-This variable tag is an extension to the [Mustache syntax](http://mustache.github.com/mustache.5.html).
-
-This tag renders the regular string description of the current context itself.
-
-For instance:
-
-	templateString = @"{{#name}}: <ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>";
-	context = [NSDictionary dictionaryWithObjectsAndKeys:
-	           @"Groue's shopping cart", @"name",
-	           [NSArray arrayWithObjects: @"beer", @"ham", nil], @"item",
-	           nil];
-	
-	// Returns @"Groue's shopping cart: <ul><li>beer</li><li>ham</li></ul>"
-	[GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-
-
 ### Unescaped variable tags `{{{name}}}` and `{{&name}}`
 
 Such a tag is rendered according to the value for key `name` in the context.
@@ -270,9 +252,9 @@ When a key is missed, it is looked into the enclosing context. This is the base 
 
 Such a section is rendered when the `{{#name}}...{{/name}}` section would not: in the case of false values, or empty enumerables.
 
-### Partials `{{>name}}`
+### Partials `{{>partial_name}}`
 
-A `{{>name}}` tag is rendered as a partial loaded from the file system.
+A `{{>partial_name}}` tag is rendered as a partial loaded from the file system.
 
 Partials must have the same extension as their including template.
 
@@ -383,6 +365,47 @@ Then load a template from it:
 And finally render:
 
 	[template render];	// "It works!"
+
+Dot key and extended paths
+--------------------------
+
+### Extended paths
+
+GRMustache supports extended paths introduced by [Handlebars.js](https://github.com/wycats/handlebars.js). Paths are made up of typical expressions and / characters. Expressions allow you to not only display data from the current context, but to display data from contexts that are descendents and ancestors of the current context.
+
+To display data from descendent contexts, use the / character. So, for example, if your context were structured like:
+
+	context = [NSDictionary dictionaryWithObjectsAndKeys:
+	           [Person personWithName:@"Alan"], @"person",
+	           [Company companyWithName:@"Acme"], @"company",
+	           nil];
+
+you could display the person's name from the top-level context with the following expression:
+
+	{{person/name}}
+
+Similarly, if already traversed into the person object you could still display the company's name with an expression like ``{{../company/name}}`, so:
+
+	{{#person}}{{name}} - {{../company/name}}{{/person}}
+
+would render:
+
+	Alan - Acme
+
+### Dot key
+
+Consistently with "`..`", the dot "`.`" stands for the current context itself. This dot key can be useful when iterating a list of scalar objects. For instance, the following context:
+
+	context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects: @"beer", @"ham", nil]
+	                                      forKey:@"item"];
+
+renders:
+
+	<ul><li>beer</li><li>ham</li></ul>
+
+when applied to the template:
+
+	<ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>
 
 Booleans Values
 ---------------
