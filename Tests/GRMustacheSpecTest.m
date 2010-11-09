@@ -64,6 +64,54 @@
 
 @end
 
+@interface GRMustacheSpecFileSystemTemplateLoader : GRMustacheTemplateLoader {
+	NSDictionary *partialsByPath;
+}
++ (id)loaderWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext;
+- (id)initWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext;
+@end
+
+@implementation GRMustacheSpecFileSystemTemplateLoader
+
++ (id)loaderWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext {
+	return [[[self alloc] initWithDictionary:partialsByPath extension:ext] autorelease];
+}
+
+- (id)initWithDictionary:(NSDictionary *)thePartialsByPath extension:(NSString *)theExtension {
+	if (self == [self initWithExtension:theExtension encoding:NSUTF8StringEncoding]) {
+		if (thePartialsByPath == nil) {
+			thePartialsByPath = [NSDictionary dictionary];
+		}
+		NSAssert([thePartialsByPath isKindOfClass:[NSDictionary class]], nil);
+		partialsByPath = [thePartialsByPath retain];
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[partialsByPath release];
+	[super dealloc];
+}
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+	NSURL *baseURL = (NSURL *)baseTemplateId;
+	if (baseURL == nil) {
+		baseURL = [NSURL URLWithString:@"/"];
+	}
+	NSURL *url = [NSURL URLWithString:name relativeToURL:baseURL];
+	url = [url URLByAppendingPathExtension:self.extension];
+	url = [url URLByStandardizingPath];
+	return url;
+}
+
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+	NSString *path = ((NSURL *)templateId).path;
+	path = [path substringFromIndex:1];	// trim initial /
+	return [partialsByPath objectForKey:path];
+}
+
+@end
+
 
 
 @interface GRMustacheSpecTest()
@@ -78,6 +126,7 @@
 	[self testSubsetNamed:@"core"];
 	[self testSubsetNamed:@"dot_key"];
 	[self testSubsetNamed:@"extended_path"];
+	[self testSubsetNamed:@"file_system"];
 }
 
 - (void)testSubsetNamed:(NSString *)subsetName {
@@ -111,11 +160,22 @@
 	id context = [suiteTest objectForKey:@"data"];
 	NSString *templateString = [suiteTest objectForKey:@"template"];
 	NSString *expected = [suiteTest objectForKey:@"expected"];
-	NSDictionary *partials = [suiteTest objectForKey:@"partials"];
-	GRMustacheTemplateLoader *loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
+	NSString *template_file_name = [suiteTest objectForKey:@"template_file_name"];
+	NSMutableDictionary *partials = [[[suiteTest objectForKey:@"partials"] mutableCopy] autorelease];
 
 	NSError *error;
-	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
+	GRMustacheTemplateLoader *loader;
+	GRMustacheTemplate *template;
+	
+	if (template_file_name.length > 0) {
+		[partials setObject:templateString forKey:template_file_name];
+		loader = [GRMustacheSpecFileSystemTemplateLoader loaderWithDictionary:partials extension:[template_file_name pathExtension]];
+		template = [loader parseTemplateNamed:[template_file_name stringByDeletingPathExtension] error:nil];
+	} else {
+		loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
+		template = [loader parseString:templateString error:&error];
+	}
+
 	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@ - %@: %@", subsetName, suiteName, testName, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
 	if (template) {
 		NSString *result = [template renderObject:context];
