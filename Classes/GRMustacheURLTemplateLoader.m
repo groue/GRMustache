@@ -42,9 +42,9 @@
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
 	if (baseTemplateId) {
 		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], nil);
-		return [NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId];
+		return [[NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
 	}
-	return [[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension];
+	return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
 // override of a private GRMustacheTemplateLoader
