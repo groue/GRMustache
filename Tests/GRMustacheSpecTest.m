@@ -64,55 +64,6 @@
 
 @end
 
-@interface GRMustacheSpecFileSystemTemplateLoader : GRMustacheTemplateLoader {
-	NSDictionary *partialsByPath;
-}
-+ (id)loaderWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext;
-- (id)initWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext;
-@end
-
-@implementation GRMustacheSpecFileSystemTemplateLoader
-
-+ (id)loaderWithDictionary:(NSDictionary *)partialsByPath extension:(NSString *)ext {
-	return [[[self alloc] initWithDictionary:partialsByPath extension:ext] autorelease];
-}
-
-- (id)initWithDictionary:(NSDictionary *)thePartialsByPath extension:(NSString *)theExtension {
-	if (self == [self initWithExtension:theExtension encoding:NSUTF8StringEncoding]) {
-		if (thePartialsByPath == nil) {
-			thePartialsByPath = [NSDictionary dictionary];
-		}
-		NSAssert([thePartialsByPath isKindOfClass:[NSDictionary class]], nil);
-		partialsByPath = [thePartialsByPath retain];
-	}
-	return self;
-}
-
-- (void)dealloc {
-	[partialsByPath release];
-	[super dealloc];
-}
-
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	NSURL *baseURL = (NSURL *)baseTemplateId;
-	if (baseURL == nil) {
-		baseURL = [NSURL URLWithString:@"/"];
-	}
-	NSURL *url = [NSURL URLWithString:name relativeToURL:baseURL];
-	url = [url URLByAppendingPathExtension:self.extension];
-	url = [url URLByStandardizingPath];
-	return url;
-}
-
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSString *path = ((NSURL *)templateId).path;
-	path = [path substringFromIndex:1];	// trim initial /
-	return [partialsByPath objectForKey:path];
-}
-
-@end
-
-
 
 @interface GRMustacheSpecTest()
 - (void)testSubsetNamed:(NSString *)subsetName;
@@ -156,21 +107,31 @@
 }
 
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSString *templatesDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"GRMustacheTest"];
 	NSString *testName = [suiteTest objectForKey:@"name"];
 	id context = [suiteTest objectForKey:@"data"];
 	NSString *templateString = [suiteTest objectForKey:@"template"];
 	NSString *expected = [suiteTest objectForKey:@"expected"];
-	NSString *template_file_name = [suiteTest objectForKey:@"template_file_name"];
+	NSString *templateFileName = [suiteTest objectForKey:@"template_file_name"];
 	NSMutableDictionary *partials = [[[suiteTest objectForKey:@"partials"] mutableCopy] autorelease];
 
 	NSError *error;
 	GRMustacheTemplateLoader *loader;
 	GRMustacheTemplate *template;
 	
-	if (template_file_name.length > 0) {
-		[partials setObject:templateString forKey:template_file_name];
-		loader = [GRMustacheSpecFileSystemTemplateLoader loaderWithDictionary:partials extension:[template_file_name pathExtension]];
-		template = [loader parseTemplateNamed:[template_file_name stringByDeletingPathExtension] error:nil];
+	if (templateFileName.length > 0) {
+		[fm removeItemAtPath:templatesDirectoryPath error:nil];
+		[fm createDirectoryAtPath:templatesDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error];
+		[partials setObject:templateString forKey:templateFileName];
+		for (NSString *templateName in partials) {
+			templateString = [partials objectForKey:templateName];
+			NSString *templatePath = [templatesDirectoryPath stringByAppendingPathComponent:templateName];
+			[fm createDirectoryAtPath:[templatePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+			[fm createFileAtPath:templatePath contents:[templateString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+		}
+		loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[NSURL fileURLWithPath:templatesDirectoryPath isDirectory:YES] extension:[templateFileName pathExtension]];
+		template = [loader parseTemplateNamed:[templateFileName stringByDeletingPathExtension] error:&error];
 	} else {
 		loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
 		template = [loader parseString:templateString error:&error];
@@ -185,6 +146,10 @@
 			[template renderObject:context];
 		}
 		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@ - %@", subsetName, suiteName, testName]);
+	}
+
+	if (templateFileName.length > 0) {
+		[fm removeItemAtPath:templatesDirectoryPath error:&error];
 	}
 }
 
