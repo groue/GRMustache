@@ -457,7 +457,7 @@ The rendering is done as usual:
 	NSString *rendering = [template renderObject:...];
 
 
-#### Implementing your own template loading strategy
+### Implementing your own template loading strategy
 
 GRMustache is shipped with built-in ability to load templates and partials from the file system, or from a bundle, as seen above.
 
