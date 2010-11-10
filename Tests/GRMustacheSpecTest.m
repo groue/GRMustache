@@ -113,25 +113,25 @@
 	id context = [suiteTest objectForKey:@"data"];
 	NSString *templateString = [suiteTest objectForKey:@"template"];
 	NSString *expected = [suiteTest objectForKey:@"expected"];
-	NSString *templateFileName = [suiteTest objectForKey:@"template_file_name"];
+	NSString *baseTemplatePath = [suiteTest objectForKey:@"template_path"];
 	NSMutableDictionary *partials = [[[suiteTest objectForKey:@"partials"] mutableCopy] autorelease];
 
 	NSError *error;
 	GRMustacheTemplateLoader *loader;
 	GRMustacheTemplate *template;
 	
-	if (templateFileName.length > 0) {
+	if (baseTemplatePath.length > 0) {
 		[fm removeItemAtPath:templatesDirectoryPath error:nil];
 		[fm createDirectoryAtPath:templatesDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error];
-		[partials setObject:templateString forKey:templateFileName];
+		[partials setObject:templateString forKey:baseTemplatePath];
 		for (NSString *templateName in partials) {
 			templateString = [partials objectForKey:templateName];
 			NSString *templatePath = [templatesDirectoryPath stringByAppendingPathComponent:templateName];
 			[fm createDirectoryAtPath:[templatePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
 			[fm createFileAtPath:templatePath contents:[templateString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 		}
-		loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[NSURL fileURLWithPath:templatesDirectoryPath isDirectory:YES] extension:[templateFileName pathExtension]];
-		template = [loader parseTemplateNamed:[templateFileName stringByDeletingPathExtension] error:&error];
+		loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[NSURL fileURLWithPath:templatesDirectoryPath isDirectory:YES] extension:[baseTemplatePath pathExtension]];
+		template = [loader parseTemplateNamed:[baseTemplatePath stringByDeletingPathExtension] error:&error];
 	} else {
 		loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
 		template = [loader parseString:templateString error:&error];
@@ -148,7 +148,7 @@
 		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@ - %@", subsetName, suiteName, testName]);
 	}
 
-	if (templateFileName.length > 0) {
+	if (baseTemplatePath.length > 0) {
 		[fm removeItemAtPath:templatesDirectoryPath error:&error];
 	}
 }
