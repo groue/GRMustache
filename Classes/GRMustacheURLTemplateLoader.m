@@ -42,7 +42,13 @@
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
 	if (baseTemplateId) {
 		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], nil);
+		if (self.extension.length == 0) {
+			return [[NSURL URLWithString:name relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
+		}
 		return [[NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
+	}
+	if (self.extension.length == 0) {
+		return [[url URLByAppendingPathComponent:name] URLByStandardizingPath];
 	}
 	return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
