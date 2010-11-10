@@ -94,7 +94,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
-- (id)valueForKeyComponent:(NSString *)key;
+- (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext;
 @end
 
 
@@ -136,7 +136,12 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			context = parent;
 			continue;
 		}
-		context = [GRMustacheContext contextWithObject:[context valueForKeyComponent:component] parent:context];
+		GRMustacheContext *valueContext = nil;
+		id value = [context valueForKeyComponent:component foundInContext:&valueContext];
+		if (value == nil) {
+			return nil;
+		}
+		context = [GRMustacheContext contextWithObject:value parent:valueContext];
 	}
 	return context.object;
 }
@@ -147,7 +152,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	[super dealloc];
 }
 
-- (id)valueForKeyComponent:(NSString *)key {
+- (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
 	id value = nil;
 	@try {
 		value = [object valueForKey:key];
@@ -163,6 +168,9 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	}
 	
 	if (value != nil) {
+		if (outContext != NULL) {
+			*outContext = self;
+		}
 		BOOL boolValue;
 		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&boolValue]) {
 			if (boolValue) {
@@ -178,7 +186,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		return nil;
 	}
 	
-	return [parent valueForKeyComponent:key];
+	return [parent valueForKeyComponent:key foundInContext:outContext];
 }
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool {
