@@ -67,7 +67,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)initWithExtension:(NSString *)theExtension encoding:(NSStringEncoding)theEncoding {
 	if (self = [self init]) {
-		if (theExtension.length == 0) {
+		if (theExtension == nil) {
 			theExtension = GRMustacheDefaultExtension;
 		}
 		extension = [theExtension retain];
