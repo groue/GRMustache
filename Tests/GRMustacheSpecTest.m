@@ -66,28 +66,28 @@
 
 
 @interface GRMustacheSpecTest()
-- (void)testSubsetNamed:(NSString *)subsetName;
-- (void)testSuiteAtURL:(NSURL *)suiteURL inSubsetNamed:(NSString *)subsetName;
-- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName;
+- (void)testModuleNamed:(NSString *)moduleName;
+- (void)testSuiteAtURL:(NSURL *)suiteURL inModuleNamed:(NSString *)moduleName;
+- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inModuleNamed:(NSString *)moduleName;
 @end
 
 @implementation GRMustacheSpecTest
 
 - (void)testMustacheSpec {
-	[self testSubsetNamed:@"core"];
-	[self testSubsetNamed:@"dot_key"];
-	[self testSubsetNamed:@"extended_path"];
-	[self testSubsetNamed:@"file_system"];
+	[self testModuleNamed:@"core"];
+	[self testModuleNamed:@"dot_key"];
+	[self testModuleNamed:@"extended_path"];
+	[self testModuleNamed:@"file_system"];
 }
 
-- (void)testSubsetNamed:(NSString *)subsetName {
-	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:subsetName];
+- (void)testModuleNamed:(NSString *)moduleName {
+	NSArray *suiteURLs = [[self testBundle] URLsForResourcesWithExtension:@"yml" subdirectory:moduleName];
 	for (NSURL *suiteURL in suiteURLs) {
-		[self testSuiteAtURL:suiteURL inSubsetNamed:subsetName];
+		[self testSuiteAtURL:suiteURL inModuleNamed:moduleName];
 	}
 }
 
-- (void)testSuiteAtURL:(NSURL *)suiteURL inSubsetNamed:(NSString *)subsetName {
+- (void)testSuiteAtURL:(NSURL *)suiteURL inModuleNamed:(NSString *)moduleName {
 	NSString *suiteName = [[suiteURL lastPathComponent] stringByDeletingPathExtension];
 	if ([suiteName isEqualToString:@"lambda_sections"]) {
 		return;
@@ -102,11 +102,11 @@
 	NSArray *suiteTests = [(NSDictionary *)suite objectForKey:@"tests"];
 	STAssertNotNil(suiteTests, nil);
 	for (NSDictionary *suiteTest in suiteTests) {
-		[self testSuiteTest:suiteTest inSuiteNamed:suiteName inSubsetNamed:subsetName];
+		[self testSuiteTest:suiteTest inSuiteNamed:suiteName inModuleNamed:moduleName];
 	}
 }
 
-- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inSubsetNamed:(NSString *)subsetName {
+- (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inModuleNamed:(NSString *)moduleName {
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *templatesDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"GRMustacheTest"];
 	NSString *testName = [suiteTest objectForKey:@"name"];
@@ -137,7 +137,7 @@
 		template = [loader parseString:templateString error:&error];
 	}
 
-	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@ - %@: %@", subsetName, suiteName, testName, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
+	STAssertNotNil(template, [NSString stringWithFormat:@"%@/%@ - %@: %@", moduleName, suiteName, testName, [[error userInfo] objectForKey:NSLocalizedDescriptionKey]]);
 	if (template) {
 		NSString *result = [template renderObject:context];
 		if (![result isEqual:expected]) {
@@ -145,7 +145,7 @@
 			template = [loader parseString:templateString error:&error];
 			[template renderObject:context];
 		}
-		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@ - %@", subsetName, suiteName, testName]);
+		STAssertEqualObjects(result, expected, [NSString stringWithFormat:@"%@/%@ - %@", moduleName, suiteName, testName]);
 	}
 
 	if (baseTemplatePath.length > 0) {
