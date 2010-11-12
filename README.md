@@ -37,6 +37,23 @@ You may also run the `make` command from the Terminal.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
+Versioning
+----------
+
+GRMustache versioning policy complies to the one defined by [Apache APR](http://apr.apache.org/versioning.html).
+
+Quoting this page :
+
+> Versions are denoted using a standard triplet of integers: MAJOR.MINOR.PATCH. The basic intent is that MAJOR versions are incompatible, large-scale upgrades of the API. MINOR versions retain source and binary compatibility with older minor versions, and changes in the PATCH level are perfectly compatible, forwards and backwards.
+
+You may check GRMustache version using the following macros:
+
+- `GRMUSTACHE_MAJOR_VERSION`
+- `GRMUSTACHE_MINOR_VERSION`
+- `GRMUSTACHE_PATCH_VERSION`
+
+You may also use the `[GRMustache version]` method (see `GRMustacheVersion.h`).
+
 Simple example
 --------------
 

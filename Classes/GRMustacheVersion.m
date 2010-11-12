@@ -20,16 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-
-@interface GRMustache: NSObject
-+ (BOOL)strictBooleanMode;
-+ (void)setStrictBooleanMode:(BOOL)aBool;
-@end
-
 #import "GRMustacheVersion.h"
-#import "GRBoolean.h"
-#import "GRMustacheError.h"
-#import "GRMustacheLambda.h"
-#import "GRMustacheTemplateLoader.h"
-#import "GRMustacheTemplate.h"
+
+
+@implementation GRMustache(Version)
+
++ (GRMustacheVersion)version {
+	return (GRMustacheVersion){ major:GRMUSTACHE_MAJOR_VERSION,
+								minor:GRMUSTACHE_MINOR_VERSION,
+								patch:GRMUSTACHE_PATCH_VERSION };
+}
+
+@end
