@@ -79,6 +79,14 @@
 
 @implementation GRBooleanTest
 
+- (void)testGRYesBoolValueIsYES {
+	STAssertEquals((int)[[GRYes yes] boolValue], (int)YES, nil);
+}
+
+- (void)testGRNoBoolValueIsNO {
+	STAssertEquals((int)[[GRNo no] boolValue], (int)NO, nil);
+}
+
 - (void)testGRYesIsTrueObject {
 	STAssertEquals([GRMustache objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
 }

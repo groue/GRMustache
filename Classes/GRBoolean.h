@@ -25,9 +25,11 @@
 
 @interface GRYes : NSObject <NSCopying>
 + (GRYes *)yes;
+- (BOOL)boolValue;
 @end
 
 
 @interface GRNo : NSObject <NSCopying>
 + (GRNo *)no;
+- (BOOL)boolValue;
 @end

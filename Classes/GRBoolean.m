@@ -62,6 +62,10 @@ static GRYes *yes = nil;
 	return nil;
 }
 
+- (BOOL)boolValue {
+	return YES;
+}
+
 - (NSString *)description {
 	return @"(yes)";
 }
@@ -105,6 +109,10 @@ static GRNo *no = nil;
 
 - (id)valueForKey:(NSString *)key {
 	return nil;
+}
+
+- (BOOL)boolValue {
+	return NO;
 }
 
 - (NSString *)description {
