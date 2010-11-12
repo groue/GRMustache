@@ -24,6 +24,7 @@
 
 
 @interface GRMustacheVariableElement: GRMustacheElement {
+@private
 	NSString *name;
 	BOOL raw;
 }

@@ -26,6 +26,7 @@
 @class GRMustacheTemplateLoader;
 
 @interface GRMustacheTemplate: GRMustacheElement {
+@private
 	GRMustacheTemplateLoader *templateLoader;
 	NSString *templateId;
 	NSString *templateString;

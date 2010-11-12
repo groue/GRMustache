@@ -24,6 +24,7 @@
 
 
 @interface GRMustacheURLTemplateLoader: GRMustacheTemplateLoader {
+@private
 	NSURL *url;
 }
 - (id)initWithURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;

@@ -22,6 +22,7 @@
 
 
 @interface GRMustacheContext: NSObject {
+@private
 	id object;
 	GRMustacheContext *parent;
 }
