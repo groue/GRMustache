@@ -33,17 +33,7 @@ Versioning
 
 GRMustache versioning policy complies to the one defined by [Apache APR](http://apr.apache.org/versioning.html).
 
-Quoting this page :
-
-> Versions are denoted using a standard triplet of integers: MAJOR.MINOR.PATCH. The basic intent is that MAJOR versions are incompatible, large-scale upgrades of the API. MINOR versions retain source and binary compatibility with older minor versions, and changes in the PATCH level are perfectly compatible, forwards and backwards.
-
-You may check GRMustache version using the following macros:
-
-- `GRMUSTACHE_MAJOR_VERSION`
-- `GRMUSTACHE_MINOR_VERSION`
-- `GRMUSTACHE_PATCH_VERSION`
-
-You may also use the `[GRMustache version]` method (see `GRMustacheVersion.h`).
+Check the `GRMustacheVersion.h` header, and `RELEASE_NOTES.md`.
 
 Testing
 -------
