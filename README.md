@@ -494,7 +494,7 @@ We provide below the implementation of a template loader which loads partials fr
 	- (id)initWithDictionary:(NSDictionary *)theTemplatesByName {
 	  // initWithExtension:encoding: is the designated initializer.
 	  // provide it with some values, even if we won't use them.
-	  if (self == [self initWithExtension:nil encoding:NSUTF8StringEncoding]) {
+	  if (self = [self initWithExtension:nil encoding:NSUTF8StringEncoding]) {
 	    templatesByName = [theTemplatesByName retain];
 	  }
 	  return self;
