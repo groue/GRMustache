@@ -28,15 +28,6 @@ Import `GRMustache.h` in order to access all GRMustache features.
 
 Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
 
-Testing
--------
-
-Open and build the GRMustache.xcodeproj project. If the build succeeds, all the tests pass!
-
-You may also run the `make` command from the Terminal.
-
-GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
-
 Versioning
 ----------
 
@@ -53,6 +44,15 @@ You may check GRMustache version using the following macros:
 - `GRMUSTACHE_PATCH_VERSION`
 
 You may also use the `[GRMustache version]` method (see `GRMustacheVersion.h`).
+
+Testing
+-------
+
+Open and build the GRMustache.xcodeproj project. If the build succeeds, all the tests pass!
+
+You may also run the `make` command from the Terminal.
+
+GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
 Simple example
 --------------
