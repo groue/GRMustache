@@ -22,14 +22,56 @@
 
 #import <Foundation/Foundation.h>
 
-
+/**
+ The GRYes class provides with a singleton which you can use as a true value
+ when controlling Mustache boolean sections.
+ 
+ This singleton object is safer and less ambiguous than [NSNumber numberWithBool:YES],
+ which GRMustache essentially considers as the integer 1.
+ 
+ @see GRYes#yes
+ @see GRMustache#strictBooleanMode
+ @see GRNo
+ @since v1.0.0
+ */
 @interface GRYes : NSObject <NSCopying>
+/**
+ @returns the GRYes singleton.
+ @since v1.0.0
+ */
 + (GRYes *)yes;
+
+/**
+ @returns YES
+ @since v1.1.0
+ */
 - (BOOL)boolValue;
 @end
 
 
+/**
+ The GRNo class provides with a singleton which you can use as a false value
+ when controlling Mustache boolean sections.
+ 
+ This singleton object is safer and less ambiguous than [NSNumber numberWithBool:NO],
+ which GRMustache essentially considers as the integer 0, and not as a false
+ value.
+ 
+ @see GRNo#no
+ @see GRMustache#strictBooleanMode
+ @see GRYes
+ @since v1.0.0
+ */
 @interface GRNo : NSObject <NSCopying>
+/**
+ @returns the GRNo singleton.
+ @since v1.0.0
+ */
 + (GRNo *)no;
+
+/**
+ @returns NO
+ @since v1.1.0
+ */
 - (BOOL)boolValue;
 @end

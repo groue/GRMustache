@@ -23,15 +23,40 @@
 #import <Foundation/Foundation.h>
 
 
-// The domain of returned errors
+/**
+ The domain of a GRMustache-generated NSError
+
+ @since v1.0.0
+*/
 extern NSString* const GRMustacheErrorDomain;
 
-// The key containing the error line
+/**
+ When a GRMustache-generated NSError has the code GRMustacheErrorCodeParseError,
+ its userInfo dictionary contains the line where the parse error occurred, at
+ the key GRMustacheErrorLine.
+
+ @since v1.0.0
+*/
 extern NSString* const GRMustacheErrorLine;
 
-// The codes of returned errors
+/**
+ The codes of a GRMustache-generated NSError
+
+ @since v1.0.0
+*/
 typedef enum {
+	/**
+	 The error code for parse errors.
+	 
+	 @since v1.0.0
+	 */
 	GRMustacheErrorCodeParseError,
+	
+	/**
+	 The error code for not found templates and partials.
+	 
+	 @since v1.0.0
+	 */
 	GRMustacheErrorCodeTemplateNotFound,
 } GRMustacheErrorCode;
 

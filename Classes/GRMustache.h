@@ -22,8 +22,44 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ The GRMustache class provides with global-level information and configuration
+ of the GRMustache library.
+ @since v1.0.0
+ */
 @interface GRMustache: NSObject
+
+/**
+ A Boolean value that determines whether GRMustache renders templates in strict
+ boolean mode.
+ 
+ @returns YES if GRMustache renders templates in strict boolean mode,
+ NO otherwise. The default value is NO.
+ 
+ In strict boolean mode, properties of context objects that are declared as BOOL
+ are interpreted as numbers, and can not be used for controlling Mustache
+ boolean sections.
+ 
+ In non-strict boolean mode, all properties declared as signed char (including
+ those declared as BOOL), are interpreted as booleans, and can be used for
+ controlling Mustache boolean sections.
+ 
+ @see GRMustache#setStrictBooleanMode:
+ @see GRYes
+ @see GRNo
+ @since v1.0.0
+ */
 + (BOOL)strictBooleanMode;
+
+/**
+ Sets the strict boolean mode of GMustache.
+ 
+ @param aBool YES if GRMustache should render templates in strict boolean mode,
+ NO otherwise.
+ 
+ @see GRMustache#strictBooleanMode
+ @since v1.0.0
+ */
 + (void)setStrictBooleanMode:(BOOL)aBool;
 @end
 

@@ -23,5 +23,12 @@
 #import <Foundation/Foundation.h>
 
 
+/**
+ The super class of GRMustacheTemplate.
+ 
+ Don't use it.
+ 
+ @since v1.0.0
+ */
 @interface GRMustacheElement: NSObject
 @end

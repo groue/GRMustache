@@ -6,6 +6,20 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		56A2A1FC128EA8D500B33845 /* GRMustacheDocumentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 56A2A200128EA8F000B33845 /* Build configuration list for PBXAggregateTarget "GRMustacheDocumentation" */;
+			buildPhases = (
+				56A2A1FB128EA8D500B33845 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = GRMustacheDocumentation;
+			productName = GRMustacheDocumentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		56115432127EC68000F01AD0 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56115418127EC67F00F01AD0 /* GRMustache.m */; };
 		56115433127EC68000F01AD0 /* GRMustacheContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 5611541B127EC68000F01AD0 /* GRMustacheContext.m */; };
@@ -346,6 +360,7 @@
 			projectRoot = "";
 			targets = (
 				56CF9629127EC5540043796D /* GRMustacheTest */,
+				56A2A1FC128EA8D500B33845 /* GRMustacheDocumentation */,
 			);
 		};
 /* End PBXProject section */
@@ -376,6 +391,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		56A2A1FB128EA8D500B33845 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#  http://developer.apple.com/tools/creatingdocsetswithdoxygen.html\n\n#  Build the doxygen documentation for the project and load the docset into Xcode.\n\n#  Use the following to adjust the value of the $DOXYGEN_PATH User-Defined Setting:\n#    Binary install location: /Applications/Doxygen.app/Contents/Resources/doxygen\n#    Source build install location: /usr/local/bin/doxygen\n\n#  If the config file doesn't exist, run 'doxygen -g $SOURCE_ROOT/doxygen.config' to \n#   a get default file.\n\nif ! [ -f $SOURCE_ROOT/doxygen.config ] \nthen \n  echo doxygen config file does not exist\n  $DOXYGEN_PATH -g $SOURCE_ROOT/doxygen.config\nfi\n\n#  Append the proper input/output directories and docset info to the config file.\n#  This works even though values are assigned higher up in the file. Easier than sed.\n\ncp $SOURCE_ROOT/doxygen.config $TEMP_DIR/doxygen.config\n\necho \"INPUT = $SOURCE_ROOT/Classes\" >> $TEMP_DIR/doxygen.config\necho \"OUTPUT_DIRECTORY = $SOURCE_ROOT/DoxygenDocs.docset\" >> $TEMP_DIR/doxygen.config\necho \"GENERATE_DOCSET        = YES\" >> $TEMP_DIR/doxygen.config\necho \"DOCSET_BUNDLE_ID       = com.github.groue.GRMustache\" >> $TEMP_DIR/doxygen.config\n\n#  Run doxygen on the updated config file.\n#  Note: doxygen creates a Makefile that does most of the heavy lifting.\n\n$DOXYGEN_PATH $TEMP_DIR/doxygen.config\n\n#  make will invoke docsetutil. Take a look at the Makefile to see how this is done.\n\nmake -C $SOURCE_ROOT/DoxygenDocs.docset/html install\n\n#  Construct a temporary applescript file to tell Xcode to load a docset.\n\nrm -f $TEMP_DIR/loadDocSet.scpt\n\necho \"tell application \\\"Xcode\\\"\" >> $TEMP_DIR/loadDocSet.scpt\necho \"load documentation set with path \\\"/Users/$USER/Library/Developer/Shared/Documentation/DocSets/\\\"\" \n     >> $TEMP_DIR/loadDocSet.scpt\necho \"end tell\" >> $TEMP_DIR/loadDocSet.scpt\n\n#  Run the load-docset applescript command.\n\nosascript $TEMP_DIR/loadDocSet.scpt\n\nexit 0";
+		};
 		56CF9628127EC5540043796D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -429,6 +457,29 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		56A2A1FD128EA8D500B33845 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DOXYGEN_PATH = /usr/local/bin/doxygen;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = GRMustacheDocumentation;
+			};
+			name = Debug;
+		};
+		56A2A1FE128EA8D500B33845 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DOXYGEN_PATH = /usr/local/bin/doxygen;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = GRMustacheDocumentation;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		56CF962C127EC5540043796D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -522,6 +573,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		56A2A200128EA8F000B33845 /* Build configuration list for PBXAggregateTarget "GRMustacheDocumentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A2A1FD128EA8D500B33845 /* Debug */,
+				56A2A1FE128EA8D500B33845 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		56CF962E127EC5550043796D /* Build configuration list for PBXNativeTarget "GRMustacheTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

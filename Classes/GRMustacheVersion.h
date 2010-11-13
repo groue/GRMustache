@@ -23,21 +23,49 @@
 #import "GRMustache.h"
 
 
-// Compile-time Checks
-
+/**
+ The major component of GRMustache version
+ 
+ @since v1.0.0
+ */
 #define GRMUSTACHE_MAJOR_VERSION 1
+
+/**
+ The minor component of GRMustache version
+ 
+ @since v1.0.0
+ */
 #define GRMUSTACHE_MINOR_VERSION 1
+
+/**
+ The patch-level component of GRMustache version
+ 
+ @since v1.0.0
+ */
 #define GRMUSTACHE_PATCH_VERSION 0
 
 
-// Run-time Checks
-
+/**
+ A C struct that hold GRMustache version information
+ 
+ @since v1.0.0
+ */
 typedef struct {
-	int major;
-	int minor;
-	int patch;
+	int major;	/**< The major component of the version. */
+	int minor;	/**< The minor component of the version. */
+	int patch;	/**< The patch-level component of the version. */
 } GRMustacheVersion;
 
+/**
+ Adds version method to the GRMustache class.
+
+ @since v1.0.0
+ */
 @interface GRMustache(Version)
+/**
+ @returns the version of GRMustache as a GRMustacheVersion.
+ 
+ @since v1.0.0
+ */
 + (GRMustacheVersion)version;
 @end
