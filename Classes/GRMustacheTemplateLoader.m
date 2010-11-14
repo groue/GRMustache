@@ -23,7 +23,7 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheURLTemplateLoader_private.h"
+#import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheBundleTemplateLoader_private.h"
 
 
@@ -42,15 +42,15 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 + (id)templateLoaderWithBaseURL:(NSURL *)url {
-	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:nil encoding:NSUTF8StringEncoding] autorelease];
+	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:nil encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext {
-	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:ext encoding:NSUTF8StringEncoding] autorelease];
+	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	return [[[GRMustacheURLTemplateLoader alloc] initWithURL:url extension:ext encoding:encoding] autorelease];
+	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:ext encoding:encoding] autorelease];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle {
