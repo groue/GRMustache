@@ -23,6 +23,7 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateLoader_private.h"
+#import "GRMustacheURLTemplateLoader_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
@@ -94,9 +95,9 @@
 }
 
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]]
-			parseContentsOfURL:url
-			error:outError];
+	id loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]];
+	NSAssert([loader isKindOfClass:[GRMustacheURLTemplateLoader class]], nil);
+	return [(GRMustacheURLTemplateLoader *)loader parseContentsOfURL:url error:outError];
 }
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {

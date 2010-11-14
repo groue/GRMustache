@@ -48,7 +48,11 @@
 
 // override of a private GRMustacheTemplateLoader
 - (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
-	GRMustacheTemplate *template = [super parseContentsOfURL:templateURL error:outError];
+	NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
+	if (!templateString) {
+		return nil;
+	}
+	GRMustacheTemplate *template = [self parseString:templateString error:outError];
 	if (!template) {
 		return nil;
 	}

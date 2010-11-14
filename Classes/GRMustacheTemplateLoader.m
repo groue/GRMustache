@@ -138,14 +138,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	return template;
 }
 
-- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	NSString *templateString = [NSString stringWithContentsOfURL:url encoding:encoding error:outError];
-	if (!templateString) {
-		return nil;
-	}
-	return [self parseString:templateString error:outError];
-}
-
 - (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId {
 	if (template) {
 		[templatesById setObject:template forKey:templateId];
