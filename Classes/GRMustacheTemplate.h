@@ -24,7 +24,6 @@
 
 
 @class GRMustacheTemplateLoader;
-@protocol GRMustacheElement;
 
 
 /**
