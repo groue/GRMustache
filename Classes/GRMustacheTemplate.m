@@ -131,7 +131,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	NSMutableString *buffer = [NSMutableString stringWithCapacity:templateString.length];
-	for (GRMustacheElement *elem in elems) {
+	for (NSObject<GRMustacheElement> *elem in elems) {
 		[buffer appendString:[elem renderContext:context]];
 	}
 	return buffer;
@@ -165,7 +165,7 @@
 	NSString *name;
 	unichar tagUnichar;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceCharacterSet];
-	GRMustacheElement *element;
+	NSObject<GRMustacheElement> *element;
 	NSInteger lastOTagLine;
 	
 	while (YES) {
@@ -314,7 +314,7 @@
 	NSString *name;
 	unichar tagUnichar;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceCharacterSet];
-	GRMustacheElement *element;
+	NSObject<GRMustacheElement> *element;
 	NSMutableArray *sectionElems = [NSMutableArray arrayWithCapacity:4];
 	NSInteger sectionStart = p;
 	NSInteger lastOTagStart;

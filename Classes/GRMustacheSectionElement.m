@@ -66,7 +66,7 @@
 	switch([GRMustache objectKind:value]) {
 		case GRMustacheObjectKindFalseValue:
 			if (inverted) {
-				for (GRMustacheElement *elem in elems) {
+				for (NSObject<GRMustacheElement> *elem in elems) {
 					[buffer appendString:[elem renderContext:context]];
 				}
 			}
@@ -75,7 +75,7 @@
 		case GRMustacheObjectKindTrueValue:
 			if (!inverted) {
 				GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:value parent:context];
-				for (GRMustacheElement *elem in elems) {
+				for (NSObject<GRMustacheElement> *elem in elems) {
 					[buffer appendString:[elem renderContext:innerContext]];
 				}
 			}
@@ -89,14 +89,14 @@
 					break;
 				}
 				if (empty) {
-					for (GRMustacheElement *elem in elems) {
+					for (NSObject<GRMustacheElement> *elem in elems) {
 						[buffer appendString:[elem renderContext:context]];
 					}
 				}
 			} else {
 				for (id object in value) {
 					GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:object parent:context];
-					for (GRMustacheElement *elem in elems) {
+					for (NSObject<GRMustacheElement> *elem in elems) {
 						[buffer appendString:[elem renderContext:innerContext]];
 					}
 				}
@@ -113,7 +113,7 @@
 						renderedContext = [GRMustacheContext contextWithObject:object parent:context];
 					}
 					NSMutableString *result = [NSMutableString stringWithCapacity:1024];
-					for (GRMustacheElement *elem in elems) {
+					for (NSObject<GRMustacheElement> *elem in elems) {
 						[result appendString:[elem renderContext:renderedContext]];
 					}
 					return (NSString *)result;

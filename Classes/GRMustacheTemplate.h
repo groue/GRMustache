@@ -20,17 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheElement.h"
+#import "GRMustacheElement_private.h"
 
 
 @class GRMustacheTemplateLoader;
+@protocol GRMustacheElement;
+
 
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.
  
  @since v1.0.0
  */
-@interface GRMustacheTemplate: GRMustacheElement {
+@interface GRMustacheTemplate: NSObject<GRMustacheElement> {
 @private
 	GRMustacheTemplateLoader *templateLoader;
 	NSString *templateId;
