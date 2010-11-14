@@ -23,9 +23,13 @@
 #import "GRMustacheFileTemplateLoader_private.h"
 
 
-@interface GRMustacheURLTemplateLoader: GRMustacheFileTemplateLoader {
-@private
-	NSURL *url;
+@implementation GRMustacheFileTemplateLoader
+
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
+	return [NSString stringWithContentsOfURL:(NSURL*)templateId
+									encoding:self.encoding
+									   error:outError];
 }
-- (id)initWithURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+
 @end

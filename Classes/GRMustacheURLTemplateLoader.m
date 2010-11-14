@@ -32,13 +32,6 @@
 	return self;
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
-	return [NSString stringWithContentsOfURL:(NSURL*)templateId
-									encoding:self.encoding
-									   error:outError];
-}
-
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
 	if (baseTemplateId) {
 		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], nil);
