@@ -5,42 +5,34 @@ GRMustache is an Objective-C implementation of the [Mustache](http://mustache.gi
 
 It supports the following Mustache features:
 
-- comments
-- delimiter changes
 - variables
-- boolean sections
-- enumerable sections
-- inverted sections
-- lambda sections
-- partials and recursive partials
+- sections (boolean, enumerable, inverted, lambda)
+- partials (and recursive partials)
+- delimiter changes
+- comments
 
 It supports extensions to the [regular Mustache syntax](http://mustache.github.com/mustache.5.html):
 
 - dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
 - extended paths, as in `{{../name}}` (introduced by [Handlebars.js](https://github.com/wycats/handlebars.js))
 
-Embedding in your XCode project
--------------------------------
+### Embedding in your XCode project
 
-GRMustache is a standalone library made of the Objective-C files contained in the `Classes` folder. Just add them to your XCode project.
+GRMustache is a standalone library made of the Objective-C files contained in the `Classes` folder. Add them to your XCode project, and link against Fundation.framework.
 
 Import `GRMustache.h` in order to access all GRMustache features.
 
 Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
 
-Versioning
-----------
+### Versioning
 
-GRMustache versioning policy complies to the one defined by [Apache APR](http://apr.apache.org/versioning.html).
+GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html).
 
-Check the `GRMustacheVersion.h` header, and `RELEASE_NOTES.md`.
+Check the repository's tags, the `GRMustacheVersion.h` header, and `RELEASE_NOTES.md`.
 
-Testing
--------
+### Testing
 
-Open and build the GRMustache.xcodeproj project. If the build succeeds, all the tests pass!
-
-You may also run the `make` command from the Terminal.
+Open the GRMustache.xcodeproj project, and build the GRMustacheTest target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
