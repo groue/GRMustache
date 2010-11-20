@@ -18,7 +18,7 @@ It supports extensions to the [regular Mustache syntax](http://mustache.github.c
 
 ### "Do you speak Mustache?"
 
-Mustache has many available implementations, in many languages (see http://mustache.github.com/ and https://github.com/defunkt/mustache/wiki/).
+Mustache has many available implementations, in many languages (see [http://mustache.github.com/](http://mustache.github.com/) and [https://github.com/defunkt/mustache/wiki/](https://github.com/defunkt/mustache/wiki/)).
 
 GRMustache aims at being a good citizen in this community. Its template semantics are strictly identical to the one defined by the [Ruby](http://github.com/defunkt/mustache) implementation, which we have considered as a reference.
 
