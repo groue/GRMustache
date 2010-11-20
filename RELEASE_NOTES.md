@@ -1,6 +1,13 @@
 GRMustache Release Notes
 ========================
 
+## v1.1.1
+
+Bug fixes around extented paths:
+
+- ../.. should base the remaining path on the including context of the including context.
+- A .. suite which rewinds too far should stop the evaluation and render an empty string.
+
 ## v1.1.0
 
 New methods:
