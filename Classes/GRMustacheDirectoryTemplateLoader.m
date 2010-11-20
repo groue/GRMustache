@@ -46,7 +46,6 @@
 	return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
-// override of a private GRMustacheTemplateLoader
 - (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
 	NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
 	if (!templateString) {
