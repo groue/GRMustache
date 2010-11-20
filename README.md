@@ -16,14 +16,6 @@ It supports extensions to the [regular Mustache syntax](http://mustache.github.c
 - dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
 - extended paths, as in `{{../name}}` (introduced by [Handlebars.js](https://github.com/wycats/handlebars.js))
 
-### “Do you speak Mustache?”
-
-Mustache has many available implementations, in many languages (see [http://mustache.github.com/](http://mustache.github.com/) and [https://github.com/defunkt/mustache/wiki/](https://github.com/defunkt/mustache/wiki/)).
-
-GRMustache aims at being a good citizen in this community. Its template semantics are strictly identical to the one defined by the [Ruby](http://github.com/defunkt/mustache) implementation, which we have considered as a reference.
-
-This means that a template built against GRMustache could be run without modification with defunkt's mustache.
-
 ### Embedding in your XCode project
 
 GRMustache is a standalone library made of the Objective-C files contained in the `Classes` folder. Add them to your XCode project, and link against Fundation.framework.
