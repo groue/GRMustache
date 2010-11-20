@@ -64,7 +64,7 @@ BOOL displayUsage()
 
 BOOL displayVersion()
 {
-	fprintf(stderr, "GRMustache %d.%d.%d\n", GRMUSTACHE_MAJOR_VERSION, GRMUSTACHE_MINOR_VERSION, GRMUSTACHE_PATCH_VERSION);
+	fprintf(stdout, "GRMustache %d.%d.%d\n", GRMUSTACHE_MAJOR_VERSION, GRMUSTACHE_MINOR_VERSION, GRMUSTACHE_PATCH_VERSION);
 	return YES;
 }
 
