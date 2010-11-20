@@ -16,7 +16,7 @@ It supports extensions to the [regular Mustache syntax](http://mustache.github.c
 - dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
 - extended paths, as in `{{../name}}` (introduced by [Handlebars.js](https://github.com/wycats/handlebars.js))
 
-### "Do you speak Mustache?"
+### “Do you speak Mustache?”
 
 Mustache has many available implementations, in many languages (see [http://mustache.github.com/](http://mustache.github.com/) and [https://github.com/defunkt/mustache/wiki/](https://github.com/defunkt/mustache/wiki/)).
 
