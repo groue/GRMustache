@@ -26,6 +26,7 @@
 
 @interface GRMustacheTestBase: SenTestCase
 @property (nonatomic, readonly) NSBundle *testBundle;
+- (GRMustacheTemplate *)parseResource:(NSString *)name;
 - (NSString *)renderObject:(id)object fromResource:(NSString *)name;
 - (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext;
 @end

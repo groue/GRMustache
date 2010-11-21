@@ -20,33 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheTokenizer_private.h"
 
 
-@implementation GRMustacheTestBase
-@dynamic testBundle;
+@class GRMustacheTemplateLoader;
 
-- (NSBundle *)testBundle {
-	return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustacheTest"];
+@interface GRMustacheCompiler : NSObject<GRMustacheTokenizerDelegate> {
+@private
+	NSError *error;
+	NSString *templateString;
+	GRMustacheTemplateLoader *templateLoader;
+	id templateId;
+	NSMutableArray *elementsStack;
+	NSMutableArray *sectionOpeningTokenStack;
+	NSMutableArray *currentElements;
+	GRMustacheToken *currentSectionOpeningToken;
 }
-
-- (GRMustacheTemplate *)parseResource:(NSString *)name {
-	return [GRMustacheTemplate parseResource:name bundle:self.testBundle error:nil];
-}
-
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name {
-	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-									bundle:self.testBundle
-									 error:nil];
-}
-
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext {
-	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-							 withExtension:ext
-									bundle:self.testBundle
-									 error:nil];
-}
-
+- (NSArray *)parseString:(NSString *)templateString templateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId error:(NSError **)outError;
 @end

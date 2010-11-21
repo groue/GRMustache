@@ -20,33 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
+#import "GRMustacheBenchmarkTest.h"
 
 
-@implementation GRMustacheTestBase
-@dynamic testBundle;
+@implementation GRMustacheBenchmarkTest
 
-- (NSBundle *)testBundle {
-	return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustacheTest"];
-}
-
-- (GRMustacheTemplate *)parseResource:(NSString *)name {
-	return [GRMustacheTemplate parseResource:name bundle:self.testBundle error:nil];
-}
-
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name {
-	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-									bundle:self.testBundle
-									 error:nil];
-}
-
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext {
-	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-							 withExtension:ext
-									bundle:self.testBundle
-									 error:nil];
+- (void)testParsingBenchmark {
+	for (int i=0; i < 50000; i++) {
+		[self parseResource:@"complex_view"];
+	}
 }
 
 @end

@@ -25,6 +25,6 @@
 
 @interface GRMustacheTemplateLoader()
 + (id)templateLoaderWithCurrentWorkingDirectory;
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)template error:(NSError **)outError;
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)templateId error:(NSError **)outError;
 - (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId;
 @end

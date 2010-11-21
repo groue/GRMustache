@@ -77,8 +77,8 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	return self;
 }
 
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplate:(GRMustacheTemplate *)baseTemplate error:(NSError **)outError {
-	id templateId = [self templateIdForTemplateNamed:name relativeToTemplateId:baseTemplate.templateId];
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId error:(NSError **)outError {
+	id templateId = [self templateIdForTemplateNamed:name relativeToTemplateId:baseTemplateId];
 	if (templateId == nil) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:GRMustacheErrorDomain
@@ -127,7 +127,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {
-	return [self parseTemplateNamed:name relativeToTemplate:nil error:outError];
+	return [self parseTemplateNamed:name relativeToTemplateId:nil error:outError];
 }
 
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError {
