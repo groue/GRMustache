@@ -3,11 +3,11 @@ GRMustache Release Notes
 
 ## v1.1.3
 
-Rendering performance improved by roughly 70%.
+Noticeable rendering performance improvement.
 
 ## v1.1.2
 
-Compiling performance improved by roughly 30%.
+Noticeable compiling performance improvement.
 
 ## v1.1.1
 
