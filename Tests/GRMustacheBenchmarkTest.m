@@ -31,4 +31,28 @@
 	}
 }
 
+- (void)testRenderingBenchmark {
+	GRMustacheTemplate *template = [self parseResource:@"complex_view"];
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+							 [NSArray arrayWithObjects:
+							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
+																  @"name1", @"name",
+																  [GRYes yes], @"current",
+																  [NSDictionary dictionaryWithObject:@"http://item1" forKey:@"url"], @"link",
+																  nil]
+														  forKey:@"item"],
+							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
+																  @"name2", @"name",
+																  [GRNo no], @"current",
+																  [NSDictionary dictionaryWithObject:@"http://item2" forKey:@"url"], @"link",
+																  nil]
+														  forKey:@"item"],
+							  nil],
+							 @"list",
+							 nil];
+	for (int i=0; i < 50000; i++) {
+		[template renderObject:context];
+	}
+}
+
 @end
