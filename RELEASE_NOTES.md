@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.1.2
+
+Compiling performance improved by roughly 30%.
+
 ## v1.1.1
 
 Bug fixes around extented paths:
