@@ -56,7 +56,7 @@ typedef enum {
 @end
 
 @interface GRMustacheTokenizer : NSObject {
-	@private
+@private
 	id<GRMustacheTokenizerDelegate> delegate;
 	NSString *otag;
 	NSString *ctag;
