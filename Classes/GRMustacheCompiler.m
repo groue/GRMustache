@@ -110,7 +110,6 @@
 				NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
 				GRMustacheSectionElement *section = [GRMustacheSectionElement sectionElementWithName:currentSectionOpeningToken.content
 																							  string:[templateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)]
-																					  templateLoader:templateLoader
 																							inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
 																							elements:currentElements];
 				[sectionOpeningTokenStack removeLastObject];

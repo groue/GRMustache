@@ -30,29 +30,26 @@
 @interface GRMustacheSectionElement()
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *templateString;
-@property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithName:(NSString *)name string:(NSString *)templateString templateLoader:(GRMustacheTemplateLoader *)templateLoader inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSectionElement
-@synthesize templateLoader;
 @synthesize templateString;
 @synthesize name;
 @synthesize inverted;
 @synthesize elems;
 
-+ (id)sectionElementWithName:(NSString *)name string:(NSString *)templateString templateLoader:(GRMustacheTemplateLoader *)templateLoader inverted:(BOOL)inverted elements:(NSArray *)elems {
-	return [[[self alloc] initWithName:name string:templateString templateLoader:templateLoader inverted:inverted elements:elems] autorelease];
++ (id)sectionElementWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems {
+	return [[[self alloc] initWithName:name string:templateString inverted:inverted elements:elems] autorelease];
 }
 
-- (id)initWithName:(NSString *)theName string:(NSString *)theTemplateString templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader inverted:(BOOL)theInverted elements:(NSArray *)theElems {
+- (id)initWithName:(NSString *)theName string:(NSString *)theTemplateString inverted:(BOOL)theInverted elements:(NSArray *)theElems {
 	if (self = [self init]) {
 		self.name = theName;
 		self.templateString = theTemplateString;
-		self.templateLoader = theTemplateLoader;
 		self.inverted = theInverted;
 		self.elems = theElems;
 	}
@@ -135,7 +132,6 @@
 - (void)dealloc {
 	[name release];
 	[templateString release];
-	[templateLoader release];
 	[elems release];
 	[super dealloc];
 }
