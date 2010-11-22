@@ -76,7 +76,7 @@
 
 #pragma mark GRMustacheTokenConsumer
 
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer didReadToken:(GRMustacheToken *)token {
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token {
 	switch (token.type) {
 		case GRMustacheTokenTypeText:
 			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];

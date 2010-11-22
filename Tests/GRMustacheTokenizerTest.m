@@ -68,7 +68,7 @@
 	return [tokenContents objectAtIndex:index];
 }
 
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer didReadToken:(GRMustacheToken *)token {
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token {
 	[tokenTypes addObject:[NSNumber numberWithInt:token.type]];
 	[tokenContents addObject:token.content];
 	return YES;

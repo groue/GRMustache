@@ -27,7 +27,7 @@
 @interface GRMustacheTokenizer()
 @property (nonatomic, retain) NSString *otag;
 @property (nonatomic, retain) NSString *ctag;
-- (BOOL)didReadToken:(GRMustacheToken *)token;
+- (BOOL)shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token;
 - (void)didStart;
 - (void)didFinish;
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
@@ -72,7 +72,7 @@
 		// otag was not found
 		if (orange.location == NSNotFound) {
 			if (p < templateString.length) {
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
 															   content:[templateString substringFromIndex:p]
 																  line:line
 																 range:NSMakeRange(p, templateString.length-p)]]) {
@@ -85,7 +85,7 @@
 		
 		if (orange.location > p) {
 			NSRange range = NSMakeRange(p, orange.location-p);
-			if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+			if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
 														   content:[templateString substringWithRange:range]
 															  line:line
 															 range:range]]) {
@@ -130,7 +130,7 @@
 		switch (tagUnichar) {
 			case '!':
 				tag = [tag substringFromIndex:1];
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -144,7 +144,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty section opening tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -158,7 +158,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty inverted section opening tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -172,7 +172,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty section closing tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -186,7 +186,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty partial tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -219,7 +219,7 @@
 					return;
 				}
 				
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -233,7 +233,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -247,7 +247,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -261,7 +261,7 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty variable tag"];
 					return;
 				}
-				if (![self didReadToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
+				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
 															   content:tag
 																  line:line
 																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
@@ -276,9 +276,9 @@
 	}
 }
 
-- (BOOL)didReadToken:(GRMustacheToken *)token {
+- (BOOL)shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token {
 	if (tokenConsumer) {
-		return [tokenConsumer tokenProducer:self didReadToken:token];
+		return [tokenConsumer tokenProducer:self shouldContinueParsingAfterReadingToken:token];
 	}
 	return YES;
 }

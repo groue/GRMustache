@@ -55,8 +55,8 @@ typedef enum {
 @end
 
 @protocol GRMustacheTokenConsumer
-- (void)tokenProducerDidStart:(id)tokenProducer;
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer didReadToken:(GRMustacheToken *)token;
+- (void)tokenProducerDidStart:(id<GRMustacheTokenProducer>)tokenProducer;
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token;
 - (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)error;
 @end
 
