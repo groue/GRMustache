@@ -28,7 +28,7 @@
 @property (nonatomic, retain) NSString *otag;
 @property (nonatomic, retain) NSString *ctag;
 - (BOOL)shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token;
-- (void)didStart;
+- (BOOL)shouldStart;
 - (void)didFinish;
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
@@ -63,7 +63,9 @@
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 	
 	tokenConsumer = theTokenConsumer;
-	[self didStart];
+	if (![self shouldStart]) {
+		return;
+	}
 	
 	while (YES) {
 		// look for otag
@@ -283,10 +285,11 @@
 	return YES;
 }
 
-- (void)didStart {
+- (BOOL)shouldStart {
 	if (tokenConsumer) {
-		[tokenConsumer tokenProducerDidStart:self];
+		return [tokenConsumer tokenProducerShouldStart:self];
 	}
+	return YES;
 }
 
 - (void)didFinish {

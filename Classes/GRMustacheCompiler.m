@@ -147,7 +147,8 @@
 	return YES;
 }
 
-- (void)tokenProducerDidStart:(id<GRMustacheTokenProducer>)tokenProducer {
+- (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer {
+	return YES;
 }
 
 - (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {
