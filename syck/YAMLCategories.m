@@ -151,7 +151,7 @@ BOOL yamlClass(id object)
 	
 	//output
 	enumerator = [self objectEnumerator];
-	while (object = [enumerator nextObject])
+	while ((object = [enumerator nextObject]))
 	{
 		/*if(!yamlClass(object))
 		{
@@ -183,7 +183,7 @@ BOOL yamlClass(id object)
 	memset(strIndent, ' ', indent);
 	strIndent[indent] = 0;
 			
-	while (anObject = [enumerator nextObject])
+	while ((anObject = [enumerator nextObject]))
 	{
 		NSString	*tag;
 		
@@ -248,7 +248,7 @@ BOOL yamlClass(id object)
 	
 	//output
 	enumerator = [allKeys objectEnumerator];
-	while (key = [enumerator nextObject])
+	while ((key = [enumerator nextObject]))
 	{
 		id object = [self objectForKey:key];
 
@@ -300,7 +300,7 @@ BOOL yamlClass(id object)
 	
 	//output
 	enumerator = [allKeys objectEnumerator];
-	while (key = [enumerator nextObject])
+	while ((key = [enumerator nextObject]))
 	{
 		id object = [self objectForKey:key];
 		NSString	*tag;

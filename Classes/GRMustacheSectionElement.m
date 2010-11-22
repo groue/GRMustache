@@ -47,7 +47,7 @@
 }
 
 - (id)initWithName:(NSString *)theName string:(NSString *)theTemplateString inverted:(BOOL)theInverted elements:(NSArray *)theElems {
-	if (self = [self init]) {
+	if ((self = [self init])) {
 		self.name = theName;
 		self.templateString = theTemplateString;
 		self.inverted = theInverted;

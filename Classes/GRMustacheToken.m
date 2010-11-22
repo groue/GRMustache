@@ -39,7 +39,7 @@
 }
 
 - (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent line:(NSUInteger)theLine range:(NSRange)theRange {
-	if (self = [self init]) {
+	if ((self = [self init])) {
 		type = theType;
 		content = [theContent retain];
 		line = theLine;

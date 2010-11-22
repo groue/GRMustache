@@ -39,7 +39,7 @@
 @synthesize ctag;
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		otag = [@"{{" retain];
 		ctag = [@"}}" retain];
 	}

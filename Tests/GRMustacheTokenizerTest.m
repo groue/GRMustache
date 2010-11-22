@@ -42,7 +42,7 @@
 @dynamic tokenCount;
 
 - (id)init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		tokenTypes = [[NSMutableArray array] retain];
 		tokenContents = [[NSMutableArray array] retain];
 	}

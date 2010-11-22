@@ -26,7 +26,7 @@
 @implementation GRMustacheDirectoryTemplateLoader
 
 - (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	if (self = [super initWithExtension:ext encoding:encoding]) {
+	if ((self = [super initWithExtension:ext encoding:encoding])) {
 		url = [theURL retain];
 	}
 	return self;
