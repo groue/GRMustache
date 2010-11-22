@@ -21,12 +21,12 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheTokenizer_private.h"
+#import "GRMustacheToken_private.h"
 
 
 @class GRMustacheTemplateLoader;
 
-@interface GRMustacheCompiler : NSObject<GRMustacheTokenizerDelegate> {
+@interface GRMustacheCompiler : NSObject<GRMustacheTokenConsumer> {
 @private
 	NSError *error;
 	NSString *templateString;
@@ -37,5 +37,5 @@
 	NSMutableArray *currentElements;
 	GRMustacheToken *currentSectionOpeningToken;
 }
-- (NSArray *)parseString:(NSString *)templateString templateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId error:(NSError **)outError;
+- (NSArray *)parseString:(NSString *)templateString withTokenProducer:(id<GRMustacheTokenProducer>)tokenProducer templateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId error:(NSError **)outError;
 @end

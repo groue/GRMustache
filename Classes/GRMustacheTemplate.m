@@ -26,6 +26,7 @@
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheCompiler_private.h"
+#import "GRMustacheTokenizer_private.h"
 
 
 @interface GRMustacheTemplate()
@@ -155,12 +156,16 @@
 }
 
 - (BOOL)parseAndReturnError:(NSError **)outError {
+	GRMustacheTokenizer *tokenProducer = [[GRMustacheTokenizer alloc] init];
 	GRMustacheCompiler *compiler = [[GRMustacheCompiler alloc] init];
 	NSArray *elements = [compiler parseString:templateString
+							withTokenProducer:tokenProducer
 							   templateLoader:templateLoader
 								   templateId:templateId
 										error:outError];
 	[compiler release];
+	[tokenProducer release];
+
 	if (elements == nil) {
 		return NO;
 	}

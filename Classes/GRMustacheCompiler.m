@@ -38,7 +38,7 @@
 @synthesize error;
 @synthesize currentSectionOpeningToken;
 
-- (NSArray *)parseString:(NSString *)theTemplateString templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId error:(NSError **)outError {
+- (NSArray *)parseString:(NSString *)theTemplateString withTokenProducer:(id<GRMustacheTokenProducer>)tokenProducer templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId error:(NSError **)outError {
 	templateString = theTemplateString;
 	templateId = theTemplateId;
 	templateLoader = theTemplateLoader;
@@ -48,10 +48,7 @@
 	[elementsStack addObject:currentElements];
 	sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
 	
-	GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
-	tokenizer.delegate = self;
-	[tokenizer parseTemplateString:templateString];
-	[tokenizer release];
+	[tokenProducer parseTemplateString:templateString forTokenConsumer:self];
 	
 	if (error == nil && currentSectionOpeningToken) {
 		self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
@@ -77,9 +74,9 @@
 	[super dealloc];
 }
 
-#pragma mark GRMustacheTokenizerDelegate
+#pragma mark GRMustacheTokenConsumer
 
-- (BOOL)templateTokenizer:(GRMustacheTokenizer *)tokenizer didReadToken:(GRMustacheToken *)token {
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer didReadToken:(GRMustacheToken *)token {
 	switch (token.type) {
 		case GRMustacheTokenTypeText:
 			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
@@ -150,9 +147,14 @@
 	return YES;
 }
 
-- (void)templateTokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)theError {
+- (void)tokenProducerDidStart:(id<GRMustacheTokenProducer>)tokenProducer {
+}
+
+- (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {
 	self.error = theError;
 }
+
+#pragma mark Private
 
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];

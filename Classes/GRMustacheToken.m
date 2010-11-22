@@ -20,14 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
 #import "GRMustacheToken_private.h"
 
 
-@interface GRMustacheTokenizer : NSObject<GRMustacheTokenProducer> {
-@private
-	id<GRMustacheTokenConsumer> tokenConsumer;
-	NSString *otag;
-	NSString *ctag;
-}
+@interface GRMustacheToken()
+@property (nonatomic, retain) NSString *content;
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range;
 @end
+
+@implementation GRMustacheToken
+@synthesize type;
+@synthesize content;
+@synthesize line;
+@synthesize range;
+
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range {
+	return [[[self alloc] initWithType:type content:content line:line range:range] autorelease];
+}
+
+- (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent line:(NSUInteger)theLine range:(NSRange)theRange {
+	if (self = [self init]) {
+		type = theType;
+		content = [theContent retain];
+		line = theLine;
+		range = theRange;
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[content release];
+	[super dealloc];
+}
+
+@end
+

@@ -24,51 +24,17 @@
 #import "GRMustacheError.h"
 
 
-@interface GRMustacheToken()
-@property (nonatomic, retain) NSString *content;
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range;
-- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range;
-@end
-
-@implementation GRMustacheToken
-@synthesize type;
-@synthesize content;
-@synthesize line;
-@synthesize range;
-
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range {
-	return [[[self alloc] initWithType:type content:content line:line range:range] autorelease];
-}
-
-- (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent line:(NSUInteger)theLine range:(NSRange)theRange {
-	if (self = [self init]) {
-		type = theType;
-		content = [theContent retain];
-		line = theLine;
-		range = theRange;
-	}
-	return self;
-}
-
-- (void)dealloc {
-	[content release];
-	[super dealloc];
-}
-
-@end
-
-
 @interface GRMustacheTokenizer()
 @property (nonatomic, retain) NSString *otag;
 @property (nonatomic, retain) NSString *ctag;
 - (BOOL)didReadToken:(GRMustacheToken *)token;
+- (void)didStart;
 - (void)didFinish;
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 @end
 
 @implementation GRMustacheTokenizer
-@synthesize delegate;
 @synthesize otag;
 @synthesize ctag;
 
@@ -86,7 +52,7 @@
 	[super dealloc];
 }
 
-- (void)parseTemplateString:(NSString *)templateString {
+- (void)parseTemplateString:(NSString *)templateString forTokenConsumer:(id<GRMustacheTokenConsumer>)theTokenConsumer {
 	NSUInteger p = 0;
 	NSUInteger line = 1;
 	NSUInteger consumedLines = 0;
@@ -95,6 +61,9 @@
 	NSString *tag;
 	unichar tagUnichar;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+	
+	tokenConsumer = theTokenConsumer;
+	[self didStart];
 	
 	while (YES) {
 		// look for otag
@@ -308,28 +277,34 @@
 }
 
 - (BOOL)didReadToken:(GRMustacheToken *)token {
-	if (delegate) {
-		return [delegate templateTokenizer:self didReadToken:token];
+	if (tokenConsumer) {
+		return [tokenConsumer tokenProducer:self didReadToken:token];
 	}
 	return YES;
 }
 
+- (void)didStart {
+	if (tokenConsumer) {
+		[tokenConsumer tokenProducerDidStart:self];
+	}
+}
+
 - (void)didFinish {
-	if (delegate) {
-		[delegate templateTokenizerDidFinish:self withError:nil];
+	if (tokenConsumer) {
+		[tokenConsumer tokenProducerDidFinish:self withError:nil];
 	}
 }
 
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
-	if (delegate) {
+	if (tokenConsumer) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
 					 forKey:NSLocalizedDescriptionKey];
 		[userInfo setObject:[NSNumber numberWithInteger:line]
 					 forKey:GRMustacheErrorLine];
-		[delegate templateTokenizerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
-																				code:GRMustacheErrorCodeParseError
-																			userInfo:userInfo]];
+		[tokenConsumer tokenProducerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
+																					 code:GRMustacheErrorCodeParseError
+																				 userInfo:userInfo]];
 	}
 }
 

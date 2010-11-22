@@ -24,10 +24,10 @@
 #import "GRMustacheTokenizer_private.h"
 
 
-@class GRMustacheTokenConsumer;
+@class GRMustacheTokenRecorder;
 
 @interface GRMustacheTokenizerTest : GRMustacheTestBase {
 	GRMustacheTokenizer *tokenizer;
-	GRMustacheTokenConsumer *consumer;
+	GRMustacheTokenRecorder *tokenRecorder;
 }
 @end
