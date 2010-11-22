@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.1.4
+
+No more warnings when compiling with LLVM 2.0
+
 ## v1.1.3
 
 Noticeable rendering performance improvement.
