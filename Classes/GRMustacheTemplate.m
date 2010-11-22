@@ -142,7 +142,7 @@
 - (id)initWithString:(NSString *)theTemplateString templateId:(id)theTemplateId templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader {
 	NSAssert(theTemplateLoader, @"Can't init GRMustacheTemplate with nil template loader");
 	NSAssert(theTemplateString, @"Can't init GRMustacheTemplate with nil template string");
-	if (self == [self init]) {
+	if ((self = [self init])) {
 		self.templateId = theTemplateId;
 		self.templateLoader = theTemplateLoader;
 		self.templateString = theTemplateString;
