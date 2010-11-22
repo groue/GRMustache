@@ -74,6 +74,8 @@
 		5648DB5C1297D4EB001423FE /* YAMLCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECD128578D100F5CF76 /* YAMLCategories.m */; };
 		5648DB5D1297D4EB001423FE /* YAMLCocoaCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D87ECF128578D100F5CF76 /* YAMLCocoaCategories.m */; };
 		5648DCCB129902E4001423FE /* GRMustacheTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648DCCA129902E4001423FE /* GRMustacheTokenizer.m */; };
+		566F45D9129AA59F00767AA3 /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56339C8C129A4C01000B6F2C /* GRMustacheToken.m */; };
+		566F45DA129AA5A300767AA3 /* GRMustacheCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 56339AD812992E4F000B6F2C /* GRMustacheCompiler.m */; };
 		56A2A198128D28F300B33845 /* GRMustacheVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A2A197128D28F300B33845 /* GRMustacheVersion.m */; };
 		56A2A3521290450400B33845 /* GRMustacheURLTemplateLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A2A3511290450400B33845 /* GRMustacheURLTemplateLoader.m */; };
 		56C99CA912872AFA00A25402 /* core in Resources */ = {isa = PBXBuildFile; fileRef = 56C99C9D12872AFA00A25402 /* core */; };
@@ -530,6 +532,8 @@
 				5648DB0D1297CF34001423FE /* GRMustacheURLTemplateLoader.m in Sources */,
 				5648DAF91297CD38001423FE /* main.m in Sources */,
 				5648DCCB129902E4001423FE /* GRMustacheTokenizer.m in Sources */,
+				566F45D9129AA59F00767AA3 /* GRMustacheToken.m in Sources */,
+				566F45DA129AA5A300767AA3 /* GRMustacheCompiler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
