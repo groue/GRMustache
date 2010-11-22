@@ -32,10 +32,6 @@
 @interface GRMustacheTemplate()
 @property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
 @property (nonatomic, retain) NSString *templateString;
-@property (nonatomic, retain) NSString *otag;
-@property (nonatomic, retain) NSString *ctag;
-@property (nonatomic) NSInteger p;
-@property (nonatomic) NSInteger curline;
 @property (nonatomic, retain) NSMutableArray *elems;
 - (id)initWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader;
 @end
@@ -45,10 +41,6 @@
 @synthesize templateId;
 @synthesize templateLoader;
 @synthesize templateString;
-@synthesize otag;
-@synthesize ctag;
-@synthesize p;
-@synthesize curline;
 @synthesize elems;
 
 
@@ -112,8 +104,6 @@
 	[templateId release];
 	[templateLoader release];
 	[templateString release];
-	[otag release];
-	[ctag release];
 	[elems release];
 	[super dealloc];
 }
@@ -146,10 +136,6 @@
 		self.templateId = theTemplateId;
 		self.templateLoader = theTemplateLoader;
 		self.templateString = theTemplateString;
-		self.otag = @"{{";
-		self.ctag = @"}}";
-		self.p = 0;
-		self.curline = 1;
 		self.elems = [NSMutableArray arrayWithCapacity:4];
 	}
 	return self;

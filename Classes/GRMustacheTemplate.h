@@ -36,10 +36,6 @@
 	GRMustacheTemplateLoader *templateLoader;
 	NSString *templateId;
 	NSString *templateString;
-	NSString *otag;
-	NSString *ctag;
-	NSInteger p;
-	NSInteger curline;
 	NSMutableArray *elems;
 }
 
