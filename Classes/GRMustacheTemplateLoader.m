@@ -25,7 +25,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheBundleTemplateLoader_private.h"
-#import "GRMustacheCompiler_private.h"
+#import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheTokenizer_private.h"
 
 
@@ -173,7 +173,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark Private
 
 - (NSArray *)parseTemplateElementsWithTemplateString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError {
-	GRMustacheCompiler *compiler = [[GRMustacheCompiler alloc] initWithTemplateLoader:self templateId:templateId];
+	GRMustacheTemplateParser *compiler = [[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId];
 	GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
 	[tokenizer parseTemplateString:templateString forTokenConsumer:compiler];
 	[tokenizer release];

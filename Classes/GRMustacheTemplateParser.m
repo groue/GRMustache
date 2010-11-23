@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheCompiler_private.h"
+#import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
@@ -28,7 +28,7 @@
 #import "GRBoolean.h"
 #import "GRMustacheError.h"
 
-@interface GRMustacheCompiler()
+@interface GRMustacheTemplateParser()
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) GRMustacheToken *currentSectionOpeningToken;
 @property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
@@ -39,7 +39,7 @@
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
 @end
 
-@implementation GRMustacheCompiler
+@implementation GRMustacheTemplateParser
 @synthesize error;
 @synthesize currentSectionOpeningToken;
 @synthesize templateLoader;

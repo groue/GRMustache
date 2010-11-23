@@ -26,7 +26,7 @@
 
 @class GRMustacheTemplateLoader;
 
-@interface GRMustacheCompiler : NSObject<GRMustacheTokenConsumer> {
+@interface GRMustacheTemplateParser : NSObject<GRMustacheTokenConsumer> {
 @private
 	NSError *error;
 	GRMustacheTemplateLoader *templateLoader;
