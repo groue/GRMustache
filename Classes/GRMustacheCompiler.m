@@ -31,25 +31,36 @@
 @interface GRMustacheCompiler()
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) GRMustacheToken *currentSectionOpeningToken;
+@property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
+@property (nonatomic, retain) NSMutableArray *currentElements;
+@property (nonatomic, retain) NSMutableArray *elementsStack;
+@property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
+@property (nonatomic, retain) id templateId;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
 @end
 
 @implementation GRMustacheCompiler
 @synthesize error;
 @synthesize currentSectionOpeningToken;
+@synthesize templateLoader;
+@synthesize templateId;
+@synthesize currentElements;
+@synthesize elementsStack;
+@synthesize sectionOpeningTokenStack;
 
-- (NSArray *)parseString:(NSString *)theTemplateString withTokenProducer:(id<GRMustacheTokenProducer>)tokenProducer templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId error:(NSError **)outError {
-	templateString = theTemplateString;
-	templateId = theTemplateId;
-	templateLoader = theTemplateLoader;
-	
-	currentElements = [NSMutableArray arrayWithCapacity:20];
-	elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-	[elementsStack addObject:currentElements];
-	sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
-	
-	[tokenProducer parseTemplateString:templateString forTokenConsumer:self];
-	
+- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId {
+	if ((self = [self init])) {
+		self.templateLoader = theTemplateLoader;
+		self.templateId = theTemplateId;
+		self.currentElements = [NSMutableArray arrayWithCapacity:20];
+		self.elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+		[elementsStack addObject:currentElements];
+		self.sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+	}
+	return self;
+}
+
+- (NSArray *)templateElementsReturningError:(NSError **)outError {
 	if (error == nil && currentSectionOpeningToken) {
 		self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
 								description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]];
@@ -62,15 +73,17 @@
 		return nil;
 	}
 	
-	[currentElements retain];
-	[elementsStack release];
-	[sectionOpeningTokenStack release];
-	return [currentElements autorelease];
+	return [[currentElements retain] autorelease];
 }
 
 - (void)dealloc {
 	[error release];
 	[currentSectionOpeningToken release];
+	[templateLoader release];
+	[templateId release];
+	[currentElements release];
+	[elementsStack release];
+	[sectionOpeningTokenStack release];
 	[super dealloc];
 }
 
@@ -105,8 +118,12 @@
 		case GRMustacheTokenTypeSectionClosing:
 			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
 				NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
+				NSString *sectionOpeningTemplateString = currentSectionOpeningToken.templateString;
+				NSString *sectionClosingTemplateString = token.templateString;
+				NSAssert(sectionOpeningTemplateString == sectionClosingTemplateString, @"not implemented");
+				NSString *sectionString = [sectionOpeningTemplateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)];
 				GRMustacheSectionElement *section = [GRMustacheSectionElement sectionElementWithName:currentSectionOpeningToken.content
-																							  string:[templateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)]
+																							  string:sectionString
 																							inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
 																							elements:currentElements];
 				[sectionOpeningTokenStack removeLastObject];
@@ -148,7 +165,7 @@
 }
 
 - (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer {
-	return YES;
+	return (error == nil);
 }
 
 - (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {

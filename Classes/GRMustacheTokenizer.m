@@ -75,9 +75,10 @@
 		if (orange.location == NSNotFound) {
 			if (p < templateString.length) {
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-															   content:[templateString substringFromIndex:p]
-																  line:line
-																 range:NSMakeRange(p, templateString.length-p)]]) {
+																						 content:[templateString substringFromIndex:p]
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(p, templateString.length-p)]]) {
 					return;
 				}
 			}
@@ -88,9 +89,10 @@
 		if (orange.location > p) {
 			NSRange range = NSMakeRange(p, orange.location-p);
 			if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-														   content:[templateString substringWithRange:range]
-															  line:line
-															 range:range]]) {
+																					 content:[templateString substringWithRange:range]
+																			  templateString:templateString
+																						line:line
+																					   range:range]]) {
 				return;
 			}
 		}
@@ -133,9 +135,10 @@
 			case '!':
 				tag = [tag substringFromIndex:1];
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -147,9 +150,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -161,9 +165,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -175,9 +180,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -189,9 +195,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -222,9 +229,10 @@
 				}
 				
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -236,9 +244,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -250,9 +259,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -264,9 +274,10 @@
 					return;
 				}
 				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-															   content:tag
-																  line:line
-																 range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+																						 content:tag
+																				  templateString:templateString
+																							line:line
+																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -306,8 +317,8 @@
 		[userInfo setObject:[NSNumber numberWithInteger:line]
 					 forKey:GRMustacheErrorLine];
 		[tokenConsumer tokenProducerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
-																					 code:GRMustacheErrorCodeParseError
-																				 userInfo:userInfo]];
+																				 code:GRMustacheErrorCodeParseError
+																			 userInfo:userInfo]];
 	}
 }
 

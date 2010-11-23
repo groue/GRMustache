@@ -25,12 +25,15 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheBundleTemplateLoader_private.h"
+#import "GRMustacheCompiler_private.h"
+#import "GRMustacheTokenizer_private.h"
 
 
 NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
 @interface GRMustacheTemplateLoader()
+- (NSArray *)parseTemplateElementsWithTemplateString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
@@ -111,15 +114,18 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 			return nil;
 		}
 		
-		template = [GRMustacheTemplate templateWithString:templateString templateId:templateId templateLoader:self];
+		template = [GRMustacheTemplate templateWithTemplateId:templateId];
 		
 		// store template before parsing, so that we support recursive templates
 		[self setTemplate:template forTemplateId:templateId];
 		
-		if (![template parseAndReturnError:outError]) {
-			// remove template if parsing fails
+		// parse
+		NSArray *templateElements = [self parseTemplateElementsWithTemplateString:templateString templateId:templateId error:outError];
+		if (templateElements == nil) {
 			[self setTemplate:nil forTemplateId:templateId];
 			return nil;
+		} else {
+			template.elems = templateElements;
 		}
 	}
 	
@@ -131,10 +137,12 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError {
-	GRMustacheTemplate *template = [GRMustacheTemplate templateWithString:templateString templateId:nil templateLoader:self];
-	if (![template parseAndReturnError:outError]) {
+	NSArray *templateElements = [self parseTemplateElementsWithTemplateString:templateString templateId:nil error:outError];
+	if (!templateElements) {
 		return nil;
 	}
+	GRMustacheTemplate *template = [GRMustacheTemplate templateWithTemplateId:nil];
+	template.elems = templateElements;
 	return template;
 }
 
@@ -160,6 +168,18 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	[extension release];
 	[templatesById release];
 	[super dealloc];
+}
+
+#pragma mark Private
+
+- (NSArray *)parseTemplateElementsWithTemplateString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError {
+	GRMustacheCompiler *compiler = [[GRMustacheCompiler alloc] initWithTemplateLoader:self templateId:templateId];
+	GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
+	[tokenizer parseTemplateString:templateString forTokenConsumer:compiler];
+	[tokenizer release];
+	NSArray *elements = [compiler templateElementsReturningError:outError];
+	[compiler release];
+	return elements;
 }
 
 @end

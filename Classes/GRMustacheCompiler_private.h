@@ -29,7 +29,6 @@
 @interface GRMustacheCompiler : NSObject<GRMustacheTokenConsumer> {
 @private
 	NSError *error;
-	NSString *templateString;
 	GRMustacheTemplateLoader *templateLoader;
 	id templateId;
 	NSMutableArray *elementsStack;
@@ -37,5 +36,6 @@
 	NSMutableArray *currentElements;
 	GRMustacheToken *currentSectionOpeningToken;
 }
-- (NSArray *)parseString:(NSString *)templateString withTokenProducer:(id<GRMustacheTokenProducer>)tokenProducer templateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId error:(NSError **)outError;
+- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId;
+- (NSArray *)templateElementsReturningError:(NSError **)outError;
 @end

@@ -38,14 +38,16 @@ typedef enum {
 @interface GRMustacheToken : NSObject {
 	GRMustacheTokenType type;
 	NSString *content;
+	NSString *templateString;
 	NSUInteger line;
 	NSRange range;
 }
 @property (nonatomic, readonly) GRMustacheTokenType type;
 @property (nonatomic, readonly, retain) NSString *content;
+@property (nonatomic, readonly, retain) NSString *templateString;
 @property (nonatomic, readonly) NSUInteger line;
 @property (nonatomic, readonly) NSRange range;
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range;
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
 @end
 
 @protocol GRMustacheTokenConsumer;

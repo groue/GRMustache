@@ -23,9 +23,6 @@
 #import "GRMustacheElement_private.h"
 
 
-@class GRMustacheTemplateLoader;
-
-
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.
  
@@ -33,10 +30,8 @@
  */
 @interface GRMustacheTemplate: NSObject<GRMustacheElement> {
 @private
-	GRMustacheTemplateLoader *templateLoader;
 	NSString *templateId;
-	NSString *templateString;
-	NSMutableArray *elems;
+	NSArray *elems;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

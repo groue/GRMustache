@@ -25,22 +25,15 @@
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheCompiler_private.h"
-#import "GRMustacheTokenizer_private.h"
 
 
 @interface GRMustacheTemplate()
-@property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
-@property (nonatomic, retain) NSString *templateString;
-@property (nonatomic, retain) NSMutableArray *elems;
-- (id)initWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader;
+- (id)initWithTemplateId:(id)templateId;
 @end
 
 
 @implementation GRMustacheTemplate
 @synthesize templateId;
-@synthesize templateLoader;
-@synthesize templateString;
 @synthesize elems;
 
 
@@ -102,8 +95,6 @@
 
 - (void)dealloc {
 	[templateId release];
-	[templateLoader release];
-	[templateString release];
 	[elems release];
 	[super dealloc];
 }
@@ -117,46 +108,25 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-	NSMutableString *buffer = [NSMutableString stringWithCapacity:templateString.length];
+	if (elems == nil) {
+		return @"";
+	}
+	NSMutableString *buffer = [NSMutableString string];
 	for (NSObject<GRMustacheElement> *elem in elems) {
 		[buffer appendString:[elem renderContext:context]];
 	}
 	return buffer;
 }
 
-
-+ (id)templateWithString:(NSString *)templateString templateId:(id)templateId templateLoader:(GRMustacheTemplateLoader *)templateLoader {
-	return [[[self alloc] initWithString:templateString templateId:templateId templateLoader:templateLoader] autorelease];
++ (id)templateWithTemplateId:(id)templateId {
+	return [[[self alloc] initWithTemplateId:templateId] autorelease];
 }
 
-- (id)initWithString:(NSString *)theTemplateString templateId:(id)theTemplateId templateLoader:(GRMustacheTemplateLoader *)theTemplateLoader {
-	NSAssert(theTemplateLoader, @"Can't init GRMustacheTemplate with nil template loader");
-	NSAssert(theTemplateString, @"Can't init GRMustacheTemplate with nil template string");
+- (id)initWithTemplateId:(id)theTemplateId {
 	if ((self = [self init])) {
 		self.templateId = theTemplateId;
-		self.templateLoader = theTemplateLoader;
-		self.templateString = theTemplateString;
-		self.elems = [NSMutableArray arrayWithCapacity:4];
 	}
 	return self;
-}
-
-- (BOOL)parseAndReturnError:(NSError **)outError {
-	GRMustacheTokenizer *tokenProducer = [[GRMustacheTokenizer alloc] init];
-	GRMustacheCompiler *compiler = [[GRMustacheCompiler alloc] init];
-	NSArray *elements = [compiler parseString:templateString
-							withTokenProducer:tokenProducer
-							   templateLoader:templateLoader
-								   templateId:templateId
-										error:outError];
-	[compiler release];
-	[tokenProducer release];
-
-	if (elements == nil) {
-		return NO;
-	}
-	self.elems = (NSMutableArray *)elements;
-	return YES;
 }
 
 @end

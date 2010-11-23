@@ -25,23 +25,25 @@
 
 @interface GRMustacheToken()
 @property (nonatomic, retain) NSString *content;
-- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range;
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
 @end
 
 @implementation GRMustacheToken
 @synthesize type;
 @synthesize content;
+@synthesize templateString;
 @synthesize line;
 @synthesize range;
 
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content line:(NSUInteger)line range:(NSRange)range {
-	return [[[self alloc] initWithType:type content:content line:line range:range] autorelease];
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
+	return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
 }
 
-- (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent line:(NSUInteger)theLine range:(NSRange)theRange {
+- (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent templateString:(NSString *)theTemplateString line:(NSUInteger)theLine range:(NSRange)theRange {
 	if ((self = [self init])) {
 		type = theType;
 		content = [theContent retain];
+		templateString = [theTemplateString retain];
 		line = theLine;
 		range = theRange;
 	}
@@ -50,6 +52,7 @@
 
 - (void)dealloc {
 	[content release];
+	[templateString release];
 	[super dealloc];
 }
 
