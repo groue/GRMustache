@@ -26,7 +26,7 @@
 
 @interface GRMustacheTokenizer : NSObject<GRMustacheTokenProducer> {
 @private
-	id<GRMustacheTokenConsumer> tokenConsumer;
+	id<GRMustacheTokenProducerDelegate> tokenConsumer;
 	NSString *otag;
 	NSString *ctag;
 }

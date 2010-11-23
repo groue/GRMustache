@@ -50,16 +50,17 @@ typedef enum {
 + (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
 @end
 
-@protocol GRMustacheTokenConsumer;
+@protocol GRMustacheTokenProducer;
 
-@protocol GRMustacheTokenProducer
-- (void)parseTemplateString:(NSString *)templateString forTokenConsumer:(id<GRMustacheTokenConsumer>)tokenConsumer;
-@end
-
-@protocol GRMustacheTokenConsumer
+@protocol GRMustacheTokenProducerDelegate<NSObject>
+@optional
 - (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer;
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token;
+@required
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 - (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)error;
 @end
 
-
+@protocol GRMustacheTokenProducer
+@property (nonatomic, assign) id<GRMustacheTokenProducerDelegate>delegate;
+- (void)parseTemplateString:(NSString *)templateString;
+@end

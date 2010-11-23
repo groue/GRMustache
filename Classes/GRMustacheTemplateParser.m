@@ -82,9 +82,9 @@
 	[super dealloc];
 }
 
-#pragma mark GRMustacheTokenConsumer
+#pragma mark GRMustacheTokenProducerDelegate
 
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token {
+- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
 	switch (token.type) {
 		case GRMustacheTokenTypeText:
 			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];

@@ -27,7 +27,7 @@
 @interface GRMustacheTokenizer()
 @property (nonatomic, retain) NSString *otag;
 @property (nonatomic, retain) NSString *ctag;
-- (BOOL)shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token;
+- (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 - (BOOL)shouldStart;
 - (void)didFinish;
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
@@ -35,6 +35,7 @@
 @end
 
 @implementation GRMustacheTokenizer
+@synthesize delegate;
 @synthesize otag;
 @synthesize ctag;
 
@@ -52,7 +53,7 @@
 	[super dealloc];
 }
 
-- (void)parseTemplateString:(NSString *)templateString forTokenConsumer:(id<GRMustacheTokenConsumer>)theTokenConsumer {
+- (void)parseTemplateString:(NSString *)templateString {
 	NSUInteger p = 0;
 	NSUInteger line = 1;
 	NSUInteger consumedLines = 0;
@@ -62,7 +63,6 @@
 	unichar tagUnichar;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 	
-	tokenConsumer = theTokenConsumer;
 	if (![self shouldStart]) {
 		return;
 	}
@@ -74,11 +74,11 @@
 		// otag was not found
 		if (orange.location == NSNotFound) {
 			if (p < templateString.length) {
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-																						 content:[templateString substringFromIndex:p]
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(p, templateString.length-p)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+																				  content:[templateString substringFromIndex:p]
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(p, templateString.length-p)]]) {
 					return;
 				}
 			}
@@ -88,11 +88,11 @@
 		
 		if (orange.location > p) {
 			NSRange range = NSMakeRange(p, orange.location-p);
-			if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-																					 content:[templateString substringWithRange:range]
-																			  templateString:templateString
-																						line:line
-																					   range:range]]) {
+			if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+																			  content:[templateString substringWithRange:range]
+																	   templateString:templateString
+																				 line:line
+																				range:range]]) {
 				return;
 			}
 		}
@@ -134,11 +134,11 @@
 		switch (tagUnichar) {
 			case '!':
 				tag = [tag substringFromIndex:1];
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -149,11 +149,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty section opening tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -164,11 +164,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty inverted section opening tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -179,11 +179,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty section closing tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -194,11 +194,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty partial tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -228,11 +228,11 @@
 					return;
 				}
 				
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -243,11 +243,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -258,11 +258,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -273,11 +273,11 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Empty variable tag"];
 					return;
 				}
-				if (![self shouldContinueParsingAfterReadingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-																						 content:tag
-																				  templateString:templateString
-																							line:line
-																						   range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
+																				  content:tag
+																		   templateString:templateString
+																					 line:line
+																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
 				break;
@@ -289,36 +289,36 @@
 	}
 }
 
-- (BOOL)shouldContinueParsingAfterReadingToken:(GRMustacheToken *)token {
-	if (tokenConsumer) {
-		return [tokenConsumer tokenProducer:self shouldContinueParsingAfterReadingToken:token];
+- (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+	if (delegate) {
+		return [delegate tokenProducer:self shouldContinueAfterParsingToken:token];
 	}
 	return YES;
 }
 
 - (BOOL)shouldStart {
-	if (tokenConsumer) {
-		return [tokenConsumer tokenProducerShouldStart:self];
+	if (delegate && [delegate respondsToSelector:@selector(tokenProducerShouldStart:)]) {
+		return [delegate tokenProducerShouldStart:self];
 	}
 	return YES;
 }
 
 - (void)didFinish {
-	if (tokenConsumer) {
-		[tokenConsumer tokenProducerDidFinish:self withError:nil];
+	if (delegate) {
+		[delegate tokenProducerDidFinish:self withError:nil];
 	}
 }
 
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
-	if (tokenConsumer) {
+	if (delegate) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
 					 forKey:NSLocalizedDescriptionKey];
 		[userInfo setObject:[NSNumber numberWithInteger:line]
 					 forKey:GRMustacheErrorLine];
-		[tokenConsumer tokenProducerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
-																				 code:GRMustacheErrorCodeParseError
-																			 userInfo:userInfo]];
+		[delegate tokenProducerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
+																			code:GRMustacheErrorCodeParseError
+																		userInfo:userInfo]];
 	}
 }
 

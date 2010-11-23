@@ -168,7 +168,8 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 - (GRMustacheTemplate *)parseString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError {
 	GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId] autorelease];
 	GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
-	[tokenizer parseTemplateString:templateString forTokenConsumer:parser];
+	tokenizer.delegate = parser;
+	[tokenizer parseTemplateString:templateString];
 	return [parser templateReturningError:outError];
 }
 
