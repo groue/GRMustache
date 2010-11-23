@@ -24,7 +24,5 @@
 
 
 @interface GRMustacheTemplate()
-@property (nonatomic, retain) NSString *templateId;
 @property (nonatomic, retain) NSArray *elems;
-+ (id)templateWithTemplateId:(id)templateId;
 @end

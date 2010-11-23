@@ -27,13 +27,7 @@
 #import "GRMustacheContext_private.h"
 
 
-@interface GRMustacheTemplate()
-- (id)initWithTemplateId:(id)templateId;
-@end
-
-
 @implementation GRMustacheTemplate
-@synthesize templateId;
 @synthesize elems;
 
 
@@ -94,7 +88,6 @@
 }
 
 - (void)dealloc {
-	[templateId release];
 	[elems release];
 	[super dealloc];
 }
@@ -116,17 +109,6 @@
 		[buffer appendString:[elem renderContext:context]];
 	}
 	return buffer;
-}
-
-+ (id)templateWithTemplateId:(id)templateId {
-	return [[[self alloc] initWithTemplateId:templateId] autorelease];
-}
-
-- (id)initWithTemplateId:(id)theTemplateId {
-	if ((self = [self init])) {
-		self.templateId = theTemplateId;
-	}
-	return self;
 }
 
 @end

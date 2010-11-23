@@ -30,7 +30,6 @@
  */
 @interface GRMustacheTemplate: NSObject<GRMustacheElement> {
 @private
-	NSString *templateId;
 	NSArray *elems;
 }
 

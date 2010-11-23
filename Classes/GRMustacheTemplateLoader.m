@@ -114,7 +114,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 			return nil;
 		}
 		
-		template = [GRMustacheTemplate templateWithTemplateId:templateId];
+		template = [[[GRMustacheTemplate alloc] init] autorelease];
 		
 		// store template before parsing, so that we support recursive templates
 		[self setTemplate:template forTemplateId:templateId];
@@ -141,7 +141,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	if (!templateElements) {
 		return nil;
 	}
-	GRMustacheTemplate *template = [GRMustacheTemplate templateWithTemplateId:nil];
+	GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
 	template.elems = templateElements;
 	return template;
 }
