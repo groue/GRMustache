@@ -58,7 +58,7 @@ typedef struct {
 
 /**
  Adds version method to the GRMustache class.
-
+ 
  @since v1.0.0
  */
 @interface GRMustache(Version)

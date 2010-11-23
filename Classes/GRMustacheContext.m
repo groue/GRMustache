@@ -83,7 +83,6 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	}
 	
 	return [boolNumber boolValue];
-
 }
 
 @end

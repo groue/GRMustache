@@ -43,9 +43,9 @@
  
  The returned template loader will load templates and partials from the provided directory url,
  with extension "mustache", encoded in UTF8.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBaseURL:(NSURL *)url;
 
 /**
@@ -59,9 +59,9 @@
  If the ext parameter is nil, the "mustache" extension will be assumed.
  
  If the ext parameter is the empty string, loaded partials won't have any extension.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
 
 /**
@@ -76,9 +76,9 @@
  If the ext parameter is nil, the "mustache" extension will be assumed.
  
  If the ext parameter is the empty string, loaded partials won't have any extension.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 
 /**
@@ -87,9 +87,9 @@
  
  The returned template loader will load templates and partials from the provided bundle,
  with extension "mustache", encoded in UTF8.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 
 /**
@@ -101,9 +101,9 @@
  with provided extension, encoded in UTF8.
  
  If the ext parameter is nil, the "mustache" extension will be assumed.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
 
 /**
@@ -116,9 +116,9 @@
  with provided extension, encoded in the provided encoding.
  
  If the ext parameter is nil, the "mustache" extension will be assumed.
-
+ 
  @since v1.0.0
-*/
+ */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 
 /**

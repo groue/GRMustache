@@ -32,7 +32,7 @@
 
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
-    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
 	if (template == nil) {
 		return nil;
 	}
@@ -40,7 +40,7 @@
 }
 
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
-    GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
 	if (template == nil) {
 		return nil;
 	}
@@ -48,7 +48,7 @@
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
 	if (template == nil) {
 		return nil;
 	}
@@ -56,7 +56,7 @@
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
 	if (template == nil) {
 		return nil;
 	}

@@ -91,7 +91,7 @@
  loaded from the template identified by baseTemplateId.
  
  @since v1.0.0
-*/
+ */
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
 
 /**

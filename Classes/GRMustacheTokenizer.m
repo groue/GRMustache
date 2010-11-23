@@ -118,10 +118,10 @@
 		tag = [templateString substringWithRange:NSMakeRange(orange.location + orange.length, crange.location - orange.location - orange.length)];
 		
 		// empty tag is not allowed
-        if (tag.length == 0) {
+		if (tag.length == 0) {
 			[self didFinishWithParseErrorAtLine:line description:@"Empty tag"];
 			return;
-        }
+		}
 		
 		// tag must not contain otag
 		if ([tag rangeOfString:otag].location != NSNotFound) {
@@ -331,17 +331,17 @@
 	assert(outLines);
 	*outLines = 0;
 	
-    while (p + stringLength <= templateStringLength) {
+	while (p + stringLength <= templateStringLength) {
 		templateChar = [templateString characterAtIndex:p];
 		if (templateChar == '\n') {
-            (*outLines)++;
-        } else if (templateChar == firstStringChar && [[templateString substringWithRange:NSMakeRange(p, string.length)] isEqualToString:string]) {
+			(*outLines)++;
+		} else if (templateChar == firstStringChar && [[templateString substringWithRange:NSMakeRange(p, string.length)] isEqualToString:string]) {
 			return NSMakeRange(p, string.length);
-        }
+		}
 		p++;
-    }
+	}
 	
-    return NSMakeRange(NSNotFound, 0);
+	return NSMakeRange(NSNotFound, 0);
 }
 
 @end

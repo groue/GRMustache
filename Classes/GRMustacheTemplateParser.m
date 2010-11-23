@@ -177,7 +177,7 @@
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 	[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
-					 forKey:NSLocalizedDescriptionKey];
+				 forKey:NSLocalizedDescriptionKey];
 	[userInfo setObject:[NSNumber numberWithInteger:line]
 				 forKey:GRMustacheErrorLine];
 	return [NSError errorWithDomain:GRMustacheErrorDomain

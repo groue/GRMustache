@@ -25,25 +25,25 @@
 
 /**
  The domain of a GRMustache-generated NSError
-
+ 
  @since v1.0.0
-*/
+ */
 extern NSString* const GRMustacheErrorDomain;
 
 /**
  When a GRMustache-generated NSError has the code GRMustacheErrorCodeParseError,
  its userInfo dictionary contains the line where the parse error occurred, at
  the key GRMustacheErrorLine.
-
+ 
  @since v1.0.0
-*/
+ */
 extern NSString* const GRMustacheErrorLine;
 
 /**
  The codes of a GRMustache-generated NSError
-
+ 
  @since v1.0.0
-*/
+ */
 typedef enum {
 	/**
 	 The error code for parse errors.

@@ -28,34 +28,34 @@ static GRYes *yes = nil;
 @implementation GRYes
 
 + (GRYes *)yes {
-    if (yes == nil) {
+	if (yes == nil) {
 		yes = [[super allocWithZone:NULL] init];
 	}
 	return yes;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-    return [[self yes] retain];
+	return [[self yes] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return self;
+	return self;
 }
 
 - (id)retain {
-    return self;
+	return self;
 }
 
 - (NSUInteger)retainCount {
-    return NSUIntegerMax;  //denotes an object that cannot be released
+	return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 - (void)release {
-    //do nothing
+	//do nothing
 }
 
 - (id)autorelease {
-    return self;
+	return self;
 }
 
 - (id)valueForKey:(NSString *)key {
@@ -77,34 +77,34 @@ static GRNo *no = nil;
 @implementation GRNo
 
 + (GRNo *)no {
-    if (no == nil) {
+	if (no == nil) {
 		no = [[super allocWithZone:NULL] init];
 	}
 	return no;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-    return [[self no] retain];
+	return [[self no] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return self;
+	return self;
 }
 
 - (id)retain {
-    return self;
+	return self;
 }
 
 - (NSUInteger)retainCount {
-    return NSUIntegerMax;  //denotes an object that cannot be released
+	return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 - (void)release {
-    //do nothing
+	//do nothing
 }
 
 - (id)autorelease {
-    return self;
+	return self;
 }
 
 - (id)valueForKey:(NSString *)key {
