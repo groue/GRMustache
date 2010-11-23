@@ -25,6 +25,7 @@
 
 
 @class GRMustacheTemplateLoader;
+@class GRMustacheTemplate;
 
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenConsumer> {
 @private
@@ -37,5 +38,5 @@
 	GRMustacheToken *currentSectionOpeningToken;
 }
 - (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId;
-- (NSArray *)templateElementsReturningError:(NSError **)outError;
+- (GRMustacheTemplate *)templateReturningError:(NSError **)outError;
 @end

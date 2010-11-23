@@ -20,12 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRendering_private.h"
 
+
+@interface GRMustacheTemplate()
+- (id)initWithElements:(NSArray *)theElems;
+@end
 
 @implementation GRMustacheTemplate
 @synthesize elems;
@@ -87,6 +91,17 @@
 			error:outError];
 }
 
++ (id)templateWithElements:(NSArray *)elems {
+	return [[[self alloc] initWithElements:elems] autorelease];
+}
+
+- (id)initWithElements:(NSArray *)theElems {
+	if ((self == [self init])) {
+		self.elems = theElems;
+	}
+	return self;
+}
+
 - (void)dealloc {
 	[elems release];
 	[super dealloc];
@@ -98,17 +113,6 @@
 
 - (NSString *)renderObject:(id)object {
 	return [self renderContext:[GRMustacheContext contextWithObject:object]];
-}
-
-- (NSString *)renderContext:(GRMustacheContext *)context {
-	if (elems == nil) {
-		return @"";
-	}
-	NSMutableString *buffer = [NSMutableString string];
-	for (NSObject<GRMustacheElement> *elem in elems) {
-		[buffer appendString:[elem renderContext:context]];
-	}
-	return buffer;
 }
 
 @end

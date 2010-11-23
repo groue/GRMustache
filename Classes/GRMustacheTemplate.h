@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheElement_private.h"
+#import <Foundation/Foundation.h>
 
 
 /**
@@ -28,7 +28,7 @@
  
  @since v1.0.0
  */
-@interface GRMustacheTemplate: NSObject<GRMustacheElement> {
+@interface GRMustacheTemplate: NSObject {
 @private
 	NSArray *elems;
 }

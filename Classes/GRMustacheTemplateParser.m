@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplateParser_private.h"
+#import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
@@ -36,6 +37,9 @@
 @property (nonatomic, retain) NSMutableArray *elementsStack;
 @property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
 @property (nonatomic, retain) id templateId;
+- (void)start;
+- (void)finish;
+- (void)finishWithError:(NSError *)error;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
 @end
 
@@ -52,20 +56,11 @@
 	if ((self = [self init])) {
 		self.templateLoader = theTemplateLoader;
 		self.templateId = theTemplateId;
-		self.currentElements = [NSMutableArray arrayWithCapacity:20];
-		self.elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-		[elementsStack addObject:currentElements];
-		self.sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
 	}
 	return self;
 }
 
-- (NSArray *)templateElementsReturningError:(NSError **)outError {
-	if (error == nil && currentSectionOpeningToken) {
-		self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
-								description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]];
-	}
-	
+- (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
 	if (error) {
 		if (outError != NULL) {
 			*outError = error;
@@ -73,7 +68,7 @@
 		return nil;
 	}
 	
-	return [[currentElements retain] autorelease];
+	return [GRMustacheTemplate templateWithElements:currentElements];
 }
 
 - (void)dealloc {
@@ -111,7 +106,7 @@
 			self.currentSectionOpeningToken = token;
 			[sectionOpeningTokenStack addObject:token];
 			
-			currentElements = [NSMutableArray array];
+			self.currentElements = [NSMutableArray array];
 			[elementsStack addObject:currentElements];
 			break;
 			
@@ -130,11 +125,11 @@
 				self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
 				
 				[elementsStack removeLastObject];
-				currentElements = [elementsStack lastObject];
+				self.currentElements = [elementsStack lastObject];
 				
 				[currentElements addObject:section];
 			} else {
-				self.error = [self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]];
+				[self finishWithError:[self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
 				return NO;
 			}
 			break;
@@ -145,7 +140,7 @@
 																relativeToTemplateId:templateId
 																			   error:&partialError];
 			if (partialTemplate == nil) {
-				self.error = partialError;
+				[self finishWithError:partialError];
 				return NO;
 			} else {
 				[currentElements addObject:partialTemplate];
@@ -165,14 +160,43 @@
 }
 
 - (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer {
-	return (error == nil);
+	[self start];
+	return YES;
 }
 
 - (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {
-	self.error = theError;
+	if (theError) {
+		[self finishWithError:theError];
+	} else if (currentSectionOpeningToken) {
+		[self finishWithError:[self parseErrorAtLine:currentSectionOpeningToken.line
+										 description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]]];
+	} else {
+		[self finish];
+	}
 }
 
 #pragma mark Private
+
+- (void)start {
+	self.currentElements = [NSMutableArray arrayWithCapacity:20];
+	self.elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+	[elementsStack addObject:currentElements];
+	self.sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+}
+
+- (void)finishWithError:(NSError *)theError {
+	self.error = theError;
+	[self finish];
+}
+
+- (void)finish {
+	if (error) {
+		self.currentElements = nil;
+	}
+	self.currentSectionOpeningToken = nil;
+	self.elementsStack = nil;
+	self.sectionOpeningTokenStack = nil;
+}
 
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];

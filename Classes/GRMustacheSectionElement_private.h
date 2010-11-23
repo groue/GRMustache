@@ -21,10 +21,9 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheElement_private.h"
 
 
-@interface GRMustacheSectionElement: NSObject<GRMustacheElement> {
+@interface GRMustacheSectionElement: NSObject {
 @private
 	NSString *name;
 	NSString *templateString;

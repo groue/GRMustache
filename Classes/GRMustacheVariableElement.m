@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache.h"
 #import "GRMustacheVariableElement_private.h"
 
 
@@ -28,7 +27,6 @@
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic) BOOL raw;
 - (id)initWithName:(NSString *)name raw:(BOOL)raw;
-- (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
@@ -46,29 +44,6 @@
 		self.raw = theRaw;
 	}
 	return self;
-}
-
-- (NSString *)htmlEscape:(NSString *)string {
-	NSMutableString *result = [NSMutableString stringWithCapacity:5 + ceilf(string.length * 1.1)];
-	[result appendString:string];
-	[result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	return result;
-}
-
-- (NSString *)renderContext:(GRMustacheContext *)context {
-	id value = [context valueForKey:name];
-	if (value != nil && value != [NSNull null] && value != [GRNo no]) {
-		if (raw) {
-			return [value description];
-		} else {
-			return [self htmlEscape:[value description]];
-		}
-	}
-	return @"";
 }
 
 - (void)dealloc {
