@@ -96,7 +96,7 @@
 }
 
 - (id)initWithElements:(NSArray *)theElems {
-	if ((self == [self init])) {
+	if ((self = [self init])) {
 		self.elems = theElems;
 	}
 	return self;
