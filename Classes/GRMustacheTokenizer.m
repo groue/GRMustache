@@ -291,21 +291,21 @@
 
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
 	if (delegate) {
-		return [delegate tokenProducer:self shouldContinueAfterParsingToken:token];
+		return [delegate tokenizer:self shouldContinueAfterParsingToken:token];
 	}
 	return YES;
 }
 
 - (BOOL)shouldStart {
-	if (delegate && [delegate respondsToSelector:@selector(tokenProducerShouldStart:)]) {
-		return [delegate tokenProducerShouldStart:self];
+	if (delegate && [delegate respondsToSelector:@selector(tokenizerShouldStart:)]) {
+		return [delegate tokenizerShouldStart:self];
 	}
 	return YES;
 }
 
 - (void)didFinish {
 	if (delegate) {
-		[delegate tokenProducerDidFinish:self withError:nil];
+		[delegate tokenizerDidFinish:self withError:nil];
 	}
 }
 
@@ -316,7 +316,7 @@
 					 forKey:NSLocalizedDescriptionKey];
 		[userInfo setObject:[NSNumber numberWithInteger:line]
 					 forKey:GRMustacheErrorLine];
-		[delegate tokenProducerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
+		[delegate tokenizerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
 																			code:GRMustacheErrorCodeParseError
 																		userInfo:userInfo]];
 	}

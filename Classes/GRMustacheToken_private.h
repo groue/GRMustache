@@ -49,18 +49,3 @@ typedef enum {
 @property (nonatomic, readonly) NSRange range;
 + (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
 @end
-
-@protocol GRMustacheTokenProducer;
-
-@protocol GRMustacheTokenProducerDelegate<NSObject>
-@optional
-- (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer;
-@required
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-- (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)error;
-@end
-
-@protocol GRMustacheTokenProducer
-@property (nonatomic, assign) id<GRMustacheTokenProducerDelegate>delegate;
-- (void)parseTemplateString:(NSString *)templateString;
-@end

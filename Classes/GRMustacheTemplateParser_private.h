@@ -21,13 +21,13 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheToken_private.h"
+#import "GRMustacheTokenizer_private.h"
 
 
 @class GRMustacheTemplateLoader;
 @class GRMustacheTemplate;
 
-@interface GRMustacheTemplateParser : NSObject<GRMustacheTokenProducerDelegate> {
+@interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
 	NSError *error;
 	GRMustacheTemplateLoader *templateLoader;

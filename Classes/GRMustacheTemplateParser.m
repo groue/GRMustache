@@ -82,9 +82,9 @@
 	[super dealloc];
 }
 
-#pragma mark GRMustacheTokenProducerDelegate
+#pragma mark GRMustacheTokenizerDelegate
 
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
 	switch (token.type) {
 		case GRMustacheTokenTypeText:
 			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
@@ -159,12 +159,12 @@
 	return YES;
 }
 
-- (BOOL)tokenProducerShouldStart:(id<GRMustacheTokenProducer>)tokenProducer {
+- (BOOL)tokenizerShouldStart:(GRMustacheTokenizer *)tokenizer {
 	[self start];
 	return YES;
 }
 
-- (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)theError {
 	if (theError) {
 		[self finishWithError:theError];
 	} else if (currentSectionOpeningToken) {

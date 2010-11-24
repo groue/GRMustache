@@ -24,10 +24,22 @@
 #import "GRMustacheToken_private.h"
 
 
-@interface GRMustacheTokenizer : NSObject<GRMustacheTokenProducer> {
+@class GRMustacheTokenizer;
+
+@protocol GRMustacheTokenizerDelegate<NSObject>
+@optional
+- (BOOL)tokenizerShouldStart:(GRMustacheTokenizer *)tokenizer;
+@required
+- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token;
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)error;
+@end
+
+@interface GRMustacheTokenizer : NSObject {
 @private
-	id<GRMustacheTokenProducerDelegate> tokenConsumer;
+	id<GRMustacheTokenizerDelegate> delegate;
 	NSString *otag;
 	NSString *ctag;
 }
+@property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate;
+- (void)parseTemplateString:(NSString *)templateString;
 @end

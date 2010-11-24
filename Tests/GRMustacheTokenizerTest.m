@@ -23,7 +23,7 @@
 #import "GRMustacheTokenizerTest.h"
 
 
-@interface GRMustacheTokenRecorder : NSObject<GRMustacheTokenProducerDelegate> {
+@interface GRMustacheTokenRecorder : NSObject<GRMustacheTokenizerDelegate> {
 	NSError *error;
 	BOOL tokenizerDidFinish;
 	NSMutableArray *tokenTypes;
@@ -68,13 +68,13 @@
 	return [tokenContents objectAtIndex:index];
 }
 
-- (BOOL)tokenProducer:(id<GRMustacheTokenProducer>)tokenProducer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
 	[tokenTypes addObject:[NSNumber numberWithInt:token.type]];
 	[tokenContents addObject:token.content];
 	return YES;
 }
 
-- (void)tokenProducerDidFinish:(id<GRMustacheTokenProducer>)tokenProducer withError:(NSError *)theError {
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)theError {
 	tokenizerDidFinish = YES;
 	error = [theError retain];
 }
