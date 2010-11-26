@@ -20,24 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
-#import "GRMustacheContext_private.h"
+#import "GRBooleanTest.h"
+#import "GRMustache_private.h"
 
 
-@interface GRBooleanTest: GRMustacheTestBase
-@end
+@implementation GRBooleanTest
 
-@interface GRStrictBooleanModeTest: GRMustacheTestBase {
-	GRMustacheContext *context;
-	GRMustacheContext *inheritingContext;
-	BOOL strictBooleanMode;
+- (void)testGRYesIsTrueObject {
+	STAssertEquals([GRMustache objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
 }
-@end
 
-@interface GRNotStrictBooleanModeTest: GRMustacheTestBase {
-	GRMustacheContext *context;
-	GRMustacheContext *inheritingContext;
-	BOOL strictBooleanMode;
+- (void)testGRNoIsFalseObject {
+	STAssertEquals([GRMustache objectKind:[GRNo no]], GRMustacheObjectKindFalseValue, nil);
 }
 
 @end
