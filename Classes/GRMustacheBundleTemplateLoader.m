@@ -39,6 +39,13 @@
 	return [bundle URLForResource:name withExtension:self.extension];
 }
 
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
+	return [NSString stringWithContentsOfURL:(NSURL*)templateId
+									encoding:self.encoding
+									   error:outError];
+}
+
 - (void)dealloc {
 	[bundle release];
 	[super dealloc];

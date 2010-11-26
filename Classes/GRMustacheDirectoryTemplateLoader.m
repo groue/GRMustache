@@ -46,6 +46,13 @@
 	return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
+	return [NSString stringWithContentsOfURL:(NSURL*)templateId
+									encoding:self.encoding
+									   error:outError];
+}
+
 - (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
 	NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
 	if (!templateString) {

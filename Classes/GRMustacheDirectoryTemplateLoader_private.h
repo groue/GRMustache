@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheURLTemplateLoader_private.h"
+#import "GRMustacheTemplateLoader_private.h"
 
 
-@interface GRMustacheDirectoryTemplateLoader: GRMustacheURLTemplateLoader {
+@interface GRMustacheDirectoryTemplateLoader: GRMustacheTemplateLoader {
 @private
 	NSURL *url;
 }
