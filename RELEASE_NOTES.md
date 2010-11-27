@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.1.5
+
+Memory management bug fixes
+
 ## v1.1.4
 
 No more warnings when compiling with LLVM 2.0

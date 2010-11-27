@@ -42,7 +42,7 @@
  
  @since v1.0.0
  */
-#define GRMUSTACHE_PATCH_VERSION 4
+#define GRMUSTACHE_PATCH_VERSION 5
 
 
 /**
