@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTestBase.h"
-#import "GRMustacheContext_private.h"
 
 
 @interface GRBoolean_v1_0_Test: GRMustacheTestBase
@@ -29,15 +28,15 @@
 @end
 
 @interface GRStrictBooleanMode_v1_0_Test: GRBoolean_v1_0_Test {
-	GRMustacheContext *context;
-	GRMustacheContext *inheritingContext;
+	id context;
+	id inheritingContext;
 	BOOL strictBooleanMode;
 }
 @end
 
 @interface GRNotStrictBooleanMode_v1_0_Test: GRBoolean_v1_0_Test {
-	GRMustacheContext *context;
-	GRMustacheContext *inheritingContext;
+	id context;
+	id inheritingContext;
 	BOOL strictBooleanMode;
 }
 

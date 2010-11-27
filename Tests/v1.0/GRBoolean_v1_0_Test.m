@@ -21,8 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRBoolean_v1_0_Test.h"
-//#import "GRMustache_private.h"
-//#import "GRMustacheContext_private.h"
 
 
 @interface GRBooleanTestSupport: NSObject
@@ -124,8 +122,8 @@
 - (void)setUp {
 	strictBooleanMode = [GRMustache strictBooleanMode];
 	[GRMustache setStrictBooleanMode:YES];
-	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
-	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
+	context = [[GRBooleanTestSupport alloc] init];
+	inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
 }
 
 - (void)tearDown {
@@ -224,8 +222,8 @@
 - (void)setUp {
 	strictBooleanMode = [GRMustache strictBooleanMode];
 	[GRMustache setStrictBooleanMode:NO];
-	context = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupport alloc] init] autorelease]] retain];
-	inheritingContext = [[GRMustacheContext contextWithObject:[[[GRBooleanTestSupportSubClass alloc] init] autorelease]] retain];
+	context = [[GRBooleanTestSupport alloc] init];
+	inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
 }
 
 - (void)tearDown {
