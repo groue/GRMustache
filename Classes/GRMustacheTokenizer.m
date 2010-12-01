@@ -25,8 +25,8 @@
 
 
 @interface GRMustacheTokenizer()
-@property (nonatomic, retain) NSString *otag;
-@property (nonatomic, retain) NSString *ctag;
+@property (nonatomic, copy) NSString *otag;
+@property (nonatomic, copy) NSString *ctag;
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 - (BOOL)shouldStart;
 - (void)didFinish;
