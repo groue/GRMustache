@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.1.6
+
+GRMustacheTemplateLoader subclasses can now rely on an immutable `extension` property.
+
 ## v1.1.5
 
 Memory management bug fixes
