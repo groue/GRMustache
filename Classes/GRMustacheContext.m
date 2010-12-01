@@ -168,18 +168,34 @@ static NSInteger BOOLPropertyType = NSNotFound;
 
 - (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
 	id value = nil;
-	@try {
-		value = [object valueForKey:key];
+	
+	// value by selector
+	
+	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Object:withRenderer:templateString:", key]);
+	if ([object respondsToSelector:renderingSelector]) {
+		value = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
+			return (NSString *)objc_msgSend(object, renderingSelector, context, renderer, text);
+		});
 	}
-	@catch (NSException *exception) {
-		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-			[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
-			![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
-		{
-			// that's some exception we are not related to
-			@throw;
+	
+	// value by KVC
+	
+	if (value == nil) {
+		@try {
+			value = [object valueForKey:key];
+		}
+		@catch (NSException *exception) {
+			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
+				[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+				![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
+			{
+				// that's some exception we are not related to
+				@throw;
+			}
 		}
 	}
+	
+	// value interpretation
 	
 	if (value != nil) {
 		if (outContext != NULL) {
@@ -196,10 +212,9 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		return value;
 	}
 	
-	if (parent == nil) {
-		return nil;
-	}
+	// parent value
 	
+	if (parent == nil) { return nil; }
 	return [parent valueForKeyComponent:key foundInContext:outContext];
 }
 
