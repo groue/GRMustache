@@ -37,13 +37,13 @@
 							 [NSArray arrayWithObjects:
 							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
 																  @"name1", @"name",
-																  [GRYes yes], @"current",
+																  [NSNumber numberWithBool:YES], @"current",
 																  [NSDictionary dictionaryWithObject:@"http://item1" forKey:@"url"], @"link",
 																  nil]
 														  forKey:@"item"],
 							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
 																  @"name2", @"name",
-																  [GRNo no], @"current",
+																  [NSNumber numberWithBool:NO], @"current",
 																  [NSDictionary dictionaryWithObject:@"http://item2" forKey:@"url"], @"link",
 																  nil]
 														  forKey:@"item"],

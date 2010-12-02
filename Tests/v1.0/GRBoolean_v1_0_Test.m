@@ -99,11 +99,6 @@
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_GRNo_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
-}
-
 - (void)test_EmptyString_isFalseValue {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
@@ -114,6 +109,20 @@
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
 }
 
+- (void)test_GRNo_isFalseValue {
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+}
+
+- (void)test_NSNumberWithBoolYES_isTrueValue {
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"bool"];
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
+}
+
+- (void)test_NSNumberWithBoolNO_isFalseValue {
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"bool"];
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+}
 
 @end
 

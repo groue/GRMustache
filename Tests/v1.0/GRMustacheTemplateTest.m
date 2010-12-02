@@ -130,4 +130,11 @@
 	STAssertEqualObjects(result, @"name:", nil);
 }
 
+- (void)testVariableElementDoesntRenderNSNumberWithBoolNO {
+	NSString *templateString = @"name:{{name}}";
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"name"];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"name:", nil);
+}
+
 @end

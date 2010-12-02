@@ -168,6 +168,14 @@
 	STAssertEqualObjects([context valueForKey:@"key"], [GRNo no], nil);
 }
 
+- (void)testNSNumberWithBoolNODoesStopExploration {
+	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+	dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
+	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	STAssertEqualObjects([context valueForKey:@"key"], [NSNumber numberWithBool:NO], nil);
+}
+
 - (void)testOneDepthContextTemplate {
 	NSString *result = [GRMustacheTemplate renderObject:@"foo" fromString:@"{{length}}" error:nil];
 	STAssertEqualObjects(result, @"3", nil);
