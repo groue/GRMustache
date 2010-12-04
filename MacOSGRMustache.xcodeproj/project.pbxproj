@@ -221,43 +221,15 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				567BB62C12AA6A9800E77EF0 /* GRBoolean.h */,
-				567BB62D12AA6A9800E77EF0 /* GRBoolean.m */,
+				567BB8FC12AA774000E77EF0 /* AbstractTree */,
+				567BB8FE12AA777200E77EF0 /* Loading */,
+				567BB8FD12AA775A00E77EF0 /* Parsing */,
+				567BB8FF12AA778600E77EF0 /* Rendering */,
 				567BB62E12AA6A9800E77EF0 /* GRMustache_private.h */,
 				567BB62F12AA6A9800E77EF0 /* GRMustache.h */,
 				567BB63012AA6A9800E77EF0 /* GRMustache.m */,
-				567BB63112AA6A9800E77EF0 /* GRMustacheBundleTemplateLoader_private.h */,
-				567BB63212AA6A9800E77EF0 /* GRMustacheBundleTemplateLoader.m */,
-				567BB63312AA6A9800E77EF0 /* GRMustacheContext_private.h */,
-				567BB63412AA6A9800E77EF0 /* GRMustacheContext.m */,
-				567BB63512AA6A9800E77EF0 /* GRMustacheDirectoryTemplateLoader_private.h */,
-				567BB63612AA6A9800E77EF0 /* GRMustacheDirectoryTemplateLoader.m */,
 				567BB63712AA6A9800E77EF0 /* GRMustacheError.h */,
 				567BB63812AA6A9800E77EF0 /* GRMustacheError.m */,
-				567BB63912AA6A9800E77EF0 /* GRMustacheLambda_private.h */,
-				567BB63A12AA6A9800E77EF0 /* GRMustacheLambda.h */,
-				567BB63B12AA6A9800E77EF0 /* GRMustacheLambda.m */,
-				567BB63C12AA6A9800E77EF0 /* GRMustacheRendering_private.h */,
-				567BB63D12AA6A9800E77EF0 /* GRMustacheRendering.m */,
-				567BB63E12AA6A9800E77EF0 /* GRMustacheSectionElement_private.h */,
-				567BB63F12AA6A9800E77EF0 /* GRMustacheSectionElement.m */,
-				567BB64012AA6A9800E77EF0 /* GRMustacheTemplate_private.h */,
-				567BB64112AA6A9800E77EF0 /* GRMustacheTemplate.h */,
-				567BB64212AA6A9800E77EF0 /* GRMustacheTemplate.m */,
-				567BB64312AA6A9800E77EF0 /* GRMustacheTemplateLoader_private.h */,
-				567BB64412AA6A9800E77EF0 /* GRMustacheTemplateLoader_protected.h */,
-				567BB64512AA6A9800E77EF0 /* GRMustacheTemplateLoader.h */,
-				567BB64612AA6A9800E77EF0 /* GRMustacheTemplateLoader.m */,
-				567BB64712AA6A9800E77EF0 /* GRMustacheTemplateParser_private.h */,
-				567BB64812AA6A9800E77EF0 /* GRMustacheTemplateParser.m */,
-				567BB64912AA6A9800E77EF0 /* GRMustacheTextElement_private.h */,
-				567BB64A12AA6A9800E77EF0 /* GRMustacheTextElement.m */,
-				567BB64B12AA6A9800E77EF0 /* GRMustacheToken_private.h */,
-				567BB64C12AA6A9800E77EF0 /* GRMustacheToken.m */,
-				567BB64D12AA6A9800E77EF0 /* GRMustacheTokenizer_private.h */,
-				567BB64E12AA6A9800E77EF0 /* GRMustacheTokenizer.m */,
-				567BB64F12AA6A9800E77EF0 /* GRMustacheVariableElement_private.h */,
-				567BB65012AA6A9800E77EF0 /* GRMustacheVariableElement.m */,
 				567BB65112AA6A9800E77EF0 /* GRMustacheVersion.h */,
 				567BB65212AA6A9800E77EF0 /* GRMustacheVersion.m */,
 			);
@@ -392,6 +364,66 @@
 				567BB72B12AA6C9700E77EF0 /* utf8_partial.mustache */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		567BB8FC12AA774000E77EF0 /* AbstractTree */ = {
+			isa = PBXGroup;
+			children = (
+				567BB63E12AA6A9800E77EF0 /* GRMustacheSectionElement_private.h */,
+				567BB63F12AA6A9800E77EF0 /* GRMustacheSectionElement.m */,
+				567BB64012AA6A9800E77EF0 /* GRMustacheTemplate_private.h */,
+				567BB64112AA6A9800E77EF0 /* GRMustacheTemplate.h */,
+				567BB64212AA6A9800E77EF0 /* GRMustacheTemplate.m */,
+				567BB64912AA6A9800E77EF0 /* GRMustacheTextElement_private.h */,
+				567BB64A12AA6A9800E77EF0 /* GRMustacheTextElement.m */,
+				567BB64F12AA6A9800E77EF0 /* GRMustacheVariableElement_private.h */,
+				567BB65012AA6A9800E77EF0 /* GRMustacheVariableElement.m */,
+			);
+			name = AbstractTree;
+			sourceTree = "<group>";
+		};
+		567BB8FD12AA775A00E77EF0 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				567BB64712AA6A9800E77EF0 /* GRMustacheTemplateParser_private.h */,
+				567BB64812AA6A9800E77EF0 /* GRMustacheTemplateParser.m */,
+				567BB64B12AA6A9800E77EF0 /* GRMustacheToken_private.h */,
+				567BB64C12AA6A9800E77EF0 /* GRMustacheToken.m */,
+				567BB64D12AA6A9800E77EF0 /* GRMustacheTokenizer_private.h */,
+				567BB64E12AA6A9800E77EF0 /* GRMustacheTokenizer.m */,
+			);
+			name = Parsing;
+			sourceTree = "<group>";
+		};
+		567BB8FE12AA777200E77EF0 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				567BB63112AA6A9800E77EF0 /* GRMustacheBundleTemplateLoader_private.h */,
+				567BB63212AA6A9800E77EF0 /* GRMustacheBundleTemplateLoader.m */,
+				567BB63512AA6A9800E77EF0 /* GRMustacheDirectoryTemplateLoader_private.h */,
+				567BB63612AA6A9800E77EF0 /* GRMustacheDirectoryTemplateLoader.m */,
+				567BB64312AA6A9800E77EF0 /* GRMustacheTemplateLoader_private.h */,
+				567BB64412AA6A9800E77EF0 /* GRMustacheTemplateLoader_protected.h */,
+				567BB64512AA6A9800E77EF0 /* GRMustacheTemplateLoader.h */,
+				567BB64612AA6A9800E77EF0 /* GRMustacheTemplateLoader.m */,
+			);
+			name = Loading;
+			sourceTree = "<group>";
+		};
+		567BB8FF12AA778600E77EF0 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				567BB62C12AA6A9800E77EF0 /* GRBoolean.h */,
+				567BB62D12AA6A9800E77EF0 /* GRBoolean.m */,
+				567BB63312AA6A9800E77EF0 /* GRMustacheContext_private.h */,
+				567BB63412AA6A9800E77EF0 /* GRMustacheContext.m */,
+				567BB63912AA6A9800E77EF0 /* GRMustacheLambda_private.h */,
+				567BB63A12AA6A9800E77EF0 /* GRMustacheLambda.h */,
+				567BB63B12AA6A9800E77EF0 /* GRMustacheLambda.m */,
+				567BB63C12AA6A9800E77EF0 /* GRMustacheRendering_private.h */,
+				567BB63D12AA6A9800E77EF0 /* GRMustacheRendering.m */,
+			);
+			name = Rendering;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -568,6 +600,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "MacOSGRMustacheTest-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
@@ -598,6 +631,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "MacOSGRMustacheTest-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
