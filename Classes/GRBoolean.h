@@ -39,7 +39,7 @@
  @returns the GRYes singleton.
  @since v1.0.0
  */
-+ (GRYes *)yes;
++ (GRYes *)yes __attribute__((deprecated));
 
 /**
  @returns YES
@@ -67,7 +67,7 @@
  @returns the GRNo singleton.
  @since v1.0.0
  */
-+ (GRNo *)no;
++ (GRNo *)no __attribute__((deprecated));
 
 /**
  @returns NO
