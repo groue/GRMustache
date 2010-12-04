@@ -36,6 +36,7 @@
  */
 @interface GRYes : NSObject <NSCopying>
 /**
+ @deprecated Use `[NSNumber numberWithBool:YES]` instead.
  @returns the GRYes singleton.
  @since v1.0.0
  */
@@ -64,6 +65,7 @@
  */
 @interface GRNo : NSObject <NSCopying>
 /**
+ @deprecated Use `[NSNumber numberWithBool:NO]` instead.
  @returns the GRNo singleton.
  @since v1.0.0
  */
