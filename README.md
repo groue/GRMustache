@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for both MacOS and iOS.
 
 It supports the following Mustache features:
 
@@ -32,7 +32,7 @@ Check the repository's tags, the `GRMustacheVersion.h` header, and `RELEASE_NOTE
 
 ### Testing
 
-Open the GRMustache.xcodeproj project, and build the GRMustacheTest target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
+Open the MacOSGRMustache.xcodeproj project, and build the MacOSGRMustache target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
