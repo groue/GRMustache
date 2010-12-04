@@ -144,14 +144,13 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if (![GRMustache objectIsFalseValue:value]) {
-		if (raw) {
-			return [value description];
-		} else {
-			return [self htmlEscape:[value description]];
-		}
+	if ([GRMustache objectIsFalseValue:value]) {
+		return @"";
 	}
-	return @"";
+	if (raw) {
+		return [value description];
+	}
+	return [self htmlEscape:[value description]];
 }
 
 @end
