@@ -36,19 +36,34 @@ static BOOL strictBooleanMode = NO;
 	strictBooleanMode = aBool;
 }
 
++ (BOOL)objectIsFalseValue:(id)object {
+	return (object == nil ||
+			object == [NSNull null] ||
+			object == [GRNo no] ||
+			(void *)object == (void *)kCFBooleanFalse ||
+			([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0));
+}
+
 + (GRMustacheObjectKind)objectKind:(id)object {
-	if (object == nil || object == [NSNull null] || object == [GRNo no] || (void *)object == (void *)kCFBooleanFalse || ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0)) {
+	if ([self objectIsFalseValue:object]) {
 		return GRMustacheObjectKindFalseValue;
 	}
-	if ([object isKindOfClass:[NSDictionary class]]) {
+	
+	if ([object isKindOfClass:[NSDictionary class]])
+	{
 		return GRMustacheObjectKindTrueValue;
 	}
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+	
+	if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+	{
 		return GRMustacheObjectKindEnumerable;
 	}
-	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]]) {
+	
+	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]])
+	{
 		return GRMustacheObjectKindLambda;
 	}
+	
 	return GRMustacheObjectKindTrueValue;
 }
 

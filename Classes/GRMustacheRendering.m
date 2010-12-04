@@ -144,7 +144,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if (value != nil && value != [NSNull null] && (void *)value != (void *)kCFBooleanFalse && value != [GRNo no]) {
+	if (![GRMustache objectIsFalseValue:value]) {
 		if (raw) {
 			return [value description];
 		} else {

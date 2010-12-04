@@ -32,6 +32,7 @@ typedef enum {
 
 
 @interface GRMustache()
++ (BOOL)objectIsFalseValue:(id)object;
 + (GRMustacheObjectKind)objectKind:(id)object;
 @end
 
