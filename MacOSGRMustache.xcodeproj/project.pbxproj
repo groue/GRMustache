@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		567BB6F512AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6D912AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m */; };
 		567BB6F612AA6C4100E77EF0 /* GRMustacheTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6DB12AA6C4100E77EF0 /* GRMustacheTestBase.m */; };
 		567BB6F712AA6C4100E77EF0 /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6DE12AA6C4100E77EF0 /* GRBooleanTest.m */; };
 		567BB6F812AA6C4100E77EF0 /* GRMustacheContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6E012AA6C4100E77EF0 /* GRMustacheContextTest.m */; };
@@ -294,12 +293,12 @@
 		567BB69412AA6BDE00E77EF0 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				567BB71C12AA6C9700E77EF0 /* Resources */,
+				567BB70912AA6C8800E77EF0 /* syck */,
 				567BB6D812AA6C4100E77EF0 /* GRMustacheBenchmarkTest.h */,
 				567BB6D912AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m */,
 				567BB6DA12AA6C4100E77EF0 /* GRMustacheTestBase.h */,
 				567BB6DB12AA6C4100E77EF0 /* GRMustacheTestBase.m */,
-				567BB71C12AA6C9700E77EF0 /* Resources */,
-				567BB70912AA6C8800E77EF0 /* syck */,
 				567BB6DC12AA6C4100E77EF0 /* Private */,
 				567BB6E312AA6C4100E77EF0 /* v1.0 */,
 				567BB6F212AA6C4100E77EF0 /* v1.1 */,
@@ -491,7 +490,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				567BB6F512AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m in Sources */,
 				567BB6F612AA6C4100E77EF0 /* GRMustacheTestBase.m in Sources */,
 				567BB6F712AA6C4100E77EF0 /* GRBooleanTest.m in Sources */,
 				567BB6F812AA6C4100E77EF0 /* GRMustacheContextTest.m in Sources */,
