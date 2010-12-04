@@ -126,6 +126,23 @@
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:NO] key:@"."], (NSInteger)NO, nil);
 }
 
+- (void)test_NSNumberWithZero_isTrueValue {
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithChar:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithFloat:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithDouble:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInt:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInteger:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLong:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLongLong:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithShort:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedChar:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInt:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInteger:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLong:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLongLong:0] key:@"."], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedShort:0] key:@"."], (NSInteger)YES, nil);
+}
+
 @end
 
 @implementation GRStrictBooleanMode_v1_0_Test
