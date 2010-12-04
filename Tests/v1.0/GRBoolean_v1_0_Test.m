@@ -117,11 +117,13 @@
 - (void)test_NSNumberWithBoolYES_isTrueValue {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"bool"];
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:YES] key:@"."], (NSInteger)YES, nil);
 }
 
 - (void)test_NSNumberWithBoolNO_isFalseValue {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"bool"];
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:NO] key:@"."], (NSInteger)NO, nil);
 }
 
 @end
