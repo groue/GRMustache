@@ -1,5 +1,5 @@
-TEST_TARGET=GRMustacheTest
-APP_TARGET=GRMustacheTest
+TEST_TARGET=MacOSGRMustacheTest
+APP_TARGET=MacOSGRMustacheTest
 COMMAND=xcodebuild
 
 default:
