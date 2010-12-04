@@ -35,14 +35,14 @@
  
  @since v1.0.0
  */
-#define GRMUSTACHE_MINOR_VERSION 1
+#define GRMUSTACHE_MINOR_VERSION 2
 
 /**
  The patch-level component of GRMustache version
  
  @since v1.0.0
  */
-#define GRMUSTACHE_PATCH_VERSION 6
+#define GRMUSTACHE_PATCH_VERSION 0
 
 
 /**
