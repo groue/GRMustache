@@ -27,7 +27,7 @@
 @dynamic testBundle;
 
 - (NSBundle *)testBundle {
-	return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustacheTest"];
+	return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
 }
 
 - (GRMustacheTemplate *)parseResource:(NSString *)name {
