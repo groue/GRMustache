@@ -176,7 +176,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
 		{
 			// that's some exception we are not related to
-			@throw;
+			[exception raise];
 		}
 	}
 	
