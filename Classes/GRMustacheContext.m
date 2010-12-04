@@ -204,8 +204,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {
 	if ((CFBooleanRef)value == kCFBooleanTrue ||
-		(CFBooleanRef)value == kCFBooleanFalse ||
-		CFBooleanGetTypeID() == CFGetTypeID(value))
+		(CFBooleanRef)value == kCFBooleanFalse)
 	{
 		if (outBooleanRef) {
 			*outBooleanRef = (CFBooleanRef)value;
