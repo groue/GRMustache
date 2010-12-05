@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.2.1
+
+- support for SDKs without blocks (MacOS before 10.6, and iOS before 4.0)
+
 ## v1.2.0
 
 - iOS support
