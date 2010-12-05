@@ -59,12 +59,10 @@ static BOOL strictBooleanMode = NO;
 		return GRMustacheObjectKindEnumerable;
 	}
 	
-#if NS_BLOCKS_AVAILABLE
-	if ([object isKindOfClass:[GRMustacheLambdaBlockWrapper class]])
+	if ([object isKindOfClass:[GRMustacheLambdaWrapper class]])
 	{
 		return GRMustacheObjectKindLambda;
 	}
-#endif
 	
 	return GRMustacheObjectKindTrueValue;
 }

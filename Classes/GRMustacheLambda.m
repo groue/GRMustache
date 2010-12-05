@@ -21,6 +21,50 @@
 // THE SOFTWARE.
 
 #import "GRMustacheLambda_private.h"
+#import "GRMustacheRendering.h"
+
+@implementation GRMustacheLambdaWrapper
+
+- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+	return @"";
+}
+
+@end
+
+
+@interface GRMustacheLambdaSelectorWrapper()
+- (id)initWithObject:(id)object selector:(SEL)renderingSelector;
+@end
+
+
+@implementation GRMustacheLambdaSelectorWrapper
+
++ (id)helperWithObject:(id)object selector:(SEL)renderingSelector {
+	return [[[self alloc] initWithObject:object selector:renderingSelector] autorelease];
+}
+
+- (id)initWithObject:(id)theObject selector:(SEL)theRenderingSelector {
+	if ((self = [self init])) {
+		object = [theObject retain];
+		renderingSelector = theRenderingSelector;
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[object release];
+	[super dealloc];
+}
+
+- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+	NSString *result = objc_msgSend(object, renderingSelector, section, context);
+	if (result == nil) {
+		return @"";
+	}
+	return result;
+}
+
+@end
 
 
 #if NS_BLOCKS_AVAILABLE
@@ -43,8 +87,8 @@
 	return self;
 }
 
-- (NSString *)renderObject:(id)object fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer {
-	NSString *result = block(renderer, object, templateString);
+- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+	NSString *result = block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
 	if (result == nil) {
 		return @"";
 	}

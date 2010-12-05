@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheContext.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
@@ -34,38 +34,6 @@
 @implementation GRMustacheTemplate
 @synthesize elems;
 
-
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	return [template renderObject:object];
-}
-
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	return [template renderObject:object];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	return [template renderObject:object];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	return [template renderObject:object];
-}
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
 	return [[GRMustacheTemplateLoader templateLoaderWithBundle:[NSBundle mainBundle]]
@@ -105,14 +73,6 @@
 - (void)dealloc {
 	[elems release];
 	[super dealloc];
-}
-
-- (NSString *)render {
-	return [self renderObject:nil];
-}
-
-- (NSString *)renderObject:(id)object {
-	return [self renderContext:[GRMustacheContext contextWithObject:object]];
 }
 
 @end

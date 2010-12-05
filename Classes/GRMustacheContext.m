@@ -29,7 +29,8 @@
 #endif
 
 #import "GRMustache_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheContext.h"
+#import "GRMustacheLambda_private.h"
 
 
 static NSInteger BOOLPropertyType = NSNotFound;
@@ -102,11 +103,27 @@ static NSInteger BOOLPropertyType = NSNotFound;
 @synthesize parent;
 
 + (id)contextWithObject:(id)object {
-	return [self contextWithObject:object parent:nil];
+	if ([object isKindOfClass:[GRMustacheContext class]]) {
+		return object;
+	}
+	return [[[self alloc] initWithObject:object parent:nil] autorelease];
 }
 
-+ (id)contextWithObject:(id)object parent:(GRMustacheContext *)parent {
-	return [[[self alloc] initWithObject:object parent:parent] autorelease];
++ (id)contextWithObjects:(id)object, ... {
+	GRMustacheContext *context = nil;
+	id eachObject;
+	va_list argumentList;
+	if (object) {
+		context = [self contextWithObject:object];
+		va_start(argumentList, object);
+		while (eachObject = va_arg(argumentList, id)) {
+			context = [context contextByAddingObject:eachObject];
+		}
+		va_end(argumentList);
+	} else {
+		context = [self contextWithObject:nil];
+	}
+	return context;
 }
 
 - (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
@@ -117,6 +134,10 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	return self;
 }
 
+- (GRMustacheContext *)contextByAddingObject:(id)theObject {
+	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
+}
+			
 - (id)valueForKey:(NSString *)key {
 	NSArray *components = [key componentsSeparatedByString:@"/"];
 	
@@ -157,7 +178,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		if (value == nil) {
 			return nil;
 		}
-		context = [GRMustacheContext contextWithObject:value parent:valueContext];
+		context = [valueContext contextByAddingObject:value];
 	}
 	
 	return context.object;
@@ -172,11 +193,9 @@ static NSInteger BOOLPropertyType = NSNotFound;
 - (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
 	// value by selector
 	
-	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Object:withRenderer:templateString:", key]);
+	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withObject:", key]);
 	if ([object respondsToSelector:renderingSelector]) {
-		return GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
-			return (NSString *)objc_msgSend(object, renderingSelector, context, renderer, text);
-		});
+		return [GRMustacheLambdaSelectorWrapper helperWithObject:object selector:renderingSelector];
 	}
 	
 	// value by KVC

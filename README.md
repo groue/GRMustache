@@ -196,6 +196,8 @@ When a key is missed at the item level, it is looked into the enclosing context.
 
 #### Lambda sections
 
+Read below "Lambdas and helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
+
 **NB: GRMustache currently implements lambda sections with Objective-C blocks. This feature is thus not available until MacOS 10.6, and iOS 4.0.**
 
 If the value is a GRMustacheLambda, the section is rendered with the string returned by a block of code.
@@ -379,6 +381,88 @@ You may consider using the unbeloved C99 `bool` type. They can reliably control 
 	- (bool)dead;
 	@end
 
+
+Lambdas and helpers
+-------------------
+
+Consider that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
+
+	<ul>
+	  {{#people}}
+	  <li>{{#link}}{{name}}{{#/link}}</li>
+	  {{/people}}
+	</ul>
+
+We expect, as an output, something like:
+
+	<ul>
+	  <li><a href="/people/1">Roger</a></li>
+	  <li><a href="/people/2">Amy</a></li>
+	</ul>
+
+GRMustache provides you with two ways in order to achieve this behavior. The first one uses Objective-C blocks, the second requires some selectors to be implemented.
+
+### Lambda blocks
+
+**NB: Lambda blocks are not available until MacOS 10.6, and iOS 4.0.**
+
+You will provide in the context a GRMustacheLambda that you will build with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
+
+	// prepare our link lambda block
+	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
+	  return [NSString stringWithFormat:
+	          @"<a href=\"/people/%@\">%@</a>",
+	          [context valueForKey:@"id"],  // id of people comes from current context
+	          renderer(context)]            // link text comes from the inner section
+	});
+
+- `renderer` is a block which renders the inner section with its argument as a context.
+- `context` is the current rendering context.
+- `text` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
+
+The rendering now goes as usual:
+
+	[template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:
+	                        linkLambda, @"link",
+	                        people, @"people",
+	                        nil]];
+
+Note that lambda blocks can be used for whatever you may find relevant. You may, for instance, implement caching:
+
+	__block NSString *cache = nil;
+	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
+	  if (cache == nil) { cache = renderer(context); }
+	  return cache;
+	});
+
+### Helper methods
+
+Another way to execute code when rendering the `link` sections is to have your context implement the `linkSection:withObject:` selector.
+
+You will usually isolate your helper methods from your data, by implementing them is a separate class:
+
+	@interface RenderingHelper: NSObject
+	@end
+	
+	@implementation RenderingHelper
+	+ (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
+	  return [NSString stringWithFormat:
+	          @"<a href=\"/people/%@\">%@</a>",
+	          [object valueForKey:@"id"],
+	          [section renderObject:object]];
+	}
+	@end
+
+Now let's build a rendering context which merges the data and the helper class:
+
+	GRMustacheContext *context = [GRMustacheContext contextWithObjects:
+	                              [GRMustacheHelperTestContext class],
+	                              data,
+	                              nil];
+
+And now we can render:
+
+	[template renderObject:context];
 
 Template loaders
 ----------------

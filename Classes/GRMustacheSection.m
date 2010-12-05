@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheSection_private.h"
 
 
-@interface GRMustacheSectionElement()
+@interface GRMustacheSection()
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *templateString;
 @property (nonatomic) BOOL inverted;
@@ -32,7 +32,7 @@
 @end
 
 
-@implementation GRMustacheSectionElement
+@implementation GRMustacheSection
 @synthesize templateString;
 @synthesize name;
 @synthesize inverted;

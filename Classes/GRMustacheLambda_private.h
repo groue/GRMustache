@@ -21,12 +21,23 @@
 // THE SOFTWARE.
 
 #import "GRMustacheLambda.h"
+#import "GRMustacheSection.h"
+
+@interface GRMustacheLambdaWrapper: NSObject
+- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section;
+@end
+
+@interface GRMustacheLambdaSelectorWrapper: GRMustacheLambdaWrapper {
+	SEL renderingSelector;
+	id object;
+}
++ (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
+@end
 
 #if NS_BLOCKS_AVAILABLE
-@interface GRMustacheLambdaBlockWrapper: NSObject {
+@interface GRMustacheLambdaBlockWrapper: GRMustacheLambdaWrapper {
 @private
 	GRMustacheLambdaBlock block;
 }
-- (NSString *)renderObject:(id)object fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer;
 @end
 #endif

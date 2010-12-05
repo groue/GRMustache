@@ -25,7 +25,7 @@
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheSection_private.h"
 #import "GRBoolean.h"
 #import "GRMustacheError.h"
 
@@ -117,10 +117,10 @@
 				NSString *sectionClosingTemplateString = token.templateString;
 				NSAssert(sectionOpeningTemplateString == sectionClosingTemplateString, @"not implemented");
 				NSString *sectionString = [sectionOpeningTemplateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)];
-				GRMustacheSectionElement *section = [GRMustacheSectionElement sectionElementWithName:currentSectionOpeningToken.content
-																							  string:sectionString
-																							inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
-																							elements:currentElements];
+				GRMustacheSection *section = [GRMustacheSection sectionElementWithName:currentSectionOpeningToken.content
+																				string:sectionString
+																			  inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
+																			  elements:currentElements];
 				[sectionOpeningTokenStack removeLastObject];
 				self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
 				

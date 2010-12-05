@@ -70,6 +70,7 @@
 #import "GRMustacheVersion.h"
 #import "GRBoolean.h"
 #import "GRMustacheError.h"
+#import "GRMustacheRendering.h"
 #import "GRMustacheLambda.h"
 #import "GRMustacheTemplateLoader.h"
 #import "GRMustacheTemplate.h"

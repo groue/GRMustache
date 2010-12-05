@@ -21,15 +21,72 @@
 // THE SOFTWARE.
 
 #import "GRMustacheRendering_private.h"
-#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheSection_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheContext.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustache_private.h"
 
 
-@implementation GRMustacheSectionElement(Rendering)
+@implementation GRMustacheTemplate(Rendering)
+
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+	if (template == nil) {
+		return nil;
+	}
+	return [template renderObject:object];
+}
+
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	if (template == nil) {
+		return nil;
+	}
+	return [template renderObject:object];
+}
+
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+	if (template == nil) {
+		return nil;
+	}
+	return [template renderObject:object];
+}
+
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+	if (template == nil) {
+		return nil;
+	}
+	return [template renderObject:object];
+}
+
+- (NSString *)render {
+	return [self renderObject:nil];
+}
+
+- (NSString *)renderObject:(id)object {
+	return [self renderContext:[GRMustacheContext contextWithObject:object]];
+}
+
+@end
+
+@implementation GRMustacheSection(Rendering)
+
+- (NSString *)renderObject:(id)object {
+	GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
+	NSMutableString *buffer = [NSMutableString string];
+	for (id<GRMustacheRenderingElement> elem in elems) {
+		[buffer appendString:[elem renderContext:context]];
+	}
+	return buffer;
+}
+
+@end
+
+@implementation GRMustacheSection(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
@@ -46,7 +103,7 @@
 			
 		case GRMustacheObjectKindTrueValue:
 			if (!inverted) {
-				GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:value parent:context];
+				GRMustacheContext *innerContext = [context contextByAddingObject:value];
 				for (id<GRMustacheRenderingElement> elem in elems) {
 					[buffer appendString:[elem renderContext:innerContext]];
 				}
@@ -67,7 +124,7 @@
 				}
 			} else {
 				for (id object in value) {
-					GRMustacheContext *innerContext = [GRMustacheContext contextWithObject:object parent:context];
+					GRMustacheContext *innerContext = [context contextByAddingObject:object];
 					for (id<GRMustacheRenderingElement> elem in elems) {
 						[buffer appendString:[elem renderContext:innerContext]];
 					}
@@ -75,28 +132,11 @@
 			}
 			break;
 
-#if NS_BLOCKS_AVAILABLE
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				GRMustacheRenderer renderer = ^(id object){
-					GRMustacheContext *renderedContext;
-					if ([object isKindOfClass:[GRMustacheContext class]]) {
-						renderedContext = object;
-					} else {
-						renderedContext = [GRMustacheContext contextWithObject:object parent:context];
-					}
-					NSMutableString *result = [NSMutableString stringWithCapacity:1024];
-					for (id<GRMustacheRenderingElement> elem in elems) {
-						[result appendString:[elem renderContext:renderedContext]];
-					}
-					return (NSString *)result;
-				};
-				[buffer appendString:[(GRMustacheLambdaBlockWrapper *)value renderObject:context
-																			  fromString:templateString
-																				renderer:renderer]];
+				[buffer appendString:[(GRMustacheLambdaWrapper *)value renderObject:context withSection:self]];
 			}
 			break;
-#endif
 			
 		default:
 			// should not be here
@@ -108,7 +148,7 @@
 
 @end
 
-@implementation GRMustacheTemplate(Rendering)
+@implementation GRMustacheTemplate(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	if (elems == nil) {
@@ -123,7 +163,7 @@
 
 @end
 
-@implementation GRMustacheTextElement(Rendering)
+@implementation GRMustacheTextElement(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	return text;
@@ -131,7 +171,7 @@
 
 @end
 
-@implementation GRMustacheVariableElement(Rendering)
+@implementation GRMustacheVariableElement(PrivateRendering)
 
 - (NSString *)htmlEscape:(NSString *)string {
 	NSMutableString *result = [NSMutableString stringWithCapacity:5 + ceilf(string.length * 1.1)];

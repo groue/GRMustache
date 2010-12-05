@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheRendering.h"
 #import "GRMustacheTemplate_private.h"
 
 
@@ -30,5 +31,5 @@
 - (NSString *)renderContext:(GRMustacheContext *)context;
 @end
 
-@interface GRMustacheTemplate(Rendering)<GRMustacheRenderingElement>
+@interface GRMustacheTemplate(PrivateRendering)<GRMustacheRenderingElement>
 @end

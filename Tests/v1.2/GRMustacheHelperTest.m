@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheHelperTest.h"
+#import "GRMustacheContext.h"
 
 
 @interface GRMustacheHelperTestContext: NSObject
@@ -28,19 +29,40 @@
 
 @implementation GRMustacheHelperTestContext
 
-- (NSString*)boldObject:(id)context withRenderer:(GRMustacheRenderer)renderer templateString:(NSString *)templateString {
-	return [NSString stringWithFormat:@"<b>%@</b>", renderer(context)];
+- (NSString*)boldSection:(GRMustacheSection *)section withObject:(id)object {
+	return [NSString stringWithFormat:@"<b>%@</b>", [section renderObject:object]];
+}
+
++ (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
+	return [NSString stringWithFormat:
+			@"<a href=\"/people/%@\">%@</a>",
+			[object valueForKey:@"id"],
+			[section renderObject:object]];
 }
 
 @end
 
 @implementation GRMustacheHelperTest
 
-- (void)testHelperMethod {
+- (void)testHelperInstanceMethod {
 	NSString *templateString = @"{{#bold}}text{{/bold}}";
 	NSDictionary *context = [[[GRMustacheHelperTestContext alloc] init] autorelease];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<b>text</b>", nil);
+}
+
+- (void)testHelperClassMethod {
+	NSString *templateString = @"<ul>{{#people}}<li>{{#link}}{{name}}{{/link}}</li>{{/people}}</ul>";
+	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+						  [NSArray arrayWithObjects:
+						   [NSDictionary dictionaryWithObjectsAndKeys:@"Alan", @"name", @"1", @"id", nil],
+						   [NSDictionary dictionaryWithObjectsAndKeys:@"Roger", @"name", @"2", @"id", nil],
+						   nil], @"people",
+						  nil
+						  ];
+	GRMustacheContext *context = [GRMustacheContext contextWithObjects:[GRMustacheHelperTestContext class], data, nil];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"<ul><li><a href=\"/people/1\">Alan</a></li><li><a href=\"/people/2\">Roger</a></li></ul>", nil);
 }
 
 @end

@@ -20,19 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache.h"
+#import "GRMustacheSection.h"
 
 
-typedef enum {
-	GRMustacheObjectKindTrueValue,
-	GRMustacheObjectKindFalseValue,
-	GRMustacheObjectKindEnumerable,
-	GRMustacheObjectKindLambda,
-} GRMustacheObjectKind;
-
-
-@interface GRMustache()
-+ (BOOL)objectIsFalseValue:(id)object;
-+ (GRMustacheObjectKind)objectKind:(id)object;
+@interface GRMustacheSection()
++ (id)sectionElementWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
-

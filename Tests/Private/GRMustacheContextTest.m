@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheContextTest.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheContext.h"
 
 
 @interface GRKVCRecorder: NSObject {
@@ -118,7 +118,7 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
+	context = [context contextByAddingObject:topRecorder];
 	STAssertEqualObjects([context valueForKey:@"top"], @"top", nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
 	STAssertNil(rootRecorder.lastAccessedKey, nil);
@@ -128,7 +128,7 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
+	context = [context contextByAddingObject:topRecorder];
 	STAssertEqualObjects([context valueForKey:@"root"], @"root", nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
 	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
@@ -138,7 +138,7 @@
 	GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
 	GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-	context = [GRMustacheContext contextWithObject:topRecorder parent:context];
+	context = [context contextByAddingObject:topRecorder];
 	STAssertNil([context valueForKey:@"foo"], nil);
 	STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
 	STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
@@ -148,7 +148,7 @@
 	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
 	dictionary = [NSDictionary dictionary];
-	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	context = [context contextByAddingObject:dictionary];
 	STAssertEqualObjects([context valueForKey:@"key"], @"foo", nil);
 }
 
@@ -156,7 +156,7 @@
 	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
 	dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
-	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	context = [context contextByAddingObject:dictionary];
 	STAssertEqualObjects([context valueForKey:@"key"], [NSNull null], nil);
 }
 
@@ -164,7 +164,7 @@
 	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
 	dictionary = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"key"];
-	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	context = [context contextByAddingObject:dictionary];
 	STAssertEqualObjects([context valueForKey:@"key"], [GRNo no], nil);
 }
 
@@ -172,7 +172,7 @@
 	NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
 	dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
-	context = [GRMustacheContext contextWithObject:dictionary parent:context];
+	context = [context contextByAddingObject:dictionary];
 	STAssertEqualObjects([context valueForKey:@"key"], [NSNumber numberWithBool:NO], nil);
 }
 

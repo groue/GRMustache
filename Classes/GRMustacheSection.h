@@ -20,13 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 
-@interface GRMustacheContext: NSObject {
+
+@interface GRMustacheSection: NSObject {
 @private
-	id object;
-	GRMustacheContext *parent;
+	NSString *name;
+	NSString *templateString;
+	BOOL inverted;
+	NSArray *elems;
 }
-+ (id)contextWithObject:(id)object;
-+ (id)contextWithObject:(id)object parent:(GRMustacheContext *)parent;
-- (id)valueForKey:(NSString *)key;
+@property (nonatomic, retain, readonly) NSString *templateString;
 @end
