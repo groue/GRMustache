@@ -23,6 +23,7 @@
 #import "GRMustacheLambda_private.h"
 
 
+#if NS_BLOCKS_AVAILABLE
 @interface GRMustacheLambdaBlockWrapper()
 + (id)lambdaWithBlock:(GRMustacheLambdaBlock)block;
 - (id)initWithBlock:(GRMustacheLambdaBlock)block;
@@ -65,3 +66,4 @@
 GRMustacheLambda GRMustacheLambdaMake(GRMustacheLambdaBlock block) {
 	return [GRMustacheLambdaBlockWrapper lambdaWithBlock:block];
 }
+#endif

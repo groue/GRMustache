@@ -27,11 +27,14 @@ typedef enum {
 	GRMustacheObjectKindTrueValue,
 	GRMustacheObjectKindFalseValue,
 	GRMustacheObjectKindEnumerable,
+#if NS_BLOCKS_AVAILABLE
 	GRMustacheObjectKindLambda,
+#endif
 } GRMustacheObjectKind;
 
 
 @interface GRMustache()
++ (BOOL)objectIsFalseValue:(id)object;
 + (GRMustacheObjectKind)objectKind:(id)object;
 @end
 

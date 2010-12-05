@@ -22,9 +22,10 @@
 
 #import <Foundation/Foundation.h>
 
-
+#if NS_BLOCKS_AVAILABLE
 typedef NSString *(^GRMustacheRenderer)(id object);
 typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheRenderer, id, NSString *);
 typedef id GRMustacheLambda;
 
 GRMustacheLambda GRMustacheLambdaMake(GRMustacheLambdaBlock block);
+#endif

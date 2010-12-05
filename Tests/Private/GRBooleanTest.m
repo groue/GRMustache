@@ -26,6 +26,11 @@
 
 @implementation GRBooleanTest
 
+- (void)testNSNumberWithBoolReturnCFBoolean {
+	STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:YES], kCFBooleanTrue, nil);
+	STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:NO], kCFBooleanFalse, nil);
+}
+
 - (void)testGRYesIsTrueObject {
 	STAssertEquals([GRMustache objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
 }

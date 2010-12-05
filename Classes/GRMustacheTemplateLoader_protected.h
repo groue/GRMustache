@@ -39,7 +39,7 @@
  @see GRMustacheTemplateLoader#initWithExtension:encoding:
  @since v1.0.0
  */
-@property (nonatomic, readonly, retain) NSString *extension;
+@property (nonatomic, readonly, copy) NSString *extension;
 
 /**
  The encoding of data containing templates (if applicable)

@@ -74,7 +74,8 @@
 				}
 			}
 			break;
-			
+
+#if NS_BLOCKS_AVAILABLE
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
 				GRMustacheRenderer renderer = ^(id object){
@@ -95,6 +96,7 @@
 																				renderer:renderer]];
 			}
 			break;
+#endif
 			
 		default:
 			// should not be here
@@ -144,14 +146,13 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if (value != nil && value != [NSNull null] && value != [GRNo no]) {
-		if (raw) {
-			return [value description];
-		} else {
-			return [self htmlEscape:[value description]];
-		}
+	if ([GRMustache objectIsFalseValue:value]) {
+		return @"";
 	}
-	return @"";
+	if (raw) {
+		return [value description];
+	}
+	return [self htmlEscape:[value description]];
 }
 
 @end

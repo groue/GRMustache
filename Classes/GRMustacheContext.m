@@ -92,7 +92,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
-- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool;
+- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
 - (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext;
 @end
 
@@ -120,6 +120,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 - (id)valueForKey:(NSString *)key {
 	NSArray *components = [key componentsSeparatedByString:@"/"];
 	
+	// fast path for single component
 	if (components.count == 1) {
 		if ([key isEqualToString:@"."]) {
 			return object;
@@ -134,6 +135,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		return [self valueForKeyComponent:key foundInContext:nil];
 	}
 	
+	// slow path for multiple components
 	GRMustacheContext *context = self;
 	for (NSString *component in components) {
 		if (component.length == 0) {
@@ -157,6 +159,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		}
 		context = [GRMustacheContext contextWithObject:value parent:valueContext];
 	}
+	
 	return context.object;
 }
 
@@ -167,31 +170,29 @@ static NSInteger BOOLPropertyType = NSNotFound;
 }
 
 - (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
-	id value = nil;
-	
 	// value by selector
 	
 	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Object:withRenderer:templateString:", key]);
 	if ([object respondsToSelector:renderingSelector]) {
-		value = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
+		return GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
 			return (NSString *)objc_msgSend(object, renderingSelector, context, renderer, text);
 		});
 	}
 	
 	// value by KVC
 	
-	if (value == nil) {
-		@try {
-			value = [object valueForKey:key];
-		}
-		@catch (NSException *exception) {
-			if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-				[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
-				![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
-			{
-				// that's some exception we are not related to
-				@throw;
-			}
+	id value = nil;
+	
+	@try {
+		value = [object valueForKey:key];
+	}
+	@catch (NSException *exception) {
+		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
+			[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+			![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
+		{
+			// that's some exception we are not related to
+			[exception raise];
 		}
 	}
 	
@@ -201,13 +202,9 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		if (outContext != NULL) {
 			*outContext = self;
 		}
-		BOOL boolValue;
-		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&boolValue]) {
-			if (boolValue) {
-				return [GRYes yes];
-			} else {
-				return [GRNo no];
-			}
+		CFBooleanRef booleanRef;
+		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&booleanRef]) {
+			return (id)booleanRef;
 		}
 		return value;
 	}
@@ -218,18 +215,22 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	return [parent valueForKeyComponent:key foundInContext:outContext];
 }
 
-- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(BOOL *)outBool {
-	// C99 bool type
-	if (CFBooleanGetTypeID() == CFGetTypeID(value)) {
-		if (outBool) {
-			*outBool = CFBooleanGetValue((CFBooleanRef)value);
+- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {
+	if ((CFBooleanRef)value == kCFBooleanTrue ||
+		(CFBooleanRef)value == kCFBooleanFalse)
+	{
+		if (outBooleanRef) {
+			*outBooleanRef = (CFBooleanRef)value;
 		}
 		return YES;
 	}
 	
-	if (![GRMustache strictBooleanMode] && [value isKindOfClass:[NSNumber class]] && [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key]) {
-		if (outBool) {
-			*outBool = [(NSNumber *)value boolValue];
+	if ([value isKindOfClass:[NSNumber class]] &&
+		![GRMustache strictBooleanMode] &&
+		[GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key])
+	{
+		if (outBooleanRef) {
+			*outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
 		}
 		return YES;
 	}

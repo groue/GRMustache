@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for both MacOS and iOS.
 
 It supports the following Mustache features:
 
@@ -32,7 +32,7 @@ Check the repository's tags, the `GRMustacheVersion.h` header, and `RELEASE_NOTE
 
 ### Testing
 
-Open the GRMustache.xcodeproj project, and build the GRMustacheTest target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
+Open the MacOSGRMustache.xcodeproj project, and build the MacOSGRMustache target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
@@ -151,7 +151,7 @@ But let's give some definitions first:
 
 - GRMustache considers *enumerable* all objects conforming to the NSFastEnumeration protocol, but NSDictionary. The most obvious enumerable is NSArray.
 
-- GRMustache considers *false* KVC key misses, and the following values: `nil`, `[NSNull null]`, the empty string `@""`, and `[GRNo no]` which we'll see below in the "Booleans values" section.
+- GRMustache considers *false* KVC key misses, and the following values: `nil`, `[NSNull null]`, `[NSNumber numberWithBool:NO]`, `kCFBooleanFalse`, and the empty string `@""`.
 
 ### Comments `{{!...}}`
 
@@ -195,6 +195,8 @@ Each item becomes the context while being rendered. This is how you iterate over
 When a key is missed at the item level, it is looked into the enclosing context.
 
 #### Lambda sections
+
+**NB: GRMustache currently implements lambda sections with Objective-C blocks. This feature is thus not available until MacOS 10.6, and iOS 4.0.**
 
 If the value is a GRMustacheLambda, the section is rendered with the string returned by a block of code.
 
@@ -316,47 +318,17 @@ when applied to the template:
 
 	<ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>
 
-Booleans Values
----------------
+Boolean Properties
+------------------
 
-There are a few rules to follow to help GRMustache behave correctly regarding booleans:
-
-- Don't use `[NSNumber numberWithBool:]` for controlling boolean sections.
-- Use `[GRNo no]` and `[GRYes yes]` instead.
-- Declare your BOOL properties with the `@property` keyword.
-
-We'll explain each rule below.
-
-### When good old NSNumber drops
-
-`[NSNumber numberWithBool:NO]` is identical to `[NSNumber numberWithInteger:0]`. There is no way, provided with a NSNumber, to tell whether its a false boolean, or a zero integer.
-
-In order to be consistent with implementations of {{ mustache }} in other languages, GRMustache treats `[NSNumber numberWithBool:NO]` as the zero number, and not as false.
-
-That is why you should not use `[NSNumber numberWithBool:]` for controlling boolean sections.
-
-### Introducing GRYes and GRNo
-
-GRMustache provides two singletons for you to use as explicit boolean objects, which you can put directly in your dictionary contexts:
-
-	// [GRYes yes] represents a true value
-	// [GRNo no] represents a false value
-	
-	context = [NSDictionary dictionaryWithObjectsAndKeys:
-	           @"Michael Jackson", @"name",
-	           [GRYes yes], @"dead",
-	           nil];
-
-### BOOL properties
-
-BOOL properties which have been declared with the `@property` keyword are handled by GRMustache:
+GRMustache handles `BOOL` properties:
 
 	@interface Person: NSObject
 	@property BOOL dead;
 	@property NSString *name;
 	@end
 
-In the following template, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only:
+For instance, in the following template, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only:
 
 	{{#persons}}
 	- {{name}} {{#dead}}(RIP){{/dead}}
@@ -369,44 +341,42 @@ If you declare a custom getter for your property, make sure you don't use it in 
 	@end
 
 	{{person}}
-	  {{#dead}}Don't use the isDead getter in templates!{{/dead}}
+	  {{#dead}}GOOD{{/dead}}
+	  {{#isDead}}BAD{{/isDead}}
 	{{/person}}
 
-### In-depth BOOL properties
+### Undeclared BOOL properties
 
-#### Undeclared BOOL properties
-
-Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers:
+Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers, and thus *can not be used for controlling boolean sections*:
 
 	@interface Person: NSObject
 	- (BOOL)dead;	// will be considered as 0 and 1 integers
 	@end
 
-#### Collateral damage: signed characters
+### Collateral damage: signed characters
 
-All properties declared as signed character will be considered as booleans:
+`BOOL` is defined as `signed char` in `<objc/objc.h>`. As a consequence, all properties declared as `char` will be considered as booleans:
 
 	@interface Person: NSObject
 	@property char initial;	// will be considered as boolean
 	@end
 
-We thought that, besides BOOL, it would be pretty rare that you would use a value of such a type in a template. However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties.
+We thought that built-in support for `BOOL` properties was worth this annoyance, since it should be pretty rare  that you would use a value of such a type in a template.
 
-#### Boolean Strict Mode
+However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties:
 
-Enter the boolean strict mode with the following statement:
+Enter the *strict boolean mode* with the following statement, prior to any rendering:
 
 	[GRMustache setStrictBooleanMode:YES];
 
-In strict boolean mode, signed char and BOOL properties will be considered as numbers.
+In strict boolean mode, `char` and `BOOL` properties will be considered as what they really are: numbers.
 
-#### The case for C99 bool
+### The case for C99 bool
 
-You may consider using the unbeloved C99 `bool` type:
+You may consider using the unbeloved C99 `bool` type. They can reliably control boolean sections whatever the boolean mode, and with ou without property declaration.
 
 	@interface Person: NSObject
-	- (bool)dead;   // Works in and out of strict boolean mode
-	                // even without @property declaration
+	- (bool)dead;
 	@end
 
 

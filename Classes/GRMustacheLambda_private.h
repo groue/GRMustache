@@ -22,10 +22,11 @@
 
 #import "GRMustacheLambda.h"
 
-
+#if NS_BLOCKS_AVAILABLE
 @interface GRMustacheLambdaBlockWrapper: NSObject {
 @private
 	GRMustacheLambdaBlock block;
 }
 - (NSString *)renderObject:(id)object fromString:(NSString *)templateString renderer:(GRMustacheRenderer)renderer;
 @end
+#endif

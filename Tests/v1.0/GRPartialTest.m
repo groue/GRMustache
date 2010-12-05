@@ -53,7 +53,7 @@
 }
 
 - (void)testRecursivePartial {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"show"];
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"show"];
 	NSString *result = [self renderObject:context fromResource:@"recursive"];
 	STAssertEqualObjects(result, @"It works!", @"");
 }
