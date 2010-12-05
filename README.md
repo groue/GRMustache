@@ -196,6 +196,8 @@ When a key is missed at the item level, it is looked into the enclosing context.
 
 #### Lambda sections
 
+**NB: GRMustache currently implements lambda sections with Objective-C blocks. This feature is thus not available until MacOS 10.6, and iOS 4.0.**
+
 If the value is a GRMustacheLambda, the section is rendered with the string returned by a block of code.
 
 You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:

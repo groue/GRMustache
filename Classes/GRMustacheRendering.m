@@ -74,7 +74,8 @@
 				}
 			}
 			break;
-			
+
+#if NS_BLOCKS_AVAILABLE
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
 				GRMustacheRenderer renderer = ^(id object){
@@ -95,6 +96,7 @@
 																				renderer:renderer]];
 			}
 			break;
+#endif
 			
 		default:
 			// should not be here
