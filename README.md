@@ -374,10 +374,10 @@ GRMustache provides you with two ways in order to achieve this behavior. The fir
 
 **NB: Lambda blocks are not available until MacOS 10.6, and iOS 4.0.**
 
-You will provide in the context a GRMustacheLambda that you will build with the GRMustacheLambdaBlockMake function. This function takes a block which returns the string that should be rendered, as in the example below:
+You will provide in the context an object built with the GRMustacheLambdaBlockMake function. This function takes a block which returns the string that should be rendered, as in the example below:
 
 	// prepare our link lambda block
-	GRMustacheLambda linkLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id linkLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
 	          [context valueForKey:@"id"],    // id of person comes from current context
@@ -400,7 +400,7 @@ The rendering now goes as usual, by providing objects for template keys:
 Note that lambda blocks can be used for whatever you may find relevant. You may, for instance, implement caching:
 
 	__block NSString *cache = nil;
-	GRMustacheLambda cacheLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id cacheLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 	  if (cache == nil) { cache = [section renderObject:context]; }
 	  return cache;
 	});
