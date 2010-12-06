@@ -20,12 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheSection.h"
 
 #if NS_BLOCKS_AVAILABLE
 typedef NSString *(^GRMustacheRenderer)(id object);
-typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheRenderer, id, NSString *);
+typedef NSString *(^GRMustacheDeprecatedLambdaBlock)(GRMustacheRenderer, id, NSString *);
+typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheSection *, id);
 typedef id GRMustacheLambda;
 
-GRMustacheLambda GRMustacheLambdaMake(GRMustacheLambdaBlock block);
+GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedLambdaBlock block) __attribute__((deprecated));
+GRMustacheLambda GRMustacheLambdaBlockMake(GRMustacheLambdaBlock block);
 #endif

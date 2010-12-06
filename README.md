@@ -198,38 +198,6 @@ When a key is missed at the item level, it is looked into the enclosing context.
 
 Read below "Lambdas and helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
 
-**NB: GRMustache currently implements lambda sections with Objective-C blocks. This feature is thus not available until MacOS 10.6, and iOS 4.0.**
-
-If the value is a GRMustacheLambda, the section is rendered with the string returned by a block of code.
-
-You will build a GRMustacheLambda with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
-
-	// A lambda which renders its section without any special effect:
-	GRMustacheLambda lambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
-	    return renderer(context);
-	});
-
-- `renderer` is a block which renders the inner section with its argument as a context.
-- `context` is the current rendering context.
-- `text` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
-
-You may, for instance, implement caching:
-
-	__block NSString *cache = nil;
-	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
-	  if (cache == nil) { cache = renderer(context); }
-	  return cache;
-	});
-
-You may also implement helper functions:
-
-	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
-	  return [NSString stringWithFormat:
-	          @"<a href=\"%@\">%@</a>",
-	          [context valueForKey:@"url"], // url comes from current context
-	          renderer(context)]            // link text comes from the inner section
-	});
-
 #### Other sections
 
 Otherwise - if the value is not enumerable, false, or lambda - the content of the section is rendered once.
@@ -385,7 +353,7 @@ You may consider using the unbeloved C99 `bool` type. They can reliably control 
 Lambdas and helpers
 -------------------
 
-Consider that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
+Imagine that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
 
 	<ul>
 	  {{#people}}
@@ -437,9 +405,42 @@ Note that lambda blocks can be used for whatever you may find relevant. You may,
 
 ### Helper methods
 
-Another way to execute code when rendering the `link` sections is to have your context implement the `linkSection:withObject:` selector.
+Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withObject:` selector.
 
-You will usually isolate your helper methods from your data, by implementing them is a separate class:
+Now you have two options: either you have your model object implement this helper selector, or you isolate helper methods from your data.
+
+#### Helper selectors as a category of model Objects
+
+If your model object is designed as such:
+
+	@interface DataModel
+	@property NSArray *people;
+	@end
+
+You may declare a category on it:
+
+	@implementation DataModel(GRMustache)
+	- (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
+	  return [NSString stringWithFormat:
+	          @"<a href=\"/people/%@\">%@</a>",
+	          [object valueForKey:@"id"],
+	          [section renderObject:object]];
+	}
+	@end
+
+This mix of data and rendering code is a debatable pattern. You can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories.
+
+Anyway, the rendering can now be done with:
+
+	DataModel *dataModel = ...;
+	[template renderObject:dataModel];
+
+
+#### Isolating helper methods
+
+In order to achieve a stricter MVC separation, one might want to isolate helper methods from data.
+
+GRMustache allows you to do that, too. First declare a container for your helper methods:
 
 	@interface RenderingHelper: NSObject
 	@end
@@ -453,11 +454,12 @@ You will usually isolate your helper methods from your data, by implementing the
 	}
 	@end
 
-Now let's build a rendering context which merges the data and the helper class:
+Now the tricky part is to provide to the template a context which contains both data, and the helper methods. Let's introduce the GRMustacheContext class, whose purpose is helping you do that.
 
+	id dataModel = ...;
 	GRMustacheContext *context = [GRMustacheContext contextWithObjects:
 	                              [GRMustacheHelperTestContext class],
-	                              data,
+	                              dataModel,
 	                              nil];
 
 And now we can render:

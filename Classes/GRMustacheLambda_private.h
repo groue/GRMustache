@@ -33,11 +33,3 @@
 }
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
 @end
-
-#if NS_BLOCKS_AVAILABLE
-@interface GRMustacheLambdaBlockWrapper: GRMustacheLambdaWrapper {
-@private
-	GRMustacheLambdaBlock block;
-}
-@end
-#endif
