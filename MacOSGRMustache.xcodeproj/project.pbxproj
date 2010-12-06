@@ -61,6 +61,7 @@
 		567BB80912AA6E9400E77EF0 /* extended_path in Resources */ = {isa = PBXBuildFile; fileRef = 567BB7FF12AA6E9400E77EF0 /* extended_path */; };
 		567BB80A12AA6E9400E77EF0 /* file_system in Resources */ = {isa = PBXBuildFile; fileRef = 567BB80312AA6E9400E77EF0 /* file_system */; };
 		567BB9A112ABC97A00E77EF0 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB9A012ABC97A00E77EF0 /* GRMustacheHelperTest.m */; };
+		56CB595212AD47C700B1E39A /* GRMustacheLambdaBlockTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -170,6 +171,8 @@
 		567BB9CB12ABD1F800E77EF0 /* GRMustacheSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSection.h; sourceTree = "<group>"; };
 		567BB9D412ABD2A800E77EF0 /* GRMustacheRendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRendering.h; sourceTree = "<group>"; };
 		567BBA6912ABE07500E77EF0 /* GRMustacheContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContext.h; sourceTree = "<group>"; };
+		56CB595012AD47C700B1E39A /* GRMustacheLambdaBlockTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheLambdaBlockTest.h; sourceTree = "<group>"; };
+		56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheLambdaBlockTest.m; sourceTree = "<group>"; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -439,6 +442,8 @@
 			children = (
 				567BB99F12ABC97A00E77EF0 /* GRMustacheHelperTest.h */,
 				567BB9A012ABC97A00E77EF0 /* GRMustacheHelperTest.m */,
+				56CB595012AD47C700B1E39A /* GRMustacheLambdaBlockTest.h */,
+				56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockTest.m */,
 			);
 			path = v1.2;
 			sourceTree = "<group>";
@@ -573,6 +578,7 @@
 				567BB7AA12AA6CFE00E77EF0 /* GRMustacheVariableElement.m in Sources */,
 				567BB7AB12AA6CFE00E77EF0 /* GRMustacheVersion.m in Sources */,
 				567BB9A112ABC97A00E77EF0 /* GRMustacheHelperTest.m in Sources */,
+				56CB595212AD47C700B1E39A /* GRMustacheLambdaBlockTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
