@@ -27,7 +27,7 @@
 
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
-	GRMustacheLambda dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 		dead = YES;
 		return @"foo";
 	});
@@ -42,7 +42,7 @@
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
 	
-	GRMustacheLambda renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 		if (cache == nil) {
 			renderedCalls++;
 			cache = [section renderObject:context];
@@ -50,7 +50,7 @@
 		return cache;
 	});
 	
-	GRMustacheLambda notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 		return section.templateString;
 	});
 	
@@ -78,7 +78,7 @@
 - (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 		return [wrapperTemplate renderObject:context];
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -91,7 +91,7 @@
 
 - (void)testSectionLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 		return (NSString *)nil;
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];

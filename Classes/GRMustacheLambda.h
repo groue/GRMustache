@@ -23,11 +23,11 @@
 #import "GRMustacheSection.h"
 
 #if NS_BLOCKS_AVAILABLE
-typedef NSString *(^GRMustacheRenderer)(id object);
-typedef NSString *(^GRMustacheDeprecatedLambdaBlock)(GRMustacheRenderer, id, NSString *);
-typedef NSString *(^GRMustacheLambdaBlock)(GRMustacheSection *, id);
-typedef id GRMustacheLambda;
+typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection *, id);
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
 
-GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedLambdaBlock block) __attribute__((deprecated));
-GRMustacheLambda GRMustacheLambdaBlockMake(GRMustacheLambdaBlock block);
+typedef NSString *(^GRMustacheRenderer)(id object) __attribute__((deprecated));
+typedef NSString *(^GRMustacheDeprecatedRenderingBlock)(GRMustacheRenderer, id, NSString *) __attribute__((deprecated));
+typedef id GRMustacheLambda __attribute__((deprecated));
+GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedRenderingBlock block) __attribute__((deprecated));
 #endif

@@ -71,20 +71,20 @@
 
 @interface GRMustacheDeprecatedLambdaBlockWrapper: GRMustacheLambdaWrapper {
 @private
-	GRMustacheDeprecatedLambdaBlock block;
+	GRMustacheDeprecatedRenderingBlock block;
 }
-+ (id)lambdaWithBlock:(GRMustacheDeprecatedLambdaBlock)block;
-- (id)initWithBlock:(GRMustacheDeprecatedLambdaBlock)block;
++ (id)lambdaWithBlock:(GRMustacheDeprecatedRenderingBlock)block;
+- (id)initWithBlock:(GRMustacheDeprecatedRenderingBlock)block;
 @end
 
 
 @implementation GRMustacheDeprecatedLambdaBlockWrapper
 
-+ (id)lambdaWithBlock:(GRMustacheDeprecatedLambdaBlock)block {
++ (id)lambdaWithBlock:(GRMustacheDeprecatedRenderingBlock)block {
 	return [[[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(GRMustacheDeprecatedLambdaBlock)theBlock {
+- (id)initWithBlock:(GRMustacheDeprecatedRenderingBlock)theBlock {
 	if ((self = [self init])) {
 		block = [theBlock copy];
 	}
@@ -100,7 +100,7 @@
 }
 
 - (NSString *)description {
-	return @"<GRMustacheLambda>";
+	return @"<GRMustacheDeprecatedLambdaBlockWrapper>";
 }
 
 - (void)dealloc {
@@ -111,27 +111,27 @@
 @end
 
 
-GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedLambdaBlock block) {
+GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedRenderingBlock block) {
 	return [GRMustacheDeprecatedLambdaBlockWrapper lambdaWithBlock:block];
 }
 
 
 @interface GRMustacheLambdaBlockWrapper: GRMustacheLambdaWrapper {
 @private
-	GRMustacheLambdaBlock block;
+	GRMustacheRenderingBlock block;
 }
-+ (id)lambdaWithBlock:(GRMustacheLambdaBlock)block;
-- (id)initWithBlock:(GRMustacheLambdaBlock)block;
++ (id)lambdaWithBlock:(GRMustacheRenderingBlock)block;
+- (id)initWithBlock:(GRMustacheRenderingBlock)block;
 @end
 
 
 @implementation GRMustacheLambdaBlockWrapper
 
-+ (id)lambdaWithBlock:(GRMustacheLambdaBlock)block {
++ (id)lambdaWithBlock:(GRMustacheRenderingBlock)block {
 	return [[(GRMustacheLambdaBlockWrapper *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(GRMustacheLambdaBlock)theBlock {
+- (id)initWithBlock:(GRMustacheRenderingBlock)theBlock {
 	if ((self = [self init])) {
 		block = [theBlock copy];
 	}
@@ -147,7 +147,7 @@ GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedLambdaBlock block) {
 }
 
 - (NSString *)description {
-	return @"<GRMustacheLambda>";
+	return @"<GRMustacheLambdaBlockWrapper>";
 }
 
 - (void)dealloc {
@@ -158,7 +158,7 @@ GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedLambdaBlock block) {
 @end
 
 
-GRMustacheLambda GRMustacheLambdaBlockMake(GRMustacheLambdaBlock block) {
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) {
 	return [GRMustacheLambdaBlockWrapper lambdaWithBlock:block];
 }
 #endif
