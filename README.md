@@ -374,22 +374,24 @@ GRMustache provides you with two ways in order to achieve this behavior. The fir
 
 **NB: Lambda blocks are not available until MacOS 10.6, and iOS 4.0.**
 
-You will provide in the context a GRMustacheLambda that you will build with the GRMustacheLambdaMake function. This function takes a block which returns the string that should be rendered, as in the example below:
+You will provide in the context a GRMustacheLambda that you will build with the GRMustacheLambdaBlockMake function. This function takes a block which returns the string that should be rendered, as in the example below:
 
 	// prepare our link lambda block
-	GRMustacheLambda linkLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
+	GRMustacheLambda linkLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
-	          [context valueForKey:@"id"],  // id of people comes from current context
-	          renderer(context)]            // link text comes from the inner section
+	          [context valueForKey:@"id"],    // id of person comes from current context
+	          [section renderObject:context]] // link text comes from the natural rendering of the inner section
 	});
 
-- `renderer` is a block which renders the inner section with its argument as a context.
+- `section` is an object which is able to render the section, provided with a context object.
 - `context` is the current rendering context.
-- `text` contains the litteral inner section, unrendered : `{{tags}}` will not have been expanded.
 
-The rendering now goes as usual:
+Note that, in case you would need it, the `section` object has a `templateString` property, which contains the litteral inner section, unrendered (`{{tags}}` will not have been expanded).
 
+The rendering now goes as usual, by providing objects for template keys:
+
+	NSArray *people = ...;
 	[template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:
 	                        linkLambda, @"link",
 	                        people, @"people",
@@ -398,33 +400,55 @@ The rendering now goes as usual:
 Note that lambda blocks can be used for whatever you may find relevant. You may, for instance, implement caching:
 
 	__block NSString *cache = nil;
-	GRMustacheLambda cacheLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *text) {
-	  if (cache == nil) { cache = renderer(context); }
+	GRMustacheLambda cacheLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, id context) {
+	  if (cache == nil) { cache = [section renderObject:context]; }
 	  return cache;
 	});
 
 ### Helper methods
 
-Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withObject:` selector.
+Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withObject:` selector (generally, implement a method whose name is the name of the section, to which you append `Section:withObject:`).
 
-Now you have two options: either you have your model object implement this helper selector, or you isolate helper methods from your data.
+Now no block is involved, and this technique works before MacOS 10.6, and iOS 4.0.
 
-#### Helper selectors as a category of model Objects
+Now the question is: which class should implement this helper selector?
+
+You have two options: either you have your model object implement this helper selector, or you isolate helper methods from your data.
+
+#### Helper selectors as a model category
 
 If your model object is designed as such:
 
 	@interface DataModel
-	@property NSArray *people;
+	@property NSArray *people;  // array of Person objects
+	@end
+	
+	@interface Person
+	@property NSString *name;
+	@property NSString *id;
 	@end
 
-You may declare a category on it:
+You can declare the `linkSection:withObject` as a category of an object that will be used as a context.
+
+You may use the Person object itself:
+
+	@implementation Person(GRMustache)
+	- (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
+	  return [NSString stringWithFormat:
+	          @"<a href=\"/people/%@\">%@</a>",
+	          self.id,                         // id comes from self
+	          [section renderObject:object]];  // link text comes from the natural rendering of the inner section
+	}
+	@end
+
+You may also use the root DataModel object:
 
 	@implementation DataModel(GRMustache)
 	- (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
-	          [object valueForKey:@"id"],
-	          [section renderObject:object]];
+	          [object valueForKey:@"id"],      // id of person comes from current context
+	          [section renderObject:object]];  // link text comes from the natural rendering of the inner section
 	}
 	@end
 
@@ -449,18 +473,17 @@ GRMustache allows you to do that, too. First declare a container for your helper
 	+ (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
-	          [object valueForKey:@"id"],
-	          [section renderObject:object]];
+	          [object valueForKey:@"id"],      // id of person comes from current context
+	          [section renderObject:object]];  // link text comes from the natural rendering of the inner section
 	}
 	@end
 
-Now the tricky part is to provide to the template a context which contains both data, and the helper methods. Let's introduce the GRMustacheContext class, whose purpose is helping you do that.
+Here we have written class methods because our helpers don't carry any state. You are free to define helper instances also.
+
+Now let's introduce the GRMustacheContext class. Its role is to help you provide to the template a context which contains both data, and helper methods:
 
 	id dataModel = ...;
-	GRMustacheContext *context = [GRMustacheContext contextWithObjects:
-	                              [GRMustacheHelperTestContext class],
-	                              dataModel,
-	                              nil];
+	id context = [GRMustacheContext contextWithObjects: [RenderingHelper class], dataModel, nil];
 
 And now we can render:
 
