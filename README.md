@@ -409,13 +409,13 @@ Note that lambda blocks can be used for whatever you may find relevant. You may,
 
 Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withObject:` selector (generally, implement a method whose name is the name of the section, to which you append `Section:withObject:`).
 
-Now no block is involved, and this technique works before MacOS 10.6, and iOS 4.0.
+No block is involved, and this technique works before MacOS 10.6, and iOS 4.0.
 
 Now the question is: which class should implement this helper selector?
 
-You have two options: either you have your model object implement this helper selector, or you isolate helper methods from your data.
+You have two options: either you have your model object implement it, or you isolate helper methods from your data.
 
-#### Helper selectors as a model category
+#### Helpers as a model category
 
 If your model object is designed as such:
 
@@ -452,7 +452,7 @@ You may also use the root DataModel object:
 	}
 	@end
 
-This mix of data and rendering code is a debatable pattern. You can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories.
+This mix of data and rendering code in a single class is a debatable pattern. You can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories.
 
 Anyway, the rendering can now be done with:
 
@@ -478,7 +478,7 @@ GRMustache allows you to do that, too. First declare a container for your helper
 	}
 	@end
 
-Here we have written class methods because our helpers don't carry any state. You are free to define helper instances also.
+Here we have written class methods because our helper doesn't carry any state. You are free to define helpers as instance methods, too.
 
 Now let's introduce the GRMustacheContext class. Its role is to help you provide to the template a context which contains both data, and helper methods:
 
