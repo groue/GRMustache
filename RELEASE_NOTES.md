@@ -1,6 +1,17 @@
 GRMustache Release Notes
 ========================
 
+## v1.3.0
+
+Support for block-less Mustache lambdas.
+
+- New classes:
+	- `GRMustacheContext`
+- New functions:
+	- `GRMustacheLambdaBlockMake`
+- Deprecated functions:
+	- `GRMustacheLambdaMake`
+
 ## v1.2.1
 
 - support for SDKs without blocks (MacOS before 10.6, and iOS before 4.0)
