@@ -384,7 +384,9 @@ You will provide in the context an object built with the GRMustacheLambdaBlockMa
 	          [section renderObject:context]] // link text comes from the natural rendering of the inner section
 	});
 
-- `section` is an object which represent the rendered section.
+The block takes two arguments:
+
+- `section` is an object which represents the rendered section.
 - `context` is the current rendering context.
 
 The `[section renderObject:context]` expression evaluates to the rendering of the section with the given context.
