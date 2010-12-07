@@ -21,9 +21,10 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSection.h"
+#import "GRMustacheContext.h"
 
 #if NS_BLOCKS_AVAILABLE
-typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection *, id);
+typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
 
 typedef NSString *(^GRMustacheRenderer)(id object) __attribute__((deprecated));

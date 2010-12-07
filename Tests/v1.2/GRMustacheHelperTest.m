@@ -29,15 +29,15 @@
 
 @implementation GRMustacheHelperTestContext
 
-- (NSString*)boldSection:(GRMustacheSection *)section withObject:(id)object {
-	return [NSString stringWithFormat:@"<b>%@</b>", [section renderObject:object]];
+- (NSString*)boldSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	return [NSString stringWithFormat:@"<b>%@</b>", [section renderObject:context]];
 }
 
-+ (NSString*)linkSection:(GRMustacheSection *)section withObject:(id)object {
++ (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
 	return [NSString stringWithFormat:
 			@"<a href=\"/people/%@\">%@</a>",
-			[object valueForKey:@"id"],
-			[section renderObject:object]];
+			[context valueForKey:@"id"],
+			[section renderObject:context]];
 }
 
 @end

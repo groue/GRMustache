@@ -193,7 +193,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 - (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
 	// value by selector
 	
-	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withObject:", key]);
+	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
 	if ([object respondsToSelector:renderingSelector]) {
 		return [GRMustacheLambdaSelectorWrapper helperWithObject:object selector:renderingSelector];
 	}
