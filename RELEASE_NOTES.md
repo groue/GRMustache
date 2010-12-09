@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.3.1
+
+No more spurious deprecation warnings
+
 ## v1.3.0
 
 Support for block-less Mustache lambdas.
