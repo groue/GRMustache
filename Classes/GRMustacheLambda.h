@@ -28,7 +28,6 @@ typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheCont
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
 
 typedef NSString *(^GRMustacheRenderer)(id object) __attribute__((deprecated));
-typedef NSString *(^GRMustacheDeprecatedRenderingBlock)(GRMustacheRenderer, id, NSString *) __attribute__((deprecated));
 typedef id GRMustacheLambda __attribute__((deprecated));
-GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedRenderingBlock block) __attribute__((deprecated));
+GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) __attribute__((deprecated));
 #endif

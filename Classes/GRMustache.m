@@ -26,6 +26,11 @@
 
 static BOOL strictBooleanMode = NO;
 
+// support for deprecated [GRNo no];
+@interface GRNo()
++ (GRYes *)_no;
+@end
+
 @implementation GRMustache
 
 + (BOOL)strictBooleanMode {
@@ -39,7 +44,7 @@ static BOOL strictBooleanMode = NO;
 + (BOOL)objectIsFalseValue:(id)object {
 	return (object == nil ||
 			object == [NSNull null] ||
-			object == [GRNo no] ||
+			object == [GRNo _no] ||
 			(void *)object == (void *)kCFBooleanFalse ||
 			([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0));
 }

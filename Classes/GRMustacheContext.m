@@ -116,7 +116,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	if (object) {
 		context = [self contextWithObject:object];
 		va_start(argumentList, object);
-		while (eachObject = va_arg(argumentList, id)) {
+		while ((eachObject = va_arg(argumentList, id))) {
 			context = [context contextByAddingObject:eachObject];
 		}
 		va_end(argumentList);

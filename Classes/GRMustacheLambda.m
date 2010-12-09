@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <objc/message.h>
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheRendering.h"
 
@@ -71,20 +72,20 @@
 
 @interface GRMustacheDeprecatedLambdaBlockWrapper: GRMustacheLambdaWrapper {
 @private
-	GRMustacheDeprecatedRenderingBlock block;
+	NSString *(^block)(NSString *(^)(id object), id, NSString *);
 }
-+ (id)lambdaWithBlock:(GRMustacheDeprecatedRenderingBlock)block;
-- (id)initWithBlock:(GRMustacheDeprecatedRenderingBlock)block;
++ (id)lambdaWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
+- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
 @end
 
 
 @implementation GRMustacheDeprecatedLambdaBlockWrapper
 
-+ (id)lambdaWithBlock:(GRMustacheDeprecatedRenderingBlock)block {
++ (id)lambdaWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
 	return [[[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(GRMustacheDeprecatedRenderingBlock)theBlock {
+- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))theBlock {
 	if ((self = [self init])) {
 		block = [theBlock copy];
 	}
@@ -111,7 +112,7 @@
 @end
 
 
-GRMustacheLambda GRMustacheLambdaMake(GRMustacheDeprecatedRenderingBlock block) {
+id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) {
 	return [GRMustacheDeprecatedLambdaBlockWrapper lambdaWithBlock:block];
 }
 

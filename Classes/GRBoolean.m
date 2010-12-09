@@ -27,15 +27,19 @@ static GRYes *yes = nil;
 
 @implementation GRYes
 
-+ (GRYes *)yes {
++ (GRYes *)_yes {
 	if (yes == nil) {
 		yes = [[super allocWithZone:NULL] init];
 	}
 	return yes;
 }
 
++ (GRYes *)yes {
+	return [self _yes];
+}
+
 + (id)allocWithZone:(NSZone *)zone {
-	return [[self yes] retain];
+	return [[self _yes] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -76,15 +80,19 @@ static GRNo *no = nil;
 
 @implementation GRNo
 
-+ (GRNo *)no {
++ (GRNo *)_no {
 	if (no == nil) {
 		no = [[super allocWithZone:NULL] init];
 	}
 	return no;
 }
 
++ (GRNo *)no {
+	return [self _no];
+}
+
 + (id)allocWithZone:(NSZone *)zone {
-	return [[self no] retain];
+	return [[self _no] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
