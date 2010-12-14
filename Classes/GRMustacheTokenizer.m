@@ -210,19 +210,15 @@
 				}
 				tag = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
 				NSArray *newTags = [tag componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
-				NSIndexSet *indexes = [newTags indexesOfObjectsPassingTest:^(id obj, NSUInteger idx, BOOL *stop) {
-					return (BOOL)(((NSString*)obj).length > 0);
-				}];
-				if (indexes.count == 2) {
-					NSUInteger index1 = [indexes firstIndex];
-					NSUInteger index2 = [indexes lastIndex];
-					if (index1 < index2) {
-						self.otag = [newTags objectAtIndex:index1];
-						self.ctag = [newTags objectAtIndex:index2];
-					} else {
-						self.otag = [newTags objectAtIndex:index2];
-						self.ctag = [newTags objectAtIndex:index1];
+				NSMutableArray *nonBlankNewTags = [NSMutableArray array];
+				for (NSString *newTag in newTags) {
+					if (newTag.length > 0) {
+						[nonBlankNewTags addObject:newTag];
 					}
+				}
+				if (nonBlankNewTags.count == 2) {
+					self.otag = [nonBlankNewTags objectAtIndex:0];
+					self.ctag = [nonBlankNewTags objectAtIndex:1];
 				} else {
 					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
 					return;
