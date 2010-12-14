@@ -94,7 +94,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
-- (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext;
+- (id)valueForKeyComponent:(NSString *)key;
 @end
 
 
@@ -153,7 +153,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			}
 			return parent.object;
 		}
-		return [self valueForKeyComponent:key foundInContext:nil];
+		return [self valueForKeyComponent:key];
 	}
 	
 	// slow path for multiple components
@@ -173,12 +173,12 @@ static NSInteger BOOLPropertyType = NSNotFound;
 			}
 			continue;
 		}
-		GRMustacheContext *valueContext = nil;
-		id value = [context valueForKeyComponent:component foundInContext:&valueContext];
+		id value = [context valueForKeyComponent:component];
 		if (value == nil) {
 			return nil;
 		}
-		context = [valueContext contextByAddingObject:value];
+		// further contexts are not in the context stack
+		context = [GRMustacheContext contextWithObject:value];
 	}
 	
 	return context.object;
@@ -190,7 +190,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	[super dealloc];
 }
 
-- (id)valueForKeyComponent:(NSString *)key foundInContext:(GRMustacheContext **)outContext {
+- (id)valueForKeyComponent:(NSString *)key {
 	// value by selector
 	
 	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
@@ -218,9 +218,6 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	// value interpretation
 	
 	if (value != nil) {
-		if (outContext != NULL) {
-			*outContext = self;
-		}
 		CFBooleanRef booleanRef;
 		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&booleanRef]) {
 			return (id)booleanRef;
@@ -231,7 +228,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	// parent value
 	
 	if (parent == nil) { return nil; }
-	return [parent valueForKeyComponent:key foundInContext:outContext];
+	return [parent valueForKeyComponent:key];
 }
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {
