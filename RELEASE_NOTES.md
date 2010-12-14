@@ -1,6 +1,11 @@
 GRMustache Release Notes
 ========================
 
+## v1.3.2
+
+- Bug fixes around extented paths
+- support for SDKs without blocks (MacOS before 10.6, and iOS before 4.0)
+
 ## v1.3.1
 
 No more spurious deprecation warnings
@@ -18,7 +23,7 @@ Support for block-less Mustache lambdas.
 
 ## v1.2.1
 
-- support for SDKs without blocks (MacOS before 10.6, and iOS before 4.0)
+- missed attempt to support for SDKs without blocks (MacOS before 10.6, and iOS before 4.0)
 
 ## v1.2.0
 
