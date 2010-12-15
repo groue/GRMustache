@@ -114,8 +114,7 @@
 			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
 				NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
 				NSString *sectionOpeningTemplateString = currentSectionOpeningToken.templateString;
-				NSString *sectionClosingTemplateString = token.templateString;
-				NSAssert(sectionOpeningTemplateString == sectionClosingTemplateString, @"not implemented");
+				NSAssert(sectionOpeningTemplateString == token.templateString, @"not implemented");
 				NSString *sectionString = [sectionOpeningTemplateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)];
 				GRMustacheSection *section = [GRMustacheSection sectionElementWithName:currentSectionOpeningToken.content
 																				string:sectionString
