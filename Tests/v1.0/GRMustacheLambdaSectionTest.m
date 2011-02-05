@@ -25,6 +25,7 @@
 
 @implementation GRMustacheLambdaSectionTest
 
+#if NS_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
 	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
@@ -37,7 +38,9 @@
 	STAssertEqualObjects(result, @"yay", nil);
 	STAssertEquals(dead, NO, nil);
 }
+#endif
 
+#if NS_BLOCKS_AVAILABLE
 - (void)testSectionsReturningLambdasGetCalledWithText {
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
@@ -74,7 +77,9 @@
 	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
 	STAssertEquals(renderedCalls, 1, @"");
 }
+#endif
 
+#if NS_BLOCKS_AVAILABLE
 - (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
@@ -88,7 +93,9 @@
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
 }
+#endif
 
+#if NS_BLOCKS_AVAILABLE
 - (void)testSectionLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
@@ -98,5 +105,6 @@
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"foobar", nil);
 }
+#endif
 
 @end
