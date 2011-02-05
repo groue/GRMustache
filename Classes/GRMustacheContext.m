@@ -69,7 +69,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	
 	NSMutableDictionary *propertyNames = [classes objectForKey:class];
 	if (propertyNames == nil) {
-		propertyNames = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
+		propertyNames = [NSMutableDictionary dictionaryWithCapacity:4];
 		[classes setObject:propertyNames forKey:class];
 	}
 	
