@@ -41,19 +41,37 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @synthesize encoding;
 
 + (id)templateLoaderWithCurrentWorkingDirectory {
-	return [self templateLoaderWithBaseURL:[NSURL fileURLWithPath:[[NSFileManager defaultManager] currentDirectoryPath] isDirectory:YES]];
+	return [self templateLoaderWithBasePath:[[NSFileManager defaultManager] currentDirectoryPath]];
 }
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateLoaderWithBaseURL:(NSURL *)url {
-	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:nil encoding:NSUTF8StringEncoding] autorelease];
+	return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:nil encoding:NSUTF8StringEncoding] autorelease];
+}
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path {
+	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:nil encoding:NSUTF8StringEncoding] autorelease];
 }
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext {
-	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:ext encoding:NSUTF8StringEncoding] autorelease];
+	return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:ext encoding:NSUTF8StringEncoding] autorelease];
+}
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext {
+	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	return [[[GRMustacheDirectoryTemplateLoader alloc] initWithURL:url extension:ext encoding:encoding] autorelease];
+	return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:ext encoding:encoding] autorelease];
+}
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
+	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:ext encoding:encoding] autorelease];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle {

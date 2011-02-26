@@ -47,6 +47,7 @@
  */
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  Renders a context object from a file template.
  
@@ -61,6 +62,22 @@
  @since v1.0.0
  */
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError;
+#endif
+
+/**
+ Renders a context object from a file template.
+ 
+ @returns A string containing the rendered template
+ @param object A context object used for interpreting Mustache tags
+ @param path The path of the template
+ @param outError If there is an error loading or parsing template and partials, upon return
+ contains an NSError object that describes the problem.
+ 
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ 
+ @since v1.4.0
+ */
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError;
 
 /**
  Renders a context object from a bundle resource template.

@@ -58,7 +58,8 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-- (void)testRenderFromFile {
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+- (void)testRenderFromURL {
 	NSURL *url = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"passenger.conf"];
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 							 @"example.com", @"server",
@@ -66,6 +67,18 @@
 							 @"production", @"stage",
 							 nil];
 	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfURL:url error:nil];
+	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
+}
+#endif
+
+- (void)testRenderFromFile {
+	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"passenger.conf"];
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+							 @"example.com", @"server",
+							 @"/var/www/example.com", @"deploy_to",
+							 @"production", @"stage",
+							 nil];
+	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfFile:path error:nil];
 	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
 

@@ -25,6 +25,7 @@
 
 @implementation GRMustacheLambdaBlockTest
 
+#if NS_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
 	id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
@@ -98,5 +99,6 @@
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"foobar", nil);
 }
+#endif
 
 @end

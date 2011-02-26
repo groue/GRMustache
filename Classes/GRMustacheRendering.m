@@ -39,8 +39,18 @@
 	return [template renderObject:object];
 }
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	if (template == nil) {
+		return nil;
+	}
+	return [template renderObject:object];
+}
+#endif
+
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
 	if (template == nil) {
 		return nil;
 	}

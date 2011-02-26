@@ -23,10 +23,20 @@
 #import "GRMustacheTemplateLoader_private.h"
 
 
-@interface GRMustacheDirectoryTemplateLoader: GRMustacheTemplateLoader {
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+@interface GRMustacheDirectoryURLTemplateLoader: GRMustacheTemplateLoader {
 @private
 	NSURL *url;
 }
 - (id)initWithURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 - (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError;
+@end
+#endif
+
+@interface GRMustacheDirectoryPathTemplateLoader: GRMustacheTemplateLoader {
+@private
+	NSString *path;
+}
+- (id)initWithPath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+- (GRMustacheTemplate *)parseContentsOfFile:(NSString *)templatePath error:(NSError **)outError;
 @end

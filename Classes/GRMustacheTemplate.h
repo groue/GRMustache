@@ -49,6 +49,7 @@
  */
 + (id)parseString:(NSString *)templateString error:(NSError **)outError;
 
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  Parses a template file, and returns a compiled template.
  
@@ -62,6 +63,21 @@
  @since v1.0.0
  */
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
+#endif
+
+/**
+ Parses a template file, and returns a compiled template.
+ 
+ @returns A GRMustacheTemplate instance
+ @param path The path of the template
+ @param outError If there is an error loading or parsing template and partials, upon return
+ contains an NSError object that describes the problem.
+ 
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ 
+ @since v1.4.0
+ */
++ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;
 
 /**
  Parses a bundle resource template, and returns a compiled template.
