@@ -431,9 +431,38 @@ Many objects are in the context and can provide the implementation: the person i
 
 Let's narrow those choices to only two: either you have your model objects implement the `linkSection:withContext:` selector, or you isolate helper methods from your model.
 
+#### Isolating helper methods
+
+In order to achieve a strict MVC separation, one might want to isolate helper methods from data.
+
+GRMustache allows you to do that: first declare a container for your helper methods:
+
+	@interface RenderingHelper: NSObject
+	@end
+	
+	@implementation RenderingHelper
+	+ (NSString*)linkSection:(GRMustacheSection *)section
+	             withContext:(GRMustacheContext *)context
+	{
+	  return [NSString stringWithFormat:
+	          @"<a href=\"/people/%@\">%@</a>",
+	          [context valueForKey:@"id"],      // id of person comes from current context
+	          [section renderObject:context]];  // link text comes from the natural rendering of the inner section
+	}
+	@end
+
+Here we have written class methods because our helper doesn't carry any state. You are free to define helpers as instance methods, too.
+
+And now we can render:
+
+	[template renderObjects:[RenderingHelper class], dataModel];
+
+The `renderObjects:` method takes several context objects. Key-value Coding lookup will start from the last provided object (in the above example, `dataModel`). The `{{#link}}` section of the template will thus be eventually be handled by the RenderingHelper class.
+
+
 #### Helpers as a model category
 
-If your model object is designed as such:
+You may also declare helper methods in categories of your model objects. For instance, if your model object is designed as such:
 
 	@interface DataModel
 	@property NSArray *people;  // array of Person objects
@@ -444,12 +473,12 @@ If your model object is designed as such:
 	@property NSString *id;
 	@end
 
-You can declare the `linkSection:withContext` in a category of those objects.
-
-You may use the Person object itself:
+You can declare the `linkSection:withContext` in a category of Person:
 
 	@implementation Person(GRMustache)
-	- (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	- (NSString*)linkSection:(GRMustacheSection *)section
+	             withContext:(GRMustacheContext *)context
+	{
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
 	          self.id,                          // id comes from self
@@ -457,55 +486,12 @@ You may use the Person object itself:
 	}
 	@end
 
-Or you may use the root DataModel object:
-
-	@implementation DataModel(GRMustache)
-	- (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	  return [NSString stringWithFormat:
-	          @"<a href=\"/people/%@\">%@</a>",
-	          [context valueForKey:@"id"],      // id of person comes from current context
-	          [section renderObject:context]];  // link text comes from the natural rendering of the inner section
-	}
-	@end
-
-The choice is really up to you, considering how much a piece of code can be reused in other contexts.
-
-This mix of data and rendering code in a single class is a debatable pattern. Well, you can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories. Furthermore, a strict MVC separation mechanism is described below.
+This mix of data and rendering code in a single class is a debatable pattern. Well, you can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories. Furthermore, a strict MVC separation mechanism is described above.
 
 Anyway, the rendering can now be done with:
 
 	DataModel *dataModel = ...;
 	[template renderObject:dataModel];
-
-
-#### Isolating helper methods
-
-In order to achieve a stricter MVC separation, one might want to isolate helper methods from data.
-
-GRMustache allows you to do that, too. First declare a container for your helper methods:
-
-	@interface RenderingHelper: NSObject
-	@end
-	
-	@implementation RenderingHelper
-	+ (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	  return [NSString stringWithFormat:
-	          @"<a href=\"/people/%@\">%@</a>",
-	          [context valueForKey:@"id"],      // id of person comes from current context
-	          [section renderObject:context]];  // link text comes from the natural rendering of the inner section
-	}
-	@end
-
-Here we have written class methods because our helper doesn't carry any state. You are free to define helpers as instance methods, too.
-
-Now let's introduce a useful feature of the GRMustacheContext class: providing to the template a context which contains both data, and helper methods:
-
-	id dataModel = ...;
-	GRMustacheContext *context = [GRMustacheContext contextWithObjects: [RenderingHelper class], dataModel, nil];
-
-And now we can render:
-
-	[template renderObject:context];
 
 
 #### Usages of lambdas and helpers

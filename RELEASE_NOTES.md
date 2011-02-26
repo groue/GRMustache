@@ -1,6 +1,13 @@
 GRMustache Release Notes
 ========================
 
+## v1.4.1
+
+- New GRMustacheTemplate method:
+	- `renderObjects:`
+- New GRMustacheSection method:
+	- `renderObjects:`
+
 ## v1.4.0
 
 - iOS 3.0 support
@@ -30,6 +37,7 @@ Support for block-less Mustache lambdas.
 
 - New classes:
 	- `GRMustacheContext`
+	- `GRMustacheSection`
 - New functions:
 	- `GRMustacheLambdaBlockMake`
 - Deprecated functions:
