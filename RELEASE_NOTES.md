@@ -1,6 +1,17 @@
 GRMustache Release Notes
 ========================
 
+## v1.4.0
+
+- iOS 3.0 support
+- New `GRMustacheTemplate` class methods:
+	- `renderObject:fromContentsOfFile:error:`
+	- `parseContentsOfFile:error:`
+- New `GRMustacheTemplateLoader` class methods:
+	- `templateLoaderWithBasePath:`
+	- `templateLoaderWithBasePath:extension:`
+	- `templateLoaderWithBasePath:extension:encoding:`
+
 ## v1.3.3
 
 - Memory bug fix

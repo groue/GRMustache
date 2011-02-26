@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for both MacOS 10.6 and iOS 4.0.
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for MacOS 10.6, iPhoneOS 3.0 and iOS 4.0
 
 It supports the following Mustache features:
 
@@ -55,9 +55,14 @@ The main rendering methods provided by the GRMustacheTemplate class are:
 	                fromString:(NSString *)templateString
 	                     error:(NSError **)outError;
 	
-	// Renders the template loaded from a url.
+	// Renders the template loaded from a url. (from MacOS 10.6 and iOS 4.0)
 	+ (NSString *)renderObject:(id)object
 	         fromContentsOfURL:(NSURL *)url
+	                     error:(NSError **)outError;
+	
+	// Renders the template loaded from a path.
+	+ (NSString *)renderObject:(id)object
+	        fromContentsOfFile:(NSString *)path
 	                     error:(NSError **)outError;
 	
 	// Renders the template loaded from a bundle resource of extension "mustache".
@@ -84,9 +89,13 @@ If you are planning to render the same template multiple times, it is more effic
 	+ (id)parseString:(NSString *)templateString
 	            error:(NSError **)outError;
 	
-	// Loads and parses the template from url.
+	// Loads and parses the template from url. (from MacOS 10.6 and iOS 4.0)
 	+ (id)parseContentsOfURL:(NSURL *)url
 	                   error:(NSError **)outError;
+	
+	// Loads and parses the template from path.
+	+ (id)parseContentsOfFile:(NSString *)path
+	                    error:(NSError **)outError;
 	
 	// Loads and parses the template from a bundle resource of extension "mustache".
 	+ (id)parseResource:(NSString *)name
@@ -244,6 +253,9 @@ Depending on the method which has been used to create the original template, par
 - Relatively to the URL of the including template:
 	- `renderObject:fromContentsOfURL:error:`
 	- `parseContentsOfURL:error:`
+- Relatively to the path of the including template:
+	- `renderObject:fromContentsOfFile:error:`
+	- `parseContentsOfFile:error:`
 
 The "Template loaders" section below will show you more partial loading GRMustache features.
 
@@ -538,17 +550,29 @@ The GRMustacheTemplateLoader class is able to load templates and their partials 
 
 You may instanciate one with the following GRMustacheTemplateLoader class methods:
 
-	// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
+	// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url;
 
-	// Loads templates and partials from a directory, with provided extension, encoded in UTF8
+	// Loads templates and partials from a directory, with provided extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url
 	                      extension:(NSString *)ext;
 
-	// Loads templates and partials from a directory, with provided extension, encoded in provided encoding
+	// Loads templates and partials from a directory, with provided extension, encoded in provided encoding (from MacOS 10.6 and iOS 4.0)
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url
 	                      extension:(NSString *)ext
 	                       encoding:(NSStringEncoding)encoding;
+	
+	// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
+	+ (id)templateLoaderWithBasePath:(NSString *)path;
+
+	// Loads templates and partials from a directory, with provided extension, encoded in UTF8
+	+ (id)templateLoaderWithBasePath:(NSString *)path
+	                       extension:(NSString *)ext;
+
+	// Loads templates and partials from a directory, with provided extension, encoded in provided encoding
+	+ (id)templateLoaderWithBasePath:(NSString *)path
+	                       extension:(NSString *)ext
+	                        encoding:(NSStringEncoding)encoding;
 	
 	// Loads templates and partials from a bundle, with "mustache" extension, encoded in UTF8
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
