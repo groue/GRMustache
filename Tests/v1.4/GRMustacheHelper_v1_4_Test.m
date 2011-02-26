@@ -33,7 +33,7 @@
 	NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:
 						  @"foobaz", @"baz",
 						  nil];
-	return [section renderObjects:context, baz, nil];
+	return [section renderObjects:context, baz];
 }
 
 @end
@@ -48,7 +48,7 @@
 						  @"bar", @"bar",
 						  nil];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result = [template renderObjects:context, data, nil];
+	NSString *result = [template renderObjects:context, data];
 	STAssertEqualObjects(result, @"barfoobaz", nil);
 }
 
