@@ -81,12 +81,50 @@
 	return [self renderContext:[GRMustacheContext contextWithObject:object]];
 }
 
+- (NSString *)renderObjects:(id)object, ... {
+	GRMustacheContext *context = nil;
+	id eachObject;
+	va_list argumentList;
+	if (object) {
+		context = [GRMustacheContext contextWithObject:object];
+		va_start(argumentList, object);
+		while ((eachObject = va_arg(argumentList, id))) {
+			if (eachObject) {
+				context = [context contextByAddingObject:eachObject];
+			}
+		}
+		va_end(argumentList);
+	}
+	return [self renderContext:context];
+}
+
 @end
 
 @implementation GRMustacheSection(Rendering)
 
 - (NSString *)renderObject:(id)object {
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
+	NSMutableString *buffer = [NSMutableString string];
+	for (id<GRMustacheRenderingElement> elem in elems) {
+		[buffer appendString:[elem renderContext:context]];
+	}
+	return buffer;
+}
+
+- (NSString *)renderObjects:(id)object, ... {
+	GRMustacheContext *context = nil;
+	id eachObject;
+	va_list argumentList;
+	if (object) {
+		context = [GRMustacheContext contextWithObject:object];
+		va_start(argumentList, object);
+		while ((eachObject = va_arg(argumentList, id))) {
+			if (eachObject) {
+				context = [context contextByAddingObject:eachObject];
+			}
+		}
+		va_end(argumentList);
+	}
 	NSMutableString *buffer = [NSMutableString string];
 	for (id<GRMustacheRenderingElement> elem in elems) {
 		[buffer appendString:[elem renderContext:context]];
