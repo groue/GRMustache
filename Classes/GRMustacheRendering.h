@@ -40,7 +40,7 @@
  Renders a template with context objects.
  
  @returns A string containing the rendered template
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
+ @param object, ... A comma-separated list of objects used for interpreting Mustache tags
  
  @since v1.4.1
  */
@@ -139,7 +139,7 @@
  Renders a template with context objects.
  
  @returns A string containing the rendered template
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
+ @param object, ... A comma-separated list of objects used for interpreting Mustache tags
  
  @since v1.4.1
  */
