@@ -20,19 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSpecTest.h"
+#import "GRMustacheSpec_v1_4_Test.h"
 #import "YAML.h"
 #import "GRMustacheTemplateLoader_protected.h"
 
 
-@interface GRMustacheSpecTemplateLoader : GRMustacheTemplateLoader {
+@interface GRMustacheSpecTemplateLoader_v1_4 : GRMustacheTemplateLoader {
 	NSDictionary *partialsByName;
 }
 + (id)loaderWithDictionary:(NSDictionary *)partialsByName;
 - (id)initWithDictionary:(NSDictionary *)partialsByName;
 @end
 
-@implementation GRMustacheSpecTemplateLoader
+@implementation GRMustacheSpecTemplateLoader_v1_4
 
 + (id)loaderWithDictionary:(NSDictionary *)partialsByName {
 	return [[[self alloc] initWithDictionary:partialsByName] autorelease];
@@ -65,13 +65,13 @@
 @end
 
 
-@interface GRMustacheSpecTest()
+@interface GRMustacheSpec_v1_4_Test()
 - (void)testModuleNamed:(NSString *)moduleName;
 - (void)testSuiteAtURL:(NSURL *)suiteURL inModuleNamed:(NSString *)moduleName;
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inModuleNamed:(NSString *)moduleName;
 @end
 
-@implementation GRMustacheSpecTest
+@implementation GRMustacheSpec_v1_4_Test
 
 - (void)testMustacheSpec {
 	[self testModuleNamed:@"core"];
@@ -130,10 +130,10 @@
 			[fm createDirectoryAtPath:[templatePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
 			[fm createFileAtPath:templatePath contents:[templateString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 		}
-		loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[NSURL fileURLWithPath:templatesDirectoryPath isDirectory:YES] extension:[baseTemplatePath pathExtension]];
+		loader = [GRMustacheTemplateLoader templateLoaderWithBasePath:templatesDirectoryPath extension:[baseTemplatePath pathExtension]];
 		template = [loader parseTemplateNamed:[baseTemplatePath stringByDeletingPathExtension] error:&error];
 	} else {
-		loader = [GRMustacheSpecTemplateLoader loaderWithDictionary:partials];
+		loader = [GRMustacheSpecTemplateLoader_v1_4 loaderWithDictionary:partials];
 		template = [loader parseString:templateString error:&error];
 	}
 

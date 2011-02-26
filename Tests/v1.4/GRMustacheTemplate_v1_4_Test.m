@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplate_v_1_4_Test.h"
+#import "GRMustacheTemplate_v1_4_Test.h"
 
 
 @implementation GRMustacheTemplate_v1_4_Test
