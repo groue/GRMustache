@@ -496,37 +496,41 @@ Anyway, the rendering can now be done with:
 
 #### Usages of lambdas and helpers
 
-Lambdas and helpers can be used for whatever you may find relevant. We'll base our examples on lambda blocks, but the same patterns apply to helper methods.
+Lambdas and helpers can be used for whatever you may find relevant.
 
 You may localize:
 
-	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+	// {{#NSLocalizedString}}...{{/NSLocalizedString}}
+	+ (NSString *)NSLocalizedStringSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
 	  return NSLocalizedString([section renderObject:context]);
-	});
+	}
 
 You may implement caching:
 
-	__block NSString *cache = nil;
-	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-	  if (cache == nil) { cache = [section renderObject:context]; }
-	  return cache;
-	});
-
-You may render another context:
-
-	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-	  return [section renderObject:[NSDictionary ...]];
-	});
+	// {{#cached}}...{{/cached}}
+	- (NSString *)cachedSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	  if (self.cache == nil) { self.cache = [section renderObject:context]; }
+	  return self.cache;
+	};
 
 You may render an extended context:
 
-	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-	  return [section renderObject:[context contextByAddingObject:[NSDictionary ...]]];
+	// {{#extended}}...{{/extended}}
+	+ (NSString *)extendedSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	  return [section renderObject:[context contextByAddingObject:...]];
+	});
+
+You may render a totally different context:
+
+	// {{#alternative}}...{{/alternative}}
+	+ (NSString *)alternativeSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	  return [section renderObject:[NSDictionary ...]];
 	});
 
 You may implement debugging sections:
 
-	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+	// {{#debug}}...{{/debug}}
+	+ (NSString *)debugSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
 	  NSLog(section.templateString);         // log the unrendered section 
 	  NSLog([section renderObject:context]); // log the rendered section 
 	  return nil;                            // don't render anything
