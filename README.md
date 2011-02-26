@@ -498,7 +498,13 @@ Anyway, the rendering can now be done with:
 
 Lambdas and helpers can be used for whatever you may find relevant. We'll base our examples on lambda blocks, but the same patterns apply to helper methods.
 
-You may, for instance, implement caching:
+You may localize:
+
+	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+	  return NSLocalizedString([section renderObject:context]);
+	});
+
+You may implement caching:
 
 	__block NSString *cache = nil;
 	GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
