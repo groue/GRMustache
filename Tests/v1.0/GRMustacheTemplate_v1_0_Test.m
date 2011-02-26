@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateTest.h"
+#import "GRMustacheTemplate_v1_0_Test.h"
 
 
-@implementation GRMustacheTemplateTest
+@implementation GRMustacheTemplate_v1_0_Test
 
 - (void)testPassenger {
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -70,17 +70,6 @@
 	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
 #endif
-
-- (void)testRenderFromFile {
-	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"passenger.conf"];
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"example.com", @"server",
-							 @"/var/www/example.com", @"deploy_to",
-							 @"production", @"stage",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfFile:path error:nil];
-	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
-}
 
 - (void)testReportsUnclosedSections {
 	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";

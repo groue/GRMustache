@@ -20,8 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
+#import "GRMustacheTemplate_v_1_4_Test.h"
 
 
-@interface GRMustacheTemplateTest : GRMustacheTestBase
+@implementation GRMustacheTemplate_v1_4_Test
+
+- (void)testRenderFromFile {
+	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"passenger.conf"];
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+							 @"example.com", @"server",
+							 @"/var/www/example.com", @"deploy_to",
+							 @"production", @"stage",
+							 nil];
+	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfFile:path error:nil];
+	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
+}
+
 @end
