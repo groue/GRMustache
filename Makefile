@@ -1,6 +1,6 @@
 TEST_TARGET=MacOSGRMustacheTest
-APP_TARGET=MacOSGRMustacheTest
+PROJECT=MacOSGRMustache.xcodeproj
 COMMAND=xcodebuild
 
 default:
-	$(COMMAND) -target $(APP_TARGET) -configuration Debug build
+	$(COMMAND) -project $(PROJECT) -target $(TEST_TARGET) -configuration Debug build
