@@ -20,14 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHelper_v1_3_Test.h"
-#import "GRMustacheContext.h"
+#import "GRMustacheSelectorHelper_v1_3_Test.h"
 
 
-@interface GRMustacheHelper_v1_3_TestContext: NSObject
+@interface GRMustacheSelectorHelper_v1_3_TestContext: NSObject
 @end
 
-@implementation GRMustacheHelper_v1_3_TestContext
+@implementation GRMustacheSelectorHelper_v1_3_TestContext
 
 - (NSString*)boldSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
 	return [NSString stringWithFormat:@"<b>%@</b>", [section renderObject:context]];
@@ -42,11 +41,11 @@
 
 @end
 
-@implementation GRMustacheHelper_v1_3_Test
+@implementation GRMustacheSelectorHelper_v1_3_Test
 
 - (void)testHelperInstanceMethod {
 	NSString *templateString = @"{{#bold}}text{{/bold}}";
-	NSDictionary *context = [[[GRMustacheHelper_v1_3_TestContext alloc] init] autorelease];
+	NSDictionary *context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<b>text</b>", nil);
 }
@@ -60,7 +59,7 @@
 						   nil], @"people",
 						  nil
 						  ];
-	GRMustacheContext *context = [GRMustacheContext contextWithObjects:[GRMustacheHelper_v1_3_TestContext class], data, nil];
+	GRMustacheContext *context = [GRMustacheContext contextWithObjects:[GRMustacheSelectorHelper_v1_3_TestContext class], data, nil];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<ul><li><a href=\"/people/1\">Alan</a></li><li><a href=\"/people/2\">Roger</a></li></ul>", nil);
 }

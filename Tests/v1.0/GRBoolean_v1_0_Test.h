@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
+#import "GRMustachePublicAPITest.h"
 
 
-@interface GRBoolean_v1_0_Test: GRMustacheTestBase
+@interface GRBoolean_v1_0_Test: GRMustachePublicAPITest
 - (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key;
 @end
 

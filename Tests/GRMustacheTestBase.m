@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTestBase.h"
+#import "GRMustacheRendering_private.h"
 
 
 @implementation GRMustacheTestBase

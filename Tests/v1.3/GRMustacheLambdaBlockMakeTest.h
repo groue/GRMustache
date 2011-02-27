@@ -20,36 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHelper_v1_4_Test.h"
-#import "GRMustacheContext.h"
+#import "GRMustachePublicAPITest.h"
 
 
-@interface GRMustacheHelper_v1_4_TestContext: NSObject
-@end
-
-@implementation GRMustacheHelper_v1_4_TestContext
-
-- (NSString*)fooSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:
-						  @"foobaz", @"baz",
-						  nil];
-	return [section renderObjects:context, baz];
-}
-
-@end
-
-@implementation GRMustacheHelper_v1_4_Test
-
-- (void)testMultipleObjectSectionRendering {
-	NSString *templateString = @"{{#foo}}{{bar}}{{baz}}{{/foo}}";
-	id context = [[[GRMustacheHelper_v1_4_TestContext alloc] init] autorelease];
-	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-						  @"baz", @"baz",
-						  @"bar", @"bar",
-						  nil];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result = [template renderObjects:context, data];
-	STAssertEqualObjects(result, @"barfoobaz", nil);
-}
-
+@interface GRMustacheLambdaBlockMakeTest : GRMustachePublicAPITest
 @end

@@ -21,13 +21,13 @@
 // THE SOFTWARE.
 
 #import "GRMustacheLambda.h"
-#import "GRMustacheSection.h"
 
-@interface GRMustacheLambdaWrapper: NSObject
+@protocol GRMustacheHelper
+@required
 - (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section;
 @end
 
-@interface GRMustacheLambdaSelectorWrapper: GRMustacheLambdaWrapper {
+@interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
 	SEL renderingSelector;
 	id object;
 }

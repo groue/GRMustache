@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheContext.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"

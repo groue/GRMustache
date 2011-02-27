@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheBundleTemplateLoader_private.h"
 #import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheTokenizer_private.h"
+#import "GRMustacheError.h"
 
 
 NSString* const GRMustacheDefaultExtension = @"mustache";

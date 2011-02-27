@@ -24,21 +24,12 @@
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheRendering.h"
 
-@implementation GRMustacheLambdaWrapper
-
-- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
-	return @"";
-}
-
-@end
-
-
-@interface GRMustacheLambdaSelectorWrapper()
+@interface GRMustacheSelectorHelper()
 - (id)initWithObject:(id)object selector:(SEL)renderingSelector;
 @end
 
 
-@implementation GRMustacheLambdaSelectorWrapper
+@implementation GRMustacheSelectorHelper
 
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector {
 	return [[[self alloc] initWithObject:object selector:renderingSelector] autorelease];
@@ -70,19 +61,65 @@
 
 #if NS_BLOCKS_AVAILABLE
 
-@interface GRMustacheDeprecatedLambdaBlockWrapper: GRMustacheLambdaWrapper {
+@interface GRMustacheBlockHelper()<GRMustacheHelper>
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+@end
+
+
+@implementation GRMustacheBlockHelper
+
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block {
+	return [[(GRMustacheBlockHelper *)[self alloc] initWithBlock:block] autorelease];
+}
+
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))theBlock {
+	if ((self = [self init])) {
+		block = [theBlock copy];
+	}
+	return self;
+}
+
+- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+	NSString *result = block(section, context);
+	if (result == nil) {
+		return @"";
+	}
+	return result;
+}
+
+- (NSString *)description {
+	return @"<GRMustacheBlockHelper>";
+}
+
+- (void)dealloc {
+	[block release];
+	[super dealloc];
+}
+
+@end
+
+
+id GRMustacheBlockHelperMake(NSString *(^block)(GRMustacheSection* section, id context)) {
+	return [GRMustacheBlockHelper helperWithBlock:block];
+}
+
+
+// =================== DEPRECATED STUFF BELOW ===================
+
+
+@interface GRMustacheDeprecatedBlockHelper1: NSObject<GRMustacheHelper> {
 @private
 	NSString *(^block)(NSString *(^)(id object), id, NSString *);
 }
-+ (id)lambdaWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
++ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
 - (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
 @end
 
 
-@implementation GRMustacheDeprecatedLambdaBlockWrapper
+@implementation GRMustacheDeprecatedBlockHelper1
 
-+ (id)lambdaWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
-	return [[[self alloc] initWithBlock:block] autorelease];
++ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
+	return [[(GRMustacheDeprecatedBlockHelper1 *)[self alloc] initWithBlock:block] autorelease];
 }
 
 - (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))theBlock {
@@ -101,7 +138,7 @@
 }
 
 - (NSString *)description {
-	return @"<GRMustacheDeprecatedLambdaBlockWrapper>";
+	return @"<GRMustacheDeprecatedBlockHelper1>";
 }
 
 - (void)dealloc {
@@ -113,23 +150,23 @@
 
 
 id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) {
-	return [GRMustacheDeprecatedLambdaBlockWrapper lambdaWithBlock:block];
+	return [GRMustacheDeprecatedBlockHelper1 helperWithBlock:block];
 }
 
 
-@interface GRMustacheLambdaBlockWrapper: GRMustacheLambdaWrapper {
+@interface GRMustacheDeprecatedBlockHelper2: NSObject<GRMustacheHelper> {
 @private
 	GRMustacheRenderingBlock block;
 }
-+ (id)lambdaWithBlock:(GRMustacheRenderingBlock)block;
++ (id)helperWithBlock:(GRMustacheRenderingBlock)block;
 - (id)initWithBlock:(GRMustacheRenderingBlock)block;
 @end
 
 
-@implementation GRMustacheLambdaBlockWrapper
+@implementation GRMustacheDeprecatedBlockHelper2
 
-+ (id)lambdaWithBlock:(GRMustacheRenderingBlock)block {
-	return [[(GRMustacheLambdaBlockWrapper *)[self alloc] initWithBlock:block] autorelease];
++ (id)helperWithBlock:(GRMustacheRenderingBlock)block {
+	return [[(GRMustacheDeprecatedBlockHelper2 *)[self alloc] initWithBlock:block] autorelease];
 }
 
 - (id)initWithBlock:(GRMustacheRenderingBlock)theBlock {
@@ -148,7 +185,7 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 }
 
 - (NSString *)description {
-	return @"<GRMustacheLambdaBlockWrapper>";
+	return @"<GRMustacheDeprecatedBlockHelper2>";
 }
 
 - (void)dealloc {
@@ -158,8 +195,9 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 
 @end
 
-
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) {
-	return [GRMustacheLambdaBlockWrapper lambdaWithBlock:block];
+	return [GRMustacheDeprecatedBlockHelper2 helperWithBlock:block];
 }
+
+
 #endif

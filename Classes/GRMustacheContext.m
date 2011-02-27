@@ -29,7 +29,8 @@
 #endif
 
 #import "GRMustache_private.h"
-#import "GRMustacheContext.h"
+#import "GRMustacheConfiguration.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 
 
@@ -117,9 +118,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 		context = [self contextWithObject:object];
 		va_start(argumentList, object);
 		while ((eachObject = va_arg(argumentList, id))) {
-			if (eachObject) {
-				context = [context contextByAddingObject:eachObject];
-			}
+			context = [context contextByAddingObject:eachObject];
 		}
 		va_end(argumentList);
 	} else {
@@ -197,7 +196,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	
 	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
 	if ([object respondsToSelector:renderingSelector]) {
-		return [GRMustacheLambdaSelectorWrapper helperWithObject:object selector:renderingSelector];
+		return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
 	}
 	
 	// value by KVC

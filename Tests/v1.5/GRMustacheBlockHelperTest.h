@@ -20,14 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheContext: NSObject {
-@private
-	id object;
-	GRMustacheContext *parent;
-}
-+ (id)contextWithObject:(id)object __attribute__((deprecated));
-+ (id)contextWithObjects:(id)object, ... __attribute__((deprecated));
-- (GRMustacheContext *)contextByAddingObject:(id)object __attribute__((deprecated));
-- (id)valueForKey:(NSString *)key;
+
+@interface GRMustacheBlockHelperTest : GRMustachePublicAPITest
 @end

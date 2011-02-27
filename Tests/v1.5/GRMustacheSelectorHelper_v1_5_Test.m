@@ -20,14 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheSelectorHelper_v1_5_Test.h"
 
-@interface GRMustacheContext: NSObject {
-@private
-	id object;
-	GRMustacheContext *parent;
+
+@interface GRMustacheSelectorHelper_v1_5_TestContext: NSObject
+@end
+
+@implementation GRMustacheSelectorHelper_v1_5_TestContext
+
+- (NSString*)fooSection:(GRMustacheSection *)section withContext:(id)context {
+	NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:
+						  @"foobaz", @"baz",
+						  nil];
+	return [section renderObjects:context, baz, nil];
 }
-+ (id)contextWithObject:(id)object __attribute__((deprecated));
-+ (id)contextWithObjects:(id)object, ... __attribute__((deprecated));
-- (GRMustacheContext *)contextByAddingObject:(id)object __attribute__((deprecated));
-- (id)valueForKey:(NSString *)key;
+
+@end
+
+@implementation GRMustacheSelectorHelper_v1_5_Test
+
+- (void)testMultipleObjectSectionRendering {
+	NSString *templateString = @"{{#foo}}{{bar}}{{baz}}{{/foo}}";
+	id context = [[[GRMustacheSelectorHelper_v1_5_TestContext alloc] init] autorelease];
+	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+						  @"baz", @"baz",
+						  @"bar", @"bar",
+						  nil];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+	NSString *result = [template renderObjects:context, data, nil];
+	STAssertEqualObjects(result, @"barfoobaz", nil);
+}
+
 @end

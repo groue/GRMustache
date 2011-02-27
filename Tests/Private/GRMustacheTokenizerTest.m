@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTokenizerTest.h"
+#import "GRMustacheError.h"
 
 
 @interface GRMustacheTokenRecorder : NSObject<GRMustacheTokenizerDelegate> {

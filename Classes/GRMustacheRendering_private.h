@@ -24,6 +24,13 @@
 #import "GRMustacheTemplate_private.h"
 
 
+typedef enum {
+	GRMustacheObjectKindTrueValue,
+	GRMustacheObjectKindFalseValue,
+	GRMustacheObjectKindEnumerable,
+	GRMustacheObjectKindLambda,
+} GRMustacheObjectKind;
+
 @class GRMustacheContext;
 
 @protocol GRMustacheRenderingElement
@@ -32,4 +39,7 @@
 @end
 
 @interface GRMustacheTemplate(PrivateRendering)<GRMustacheRenderingElement>
++ (BOOL)objectIsFalseValue:(id)object;
++ (GRMustacheObjectKind)objectKind:(id)object;
 @end
+

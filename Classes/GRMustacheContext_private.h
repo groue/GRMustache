@@ -20,8 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
 
-
-@interface GRMustacheHelper_v1_3_Test : GRMustacheTestBase
+@interface GRMustacheContext: NSObject {
+@private
+	id object;
+	GRMustacheContext *parent;
+}
++ (id)contextWithObject:(id)object;
++ (id)contextWithObjects:(id)object, ...;
+- (GRMustacheContext *)contextByAddingObject:(id)object;
+- (id)valueForKey:(NSString *)key;
 @end

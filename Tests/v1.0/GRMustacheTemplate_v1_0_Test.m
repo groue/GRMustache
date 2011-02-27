@@ -21,6 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplate_v1_0_Test.h"
+#import "GRMustacheError.h"
+#import "GRBoolean.h"
+#import "GRMustacheRendering.h"
 
 
 @implementation GRMustacheTemplate_v1_0_Test

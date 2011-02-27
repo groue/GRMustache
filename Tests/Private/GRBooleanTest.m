@@ -21,7 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRBooleanTest.h"
-#import "GRMustache_private.h"
+#import "GRBoolean.h"
+#import "GRMustacheRendering_private.h"
 
 
 @implementation GRBooleanTest
@@ -32,11 +33,11 @@
 }
 
 - (void)testGRYesIsTrueObject {
-	STAssertEquals([GRMustache objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
+	STAssertEquals([GRMustacheTemplate objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
 }
 
 - (void)testGRNoIsFalseObject {
-	STAssertEquals([GRMustache objectKind:[GRNo no]], GRMustacheObjectKindFalseValue, nil);
+	STAssertEquals([GRMustacheTemplate objectKind:[GRNo no]], GRMustacheObjectKindFalseValue, nil);
 }
 
 @end

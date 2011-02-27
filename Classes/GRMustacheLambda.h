@@ -21,13 +21,23 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSection.h"
-#import "GRMustacheContext.h"
+
+@class GRMustacheContext;
 
 #if NS_BLOCKS_AVAILABLE
-typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
+@interface GRMustacheBlockHelper: NSObject {
+@private
+	NSString *(^block)(GRMustacheSection* section, id context);
+}
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+@end
 
-typedef NSString *(^GRMustacheRenderer)(id object) __attribute__((deprecated));
+// =================== DEPRECATED STUFF BELOW ===================
+
+typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) __attribute__((deprecated));
+
+typedef NSString *(^GRMustacheRenderer)(id object);
 typedef id GRMustacheLambda __attribute__((deprecated));
 GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) __attribute__((deprecated));
 #endif

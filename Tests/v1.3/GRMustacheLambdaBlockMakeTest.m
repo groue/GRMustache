@@ -20,17 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheLambdaSectionTest.h"
+#import "GRMustacheLambdaBlockMakeTest.h"
 
 
-@implementation GRMustacheLambdaSectionTest
+@implementation GRMustacheLambdaBlockMakeTest
 
 #if NS_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
-	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
+	id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		dead = YES;
-		return templateString;
+		return @"foo";
 	});
 	NSString *templateString = @"{{#show}}<li>{{die}}</li>{{/show}}yay";
 	NSDictionary *context = [NSDictionary dictionaryWithObject:dieLambda forKey:@"die"];
@@ -38,23 +38,21 @@
 	STAssertEqualObjects(result, @"yay", nil);
 	STAssertEquals(dead, NO, nil);
 }
-#endif
 
-#if NS_BLOCKS_AVAILABLE
 - (void)testSectionsReturningLambdasGetCalledWithText {
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
 	
-	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
+	id renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = renderer(context);
+			cache = [section renderObject:context];
 		}
 		return cache;
 	});
 	
-	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
-		return templateString;
+	id notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+		return section.templateString;
 	});
 	
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -77,13 +75,11 @@
 	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
 	STAssertEquals(renderedCalls, 1, @"");
 }
-#endif
 
-#if NS_BLOCKS_AVAILABLE
 - (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
+	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		return [wrapperTemplate renderObject:context];
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -93,12 +89,24 @@
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
 }
-#endif
 
-#if NS_BLOCKS_AVAILABLE
+- (void)testSectionLambdasCanRenderExtendedContext {
+	NSString *templateString = @"{{#wrapper}}{{foo}}{{bar}}{{/wrapper}}";
+	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+		return [section renderObject:[context contextByAddingObject:[NSDictionary dictionaryWithObject:@"wrapperbar" forKey:@"bar"]]];
+	});
+	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+							 wrapperLambda, @"wrapper",
+							 @"bar", @"bar",
+							 @"foo", @"foo",
+							 nil];
+	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+	STAssertEqualObjects(result, @"foowrapperbar", nil);
+}
+
 - (void)testSectionLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
-	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
+	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		return (NSString *)nil;
 	});
 	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];

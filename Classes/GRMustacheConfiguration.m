@@ -20,14 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache_private.h"
+#import "GRMustacheConfiguration.h"
 
-@interface GRMustacheContext: NSObject {
-@private
-	id object;
-	GRMustacheContext *parent;
+
+static BOOL strictBooleanMode = NO;
+
+@implementation GRMustache(Configuration)
+
++ (BOOL)strictBooleanMode {
+	return strictBooleanMode;
 }
-+ (id)contextWithObject:(id)object __attribute__((deprecated));
-+ (id)contextWithObjects:(id)object, ... __attribute__((deprecated));
-- (GRMustacheContext *)contextByAddingObject:(id)object __attribute__((deprecated));
-- (id)valueForKey:(NSString *)key;
+
++ (void)setStrictBooleanMode:(BOOL)aBool {
+	strictBooleanMode = aBool;
+}
+
 @end

@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRBoolean.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheSection_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheContext.h"
 #import "GRMustacheLambda_private.h"
-#import "GRMustache_private.h"
 
 
 @implementation GRMustacheTemplate(Rendering)
@@ -89,9 +89,7 @@
 		context = [GRMustacheContext contextWithObject:object];
 		va_start(argumentList, object);
 		while ((eachObject = va_arg(argumentList, id))) {
-			if (eachObject) {
-				context = [context contextByAddingObject:eachObject];
-			}
+			context = [context contextByAddingObject:eachObject];
 		}
 		va_end(argumentList);
 	}
@@ -119,9 +117,7 @@
 		context = [GRMustacheContext contextWithObject:object];
 		va_start(argumentList, object);
 		while ((eachObject = va_arg(argumentList, id))) {
-			if (eachObject) {
-				context = [context contextByAddingObject:eachObject];
-			}
+			context = [context contextByAddingObject:eachObject];
 		}
 		va_end(argumentList);
 	}
@@ -140,7 +136,7 @@
 	id value = [context valueForKey:name];
 	NSMutableString *buffer= [NSMutableString stringWithCapacity:1024];
 	
-	switch([GRMustache objectKind:value]) {
+	switch([GRMustacheTemplate objectKind:value]) {
 		case GRMustacheObjectKindFalseValue:
 			if (inverted) {
 				for (id<GRMustacheRenderingElement> elem in elems) {
@@ -182,7 +178,7 @@
 
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				[buffer appendString:[(GRMustacheLambdaWrapper *)value renderObject:context withSection:self]];
+				[buffer appendString:[(id<GRMustacheHelper>)value renderObject:context withSection:self]];
 			}
 			break;
 			
@@ -196,7 +192,45 @@
 
 @end
 
+// support for deprecated [GRNo no];
+@interface GRNo()
++ (GRNo *)_no;
+@end
+
 @implementation GRMustacheTemplate(PrivateRendering)
+
++ (BOOL)objectIsFalseValue:(id)object {
+	return (object == nil ||
+			object == [NSNull null] ||
+			object == [GRNo _no] ||
+			(void *)object == (void *)kCFBooleanFalse ||
+			([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0));
+}
+
++ (GRMustacheObjectKind)objectKind:(id)object {
+	if ([self objectIsFalseValue:object]) {
+		return GRMustacheObjectKindFalseValue;
+	}
+	
+	if ([object isKindOfClass:[NSDictionary class]])
+	{
+		return GRMustacheObjectKindTrueValue;
+	}
+	
+	if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+	{
+		return GRMustacheObjectKindEnumerable;
+	}
+	
+	// TODO: why can't we test for protocol on iOS?
+	// if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) -> tests fails on iOS
+	if ([object respondsToSelector:@selector(renderObject:withSection:)])
+	{
+		return GRMustacheObjectKindLambda;
+	}
+	
+	return GRMustacheObjectKindTrueValue;
+}
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	if (elems == nil) {
@@ -234,7 +268,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if ([GRMustache objectIsFalseValue:value]) {
+	if ([GRMustacheTemplate objectIsFalseValue:value]) {
 		return @"";
 	}
 	if (raw) {

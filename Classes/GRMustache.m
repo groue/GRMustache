@@ -20,16 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustache.h"
 
 
 static BOOL strictBooleanMode = NO;
-
-// support for deprecated [GRNo no];
-@interface GRNo()
-+ (GRYes *)_no;
-@end
 
 @implementation GRMustache
 
@@ -39,37 +33,6 @@ static BOOL strictBooleanMode = NO;
 
 + (void)setStrictBooleanMode:(BOOL)aBool {
 	strictBooleanMode = aBool;
-}
-
-+ (BOOL)objectIsFalseValue:(id)object {
-	return (object == nil ||
-			object == [NSNull null] ||
-			object == [GRNo _no] ||
-			(void *)object == (void *)kCFBooleanFalse ||
-			([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0));
-}
-
-+ (GRMustacheObjectKind)objectKind:(id)object {
-	if ([self objectIsFalseValue:object]) {
-		return GRMustacheObjectKindFalseValue;
-	}
-	
-	if ([object isKindOfClass:[NSDictionary class]])
-	{
-		return GRMustacheObjectKindTrueValue;
-	}
-	
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
-	{
-		return GRMustacheObjectKindEnumerable;
-	}
-	
-	if ([object isKindOfClass:[GRMustacheLambdaWrapper class]])
-	{
-		return GRMustacheObjectKindLambda;
-	}
-	
-	return GRMustacheObjectKindTrueValue;
 }
 
 @end

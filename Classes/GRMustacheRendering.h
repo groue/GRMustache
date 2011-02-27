@@ -40,9 +40,9 @@
  Renders a template with context objects.
  
  @returns A string containing the rendered template
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags
+ @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
  
- @since v1.4.1
+ @since v1.5.0
  */
 - (NSString *)renderObjects:(id)object, ...;
 @end
@@ -136,16 +136,6 @@
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
 
 /**
- Renders a template with context objects.
- 
- @returns A string containing the rendered template
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags
- 
- @since v1.4.1
- */
-- (NSString *)renderObjects:(id)object, ...;
-
-/**
  Renders a template with a context object.
  
  @returns A string containing the rendered template
@@ -154,6 +144,16 @@
  @since v1.0.0
  */
 - (NSString *)renderObject:(id)object;
+
+/**
+ Renders a template with context objects.
+ 
+ @returns A string containing the rendered template
+ @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
+ 
+ @since v1.5.0
+ */
+- (NSString *)renderObjects:(id)object, ...;
 
 /**
  Renders a template without any context object for interpreting Mustache tags.
