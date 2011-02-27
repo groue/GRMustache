@@ -1,12 +1,18 @@
 GRMustache Release Notes
 ========================
 
-## v1.4.1
+## v1.5.0
 
 - New GRMustacheTemplate method:
 	- `renderObjects:`
 - New GRMustacheSection method:
 	- `renderObjects:`
+- New class:
+	- `GRMustacheBlockHelper`
+- Deprecated class:
+	- `GRMustacheContext`
+- Deprecated function:
+	- `GRMustacheLambdaBlockMake`
 
 ## v1.4.0
 

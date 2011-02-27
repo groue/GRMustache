@@ -6,7 +6,7 @@ GRMustache is an Objective-C implementation of the [Mustache](http://mustache.gi
 It supports the following Mustache features:
 
 - variables
-- sections (boolean, enumerable, inverted, lambda)
+- sections (boolean, enumerable, inverted, helpers)
 - partials (and recursive partials)
 - delimiter changes
 - comments
@@ -203,13 +203,13 @@ Each item becomes the context while being rendered. This is how you iterate over
 
 When a key is missed at the item level, it is looked into the enclosing context.
 
-#### Lambda sections
+#### Helper sections
 
-Read below "Lambdas and helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
+Read below "Helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
 
 #### Other sections
 
-Otherwise - if the value is not enumerable, false, or lambda - the content of the section is rendered once.
+Otherwise - if the value is not enumerable, false, or helper - the content of the section is rendered once.
 
 The value becomes the context while being rendered. This is how you traverse an object hierarchy:
 
@@ -362,8 +362,8 @@ You may consider using the unbeloved C99 `bool` type. They can reliably control 
 	@end
 
 
-Lambdas and helpers
--------------------
+Helpers
+-------
 
 Imagine that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
 
@@ -382,19 +382,18 @@ We expect, as an output, something like:
 
 GRMustache provides you with two ways in order to achieve this behavior. The first one uses Objective-C blocks, the second requires some selectors to be implemented.
 
-### Lambda blocks
+### Block helpers
 
-*Note that lambda blocks are not available until MacOS 10.6, and iOS 4.0.*
+*Note that block helpers are not available until MacOS 10.6, and iOS 4.0.*
 
-You will provide in the context an object built with the GRMustacheLambdaBlockMake function. This function takes a block which returns the string that should be rendered, as in the example below:
+You will provide in the context a GRMustacheBlockHelper instance, built with a block which returns the string that should be rendered:
 
-	// prepare our link lambda block
-	id linkLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+	id linkHelper = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
 	          [context valueForKey:@"id"],    // id of person comes from current context
 	          [section renderObject:context]] // link text comes from the natural rendering of the inner section
-	});
+	}];
 
 The block takes two arguments:
 
@@ -405,11 +404,11 @@ The `[section renderObject:context]` expression evaluates to the rendering of th
 
 In case you would need it, the `section` object has a `templateString` property, which contains the litteral inner section, unrendered (`{{tags}}` will not have been expanded).
 
-The final rendering now goes as usual, by providing objects for template keys, the lambda for the key `link`, and some people for the key `people`:
+The final rendering now goes as usual, by providing objects for template keys, the helper for the key `link`, and some people for the key `people`:
 
 	NSArray *people = ...;
 	[template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:
-	                        linkLambda, @"link",
+	                        linkHelper, @"link",
 	                        people, @"people",
 	                        nil]];
 
@@ -442,7 +441,7 @@ GRMustache allows you to do that: first declare a container for your helper meth
 	
 	@implementation RenderingHelper
 	+ (NSString*)linkSection:(GRMustacheSection *)section
-	             withContext:(GRMustacheContext *)context
+	             withContext:(id)context
 	{
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
@@ -477,7 +476,7 @@ You can declare the `linkSection:withContext` in a category of Person:
 
 	@implementation Person(GRMustache)
 	- (NSString*)linkSection:(GRMustacheSection *)section
-	             withContext:(GRMustacheContext *)context
+	             withContext:(id)context
 	{
 	  return [NSString stringWithFormat:
 	          @"<a href=\"/people/%@\">%@</a>",
@@ -494,21 +493,21 @@ Anyway, the rendering can now be done with:
 	[template renderObject:dataModel];
 
 
-#### Usages of lambdas and helpers
+#### Usages of helpers
 
-Lambdas and helpers can be used for whatever you may find relevant.
+Helpers can be used for whatever you may find relevant.
 
 You may localize:
 
 	// {{#NSLocalizedString}}...{{/NSLocalizedString}}
-	+ (NSString *)NSLocalizedStringSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	+ (NSString *)NSLocalizedStringSection:(GRMustacheSection *)section withContext:(id)context {
 	  return NSLocalizedString([section renderObject:context]);
 	}
 
 You may implement caching:
 
 	// {{#cached}}...{{/cached}}
-	- (NSString *)cachedSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	- (NSString *)cachedSection:(GRMustacheSection *)section withContext:(id)context {
 	  if (self.cache == nil) { self.cache = [section renderObject:context]; }
 	  return self.cache;
 	};
@@ -516,21 +515,21 @@ You may implement caching:
 You may render an extended context:
 
 	// {{#extended}}...{{/extended}}
-	+ (NSString *)extendedSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	  return [section renderObject:[context contextByAddingObject:...]];
+	+ (NSString *)extendedSection:(GRMustacheSection *)section withContext:(id)context {
+	  return [section renderObjects:context, ...];
 	});
 
 You may render a totally different context:
 
 	// {{#alternative}}...{{/alternative}}
-	+ (NSString *)alternativeSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	+ (NSString *)alternativeSection:(GRMustacheSection *)section withContext:(id)context {
 	  return [section renderObject:[NSDictionary ...]];
 	});
 
 You may implement debugging sections:
 
 	// {{#debug}}...{{/debug}}
-	+ (NSString *)debugSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	+ (NSString *)debugSection:(GRMustacheSection *)section withContext:(id)context {
 	  NSLog(section.templateString);         // log the unrendered section 
 	  NSLog([section renderObject:context]); // log the rendered section 
 	  return nil;                            // don't render anything
