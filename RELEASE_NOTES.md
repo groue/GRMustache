@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.5.1
+
+- Memory bug fix
+
 ## v1.5.0
 
 - New GRMustacheTemplate method:
