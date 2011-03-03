@@ -177,10 +177,10 @@
 #pragma mark Private
 
 - (void)start {
-	self.currentElements = [NSMutableArray arrayWithCapacity:20];
-	self.elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+	currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+	elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
 	[elementsStack addObject:currentElements];
-	self.sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+	sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
 }
 
 - (void)finishWithError:(NSError *)theError {
