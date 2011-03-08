@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.5.2
+
+- The `DEBUG` macro has GRMustache raise much less NSUndefinedKeyException
+
 ## v1.5.1
 
 - Memory bug fix
