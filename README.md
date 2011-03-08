@@ -144,12 +144,14 @@ The most obvious objects which support KVC are dictionaries. You may also provid
 	                      fromString:@"Hi {{name}}!"
 	                           error:nil];
 
-GRMustache catches NSUndefinedKeyException:
+A KVC key miss can raise a NSUndefinedKeyException. GRMustache catches those exceptions:
 
-	// doesn't throw, and returns @"Hi !"
+	// doesn't raise, and returns @"Hi !"
 	[GRMustacheTemplate renderObject:[Person personWithName:@"Mom"]
-	                      fromString:@"Hi {{blame}}!"
+	                      fromString:@"Hi {{XXX}}!"
 	                           error:nil];
+
+Those exceptions are part of the regular rendering of a template. Yet, when debugging your project, they may become an annoyance. Try the "Avoid the NSUndefinedKeyException attack" chapter.
 
 Tag types
 ---------
@@ -664,6 +666,20 @@ And finally render:
 	[template render];	// "It works!"
 
 
+Avoid the NSUndefinedKeyException attack
+----------------------------------------
+
+The rendering of a GRMustache template can lead to many NSUndefinedKeyExceptions to be raised, because of the heavy usage of Key-Value Coding.
+
+Those exceptions are nicely handled by GRMustache, and are part of the regular rendering of a template.
+
+Unfortunately, when debugging a project, developers usually set their debugger to stop on every Objective-C exceptions.
+
+GRMustache rendering can thus become a huge annoyance.
+
+If the sentences above exactly describe your problem, smile :-)
+
+Make sure the `DEBUG` macro is globally defined in your project (for instance, add -DDEBUG to the "Other C Flags" setting of your development configuration). GRMustache will then prevent the raising of a great deal of NSUndefinedKeyExceptions.
 
 Errors
 ------

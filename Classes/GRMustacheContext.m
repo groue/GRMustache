@@ -33,6 +33,9 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 
+#ifdef DEBUG
+id silentValueForKey(id object, NSString *key);
+#endif
 
 static NSInteger BOOLPropertyType = NSNotFound;
 
@@ -191,6 +194,10 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	[super dealloc];
 }
 
+- (id)valueForUndefinedKey:(NSString *)key {
+	return nil;
+}
+
 - (id)valueForKeyComponent:(NSString *)key {
 	// value by selector
 	
@@ -204,7 +211,11 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	id value = nil;
 	
 	@try {
+#ifdef DEBUG
+		value = silentValueForKey(object, key);
+#else
 		value = [object valueForKey:key];
+#endif
 	}
 	@catch (NSException *exception) {
 		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
@@ -256,3 +267,86 @@ static NSInteger BOOLPropertyType = NSNotFound;
 }
 
 @end
+
+#ifdef DEBUG
+
+// helper function for silentValueForKey
+id silentValueForUndefinedKey(id self, SEL _cmd, NSString *key) {
+	return nil;
+}
+
+// Generally, this function returns the same result as [object valueForKey:key].
+// 
+// The rendering of a GRMustache template can lead to many
+// NSUndefinedKeyExceptions to be raised.
+//
+// Those exceptions are nicely handled by GRMustache, and are part
+// of the regular rendering of a template.
+//
+// Unfortunately, when debugging a project, developers usually set their
+// debugger to stop on every Objective-C exceptions.
+//
+// GRMustache rendering can thus become a huge annoyance.
+//
+// The purpose of this function is to have the same result as
+// [object valueForKey:key], but instead of letting [NSObject valueForUndefinedKey:]
+// raise an NSUndefinedKeyException, it returns nil instead.
+id silentValueForKey(id object, NSString *key) {
+	// Don't mess with objects that do not conform to NSObject protocol...
+	Class originalClass = [object class];
+	Class rootClass = nil;
+	for (Class superclass = originalClass; superclass; superclass = class_getSuperclass(superclass)) {
+		rootClass = superclass;
+	}
+	if (!class_conformsToProtocol(rootClass, @protocol(NSObject))) {
+		return [object valueForKey:key];
+	}
+	
+	// Don't mess with objects that are not NSObject instances...
+	if (![object isKindOfClass:[NSObject class]]) {
+		return [object valueForKey:key];
+	}
+	
+	// NSDictionary already has the behavior we aim at.
+	// (And it won't let our later magic run, so don't mess with NSDictionary)
+	if ([object isKindOfClass:[NSDictionary class]]) {
+		return [object valueForKey:key];
+	}
+	
+	// Does object provide the same implementation of valueForUndefinedKey: as NSObject?
+	// If it does not, don't mess with it.
+	SEL selector = @selector(valueForUndefinedKey:);
+	IMP rootIMP = method_getImplementation(class_getInstanceMethod([NSObject class], selector));
+	IMP objectIMP = method_getImplementation(class_getInstanceMethod(originalClass, selector));
+	if (rootIMP != objectIMP) {
+		return [object valueForKey:key];
+	}
+	
+	// Now the magic: let's temporarily switch object's class with a subclass
+	// whose implementation for valueForUndefinedKey: just returns nil.
+	id value = nil;
+	const char *silentClassName = [[NSString stringWithFormat:@"GRMustacheSilent%@", originalClass] UTF8String];
+	Class silentClass = objc_lookUpClass(silentClassName);
+	if (silentClass == NULL) {
+		silentClass = objc_allocateClassPair(originalClass, silentClassName, 0);
+		class_addMethod(silentClass, selector, (IMP)silentValueForUndefinedKey, "@@:@");
+		objc_registerClassPair(silentClass);
+	}
+	object->isa = silentClass;
+	
+	// Silently call valueForKey!!!!
+	@try {
+		value = [object valueForKey:key];
+	}
+	@catch (NSException *exception) {
+		// shit happens: restore our object's class and reraise
+		object->isa = originalClass;
+		[exception raise];
+	}
+	
+	// restore our object's class
+	object->isa = originalClass;
+	return value;
+}
+#endif
+
