@@ -323,7 +323,7 @@ id silentValueForKey(id object, NSString *key) {
 	id value = nil;
 	const char *silentClassName = [[NSString stringWithFormat:@"GRMustacheSilent%@", originalClass] UTF8String];
 	Class silentClass = objc_lookUpClass(silentClassName);
-	if (silentClass == NULL) {
+	if (silentClass == nil) {
 		silentClass = objc_allocateClassPair(originalClass, silentClassName, 0);
 		class_addMethod(silentClass, selector, (IMP)silentValueForUndefinedKey, "@@:@");
 		objc_registerClassPair(silentClass);
