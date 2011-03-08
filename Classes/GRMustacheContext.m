@@ -194,10 +194,6 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	[super dealloc];
 }
 
-- (id)valueForUndefinedKey:(NSString *)key {
-	return nil;
-}
-
 - (id)valueForKeyComponent:(NSString *)key {
 	// value by selector
 	
