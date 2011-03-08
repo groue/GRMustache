@@ -679,7 +679,7 @@ GRMustache rendering can thus become a huge annoyance.
 
 If the sentences above exactly describe your problem, smile :-)
 
-Make sure the `DEBUG` macro is globally defined in your project (for instance, add -DDEBUG to the "Other C Flags" setting of your development configuration). GRMustache will then prevent the raising of a great deal of NSUndefinedKeyExceptions.
+Make sure the `DEBUG` macro is globally defined in your project (for instance, add -DDEBUG to the "Other C Flags" setting of your development configuration). GRMustache will then prevent the raising of a great deal of NSUndefinedKeyException. Of course, there is a slight performance hit. But you won't ship with `DEBUG` macro on, will you?
 
 Errors
 ------
