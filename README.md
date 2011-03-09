@@ -151,7 +151,7 @@ A KVC key miss can raise a NSUndefinedKeyException. GRMustache catches those exc
 	                      fromString:@"Hi {{XXX}}!"
 	                           error:nil];
 
-Those exceptions are part of the regular rendering of a template. Yet, when debugging your project, they may become an annoyance. Try the "Avoid the NSUndefinedKeyException attack" chapter below.
+Those exceptions are part of the regular rendering of a template. Yet, when debugging your project, they may become an annoyance. Try the "Avoid the NSUndefinedKeyException attack" section below.
 
 Tag types
 ---------
