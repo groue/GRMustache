@@ -33,6 +33,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 
+#define DEBUG
 #ifdef DEBUG
 id silentValueForKey(id object, NSString *key);
 #endif
@@ -275,24 +276,9 @@ id silentValueForUndefinedKey(id self, SEL _cmd, NSString *key) {
 // [object valueForKey:key], but instead of letting [NSObject valueForUndefinedKey:]
 // raise an NSUndefinedKeyException, it silently returns nil instead.
 id silentValueForKey(id object, NSString *key) {
-	// Don't mess with objects that do not conform to NSObject protocol...
-	Class originalClass = [object class];
-	Class rootClass = nil;
-	for (Class superclass = originalClass; superclass; superclass = class_getSuperclass(superclass)) {
-		rootClass = superclass;
-	}
-	if (!class_conformsToProtocol(rootClass, @protocol(NSObject))) {
-		return [object valueForKey:key];
-	}
-	
-	// NSDictionary already has the behavior we aim at.
-	// (And it won't let our later magic run, so don't mess with NSDictionary)
-	if ([object isKindOfClass:[NSDictionary class]]) {
-		return [object valueForKey:key];
-	}
-	
 	// Does object provide the same implementations of valueForKey: and valueForUndefinedKey: as NSObject?
 	// If it does not, don't mess with it.
+	Class originalClass = [object class];
 	SEL vfukSelector = @selector(valueForUndefinedKey:);
 	SEL vfkSelector = @selector(valueForKey:);
 	if ((class_getMethodImplementation([NSObject class], vfukSelector) !=
