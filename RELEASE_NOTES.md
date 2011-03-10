@@ -7,9 +7,11 @@ The `DEBUG` macro has GRMustache raise much less NSUndefinedKeyException
 
 ## v1.5.1
 
-Memory bug fix
+Bug fixes
 
 ## v1.5.0
+
+**API simplification**
 
 New GRMustacheTemplate method:
 
@@ -33,7 +35,7 @@ Deprecated function (use GRMustacheBlockHelper instead):
 
 ## v1.4.0
 
-iOS 3.0 support
+**iOS 3.0 support**
 
 New `GRMustacheTemplate` methods:
 
@@ -48,19 +50,19 @@ New `GRMustacheTemplateLoader` class methods:
 
 ## v1.3.3
 
-Memory bug fix
+Bug fixes
 
 ## v1.3.2
 
-Bug fixes around extented paths
+Bug fixes
 
 ## v1.3.1
 
-No more spurious deprecation warnings
+Bug fixes
 
 ## v1.3.0
 
-Support for block-less Mustache lambdas.
+**Block-less API for helpers.**
 
 New classes:
 
@@ -77,7 +79,7 @@ Deprecated functions (use GRMustacheLambdaBlockMake instead):
 
 ## v1.2.0
 
-iOS 4.0 support
+**iOS 4.0 support**
 
 Deprecated class (use `[NSNumber numberWithBool:YES]` instead of `[GRYes yes]`):
 
@@ -93,26 +95,23 @@ GRMustacheTemplateLoader subclasses can now rely on an immutable `extension` pro
 
 ## v1.1.5
 
-Memory management bug fixes
+Bug fixes
 
 ## v1.1.4
 
-No more warnings when compiling with LLVM 2.0
+Bug fixes
 
 ## v1.1.3
 
-Noticeable rendering performance improvement.
+**Rendering performance improvement**
 
 ## v1.1.2
 
-Noticeable compiling performance improvement.
+**Template compiling performance improvement**
 
 ## v1.1.1
 
-Bug fixes around extented paths:
-
-- ../.. should base the remaining path on the including context of the including context.
-- A .. suite which rewinds too far should stop the evaluation and render an empty string.
+Bug fixes
 
 ## v1.1.0
 
@@ -123,4 +122,4 @@ New methods:
 
 ## v1.0.0
 
-First versioned release
+**First versioned release**
