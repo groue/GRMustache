@@ -33,7 +33,6 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 
-#define DEBUG
 #ifdef DEBUG
 id silentValueForKey(id object, NSString *key);
 #endif
