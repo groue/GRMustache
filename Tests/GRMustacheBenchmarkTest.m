@@ -22,37 +22,42 @@
 
 #import "GRMustacheBenchmarkTest.h"
 
+@interface GRMustacheBenchmarkTest()
+- (NSString *)templateString;
+- (NSDictionary *)context;
+@end
 
 @implementation GRMustacheBenchmarkTest
 
 - (void)testParsingBenchmark {
-	for (int i=0; i < 50000; i++) {
-		[self parseResource:@"complex_view"];
-	}
+    NSString *templateString = [self templateString];
+    [GRMustacheTemplate parseString:templateString error:nil];
 }
 
 - (void)testRenderingBenchmark {
-	GRMustacheTemplate *template = [self parseResource:@"complex_view"];
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [NSArray arrayWithObjects:
-							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
-																  @"name1", @"name",
-																  [NSNumber numberWithBool:YES], @"current",
-																  [NSDictionary dictionaryWithObject:@"http://item1" forKey:@"url"], @"link",
-																  nil]
-														  forKey:@"item"],
-							  [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
-																  @"name2", @"name",
-																  [NSNumber numberWithBool:NO], @"current",
-																  [NSDictionary dictionaryWithObject:@"http://item2" forKey:@"url"], @"link",
-																  nil]
-														  forKey:@"item"],
-							  nil],
-							 @"list",
-							 nil];
-	for (int i=0; i < 50000; i++) {
-		[template renderObject:context];
-	}
+    NSString *templateString = [self templateString];
+    NSDictionary *context = [self context];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    [template renderObject:context];
+}
+
+#pragma mark Private
+
+- (NSString *)templateString {
+    int doublingCount = 10; // 2^10=1024 sections
+    NSString *baseString = @"{{#items}}item{{item}}{{/items}}";
+    NSMutableString *templateString = [NSMutableString stringWithCapacity:baseString.length * (1 << doublingCount)];
+    [templateString appendString:baseString];
+    for (int i=0; i<doublingCount; i++) { [templateString appendString:templateString]; }
+    return templateString;
+}
+
+- (NSDictionary *)context {
+    int doublingCount = 10; // 2^10=1024 items
+    NSMutableArray *items = [[NSMutableArray arrayWithCapacity:(1 << doublingCount)] retain];
+    [items addObject:[NSMutableDictionary dictionaryWithObject:@"item" forKey:@"item"]];
+    for (int i=0; i<doublingCount; i++) { [items addObjectsFromArray:items]; }
+    return [NSDictionary dictionaryWithObject:items forKey:@"items"];
 }
 
 @end
