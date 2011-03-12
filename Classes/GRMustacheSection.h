@@ -26,9 +26,10 @@
 @interface GRMustacheSection: NSObject {
 @private
 	NSString *name;
-	NSString *templateString;
+	NSString *baseTemplateString;
+    NSRange range;
 	BOOL inverted;
 	NSArray *elems;
 }
-@property (nonatomic, retain, readonly) NSString *templateString;
+@property (nonatomic, readonly) NSString *templateString;
 @end

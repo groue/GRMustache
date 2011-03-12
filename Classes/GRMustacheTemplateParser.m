@@ -113,11 +113,11 @@
 		case GRMustacheTokenTypeSectionClosing:
 			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
 				NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
-				NSString *sectionOpeningTemplateString = currentSectionOpeningToken.templateString;
-				NSAssert(sectionOpeningTemplateString == token.templateString, @"not implemented");
-				NSString *sectionString = [sectionOpeningTemplateString substringWithRange:NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length)];
+				NSAssert(currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
+                NSRange range = NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length);
 				GRMustacheSection *section = [GRMustacheSection sectionElementWithName:currentSectionOpeningToken.content
-																				string:sectionString
+                                                                    baseTemplateString:token.templateString
+                                                                                 range:range
 																			  inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
 																			  elements:currentElements];
 				[sectionOpeningTokenStack removeLastObject];

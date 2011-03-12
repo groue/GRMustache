@@ -25,27 +25,30 @@
 
 @interface GRMustacheSection()
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *templateString;
+@property (nonatomic, retain) NSString *baseTemplateString;
+@property (nonatomic) NSRange range;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSection
-@synthesize templateString;
+@synthesize baseTemplateString;
+@synthesize range;
 @synthesize name;
 @synthesize inverted;
 @synthesize elems;
 
-+ (id)sectionElementWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems {
-	return [[[self alloc] initWithName:name string:templateString inverted:inverted elements:elems] autorelease];
++ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
+	return [[[self alloc] initWithName:name baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
 }
 
-- (id)initWithName:(NSString *)theName string:(NSString *)theTemplateString inverted:(BOOL)theInverted elements:(NSArray *)theElems {
+- (id)initWithName:(NSString *)theName baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems {
 	if ((self = [self init])) {
 		self.name = theName;
-		self.templateString = theTemplateString;
+		self.baseTemplateString = theBaseTemplateString;
+        self.range = theRange;
 		self.inverted = theInverted;
 		self.elems = theElems;
 	}
@@ -54,9 +57,13 @@
 
 - (void)dealloc {
 	[name release];
-	[templateString release];
+	[baseTemplateString release];
 	[elems release];
 	[super dealloc];
+}
+
+- (NSString *)templateString {
+    return [baseTemplateString substringWithRange:range];
 }
 
 

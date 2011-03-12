@@ -24,5 +24,5 @@
 
 
 @interface GRMustacheSection()
-+ (id)sectionElementWithName:(NSString *)name string:(NSString *)templateString inverted:(BOOL)inverted elements:(NSArray *)elems;
++ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
