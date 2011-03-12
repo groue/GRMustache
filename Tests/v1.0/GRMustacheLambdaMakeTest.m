@@ -48,10 +48,11 @@
 	GRMustacheLambda renderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = renderer(context);
+			cache = [renderer(context) retain];
 		}
 		return cache;
 	});
+    [cache release];
 	
 	GRMustacheLambda notRenderedLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
 		return templateString;

@@ -46,10 +46,11 @@
 	GRMustacheBlockHelper *renderedHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = [section renderObject:context];
+			cache = [[section renderObject:context] retain];
 		}
 		return cache;
 	}];
+    [cache release];
 	
 	GRMustacheBlockHelper *notRenderedHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {
 		return section.templateString;

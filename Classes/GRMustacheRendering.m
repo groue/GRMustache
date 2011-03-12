@@ -32,45 +32,60 @@
 @implementation GRMustacheTemplate(Rendering)
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
 	if (template == nil) {
 		return nil;
 	}
-	return [template renderObject:object];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
 }
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
 	if (template == nil) {
 		return nil;
 	}
-	return [template renderObject:object];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
 }
 #endif
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
 	if (template == nil) {
 		return nil;
 	}
-	return [template renderObject:object];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
 	if (template == nil) {
 		return nil;
 	}
-	return [template renderObject:object];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
 	if (template == nil) {
 		return nil;
 	}
-	return [template renderObject:object];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
 }
 
 - (NSString *)render {
@@ -101,15 +116,18 @@
 @implementation GRMustacheSection(Rendering)
 
 - (NSString *)renderObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-	NSMutableString *buffer = [NSMutableString string];
+	NSMutableString *result = [[NSMutableString string] retain];
 	for (id<GRMustacheRenderingElement> elem in elems) {
-		[buffer appendString:[elem renderContext:context]];
+		[result appendString:[elem renderContext:context]];
 	}
-	return buffer;
+    [pool drain];
+	return [result autorelease];
 }
 
 - (NSString *)renderObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheContext *context = nil;
 	id eachObject;
 	va_list argumentList;
@@ -121,11 +139,12 @@
 		}
 		va_end(argumentList);
 	}
-	NSMutableString *buffer = [NSMutableString string];
+	NSMutableString *result = [[NSMutableString string] retain];
 	for (id<GRMustacheRenderingElement> elem in elems) {
-		[buffer appendString:[elem renderContext:context]];
+		[result appendString:[elem renderContext:context]];
 	}
-	return buffer;
+    [pool drain];
+	return [result autorelease];
 }
 
 @end
@@ -133,14 +152,15 @@
 @implementation GRMustacheSection(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	id value = [context valueForKey:name];
-	NSMutableString *buffer= [NSMutableString stringWithCapacity:1024];
+	NSMutableString *result = [[NSMutableString stringWithCapacity:1024] retain];
 	
 	switch([GRMustacheTemplate objectKind:value]) {
 		case GRMustacheObjectKindFalseValue:
 			if (inverted) {
 				for (id<GRMustacheRenderingElement> elem in elems) {
-					[buffer appendString:[elem renderContext:context]];
+					[result appendString:[elem renderContext:context]];
 				}
 			}
 			break;
@@ -149,7 +169,7 @@
 			if (!inverted) {
 				GRMustacheContext *innerContext = [context contextByAddingObject:value];
 				for (id<GRMustacheRenderingElement> elem in elems) {
-					[buffer appendString:[elem renderContext:innerContext]];
+					[result appendString:[elem renderContext:innerContext]];
 				}
 			}
 			break;
@@ -163,14 +183,14 @@
 				}
 				if (empty) {
 					for (id<GRMustacheRenderingElement> elem in elems) {
-						[buffer appendString:[elem renderContext:context]];
+						[result appendString:[elem renderContext:context]];
 					}
 				}
 			} else {
 				for (id object in value) {
 					GRMustacheContext *innerContext = [context contextByAddingObject:object];
 					for (id<GRMustacheRenderingElement> elem in elems) {
-						[buffer appendString:[elem renderContext:innerContext]];
+						[result appendString:[elem renderContext:innerContext]];
 					}
 				}
 			}
@@ -178,7 +198,7 @@
 
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				[buffer appendString:[(id<GRMustacheHelper>)value renderObject:context withSection:self]];
+				[result appendString:[(id<GRMustacheHelper>)value renderObject:context withSection:self]];
 			}
 			break;
 			
@@ -187,7 +207,8 @@
 			NSAssert(NO, nil);
 	}
 	
-	return buffer;
+    [pool drain];
+	return [result autorelease];
 }
 
 @end
@@ -236,11 +257,13 @@
 	if (elems == nil) {
 		return @"";
 	}
-	NSMutableString *buffer = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	NSMutableString *result = [[NSMutableString string] retain];
 	for (id<GRMustacheRenderingElement> elem in elems) {
-		[buffer appendString:[elem renderContext:context]];
+		[result appendString:[elem renderContext:context]];
 	}
-	return buffer;
+    [pool drain];
+	return [result autorelease];
 }
 
 @end

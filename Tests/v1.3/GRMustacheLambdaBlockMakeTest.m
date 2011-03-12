@@ -46,10 +46,11 @@
 	id renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		if (cache == nil) {
 			renderedCalls++;
-			cache = [section renderObject:context];
+			cache = [[section renderObject:context] retain];
 		}
 		return cache;
 	});
+    [cache release];
 	
 	id notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
 		return section.templateString;
