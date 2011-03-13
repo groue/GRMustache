@@ -28,15 +28,17 @@
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheLambda_private.h"
 
+static inline void appendRenderingElementsWithContext(NSMutableString *buffer, NSArray *elems, GRMustacheContext *context) {
+    for (id<GRMustacheRenderingElement> elem in elems) {
+        [buffer appendString:[elem renderContext:context]];
+    }
+}
 
 @implementation GRMustacheTemplate(Rendering)
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
-	if (template == nil) {
-		return nil;
-	}
     NSString *result = [[template renderObject:object] retain];
     [pool drain];
 	return [result autorelease];
@@ -46,9 +48,6 @@
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
-	if (template == nil) {
-		return nil;
-	}
 	NSString *result = [[template renderObject:object] retain];
     [pool drain];
 	return [result autorelease];
@@ -58,9 +57,6 @@
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
-	if (template == nil) {
-		return nil;
-	}
 	NSString *result = [[template renderObject:object] retain];
     [pool drain];
 	return [result autorelease];
@@ -69,10 +65,7 @@
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	NSString *result = [[template renderObject:object] retain];
+    NSString *result = [[template renderObject:object] retain];
     [pool drain];
 	return [result autorelease];
 }
@@ -80,16 +73,13 @@
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
-	if (template == nil) {
-		return nil;
-	}
-	NSString *result = [[template renderObject:object] retain];
+    NSString *result = [[template renderObject:object] retain];
     [pool drain];
 	return [result autorelease];
 }
 
 - (NSString *)render {
-	return [self renderObject:nil];
+	return [self renderContext:nil];
 }
 
 - (NSString *)renderObject:(id)object {
@@ -116,17 +106,15 @@
 @implementation GRMustacheSection(Rendering)
 
 - (NSString *)renderObject:(id)object {
+    NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-	NSMutableString *result = [[NSMutableString string] retain];
-	for (id<GRMustacheRenderingElement> elem in elems) {
-		[result appendString:[elem renderContext:context]];
-	}
+    appendRenderingElementsWithContext(result, elems, [GRMustacheContext contextWithObject:object]);
     [pool drain];
-	return [result autorelease];
+    return result;
 }
 
 - (NSString *)renderObjects:(id)object, ... {
+    NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheContext *context = nil;
 	id eachObject;
@@ -139,12 +127,9 @@
 		}
 		va_end(argumentList);
 	}
-	NSMutableString *result = [[NSMutableString string] retain];
-	for (id<GRMustacheRenderingElement> elem in elems) {
-		[result appendString:[elem renderContext:context]];
-	}
+    appendRenderingElementsWithContext(result, elems, context);
     [pool drain];
-	return [result autorelease];
+    return result;
 }
 
 @end
@@ -152,26 +137,22 @@
 @implementation GRMustacheSection(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
+    NSMutableString *result = nil;
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	id value = [context valueForKey:name];
-	NSMutableString *result = [[NSMutableString stringWithCapacity:1024] retain];
-	
 	switch([GRMustacheTemplate objectKind:value]) {
 		case GRMustacheObjectKindFalseValue:
 			if (inverted) {
-				for (id<GRMustacheRenderingElement> elem in elems) {
-					[result appendString:[elem renderContext:context]];
-				}
+                result = [[NSMutableString string] retain];
+                appendRenderingElementsWithContext(result, elems, context);
 			}
 			break;
 			
 		case GRMustacheObjectKindTrueValue:
 			if (!inverted) {
-				GRMustacheContext *innerContext = [context contextByAddingObject:value];
-				for (id<GRMustacheRenderingElement> elem in elems) {
-					[result appendString:[elem renderContext:innerContext]];
-				}
-			}
+                result = [[NSMutableString string] retain];
+                appendRenderingElementsWithContext(result, elems, [context contextByAddingObject:value]);
+            }
 			break;
 			
 		case GRMustacheObjectKindEnumerable:
@@ -182,33 +163,32 @@
 					break;
 				}
 				if (empty) {
-					for (id<GRMustacheRenderingElement> elem in elems) {
-						[result appendString:[elem renderContext:context]];
-					}
+                    result = [[NSMutableString string] retain];
+                    appendRenderingElementsWithContext(result, elems, context);
 				}
 			} else {
+                result = [[NSMutableString string] retain];
 				for (id object in value) {
-					GRMustacheContext *innerContext = [context contextByAddingObject:object];
-					for (id<GRMustacheRenderingElement> elem in elems) {
-						[result appendString:[elem renderContext:innerContext]];
-					}
+                    appendRenderingElementsWithContext(result, elems, [context contextByAddingObject:object]);
 				}
 			}
 			break;
 
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-				[result appendString:[(id<GRMustacheHelper>)value renderObject:context withSection:self]];
-			}
+                result = [[(id<GRMustacheHelper>)value renderObject:context withSection:self] retain];
+            }
 			break;
 			
 		default:
 			// should not be here
 			NSAssert(NO, nil);
 	}
-	
     [pool drain];
-	return [result autorelease];
+    if (!result) {
+        return @"";
+    }
+    return [result autorelease];
 }
 
 @end
@@ -233,20 +213,17 @@
 		return GRMustacheObjectKindFalseValue;
 	}
 	
-	if ([object isKindOfClass:[NSDictionary class]])
-	{
+	if ([object isKindOfClass:[NSDictionary class]]) {
 		return GRMustacheObjectKindTrueValue;
 	}
 	
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
-	{
+	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
 		return GRMustacheObjectKindEnumerable;
 	}
 	
 	// TODO: why can't we test for protocol on iOS?
 	// if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) -> tests fails on iOS
-	if ([object respondsToSelector:@selector(renderObject:withSection:)])
-	{
+	if ([object respondsToSelector:@selector(renderObject:withSection:)]) {
 		return GRMustacheObjectKindLambda;
 	}
 	
@@ -254,16 +231,11 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-	if (elems == nil) {
-		return @"";
-	}
+    NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	NSMutableString *result = [[NSMutableString string] retain];
-	for (id<GRMustacheRenderingElement> elem in elems) {
-		[result appendString:[elem renderContext:context]];
-	}
+    appendRenderingElementsWithContext(result, elems, context);
     [pool drain];
-	return [result autorelease];
+    return result;
 }
 
 @end
@@ -279,8 +251,7 @@
 @implementation GRMustacheVariableElement(PrivateRendering)
 
 - (NSString *)htmlEscape:(NSString *)string {
-	NSMutableString *result = [NSMutableString stringWithCapacity:5 + ceilf(string.length * 1.1)];
-	[result appendString:string];
+	NSMutableString *result = [NSMutableString stringWithString:string];
 	[result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
 	[result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
 	[result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
