@@ -34,8 +34,53 @@
 #import "GRMustacheLambda_private.h"
 
 #ifdef DEBUG
-id silentValueForKey(id object, NSString *key);
+
+static id silentValueForUndefinedKeyIMP(id self, SEL _cmd, NSString *key) {
+	return nil;
+}
+
+// The purpose of this function is to have the same result as
+// [object valueForKey:key], but instead of letting [NSObject valueForUndefinedKey:]
+// raise an NSUndefinedKeyException, it silently returns nil instead.
+static id silentValueForKey(id object, NSString *key) {
+	// Does object provide the same implementations of valueForKey: and valueForUndefinedKey: as NSObject?
+	// If it does not, don't mess with it.
+	Class originalClass = [object class];
+	SEL vfukSelector = @selector(valueForUndefinedKey:);
+	SEL vfkSelector = @selector(valueForKey:);
+	if ((class_getMethodImplementation([NSObject class], vfukSelector) !=
+		 class_getMethodImplementation(originalClass, vfukSelector))
+		||
+		(class_getMethodImplementation([NSObject class], vfkSelector) !=
+		 class_getMethodImplementation(originalClass, vfkSelector)))
+	{
+		return [object valueForKey:key];
+	}
+	
+	// Now the magic: let's temporarily switch object's class with a subclass
+	// whose implementation for valueForUndefinedKey: just returns nil.
+	const char *silentClassName = [[NSString stringWithFormat:@"GRMustacheSilent%@", originalClass] UTF8String];
+	Class silentClass = objc_lookUpClass(silentClassName);
+	if (silentClass == nil) {
+		silentClass = objc_allocateClassPair(originalClass, silentClassName, 0);
+		class_addMethod(silentClass, vfukSelector, (IMP)silentValueForUndefinedKeyIMP, "@@:@");
+		objc_registerClassPair(silentClass);
+	}
+	object->isa = silentClass;
+	
+	// Silently call valueForKey!!!!
+	@try {
+		id value = [object valueForKey:key];
+		object->isa = originalClass;
+		return value;
+	}
+	@catch (NSException *exception) {
+		object->isa = originalClass;
+		[exception raise];
+	}
+}
 #endif
+
 
 static NSInteger BOOLPropertyType = NSNotFound;
 
@@ -263,53 +308,4 @@ static NSInteger BOOLPropertyType = NSNotFound;
 }
 
 @end
-
-#ifdef DEBUG
-
-// helper function for silentValueForKey
-id silentValueForUndefinedKey(id self, SEL _cmd, NSString *key) {
-	return nil;
-}
-
-// The purpose of this function is to have the same result as
-// [object valueForKey:key], but instead of letting [NSObject valueForUndefinedKey:]
-// raise an NSUndefinedKeyException, it silently returns nil instead.
-id silentValueForKey(id object, NSString *key) {
-	// Does object provide the same implementations of valueForKey: and valueForUndefinedKey: as NSObject?
-	// If it does not, don't mess with it.
-	Class originalClass = [object class];
-	SEL vfukSelector = @selector(valueForUndefinedKey:);
-	SEL vfkSelector = @selector(valueForKey:);
-	if ((class_getMethodImplementation([NSObject class], vfukSelector) !=
-		 class_getMethodImplementation(originalClass, vfukSelector))
-		||
-		(class_getMethodImplementation([NSObject class], vfkSelector) !=
-		 class_getMethodImplementation(originalClass, vfkSelector)))
-	{
-		return [object valueForKey:key];
-	}
-	
-	// Now the magic: let's temporarily switch object's class with a subclass
-	// whose implementation for valueForUndefinedKey: just returns nil.
-	const char *silentClassName = [[NSString stringWithFormat:@"GRMustacheSilent%@", originalClass] UTF8String];
-	Class silentClass = objc_lookUpClass(silentClassName);
-	if (silentClass == nil) {
-		silentClass = objc_allocateClassPair(originalClass, silentClassName, 0);
-		class_addMethod(silentClass, vfukSelector, (IMP)silentValueForUndefinedKey, "@@:@");
-		objc_registerClassPair(silentClass);
-	}
-	object->isa = silentClass;
-	
-	// Silently call valueForKey!!!!
-	@try {
-		id value = [object valueForKey:key];
-		object->isa = originalClass;
-		return value;
-	}
-	@catch (NSException *exception) {
-		object->isa = originalClass;
-		[exception raise];
-	}
-}
-#endif
 
