@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56248D69132CC55F00A86684 /* GRMustacheBenchmarkTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6D912AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m */; };
 		5629DED11319113B0079DE2E /* GRMustacheTemplate_v1_4_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 5629DED01319113B0079DE2E /* GRMustacheTemplate_v1_4_Test.m */; };
 		562BAE26131A1F5E0004EC7B /* GRMustacheSelectorHelper_v1_5_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BAE25131A1F5E0004EC7B /* GRMustacheSelectorHelper_v1_5_Test.m */; };
 		562BAECC131A2AD20004EC7B /* GRMustacheBlockHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BAECB131A2AD20004EC7B /* GRMustacheBlockHelperTest.m */; };
@@ -68,7 +69,6 @@
 		567BB80A12AA6E9400E77EF0 /* file_system in Resources */ = {isa = PBXBuildFile; fileRef = 567BB80312AA6E9400E77EF0 /* file_system */; };
 		567BB9A112ABC97A00E77EF0 /* GRMustacheSelectorHelper_v1_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB9A012ABC97A00E77EF0 /* GRMustacheSelectorHelper_v1_3_Test.m */; };
 		56CB595212AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.m */; };
-		56DEE3C7132B8441007257CF /* GRMustacheBenchmarkTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6D912AA6C4100E77EF0 /* GRMustacheBenchmarkTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -584,7 +584,7 @@
 				562BAECC131A2AD20004EC7B /* GRMustacheBlockHelperTest.m in Sources */,
 				562BAF44131A2F420004EC7B /* GRMustachePublicAPITest.m in Sources */,
 				562BAFE8131A35C50004EC7B /* GRMustacheConfiguration.m in Sources */,
-				56DEE3C7132B8441007257CF /* GRMustacheBenchmarkTest.m in Sources */,
+				56248D69132CC55F00A86684 /* GRMustacheBenchmarkTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
