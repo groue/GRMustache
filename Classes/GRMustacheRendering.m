@@ -34,6 +34,25 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     }
 }
 
+static NSString *renderRenderingElementsWithObjectAndObjectList(NSArray *elems, id object, va_list objectList) {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    GRMustacheContext *context = nil;
+    if (object) {
+        context = [GRMustacheContext contextWithObject:object];
+        id eachObject;
+        va_list objectListCopy;
+        va_copy(objectListCopy, objectList);
+        while ((eachObject = va_arg(objectListCopy, id))) {
+            context = [context contextByAddingObject:eachObject];
+        }
+        va_end(objectListCopy);
+    }
+    appendRenderingElementsWithContext(result, elems, context);
+    [pool drain];
+    return result;
+}
+
 @implementation GRMustacheSection(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
@@ -91,25 +110,6 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     return [result autorelease];
 }
 
-- (NSString *)renderObject:(id)object andObjectList:(va_list)objectList {
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheContext *context = nil;
-    if (object) {
-        context = [GRMustacheContext contextWithObject:object];
-        id eachObject;
-        va_list objectListCopy;
-        va_copy(objectListCopy, objectList);
-        while ((eachObject = va_arg(objectListCopy, id))) {
-            context = [context contextByAddingObject:eachObject];
-        }
-        va_end(objectListCopy);
-    }
-    appendRenderingElementsWithContext(result, elems, context);
-    [pool drain];
-    return result;
-}
-
 @end
 
 // support for deprecated [GRNo no];
@@ -152,25 +152,6 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 - (NSString *)renderContext:(GRMustacheContext *)context {
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    appendRenderingElementsWithContext(result, elems, context);
-    [pool drain];
-    return result;
-}
-
-- (NSString *)renderObject:(id)object andObjectList:(va_list)objectList {
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheContext *context = nil;
-    if (object) {
-        context = [GRMustacheContext contextWithObject:object];
-        id eachObject;
-        va_list objectListCopy;
-        va_copy(objectListCopy, objectList);
-        while ((eachObject = va_arg(objectListCopy, id))) {
-            context = [context contextByAddingObject:eachObject];
-        }
-        va_end(objectListCopy);
-    }
     appendRenderingElementsWithContext(result, elems, context);
     [pool drain];
     return result;
@@ -235,7 +216,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    NSString *result = [renderRenderingElementsWithObjectAndObjectList(template.elems, object, objectList) retain];
     va_end(objectList);
     [pool drain];
 	return [result autorelease];
@@ -264,7 +245,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    NSString *result = [renderRenderingElementsWithObjectAndObjectList(template.elems, object, objectList) retain];
     va_end(objectList);
     [pool drain];
 	return [result autorelease];
@@ -293,7 +274,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    NSString *result = [renderRenderingElementsWithObjectAndObjectList(template.elems, object, objectList) retain];
     va_end(objectList);
     [pool drain];
 	return [result autorelease];
@@ -321,7 +302,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    NSString *result = [renderRenderingElementsWithObjectAndObjectList(template.elems, object, objectList) retain];
     va_end(objectList);
     [pool drain];
 	return [result autorelease];
@@ -349,7 +330,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    NSString *result = [renderRenderingElementsWithObjectAndObjectList(template.elems, object, objectList) retain];
     va_end(objectList);
     [pool drain];
 	return [result autorelease];
@@ -366,7 +347,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 - (NSString *)renderObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [self renderObject:object andObjectList:objectList];
+    NSString *result = renderRenderingElementsWithObjectAndObjectList(elems, object, objectList);
     va_end(objectList);
     return result;
 }
@@ -386,7 +367,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 - (NSString *)renderObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    NSString *result = [self renderObject:object andObjectList:objectList];
+    NSString *result = renderRenderingElementsWithObjectAndObjectList(elems, object, objectList);
     va_end(objectList);
     return result;
 }
