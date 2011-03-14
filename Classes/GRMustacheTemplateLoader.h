@@ -59,7 +59,18 @@
  
  @since v1.4.0
  */
-+ (id)templateLoaderWithBasePath:(NSString *)path;
++ (id)templateLoaderWithBasePath:(NSString *)path __attribute__((deprecated));
+
+/**
+ @returns A GRMustacheTemplateLoader instance
+ @param path The path of a directory
+ 
+ The returned template loader will load templates and partials from the provided directory path,
+ with extension "mustache", encoded in UTF8.
+ 
+ @since v1.6.0
+ */
++ (id)templateLoaderWithDirectory:(NSString *)path;
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -93,7 +104,23 @@
  
  @since v1.4.0
  */
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated));
+
+/**
+ @returns A GRMustacheTemplateLoader instance
+ @param path The path of a directory
+ @param ext The file name extension of loaded templates.
+ 
+ The returned template loader will load templates and partials from the provided directory path,
+ with provided extension, encoded in UTF8.
+ 
+ If the ext parameter is nil, the "mustache" extension will be assumed.
+ 
+ If the ext parameter is the empty string, loaded partials won't have any extension.
+ 
+ @since v1.6.0
+ */
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -129,7 +156,24 @@
  
  @since v1.4.0
  */
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding __attribute__((deprecated));
+
+/**
+ @returns A GRMustacheTemplateLoader instance
+ @param path The path of a directory
+ @param ext The file name extension of loaded templates.
+ @param encoding The encoding of template files.
+ 
+ The returned template loader will load templates and partials from the provided directory path,
+ with provided extension, encoded in provided encoding.
+ 
+ If the ext parameter is nil, the "mustache" extension will be assumed.
+ 
+ If the ext parameter is the empty string, loaded partials won't have any extension.
+ 
+ @since v1.4.0
+ */
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 
 /**
  @returns A GRMustacheTemplateLoader instance

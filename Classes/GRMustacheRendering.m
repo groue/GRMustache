@@ -34,106 +34,6 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     }
 }
 
-@implementation GRMustacheTemplate(Rendering)
-
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    [pool drain];
-	return [result autorelease];
-}
-
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
-	NSString *result = [[template renderObject:object] retain];
-    [pool drain];
-	return [result autorelease];
-}
-#endif
-
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
-	NSString *result = [[template renderObject:object] retain];
-    [pool drain];
-	return [result autorelease];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    [pool drain];
-	return [result autorelease];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    [pool drain];
-	return [result autorelease];
-}
-
-- (NSString *)render {
-	return [self renderContext:nil];
-}
-
-- (NSString *)renderObject:(id)object {
-	return [self renderContext:[GRMustacheContext contextWithObject:object]];
-}
-
-- (NSString *)renderObjects:(id)object, ... {
-	GRMustacheContext *context = nil;
-	id eachObject;
-	va_list argumentList;
-	if (object) {
-		context = [GRMustacheContext contextWithObject:object];
-		va_start(argumentList, object);
-		while ((eachObject = va_arg(argumentList, id))) {
-			context = [context contextByAddingObject:eachObject];
-		}
-		va_end(argumentList);
-	}
-	return [self renderContext:context];
-}
-
-@end
-
-@implementation GRMustacheSection(Rendering)
-
-- (NSString *)renderObject:(id)object {
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    appendRenderingElementsWithContext(result, elems, [GRMustacheContext contextWithObject:object]);
-    [pool drain];
-    return result;
-}
-
-- (NSString *)renderObjects:(id)object, ... {
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheContext *context = nil;
-	id eachObject;
-	va_list argumentList;
-	if (object) {
-		context = [GRMustacheContext contextWithObject:object];
-		va_start(argumentList, object);
-		while ((eachObject = va_arg(argumentList, id))) {
-			context = [context contextByAddingObject:eachObject];
-		}
-		va_end(argumentList);
-	}
-    appendRenderingElementsWithContext(result, elems, context);
-    [pool drain];
-    return result;
-}
-
-@end
-
 @implementation GRMustacheSection(PrivateRendering)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
@@ -191,6 +91,25 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     return [result autorelease];
 }
 
+- (NSString *)renderObject:(id)object andObjectList:(va_list)objectList {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    GRMustacheContext *context = nil;
+    if (object) {
+        context = [GRMustacheContext contextWithObject:object];
+        id eachObject;
+        va_list objectListCopy;
+        va_copy(objectListCopy, objectList);
+        while ((eachObject = va_arg(objectListCopy, id))) {
+            context = [context contextByAddingObject:eachObject];
+        }
+        va_end(objectListCopy);
+    }
+    appendRenderingElementsWithContext(result, elems, context);
+    [pool drain];
+    return result;
+}
+
 @end
 
 // support for deprecated [GRNo no];
@@ -238,6 +157,25 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     return result;
 }
 
+- (NSString *)renderObject:(id)object andObjectList:(va_list)objectList {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    GRMustacheContext *context = nil;
+    if (object) {
+        context = [GRMustacheContext contextWithObject:object];
+        id eachObject;
+        va_list objectListCopy;
+        va_copy(objectListCopy, objectList);
+        while ((eachObject = va_arg(objectListCopy, id))) {
+            context = [context contextByAddingObject:eachObject];
+        }
+        va_end(objectListCopy);
+    }
+    appendRenderingElementsWithContext(result, elems, context);
+    [pool drain];
+    return result;
+}
+
 @end
 
 @implementation GRMustacheTextElement(PrivateRendering)
@@ -269,6 +207,188 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 		return [value description];
 	}
 	return [self htmlEscape:[value description]];
+}
+
+@end
+
+@implementation GRMustacheTemplate(Rendering)
+
+// deprecated
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderString:(NSString *)templateString error:(NSError **)outError withObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderString:(NSString *)templateString error:(NSError **)outError withObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    va_end(objectList);
+    [pool drain];
+	return [result autorelease];
+}
+
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+// deprecated
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderContentsOfURL:(NSURL *)url error:(NSError **)outError withObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderContentsOfURL:(NSURL *)url error:(NSError **)outError withObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    va_end(objectList);
+    [pool drain];
+	return [result autorelease];
+}
+#endif
+
+// deprecated
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderContentsOfFile:(NSString *)path error:(NSError **)outError withObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
+	NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderContentsOfFile:(NSString *)path error:(NSError **)outError withObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    va_end(objectList);
+    [pool drain];
+	return [result autorelease];
+}
+
+// deprecated
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError withObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError withObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    va_end(objectList);
+    [pool drain];
+	return [result autorelease];
+}
+
+// deprecated
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError withObject:(id)object {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+    NSString *result = [[template renderObject:object] retain];
+    [pool drain];
+	return [result autorelease];
+}
+
++ (NSString *)renderResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError withObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [[template renderObject:object andObjectList:objectList] retain];
+    va_end(objectList);
+    [pool drain];
+	return [result autorelease];
+}
+
+- (NSString *)render {
+	return [self renderContext:nil];
+}
+
+- (NSString *)renderObject:(id)object {
+	return [self renderContext:[GRMustacheContext contextWithObject:object]];
+}
+
+- (NSString *)renderObjects:(id)object, ... {
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [self renderObject:object andObjectList:objectList];
+    va_end(objectList);
+    return result;
+}
+
+@end
+
+@implementation GRMustacheSection(Rendering)
+
+- (NSString *)renderObject:(id)object {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    appendRenderingElementsWithContext(result, elems, [GRMustacheContext contextWithObject:object]);
+    [pool drain];
+    return result;
+}
+
+- (NSString *)renderObjects:(id)object, ... {
+    va_list objectList;
+    va_start(objectList, object);
+    NSString *result = [self renderObject:object andObjectList:objectList];
+    va_end(objectList);
+    return result;
 }
 
 @end

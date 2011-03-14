@@ -41,7 +41,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @synthesize encoding;
 
 + (id)templateLoaderWithCurrentWorkingDirectory {
-	return [self templateLoaderWithBasePath:[[NSFileManager defaultManager] currentDirectoryPath]];
+	return [self templateLoaderWithDirectory:[[NSFileManager defaultManager] currentDirectoryPath]];
 }
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
@@ -50,7 +50,12 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 #endif
 
+// deprecated
 + (id)templateLoaderWithBasePath:(NSString *)path {
+	return [self templateLoaderWithDirectory:path];
+}
+
++ (id)templateLoaderWithDirectory:(NSString *)path {
 	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:nil encoding:NSUTF8StringEncoding] autorelease];
 }
 
@@ -60,7 +65,12 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 #endif
 
+// deprecated
 + (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext {
+	return [self templateLoaderWithDirectory:path extension:ext];
+}
+
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext {
 	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
@@ -70,7 +80,12 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 #endif
 
+// deprecated
 + (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
+	return [self templateLoaderWithDirectory:path extension:ext encoding:encoding];
+}
+
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
 	return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:ext encoding:encoding] autorelease];
 }
 

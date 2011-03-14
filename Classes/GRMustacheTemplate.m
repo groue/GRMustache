@@ -50,7 +50,7 @@
 #endif
 
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError {
-	id loader = [GRMustacheTemplateLoader templateLoaderWithBasePath:[path stringByDeletingLastPathComponent] extension:[path pathExtension]];
+	id loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension]];
 	NSAssert([loader isKindOfClass:[GRMustacheDirectoryPathTemplateLoader class]], nil);
 	return [(GRMustacheDirectoryPathTemplateLoader *)loader parseContentsOfFile:path error:outError];
 }
