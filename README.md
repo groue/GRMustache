@@ -164,6 +164,8 @@ But let's give some definitions first:
 
 - GRMustache considers *false* KVC key misses, and the following values: `nil`, `[NSNull null]`, `[NSNumber numberWithBool:NO]`, `kCFBooleanFalse`, and the empty string `@""`.
 
+The topic of booleans is not trivial. Check the [Booleans](https://github.com/groue/GRMustache/wiki/Booleans) wiki page.
+
 ### Comments `{{!...}}`
 
 Comments tags are not rendered.
@@ -191,6 +193,8 @@ Sections are rendered differently, depending on the value for key `name` in the 
 #### False sections
 
 If the value is *false*, the section is not rendered.
+
+The topic of booleans is not trivial. Check the [Booleans](https://github.com/groue/GRMustache/wiki/Booleans) wiki page.
 
 #### Enumerable sections
 
@@ -301,68 +305,6 @@ renders:
 when applied to the template:
 
 	<ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>
-
-Boolean Properties
-------------------
-
-GRMustache handles `BOOL` properties:
-
-	@interface Person: NSObject
-	@property BOOL dead;
-	@property NSString *name;
-	@end
-
-For instance, in the following template, GRMustache would process the `dead` boolean property as expected, and display "RIP" next to dead people only:
-
-	{{#persons}}
-	- {{name}} {{#dead}}(RIP){{/dead}}
-	{{/persons}}
-
-If you declare a custom getter for your property, make sure you don't use it in the template:
-
-	@interface Person: NSObject
-	@property (getter=isDead) BOOL dead;
-	@end
-
-	{{person}}
-	  {{#dead}}GOOD{{/dead}}
-	  {{#isDead}}BAD{{/isDead}}
-	{{/person}}
-
-### Undeclared BOOL properties
-
-Undeclared BOOL properties, that is to say: selectors implemented without corresponding `@property` in some `@interface` block, will be considered as numbers, and thus *can not be used for controlling boolean sections*:
-
-	@interface Person: NSObject
-	- (BOOL)dead;	// will be considered as 0 and 1 integers
-	@end
-
-### Collateral damage: signed characters
-
-`BOOL` is defined as `signed char` in `<objc/objc.h>`. As a consequence, all properties declared as `char` will be considered as booleans:
-
-	@interface Person: NSObject
-	@property char initial;	// will be considered as boolean
-	@end
-
-We thought that built-in support for `BOOL` properties was worth this annoyance, since it should be pretty rare  that you would use a value of such a type in a template.
-
-However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties:
-
-Enter the *strict boolean mode* with the following statement, prior to any rendering:
-
-	[GRMustache setStrictBooleanMode:YES];
-
-In strict boolean mode, `char` and `BOOL` properties will be considered as what they really are: numbers.
-
-### The case for C99 bool
-
-You may consider using the unbeloved C99 `bool` type. They can reliably control boolean sections whatever the boolean mode, and with ou without property declaration.
-
-	@interface Person: NSObject
-	- (bool)dead;
-	@end
-
 
 Helpers
 -------
