@@ -380,11 +380,12 @@ static NSInteger BOOLPropertyType = NSNotFound;
             silentObjects = [NSMutableSet set];
             [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheSilentObjects];
         }
-        [silentObjects addObject:[NSValue valueWithPointer:object]];
+        NSValue *objectPointer = [NSValue valueWithPointer:object];
+        [silentObjects addObject:objectPointer];
 #endif
 		value = [object valueForKey:key];
 #ifdef DEBUG
-        [silentObjects removeObject:object];
+        [silentObjects removeObject:objectPointer];
 #endif
 	}
 	@catch (NSException *exception) {
