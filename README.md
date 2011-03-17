@@ -37,9 +37,13 @@ GRMustache versioning policy complies to the one defined by the [Apache APR](htt
 
 ### Testing
 
-Open the MacOSGRMustache.xcodeproj project, and build the MacOSGRMustache target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
+Open the MacOSGRMustache.xcodeproj project, and build the MacOSGRMustacheTest target. Tests pass if the build succeeds. You may also run the `make` command from the Terminal.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
+
+### Advanced topics
+
+This README file provides with basic GRMustache documentation. Check out the [wiki](https://github.com/groue/GRMustache/wiki) for discussions on some more advanced topics.
 
 Simple example
 --------------
