@@ -151,7 +151,7 @@ A KVC key miss can raise a NSUndefinedKeyException. GRMustache catches those exc
 	                      fromString:@"Hi {{XXX}}!"
 	                           error:nil];
 
-Those exceptions are part of the regular rendering of a template. Yet, when debugging your project, they may become an annoyance. Try the "Avoid the NSUndefinedKeyException attack" section below.
+Those exceptions are part of the regular rendering of a template. Yet, when debugging your project, they may become an annoyance. Check the [Avoid the NSUndefinedKeyException attack](https://github.com/groue/GRMustache/wiki/Avoid-the-NSUndefinedKeyException-attack) wiki page.
 
 Tag types
 ---------
@@ -607,21 +607,6 @@ And finally render:
 
 	[template render];	// "It works!"
 
-
-Avoid the NSUndefinedKeyException attack
-----------------------------------------
-
-The rendering of a GRMustache template can lead to many NSUndefinedKeyExceptions to be raised, because of the heavy usage of Key-Value Coding.
-
-Those exceptions are nicely handled by GRMustache, and are part of the regular rendering of a template.
-
-Unfortunately, when debugging a project, developers usually set their debugger to stop on every Objective-C exceptions.
-
-GRMustache rendering can thus become a huge annoyance.
-
-If the sentences above exactly describe your problem, smile :-)
-
-Make sure the `DEBUG` macro is globally defined in your project (for instance, add -DDEBUG to the "Other C Flags" setting of your development configuration). GRMustache will then prevent the raising of a great deal of NSUndefinedKeyException. Of course, there is a slight performance hit. But you won't ship with `DEBUG` macro on, will you?
 
 Errors
 ------
