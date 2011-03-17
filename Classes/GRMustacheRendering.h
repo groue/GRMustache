@@ -63,31 +63,7 @@
  
  @since v1.0.0
  */
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError __attribute__((deprecated));
-
-/**
- Renders a template string with a context object.
- 
- @returns A string containing the rendered template
- @param templateString The template string
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object A context object used for interpreting Mustache tags
- 
- @since v1.6.0
- */
-+ (NSString *)renderString:(NSString *)templateString error:(NSError **)outError withObject:(id)object;
-
-/**
- Renders a template string with context objects.
- 
- @returns A string containing the rendered template
- @param templateString The template string
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
- 
- @since v1.6.0
- */
-+ (NSString *)renderString:(NSString *)templateString error:(NSError **)outError withObjects:(id)object, ...;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -103,35 +79,7 @@
  
  @since v1.0.0
  */
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError __attribute__((deprecated));
-
-/**
- Renders a file template with a context object.
- 
- @returns A string containing the rendered template
- @param url The URL of the template
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object A context object used for interpreting Mustache tags
- 
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderContentsOfURL:(NSURL *)url error:(NSError **)outError withObject:(id)object;
-
-/**
- Renders a file template with context objects.
- 
- @returns A string containing the rendered template
- @param url The URL of the template
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
- 
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderContentsOfURL:(NSURL *)url error:(NSError **)outError withObjects:(id)object, ...;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError;
 #endif
 
 /**
@@ -147,35 +95,7 @@
  
  @since v1.4.0
  */
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError __attribute__((deprecated));
-
-/**
- Renders a file template with a context object.
- 
- @returns A string containing the rendered template
- @param path The path of the template
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object A context object used for interpreting Mustache tags
- 
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderContentsOfFile:(NSString *)path error:(NSError **)outError withObject:(id)object;
-
-/**
- Renders a file template with context object.
- 
- @returns A string containing the rendered template
- @param path The path of the template
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
- 
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderContentsOfFile:(NSString *)path error:(NSError **)outError withObjects:(id)object, ...;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError;
 
 /**
  Renders a context object from a bundle resource template.
@@ -193,41 +113,7 @@
  
  @since v1.0.0
  */
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError __attribute__((deprecated));
-
-/**
- Renders a bundle resource template with a context object.
- 
- @returns A string containing the rendered template
- @param name The name of a bundle resource of extension "mustache"
- @param bundle The bundle where to look for the template resource
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object A context object used for interpreting Mustache tags
- 
- If you provide nil as a bundle, the resource will be looked in the main bundle.
- 
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError withObject:(id)object;
-
-/**
- Renders a bundle resource template with context objects.
- 
- @returns A string containing the rendered template
- @param name The name of a bundle resource of extension "mustache"
- @param bundle The bundle where to look for the template resource
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
- 
- If you provide nil as a bundle, the resource will be looked in the main bundle.
- 
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.6.0
- */
-+ (NSString *)renderResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError withObjects:(id)object, ...;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
 
 /**
  Renders a context object from a bundle resource template.
@@ -246,43 +132,7 @@
  
  @since v1.0.0
  */
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError __attribute__((deprecated));
-
-/**
- Renders a bundle resource template with a context object.
- 
- @returns A string containing the rendered template
- @param name The name of a bundle resource
- @param ext The extension of the bundle resource
- @param bundle The bundle where to look for the template resource.
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object A context object used for interpreting Mustache tags
- 
- If you provide nil as a bundle, the resource will be looked in the main bundle.
- 
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.0.0
- */
-+ (NSString *)renderResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError withObject:(id)object;
-
-/**
- Renders a bundle resource template with context objects.
- 
- @returns A string containing the rendered template
- @param name The name of a bundle resource
- @param ext The extension of the bundle resource
- @param bundle The bundle where to look for the template resource.
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
- 
- If you provide nil as a bundle, the resource will be looked in the main bundle.
- 
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.0.0
- */
-+ (NSString *)renderResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError withObjects:(id)object, ...;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
 
 /**
  Renders a template with a context object.

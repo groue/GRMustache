@@ -159,20 +159,28 @@ static NSInteger BOOLPropertyType = NSNotFound;
 }
 
 + (id)contextWithObjects:(id)object, ... {
-	GRMustacheContext *context = nil;
-	id eachObject;
-	va_list argumentList;
-	if (object) {
-		context = [self contextWithObject:object];
-		va_start(argumentList, object);
-		while ((eachObject = va_arg(argumentList, id))) {
-			context = [context contextByAddingObject:eachObject];
-		}
-		va_end(argumentList);
-	} else {
-		context = [self contextWithObject:nil];
-	}
-	return context;
+    va_list objectList;
+    va_start(objectList, object);
+    GRMustacheContext *result = [self contextWithObject:object andObjectList:objectList];
+    va_end(objectList);
+    return result;
+}
+
++ (id)contextWithObject:(id)object andObjectList:(va_list)objectList {
+    GRMustacheContext *context = nil;
+    if (object) {
+        context = [GRMustacheContext contextWithObject:object];
+        id eachObject;
+        va_list objectListCopy;
+        va_copy(objectListCopy, objectList);
+        while ((eachObject = va_arg(objectListCopy, id))) {
+            context = [context contextByAddingObject:eachObject];
+        }
+        va_end(objectListCopy);
+    } else {
+        context = [self contextWithObject:nil];
+    }
+    return context;
 }
 
 - (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {

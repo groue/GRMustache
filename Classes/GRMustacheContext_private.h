@@ -28,6 +28,7 @@
 }
 + (id)contextWithObject:(id)object;
 + (id)contextWithObjects:(id)object, ...;
++ (id)contextWithObject:(id)object andObjectList:(va_list)objectList;
 - (GRMustacheContext *)contextByAddingObject:(id)object;
 - (id)valueForKey:(NSString *)key;
 @end
