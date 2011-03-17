@@ -560,16 +560,16 @@ You may instanciate one with the following GRMustacheTemplateLoader class method
 	                       encoding:(NSStringEncoding)encoding;
 	
 	// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
-	+ (id)templateLoaderWithBasePath:(NSString *)path;
+	+ (id)templateLoaderWithDirectory:(NSString *)path;
 
 	// Loads templates and partials from a directory, with provided extension, encoded in UTF8
-	+ (id)templateLoaderWithBasePath:(NSString *)path
-	                       extension:(NSString *)ext;
+	+ (id)templateLoaderWithDirectory:(NSString *)path
+	                        extension:(NSString *)ext;
 
 	// Loads templates and partials from a directory, with provided extension, encoded in provided encoding
-	+ (id)templateLoaderWithBasePath:(NSString *)path
-	                       extension:(NSString *)ext
-	                        encoding:(NSStringEncoding)encoding;
+	+ (id)templateLoaderWithDirectory:(NSString *)path
+	                        extension:(NSString *)ext
+	                         encoding:(NSStringEncoding)encoding;
 	
 	// Loads templates and partials from a bundle, with "mustache" extension, encoded in UTF8
 	+ (id)templateLoaderWithBundle:(NSBundle *)bundle;

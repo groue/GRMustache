@@ -1,9 +1,27 @@
 GRMustache Release Notes
 ========================
 
+## v1.6.0
+
+**Reduced memory footprint**
+
+New GRMustacheTemplateLoader class methods:
+
+- `+ (id)templateLoaderWithDirectory:(NSString *)path;`
+- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;`
+- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;`
+
+Deprecated GRMustacheTemplateLoader class methods (replace `BasePath` with `Directory`):
+
+- `+ (id)templateLoaderWithBasePath:(NSString *)path;`
+- `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;`
+- `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;`
+
+Bug fixes around the NSUndefinedKeyException handling when the `DEBUG` macro is set (thanks to [Mike Ash](http://www.mikeash.com/)).
+
 ## v1.5.2
 
-The `DEBUG` macro has GRMustache raise much less NSUndefinedKeyException
+The `DEBUG` macro makes GRMustache raise much less NSUndefinedKeyException.
 
 ## v1.5.1
 
