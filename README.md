@@ -33,9 +33,7 @@ You should always check out raw tags, since the head of the master branch may be
 
 ### Versioning
 
-GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html).
-
-Always check out raw tags, and check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md).
+GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html). Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md).
 
 ### Testing
 
