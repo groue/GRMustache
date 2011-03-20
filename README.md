@@ -24,13 +24,6 @@ Import `GRMustache.h` in order to access all GRMustache features.
 
 Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
 
-You should always check out raw tags, since the head of the master branch may be unstable:
-
-	$ git clone git://github.com/groue/GRMustache.git
-	$ cd GRMustache
-	$ git tag -l	# list the available tags
-	$ git checkout v1.6.0
-
 ### Versioning
 
 GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html). Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md).
