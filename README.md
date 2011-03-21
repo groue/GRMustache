@@ -418,7 +418,7 @@ You may also declare helper methods in categories of your model objects. For ins
 	@property NSString *id;
 	@end
 
-You can declare the `linkSection:withContext` in a category of Person:
+You can declare the `linkSection:withContext:` in a category of Person:
 
 	@implementation Person(GRMustache)
 	- (NSString*)linkSection:(GRMustacheSection *)section
