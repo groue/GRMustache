@@ -400,7 +400,7 @@ Here we have written class methods because our helper doesn't carry any state. Y
 
 And now we can render:
 
-	[template renderObjects:[RenderingHelper class], dataModel];
+	[template renderObjects:[RenderingHelper class], dataModel, nil];
 
 The `renderObjects:` method takes several context objects. Key-value Coding lookup will start from the last provided object (in the above example, `dataModel`). The `{{#link}}` section of the template will thus be eventually be handled by the RenderingHelper class.
 
