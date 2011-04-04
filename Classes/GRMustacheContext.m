@@ -261,6 +261,13 @@ static NSInteger BOOLPropertyType = NSNotFound;
         [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
                         withMethod:@selector(GRMustacheSilentValueForUndefinedKey:)
                              error:nil];
+        
+        Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+        if (NSManagedObjectClass) {
+            [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
+                                        withMethod:@selector(GRMustacheSilentValueForUndefinedKey:)
+                                             error:nil];
+        }
     }
 }
 #endif
