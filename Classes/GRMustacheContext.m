@@ -169,17 +169,22 @@
 
 static const NSString *GRMustacheSilentObjects = @"GRMustacheSilentObjects";
 
-@interface NSObject(GRMustache)
-- (id)GRMustacheSilentValueForUndefinedKey:(NSString *)key;
-@end
-
 @implementation NSObject(GRMustache)
-- (id)GRMustacheSilentValueForUndefinedKey:(NSString *)key {
+// implementation for NSObject
+- (id)GRMustacheSilentValueForUndefinedKey_NSObject:(NSString *)key {
     NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
     if ([silentObjects containsObject:[NSValue valueWithPointer:self]]) {
         return nil;
     }
-    return [self GRMustacheSilentValueForUndefinedKey:key];
+    return [self GRMustacheSilentValueForUndefinedKey_NSObject:key];
+}
+// implementation for NSManagedObject
+- (id)GRMustacheSilentValueForUndefinedKey_NSManagedObject:(NSString *)key {
+    NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
+    if ([silentObjects containsObject:[NSValue valueWithPointer:self]]) {
+        return nil;
+    }
+    return [self GRMustacheSilentValueForUndefinedKey_NSManagedObject:key];
 }
 @end
 #endif
@@ -259,13 +264,13 @@ static NSInteger BOOLPropertyType = NSNotFound;
 {
     if (self == [GRMustacheContext class]) {
         [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                        withMethod:@selector(GRMustacheSilentValueForUndefinedKey:)
+                        withMethod:@selector(GRMustacheSilentValueForUndefinedKey_NSObject:)
                              error:nil];
         
         Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
         if (NSManagedObjectClass) {
             [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                                        withMethod:@selector(GRMustacheSilentValueForUndefinedKey:)
+                                        withMethod:@selector(GRMustacheSilentValueForUndefinedKey_NSManagedObject:)
                                              error:nil];
         }
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		562AD61D135082380099314B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 562AD61C135082380099314B /* CoreData.framework */; };
 		562BB02B131A39230004EC7B /* GRMustacheLambdaBlockMakeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB028131A39230004EC7B /* GRMustacheLambdaBlockMakeTest.m */; };
 		562BB02C131A39230004EC7B /* GRMustacheSelectorHelper_v1_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB02A131A39230004EC7B /* GRMustacheSelectorHelper_v1_3_Test.m */; };
 		562BB032131A39330004EC7B /* GRMustacheTemplate_v1_4_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB030131A39330004EC7B /* GRMustacheTemplate_v1_4_Test.m */; };
@@ -19,6 +20,8 @@
 		562BB074131A39E80004EC7B /* GRMustacheTemplate_v1_0_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB06B131A39E80004EC7B /* GRMustacheTemplate_v1_0_Test.m */; };
 		562BB075131A39E80004EC7B /* GRMustacheTemplateLoaderSubclassTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB06D131A39E80004EC7B /* GRMustacheTemplateLoaderSubclassTest.m */; };
 		562BB076131A39E80004EC7B /* GRPartialTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 562BB06F131A39E80004EC7B /* GRPartialTest.m */; };
+		56787A8C1350817800FF6106 /* GRManagedObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56787A891350817800FF6106 /* GRManagedObjectTest.m */; };
+		56787A8D1350817800FF6106 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 56787A8A1350817800FF6106 /* Model.xcdatamodeld */; };
 		567BB6F612AA6C4100E77EF0 /* GRMustacheTestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6DB12AA6C4100E77EF0 /* GRMustacheTestBase.m */; };
 		567BB6F712AA6C4100E77EF0 /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6DE12AA6C4100E77EF0 /* GRBooleanTest.m */; };
 		567BB6F812AA6C4100E77EF0 /* GRMustacheContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB6E012AA6C4100E77EF0 /* GRMustacheContextTest.m */; };
@@ -63,6 +66,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		562AD61C135082380099314B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		562BB027131A39230004EC7B /* GRMustacheLambdaBlockMakeTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheLambdaBlockMakeTest.h; sourceTree = "<group>"; };
 		562BB028131A39230004EC7B /* GRMustacheLambdaBlockMakeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheLambdaBlockMakeTest.m; sourceTree = "<group>"; };
 		562BB029131A39230004EC7B /* GRMustacheSelectorHelper_v1_3_Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSelectorHelper_v1_3_Test.h; sourceTree = "<group>"; };
@@ -92,6 +96,9 @@
 		562BB06D131A39E80004EC7B /* GRMustacheTemplateLoaderSubclassTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateLoaderSubclassTest.m; sourceTree = "<group>"; };
 		562BB06E131A39E80004EC7B /* GRPartialTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRPartialTest.h; sourceTree = "<group>"; };
 		562BB06F131A39E80004EC7B /* GRPartialTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPartialTest.m; sourceTree = "<group>"; };
+		56787A881350817800FF6106 /* GRManagedObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRManagedObjectTest.h; sourceTree = "<group>"; };
+		56787A891350817800FF6106 /* GRManagedObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRManagedObjectTest.m; sourceTree = "<group>"; };
+		56787A8B1350817800FF6106 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		567BB62C12AA6A9800E77EF0 /* GRBoolean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBoolean.h; sourceTree = "<group>"; };
 		567BB62D12AA6A9800E77EF0 /* GRBoolean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRBoolean.m; sourceTree = "<group>"; };
 		567BB62E12AA6A9800E77EF0 /* GRMustache_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache_private.h; sourceTree = "<group>"; };
@@ -173,6 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				562AD61D135082380099314B /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +198,7 @@
 		0867D691FE84028FC02AAC07 /* MacOSGRMustache */ = {
 			isa = PBXGroup;
 			children = (
+				562AD61C135082380099314B /* CoreData.framework */,
 				568E0FEA1318F8D000A292D4 /* iOSGRMustacheTest-Info.plist */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				567BB69412AA6BDE00E77EF0 /* Tests */,
@@ -238,6 +247,16 @@
 			path = v1.4;
 			sourceTree = "<group>";
 		};
+		56787A871350817800FF6106 /* v1.6 */ = {
+			isa = PBXGroup;
+			children = (
+				56787A8A1350817800FF6106 /* Model.xcdatamodeld */,
+				56787A881350817800FF6106 /* GRManagedObjectTest.h */,
+				56787A891350817800FF6106 /* GRManagedObjectTest.m */,
+			);
+			path = v1.6;
+			sourceTree = "<group>";
+		};
 		567BB69412AA6BDE00E77EF0 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -254,6 +273,7 @@
 				567BB99E12ABC97A00E77EF0 /* v1.3 */,
 				5667955C13191282004FA7CC /* v1.4 */,
 				562BB03A131A39540004EC7B /* v1.5 */,
+				56787A871350817800FF6106 /* v1.6 */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -531,6 +551,8 @@
 				562BB074131A39E80004EC7B /* GRMustacheTemplate_v1_0_Test.m in Sources */,
 				562BB075131A39E80004EC7B /* GRMustacheTemplateLoaderSubclassTest.m in Sources */,
 				562BB076131A39E80004EC7B /* GRPartialTest.m in Sources */,
+				56787A8C1350817800FF6106 /* GRManagedObjectTest.m in Sources */,
+				56787A8D1350817800FF6106 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +727,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		56787A8A1350817800FF6106 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				56787A8B1350817800FF6106 /* Model.xcdatamodel */,
+			);
+			currentVersion = 56787A8B1350817800FF6106 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
 }

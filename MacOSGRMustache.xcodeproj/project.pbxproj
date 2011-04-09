@@ -68,6 +68,8 @@
 		567BB80912AA6E9400E77EF0 /* extended_path in Resources */ = {isa = PBXBuildFile; fileRef = 567BB7FF12AA6E9400E77EF0 /* extended_path */; };
 		567BB80A12AA6E9400E77EF0 /* file_system in Resources */ = {isa = PBXBuildFile; fileRef = 567BB80312AA6E9400E77EF0 /* file_system */; };
 		567BB9A112ABC97A00E77EF0 /* GRMustacheSelectorHelper_v1_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 567BB9A012ABC97A00E77EF0 /* GRMustacheSelectorHelper_v1_3_Test.m */; };
+		56C6B68E135078A000942A1A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 56C6B68C135078A000942A1A /* Model.xcdatamodeld */; };
+		56C6B69D1350799C00942A1A /* GRManagedObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C6B69C1350799C00942A1A /* GRManagedObjectTest.m */; };
 		56CB595212AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.m */; };
 /* End PBXBuildFile section */
 
@@ -187,6 +189,9 @@
 		567BB9CB12ABD1F800E77EF0 /* GRMustacheSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSection.h; sourceTree = "<group>"; };
 		567BB9D412ABD2A800E77EF0 /* GRMustacheRendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRendering.h; sourceTree = "<group>"; };
 		567BBA6912ABE07500E77EF0 /* GRMustacheContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContext.h; sourceTree = "<group>"; };
+		56C6B68D135078A000942A1A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		56C6B69B1350799C00942A1A /* GRManagedObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRManagedObjectTest.h; sourceTree = "<group>"; };
+		56C6B69C1350799C00942A1A /* GRManagedObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRManagedObjectTest.m; sourceTree = "<group>"; };
 		56CB595012AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheLambdaBlockMakeTest.h; sourceTree = "<group>"; };
 		56CB595112AD47C700B1E39A /* GRMustacheLambdaBlockMakeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheLambdaBlockMakeTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -281,6 +286,7 @@
 				567BB99E12ABC97A00E77EF0 /* v1.3 */,
 				5629DECE131910CB0079DE2E /* v1.4 */,
 				562BAE23131A1F5E0004EC7B /* v1.5 */,
+				56C6B68A1350787400942A1A /* v1.6 */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -447,6 +453,16 @@
 			path = v1.3;
 			sourceTree = "<group>";
 		};
+		56C6B68A1350787400942A1A /* v1.6 */ = {
+			isa = PBXGroup;
+			children = (
+				56C6B68C135078A000942A1A /* Model.xcdatamodeld */,
+				56C6B69B1350799C00942A1A /* GRManagedObjectTest.h */,
+				56C6B69C1350799C00942A1A /* GRManagedObjectTest.m */,
+			);
+			path = v1.6;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -585,6 +601,8 @@
 				562BAF44131A2F420004EC7B /* GRMustachePublicAPITest.m in Sources */,
 				562BAFE8131A35C50004EC7B /* GRMustacheConfiguration.m in Sources */,
 				56248D69132CC55F00A86684 /* GRMustacheBenchmarkTest.m in Sources */,
+				56C6B68E135078A000942A1A /* Model.xcdatamodeld in Sources */,
+				56C6B69D1350799C00942A1A /* GRManagedObjectTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +727,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		56C6B68C135078A000942A1A /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				56C6B68D135078A000942A1A /* Model.xcdatamodel */,
+			);
+			currentVersion = 56C6B68D135078A000942A1A /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
 }
