@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.6.1
+
+The NSUndefinedKeyException silencing activated by the DEBUG macro applies to NSManagedObject instances (see the [Avoid the NSUndefinedKeyException attack](https://github.com/groue/GRMustache/wiki/Avoid-the-NSUndefinedKeyException-attack) wiki page).
+
 ## v1.6.0
 
 **Reduced memory footprint**
@@ -21,7 +25,7 @@ Bug fixes around the NSUndefinedKeyException handling when the `DEBUG` macro is 
 
 ## v1.5.2
 
-The `DEBUG` macro makes GRMustache raise much less NSUndefinedKeyException.
+The `DEBUG` macro makes GRMustache raise much less NSUndefinedKeyException (see the [Avoid the NSUndefinedKeyException attack](https://github.com/groue/GRMustache/wiki/Avoid-the-NSUndefinedKeyException-attack) wiki page).
 
 ## v1.5.1
 
