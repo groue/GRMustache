@@ -45,7 +45,7 @@
 
 - (void)testHelperInstanceMethod {
 	NSString *templateString = @"{{#bold}}text{{/bold}}";
-	NSDictionary *context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
+	id context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
 	STAssertEqualObjects(result, @"<b>text</b>", nil);
 }

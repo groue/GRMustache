@@ -99,11 +99,6 @@
 @end
 
 
-id GRMustacheBlockHelperMake(NSString *(^block)(GRMustacheSection* section, id context)) {
-	return [GRMustacheBlockHelper helperWithBlock:block];
-}
-
-
 // =================== DEPRECATED STUFF BELOW ===================
 
 

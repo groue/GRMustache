@@ -68,7 +68,7 @@
 
 - (id)valueForKey:(NSString *)key {
 	if ([key isEqualToString:@"NonNSUndefinedKeyException"]) {
-		NSAssert(NO, nil);
+		NSAssert(NO, @"");
 	}
 	if ([key isEqualToString:@"OtherNSUndefinedKeyException"]) {
 		return [@"" valueForKey:@"foo"];

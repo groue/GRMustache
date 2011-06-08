@@ -40,7 +40,7 @@
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSString class]], nil);
+	NSAssert([templateId isKindOfClass:[NSString class]], @"");
 	return [NSString stringWithContentsOfFile:(NSString*)templateId
 									 encoding:self.encoding
 										error:outError];

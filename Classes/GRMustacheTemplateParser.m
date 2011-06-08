@@ -151,7 +151,7 @@
 			break;
 			
 		default:
-			NSAssert(NO, nil);
+			NSAssert(NO, @"");
 			break;
 			
 	}

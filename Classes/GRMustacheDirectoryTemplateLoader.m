@@ -34,7 +34,7 @@
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
 	if (baseTemplateId) {
-		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], nil);
+		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], @"");
 		if (self.extension.length == 0) {
 			return [[NSURL URLWithString:name relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
 		}
@@ -47,7 +47,7 @@
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSURL class]], nil);
+	NSAssert([templateId isKindOfClass:[NSURL class]], @"");
 	return [NSString stringWithContentsOfURL:(NSURL*)templateId
 									encoding:self.encoding
 									   error:outError];
@@ -85,7 +85,7 @@
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
 	if (baseTemplateId) {
-		NSAssert([baseTemplateId isKindOfClass:[NSString class]], nil);
+		NSAssert([baseTemplateId isKindOfClass:[NSString class]], @"");
 		NSString *basePath = [(NSString *)baseTemplateId stringByDeletingLastPathComponent];
 		if (self.extension.length == 0) {
 			return [[basePath stringByAppendingPathComponent:name] stringByStandardizingPath];
@@ -99,7 +99,7 @@
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSString class]], nil);
+	NSAssert([templateId isKindOfClass:[NSString class]], @"");
 	return [NSString stringWithContentsOfFile:(NSString*)templateId
 									 encoding:self.encoding
 										error:outError];

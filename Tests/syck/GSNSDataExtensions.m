@@ -197,7 +197,7 @@ static char gEncodingTable[ 64 ] = {
     unsigned long		ixtext;
     unsigned long		lengthData;
     long				ctremaining;
-    unsigned char		inbuf [4], outbuf [3];
+    unsigned char		inbuf [4], outbuf [4];
     short				i;
     short				charsonline = 0, ctcopy;
     unsigned long		ix;

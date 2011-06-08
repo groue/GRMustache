@@ -76,13 +76,13 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-                result = [[(id<GRMustacheHelper>)value renderObject:context withSection:self] retain];
+                result = [[(id<GRMustacheHelper>)value renderObject:context withSection:self] mutableCopy];
             }
 			break;
 			
 		default:
 			// should not be here
-			NSAssert(NO, nil);
+			NSAssert(NO, @"");
 	}
     [pool drain];
     if (!result) {

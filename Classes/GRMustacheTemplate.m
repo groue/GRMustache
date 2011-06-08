@@ -44,14 +44,14 @@
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
 	id loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]];
-	NSAssert([loader isKindOfClass:[GRMustacheDirectoryURLTemplateLoader class]], nil);
+	NSAssert([loader isKindOfClass:[GRMustacheDirectoryURLTemplateLoader class]], @"");
 	return [(GRMustacheDirectoryURLTemplateLoader *)loader parseContentsOfURL:url error:outError];
 }
 #endif
 
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError {
 	id loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension]];
-	NSAssert([loader isKindOfClass:[GRMustacheDirectoryPathTemplateLoader class]], nil);
+	NSAssert([loader isKindOfClass:[GRMustacheDirectoryPathTemplateLoader class]], @"");
 	return [(GRMustacheDirectoryPathTemplateLoader *)loader parseContentsOfFile:path error:outError];
 }
 
