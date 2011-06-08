@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.6.2
+
+**LLVM3 compatibility**
+
 ## v1.6.1
 
 The NSUndefinedKeyException silencing activated by the DEBUG macro applies to NSManagedObject instances (see the [Avoid the NSUndefinedKeyException attack](https://github.com/groue/GRMustache/wiki/Avoid-the-NSUndefinedKeyException-attack) wiki page).
