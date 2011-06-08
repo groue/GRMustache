@@ -63,4 +63,7 @@
  @since v1.0.0
  */
 + (void)setStrictBooleanMode:(BOOL)aBool;
+
++ (void)preventNSUndefinedKeyExceptionAttack;
+
 @end

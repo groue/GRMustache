@@ -26,6 +26,7 @@
 	id object;
 	GRMustacheContext *parent;
 }
++ (void)preventNSUndefinedKeyExceptionAttack;
 + (id)contextWithObject:(id)object;
 + (id)contextWithObjects:(id)object, ...;
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList;

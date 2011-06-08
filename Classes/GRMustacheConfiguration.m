@@ -22,6 +22,7 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheConfiguration.h"
+#import "GRMustacheContext_private.h"
 
 
 static BOOL strictBooleanMode = NO;
@@ -34,6 +35,10 @@ static BOOL strictBooleanMode = NO;
 
 + (void)setStrictBooleanMode:(BOOL)aBool {
 	strictBooleanMode = aBool;
+}
+
++ (void)preventNSUndefinedKeyExceptionAttack {
+	[GRMustacheContext preventNSUndefinedKeyExceptionAttack];
 }
 
 @end

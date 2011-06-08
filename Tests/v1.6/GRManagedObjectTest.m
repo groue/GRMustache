@@ -49,9 +49,9 @@
 - (void)testNSUndefinedKeyExceptionSilencing {
     NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
     // The actual test is:
-    // 1. set the DEBUG macro for the target
-    // 2. have the debugger stops on every exception
-    // 3. check that the following line does not stop the debugger
+    // 1. have the debugger stops on every exception
+    // 2. check that the second line does not stop the debugger
+    [GRMustache preventNSUndefinedKeyExceptionAttack];
     [GRMustacheTemplate renderObject:managedObject fromString:@"{{foo}}" error:nil];
 }
 

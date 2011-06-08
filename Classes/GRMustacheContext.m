@@ -33,7 +33,9 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 
-#ifdef DEBUG
+static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
+
+
 //=============================================================================
 // Embedding https://github.com/rentzsch/jrswizzle/ START
 //=============================================================================
@@ -173,7 +175,7 @@ static const NSString *GRMustacheSilentObjects = @"GRMustacheSilentObjects";
 // implementation for NSObject
 - (id)GRMustacheSilentValueForUndefinedKey_NSObject:(NSString *)key {
     NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
-    if ([silentObjects containsObject:[NSValue valueWithPointer:self]]) {
+    if ([silentObjects containsObject:self]) {
         return nil;
     }
     return [self GRMustacheSilentValueForUndefinedKey_NSObject:key];
@@ -181,13 +183,13 @@ static const NSString *GRMustacheSilentObjects = @"GRMustacheSilentObjects";
 // implementation for NSManagedObject
 - (id)GRMustacheSilentValueForUndefinedKey_NSManagedObject:(NSString *)key {
     NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
-    if ([silentObjects containsObject:[NSValue valueWithPointer:self]]) {
+    if ([silentObjects containsObject:self]) {
         return nil;
     }
     return [self GRMustacheSilentValueForUndefinedKey_NSManagedObject:key];
 }
 @end
-#endif
+
 
 
 static NSInteger BOOLPropertyType = NSNotFound;
@@ -259,10 +261,10 @@ static NSInteger BOOLPropertyType = NSNotFound;
 @synthesize object;
 @synthesize parent;
 
-#ifdef DEBUG
-+ (void)initialize
-{
-    if (self == [GRMustacheContext class]) {
++ (void)preventNSUndefinedKeyExceptionAttack {
+    if (preventingNSUndefinedKeyExceptionAttack == NO) {
+        preventingNSUndefinedKeyExceptionAttack = YES;
+        
         [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
                         withMethod:@selector(GRMustacheSilentValueForUndefinedKey_NSObject:)
                              error:nil];
@@ -275,7 +277,7 @@ static NSInteger BOOLPropertyType = NSNotFound;
         }
     }
 }
-#endif
+
 
 + (id)contextWithObject:(id)object {
 	if ([object isKindOfClass:[GRMustacheContext class]]) {
@@ -386,19 +388,18 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	id value = nil;
 	
 	@try {
-#ifdef DEBUG
-        NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
-        if (silentObjects == nil) {
-            silentObjects = [NSMutableSet set];
-            [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheSilentObjects];
+        if (preventingNSUndefinedKeyExceptionAttack) {
+            NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
+            if (silentObjects == nil) {
+                silentObjects = [NSMutableSet set];
+                [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheSilentObjects];
+            }
+            [silentObjects addObject:object];
+            value = [object valueForKey:key];
+            [silentObjects removeObject:object];
+        } else {
+            value = [object valueForKey:key];
         }
-        NSValue *objectPointer = [NSValue valueWithPointer:object];
-        [silentObjects addObject:objectPointer];
-#endif
-		value = [object valueForKey:key];
-#ifdef DEBUG
-        [silentObjects removeObject:objectPointer];
-#endif
 	}
 	@catch (NSException *exception) {
 		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
