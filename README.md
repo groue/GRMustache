@@ -1,6 +1,8 @@
 GRMustache
 ==========
 
+WWDC alert! [Follow us on twitter](http://twitter.com/GRMustache)
+
 GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for MacOS 10.6, iPhoneOS 3.0 and iOS 4.0
 
 It supports the following Mustache features:
@@ -27,6 +29,8 @@ Header files whose names contain `private` declare private APIs which are subjec
 ### Versioning
 
 GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html). Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md).
+
+[Follow us on twitter](http://twitter.com/GRMustache) for breaking development news.
 
 ### Testing
 
