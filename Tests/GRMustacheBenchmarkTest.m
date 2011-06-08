@@ -56,7 +56,7 @@
     int doublingCount = 10; // 2^10=1024 items
     NSMutableArray *items = [[NSMutableArray arrayWithCapacity:(1 << doublingCount)] retain];
     [items addObject:[NSMutableDictionary dictionaryWithObject:@"item" forKey:@"item"]];
-    for (int i=0; i<doublingCount; i++) { [items addObjectsFromArray:items]; }
+    for (int i=0; i<doublingCount; i++) { [items addObjectsFromArray:[NSArray arrayWithArray:items]]; }
     return [NSDictionary dictionaryWithObject:items forKey:@"items"];
 }
 
