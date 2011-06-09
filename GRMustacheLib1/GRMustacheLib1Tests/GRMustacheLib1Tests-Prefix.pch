@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'GRMustacheLib1Tests' target in the 'GRMustacheLib1Tests' project
-//
-
-#ifdef __OBJC__
-    #import <UIKit/UIKit.h>
-#endif
