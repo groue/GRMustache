@@ -1,6 +1,14 @@
 GRMustache Release Notes
 ========================
 
+## v1.7.0
+
+**GRMustache now ships as a static library.**
+
+See the [Embedding](https://github.com/groue/GRMustache/wiki/Embedding) wiki page in order to see how to embed GRMustache in your project.
+
+Besides, the NSUndefinedKeyException silencing is no longer activated by the DEBUG macro. You now have to explicitely call the `[GRMustache preventNSUndefinedKeyExceptionAttack]` method. For more details, see the [Avoid the NSUndefinedKeyException attack](https://github.com/groue/GRMustache/wiki/Avoid-the-NSUndefinedKeyException-attack) wiki page.
+
 ## v1.6.2
 
 **LLVM3 compatibility**

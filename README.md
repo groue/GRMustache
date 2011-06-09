@@ -20,11 +20,9 @@ It supports extensions to the [regular Mustache syntax](http://mustache.github.c
 
 ### Embedding in your XCode project
 
-GRMustache is a standalone library made of the Objective-C files contained in the `Classes` folder. Add them to your XCode project, and link against Foundation.framework.
+GRMustache ships as a static library and a bunch of header files, and only depends on the Foundation.framework.
 
-Import `GRMustache.h` in order to access all GRMustache features.
-
-Header files whose names contain `private` declare private APIs which are subject to change, without notice, over releases.
+Follow the instructions in the [Embedding](https://github.com/groue/GRMustache/wiki/Embedding) wiki page, and import `GRMustache.h` in order to access all GRMustache features.
 
 ### Versioning
 
