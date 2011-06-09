@@ -111,6 +111,20 @@
 			remoteGlobalIDString = 565F691B139FF016004D1894;
 			remoteInfo = "GRMustache1-macosx";
 		};
+		5665297F13A126AB00B98B87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 565F691C139FF016004D1894;
+			remoteInfo = GRMustache1;
+		};
+		5665298113A126AB00B98B87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 565F6929139FF017004D1894;
+			remoteInfo = GRMustache1Tests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -239,6 +253,7 @@
 		565F6BD0139FF157004D1894 /* dot_key */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dot_key; path = "Tests/Mustache-Spec/specs/dot_key"; sourceTree = SOURCE_ROOT; };
 		565F6BD1139FF157004D1894 /* extended_path */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extended_path; path = "Tests/Mustache-Spec/specs/extended_path"; sourceTree = SOURCE_ROOT; };
 		565F6BD2139FF157004D1894 /* file_system */ = {isa = PBXFileReference; lastKnownFileType = folder; name = file_system; path = "Tests/Mustache-Spec/specs/file_system"; sourceTree = SOURCE_ROOT; };
+		5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "GRMustache1-ios.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +301,7 @@
 		565F6911139FF016004D1894 = {
 			isa = PBXGroup;
 			children = (
+				5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */,
 				565F6921139FF016004D1894 /* GRMustache1 */,
 				565F6932139FF017004D1894 /* GRMustache1Tests */,
 				565F691E139FF016004D1894 /* Frameworks */,
@@ -531,6 +547,15 @@
 			path = v1.6;
 			sourceTree = "<group>";
 		};
+		5665297B13A126AA00B98B87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5665298013A126AB00B98B87 /* libGRMustache1.a */,
+				5665298213A126AB00B98B87 /* GRMustache1Tests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -621,6 +646,12 @@
 			mainGroup = 565F6911139FF016004D1894;
 			productRefGroup = 565F691D139FF016004D1894 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5665297B13A126AA00B98B87 /* Products */;
+					ProjectRef = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				565F691B139FF016004D1894 /* GRMustache1 */,
@@ -628,6 +659,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5665298013A126AB00B98B87 /* libGRMustache1.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGRMustache1.a;
+			remoteRef = 5665297F13A126AB00B98B87 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5665298213A126AB00B98B87 /* GRMustache1Tests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GRMustache1Tests.octest;
+			remoteRef = 5665298113A126AB00B98B87 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		565F6926139FF017004D1894 /* Resources */ = {
