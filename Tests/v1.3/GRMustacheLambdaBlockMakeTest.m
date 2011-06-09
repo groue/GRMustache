@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache_context.h"
 #import "GRMustacheLambdaBlockMakeTest.h"
 
 
 @implementation GRMustacheLambdaBlockMakeTest
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
 	id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {

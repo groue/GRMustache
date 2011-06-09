@@ -20,11 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache_context.h"
 #import "GRMustacheSection.h"
 
 @class GRMustacheContext;
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 @interface GRMustacheBlockHelper: NSObject {
 @private
 	NSString *(^block)(GRMustacheSection* section, id context);

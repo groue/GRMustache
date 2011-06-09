@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMUstache_context.h"
 #import "GRMustacheLambdaMakeTest.h"
 
 
 @implementation GRMustacheLambdaMakeTest
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
 	GRMustacheLambda dieLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {
@@ -40,7 +41,7 @@
 }
 #endif
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testSectionsReturningLambdasGetCalledWithText {
 	__block int renderedCalls = 0;
 	__block NSString *cache = nil;
@@ -80,7 +81,7 @@
 }
 #endif
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate {
 	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
 	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
@@ -96,7 +97,7 @@
 }
 #endif
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testSectionLambdasCanReturnNil {
 	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
 	GRMustacheLambda wrapperLambda = GRMustacheLambdaMake(^(GRMustacheRenderer renderer, id context, NSString *templateString) {

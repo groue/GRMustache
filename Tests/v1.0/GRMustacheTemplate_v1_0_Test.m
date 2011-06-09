@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache_context.h"
 #import "GRMustacheTemplate_v1_0_Test.h"
 #import "GRMustacheError.h"
 #import "GRBoolean.h"
@@ -61,7 +62,7 @@
 	STAssertEqualObjects(result, @"Hi Mom!", nil);
 }
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 - (void)testRenderFromURL {
 	NSURL *url = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"passenger.conf"];
 	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:

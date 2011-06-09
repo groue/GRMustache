@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-
+#import "GRMustache_context.h"
 
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.
@@ -49,7 +49,7 @@
  */
 + (id)parseString:(NSString *)templateString error:(NSError **)outError;
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  Parses a template file, and returns a compiled template.
  

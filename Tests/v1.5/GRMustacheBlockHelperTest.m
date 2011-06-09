@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache_context.h"
 #import "GRMustacheBlockHelperTest.h"
 
 
 @implementation GRMustacheBlockHelperTest
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 - (void)testDoesntExecuteWhatItDoesntNeedTo {
 	__block BOOL dead = NO;
 	GRMustacheBlockHelper *dieHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {

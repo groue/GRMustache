@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <objc/message.h>
+#import "GRMustache_context.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheRendering.h"
 
@@ -59,7 +60,7 @@
 @end
 
 
-#if NS_BLOCKS_AVAILABLE
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 
 @interface GRMustacheBlockHelper()<GRMustacheHelper>
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
