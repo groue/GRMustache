@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustache_context.h"
+#import "GRMustacheEnvironment.h"
 
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.

@@ -17,6 +17,7 @@
 		5629021613A10D0C00C92BB7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5629021513A10D0C00C92BB7 /* Foundation.framework */; };
 		5629021813A10D2100C92BB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5629021713A10D2100C92BB7 /* CoreData.framework */; };
 		5629022013A10D6F00C92BB7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5629021F13A10D6F00C92BB7 /* Cocoa.framework */; };
+		5651A82413B5B2CE0035E783 /* GRMustacheEnvironment.h in Headers */ = {isa = PBXBuildFile; fileRef = 5651A82313B5B2CE0035E783 /* GRMustacheEnvironment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565F6931139FF017004D1894 /* libGRMustache1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F691C139FF016004D1894 /* libGRMustache1.a */; };
 		565F6978139FF062004D1894 /* GRBoolean.h in Headers */ = {isa = PBXBuildFile; fileRef = 565F694C139FF062004D1894 /* GRBoolean.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565F6979139FF062004D1894 /* GRBoolean.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F694D139FF062004D1894 /* GRBoolean.m */; };
@@ -111,20 +112,6 @@
 			remoteGlobalIDString = 565F691B139FF016004D1894;
 			remoteInfo = "GRMustache1-macosx";
 		};
-		5665297F13A126AB00B98B87 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 565F691C139FF016004D1894;
-			remoteInfo = GRMustache1;
-		};
-		5665298113A126AB00B98B87 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 565F6929139FF017004D1894;
-			remoteInfo = GRMustache1Tests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +134,7 @@
 		5629021513A10D0C00C92BB7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5629021713A10D2100C92BB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5629021F13A10D6F00C92BB7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		5651A82313B5B2CE0035E783 /* GRMustacheEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheEnvironment.h; sourceTree = "<group>"; };
 		565F691C139FF016004D1894 /* libGRMustache1.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGRMustache1.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		565F6923139FF016004D1894 /* GRMustache1-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GRMustache1-Prefix.pch"; sourceTree = "<group>"; };
 		565F6929139FF017004D1894 /* GRMustache1Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustache1Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,7 +241,6 @@
 		565F6BD0139FF157004D1894 /* dot_key */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dot_key; path = "Tests/Mustache-Spec/specs/dot_key"; sourceTree = SOURCE_ROOT; };
 		565F6BD1139FF157004D1894 /* extended_path */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extended_path; path = "Tests/Mustache-Spec/specs/extended_path"; sourceTree = SOURCE_ROOT; };
 		565F6BD2139FF157004D1894 /* file_system */ = {isa = PBXFileReference; lastKnownFileType = folder; name = file_system; path = "Tests/Mustache-Spec/specs/file_system"; sourceTree = SOURCE_ROOT; };
-		5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "GRMustache1-ios.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,7 +288,6 @@
 		565F6911139FF016004D1894 = {
 			isa = PBXGroup;
 			children = (
-				5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */,
 				565F6921139FF016004D1894 /* GRMustache1 */,
 				565F6932139FF017004D1894 /* GRMustache1Tests */,
 				565F691E139FF016004D1894 /* Frameworks */,
@@ -379,6 +365,7 @@
 				565F6957139FF062004D1894 /* GRMustacheContext_private.h */,
 				565F6958139FF062004D1894 /* GRMustacheDirectoryTemplateLoader.m */,
 				565F6959139FF062004D1894 /* GRMustacheDirectoryTemplateLoader_private.h */,
+				5651A82313B5B2CE0035E783 /* GRMustacheEnvironment.h */,
 				565F695A139FF062004D1894 /* GRMustacheError.h */,
 				565F695B139FF062004D1894 /* GRMustacheError.m */,
 				565F695C139FF062004D1894 /* GRMustacheLambda.h */,
@@ -547,15 +534,6 @@
 			path = v1.6;
 			sourceTree = "<group>";
 		};
-		5665297B13A126AA00B98B87 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5665298013A126AB00B98B87 /* libGRMustache1.a */,
-				5665298213A126AB00B98B87 /* GRMustache1Tests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -567,6 +545,7 @@
 				565F697A139FF062004D1894 /* GRMustache.h in Headers */,
 				565F697F139FF062004D1894 /* GRMustacheConfiguration.h in Headers */,
 				565F6981139FF062004D1894 /* GRMustacheContext.h in Headers */,
+				5651A82413B5B2CE0035E783 /* GRMustacheEnvironment.h in Headers */,
 				565F6986139FF062004D1894 /* GRMustacheError.h in Headers */,
 				565F6988139FF062004D1894 /* GRMustacheLambda.h in Headers */,
 				565F698B139FF062004D1894 /* GRMustacheRendering.h in Headers */,
@@ -646,12 +625,6 @@
 			mainGroup = 565F6911139FF016004D1894;
 			productRefGroup = 565F691D139FF016004D1894 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 5665297B13A126AA00B98B87 /* Products */;
-					ProjectRef = 5665297A13A126AA00B98B87 /* GRMustache1-ios.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				565F691B139FF016004D1894 /* GRMustache1 */,
@@ -659,23 +632,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		5665298013A126AB00B98B87 /* libGRMustache1.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGRMustache1.a;
-			remoteRef = 5665297F13A126AB00B98B87 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5665298213A126AB00B98B87 /* GRMustache1Tests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GRMustache1Tests.octest;
-			remoteRef = 5665298113A126AB00B98B87 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		565F6926139FF017004D1894 /* Resources */ = {

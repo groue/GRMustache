@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_context.h"
+#import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"

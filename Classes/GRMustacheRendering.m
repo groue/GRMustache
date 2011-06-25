@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_context.h"
+#import "GRMustacheEnvironment.h"
 #import "GRBoolean.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheSection_private.h"

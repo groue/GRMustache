@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import <objc/message.h>
-#import "GRMustache_context.h"
+#import "GRMustacheEnvironment.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheRendering.h"
 

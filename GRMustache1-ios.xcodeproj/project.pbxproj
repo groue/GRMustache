@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5651A82813B5B5A00035E783 /* GRMustacheEnvironment.h in Headers */ = {isa = PBXBuildFile; fileRef = 566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565F6920139FF016004D1894 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F691F139FF016004D1894 /* Foundation.framework */; };
 		565F692C139FF017004D1894 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F691F139FF016004D1894 /* Foundation.framework */; };
 		565F6931139FF017004D1894 /* libGRMustache1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F691C139FF016004D1894 /* libGRMustache1.a */; };
@@ -139,7 +140,7 @@
 		566529BD13A12E9600B98B87 /* GRMustacheToken_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 565F6971139FF062004D1894 /* GRMustacheToken_private.h */; };
 		566529BE13A12E9600B98B87 /* GRMustacheTokenizer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 565F6973139FF062004D1894 /* GRMustacheTokenizer_private.h */; };
 		566529BF13A12E9600B98B87 /* GRMustacheVariableElement_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 565F6975139FF062004D1894 /* GRMustacheVariableElement_private.h */; };
-		566529CD13A135FA00B98B87 /* GRMustache_context.h in Headers */ = {isa = PBXBuildFile; fileRef = 566529CC13A132A400B98B87 /* GRMustache_context.h */; };
+		566529CD13A135FA00B98B87 /* GRMustacheEnvironment.h in Headers */ = {isa = PBXBuildFile; fileRef = 566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -262,7 +263,7 @@
 		565F6BD2139FF157004D1894 /* file_system */ = {isa = PBXFileReference; lastKnownFileType = folder; name = file_system; path = "Tests/Mustache-Spec/specs/file_system"; sourceTree = SOURCE_ROOT; };
 		565F6BD7139FF23C004D1894 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		566529C313A12E9600B98B87 /* libGRMustache1-ios3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache1-ios3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		566529CC13A132A400B98B87 /* GRMustache_context.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustache_context.h; sourceTree = "<group>"; };
+		566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustacheEnvironment.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,7 +366,6 @@
 				565F694D139FF062004D1894 /* GRBoolean.m */,
 				565F694E139FF062004D1894 /* GRMustache.h */,
 				565F694F139FF062004D1894 /* GRMustache.m */,
-				566529CC13A132A400B98B87 /* GRMustache_context.h */,
 				565F6950139FF062004D1894 /* GRMustache_private.h */,
 				565F6951139FF062004D1894 /* GRMustacheBundleTemplateLoader.m */,
 				565F6952139FF062004D1894 /* GRMustacheBundleTemplateLoader_private.h */,
@@ -376,6 +376,7 @@
 				565F6957139FF062004D1894 /* GRMustacheContext_private.h */,
 				565F6958139FF062004D1894 /* GRMustacheDirectoryTemplateLoader.m */,
 				565F6959139FF062004D1894 /* GRMustacheDirectoryTemplateLoader_private.h */,
+				566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */,
 				565F695A139FF062004D1894 /* GRMustacheError.h */,
 				565F695B139FF062004D1894 /* GRMustacheError.m */,
 				565F695C139FF062004D1894 /* GRMustacheLambda.h */,
@@ -550,6 +551,7 @@
 				565F697A139FF062004D1894 /* GRMustache.h in Headers */,
 				565F697F139FF062004D1894 /* GRMustacheConfiguration.h in Headers */,
 				565F6981139FF062004D1894 /* GRMustacheContext.h in Headers */,
+				566529CD13A135FA00B98B87 /* GRMustacheEnvironment.h in Headers */,
 				565F6986139FF062004D1894 /* GRMustacheError.h in Headers */,
 				565F6988139FF062004D1894 /* GRMustacheLambda.h in Headers */,
 				565F698B139FF062004D1894 /* GRMustacheRendering.h in Headers */,
@@ -558,7 +560,6 @@
 				565F6994139FF062004D1894 /* GRMustacheTemplateLoader.h in Headers */,
 				565F6997139FF062004D1894 /* GRMustacheTemplateLoader_protected.h in Headers */,
 				565F69A2139FF062004D1894 /* GRMustacheVersion.h in Headers */,
-				566529CD13A135FA00B98B87 /* GRMustache_context.h in Headers */,
 				565F697C139FF062004D1894 /* GRMustache_private.h in Headers */,
 				565F697E139FF062004D1894 /* GRMustacheBundleTemplateLoader_private.h in Headers */,
 				565F6983139FF062004D1894 /* GRMustacheContext_private.h in Headers */,
@@ -584,6 +585,7 @@
 				566529A713A12E9600B98B87 /* GRMustache.h in Headers */,
 				566529A813A12E9600B98B87 /* GRMustacheConfiguration.h in Headers */,
 				566529A913A12E9600B98B87 /* GRMustacheContext.h in Headers */,
+				5651A82813B5B5A00035E783 /* GRMustacheEnvironment.h in Headers */,
 				566529AA13A12E9600B98B87 /* GRMustacheError.h in Headers */,
 				566529AB13A12E9600B98B87 /* GRMustacheLambda.h in Headers */,
 				566529AC13A12E9600B98B87 /* GRMustacheRendering.h in Headers */,
