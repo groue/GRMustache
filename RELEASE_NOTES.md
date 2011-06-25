@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.7.1
+
+Added missing header file
+
 ## v1.7.0
 
 **GRMustache now ships as a static library.**
