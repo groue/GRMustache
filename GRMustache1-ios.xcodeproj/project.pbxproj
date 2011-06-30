@@ -374,6 +374,8 @@
 				565F6953139FF062004D1894 /* GRMustacheConfiguration.h */,
 				565F6954139FF062004D1894 /* GRMustacheConfiguration.m */,
 				566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */,
+				565F695A139FF062004D1894 /* GRMustacheError.h */,
+				565F695B139FF062004D1894 /* GRMustacheError.m */,
 				565F6976139FF062004D1894 /* GRMustacheVersion.h */,
 				565F6977139FF062004D1894 /* GRMustacheVersion.m */,
 			);
@@ -529,8 +531,6 @@
 		56E29A5913BC3B50006336DB /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
-				565F695A139FF062004D1894 /* GRMustacheError.h */,
-				565F695B139FF062004D1894 /* GRMustacheError.m */,
 				565F696C139FF062004D1894 /* GRMustacheTemplateParser.m */,
 				565F696D139FF062004D1894 /* GRMustacheTemplateParser_private.h */,
 				565F6970139FF062004D1894 /* GRMustacheToken.m */,

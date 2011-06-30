@@ -34,6 +34,10 @@ Open the GRMustache1-macosx.xcodeproj project and test the GRMustache1 target.
 
 GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
+### Forking
+
+Please fork, and read the [Note on forking](https://github.com/groue/GRMustache/wiki/Note-on-forking) wiki page.
+
 ### Advanced topics
 
 This README file provides with basic GRMustache documentation. Check out the [wiki](https://github.com/groue/GRMustache/wiki) for discussions on some more advanced topics.
