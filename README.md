@@ -22,11 +22,15 @@ GRMustache ships as a static library and a bunch of header files, and only depen
 
 Follow the instructions in the [Embedding](https://github.com/groue/GRMustache/wiki/Embedding) wiki page, and import `GRMustache.h` in order to access all GRMustache features.
 
-### Versioning
+### Versioning and backward compatibility
 
-GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html). Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md).
+Until GRMustache hits version 2, there is no risk upgrading GRMustache in your project: you will get bugfixes and improvements without changing a line of your code.
 
-[Follow us on twitter](http://twitter.com/GRMustache) for breaking development news.
+You may well get deprecation warnings, but these are only warnings. Support for deprecated APIs will only be removed in the next major version.
+
+This is because GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html).
+
+Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md) for more information, and [Follow us on twitter](http://twitter.com/GRMustache) for breaking development news.
 
 ### Testing
 
