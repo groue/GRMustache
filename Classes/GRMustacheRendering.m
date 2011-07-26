@@ -180,7 +180,9 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
     NSString *result = [[template renderObject:object] retain];
+	if (outError != NULL) [*outError retain];
     [pool drain];
+	if (outError != NULL) [*outError autorelease];
 	return [result autorelease];
 }
 
@@ -189,7 +191,9 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
 	NSString *result = [[template renderObject:object] retain];
+	if (outError != NULL) [*outError retain];
     [pool drain];
+	if (outError != NULL) [*outError autorelease];
 	return [result autorelease];
 }
 #endif
@@ -198,7 +202,9 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
 	NSString *result = [[template renderObject:object] retain];
+	if (outError != NULL) [*outError retain];
     [pool drain];
+	if (outError != NULL) [*outError autorelease];
 	return [result autorelease];
 }
 
@@ -206,7 +212,9 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
     NSString *result = [[template renderObject:object] retain];
+	if (outError != NULL) [*outError retain];
     [pool drain];
+	if (outError != NULL) [*outError autorelease];
 	return [result autorelease];
 }
 
@@ -214,7 +222,9 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
     NSString *result = [[template renderObject:object] retain];
+	if (outError != NULL) [*outError retain];
     [pool drain];
+	if (outError != NULL) [*outError autorelease];
 	return [result autorelease];
 }
 
