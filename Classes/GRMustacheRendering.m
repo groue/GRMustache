@@ -229,7 +229,7 @@ static inline void appendRenderingElementsWithContext(NSMutableString *buffer, N
 }
 
 - (NSString *)render {
-	return [self renderContext:nil];
+	return [self renderObject:nil];
 }
 
 - (NSString *)renderObject:(id)object {
