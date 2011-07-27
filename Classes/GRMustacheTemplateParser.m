@@ -63,7 +63,7 @@
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
 	if (error) {
 		if (outError != NULL) {
-			*outError = error;
+			*outError = [[error retain] autorelease];
 		}
 		return nil;
 	}
