@@ -43,7 +43,7 @@
 		if (thePartialsByName == nil) {
 			thePartialsByName = [NSDictionary dictionary];
 		}
-		NSAssert([thePartialsByName isKindOfClass:[NSDictionary class]], nil);
+		NSAssert([thePartialsByName isKindOfClass:[NSDictionary class]], @"");
 		partialsByName = [thePartialsByName retain];
 	}
 	return self;
