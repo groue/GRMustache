@@ -387,29 +387,31 @@ static NSInteger BOOLPropertyType = NSNotFound;
 	
 	id value = nil;
 	
-	@try {
-        if (preventingNSUndefinedKeyExceptionAttack) {
-            NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
-            if (silentObjects == nil) {
-                silentObjects = [NSMutableSet set];
-                [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheSilentObjects];
+    if (object) {
+        @try {
+            if (preventingNSUndefinedKeyExceptionAttack) {
+                NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheSilentObjects];
+                if (silentObjects == nil) {
+                    silentObjects = [NSMutableSet set];
+                    [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheSilentObjects];
+                }
+                [silentObjects addObject:object];
+                value = [object valueForKey:key];
+                [silentObjects removeObject:object];
+            } else {
+                value = [object valueForKey:key];
             }
-            [silentObjects addObject:object];
-            value = [object valueForKey:key];
-            [silentObjects removeObject:object];
-        } else {
-            value = [object valueForKey:key];
         }
-	}
-	@catch (NSException *exception) {
-		if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-			[[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
-			![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
-		{
-			// that's some exception we are not related to
-			[exception raise];
-		}
-	}
+        @catch (NSException *exception) {
+            if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
+                [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+                ![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
+            {
+                // that's some exception we are not related to
+                [exception raise];
+            }
+        }
+    }
 	
 	// value interpretation
 	
