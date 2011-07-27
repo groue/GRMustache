@@ -1,6 +1,11 @@
 GRMustache Release Notes
 ========================
 
+## v1.7.2
+
+- Fixed [issue #6](https://github.com/groue/GRMustache/issues/6)
+- `[GRMustache preventNSUndefinedKeyExceptionAttack]` no longer prevents the rendering of `nil`.
+
 ## v1.7.1
 
 Added missing header file
