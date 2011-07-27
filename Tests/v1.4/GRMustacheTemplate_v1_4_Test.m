@@ -36,4 +36,20 @@
 	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
 
+- (void)testParseFromFileReportsError {
+	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
+    NSError *error = nil;
+    GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:&error];
+    STAssertNil(template, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
+- (void)testRenderFromFileReportsError {
+	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
+    NSError *error = nil;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfFile:path error:&error];
+    STAssertNil(result, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
 @end

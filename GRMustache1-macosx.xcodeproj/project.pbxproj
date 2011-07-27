@@ -96,12 +96,14 @@
 		565F6BCA139FF13B004D1894 /* GRMustacheTemplate_v1_4_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B5A139FF13B004D1894 /* GRMustacheTemplate_v1_4_Test.m */; };
 		565F6BCB139FF13B004D1894 /* GRMustacheBlockHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B5D139FF13B004D1894 /* GRMustacheBlockHelperTest.m */; };
 		565F6BCC139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B5F139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m */; };
-		565F6BCD139FF13B004D1894 /* GRManagedObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B62139FF13B004D1894 /* GRManagedObjectTest.m */; };
-		565F6BCE139FF13B004D1894 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B63139FF13B004D1894 /* Model.xcdatamodeld */; };
 		565F6BD3139FF157004D1894 /* core in Resources */ = {isa = PBXBuildFile; fileRef = 565F6BCF139FF157004D1894 /* core */; };
 		565F6BD4139FF157004D1894 /* dot_key in Resources */ = {isa = PBXBuildFile; fileRef = 565F6BD0139FF157004D1894 /* dot_key */; };
 		565F6BD5139FF157004D1894 /* extended_path in Resources */ = {isa = PBXBuildFile; fileRef = 565F6BD1139FF157004D1894 /* extended_path */; };
 		565F6BD6139FF157004D1894 /* file_system in Resources */ = {isa = PBXBuildFile; fileRef = 565F6BD2139FF157004D1894 /* file_system */; };
+		5672484213E020C60043E2FA /* syntax_error.conf in Resources */ = {isa = PBXBuildFile; fileRef = 5672484113E020C60043E2FA /* syntax_error.conf */; };
+		5672484913E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 5672484813E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.m */; };
+		5672484E13E02F430043E2FA /* GRManagedObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5672484B13E02F430043E2FA /* GRManagedObjectTest.m */; };
+		5672484F13E02F430043E2FA /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5672484C13E02F430043E2FA /* Model.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -234,13 +236,16 @@
 		565F6B5D139FF13B004D1894 /* GRMustacheBlockHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBlockHelperTest.m; sourceTree = "<group>"; };
 		565F6B5E139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSelectorHelper_v1_5_Test.h; sourceTree = "<group>"; };
 		565F6B5F139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSelectorHelper_v1_5_Test.m; sourceTree = "<group>"; };
-		565F6B61139FF13B004D1894 /* GRManagedObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRManagedObjectTest.h; sourceTree = "<group>"; };
-		565F6B62139FF13B004D1894 /* GRManagedObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRManagedObjectTest.m; sourceTree = "<group>"; };
-		565F6B64139FF13B004D1894 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		565F6BCF139FF157004D1894 /* core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = core; path = "Tests/Mustache-Spec/specs/core"; sourceTree = SOURCE_ROOT; };
 		565F6BD0139FF157004D1894 /* dot_key */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dot_key; path = "Tests/Mustache-Spec/specs/dot_key"; sourceTree = SOURCE_ROOT; };
 		565F6BD1139FF157004D1894 /* extended_path */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extended_path; path = "Tests/Mustache-Spec/specs/extended_path"; sourceTree = SOURCE_ROOT; };
 		565F6BD2139FF157004D1894 /* file_system */ = {isa = PBXFileReference; lastKnownFileType = folder; name = file_system; path = "Tests/Mustache-Spec/specs/file_system"; sourceTree = SOURCE_ROOT; };
+		5672484113E020C60043E2FA /* syntax_error.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = syntax_error.conf; sourceTree = "<group>"; };
+		5672484713E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplate_v1_7_Test.h; sourceTree = "<group>"; };
+		5672484813E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplate_v1_7_Test.m; sourceTree = "<group>"; };
+		5672484A13E02F430043E2FA /* GRManagedObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRManagedObjectTest.h; sourceTree = "<group>"; };
+		5672484B13E02F430043E2FA /* GRManagedObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRManagedObjectTest.m; sourceTree = "<group>"; };
+		5672484D13E02F430043E2FA /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -388,7 +393,7 @@
 				565F6B51139FF13B004D1894 /* v1.3 */,
 				565F6B56139FF13B004D1894 /* v1.4 */,
 				565F6B5B139FF13B004D1894 /* v1.5 */,
-				565F6B60139FF13B004D1894 /* v1.6 */,
+				5672484613E02F0B0043E2FA /* v1.7 */,
 			);
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
@@ -424,6 +429,7 @@
 				565F6B2B139FF13B004D1894 /* partial_with_module.mustache */,
 				565F6B2C139FF13B004D1894 /* passenger.conf */,
 				565F6B2D139FF13B004D1894 /* recursive.mustache */,
+				5672484113E020C60043E2FA /* syntax_error.conf */,
 				565F6B2E139FF13B004D1894 /* template_partial.mustache */,
 				565F6B2F139FF13B004D1894 /* template_partial.txt */,
 				565F6B30139FF13B004D1894 /* utf8.mustache */,
@@ -495,14 +501,16 @@
 			path = v1.5;
 			sourceTree = "<group>";
 		};
-		565F6B60139FF13B004D1894 /* v1.6 */ = {
+		5672484613E02F0B0043E2FA /* v1.7 */ = {
 			isa = PBXGroup;
 			children = (
-				565F6B61139FF13B004D1894 /* GRManagedObjectTest.h */,
-				565F6B62139FF13B004D1894 /* GRManagedObjectTest.m */,
-				565F6B63139FF13B004D1894 /* Model.xcdatamodeld */,
+				5672484A13E02F430043E2FA /* GRManagedObjectTest.h */,
+				5672484B13E02F430043E2FA /* GRManagedObjectTest.m */,
+				5672484713E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.h */,
+				5672484813E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.m */,
+				5672484C13E02F430043E2FA /* Model.xcdatamodeld */,
 			);
-			path = v1.6;
+			path = v1.7;
 			sourceTree = "<group>";
 		};
 		56E29A6213BC3C59006336DB /* Abstract Tree */ = {
@@ -689,6 +697,7 @@
 				565F6BD4139FF157004D1894 /* dot_key in Resources */,
 				565F6BD5139FF157004D1894 /* extended_path in Resources */,
 				565F6BD6139FF157004D1894 /* file_system in Resources */,
+				5672484213E020C60043E2FA /* syntax_error.conf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -758,14 +767,15 @@
 				565F6BCA139FF13B004D1894 /* GRMustacheTemplate_v1_4_Test.m in Sources */,
 				565F6BCB139FF13B004D1894 /* GRMustacheBlockHelperTest.m in Sources */,
 				565F6BCC139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m in Sources */,
-				565F6BCD139FF13B004D1894 /* GRManagedObjectTest.m in Sources */,
-				565F6BCE139FF13B004D1894 /* Model.xcdatamodeld in Sources */,
 				562901FE13A10C0800C92BB7 /* GRMustacheSpec_v1_0_Test.m in Sources */,
 				5629020213A10C3C00C92BB7 /* GRMustacheSpec_v1_4_Test.m in Sources */,
 				5629021013A10CA400C92BB7 /* GSNSDataExtensions.m in Sources */,
 				5629021213A10CA400C92BB7 /* SyckInput.m in Sources */,
 				5629021313A10CA400C92BB7 /* YAMLCategories.m in Sources */,
 				5629021413A10CA400C92BB7 /* YAMLCocoaCategories.m in Sources */,
+				5672484913E02F0B0043E2FA /* GRMustacheTemplate_v1_7_Test.m in Sources */,
+				5672484E13E02F430043E2FA /* GRManagedObjectTest.m in Sources */,
+				5672484F13E02F430043E2FA /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -924,12 +934,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		565F6B63139FF13B004D1894 /* Model.xcdatamodeld */ = {
+		5672484C13E02F430043E2FA /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				565F6B64139FF13B004D1894 /* Model.xcdatamodel */,
+				5672484D13E02F430043E2FA /* Model.xcdatamodel */,
 			);
-			currentVersion = 565F6B64139FF13B004D1894 /* Model.xcdatamodel */;
+			currentVersion = 5672484D13E02F430043E2FA /* Model.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

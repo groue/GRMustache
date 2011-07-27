@@ -73,9 +73,25 @@
 	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfURL:url error:nil];
 	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
+
+- (void)testParseFromURLReportsError {
+	NSURL *url = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"syntax_error.conf"];
+    NSError *error = nil;
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:&error];
+    STAssertNil(template, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
+- (void)testRenderFromURLReportsError {
+	NSURL *url = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"syntax_error.conf"];
+    NSError *error = nil;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:url error:&error];
+    STAssertNil(result, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
 #endif
 
-- (void)testReportsUnclosedSections {
+- (void)testParsingReportsUnclosedSections {
 	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
@@ -84,7 +100,16 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
-- (void)testReportsUnclosedSectionsReportsTheLineNumber {
+- (void)testRenderingReportsUnclosedSections {
+	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
+	NSError *error;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
+	STAssertNil(result, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsUnclosedSectionsReportsTheLineNumber {
 	NSString *templateString = @"hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
@@ -93,11 +118,29 @@
 	STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
 }
 
-- (void)testLotsOfStaches {
+- (void)testRenderingReportsUnclosedSectionsReportsTheLineNumber {
+	NSString *templateString = @"hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}";
+	NSError *error;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
+	STAssertNil(result, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
+}
+
+- (void)testParsingReportsLotsOfStaches {
 	NSString *templateString = @"{{{{foo}}}}";
 	NSError *error;
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
 	STAssertNil(template, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testRenderingReportsLotsOfStaches {
+	NSString *templateString = @"{{{{foo}}}}";
+	NSError *error;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
+	STAssertNil(result, nil);
 	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
