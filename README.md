@@ -140,7 +140,7 @@ Context objects
 
 You will provide a rendering method with a context object.
 
-Mustache tag names are looked in the context object, through the standard Key-Value Coding method `valueForKey:`.
+Mustache tag names are looked for in the context object, through the standard Key-Value Coding method `valueForKey:`.
 
 The most obvious objects which support KVC are dictionaries. You may also provide with any other object:
 
@@ -217,7 +217,7 @@ Each item becomes the context while being rendered. This is how you iterate over
 	- {{name}}
 	{{/items}}
 
-When a key is missed at the item level, it is looked into the enclosing context.
+When a key is missed at the item level, it is looked for in the enclosing context.
 
 #### Helper sections
 
@@ -237,7 +237,7 @@ The value becomes the context while being rendered. This is how you traverse an 
 	  {{/mother}}
 	{{/me}}
 
-When a key is missed, it is looked into the enclosing context. This is the base mechanism for templates like:
+When a key is missed, it is looked for in the enclosing context. This is the base mechanism for templates like:
 
 	{{! If there is a title, render it in a <h1> tag }}
 	{{#title}}
@@ -256,7 +256,7 @@ Partials must have the same extension as their including template.
 
 Recursive partials are possible. Just avoid infinite loops in your context objects.
 
-Depending on the method which has been used to create the original template, partials will be looked in different places :
+Depending on the method which has been used to create the original template, partials will be looked for in different places :
 
 - In the main bundle:
 	- `renderObject:fromString:error:`
@@ -497,7 +497,7 @@ Template loaders
 
 The GRMustacheTemplateLoader class is able to load templates and their partials from anywhere in the file system, and provides more options than the high-level methods already seen.
 
-You may instanciate one with the following GRMustacheTemplateLoader class methods:
+You may instantiate one with the following GRMustacheTemplateLoader class methods:
 
 	// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
 	+ (id)templateLoaderWithBaseURL:(NSURL *)url;
