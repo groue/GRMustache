@@ -32,4 +32,25 @@
 	NSArray *elems;
 }
 @property (nonatomic, readonly) NSString *templateString;
+
+/**
+ Renders a template with a context object.
+ 
+ @returns A string containing the rendered template
+ @param object A context object used for interpreting Mustache tags
+ 
+ @since v1.3.0
+ */
+- (NSString *)renderObject:(id)object;
+
+/**
+ Renders a template with context objects.
+ 
+ @returns A string containing the rendered template
+ @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
+ 
+ @since v1.5.0
+ */
+- (NSString *)renderObjects:(id)object, ...;
+
 @end

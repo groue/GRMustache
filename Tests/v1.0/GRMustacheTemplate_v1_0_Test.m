@@ -24,7 +24,7 @@
 #import "GRMustacheTemplate_v1_0_Test.h"
 #import "GRMustacheError.h"
 #import "GRBoolean.h"
-#import "GRMustacheRendering.h"
+#import "GRMustacheTemplate.h"
 
 
 @implementation GRMustacheTemplate_v1_0_Test

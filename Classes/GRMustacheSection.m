@@ -21,7 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSection_private.h"
-
+#import "GRMustacheTemplate_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustacheLambda_private.h"
 
 @interface GRMustacheSection()
 @property (nonatomic, retain) NSString *name;
@@ -66,5 +68,94 @@
     return [baseTemplateString substringWithRange:range];
 }
 
+- (NSString *)renderObject:(id)object {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
+    for (id<GRMustacheRenderingElement> elem in elems) {
+        [result appendString:[elem renderContext:context]];
+    }
+    [pool drain];
+    return result;
+}
+
+- (NSString *)renderObjects:(id)object, ... {
+    va_list objectList;
+    va_start(objectList, object);
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
+    va_end(objectList);
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    for (id<GRMustacheRenderingElement> elem in elems) {
+        [result appendString:[elem renderContext:context]];
+    }
+    [pool drain];
+    return result;
+}
+
+- (NSString *)renderContext:(GRMustacheContext *)context {
+    NSMutableString *result = nil;
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+	id value = [context valueForKey:name];
+	switch([GRMustacheTemplate objectKind:value]) {
+		case GRMustacheObjectKindFalseValue:
+			if (inverted) {
+                result = [[NSMutableString string] retain];
+                for (id<GRMustacheRenderingElement> elem in elems) {
+                    [result appendString:[elem renderContext:context]];
+                }
+			}
+			break;
+			
+		case GRMustacheObjectKindTrueValue:
+			if (!inverted) {
+                GRMustacheContext *innerContext = [context contextByAddingObject:value];
+                result = [[NSMutableString string] retain];
+                for (id<GRMustacheRenderingElement> elem in elems) {
+                    [result appendString:[elem renderContext:innerContext]];
+                }
+            }
+			break;
+			
+		case GRMustacheObjectKindEnumerable:
+			if (inverted) {
+				BOOL empty = YES;
+				for (id object in value) {
+					empty = NO;
+					break;
+				}
+				if (empty) {
+                    result = [[NSMutableString string] retain];
+                    for (id<GRMustacheRenderingElement> elem in elems) {
+                        [result appendString:[elem renderContext:context]];
+                    }
+				}
+			} else {
+                result = [[NSMutableString string] retain];
+				for (id object in value) {
+                    GRMustacheContext *innerContext = [context contextByAddingObject:object];
+                    for (id<GRMustacheRenderingElement> elem in elems) {
+                        [result appendString:[elem renderContext:innerContext]];
+                    }
+				}
+			}
+			break;
+            
+		case GRMustacheObjectKindLambda:
+			if (!inverted) {
+                result = [[(id<GRMustacheHelper>)value renderObject:context withSection:self] mutableCopy];
+            }
+			break;
+			
+		default:
+			// should not be here
+			NSAssert(NO, @"");
+	}
+    [pool drain];
+    if (!result) {
+        return @"";
+    }
+    return [result autorelease];
+}
 
 @end

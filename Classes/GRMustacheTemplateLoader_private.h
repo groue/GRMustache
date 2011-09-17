@@ -20,11 +20,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateLoader_protected.h"
+#import "GRMustacheEnvironment.h"
+#import <Foundation/Foundation.h>
 
+@class GRMustacheTemplate;
 
-@interface GRMustacheTemplateLoader()
+@interface GRMustacheTemplateLoader: NSObject {
+@private
+	NSString *extension;
+	NSStringEncoding encoding;
+	NSMutableDictionary *templatesById;
+}
+@property (nonatomic, readonly, copy) NSString *extension;
+@property (nonatomic, readonly) NSStringEncoding encoding;
+
 + (id)templateLoaderWithCurrentWorkingDirectory;
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
++ (id)templateLoaderWithBaseURL:(NSURL *)url;
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path __attribute__((deprecated));
+
++ (id)templateLoaderWithDirectory:(NSString *)path;
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated));
+
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+#endif
+
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding __attribute__((deprecated));
+
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+
++ (id)templateLoaderWithBundle:(NSBundle *)bundle;
+
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
+
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;
+
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)templateId error:(NSError **)outError;
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
+
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError;
+
 - (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId;
 @end

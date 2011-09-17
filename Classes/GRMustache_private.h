@@ -22,5 +22,20 @@
 
 #import <Foundation/Foundation.h>
 
+typedef struct {
+	int major;
+	int minor;
+	int patch;
+} GRMustacheVersion;
+
 @interface GRMustache: NSObject
+
++ (GRMustacheVersion)version;
+
++ (BOOL)strictBooleanMode;
+
++ (void)setStrictBooleanMode:(BOOL)aBool;
+
++ (void)preventNSUndefinedKeyExceptionAttack;
+
 @end

@@ -59,8 +59,8 @@
 						   nil], @"people",
 						  nil
 						  ];
-	GRMustacheContext *context = [GRMustacheContext contextWithObjects:[GRMustacheSelectorHelper_v1_3_TestContext class], data, nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];;
+	NSString *result = [template renderObjects:[GRMustacheSelectorHelper_v1_3_TestContext class], data, nil];
 	STAssertEqualObjects(result, @"<ul><li><a href=\"/people/1\">Alan</a></li><li><a href=\"/people/2\">Roger</a></li></ul>", nil);
 }
 

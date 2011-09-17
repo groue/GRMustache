@@ -20,8 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache.h"
-
+#import "GRMustache_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustacheVersion.h"
 
 static BOOL strictBooleanMode = NO;
 
@@ -33,6 +34,17 @@ static BOOL strictBooleanMode = NO;
 
 + (void)setStrictBooleanMode:(BOOL)aBool {
 	strictBooleanMode = aBool;
+}
+
++ (void)preventNSUndefinedKeyExceptionAttack {
+	[GRMustacheContext preventNSUndefinedKeyExceptionAttack];
+}
+
++ (GRMustacheVersion)version {
+	return (GRMustacheVersion){
+		.major = GRMUSTACHE_MAJOR_VERSION,
+		.minor = GRMUSTACHE_MINOR_VERSION,
+		.patch = GRMUSTACHE_PATCH_VERSION };
 }
 
 @end

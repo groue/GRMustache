@@ -21,12 +21,13 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-
+#import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheVariableElement()
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic) BOOL raw;
 - (id)initWithName:(NSString *)name raw:(BOOL)raw;
+- (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
@@ -49,6 +50,27 @@
 - (void)dealloc {
 	[name release];
 	[super dealloc];
+}
+
+- (NSString *)htmlEscape:(NSString *)string {
+	NSMutableString *result = [NSMutableString stringWithString:string];
+	[result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	[result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+	return result;
+}
+
+- (NSString *)renderContext:(GRMustacheContext *)context {
+	id value = [context valueForKey:name];
+	if ([GRMustacheTemplate objectIsFalseValue:value]) {
+		return @"";
+	}
+	if (raw) {
+		return [value description];
+	}
+	return [self htmlEscape:[value description]];
 }
 
 @end

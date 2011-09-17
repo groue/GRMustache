@@ -29,7 +29,6 @@
 #endif
 
 #import "GRMustache_private.h"
-#import "GRMustacheConfiguration.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 

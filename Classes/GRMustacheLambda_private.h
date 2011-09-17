@@ -20,7 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheLambda.h"
+#import <Foundation/Foundation.h>
+@class GRMustacheSection;
+@class GRMustacheContext;
 
 @protocol GRMustacheHelper
 @required
@@ -33,3 +35,19 @@
 }
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
 @end
+
+#if GRMUSTACHE_BLOCKS_AVAILABLE
+@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
+@private
+	NSString *(^block)(GRMustacheSection* section, id context);
+}
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+@end
+
+typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
+
+typedef NSString *(^GRMustacheRenderer)(id object);
+typedef id GRMustacheLambda;
+GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *));
+#endif

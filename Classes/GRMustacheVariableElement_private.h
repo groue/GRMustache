@@ -21,9 +21,9 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheRendering_private.h"
 
-
-@interface GRMustacheVariableElement: NSObject {
+@interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
 @private
 	NSString *name;
 	BOOL raw;

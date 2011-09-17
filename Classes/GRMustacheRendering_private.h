@@ -20,16 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheRendering.h"
-#import "GRMustacheTemplate_private.h"
+#import <Foundation/Foundation.h>
 
-
-typedef enum {
-	GRMustacheObjectKindTrueValue,
-	GRMustacheObjectKindFalseValue,
-	GRMustacheObjectKindEnumerable,
-	GRMustacheObjectKindLambda,
-} GRMustacheObjectKind;
 
 @class GRMustacheContext;
 
@@ -37,9 +29,3 @@ typedef enum {
 @required
 - (NSString *)renderContext:(GRMustacheContext *)context;
 @end
-
-@interface GRMustacheTemplate(PrivateRendering)<GRMustacheRenderingElement>
-+ (BOOL)objectIsFalseValue:(id)object;
-+ (GRMustacheObjectKind)objectKind:(id)object;
-@end
-

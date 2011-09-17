@@ -21,9 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheContextTest.h"
-#import "GRBoolean.h"
+#import "GRBoolean_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheRendering_private.h"
+#import "GRMustacheTemplate_private.h"
 
 
 @interface GRKVCRecorder: NSObject {

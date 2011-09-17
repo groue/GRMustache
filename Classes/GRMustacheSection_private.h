@@ -20,9 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSection.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheRendering_private.h"
 
 
-@interface GRMustacheSection()
+@interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
+@private
+	NSString *name;
+	NSString *baseTemplateString;
+    NSRange range;
+	BOOL inverted;
+	NSArray *elems;
+}
+@property (nonatomic, readonly) NSString *templateString;
+
 + (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
+
+- (NSString *)renderObject:(id)object;
+
+- (NSString *)renderObjects:(id)object, ...;
+
 @end

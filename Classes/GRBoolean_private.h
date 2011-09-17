@@ -20,25 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
-#import "GRMustacheConfiguration.h"
-#import "GRMustacheContext_private.h"
+#import <Foundation/Foundation.h>
 
+@interface GRYes : NSObject <NSCopying>
++ (GRYes *)yes __attribute__((deprecated));
+- (BOOL)boolValue;
+@end
 
-static BOOL strictBooleanMode = NO;
-
-@implementation GRMustache(Configuration)
-
-+ (BOOL)strictBooleanMode {
-	return strictBooleanMode;
-}
-
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
-}
-
-+ (void)preventNSUndefinedKeyExceptionAttack {
-	[GRMustacheContext preventNSUndefinedKeyExceptionAttack];
-}
-
+@interface GRNo : NSObject <NSCopying>
++ (GRNo *)no;
+- (BOOL)boolValue;
 @end

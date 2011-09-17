@@ -23,7 +23,7 @@
 #import <objc/message.h>
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheLambda_private.h"
-#import "GRMustacheRendering.h"
+#import "GRMustacheSection_private.h"
 
 @interface GRMustacheSelectorHelper()
 - (id)initWithObject:(id)object selector:(SEL)renderingSelector;
@@ -62,7 +62,7 @@
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 
-@interface GRMustacheBlockHelper()<GRMustacheHelper>
+@interface GRMustacheBlockHelper()
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
 @end
 

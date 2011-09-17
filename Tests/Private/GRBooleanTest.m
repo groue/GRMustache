@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRBooleanTest.h"
-#import "GRBoolean.h"
-#import "GRMustacheRendering_private.h"
+#import "GRBoolean_private.h"
+#import "GRMustacheTemplate_private.h"
 
 
 @implementation GRBooleanTest
