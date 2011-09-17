@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.7.3
+
+One no longer needs to add `-all_load` to the "Other Linker Flags" target option tu use GRMustache static libraries.
+
 ## v1.7.2
 
 - Fixed [issue #6](https://github.com/groue/GRMustache/issues/6)

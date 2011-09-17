@@ -20,8 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache.h"
-
 
 /**
  The major component of GRMustache version
@@ -42,35 +40,5 @@
  
  @since v1.0.0
  */
-#define GRMUSTACHE_PATCH_VERSION 2
+#define GRMUSTACHE_PATCH_VERSION 3
 
-
-/**
- A C struct that hold GRMustache version information
- 
- @since v1.0.0
- */
-typedef struct {
-	int major;	/**< The major component of the version. */
-	int minor;	/**< The minor component of the version. */
-	int patch;	/**< The patch-level component of the version. */
-} GRMustacheVersion;
-
-/**
- Adds version method to the GRMustache class.
- 
- @since v1.0.0
- */
-@interface GRMustache(Version)
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Getting the GRMustache version
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- @returns the version of GRMustache as a GRMustacheVersion.
- 
- @since v1.0.0
- */
-+ (GRMustacheVersion)version;
-@end

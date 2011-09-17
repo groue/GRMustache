@@ -23,19 +23,82 @@
 #import <Foundation/Foundation.h>
 
 /**
+ A C struct that hold GRMustache version information
+ 
+ @since v1.0.0
+ */
+typedef struct {
+	int major;	/**< The major component of the version. */
+	int minor;	/**< The minor component of the version. */
+	int patch;	/**< The patch-level component of the version. */
+} GRMustacheVersion;
+
+
+/**
  The GRMustache class provides with global-level information and configuration
  of the GRMustache library.
  @since v1.0.0
  */
 @interface GRMustache: NSObject
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Getting the GRMustache version
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ @returns the version of GRMustache as a GRMustacheVersion.
+ 
+ @since v1.0.0
+ */
++ (GRMustacheVersion)version;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Handling of boolean properties
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ A Boolean value that determines whether GRMustache renders templates in strict
+ boolean mode.
+ 
+ @returns YES if GRMustache renders templates in strict boolean mode,
+ NO otherwise. The default value is NO.
+ 
+ In strict boolean mode, properties of context objects that are declared as BOOL
+ are interpreted as numbers, and can not be used for controlling Mustache
+ boolean sections.
+ 
+ In non-strict boolean mode, all properties declared as signed char (including
+ those declared as BOOL), are interpreted as booleans, and can be used for
+ controlling Mustache boolean sections.
+ 
+ @see GRMustache#setStrictBooleanMode:
+ @see GRYes
+ @see GRNo
+ @since v1.0.0
+ */
++ (BOOL)strictBooleanMode;
+
+/**
+ Sets the strict boolean mode of GMustache.
+ 
+ @param aBool YES if GRMustache should render templates in strict boolean mode,
+ NO otherwise.
+ 
+ @see GRMustache#strictBooleanMode
+ @since v1.0.0
+ */
++ (void)setStrictBooleanMode:(BOOL)aBool;
+
++ (void)preventNSUndefinedKeyExceptionAttack;
+
 @end
 
-#import "GRMustacheVersion.h"
-#import "GRMustacheConfiguration.h"
-#import "GRBoolean.h"
-#import "GRMustacheError.h"
-#import "GRMustacheRendering.h"
+#import "GRMustacheSection.h"
+#import "GRMustacheTemplate.h"
+#import "GRMustacheTemplateLoader.h"
 #import "GRMustacheContext.h"
 #import "GRMustacheLambda.h"
-#import "GRMustacheTemplateLoader.h"
-#import "GRMustacheTemplate.h"
+#import "GRBoolean.h"
+#import "GRMustacheEnvironment.h"
+#import "GRMustacheError.h"
+#import "GRMustacheVersion.h"

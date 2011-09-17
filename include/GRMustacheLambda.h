@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheEnvironment.h"
-#import "GRMustacheSection.h"
-
+@class GRMustacheSection;
 @class GRMustacheContext;
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
