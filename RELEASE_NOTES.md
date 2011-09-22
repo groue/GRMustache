@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.7.4
+
+Bug fix: avoid crashing when one provides uninitialized NSError* to GRMustache.
+
 ## v1.7.3
 
 One no longer needs to add `-all_load` to the "Other Linker Flags" target option tu use GRMustache static libraries.
