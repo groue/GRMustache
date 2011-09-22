@@ -186,4 +186,27 @@
 	STAssertEqualObjects(result, @"name:", nil);
 }
 
+- (void)testNullErrorDoesntCrash {
+    [GRMustacheTemplate renderObject:@"" fromString:@"" error:NULL];
+    [GRMustacheTemplate renderObject:@"" fromString:@"{{" error:NULL];
+}
+
+- (void)testNilInitializedErrorDoesntCrash {
+    NSError *error = nil;
+    [GRMustacheTemplate renderObject:@"" fromString:@"" error:&error];
+    error = nil;
+    NSString *result = [GRMustacheTemplate renderObject:@"" fromString:@"{{" error:&error];
+    STAssertNil(result, nil);
+    STAssertNotNil(error.domain, nil);
+}
+
+- (void)testUninitializedErrorDoesntCrash {
+    NSError *error = (NSError *)0xa;   // some awful value
+    [GRMustacheTemplate renderObject:@"" fromString:@"" error:&error];
+    error = (NSError *)0xa;   // some awful value
+    NSString *result = [GRMustacheTemplate renderObject:@"" fromString:@"{{" error:&error];
+    STAssertNil(result, nil);
+    STAssertNotNil(error.domain, nil);
+}
+
 @end
