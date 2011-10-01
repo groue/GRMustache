@@ -150,9 +150,8 @@
 /* Begin PBXFileReference section */
 		565F691C139FF016004D1894 /* libGRMustache1.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGRMustache1.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		565F691F139FF016004D1894 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		565F6923139FF016004D1894 /* GRMustache1-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GRMustache1-Prefix.pch"; sourceTree = "<group>"; };
 		565F6929139FF017004D1894 /* GRMustache1Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustache1Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		565F6934139FF017004D1894 /* GRMustache1Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache1Tests-Info.plist"; sourceTree = "<group>"; };
+		565F6934139FF017004D1894 /* GRMustache1Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GRMustache1Tests-Info.plist"; path = "../Tests/GRMustache1Tests-Info.plist"; sourceTree = "<group>"; };
 		565F694C139FF062004D1894 /* GRBoolean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBoolean.h; sourceTree = "<group>"; };
 		565F694D139FF062004D1894 /* GRBoolean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRBoolean.m; sourceTree = "<group>"; };
 		565F694E139FF062004D1894 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache.h; sourceTree = "<group>"; };
@@ -330,7 +329,6 @@
 		565F6922139FF016004D1894 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				565F6923139FF016004D1894 /* GRMustache1-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -878,11 +876,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GRMustache1/GRMustache1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
 				);
+				OTHER_CFLAGS = "-DTARGET_OS_IPHONE";
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -896,11 +894,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GRMustache1/GRMustache1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
 				);
+				OTHER_CFLAGS = "-DTARGET_OS_IPHONE";
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -918,7 +916,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "GRMustache1Tests/GRMustache1Tests-Info.plist";
+				INFOPLIST_FILE = "Tests/GRMustache1Tests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
@@ -943,7 +941,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				INFOPLIST_FILE = "GRMustache1Tests/GRMustache1Tests-Info.plist";
+				INFOPLIST_FILE = "Tests/GRMustache1Tests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
@@ -964,12 +962,12 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GRMustache1/GRMustache1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/Tests/syck\\\"",
 				);
 				OTHER_CFLAGS = (
+					"-DTARGET_OS_IPHONE",
 					"-DGRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED=30000",
 					"-DGRMUSTACHE_BLOCKS_AVAILABLE=0",
 				);
@@ -986,12 +984,12 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GRMustache1/GRMustache1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/Tests/syck\\\"",
 				);
 				OTHER_CFLAGS = (
+					"-DTARGET_OS_IPHONE",
 					"-DGRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED=30000",
 					"-DGRMUSTACHE_BLOCKS_AVAILABLE=0",
 				);
