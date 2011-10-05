@@ -51,4 +51,24 @@
 	STAssertEqualObjects(result, @"barfoobaz", nil);
 }
 
+- (void)testMultipleObjectsRendering {
+    NSString *templateString = @"{{A}}{{B}}{{C}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    
+    NSDictionary *foo = [NSDictionary dictionaryWithObjectsAndKeys:@"fooA", @"A", @"fooB", @"B", nil];
+    NSDictionary *bar = [NSDictionary dictionaryWithObjectsAndKeys:@"barB", @"B", @"barC", @"C", nil];
+    NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:@"bazA", @"A", @"bazC", @"C", nil];
+    
+    STAssertEqualObjects([template renderObject:foo], @"fooAfooB", nil);
+    STAssertEqualObjects([template renderObject:bar], @"barBbarC", nil);
+    STAssertEqualObjects([template renderObject:baz], @"bazAbazC", nil);
+
+    STAssertEqualObjects(([template renderObjects:foo, bar, nil]), @"fooAbarBbarC", nil);
+    STAssertEqualObjects(([template renderObjects:bar, foo, nil]), @"fooAfooBbarC", nil);
+    STAssertEqualObjects(([template renderObjects:foo, baz, nil]), @"bazAfooBbazC", nil);
+    STAssertEqualObjects(([template renderObjects:baz, foo, nil]), @"fooAfooBbazC", nil);
+    STAssertEqualObjects(([template renderObjects:bar, baz, nil]), @"bazAbarBbazC", nil);
+    STAssertEqualObjects(([template renderObjects:baz, bar, nil]), @"bazAbarBbarC", nil);
+}
+
 @end
