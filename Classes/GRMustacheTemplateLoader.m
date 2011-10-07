@@ -34,12 +34,14 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
 @interface GRMustacheTemplateLoader()
+@property (nonatomic) BOOL shouldFailWithCodeTemplateNotFound;
 - (GRMustacheTemplate *)parseString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
 @synthesize extension;
 @synthesize encoding;
+@synthesize shouldFailWithCodeTemplateNotFound;
 
 + (id)templateLoaderWithCurrentWorkingDirectory {
 	return [self templateLoaderWithDirectory:[[NSFileManager defaultManager] currentDirectoryPath]];
@@ -110,6 +112,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 		extension = [theExtension retain];
 		encoding = theEncoding;
 		templatesById = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
+        shouldFailWithCodeTemplateNotFound = NO;
 	}
 	return self;
 }
@@ -117,13 +120,17 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId error:(NSError **)outError {
 	id templateId = [self templateIdForTemplateNamed:name relativeToTemplateId:baseTemplateId];
 	if (templateId == nil) {
-		if (outError != NULL) {
-			*outError = [NSError errorWithDomain:GRMustacheErrorDomain
-											code:GRMustacheErrorCodeTemplateNotFound
-										userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
-																			 forKey:NSLocalizedDescriptionKey]];
-		}
-		return nil;
+        if (self.shouldFailWithCodeTemplateNotFound) {
+            if (outError != NULL) {
+                *outError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                code:GRMustacheErrorCodeTemplateNotFound
+                                            userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
+                                                                                 forKey:NSLocalizedDescriptionKey]];
+            }
+            return nil;
+        } else {
+            return [GRMustacheTemplate template];
+        }
 	}
 	
 	GRMustacheTemplate *template = [templatesById objectForKey:templateId];
@@ -131,21 +138,30 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 	if (template == nil) {
 		// templateStringForTemplateId is a method that GRMustache users may implement.
 		// We have to take extra care of error handling here.
-		if (outError != NULL) {
-			*outError = nil;
-		}
-		NSString *templateString = [self templateStringForTemplateId:templateId error:outError];
+        NSError *templateStringError = nil;
+		NSString *templateString = [self templateStringForTemplateId:templateId error:&templateStringError];
 		if (!templateString) {
-			if (outError != NULL) {
-				// make sure we return an error
-				if (*outError == nil) {
-					*outError = [NSError errorWithDomain:GRMustacheErrorDomain
-													code:GRMustacheErrorCodeTemplateNotFound
-												userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
-																					 forKey:NSLocalizedDescriptionKey]];
-				}
-			}
-			return nil;
+            if (templateStringError != nil) {
+                if (outError != NULL) {
+                    *outError = templateStringError;
+                }
+                return nil;
+            }
+            
+            if (self.shouldFailWithCodeTemplateNotFound) {
+                if (outError != NULL) {
+                    // make sure we return an error
+                    if (*outError == nil) {
+                        *outError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                        code:GRMustacheErrorCodeTemplateNotFound
+                                                    userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
+                                                                                         forKey:NSLocalizedDescriptionKey]];
+                    }
+                }
+                return nil;
+            } else {
+                return [GRMustacheTemplate template];
+            }
 		}
 		
 		// store an empty template before parsing, so that we support recursive partials

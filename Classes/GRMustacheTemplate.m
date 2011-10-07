@@ -36,6 +36,14 @@
 @implementation GRMustacheTemplate
 @synthesize elems;
 
++ (GRMustacheTemplate *)template
+{
+    static GRMustacheTemplate *emptyTemplate = nil;
+    if (emptyTemplate == nil) {
+        emptyTemplate = [[GRMustacheTemplate templateWithElements:nil] retain];
+    }
+    return emptyTemplate;
+}
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
 	return [[GRMustacheTemplateLoader templateLoaderWithBundle:[NSBundle mainBundle]]

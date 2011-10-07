@@ -41,6 +41,8 @@ typedef enum {
 
 + (GRMustacheObjectKind)objectKind:(id)object;
 
++ (GRMustacheTemplate *)template;
+
 + (id)templateWithElements:(NSArray *)elems;
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError;

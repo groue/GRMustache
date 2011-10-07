@@ -30,6 +30,7 @@
 	NSString *extension;
 	NSStringEncoding encoding;
 	NSMutableDictionary *templatesById;
+    BOOL shouldFailWithCodeTemplateNotFound;
 }
 @property (nonatomic, readonly, copy) NSString *extension;
 @property (nonatomic, readonly) NSStringEncoding encoding;
