@@ -4,3 +4,6 @@
 [submodule "Tests/spec"]
 	path = Tests/spec
 	url = https://github.com/mustache/spec.git
+[submodule "Libs/groue/jrswizzle"]
+	path = Libs/groue/jrswizzle
+	url = git://github.com/groue/jrswizzle.git
