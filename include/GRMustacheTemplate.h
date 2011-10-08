@@ -31,7 +31,10 @@
 @interface GRMustacheTemplate: NSObject {
 @private
 	NSArray *elems;
+    id contextStrategy;
 }
+
++ (id)templateWithOptions:(GRMustacheTemplateOptions)options;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Parsing
@@ -48,6 +51,7 @@
  @since v1.0.0
  */
 + (id)parseString:(NSString *)templateString error:(NSError **)outError;
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -63,6 +67,7 @@
  @since v1.0.0
  */
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 #endif
 
 /**
@@ -78,6 +83,7 @@
  @since v1.4.0
  */
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 /**
  Parses a bundle resource template, and returns a compiled template.
@@ -95,6 +101,7 @@
  @since v1.0.0
  */
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 /**
  Parses a bundle resource template, and returns a compiled template.
@@ -113,6 +120,7 @@
  @since v1.0.0
  */
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +138,7 @@
  @since v1.0.0
  */
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -146,6 +155,7 @@
  @since v1.0.0
  */
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 #endif
 
 /**
@@ -162,6 +172,7 @@
  @since v1.4.0
  */
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 /**
  Renders a context object from a bundle resource template.
@@ -180,6 +191,7 @@
  @since v1.0.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 /**
  Renders a context object from a bundle resource template.
@@ -199,6 +211,7 @@
  @since v1.0.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 /**
  Renders a template with a context object.

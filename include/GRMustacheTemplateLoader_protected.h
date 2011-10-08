@@ -72,6 +72,7 @@
  @since v1.0.0
  */
 - (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 
 /**
  Don't use this method.

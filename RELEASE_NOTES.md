@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.8
+
+**GRMustache now supports [mustache/spec v1.1.2](https://github.com/mustache/spec).**
+
 ## v1.7.4
 
 Bug fix: avoid crashing when one provides uninitialized NSError* to GRMustache.

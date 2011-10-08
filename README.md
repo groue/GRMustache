@@ -1,26 +1,44 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for MacOS 10.6, iPhoneOS 3.0 and iOS 4.0
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for MacOS 10.6+, iPhoneOS 3.0, iOS 4.0, and iOS 5.0.
 
-It supports the following Mustache features:
+It supports the [regular Mustache syntax](http://mustache.github.com/mustache.5.html), the [Mustache specification v1.1.2](https://github.com/mustache/spec), except for whitespace management (more on that below), and language extensions brought by [Handlebars.js](https://github.com/wycats/handlebars.js).
 
-- variables
-- sections (boolean, enumerable, inverted, helpers)
-- partials (and recursive partials)
-- delimiter changes
-- comments
+Full features list:
 
-It supports extensions to the [regular Mustache syntax](http://mustache.github.com/mustache.5.html):
+- HTML-escaped variable tags: `{{name}}`
+- Unescaped variable tags: `{{{name}}}` and `{{&name}}`
+- Sections (boolean, enumerable, inverted, lambdas): `{{#name}}...{{/name}}`
+- partials (and recursive partials): `{{>name}}`
+- delimiter changes: `{{=<% %>=}}`
+- comments: `{{!...}}`
+- "dotted names": `{{foo.bar}}`
+- "implicit iterator": `{{.}}`
+- "extended paths" of [Handlebars.js](https://github.com/wycats/handlebars.js): `{{../foo/bar}}`
 
-- dot variable tag: `{{.}}` (introduced by [mustache.js](http://github.com/janl/mustache.js))
-- extended paths, as in `{{../name}}` (introduced by [Handlebars.js](https://github.com/wycats/handlebars.js))
+Note that:
+
+- GRMustache does not honor the whitespace management rules of the [Mustache specification v1.1.2](https://github.com/mustache/spec): each character of your templates will be rendered as is.
+- The default rendering of GRMustache is compatible with [Handlebars.js](https://github.com/wycats/handlebars.js). This means that support for "extended paths" such as `{{../foo/bar}}` is enabled by default. In order to use the "dotted names" of [Mustache v1.1.2](https://github.com/mustache/spec), such as `{{foo.bar}}`, you will have to ask for them explicitely.
 
 ### Embedding in your XCode project
 
-GRMustache ships as a static library and a bunch of header files, and only depends on the Foundation.framework.
+GRMustache ships as a static library and a header file, and only depends on the Foundation.framework.
 
-Follow the instructions in the [Embedding](https://github.com/groue/GRMustache/wiki/Embedding) wiki page, and import `GRMustache.h` in order to access all GRMustache features.
+The `GRMustache.h` header file is located into the `/include` folder at the root of the GRMustache repository. Add it to your project.
+
+You'll have next to choose a static library among those located in the `/lib` folder:
+
+- `libGRMustache1-ios3.a`
+- `libGRMustache1-ios4.a`
+- `libGRMustache1-macosx10.6.a`
+
+`libGRMustache1-ios3.a` targets iOS3+, and include both device and simulator architectures (i386 armv6 armv7). This means that this single static library allows you to run GRMustache on both simulator and iOS devices.
+
+`libGRMustache1-ios4.a` targets iOS4+, and include both device and simulator architectures (i386 armv6 armv7). On top of all the APIs provided by `libGRMustache1-ios3.a`, you'll find blocks and NSURL* APIs in this version of the lib.
+
+`libGRMustache1-macosx10.6.a` targets MaxOSX 10.6+. It includes both 32 and 64 bits architectures (i386 x86_64), and the full set of GRMustache APIs.
 
 ### Versioning and backward compatibility
 
@@ -31,12 +49,6 @@ You may well get deprecation warnings, but these are only warnings. Support for 
 This is because GRMustache versioning policy complies to the one defined by the [Apache APR](http://apr.apache.org/versioning.html).
 
 Check the [release notes](https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md) for more information, and [Follow us on twitter](http://twitter.com/GRMustache) for breaking development news.
-
-### Testing
-
-Open the GRMustache1-macosx.xcodeproj project and test the GRMustache1 target.
-
-GRMustache is tested against the [core](https://github.com/groue/Mustache-Spec/tree/master/specs/core/), [file_system](https://github.com/groue/Mustache-Spec/tree/master/specs/file_system/), [dot_key](https://github.com/groue/Mustache-Spec/tree/master/specs/dot_key/), and [extended_path](https://github.com/groue/Mustache-Spec/tree/master/specs/extended_path/) modules of the [Mustache-Spec](https://github.com/groue/Mustache-Spec) project. More tests come from the [Ruby](http://github.com/defunkt/mustache) implementation.
 
 ### Forking
 
@@ -88,7 +100,75 @@ The main rendering methods provided by the GRMustacheTemplate class are:
 	                    bundle:(NSBundle *)bundle
 	                     error:(NSError **)outError;
 
-All methods may return errors, described in the "Errors" section below.
+All those methods perform a rendering that is compatible with [Handlebars.js](https://github.com/wycats/handlebars.js) and its "extended paths", such as `{{../foo/bar}}` (see below).
+
+In order to process the "dotted names" of [Mustache v1.1.2](https://github.com/mustache/spec), such as `{{foo.bar}}`, you have to ask for it explicitely:
+
+The recommended way is to call, prior to any rendering, the following method:
+
+	[GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
+	[GRMustacheTemplate renderObject:...]   // will use Mustache v1.1.2 rendering
+
+Since GRMustache 2 will stop using Handlebars as its default behavior, think of this line as something similar to Python's `from __future__ import ...` (see [PEP 236](http://www.python.org/dev/peps/pep-0236/)). When GRMustache hits version 2, it will be easier for you to migrate.
+
+You may also take the explicit and more verbose path, and provide the `GRMustacheTemplateOptionMustacheSpecCompatibility` option to methods below.
+
+	enum {
+	    // default, with support for extended paths of Handlebars.js
+	    GRMustacheTemplateOptionNone = 0,
+	    
+	    // support for the dotted names of Mustache v1.1.2
+	    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+	};
+	
+	typedef NSUInteger GRMustacheTemplateOptions;
+	
+	// Renders the provided templateString.
+	+ (NSString *)renderObject:(id)object
+	                fromString:(NSString *)templateString
+	                   options:(GRMustacheTemplateOptions)options
+	                     error:(NSError **)outError;
+	
+	// Renders the template loaded from a url. (from MacOS 10.6 and iOS 4.0)
+	+ (NSString *)renderObject:(id)object
+	         fromContentsOfURL:(NSURL *)url
+	                   options:(GRMustacheTemplateOptions)options
+	                     error:(NSError **)outError;
+	
+	// Renders the template loaded from a path.
+	+ (NSString *)renderObject:(id)object
+	        fromContentsOfFile:(NSString *)path
+	                   options:(GRMustacheTemplateOptions)options
+	                     error:(NSError **)outError;
+	
+	// Renders the template loaded from a bundle resource of extension "mustache".
+	+ (NSString *)renderObject:(id)object
+	              fromResource:(NSString *)name
+	                    bundle:(NSBundle *)bundle
+	                   options:(GRMustacheTemplateOptions)options
+	                     error:(NSError **)outError;
+	
+	// Renders the template loaded from a bundle resource of provided extension.
+	+ (NSString *)renderObject:(id)object
+	              fromResource:(NSString *)name
+	             withExtension:(NSString *)ext
+	                    bundle:(NSBundle *)bundle
+	                   options:(GRMustacheTemplateOptions)options
+	                     error:(NSError **)outError;
+
+
+### Errors
+
+GRMustache methods may return errors whose domain is GRMustacheErrorDomain.
+
+	extern NSString* const GRMustacheErrorDomain;
+
+Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
+
+	typedef enum {
+		GRMustacheErrorCodeParseError,
+		GRMustacheErrorCodeTemplateNotFound,
+	} GRMustacheErrorCode;
 
 Compiling templates
 -------------------
@@ -134,6 +214,10 @@ For instance:
 	[template renderObject:nil];
 	// @"Hi !", shortcut to renderObject:nil
 	[template render];
+
+All those methods return templates that are compatible with [Handlebars.js](https://github.com/wycats/handlebars.js) and its "extended paths", such as `{{../foo/bar}}` (see below).
+
+In order to process the "dotted names" of [Mustache v1.1.2](https://github.com/mustache/spec), such as `{{foo.bar}}`, you have to ask for it explicitely. See "Rendering methods" above.
 
 Context objects
 ---------------
@@ -219,13 +303,13 @@ Each item becomes the context while being rendered. This is how you iterate over
 
 When a key is missed at the item level, it is looked for in the enclosing context.
 
-#### Helper sections
+#### Lambda sections
 
-Read below "Helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
+Read below "Lambdas", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
 
 #### Other sections
 
-Otherwise - if the value is not enumerable, false, or helper - the content of the section is rendered once.
+Otherwise - if the value is not enumerable, false, or lambda - the content of the section is rendered once.
 
 The value becomes the context while being rendered. This is how you traverse an object hierarchy:
 
@@ -275,14 +359,29 @@ Depending on the method which has been used to create the original template, par
 
 The "Template loaders" section below will show you more partial loading GRMustache features.
 
-Dot key and extended paths
---------------------------
+Implicit iterator, dotted names and extended paths
+--------------------------------------------------
+
+### Implicit iterator
+
+The dot "`.`" stands for the current context itself. This dot key can be useful when iterating a list of scalar objects. For instance, the following context:
+
+	context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects: @"beer", @"ham", nil]
+	                                      forKey:@"item"];
+
+renders:
+
+	<ul><li>beer</li><li>ham</li></ul>
+
+when applied to the template:
+
+	<ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>
 
 ### Extended paths
 
 GRMustache supports extended paths introduced by [Handlebars.js](https://github.com/wycats/handlebars.js). Paths are made up of typical expressions and / characters. Expressions allow you to not only display data from the current context, but to display data from contexts that are descendents and ancestors of the current context.
 
-To display data from descendent contexts, use the / character. So, for example, if your context were structured like:
+To display data from descendent contexts, use the `/` character. So, for example, if your context were structured like:
 
 	context = [NSDictionary dictionaryWithObjectsAndKeys:
 	           [Person personWithName:@"Alan"], @"person",
@@ -301,22 +400,23 @@ would render:
 
 	Alan - Acme
 
-### Dot key
+### Dotted names
 
-Consistently with "`..`", the dot "`.`" stands for the current context itself. This dot key can be useful when iterating a list of scalar objects. For instance, the following context:
+GRMustache supports the dotted names of [Mustache v1.1.2](https://github.com/mustache/spec). Dotted names are made up of typical names and . characters. Expressions allow you to not only display data from the current context, but to display data from contexts that are descendents of the current context.
 
-	context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects: @"beer", @"ham", nil]
-	                                      forKey:@"item"];
+To display data from descendent contexts, use the `.` character. So, for example, if your context were structured like:
 
-renders:
+	context = [NSDictionary dictionaryWithObjectsAndKeys:
+	           [Person personWithName:@"Alan"], @"person",
+	           nil];
 
-	<ul><li>beer</li><li>ham</li></ul>
+you could display the person's name from the top-level context with the following expression:
 
-when applied to the template:
+	{{person.name}}
 
-	<ul>{{#item}}<li>{{.}}</li>{{/item}}</ul>
+You have to explicitely ask for the Mustache spec compatibility in order to use dotted names. See "Rendering methods" above.
 
-Helpers
+Lambdas
 -------
 
 Imagine that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
@@ -336,9 +436,9 @@ We expect, as an output, something like:
 
 GRMustache provides you with two ways in order to achieve this behavior. The first one uses Objective-C blocks, the second requires some selectors to be implemented.
 
-### Block helpers
+### Block lambdas
 
-*Note that block helpers are not available until MacOS 10.6, and iOS 4.0.*
+*Note that block lambdas are not available until MacOS 10.6, and iOS 4.0.*
 
 You will provide in the context a GRMustacheBlockHelper instance, built with a block which returns the string that should be rendered:
 
@@ -366,7 +466,7 @@ The final rendering now goes as usual, by providing objects for template keys, t
 	                        people, @"people",
 	                        nil]];
 
-### Helper methods
+### Method lambdas
 
 Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withContext:` selector (generally, implement a method whose name is the name of the section, to which you append `Section:withContext:`).
 
@@ -447,9 +547,9 @@ Anyway, the rendering can now be done with:
 	[template renderObject:dataModel];
 
 
-#### Usages of helpers
+#### Usages of lambdas
 
-Helpers can be used for whatever you may find relevant.
+Lambdas can be used for whatever you may find relevant.
 
 You may localize:
 
@@ -495,7 +595,11 @@ Template loaders
 
 ### Fine tuning loading of templates
 
-The GRMustacheTemplateLoader class is able to load templates and their partials from anywhere in the file system, and provides more options than the high-level methods already seen.
+The GRMustacheTemplateLoader class is able to load templates and their partials from anywhere.
+
+The [Implementing your own template loading strategy](https://github.com/groue/GRMustache/wiki/Implementing-your-own-template-loading-strategy) wiki page will tell you how to subclass GRMustacheTemplateLoader in order to load templates and partials from an NSDictionary.
+
+The GRMustacheTemplateLoader class itself is able to load templates and their partials from anywhere in the file system, and provides more options than the high-level methods already seen.
 
 You may instantiate one with the following GRMustacheTemplateLoader class methods:
 
@@ -547,21 +651,10 @@ The rendering is done as usual:
 
 	NSString *rendering = [template renderObject:...];
 
-Also don't miss the [Implementing your own template loading strategy](https://github.com/groue/GRMustache/wiki/Implementing-your-own-template-loading-strategy) page in the wiki: you will learn how to subclass GRMustacheTemplateLoader in order to load templates and partials from anywhere.
 
-Errors
-------
+All those template loaders return templates that are compatible with [Handlebars.js](https://github.com/wycats/handlebars.js) and its "extended paths", such as `{{../foo/bar}}` (see below).
 
-The GRMustache library may return errors whose domain is GRMustacheErrorDomain.
-
-	extern NSString* const GRMustacheErrorDomain;
-
-Their error codes may be interpreted with the GRMustacheErrorCode enumeration:
-
-	typedef enum {
-		GRMustacheErrorCodeParseError,
-		GRMustacheErrorCodeTemplateNotFound,
-	} GRMustacheErrorCode;
+In order to process the "dotted names" of [Mustache v1.1.2](https://github.com/mustache/spec), such as `{{foo.bar}}`, you have to ask for it explicitely. See "Rendering methods" above.
 
 
 A less simple example
