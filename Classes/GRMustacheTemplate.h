@@ -23,13 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheEnvironment.h"
 
-enum {
-    GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
-};
-
-typedef NSUInteger GRMustacheTemplateOptions;
-
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.
  

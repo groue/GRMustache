@@ -22,6 +22,14 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    GRMustacheTemplateOptionNone = 0,
+    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+};
+
+typedef NSUInteger GRMustacheTemplateOptions;
+
+
 /**
  A C struct that hold GRMustache version information
  
@@ -90,6 +98,10 @@ typedef struct {
 + (void)setStrictBooleanMode:(BOOL)aBool;
 
 + (void)preventNSUndefinedKeyExceptionAttack;
+
++ (GRMustacheTemplateOptions)defaultTemplateOptions;
+
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
 
 @end
 

@@ -22,6 +22,15 @@
 
 #import <Foundation/Foundation.h>
 
+enum {
+    GRMustacheTemplateOptionNone = 0,
+    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+};
+
+typedef NSUInteger GRMustacheTemplateOptions;
+
+extern GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions;
+
 typedef struct {
 	int major;
 	int minor;
@@ -37,5 +46,9 @@ typedef struct {
 + (void)setStrictBooleanMode:(BOOL)aBool;
 
 + (void)preventNSUndefinedKeyExceptionAttack;
+
++ (GRMustacheTemplateOptions)defaultTemplateOptions;
+
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
 
 @end

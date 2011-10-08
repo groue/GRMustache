@@ -20,42 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache_private.h"
-#import "GRMustacheContext_private.h"
-#import "GRMustacheVersion.h"
+#import "GRMustacheDefaultTemplateOptionsTest.h"
 
-static BOOL strictBooleanMode = NO;
-GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateOptionNone;
 
-@implementation GRMustache
+@implementation GRMustacheDefaultTemplateOptionsTest
 
-+ (BOOL)strictBooleanMode {
-	return strictBooleanMode;
-}
-
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
-}
-
-+ (void)preventNSUndefinedKeyExceptionAttack {
-	[GRMustacheContext preventNSUndefinedKeyExceptionAttack];
-}
-
-+ (GRMustacheVersion)version {
-	return (GRMustacheVersion){
-		.major = GRMUSTACHE_MAJOR_VERSION,
-		.minor = GRMUSTACHE_MINOR_VERSION,
-		.patch = GRMUSTACHE_PATCH_VERSION };
-}
-
-+ (GRMustacheTemplateOptions)defaultTemplateOptions
+- (void)testDefaultTemplateOptions
 {
-    return GRMustacheDefaultTemplateOptions;
-}
+    NSString *templateString = @"{{foo/bar}}---{{foo.bar}}";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"baz" forKey:@"bar"] forKey:@"foo"];
+    NSString *result = nil;
+    GRMustacheTemplateOptions originalTemplateOptions = [GRMustache defaultTemplateOptions];
+    
+    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionNone];
+    result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"baz---", @"");
+    
+    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
+    result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"---baz", @"");
 
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions
-{
-    GRMustacheDefaultTemplateOptions = templateOptions;
+    [GRMustache setDefaultTemplateOptions:originalTemplateOptions];
 }
 
 @end

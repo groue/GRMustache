@@ -21,17 +21,11 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustache_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheEnvironment.h"
 
 @class GRMustacheContextStrategy;
-
-enum {
-    GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
-};
-
-typedef NSUInteger GRMustacheTemplateOptions;
 
 typedef enum {
 	GRMustacheObjectKindTrueValue,

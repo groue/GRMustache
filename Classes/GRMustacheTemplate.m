@@ -51,7 +51,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
-    return [GRMustacheTemplate parseString:templateString options:GRMustacheTemplateOptionNone error:outError];
+    return [GRMustacheTemplate parseString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -62,7 +62,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-    return [GRMustacheTemplate parseContentsOfURL:url options:GRMustacheTemplateOptionNone error:outError];
+    return [GRMustacheTemplate parseContentsOfURL:url options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -73,7 +73,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 #endif
 
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError {
-    return [GRMustacheTemplate parseContentsOfFile:path options:GRMustacheTemplateOptionNone error:outError];
+    return [GRMustacheTemplate parseContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -83,7 +83,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-    return [GRMustacheTemplate parseResource:name bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+    return [GRMustacheTemplate parseResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -92,7 +92,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-    return [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+    return [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -111,7 +111,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
-    return [self renderObject:object fromString:templateString options:GRMustacheTemplateOptionNone error:outError];
+    return [self renderObject:object fromString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -126,7 +126,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
-    return [self renderObject:object fromContentsOfURL:url options:GRMustacheTemplateOptionNone error:outError];
+    return [self renderObject:object fromContentsOfURL:url options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -141,7 +141,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 #endif
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
-    return [self renderObject:object fromContentsOfFile:path options:GRMustacheTemplateOptionNone error:outError];
+    return [self renderObject:object fromContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -155,7 +155,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-    return [self renderObject:object fromResource:name bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+    return [self renderObject:object fromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
@@ -169,7 +169,7 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-    return [self renderObject:object fromResource:name withExtension:ext bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+    return [self renderObject:object fromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
