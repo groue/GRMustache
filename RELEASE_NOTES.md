@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.1
+
+Bug fixes
+
 ## v1.8
 
 **GRMustache now supports [mustache/spec v1.1.2](https://github.com/mustache/spec).**
