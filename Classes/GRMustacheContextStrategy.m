@@ -52,6 +52,14 @@
     return strategy;
 }
 
+- (void)dealloc
+{
+    self.keyComponentsSeparator = nil;
+    self.upContextKey = nil;
+    self.selfContextKey = nil;
+    [super dealloc];
+}
+
 - (id)valueForKey:(NSString *)key inContext:(GRMustacheContext *)context
 {
 	// fast path for selfContextKey
