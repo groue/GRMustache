@@ -25,8 +25,8 @@
 
 @implementation GRMustacheBundleTemplateLoader
 
-- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	if ((self = [self initWithExtension:ext encoding:encoding])) {
+- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options {
+	if ((self = [self initWithExtension:ext encoding:encoding options:options])) {
 		if (theBundle == nil) {
 			theBundle = [NSBundle mainBundle];
 		}

@@ -20,11 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_v1_0_Test.h"
 #import "GRMustacheError.h"
-#import "GRBoolean.h"
-#import "GRMustacheTemplate.h"
+#import "GRBoolean_private.h"
+#import "GRMustacheTemplate_private.h"
 
 
 @implementation GRMustacheTemplate_v1_0_Test

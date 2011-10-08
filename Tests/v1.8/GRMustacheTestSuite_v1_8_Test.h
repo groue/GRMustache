@@ -23,5 +23,5 @@
 #import "GRMustachePublicAPITest.h"
 
 
-@interface GRMustacheSpec_v1_4_Test : GRMustachePublicAPITest
+@interface GRMustacheTestSuite_v1_8_Test : GRMustachePublicAPITest
 @end

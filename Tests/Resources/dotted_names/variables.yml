@@ -1,0 +1,18 @@
+tests:
+  - name: The dot key should render the root context.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: '---'
+    template: '<{{.}}>'
+    expected: '<--->'
+
+  - name: The dot key should render the current context.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { subject: '---' }
+    template: '<{{#subject}}{{.}}{{/subject}}>'
+    expected: '<--->'
+
+  - name: The dot key should render the current list item.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { list: [ '1', '2', '3' ] }
+    template: '<{{#list}}{{.}}{{/list}}>'
+    expected: '<123>'

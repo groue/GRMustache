@@ -20,14 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePrivateAPITest.h"
-#import "GRMustacheTokenizer_private.h"
+#import <Foundation/Foundation.h>
+@class GRMustacheContext;
 
-
-@class GRMustacheTokenRecorder;
-
-@interface GRMustacheTokenizerTest : GRMustachePrivateAPITest {
-	GRMustacheTokenizer *tokenizer;
-	GRMustacheTokenRecorder *tokenRecorder;
+@interface GRMustacheContextStrategy : NSObject {
+@private
+    NSString *keyComponentsSeparator;
+    NSString *upContextKey;
+    NSString *selfContextKey;
 }
+
++ (GRMustacheContextStrategy *)handlebarsStrategy;
++ (GRMustacheContextStrategy *)mustacheSpecStrategy;
+- (id)valueForKey:(NSString *)key inContext:(GRMustacheContext *)context;
+
 @end

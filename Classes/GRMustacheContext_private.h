@@ -27,10 +27,13 @@
 	id object;
 	GRMustacheContext *parent;
 }
+@property (nonatomic, retain, readonly) id object;
+@property (nonatomic, retain, readonly) GRMustacheContext *parent;
 + (void)preventNSUndefinedKeyExceptionAttack;
 + (id)contextWithObject:(id)object;
 + (id)contextWithObjects:(id)object, ...;
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList;
 - (GRMustacheContext *)contextByAddingObject:(id)object;
 - (id)valueForKey:(NSString *)key;
+- (id)valueForKeyComponent:(NSString *)key;
 @end

@@ -35,7 +35,7 @@
 	NSString *extension;
 	NSStringEncoding encoding;
 	NSMutableDictionary *templatesById;
-    BOOL shouldFailWithCodeTemplateNotFound;
+    GRMustacheTemplateOptions templateOptions;
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
@@ -49,6 +49,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)url;
++ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options;
 #endif
 
 /**
@@ -72,6 +73,7 @@
  @since v1.6.0
  */
 + (id)templateLoaderWithDirectory:(NSString *)path;
++ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -89,6 +91,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 #endif
 
 /**
@@ -122,6 +125,7 @@
  @since v1.6.0
  */
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
@@ -140,6 +144,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 #endif
 
 /**
@@ -175,6 +180,7 @@
  @since v1.4.0
  */
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 
 /**
  @returns A GRMustacheTemplateLoader instance
@@ -186,6 +192,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;
 
 /**
  @returns A GRMustacheTemplateLoader instance
@@ -200,6 +207,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 
 /**
  @returns A GRMustacheTemplateLoader instance
@@ -215,6 +223,7 @@
  @since v1.0.0
  */
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 
 /**
  @returns a GRMustacheTemplate instance

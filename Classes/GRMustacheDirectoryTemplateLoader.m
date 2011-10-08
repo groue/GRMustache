@@ -26,8 +26,8 @@
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 @implementation GRMustacheDirectoryURLTemplateLoader
 
-- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	if ((self = [super initWithExtension:ext encoding:encoding])) {
+- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
+	if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
 		url = [theURL retain];
 	}
 	return self;
@@ -77,8 +77,8 @@
 
 @implementation GRMustacheDirectoryPathTemplateLoader
 
-- (id)initWithPath:(NSString *)thePath extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-	if ((self = [super initWithExtension:ext encoding:encoding])) {
+- (id)initWithPath:(NSString *)thePath extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
+	if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
 		path = [thePath retain];
 	}
 	return self;

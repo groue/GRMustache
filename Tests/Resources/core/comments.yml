@@ -1,0 +1,31 @@
+tests:
+  - name: Single line comment block should be removed from the template.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { }
+    template: '<{{! Comment Block! }}>'
+    expected: '<>'
+
+  - name: Multiline comment block should be removed from the template.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { }
+    template: |
+      <{{!
+        This is a
+        multi-line comment...
+      }}>
+    expected: |
+      <>
+
+  # Whitespace Sensitivity
+
+  - name: Single left outer whitespace should be honored.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { }
+    template: '< {{! Comment block}}>'
+    expected: '< >'
+
+  - name: Single right outer whitespace should be honored.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { }
+    template: '<{{! Comment block}} >'
+    expected: '< >'

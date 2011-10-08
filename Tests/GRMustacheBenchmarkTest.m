@@ -29,17 +29,17 @@
 
 @implementation GRMustacheBenchmarkTest
 
-//- (void)testParsingBenchmark {
-//    NSString *templateString = [self templateString];
-//    [GRMustacheTemplate parseString:templateString error:nil];
-//}
-//
-//- (void)testRenderingBenchmark {
-//    NSString *templateString = [self templateString];
-//    NSDictionary *context = [self context];
-//    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-//    [template renderObject:context];
-//}
+- (void)testParsingBenchmark {
+    NSString *templateString = [self templateString];
+    [GRMustacheTemplate parseString:templateString error:nil];
+}
+
+- (void)testRenderingBenchmark {
+    NSString *templateString = [self templateString];
+    NSDictionary *context = [self context];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    [template renderObject:context];
+}
 
 #pragma mark Private
 

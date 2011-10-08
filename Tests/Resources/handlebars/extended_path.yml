@@ -1,0 +1,96 @@
+tests:
+  - name: 3rd assertion of test "zeros" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { num1 : { num2 : 0 }}
+    template: 'num: {{num1/num2}}'
+    expected: 'num: 0'
+
+  - name: 1st assertion of test "nested paths" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { alan: { expression: 'beautiful' } }
+    template: 'Goodbye {{alan/expression}} world!'
+    expected: 'Goodbye beautiful world!'
+
+  - name: 1st assertion of test "nested paths with empty string value" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { alan: { expression: '' } }
+    template: 'Goodbye {{alan/expression}} world!'
+    expected: 'Goodbye  world!'
+
+  - name: 2nd assertion of test "bad idea nested paths" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { goodbyes: [ { text: 'goodbye' }, { text: 'Goodbye' }, { text: 'GOODBYE' } ], world: 'world' }
+    template: '{{#goodbyes}}{{.././world}} {{/goodbyes}}'
+    expected: 'world world world '
+
+  - name: 1st assertion of test "complex but empty paths" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { person: { name: null } }
+    template: '{{person/name}}'
+    expected: ''
+
+  - name: 2nd assertion of test "complex but empty paths" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { person: { } }
+    template: '{{person/name}}'
+    expected: ''
+
+  - name: 2nd assertion of test "this keyword in paths" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { hellos: [ { text: 'hello' }, { text: 'Hello' }, { text: 'HELLO' } ] }
+    template: '{{#hellos}}{{./text}}{{/hellos}}'
+    expected: 'helloHelloHELLO'
+
+  - name: 1st assertion of test "block with complex lookup" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'Alan', goodbyes: [ { text: 'goodbye' }, { text: 'Goodbye' }, { text: 'GOODBYE' } ] }
+    template: '{{#goodbyes}}{{text}} cruel {{../name}}! {{/goodbyes}}'
+    expected: 'goodbye cruel Alan! Goodbye cruel Alan! GOODBYE cruel Alan! '
+
+  - name: 1st assertion of test "block with deep nested complex lookup" of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { omg: 'OMG!', outer: [ { inner: [ { text: 'goodbye' } ] } ] }
+    template: '{{#outer}}Goodbye {{#inner}}cruel {{../../omg}}{{/inner}}{{/outer}}'
+    expected: 'Goodbye cruel OMG!'
+
+  - name: ".. should base the remaining path on the including context."
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'root_name', outer: { name: 'outer_name', inner: { name: 'inner_name' }} }
+    template: '<{{#outer}}{{#inner}}{{../name}}{{/inner}}{{/outer}}>'
+    expected: '<outer_name>'
+
+  - name: "../.. should base the remaining path on the including context of the including context."
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'root_name', outer: { name: 'outer_name', inner: { name: 'inner_name' }} }
+    template: '<{{#outer}}{{#inner}}{{../../name}}{{/inner}}{{/outer}}>'
+    expected: '<root_name>'
+
+  - name: "A .. suite which rewinds too far should stop the evaluation and render an empty string."
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'root_name', outer: { name: 'outer_name', inner: { name: 'inner_name' }} }
+    template: '<{{#outer}}{{#inner}}{{../../../name}}{{/inner}}{{/outer}}>'
+    expected: '<>'
+
+  - name: A missed key component should be looked in including context.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { subject: '---', outer: { inner: { subject: '+++' }} }
+    template: '<{{#outer}}{{#inner}}{{../subject}}{{/inner}}{{/outer}}>'
+    expected: '<--->'
+
+  - name: A key component should base the remaining path on the value eventually provided.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { subject: { name: 'root_name' }, outer: { name: 'outer_name', inner: { name: 'inner_name', subject: '+++' }} }
+    template: '<{{#outer}}{{#inner}}{{../subject/name}}{{/inner}}{{/outer}}>'
+    expected: '<root_name>'
+
+  - name: A key component should restrict the context for the remaining path to the value eventually provided.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'root_name', subject: { }, outer: { name: 'outer_name', inner: { name: 'inner_name', subject: '+++' }} }
+    template: '<{{#outer}}{{#inner}}{{../subject/name}}{{/inner}}{{/outer}}>'
+    expected: '<>'
+
+  - name: A key component that is missed in the whole context stack should stop the evaluation and render an empty string.
+    options: 0 # GRMustacheTemplateOptionNone
+    data: { name: 'root_name', outer: { name: 'outer_name', inner: { name: 'inner_name', subject: '+++' }} }
+    template: '<{{#outer}}{{#inner}}{{../subject/name}}{{/inner}}{{/outer}}>'
+    expected: '<>'

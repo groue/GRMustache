@@ -1,6 +1,3 @@
-[submodule "Mustache-Spec"]
-	path = Tests/Mustache-Spec
-	url = https://github.com/groue/Mustache-Spec.git
 [submodule "Tests/spec"]
 	path = Tests/spec
 	url = https://github.com/mustache/spec.git

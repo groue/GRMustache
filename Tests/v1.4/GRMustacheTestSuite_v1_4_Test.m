@@ -20,19 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSpec_v1_4_Test.h"
+#import "GRMustacheTestSuite_v1_4_Test.h"
 #import "YAML.h"
 #import "GRMustacheTemplateLoader_protected.h"
 
 
-@interface GRMustacheSpecTemplateLoader_v1_4 : GRMustacheTemplateLoader {
+@interface GRMustacheTestSuiteTemplateLoader_v1_4 : GRMustacheTemplateLoader {
 	NSDictionary *partialsByName;
 }
 + (id)loaderWithDictionary:(NSDictionary *)partialsByName;
 - (id)initWithDictionary:(NSDictionary *)partialsByName;
 @end
 
-@implementation GRMustacheSpecTemplateLoader_v1_4
+@implementation GRMustacheTestSuiteTemplateLoader_v1_4
 
 + (id)loaderWithDictionary:(NSDictionary *)partialsByName {
 	return [[[self alloc] initWithDictionary:partialsByName] autorelease];
@@ -65,19 +65,18 @@
 @end
 
 
-@interface GRMustacheSpec_v1_4_Test()
+@interface GRMustacheTestSuite_v1_4_Test()
 - (void)testModuleNamed:(NSString *)moduleName;
 - (void)testSuiteAtURL:(NSURL *)suiteURL inModuleNamed:(NSString *)moduleName;
 - (void)testSuiteTest:(NSDictionary *)suiteTest inSuiteNamed:(NSString *)suiteName inModuleNamed:(NSString *)moduleName;
 @end
 
-@implementation GRMustacheSpec_v1_4_Test
+@implementation GRMustacheTestSuite_v1_4_Test
 
 - (void)testMustacheSpec {
 	[self testModuleNamed:@"core"];
-	[self testModuleNamed:@"dot_key"];
-	[self testModuleNamed:@"extended_path"];
 	[self testModuleNamed:@"file_system"];
+	[self testModuleNamed:@"handlebars"];
 }
 
 - (void)testModuleNamed:(NSString *)moduleName {
@@ -89,12 +88,6 @@
 
 - (void)testSuiteAtURL:(NSURL *)suiteURL inModuleNamed:(NSString *)moduleName {
 	NSString *suiteName = [[suiteURL lastPathComponent] stringByDeletingPathExtension];
-	if ([suiteName isEqualToString:@"lambda_sections"]) {
-		return;
-	}
-	if ([suiteName isEqualToString:@"lambda_variables"]) {
-		return;
-	}
 	NSString *yamlString = [NSString stringWithContentsOfURL:suiteURL encoding:NSUTF8StringEncoding error:nil];
 	id suite = yaml_parse(yamlString);
 	STAssertNotNil(suite, nil);
@@ -133,7 +126,7 @@
 		loader = [GRMustacheTemplateLoader templateLoaderWithBasePath:templatesDirectoryPath extension:[baseTemplatePath pathExtension]];
 		template = [loader parseTemplateNamed:[baseTemplatePath stringByDeletingPathExtension] error:&error];
 	} else {
-		loader = [GRMustacheSpecTemplateLoader_v1_4 loaderWithDictionary:partials];
+		loader = [GRMustacheTestSuiteTemplateLoader_v1_4 loaderWithDictionary:partials];
 		template = [loader parseString:templateString error:&error];
 	}
 

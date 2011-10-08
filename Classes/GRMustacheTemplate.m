@@ -27,75 +27,96 @@
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRBoolean_private.h"
+#import "GRMustacheContextStrategy_private.h"
 
+static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateCurrentStrategy";
 
 @interface GRMustacheTemplate()
-- (id)initWithElements:(NSArray *)theElems;
+@property (nonatomic, retain) GRMustacheContextStrategy *contextStrategy;
++ (void)setCurrentContextStrategy:(GRMustacheContextStrategy *)contextStrategy;
+- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options;
 @end
 
 @implementation GRMustacheTemplate
 @synthesize elems;
+@synthesize contextStrategy;
 
-+ (GRMustacheTemplate *)template
++ (id)templateWithOptions:(GRMustacheTemplateOptions)options
 {
     static GRMustacheTemplate *emptyTemplate = nil;
     if (emptyTemplate == nil) {
-        emptyTemplate = [[GRMustacheTemplate templateWithElements:nil] retain];
+        emptyTemplate = [[GRMustacheTemplate templateWithElements:nil options:options] retain];
     }
     return emptyTemplate;
 }
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithBundle:[NSBundle mainBundle]]
-			parseString:templateString
-			error:outError];
+    return [GRMustacheTemplate parseString:templateString options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
+{
+    GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithBundle:[NSBundle mainBundle] options:options];
+	return [loader parseString:templateString error:outError];
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError {
-	id loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension]];
+    return [GRMustacheTemplate parseContentsOfURL:url options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
+	GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension] options:options];
 	NSAssert([loader isKindOfClass:[GRMustacheDirectoryURLTemplateLoader class]], @"");
 	return [(GRMustacheDirectoryURLTemplateLoader *)loader parseContentsOfURL:url error:outError];
 }
 #endif
 
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError {
-	id loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension]];
+    return [GRMustacheTemplate parseContentsOfFile:path options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
+	GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension] options:options];
 	NSAssert([loader isKindOfClass:[GRMustacheDirectoryPathTemplateLoader class]], @"");
 	return [(GRMustacheDirectoryPathTemplateLoader *)loader parseContentsOfFile:path error:outError];
 }
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithBundle:bundle]
-			parseTemplateNamed:name
-			error:outError];
+    return [GRMustacheTemplate parseResource:name bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
+    GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithBundle:bundle options:options];
+	return [loader parseTemplateNamed:name error:outError];
 }
 
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
-	return [[GRMustacheTemplateLoader templateLoaderWithBundle:bundle extension:ext]
-			parseTemplateNamed:name
-			error:outError];
+    return [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
 }
 
-+ (id)templateWithElements:(NSArray *)elems {
-	return [[[self alloc] initWithElements:elems] autorelease];
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
+    GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithBundle:bundle extension:ext options:options];
+	return [loader parseTemplateNamed:name error:outError];
 }
 
-- (id)initWithElements:(NSArray *)theElems {
-	if ((self = [self init])) {
-		self.elems = theElems;
-	}
-	return self;
++ (id)templateWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options {
+	return [[[self alloc] initWithElements:elems options:options] autorelease];
 }
 
 - (void)dealloc {
 	[elems release];
+    [contextStrategy release];
 	[super dealloc];
 }
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError {
+    return [self renderObject:object fromString:templateString options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString options:options error:outError];
     NSString *result = [[template renderObject:object] retain];
 	if (!template && outError != NULL) [*outError retain];
     [pool drain];
@@ -105,8 +126,12 @@
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError {
+    return [self renderObject:object fromContentsOfURL:url options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfURL:url options:options error:outError];
 	NSString *result = [[template renderObject:object] retain];
 	if (!template && outError != NULL) [*outError retain];
     [pool drain];
@@ -116,8 +141,12 @@
 #endif
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError {
+    return [self renderObject:object fromContentsOfFile:path options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path options:options error:outError];
 	NSString *result = [[template renderObject:object] retain];
 	if (!template && outError != NULL) [*outError retain];
     [pool drain];
@@ -126,8 +155,12 @@
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {
+    return [self renderObject:object fromResource:name bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name bundle:bundle options:options error:outError];
     NSString *result = [[template renderObject:object] retain];
 	if (!template && outError != NULL) [*outError retain];
     [pool drain];
@@ -136,8 +169,12 @@
 }
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError {
+    return [self renderObject:object fromResource:name withExtension:ext bundle:bundle options:GRMustacheTemplateOptionNone error:outError];
+}
+
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle error:outError];
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle options:options error:outError];
     NSString *result = [[template renderObject:object] retain];
 	if (!template && outError != NULL) [*outError retain];
     [pool drain];
@@ -198,6 +235,7 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
+    [GRMustacheTemplate setCurrentContextStrategy:self.contextStrategy];
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     for (id<GRMustacheRenderingElement> elem in elems) {
@@ -205,6 +243,36 @@
     }
     [pool drain];
     return result;
+}
+
++ (GRMustacheContextStrategy *)currentContextStrategy
+{
+    return [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheTemplateCurrentStrategy];
+}
+
+#pragma mark - Private
+
++ (void)setCurrentContextStrategy:(GRMustacheContextStrategy *)contextStrategy
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    if (contextStrategy) {
+        [threadDictionary setObject:contextStrategy forKey:GRMustacheTemplateCurrentStrategy];
+    } else {
+        [threadDictionary removeObjectForKey:GRMustacheTemplateCurrentStrategy];
+    }
+}
+
+- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options {
+	if ((self = [self init])) {
+		self.elems = theElems;
+        
+        if (options & GRMustacheTemplateOptionMustacheSpecCompatibility) {
+            self.contextStrategy = [GRMustacheContextStrategy mustacheSpecStrategy];
+        } else {
+            self.contextStrategy = [GRMustacheContextStrategy handlebarsStrategy];
+        }
+	}
+	return self;
 }
 
 @end

@@ -20,14 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePrivateAPITest.h"
-#import "GRMustacheTokenizer_private.h"
+#import "GRMustacheTestBase.h"
 
-
-@class GRMustacheTokenRecorder;
-
-@interface GRMustacheTokenizerTest : GRMustachePrivateAPITest {
-	GRMustacheTokenizer *tokenizer;
-	GRMustacheTokenRecorder *tokenRecorder;
-}
+@interface GRMustachePrivateAPITest : GRMustacheTestBase
 @end

@@ -20,9 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
 #import "GRMustacheTemplate_private.h"
-
+#import "GRMustacheTestBase.h"
 
 @implementation GRMustacheTestBase
 @dynamic testBundle;
@@ -32,22 +31,24 @@
 }
 
 - (GRMustacheTemplate *)parseResource:(NSString *)name {
-	return [GRMustacheTemplate parseResource:name bundle:self.testBundle error:nil];
+	return [GRMustacheTemplate parseResource:name
+                                      bundle:self.testBundle
+                                       error:nil];
 }
 
 - (NSString *)renderObject:(id)object fromResource:(NSString *)name {
 	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-									bundle:self.testBundle
-									 error:nil];
+                               fromResource:name
+                                     bundle:self.testBundle
+                                      error:nil];
 }
 
 - (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext {
 	return [GRMustacheTemplate renderObject:object
-							  fromResource:name
-							 withExtension:ext
-									bundle:self.testBundle
-									 error:nil];
+                               fromResource:name
+                              withExtension:ext
+                                     bundle:self.testBundle
+                                      error:nil];
 }
 
 @end

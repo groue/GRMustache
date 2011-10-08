@@ -24,6 +24,15 @@
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheEnvironment.h"
 
+@class GRMustacheContextStrategy;
+
+enum {
+    GRMustacheTemplateOptionNone = 0,
+    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+};
+
+typedef NSUInteger GRMustacheTemplateOptions;
+
 typedef enum {
 	GRMustacheObjectKindTrueValue,
 	GRMustacheObjectKindFalseValue,
@@ -34,6 +43,7 @@ typedef enum {
 @interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
 @private
 	NSArray *elems;
+    GRMustacheContextStrategy *contextStrategy;
 }
 @property (nonatomic, retain) NSArray *elems;
 
@@ -41,33 +51,45 @@ typedef enum {
 
 + (GRMustacheObjectKind)objectKind:(id)object;
 
-+ (GRMustacheTemplate *)template;
++ (GRMustacheContextStrategy *)currentContextStrategy;
 
-+ (id)templateWithElements:(NSArray *)elems;
++ (id)templateWithOptions:(GRMustacheTemplateOptions)options;
+
++ (id)templateWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError;
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 #endif
 
 + (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 #endif
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
 
 - (NSString *)renderObject:(id)object;
 

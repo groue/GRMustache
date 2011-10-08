@@ -68,7 +68,7 @@
 		return nil;
 	}
 	
-	return [GRMustacheTemplate templateWithElements:currentElements];
+    return [self.templateLoader templateWithElements:currentElements];
 }
 
 - (void)dealloc {
@@ -137,6 +137,7 @@
 			NSError *partialError;
 			GRMustacheTemplate *partialTemplate = [templateLoader parseTemplateNamed:token.content
 																relativeToTemplateId:templateId
+                                                                           asPartial:YES
 																			   error:&partialError];
 			if (partialTemplate == nil) {
 				[self finishWithError:partialError];

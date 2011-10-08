@@ -25,6 +25,8 @@
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheProperty_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
+#import "GRMustacheContextStrategy_private.h"
+#import "GRMustacheTemplate_private.h"
 
 static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
@@ -33,7 +35,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
-- (id)valueForKeyComponent:(NSString *)key;
 @end
 
 
@@ -89,50 +90,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
 }
 
-- (id)valueForKey:(NSString *)key {
-	NSArray *components = [key componentsSeparatedByString:@"/"];
-	
-	// fast path for single component
-	if (components.count == 1) {
-		if ([key isEqualToString:@"."]) {
-			return object;
-		}
-		if ([key isEqualToString:@".."]) {
-			if (parent == nil) {
-				// went too far
-				return nil;
-			}
-			return parent.object;
-		}
-		return [self valueForKeyComponent:key];
-	}
-	
-	// slow path for multiple components
-	GRMustacheContext *context = self;
-	for (NSString *component in components) {
-		if (component.length == 0) {
-			continue;
-		}
-		if ([component isEqualToString:@"."]) {
-			continue;
-		}
-		if ([component isEqualToString:@".."]) {
-			context = context.parent;
-			if (context == nil) {
-				// went too far
-				return nil;
-			}
-			continue;
-		}
-		id value = [context valueForKeyComponent:component];
-		if (value == nil) {
-			return nil;
-		}
-		// further contexts are not in the context stack
-		context = [GRMustacheContext contextWithObject:value];
-	}
-	
-	return context.object;
+- (id)valueForKey:(NSString *)key
+{
+    return [[GRMustacheTemplate currentContextStrategy] valueForKey:key inContext:self];
 }
 
 - (void)dealloc {
