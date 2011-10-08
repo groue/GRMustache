@@ -102,14 +102,6 @@
 	NSString *expected = [suiteTest objectForKey:@"expected"];
 	NSMutableDictionary *partials = [[[suiteTest objectForKey:@"partials"] mutableCopy] autorelease];
     
-    if ([suiteName isEqualToString:@"partials"] &&
-        [testName isEqualToString:@"Failed Lookup"] &&
-        [testDesc isEqualToString:@"The empty string should be used when the named partial is not found."])
-    {
-        // Ignore this test, because we don't want to hide the GRMustache user that one of his partials is not found.
-        return;
-    }
-
 	NSError *error;
 	GRMustacheTemplateLoader *loader = [GRMustacheSpecTemplateLoader_v1_0 loaderWithDictionary:partials];
 	GRMustacheTemplate *template = [loader parseString:templateString error:&error];
