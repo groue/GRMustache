@@ -97,6 +97,8 @@
 		565F6BCB139FF13B004D1894 /* GRMustacheBlockHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B5D139FF13B004D1894 /* GRMustacheBlockHelperTest.m */; };
 		565F6BCC139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6B5F139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m */; };
 		565F6BD8139FF23C004D1894 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 565F6BD7139FF23C004D1894 /* CoreData.framework */; };
+		5663FC4914418B9F00B60CEA /* GRMustacheAvailabilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 5663FC4814418B9F00B60CEA /* GRMustacheAvailabilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5663FC4A14418BE300B60CEA /* GRMustacheAvailabilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 5663FC4814418B9F00B60CEA /* GRMustacheAvailabilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5665299113A12E9600B98B87 /* GRBoolean.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F694D139FF062004D1894 /* GRBoolean.m */; };
 		5665299213A12E9600B98B87 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F694F139FF062004D1894 /* GRMustache.m */; };
 		5665299313A12E9600B98B87 /* GRMustacheBundleTemplateLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F6951139FF062004D1894 /* GRMustacheBundleTemplateLoader.m */; };
@@ -262,6 +264,7 @@
 		565F6B5E139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheSelectorHelper_v1_5_Test.h; sourceTree = "<group>"; };
 		565F6B5F139FF13B004D1894 /* GRMustacheSelectorHelper_v1_5_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSelectorHelper_v1_5_Test.m; sourceTree = "<group>"; };
 		565F6BD7139FF23C004D1894 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		5663FC4814418B9F00B60CEA /* GRMustacheAvailabilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheAvailabilityMacros.h; sourceTree = "<group>"; };
 		566529C313A12E9600B98B87 /* libGRMustache1-ios3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache1-ios3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustacheEnvironment.h; sourceTree = "<group>"; };
 		5672485413E0310D0043E2FA /* GRManagedObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRManagedObjectTest.h; sourceTree = "<group>"; };
@@ -404,6 +407,7 @@
 				565F694E139FF062004D1894 /* GRMustache.h */,
 				565F694F139FF062004D1894 /* GRMustache.m */,
 				565F6950139FF062004D1894 /* GRMustache_private.h */,
+				5663FC4814418B9F00B60CEA /* GRMustacheAvailabilityMacros.h */,
 				566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */,
 				565F695A139FF062004D1894 /* GRMustacheError.h */,
 				565F695B139FF062004D1894 /* GRMustacheError.m */,
@@ -644,6 +648,7 @@
 				563BF6F514404471005A4F58 /* JRSwizzle.h in Headers */,
 				563BF72014404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */,
 				563BF72214404493005A4F58 /* GRMustacheProperty_private.h in Headers */,
+				5663FC4914418B9F00B60CEA /* GRMustacheAvailabilityMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -681,6 +686,7 @@
 				566529BE13A12E9600B98B87 /* GRMustacheTokenizer_private.h in Headers */,
 				566529BF13A12E9600B98B87 /* GRMustacheVariableElement_private.h in Headers */,
 				569C86771424A6D800D6BC77 /* GRBoolean_private.h in Headers */,
+				5663FC4A14418BE300B60CEA /* GRMustacheAvailabilityMacros.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,7 +976,6 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Tests/GRMustache1Tests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -995,7 +1000,6 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "Tests/GRMustache1Tests-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

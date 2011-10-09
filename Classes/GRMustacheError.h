@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
 
 /**
@@ -28,7 +29,7 @@
  
  @since v1.0.0
  */
-extern NSString* const GRMustacheErrorDomain;
+extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 /**
  When a GRMustache-generated NSError has the code GRMustacheErrorCodeParseError,
@@ -37,7 +38,7 @@ extern NSString* const GRMustacheErrorDomain;
  
  @since v1.0.0
  */
-extern NSString* const GRMustacheErrorLine;
+extern NSString* const GRMustacheErrorLine AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 /**
  The codes of a GRMustache-generated NSError
@@ -58,6 +59,6 @@ typedef enum {
 	 @since v1.0.0
 	 */
 	GRMustacheErrorCodeTemplateNotFound,
-} GRMustacheErrorCode;
+} GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 

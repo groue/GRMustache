@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
 enum {
     GRMustacheTemplateOptionNone = 0,
@@ -58,7 +59,7 @@ typedef struct {
  
  @since v1.0.0
  */
-+ (GRMustacheVersion)version;
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Handling of boolean properties
@@ -84,7 +85,7 @@ typedef struct {
  @see GRNo
  @since v1.0.0
  */
-+ (BOOL)strictBooleanMode;
++ (BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 /**
  Sets the strict boolean mode of GMustache.
@@ -95,13 +96,13 @@ typedef struct {
  @see GRMustache#strictBooleanMode
  @since v1.0.0
  */
-+ (void)setStrictBooleanMode:(BOOL)aBool;
++ (void)setStrictBooleanMode:(BOOL)aBool AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
-+ (void)preventNSUndefinedKeyExceptionAttack;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER;
 
-+ (GRMustacheTemplateOptions)defaultTemplateOptions;
++ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
 @end
 

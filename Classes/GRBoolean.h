@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
 /**
  The GRYes class provides with a singleton which you can use as a true value
@@ -40,13 +41,13 @@
  @returns the GRYes singleton.
  @since v1.0.0
  */
-+ (GRYes *)yes __attribute__((deprecated));
++ (GRYes *)yes AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 
 /**
  @returns YES
  @since v1.1.0
  */
-- (BOOL)boolValue;
+- (BOOL)boolValue AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 @end
 
 
@@ -69,11 +70,11 @@
  @returns the GRNo singleton.
  @since v1.0.0
  */
-+ (GRNo *)no __attribute__((deprecated));
++ (GRNo *)no AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 
 /**
  @returns NO
  @since v1.1.0
  */
-- (BOOL)boolValue;
+- (BOOL)boolValue AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 @end

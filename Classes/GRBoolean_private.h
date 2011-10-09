@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 
 @interface GRYes : NSObject <NSCopying>
-+ (GRYes *)yes __attribute__((deprecated));
++ (GRYes *)yes;
 - (BOOL)boolValue;
 @end
 
