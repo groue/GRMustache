@@ -108,7 +108,7 @@
  
  @since v1.4.0
  */
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated)) AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6;
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6;
 
 /**
  @returns A GRMustacheTemplateLoader instance
