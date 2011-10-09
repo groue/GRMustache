@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
 
 @interface GRMustacheSection: NSObject {
@@ -31,7 +32,7 @@
 	BOOL inverted;
 	NSArray *elems;
 }
-@property (nonatomic, readonly) NSString *templateString;
+@property (nonatomic, readonly) NSString *templateString AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER;
 
 /**
  Renders a template with a context object.
@@ -41,7 +42,7 @@
  
  @since v1.3.0
  */
-- (NSString *)renderObject:(id)object;
+- (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER;
 
 /**
  Renders a template with context objects.
@@ -51,6 +52,6 @@
  
  @since v1.5.0
  */
-- (NSString *)renderObjects:(id)object, ...;
+- (NSString *)renderObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 
 @end

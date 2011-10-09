@@ -1,13 +1,57 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.2
+
+Better testing of public API thanks to availability macros.
+
 ## v1.8.1
 
 Bug fixes
 
 ## v1.8
 
-**GRMustache now supports [mustache/spec v1.1.2](https://github.com/mustache/spec).**
+**GRMustache now supports the [Mustache specification v1.1.2](https://github.com/mustache/spec).**
+
+New type and enum:
+
+    enum {
+        GRMustacheTemplateOptionNone = 0,
+        GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+    };
+
+    typedef NSUInteger GRMustacheTemplateOptions;
+
+New GRMustache methods:
+
+- `+ (GRMustacheTemplateOptions)defaultTemplateOptions;`
+- `+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;`
+
+New GRMustacheTemplate methods:
+
+- `+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+
+New GRMustacheTemplateLoader methods:
+
+- `+ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
+- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
+
 
 ## v1.7.4
 
@@ -46,13 +90,13 @@ The NSUndefinedKeyException silencing activated by the DEBUG macro applies to NS
 
 **Reduced memory footprint**
 
-New GRMustacheTemplateLoader class methods:
+New GRMustacheTemplateLoader methods:
 
 - `+ (id)templateLoaderWithDirectory:(NSString *)path;`
 - `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;`
 - `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;`
 
-Deprecated GRMustacheTemplateLoader class methods (replace `BasePath` with `Directory`):
+Deprecated GRMustacheTemplateLoader methods (replace `BasePath` with `Directory`):
 
 - `+ (id)templateLoaderWithBasePath:(NSString *)path;`
 - `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;`
@@ -101,7 +145,7 @@ New `GRMustacheTemplate` methods:
 - `+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError;`
 - `+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;`
 
-New `GRMustacheTemplateLoader` class methods:
+New `GRMustacheTemplateLoader` methods:
 
 - `+ (id)templateLoaderWithBasePath:(NSString *)path;`
 - `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;`

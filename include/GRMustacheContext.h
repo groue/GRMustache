@@ -21,15 +21,15 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-
+#import "GRMustacheAvailabilityMacros.h"
 
 @interface GRMustacheContext: NSObject {
 @private
 	id object;
 	GRMustacheContext *parent;
 }
-+ (id)contextWithObject:(id)object __attribute__((deprecated));
-+ (id)contextWithObjects:(id)object, ... __attribute__((deprecated));
-- (GRMustacheContext *)contextByAddingObject:(id)object __attribute__((deprecated));
-- (id)valueForKey:(NSString *)key;
++ (id)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
++ (id)contextWithObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+- (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+- (id)valueForKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER;
 @end

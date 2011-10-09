@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheAvailabilityMacros.h"
 @class GRMustacheSection;
 @class GRMustacheContext;
 
@@ -30,15 +31,13 @@
 @private
 	NSString *(^block)(GRMustacheSection* section, id context);
 }
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 @end
 
-// =================== DEPRECATED STUFF BELOW ===================
-
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) __attribute__((deprecated));
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
 typedef NSString *(^GRMustacheRenderer)(id object);
-typedef id GRMustacheLambda __attribute__((deprecated));
-GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) __attribute__((deprecated));
+typedef id GRMustacheLambda;
+GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3;
 #endif
