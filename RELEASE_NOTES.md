@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.3
+
+Availability fixes.
+
 ## v1.8.2
 
 Better testing of public API thanks to availability macros.
