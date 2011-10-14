@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		560F68E11447FF7E002C50A4 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF6D814404471005A4F58 /* JRSwizzle.m */; };
 		563BF6F514404471005A4F58 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF6D714404471005A4F58 /* JRSwizzle.h */; };
 		563BF6F614404471005A4F58 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF6D814404471005A4F58 /* JRSwizzle.m */; };
 		563BF72014404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF71C14404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h */; };
@@ -896,6 +897,7 @@
 				56D585771447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */,
 				56D585791447F7F400DA3F67 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */,
 				56D5857A1447F7F800DA3F67 /* GRMustacheProperty.m in Sources */,
+				560F68E11447FF7E002C50A4 /* JRSwizzle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
