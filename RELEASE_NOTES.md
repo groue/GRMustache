@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.4
+
+Added missing symbols from the iOS static libraries.
+
 ## v1.8.3
 
 Availability fixes.
