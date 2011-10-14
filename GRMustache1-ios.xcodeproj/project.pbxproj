@@ -14,7 +14,6 @@
 		563BF72214404493005A4F58 /* GRMustacheProperty_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF71E14404493005A4F58 /* GRMustacheProperty_private.h */; };
 		563BF72314404493005A4F58 /* GRMustacheProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71F14404493005A4F58 /* GRMustacheProperty.m */; };
 		563BF72D14407AC2005A4F58 /* GRMustachePrivateAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72C14407AC2005A4F58 /* GRMustachePrivateAPITest.m */; };
-		563BF73014407B0D005A4F58 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
 		563BF73114407BAF005A4F58 /* GRMustacheContextStrategy_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF72E14407B0D005A4F58 /* GRMustacheContextStrategy_private.h */; };
 		563BF73214407BAF005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF71C14404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h */; };
 		563BF73314407BAF005A4F58 /* GRMustacheProperty_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BF71E14404493005A4F58 /* GRMustacheProperty_private.h */; };
@@ -146,6 +145,10 @@
 		5672485F13E0311D0043E2FA /* syntax_error.conf in Resources */ = {isa = PBXBuildFile; fileRef = 5672485E13E0311D0043E2FA /* syntax_error.conf */; };
 		569C86761424A6CF00D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
 		569C86771424A6D800D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
+		56D585771447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
+		56D585781447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
+		56D585791447F7F400DA3F67 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71D14404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard.m */; };
+		56D5857A1447F7F800DA3F67 /* GRMustacheProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71F14404493005A4F58 /* GRMustacheProperty.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -838,6 +841,7 @@
 				563BF6F614404471005A4F58 /* JRSwizzle.m in Sources */,
 				563BF72114404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */,
 				563BF72314404493005A4F58 /* GRMustacheProperty.m in Sources */,
+				56D585781447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -867,7 +871,6 @@
 				5672485B13E0310D0043E2FA /* GRMustacheTemplate_v1_7_Test.m in Sources */,
 				5672485C13E0310D0043E2FA /* Model.xcdatamodeld in Sources */,
 				563BF72D14407AC2005A4F58 /* GRMustachePrivateAPITest.m in Sources */,
-				563BF73014407B0D005A4F58 /* GRMustacheContextStrategy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +893,9 @@
 				5665299F13A12E9600B98B87 /* GRMustacheToken.m in Sources */,
 				566529A013A12E9600B98B87 /* GRMustacheTokenizer.m in Sources */,
 				566529A113A12E9600B98B87 /* GRMustacheVariableElement.m in Sources */,
+				56D585771447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */,
+				56D585791447F7F400DA3F67 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */,
+				56D5857A1447F7F800DA3F67 /* GRMustacheProperty.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
