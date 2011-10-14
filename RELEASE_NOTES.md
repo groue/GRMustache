@@ -1,9 +1,13 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.5
+
+Added missing symbols from lib/libGRMustache1-ios3.a
+
 ## v1.8.4
 
-Added missing symbols from the iOS static libraries.
+Added missing symbols from lib/libGRMustache1-ios3.a and lib/libGRMustache1-ios4.a
 
 ## v1.8.3
 
