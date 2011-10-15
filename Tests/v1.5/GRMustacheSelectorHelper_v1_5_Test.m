@@ -63,6 +63,10 @@
     STAssertEqualObjects([template renderObject:bar], @"barBbarC", nil);
     STAssertEqualObjects([template renderObject:baz], @"bazAbazC", nil);
 
+    STAssertEqualObjects(([template renderObjects:foo, nil]), @"fooAfooB", nil);
+    STAssertEqualObjects(([template renderObjects:bar, nil]), @"barBbarC", nil);
+    STAssertEqualObjects(([template renderObjects:baz, nil]), @"bazAbazC", nil);
+    
     STAssertEqualObjects(([template renderObjects:foo, bar, nil]), @"fooAbarBbarC", nil);
     STAssertEqualObjects(([template renderObjects:bar, foo, nil]), @"fooAfooBbarC", nil);
     STAssertEqualObjects(([template renderObjects:foo, baz, nil]), @"bazAfooBbazC", nil);
