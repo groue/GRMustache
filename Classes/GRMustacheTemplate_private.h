@@ -45,8 +45,6 @@ typedef enum {
 
 + (GRMustacheObjectKind)objectKind:(id)object;
 
-+ (GRMustacheContextStrategy *)currentContextStrategy;
-
 + (id)templateWithOptions:(GRMustacheTemplateOptions)options;
 
 + (id)templateWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;

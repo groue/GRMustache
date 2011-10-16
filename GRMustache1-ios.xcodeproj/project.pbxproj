@@ -150,6 +150,7 @@
 		56D585781447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
 		56D585791447F7F400DA3F67 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71D14404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard.m */; };
 		56D5857A1447F7F800DA3F67 /* GRMustacheProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71F14404493005A4F58 /* GRMustacheProperty.m */; };
+		56FDC0A6144AD9B400022D47 /* GRMustacheContextStrategyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FDC0A5144AD9B400022D47 /* GRMustacheContextStrategyTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -278,6 +279,8 @@
 		5672485913E0310D0043E2FA /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5672485E13E0311D0043E2FA /* syntax_error.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = syntax_error.conf; sourceTree = "<group>"; };
 		569C86751424A6CE00D6BC77 /* GRBoolean_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBoolean_private.h; sourceTree = "<group>"; };
+		56FDC0A4144AD9B400022D47 /* GRMustacheContextStrategyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContextStrategyTest.h; sourceTree = "<group>"; };
+		56FDC0A5144AD9B400022D47 /* GRMustacheContextStrategyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextStrategyTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -448,6 +451,8 @@
 			children = (
 				565F6B1C139FF13B004D1894 /* GRBooleanTest.h */,
 				565F6B1D139FF13B004D1894 /* GRBooleanTest.m */,
+				56FDC0A4144AD9B400022D47 /* GRMustacheContextStrategyTest.h */,
+				56FDC0A5144AD9B400022D47 /* GRMustacheContextStrategyTest.m */,
 				565F6B1E139FF13B004D1894 /* GRMustacheContextTest.h */,
 				565F6B1F139FF13B004D1894 /* GRMustacheContextTest.m */,
 				565F6B20139FF13B004D1894 /* GRMustacheTokenizerTest.h */,
@@ -872,6 +877,7 @@
 				5672485B13E0310D0043E2FA /* GRMustacheTemplate_v1_7_Test.m in Sources */,
 				5672485C13E0310D0043E2FA /* Model.xcdatamodeld in Sources */,
 				563BF72D14407AC2005A4F58 /* GRMustachePrivateAPITest.m in Sources */,
+				56FDC0A6144AD9B400022D47 /* GRMustacheContextStrategyTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

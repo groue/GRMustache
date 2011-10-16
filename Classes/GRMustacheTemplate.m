@@ -29,11 +29,8 @@
 #import "GRBoolean_private.h"
 #import "GRMustacheContextStrategy_private.h"
 
-static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateCurrentStrategy";
-
 @interface GRMustacheTemplate()
 @property (nonatomic, retain) GRMustacheContextStrategy *contextStrategy;
-+ (void)setCurrentContextStrategy:(GRMustacheContextStrategy *)contextStrategy;
 - (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options;
 @end
 
@@ -191,17 +188,14 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 - (NSString *)renderObjects:(id)object, ... {
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
     va_list objectList;
     va_start(objectList, object);
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
     va_end(objectList);
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    for (id<GRMustacheRenderingElement> elem in elems) {
-        [result appendString:[elem renderContext:context]];
-    }
+    NSString *result = [[self renderContext:context] retain];
     [pool drain];
-    return result;
+    return [result autorelease];
 }
 
 + (BOOL)objectIsFalseValue:(id)object {
@@ -235,32 +229,18 @@ static const NSString *GRMustacheTemplateCurrentStrategy = @"GRMustacheTemplateC
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-    [GRMustacheTemplate setCurrentContextStrategy:self.contextStrategy];
+    [GRMustacheContext pushContextStrategy:self.contextStrategy];
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     for (id<GRMustacheRenderingElement> elem in elems) {
         [result appendString:[elem renderContext:context]];
     }
     [pool drain];
+    [GRMustacheContext popContextStrategy];
     return result;
 }
 
-+ (GRMustacheContextStrategy *)currentContextStrategy
-{
-    return [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheTemplateCurrentStrategy];
-}
-
 #pragma mark - Private
-
-+ (void)setCurrentContextStrategy:(GRMustacheContextStrategy *)contextStrategy
-{
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    if (contextStrategy) {
-        [threadDictionary setObject:contextStrategy forKey:GRMustacheTemplateCurrentStrategy];
-    } else {
-        [threadDictionary removeObjectForKey:GRMustacheTemplateCurrentStrategy];
-    }
-}
 
 - (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options {
 	if ((self = [self init])) {

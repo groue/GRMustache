@@ -119,6 +119,7 @@
 		56F5A827143EC5CB00478651 /* inverted.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56F5A819143EC5CB00478651 /* inverted.yml */; };
 		56F5A829143EC5CB00478651 /* partials.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56F5A81B143EC5CB00478651 /* partials.yml */; };
 		56F5A82B143EC5CB00478651 /* sections.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56F5A81D143EC5CB00478651 /* sections.yml */; };
+		56FDC09F144AD5D200022D47 /* GRMustacheContextStrategyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FDC09E144AD5D100022D47 /* GRMustacheContextStrategyTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,6 +280,8 @@
 		56F5A819143EC5CB00478651 /* inverted.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = inverted.yml; sourceTree = "<group>"; };
 		56F5A81B143EC5CB00478651 /* partials.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = partials.yml; sourceTree = "<group>"; };
 		56F5A81D143EC5CB00478651 /* sections.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sections.yml; sourceTree = "<group>"; };
+		56FDC09D144AD5D100022D47 /* GRMustacheContextStrategyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContextStrategyTest.h; sourceTree = "<group>"; };
+		56FDC09E144AD5D100022D47 /* GRMustacheContextStrategyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextStrategyTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,6 +469,8 @@
 			children = (
 				565F6B1C139FF13B004D1894 /* GRBooleanTest.h */,
 				565F6B1D139FF13B004D1894 /* GRBooleanTest.m */,
+				56FDC09D144AD5D100022D47 /* GRMustacheContextStrategyTest.h */,
+				56FDC09E144AD5D100022D47 /* GRMustacheContextStrategyTest.m */,
 				565F6B1E139FF13B004D1894 /* GRMustacheContextTest.h */,
 				565F6B1F139FF13B004D1894 /* GRMustacheContextTest.m */,
 				565F6B20139FF13B004D1894 /* GRMustacheTokenizerTest.h */,
@@ -878,6 +883,7 @@
 				563BF7421440851E005A4F58 /* GRMustacheTestSuite_v1_0_Test.m in Sources */,
 				563BF74A14408C21005A4F58 /* GRMustacheTestSuite_v1_8_Test.m in Sources */,
 				563BF74D1440A381005A4F58 /* GRMustacheDefaultTemplateOptionsTest.m in Sources */,
+				56FDC09F144AD5D200022D47 /* GRMustacheContextStrategyTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

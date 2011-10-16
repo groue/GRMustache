@@ -29,10 +29,13 @@
 #import "GRMustacheTemplate_private.h"
 
 static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
+static const NSString *GRMustacheContextStrategyStackKey = @"GRMustacheContextStrategyStackKey";
+
 
 @interface GRMustacheContext()
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
++ (GRMustacheContextStrategy *)currentContextStrategy;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
 @end
@@ -41,6 +44,40 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @implementation GRMustacheContext
 @synthesize object;
 @synthesize parent;
+
++ (void)resetContextStrategyStack
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    [threadDictionary removeObjectForKey:GRMustacheContextStrategyStackKey];
+}
+
++ (void)pushContextStrategy:(GRMustacheContextStrategy *)contextStrategy
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
+    if (!contextStrategyStack) {
+        contextStrategyStack = [NSMutableArray array];
+        [threadDictionary setObject:contextStrategyStack forKey:GRMustacheContextStrategyStackKey];
+    }
+    [contextStrategyStack addObject:contextStrategy];
+}
+
++ (void)popContextStrategy
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
+    NSAssert(contextStrategyStack.count > 0, @"poping from empty context strategy stack");
+    [contextStrategyStack removeLastObject];
+}
+
++ (GRMustacheContextStrategy *)currentContextStrategy
+{
+    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
+    NSUInteger count = contextStrategyStack.count;
+    NSAssert(count > 0, @"empty context strategy stack");
+    return [[[contextStrategyStack objectAtIndex:count-1] retain] autorelease];
+}
 
 + (void)preventNSUndefinedKeyExceptionAttack {
     preventingNSUndefinedKeyExceptionAttack = YES;
@@ -92,7 +129,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 - (id)valueForKey:(NSString *)key
 {
-    return [[GRMustacheTemplate currentContextStrategy] valueForKey:key inContext:self];
+    return [[GRMustacheContext currentContextStrategy] valueForKey:key inContext:self];
 }
 
 - (void)dealloc {

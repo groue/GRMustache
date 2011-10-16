@@ -23,6 +23,7 @@
 #import "GRMustacheContextTest.h"
 #import "GRBoolean_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheContextStrategy_private.h"
 #import "GRMustacheTemplate_private.h"
 
 
@@ -108,6 +109,16 @@
 @end
 
 @implementation GRMustacheContextTest
+
+- (void)setUp
+{
+    [GRMustacheContext pushContextStrategy:[GRMustacheContextStrategy handlebarsStrategy]];
+}
+
+- (void)tearDown
+{
+    [GRMustacheContext popContextStrategy];
+}
 
 - (void)testOneDepthContextForwardsValueForKeyToItsObject {
 	GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];

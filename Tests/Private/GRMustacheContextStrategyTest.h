@@ -20,24 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-@class GRMustacheContextStrategy;
+#import "GRMustachePrivateAPITest.h"
 
-@interface GRMustacheContext: NSObject {
-@private
-	id object;
-	GRMustacheContext *parent;
-}
-@property (nonatomic, retain, readonly) id object;
-@property (nonatomic, retain, readonly) GRMustacheContext *parent;
-+ (void)preventNSUndefinedKeyExceptionAttack;
-+ (id)contextWithObject:(id)object;
-+ (id)contextWithObjects:(id)object, ...;
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList;
-+ (void)resetContextStrategyStack;
-+ (void)pushContextStrategy:(GRMustacheContextStrategy *)contextStrategy;
-+ (void)popContextStrategy;
-- (GRMustacheContext *)contextByAddingObject:(id)object;
-- (id)valueForKey:(NSString *)key;
-- (id)valueForKeyComponent:(NSString *)key;
+@interface GRMustacheContextStrategyTest : GRMustachePrivateAPITest
+
 @end
