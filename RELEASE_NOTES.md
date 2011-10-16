@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.8.6
+
+Fixed bug in [GRMustacheTemplate renderObjects:...]
+
 ## v1.8.5
 
 Added missing symbols from lib/libGRMustache1-ios3.a
