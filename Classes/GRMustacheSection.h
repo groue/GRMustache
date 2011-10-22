@@ -69,11 +69,11 @@
         + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
     @end
  
- #### The raw inner content
+ #### The literal inner content
  
  Now up to the first implementation. The _section_ argument is a `GRMustacheSection` object, which represents the section being rendered: `{{#localize}}Delete{{/localize}}`.
  
- This _section_ object has a templateString property, which returns the raw inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
+ This _section_ object has a templateString property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
     @implementation LocalizeMustacheHelper
     + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
@@ -86,21 +86,27 @@
  
  #### Rendering the inner content
  
- Yet the application keeps on evolving, and now comes this new template snippets:
+ Yet the application keeps on evolving, and it appears that the item names should also be localized. The template snippet now reads:
  
-    {{#buttons}}
-        <a href="{{url}}">{{#localize}}{{name}}{{/localize}}</a>
-    {{/buttons}}
+    {{#cart}}
+        {{#items}}
+            {{quantity}} × {{#localize}}{{name}}{{/localize}}
+            {{#localize}}Delete{{/localize}}
+        {{/items}}
+    {{/cart}}
  
- We still have to localize strings, but those strings now come from button objects, not from the template itself.
+ Now the strings we have to localize may be:
  
- Our first `LocalizeMustacheHelper` implementation will call `NSLocalizedString` on `@"{{name}}"`, not on the buttons' names, and will fail.
+ - literal strings from the template: `{{#localize}}Delete{{/localize}}`
+ - strings coming from cart items : `{{#localize}}{{name}}{{/localize}}`
  
- This is because we now need to provide to `NSLocalizedString` the mustache rendering of the inner content, not the raw inner content.
+ Our first `LocalizeMustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
+ 
+ Actually we now need to provide to `NSLocalizedString` the mustache rendering of the inner content, not the literal inner content.
  
  Fortunately, we have:
  
- - the _context_ parameter, which is the current rendering context, containing a button, a button collection, and any surrouding objects.
+ - the _context_ parameter, which is the current rendering context, containing a cart item, an item collection, a cart, and any surrouding objects.
  - the renderObject: method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
  
  Now we can fix our implementation:
@@ -142,11 +148,11 @@
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// @name Accessing the raw inner content
+/// @name Accessing the literal inner content
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- Returns the raw inner content of the section, with unprocessed mustache `{{tags}}`.
+ Returns the literal inner content of the section, with unprocessed mustache `{{tags}}`.
  
  @since v1.3
  */

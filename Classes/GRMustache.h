@@ -142,12 +142,13 @@ typedef struct {
 /**
  Sets the default template options.
  
- Those options will be used by all GRMustacheTemplate rendering and parsing methods, such as [GRMustacheTemplate renderObject:fromString:error] and [GRMustacheTemplate parseTemplateFromString:error:].
+ Those options will be used by all GRMustacheTemplate rendering and parsing methods, such as [GRMustacheTemplate parseString:error:] and [GRMustacheTemplate renderObject:fromString:error:].
  
  For instance, you'll trigger support for the [Mustache Specification 1.1.2](https://github.com/mustache/spec) with:
  
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility]
+    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
  
+ @param templateOptions A mask of options indicating the default behavior of templates.
  @see defaultTemplateOptions
  @since v1.8
  */
