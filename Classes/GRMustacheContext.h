@@ -95,7 +95,7 @@
  
  If no object can return a value, this method returns nil.
  
- If GRMustache does not run in strict boolean mode, this method will return objects created with `[NSNumber numberWithBOOL:]` instead of `[NSNumber numberWithUnsignedChar:]` when dealing with BOOL properties of objects.
+ If GRMustache does not run in strict boolean mode, this method will return objects created with `[NSNumber numberWithBOOL:]` instead of `[NSNumber numberWithChar:]` when dealing with BOOL properties of objects.
  
  @return The first non nil value found in the objects contained in the context, if possible, and nil otherwise.
  
