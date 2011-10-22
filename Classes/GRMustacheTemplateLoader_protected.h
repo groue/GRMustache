@@ -27,7 +27,7 @@
 /**
  Class extension exposed to the subclasses of GRMustacheTemplateLoader.
  
- @since v1.0.0
+ @since v1.0
  */
 @interface GRMustacheTemplateLoader()
 
@@ -37,7 +37,7 @@
  This property is never nil, but may contain an empty NSString.
  
  @see GRMustacheTemplateLoader#initWithExtension:encoding:
- @since v1.0.0
+ @since v1.0
  */
 @property (nonatomic, readonly, copy) NSString *extension;
 
@@ -45,7 +45,7 @@
  The encoding of data containing templates (if applicable)
  
  @see GRMustacheTemplateLoader#initWithExtension:encoding:
- @since v1.0.0
+ @since v1.0
  */
 @property (nonatomic, readonly) NSStringEncoding encoding;
 
@@ -54,7 +54,7 @@
  
  Don't use this method unless you implement a GRMustacheTemplateLoader subclass.
  
- @returns a GRMustacheTemplateLoader instance.
+ @return a GRMustacheTemplateLoader instance.
  @param ext The file name extension of loaded templates.
  @param encoding The encoding of data containing templates.
  
@@ -69,7 +69,7 @@
  encoding, you may pass any value in those parameters.
  
  @see GRMustacheTemplateLoader#templateStringForTemplateId:error:
- @since v1.0.0
+ @since v1.0
  */
 - (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 - (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
@@ -79,7 +79,7 @@
  
  Subclasses must override it.
  
- @returns a template identifier
+ @return a template identifier
  @param name The name of a partial or a template
  @param baseTemplateId The identifier of the template refering to the name
  
@@ -91,7 +91,7 @@
  "root template". Otherwise, the name parameter refers to the name of a partial
  loaded from the template identified by baseTemplateId.
  
- @since v1.0.0
+ @since v1.0
  */
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
 
@@ -100,7 +100,7 @@
  
  Subclasses must override it.
  
- @returns A template string
+ @return A template string
  @param templateId A template identifier
  @param outError If there is an error building the template string, upon return
  contains an NSError object that describes the problem.
@@ -112,7 +112,7 @@
  @see GRMustacheTemplateLoader#extension
  @see GRMustacheTemplateLoader#encoding
  
- @since v1.0.0
+ @since v1.0
  */
 // Override this method, and return a template string.
 // If applicable, it is your responsability to use the extension property in order to load the correct template.
