@@ -461,7 +461,7 @@ Since our helper doesn't carry any state, let's declare our `localizeSection:wit
 
 Now up to the first implementation. The _section_ argument is a `GRMustacheSection` object, which represents the section being rendered: `{{#localize}}Delete{{/localize}}`.
 
-This _section_ object has a templateString property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
+This _section_ object has a `templateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
 	@implementation MustacheHelper
 	+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
