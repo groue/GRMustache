@@ -419,144 +419,141 @@ You have to explicitely ask for the Mustache spec compatibility in order to use 
 Lambdas
 -------
 
-Imagine that, in the following template, you wish the `link` sections to be rendered as hyperlinks:
+Mustache lambdas allow you to execute custom code when rendering a mustache section such as:
 
-	<ul>
-	  {{#people}}
-	  <li>{{#link}}{{name}}{{/link}}</li>
-	  {{/people}}
-	</ul>
+	{{#name}}...{{/name}}
 
-We expect, as an output, something like:
+GRMustache provides you with two ways in order to define your lambdas. The first one requires some selectors to be implemented, the second uses Objective-C blocks.
 
-	<ul>
-	  <li><a href="/people/1">Roger</a></li>
-	  <li><a href="/people/2">Amy</a></li>
-	</ul>
+For the purpose of demonstration, we'll implement a lambda that translates, via `NSLocalizedString`, the content of the section: one will expect `{{#localize}}Delete{{/localize}}` to output `Effacer` when the locale is French.
 
-GRMustache provides you with two ways in order to achieve this behavior. The first one uses Objective-C blocks, the second requires some selectors to be implemented.
+### Implementing lambdas with methods
 
-### Block lambdas
+If the context used for mustache rendering implements the `localizeSection:withContext:` selector (generally, a method whose name is the name of the section, to which you append `Section:withContext:`), then this method will be called when rendering the section.
 
-*Note that block lambdas are not available until MacOS 10.6, and iOS 4.0.*
+The choice of the class that should implement this selector is up to you, as long as it can be reached when rendering the template, just as regular values.
 
-You will provide in the context a GRMustacheBlockHelper instance, built with a block which returns the string that should be rendered:
+For instance, let's focus on the following template snippet:
 
-	id linkHelper = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
-	  return [NSString stringWithFormat:
-	          @"<a href=\"/people/%@\">%@</a>",
-	          [context valueForKey:@"id"],    // id of person comes from current context
-	          [section renderObject:context]] // link text comes from the natural rendering of the inner section
+	{{#cart}}
+	    {{#items}}
+	        {{quantity}} × {{name}}
+	        {{#localize}}Delete{{/localize}}
+	    {{/items}}
+	{{/cart}}
+
+When the `localize` section is rendered, the context contains an item object, an items collection, a cart object, plus any surrounding objects.
+
+If the item object implements the `localizeSection:withContext:` selector, then its implementation will be called. Otherwise, the selector will be looked up in the items collection. Since this collection is likely an `NSArray` instance, the lookup will continue with the cart and its surrounding context, until some object is found that implements the `localizeSection:withContext:` selector.
+
+In order to have a reusable `localize` lambda, we'll isolate it in a specific class, `MustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
+
+Let's first declare our helper class:
+
+	@interface MustacheHelper: NSObject
+
+Since our helper doesn't carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
+
+	    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
+	@end
+
+#### The literal inner content
+
+Now up to the first implementation. The _section_ argument is a `GRMustacheSection` object, which represents the section being rendered: `{{#localize}}Delete{{/localize}}`.
+
+This _section_ object has a templateString property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
+
+	@implementation MustacheHelper
+	+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
+	{
+	    return NSLocalizedString(section.templateString, nil);
+	}
+	@end
+
+So far, so good, this would work as expected.
+
+#### Rendering the inner content
+
+Yet the application keeps on evolving, and it appears that the item names should also be localized. The template snippet now reads:
+
+	{{#cart}}
+	    {{#items}}
+	        {{quantity}} × {{#localize}}{{name}}{{/localize}}
+	        {{#localize}}Delete{{/localize}}
+	    {{/items}}
+	{{/cart}}
+
+Now the strings we have to localize may be:
+
+- literal strings from the template: `{{#localize}}Delete{{/localize}}`
+- strings coming from cart items : `{{#localize}}{{name}}{{/localize}}`
+
+Our first `MustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
+
+Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
+
+Fortunately, we have:
+
+- the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
+- the _context_ parameter, which is the current rendering context, containing a cart item, an item collection, a cart, and any surrouding objects.
+
+`[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
+
+Now we can fix our implementation:
+
+	@implementation MustacheHelper
+	+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
+	{
+	    NSString *renderedContent = [section renderObject:context];
+	    return NSLocalizedString(renderedContent, nil);
+	}
+	@end
+
+#### Using the helper object
+
+Now that our helper class is well defined, let's use it.
+
+Assuming:
+
+- `orderConfirmation.mustache` is a mustache template resource,
+- `self` has a `cart` property suitable for our template rendering,
+
+Let's first parse the template:
+
+	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation" bundle:nil error:NULL];
+
+Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` lambda, and `self` that will provide the `cart`:
+
+	[template renderObjects:[MustacheHelper class], self, nil];
+
+### Implementing lambdas with blocks
+
+Starting MacOS6 and iOS4, blocks are available to the Objective-C language. GRMustache provides a block-based lambda API.
+
+This technique does not involve declaring any special selector. But when asked for the `localized` key, your context will return a GRMustacheBlockHelper instance, built in the same fashion as the helper methods seen above:
+
+	id localize = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
+	    NSString *renderedContent = [section renderObject:context];
+	    return NSLocalizedString(renderedContent, nil);
 	}];
 
-The block takes two arguments:
+See how the block implementation is strictly identical to the lambda method discussed above.
 
-- `section` is an object which represents the rendered section.
-- `context` is the current rendering context.
+Actually, your only concern is to make sure your values and lambda code can be reached by GRMustache when rendering your templates. Implementing `localizeSection:withContext` or returning a GRMustacheBlockHelper instance for the `localize` key is strictly equivalent.
 
-The `[section renderObject:context]` expression evaluates to the rendering of the section with the given context.
+Speaking of the `localize` key, we need some container object:
 
-In case you would need it, the `section` object has a `templateString` property, which contains the litteral inner section, unrendered (`{{tags}}` will not have been expanded).
+	id mustacheHelper = [NSDictionary dictionaryWithObject:localize forKey:@"localize"];
 
-The final rendering now goes as usual, by providing objects for template keys, the helper for the key `link`, and some people for the key `people`:
+And now the rendering is done as usual:
 
-	NSArray *people = ...;
-	[template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:
-	                        linkHelper, @"link",
-	                        people, @"people",
-	                        nil]];
-
-### Method lambdas
-
-Another way to execute code when rendering the `link` sections is to have the context implement the `linkSection:withContext:` selector (generally, implement a method whose name is the name of the section, to which you append `Section:withContext:`).
-
-No block is involved, and this technique works before MacOS 10.6, and iOS 4.0.
-
-Now the question is: which class should implement this helper selector? When the `{{#link}}` section is rendered, GRMustache is actually rendering a person. Remember the template itself:
-
-	<ul>
-	  {{#people}}
-	  <li>{{#link}}{{name}}{{/link}}</li>
-	  {{/people}}
-	</ul>
-
-Many objects are in the context and can provide the implementation: the person itself, the `people` array of persons, the object that did provide this array, up to the root, the object which has been initially provided to the template.
-
-Let's narrow those choices to only two: either you have your model objects implement the `linkSection:withContext:` selector, or you isolate helper methods from your model.
-
-#### Isolating helper methods
-
-In order to achieve a strict MVC separation, one might want to isolate helper methods from data.
-
-GRMustache allows you to do that: first declare a container for your helper methods:
-
-	@interface RenderingHelper: NSObject
-	@end
-	
-	@implementation RenderingHelper
-	+ (NSString*)linkSection:(GRMustacheSection *)section
-	             withContext:(id)context
-	{
-	  return [NSString stringWithFormat:
-	          @"<a href=\"/people/%@\">%@</a>",
-	          [context valueForKey:@"id"],      // id of person comes from current context
-	          [section renderObject:context]];  // link text comes from the natural rendering of the inner section
-	}
-	@end
-
-Here we have written class methods because our helper doesn't carry any state. You are free to define helpers as instance methods, too.
-
-And now we can render:
-
-	[template renderObjects:[RenderingHelper class], dataModel, nil];
-
-The `renderObjects:` method takes several context objects. Key-value Coding lookup will start from the last provided object (in the above example, `dataModel`). The `{{#link}}` section of the template will thus be eventually be handled by the RenderingHelper class.
+	[template renderObjects:mustacheHelper, self, nil];
 
 
-#### Helpers as a model category
 
-You may also declare helper methods in categories of your model objects. For instance, if your model object is designed as such:
-
-	@interface DataModel
-	@property NSArray *people;  // array of Person objects
-	@end
-	
-	@interface Person
-	@property NSString *name;
-	@property NSString *id;
-	@end
-
-You can declare the `linkSection:withContext:` in a category of Person:
-
-	@implementation Person(GRMustache)
-	- (NSString*)linkSection:(GRMustacheSection *)section
-	             withContext:(id)context
-	{
-	  return [NSString stringWithFormat:
-	          @"<a href=\"/people/%@\">%@</a>",
-	          self.id,                          // id comes from self
-	          [section renderObject:context]];  // link text comes from the natural rendering of the inner section
-	}
-	@end
-
-This mix of data and rendering code in a single class is a debatable pattern. Well, you can compare this to the NSString(UIStringDrawing) and NSString(AppKitAdditions) categories. Furthermore, a strict MVC separation mechanism is described above.
-
-Anyway, the rendering can now be done with:
-
-	DataModel *dataModel = ...;
-	[template renderObject:dataModel];
-
-
-#### Usages of lambdas
+### Usages of lambdas
 
 Lambdas can be used for whatever you may find relevant.
-
-You may localize:
-
-	// {{#NSLocalizedString}}...{{/NSLocalizedString}}
-	+ (NSString *)NSLocalizedStringSection:(GRMustacheSection *)section withContext:(id)context {
-	  return NSLocalizedString([section renderObject:context]);
-	}
 
 You may implement caching:
 
