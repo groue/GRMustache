@@ -143,7 +143,7 @@
             
 		case GRMustacheObjectKindLambda:
 			if (!inverted) {
-                result = [[(id<GRMustacheHelper>)value renderObject:context withSection:self] mutableCopy];
+                result = [[(id<GRMustacheHelper>)value renderSection:self withContext:context] mutableCopy];
             }
 			break;
 			

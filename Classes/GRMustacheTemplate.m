@@ -23,6 +23,7 @@
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheLambda_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
@@ -219,9 +220,7 @@
 		return GRMustacheObjectKindEnumerable;
 	}
 	
-	// TODO: why can't we test for protocol on iOS?
-	// if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) -> tests fails on iOS
-	if ([object respondsToSelector:@selector(renderObject:withSection:)]) {
+	if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) {
 		return GRMustacheObjectKindLambda;
 	}
 	

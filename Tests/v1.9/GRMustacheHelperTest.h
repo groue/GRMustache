@@ -20,34 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-@class GRMustacheSection;
-@class GRMustacheContext;
+#define GRMUSTACHE_VERSION_MIN_REQUIRED GRMUSTACHE_VERSION_1_8
+#define GRMUSTACHE_VERSION_MAX_REQUIRED GRMUSTACHE_VERSION_1_8
+#import "GRMustachePublicAPITest.h"
 
-@protocol GRMustacheHelper<NSObject>
-@required
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context;
+@interface GRMustacheHelperTest : GRMustachePublicAPITest
+
 @end
-
-@interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
-	SEL renderingSelector;
-	id object;
-}
-+ (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
-@end
-
-#if GRMUSTACHE_BLOCKS_AVAILABLE
-@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
-@private
-	NSString *(^block)(GRMustacheSection* section, id context);
-}
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
-@end
-
-typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
-
-typedef NSString *(^GRMustacheRenderer)(id object);
-typedef id GRMustacheLambda;
-GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *));
-#endif

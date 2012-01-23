@@ -49,7 +49,7 @@
 	[super dealloc];
 }
 
-- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	NSString *result = objc_msgSend(object, renderingSelector, section, context);
 	if (result == nil) {
 		return @"";
@@ -80,7 +80,7 @@
 	return self;
 }
 
-- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	NSString *result = block(section, context);
 	if (result == nil) {
 		return @"";
@@ -125,7 +125,7 @@
 	return self;
 }
 
-- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	NSString *result = block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
 	if (result == nil) {
 		return @"";
@@ -172,7 +172,7 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 	return self;
 }
 
-- (NSString *)renderObject:(id)context withSection:(GRMustacheSection *)section {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	NSString *result = block(section, context);
 	if (result == nil) {
 		return @"";

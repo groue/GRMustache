@@ -20,34 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-@class GRMustacheSection;
-@class GRMustacheContext;
+#import "GRMustacheHelperTest.h"
 
-@protocol GRMustacheHelper<NSObject>
-@required
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context;
+@interface GRMustacheFoobarHelper : NSObject<GRMustacheHelper>
 @end
 
-@interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
-	SEL renderingSelector;
-	id object;
+@implementation GRMustacheFoobarHelper
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    return @"foobar";
 }
-+ (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
 @end
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
-@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
-@private
-	NSString *(^block)(GRMustacheSection* section, id context);
+@implementation GRMustacheHelperTest
+
+- (void)testDefaultTemplateOptions
+{
+    NSString *templateString = @"{{#foobar}}---{{/foobar}}";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[[[GRMustacheFoobarHelper alloc] init] autorelease] forKey:@"foobar"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foobar", @"");
 }
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+
 @end
-
-typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
-
-typedef NSString *(^GRMustacheRenderer)(id object);
-typedef id GRMustacheLambda;
-GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *));
-#endif
