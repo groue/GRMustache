@@ -154,6 +154,8 @@ typedef struct {
  */
 + (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
++ (BOOL)booleanValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
+
 @end
 
 #import "GRMustacheSection.h"
