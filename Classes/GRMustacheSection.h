@@ -54,15 +54,15 @@
         {{/items}}
     {{/cart}}
  
- The `localize` section is rendered with a context containing an item object, an items collection, a cart object, plus any surrounding objects.
+ When the `localize` section is rendered, the context contains an item object, an items collection, a cart object, plus any surrounding objects.
  
  If the item object implements the `localizeSection:withContext:` selector, then its implementation will be called. Otherwise, the selector will be looked up in the items collection. Since this collection is likely an `NSArray` instance, the lookup will continue with the cart and its surrounding context, until some object is found that implements the `localizeSection:withContext:` selector.
  
- In order to have a reusable `localize` lambda, we'll isolate it in a specific class, `LocalizeMustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
+ In order to have a reusable `localize` lambda, we'll isolate it in a specific class, `MustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
 
  Let's first declare our helper class:
  
-    @interface LocalizeMustacheHelper: NSObject
+    @interface MustacheHelper: NSObject
  
  Since our helper doesn't carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
  
@@ -75,14 +75,14 @@
  
  This _section_ object has a templateString property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
-    @implementation LocalizeMustacheHelper
+    @implementation MustacheHelper
     + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
     {
         return NSLocalizedString(section.templateString, nil);
     }
     @end
  
- So far, so good, this works as expected.
+ So far, so good, this would work as expected.
  
  #### Rendering the inner content
  
@@ -100,18 +100,20 @@
  - literal strings from the template: `{{#localize}}Delete{{/localize}}`
  - strings coming from cart items : `{{#localize}}{{name}}{{/localize}}`
  
- Our first `LocalizeMustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
+ Our first `MustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
  
- Actually we now need to provide to `NSLocalizedString` the mustache rendering of the inner content, not the literal inner content.
+ Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
  
  Fortunately, we have:
  
- - the _context_ parameter, which is the current rendering context, containing a cart item, an item collection, a cart, and any surrouding objects.
  - the renderObject: method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
+ - the _context_ parameter, which is the current rendering context, containing a cart item, an item collection, a cart, and any surrouding objects.
+ 
+ `[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
  
  Now we can fix our implementation:
  
-    @implementation LocalizeMustacheHelper
+    @implementation MustacheHelper
     + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
     {
         NSString *renderedContent = [section renderObject:context];
@@ -130,11 +132,36 @@
  
  Let's first parse the template:
  
-    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation" bundle:nil error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation"
+                                                              bundle:nil
+                                                               error:NULL];
  
- Let's now render, with two objects: our `LocalizeMustacheHelper` class that will provide the `localize` lambda, and `self` that will provide the `cart`:
+ Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` lambda, and `self` that will provide the `cart`:
  
-    [template renderObjects:[LocalizeMustacheHelper class], self, nil];
+    [template renderObjects:[MustacheHelper class], self, nil];
+
+ ### Implementing lambdas with blocks
+
+ Starting MacOS6 and iOS4, blocks are available to the Objective-C language. GRMustache provides a block-based lambda API.
+ 
+ This technique does not involve declaring any special selector. But when asked for the `localized` key, your context will return a GRMustacheBlockHelper instance, built in the same fashion as the helper methods seen above:
+ 
+    id localize = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
+        NSString *renderedContent = [section renderObject:context];
+        return NSLocalizedString(renderedContent, nil);
+    }];
+ 
+ See how the block implementation is strictly identical to the lambda method discussed above.
+ 
+ Actually, your only concern is to make sure your values and lambda code can be reached by GRMustache when rendering your templates. Implementing `localizeSection:withContext` or returning a GRMustacheBlockHelper instance for the `localize` key is strictly equivalent.
+ 
+ Speaking of the `localize` key, we need some container object:
+ 
+    id mustacheHelper = [NSDictionary dictionaryWithObject:localize forKey:@"localize"];
+ 
+ And now the rendering is done as usual:
+ 
+    [template renderObjects:mustacheHelper, self, nil];
  
  @since v1.3
  */
