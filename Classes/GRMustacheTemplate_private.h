@@ -30,7 +30,7 @@
 typedef enum {
 	GRMustacheObjectKindTrueValue,
 	GRMustacheObjectKindFalseValue,
-	GRMustacheObjectKindEnumerable,
+	GRMustacheObjectKindNonEmptyEnumerable,
 	GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
@@ -40,8 +40,6 @@ typedef enum {
     GRMustacheContextStrategy *contextStrategy;
 }
 @property (nonatomic, retain) NSArray *elems;
-
-+ (BOOL)objectIsFalseValue:(id)object;
 
 + (GRMustacheObjectKind)objectKind:(id)object;
 

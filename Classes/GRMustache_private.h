@@ -51,4 +51,6 @@ typedef struct {
 
 + (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
 
++ (BOOL)booleanValue:(id)object;
+
 @end

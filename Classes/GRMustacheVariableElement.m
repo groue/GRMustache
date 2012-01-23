@@ -22,6 +22,7 @@
 
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustache_private.h"
 
 @interface GRMustacheVariableElement()
 @property (nonatomic, retain) NSString *name;
@@ -64,7 +65,7 @@
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
 	id value = [context valueForKey:name];
-	if ([GRMustacheTemplate objectIsFalseValue:value]) {
+	if ([GRMustache booleanValue:value] == NO) {
 		return @"";
 	}
 	if (raw) {

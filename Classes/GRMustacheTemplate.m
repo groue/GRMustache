@@ -27,7 +27,7 @@
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
-#import "GRBoolean_private.h"
+#import "GRMustache_private.h"
 #import "GRMustacheContextStrategy_private.h"
 
 @interface GRMustacheTemplate()
@@ -199,16 +199,8 @@
     return [result autorelease];
 }
 
-+ (BOOL)objectIsFalseValue:(id)object {
-	return (object == nil ||
-			object == [NSNull null] ||
-			object == [GRNo no] ||
-			(void *)object == (void *)kCFBooleanFalse ||
-			([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0));
-}
-
 + (GRMustacheObjectKind)objectKind:(id)object {
-	if ([self objectIsFalseValue:object]) {
+	if ([GRMustache booleanValue:object] == NO) {
 		return GRMustacheObjectKindFalseValue;
 	}
 	
@@ -217,7 +209,7 @@
 	}
 	
 	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-		return GRMustacheObjectKindEnumerable;
+		return GRMustacheObjectKindNonEmptyEnumerable;
 	}
 	
 	if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) {
