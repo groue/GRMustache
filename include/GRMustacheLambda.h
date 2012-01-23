@@ -26,8 +26,13 @@
 @class GRMustacheSection;
 @class GRMustacheContext;
 
+@protocol GRMustacheHelper<NSObject>
+@required
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
+@end
+
 #if GRMUSTACHE_BLOCKS_AVAILABLE
-@interface GRMustacheBlockHelper: NSObject {
+@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
 @private
 	NSString *(^block)(GRMustacheSection* section, id context);
 }

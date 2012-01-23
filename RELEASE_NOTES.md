@@ -1,6 +1,17 @@
 GRMustache Release Notes
 ========================
 
+## v1.9
+
+**Better lambda encapsulation with classes conforming to the GRMustacheHelper protocol.**
+
+New protocol:
+
+    @protocol GRMustacheHelper<NSObject>
+    @required
+    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+    @end
+
 ## v1.8.6
 
 Fixed bug in [GRMustacheTemplate renderObjects:...]

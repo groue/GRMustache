@@ -27,7 +27,7 @@
 /**
  The GRMustacheTemplate class provides with Mustache template rendering services.
  
- @since v1.0.0
+ @since v1.0
  */
 @interface GRMustacheTemplate: NSObject {
 @private
@@ -36,68 +36,141 @@
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// @name Parsing
+/// @name Parsing and Rendering Template Strings
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  Parses a template string, and returns a compiled template.
  
- @returns A GRMustacheTemplate instance
- @param templateString The template string
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ The behavior of the returned template is determined by [GRMustache defaultTemplateOptions].
  
- @since v1.0.0
+ @return A GRMustacheTemplate instance
+ @param templateString The template string
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ @see parseString:options:error:
+ @see [GRMustache defaultTemplateOptions]
+ @since v1.0
  */
 + (id)parseString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
+
+/**
+ Parses a template string, and returns a compiled template.
+ 
+ The behavior of the returned template is determined by the _options_ parameter, not by [GRMustache defaultTemplateOptions].
+ 
+ For instance, you'll trigger support for the [Mustache Specification 1.1.2](https://github.com/mustache/spec) with:
+ 
+    [GRMustacheTemplate parseString:templateString
+                            options:GRMustacheTemplateOptionMustacheSpecCompatibility
+                              error:NULL];
+ 
+ @return A GRMustacheTemplate instance
+ @param templateString The template string
+ @param options A mask of options indicating the behavior of the template.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ @see parseString:error:
+ @since v1.8
+ */
 + (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
+
+/**
+ Renders a context object from a template string.
+ 
+ @return A string containing the rendered template
+ @param object A context object used for interpreting Mustache tags
+ @param templateString The template string
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ 
+ @since v1.0
+ */
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Parsing and Rendering Files
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ Parses a template file, and returns a compiled template.
+ 
+ @return A GRMustacheTemplate instance
+ @param path The path of the template
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ 
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ 
+ @since v1.4
+ */
++ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  Parses a template file, and returns a compiled template.
  
- @returns A GRMustacheTemplate instance
+ @return A GRMustacheTemplate instance
  @param url The URL of the template
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.0.0
+ @since v1.0
  */
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 #endif
 
 /**
- Parses a template file, and returns a compiled template.
+ Renders a context object from a file template.
  
- @returns A GRMustacheTemplate instance
+ @return A string containing the rendered template
+ @param object A context object used for interpreting Mustache tags
  @param path The path of the template
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.4.0
+ @since v1.4
  */
-+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
-+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+/**
+ Renders a context object from a file template.
+ 
+ @return A string containing the rendered template
+ @param object A context object used for interpreting Mustache tags
+ @param url The URL of the template
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ 
+ The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ 
+ @since v1.0
+ */
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
+#endif
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Parsing and Rendering NSBundle Resources
+//////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  Parses a bundle resource template, and returns a compiled template.
  
- @returns A GRMustacheTemplate instance
+ @return A GRMustacheTemplate instance
  @param name The name of a bundle resource of extension "mustache"
  @param bundle The bundle where to look for the template resource
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
  The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.0.0
+ @since v1.0
  */
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
@@ -105,89 +178,36 @@
 /**
  Parses a bundle resource template, and returns a compiled template.
  
- @returns A GRMustacheTemplate instance
+ @return A GRMustacheTemplate instance
  @param name The name of a bundle resource
  @param ext The extension of the bundle resource
  @param bundle The bundle where to look for the template resource
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
  The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.0.0
+ @since v1.0
  */
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Rendering
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- Renders a context object from a template string.
- 
- @returns A string containing the rendered template
- @param object A context object used for interpreting Mustache tags
- @param templateString The template string
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- 
- @since v1.0.0
- */
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-/**
- Renders a context object from a file template.
- 
- @returns A string containing the rendered template
- @param object A context object used for interpreting Mustache tags
- @param url The URL of the template
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
- 
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.0.0
- */
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-#endif
-
-/**
- Renders a context object from a file template.
- 
- @returns A string containing the rendered template
- @param object A context object used for interpreting Mustache tags
- @param path The path of the template
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
- 
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
- 
- @since v1.4.0
- */
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-
 /**
  Renders a context object from a bundle resource template.
  
- @returns A string containing the rendered template
+ @return A string containing the rendered template
  @param object A context object used for interpreting Mustache tags
  @param name The name of a bundle resource of extension "mustache"
  @param bundle The bundle where to look for the template resource
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
  The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.0.0
+ @since v1.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
@@ -195,49 +215,53 @@
 /**
  Renders a context object from a bundle resource template.
  
- @returns A string containing the rendered template
+ @return A string containing the rendered template
  @param object A context object used for interpreting Mustache tags
  @param name The name of a bundle resource
  @param ext The extension of the bundle resource
  @param bundle The bundle where to look for the template resource.
- @param outError If there is an error loading or parsing template and partials, upon return
- contains an NSError object that describes the problem.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
  The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
  
- @since v1.0.0
+ @since v1.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering a Parsed Template
+//////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  Renders a template with a context object.
  
- @returns A string containing the rendered template
+ @return A string containing the rendered template
  @param object A context object used for interpreting Mustache tags
  
- @since v1.0.0
+ @since v1.0
  */
 - (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 /**
  Renders a template with context objects.
  
- @returns A string containing the rendered template
+ @return A string containing the rendered template
  @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil
  
- @since v1.5.0
+ @since v1.5
  */
 - (NSString *)renderObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 
 /**
  Renders a template without any context object for interpreting Mustache tags.
  
- @returns A string containing the rendered template
+ @return A string containing the rendered template
  
- @since v1.0.0
+ @since v1.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 

@@ -23,13 +23,88 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+/**
+ @warning *Deprecated*: You should no longer use the GRMustacheContext class in your mustache lambda definitions.
+ 
+ Instead, check the GRMustacheSection overview, which tells about modern ways to define mustache lambdas.
+ 
+ @since v1.3
+ @deprecated v1.5
+ */
 @interface GRMustacheContext: NSObject {
 @private
 	id object;
 	GRMustacheContext *parent;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Creating a context
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ Returns a context objet containing a single object.
+ 
+ @warning *Deprecated*: See the class overview above.
+ 
+ @return A context objet containing a single object.
+ 
+ @since v1.3
+ 
+ @deprecated v1.5
+ */
 + (id)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+
+/**
+ Returns a context objet containing several objects.
+ 
+ @warning *Deprecated*: See the class overview above.
+ 
+ @return A context objet containing several objects.
+ 
+ @since v1.3
+ 
+ @deprecated v1.5
+ */
 + (id)contextWithObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Deriving new contexts
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ Returns a new context that is a copy of the receiving context with a given object added to the end.
+ 
+ @warning *Deprecated*: See the class overview above.
+ 
+ @return A new context that is a copy of the receiving context with a given object added to the end.
+ 
+ @since v1.3
+ 
+ @deprecated v1.5
+ */
 - (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Key value coding
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ Returns the first non nil value found in the objects contained in the context, if possible, and nil otherwise.
+ 
+ GRMustacheContext sends the `valueForKey:` message to all its objects, starting from the last one, until one returns a value that is not nil.
+ 
+ If no object can return a value, this method returns nil.
+ 
+ If GRMustache does not run in strict boolean mode, this method will return objects created with `[NSNumber numberWithBOOL:]` instead of `[NSNumber numberWithChar:]` when dealing with BOOL properties of objects.
+ 
+ @return The first non nil value found in the objects contained in the context, if possible, and nil otherwise.
+ 
+ @param key The name of one of the receiver's properties.
+ 
+ @see [GRMustache strictBooleanMode]
+ @see [GRMustache setStrictBooleanMode:]
+ 
+ @since v1.3
+ */
 - (id)valueForKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER;
 @end

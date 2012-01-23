@@ -33,19 +33,19 @@
  @see GRYes#yes
  @see GRMustache#strictBooleanMode
  @see GRNo
- @since v1.0.0
+ @since v1.0
  */
 @interface GRYes : NSObject <NSCopying>
 /**
  @deprecated Use `[NSNumber numberWithBool:YES]` instead.
- @returns the GRYes singleton.
- @since v1.0.0
+ @return the GRYes singleton.
+ @since v1.0
  */
 + (GRYes *)yes AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 
 /**
- @returns YES
- @since v1.1.0
+ @return YES
+ @since v1.1
  */
 - (BOOL)boolValue AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 @end
@@ -62,19 +62,19 @@
  @see GRNo#no
  @see GRMustache#strictBooleanMode
  @see GRYes
- @since v1.0.0
+ @since v1.0
  */
 @interface GRNo : NSObject <NSCopying>
 /**
  @deprecated Use `[NSNumber numberWithBool:NO]` instead.
- @returns the GRNo singleton.
- @since v1.0.0
+ @return the GRNo singleton.
+ @since v1.0
  */
 + (GRNo *)no AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 
 /**
- @returns NO
- @since v1.1.0
+ @return NO
+ @since v1.1
  */
 - (BOOL)boolValue AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2;
 @end
