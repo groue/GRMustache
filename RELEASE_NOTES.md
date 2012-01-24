@@ -3,14 +3,16 @@ GRMustache Release Notes
 
 ## v1.9
 
-**Better lambda encapsulation with classes conforming to the GRMustacheHelper protocol.**
+- **Better lambda encapsulation with classes conforming to the GRMustacheHelper protocol.**
+- **Format all numbers in a section with GRMustacheNumberFormatterHelper**
 
 New protocol:
 
-    @protocol GRMustacheHelper<NSObject>
-    @required
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-    @end
+- `GRMustacheHelper`
+
+New class:
+
+- `GRMustacheNumberFormatterHelper`
 
 ## v1.8.6
 

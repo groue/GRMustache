@@ -24,6 +24,6 @@
 #define GRMUSTACHE_VERSION_MAX_REQUIRED GRMUSTACHE_VERSION_1_9
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheHelperTest : GRMustachePublicAPITest
+@interface GRMustacheNumberFormatterHelperTest : GRMustachePublicAPITest
 
 @end

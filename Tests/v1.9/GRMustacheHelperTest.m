@@ -34,7 +34,7 @@
 
 @implementation GRMustacheHelperTest
 
-- (void)testDefaultTemplateOptions
+- (void)testRenderSectionWithContextMethodPerformsRendering
 {
     NSString *templateString = @"{{#foobar}}---{{/foobar}}";
     NSDictionary *context = [NSDictionary dictionaryWithObject:[[[GRMustacheFoobarHelper alloc] init] autorelease] forKey:@"foobar"];
