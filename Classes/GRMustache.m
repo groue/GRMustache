@@ -22,7 +22,6 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRBoolean_private.h"
 #import "GRMustacheVersion.h"
 
 static BOOL strictBooleanMode = NO;
@@ -57,28 +56,6 @@ GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateO
 + (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions
 {
     GRMustacheDefaultTemplateOptions = templateOptions;
-}
-
-+ (BOOL)booleanValue:(id)object {
-    if (object == nil) {
-        return NO;
-    } else if (object == [NSNull null]) {
-        return NO;
-    } else if (object == [GRNo no]) {
-        return NO;
-    } else if ((void *)object == (void *)kCFBooleanFalse) {
-        return NO;
-    } else if ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0) {
-        return NO;
-    } else if ([object conformsToProtocol:@protocol(NSFastEnumeration)] && ![object isKindOfClass:[NSDictionary class]]) {
-        BOOL empty = YES;
-        for (id item in object) {
-            empty = NO;
-            break;
-        }
-        return !empty;
-    }
-	return YES;
 }
 
 @end

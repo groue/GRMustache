@@ -97,7 +97,9 @@
     NSMutableString *result = nil;
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 	id value = [context valueForKey:name];
-	switch([GRMustacheTemplate objectKind:value]) {
+    GRMustacheObjectKind kind;
+    [GRMustacheTemplate object:value kind:&kind boolValue:NULL];
+	switch(kind) {
 		case GRMustacheObjectKindFalseValue:
 			if (inverted) {
                 result = [[NSMutableString string] retain];
@@ -117,8 +119,20 @@
             }
 			break;
 			
-		case GRMustacheObjectKindNonEmptyEnumerable:
-			if (!inverted) {
+		case GRMustacheObjectKindEnumerable:
+			if (inverted) {
+				BOOL empty = YES;
+				for (id object in value) {
+					empty = NO;
+					break;
+				}
+				if (empty) {
+                    result = [[NSMutableString string] retain];
+                    for (id<GRMustacheRenderingElement> elem in elems) {
+                        [result appendString:[elem renderContext:context]];
+                    }
+				}
+			} else {
                 result = [[NSMutableString string] retain];
 				for (id object in value) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:object];

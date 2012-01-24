@@ -27,7 +27,7 @@
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
-#import "GRMustache_private.h"
+#import "GRBoolean_private.h"
 #import "GRMustacheContextStrategy_private.h"
 
 @interface GRMustacheTemplate()
@@ -199,24 +199,36 @@
     return [result autorelease];
 }
 
-+ (GRMustacheObjectKind)objectKind:(id)object {
-	if ([GRMustache booleanValue:object] == NO) {
-		return GRMustacheObjectKindFalseValue;
-	}
-	
-	if ([object isKindOfClass:[NSDictionary class]]) {
-		return GRMustacheObjectKindTrueValue;
-	}
-	
-	if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-		return GRMustacheObjectKindNonEmptyEnumerable;
-	}
-	
-	if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) {
-		return GRMustacheObjectKindLambda;
-	}
-	
-	return GRMustacheObjectKindTrueValue;
++ (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue
+{
+    if (object == nil ||
+        object == [NSNull null] ||
+        object == [GRNo no] ||
+        (void *)object == (void *)kCFBooleanFalse ||
+        ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0))
+    {
+        if (outKind != NULL) {
+            *outKind = GRMustacheObjectKindFalseValue;
+        }
+        if (outBoolValue != NULL) {
+            *outBoolValue = NO;
+        }
+    } else {
+        if (outKind != NULL) {
+            if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) {
+                *outKind = GRMustacheObjectKindLambda;
+            } else if ([object isKindOfClass:[NSDictionary class]]) {
+                *outKind = GRMustacheObjectKindTrueValue;
+            } else if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+                *outKind = GRMustacheObjectKindEnumerable;
+            } else {
+                *outKind = GRMustacheObjectKindTrueValue;
+            }
+        }
+        if (outBoolValue != NULL) {
+            *outBoolValue = YES;
+        }
+    }
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {

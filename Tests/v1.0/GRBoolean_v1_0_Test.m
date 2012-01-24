@@ -104,6 +104,11 @@
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
+- (void)test_EmptyArray_isFalseValue {
+	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray array] forKey:@"bool"];
+	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+}
+
 - (void)test_GRYes_isTrueValue {
 	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"bool"];
 	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);

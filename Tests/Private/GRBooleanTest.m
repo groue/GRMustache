@@ -33,11 +33,15 @@
 }
 
 - (void)testGRYesIsTrueObject {
-	STAssertEquals([GRMustacheTemplate objectKind:[GRYes yes]], GRMustacheObjectKindTrueValue, nil);
+    GRMustacheObjectKind kind;
+    [GRMustacheTemplate object:[GRYes yes] kind:&kind boolValue:NULL];
+	STAssertEquals(kind, GRMustacheObjectKindTrueValue, nil);
 }
 
 - (void)testGRNoIsFalseObject {
-	STAssertEquals([GRMustacheTemplate objectKind:[GRNo no]], GRMustacheObjectKindFalseValue, nil);
+    GRMustacheObjectKind kind;
+    [GRMustacheTemplate object:[GRNo no] kind:&kind boolValue:NULL];
+	STAssertEquals(kind, GRMustacheObjectKindFalseValue, nil);
 }
 
 @end
