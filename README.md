@@ -17,6 +17,11 @@ Full features list:
 - "implicit iterator": `{{.}}`
 - "extended paths" of [Handlebars.js](https://github.com/wycats/handlebars.js): `{{../foo/bar}}`
 
+On top of the core Mustache engine, GRMustache ships with a few handy stuff:
+
+- Number formatting
+- Date formatting
+
 Note that:
 
 - GRMustache does not honor the whitespace management rules of the [Mustache specification v1.1.2](https://github.com/mustache/spec): each character of your templates will be rendered as is.
@@ -305,7 +310,7 @@ When a key is missed at the item level, it is looked for in the enclosing contex
 
 #### Lambda sections
 
-Read below "Lambdas", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
+Read below "Helpers", which covers in detail how GRMustache allows you to provide custom code for rendering sections.
 
 #### Other sections
 
@@ -364,7 +369,7 @@ Implicit iterator, dotted names and extended paths
 
 ### Implicit iterator
 
-The dot "`.`" stands for the current context itself. This dot key can be useful when iterating a list of scalar objects. For instance, the following context:
+The dot "`.`" stands for the current context itself. This "implicit iterator" can be useful when iterating a list of scalar objects. For instance, the following context:
 
 	context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects: @"beer", @"ham", nil]
 	                                      forKey:@"item"];
@@ -384,7 +389,7 @@ GRMustache supports extended paths introduced by [Handlebars.js](https://github.
 To display data from descendent contexts, use the `/` character. So, for example, if your context were structured like:
 
 	context = [NSDictionary dictionaryWithObjectsAndKeys:
-	           [Person personWithName:@"Alan"], @"person",
+	           [Person personWithName:@"Alan"],   @"person",
 	           [Company companyWithName:@"Acme"], @"company",
 	           nil];
 
@@ -416,18 +421,18 @@ you could display the person's name from the top-level context with the followin
 
 You have to explicitely ask for the Mustache spec compatibility in order to use dotted names. See "Rendering methods" above.
 
-Lambdas
+Helpers
 -------
 
-Mustache lambdas allow you to execute custom code when rendering a mustache section such as:
+Mustache helpers, also known as lambdas, allow you to execute custom code when rendering a mustache section such as:
 
 	{{#name}}...{{/name}}
 
-GRMustache provides you with two ways in order to define your lambdas. The first one requires some selectors to be implemented, the second uses Objective-C blocks.
+For the purpose of demonstration, we'll implement a helper that translates, via `NSLocalizedString`, the content of the section: one will expect `{{#localize}}Delete{{/localize}}` to output `Effacer` when the locale is French.
 
-For the purpose of demonstration, we'll implement a lambda that translates, via `NSLocalizedString`, the content of the section: one will expect `{{#localize}}Delete{{/localize}}` to output `Effacer` when the locale is French.
+We'll see three techniques for implementing the behavior.
 
-### Implementing lambdas with methods
+### Implementing helpers with specific selectors
 
 If the context used for mustache rendering implements the `localizeSection:withContext:` selector (generally, a method whose name is the name of the section, to which you append `Section:withContext:`), then this method will be called when rendering the section.
 
@@ -436,17 +441,17 @@ The choice of the class that should implement this selector is up to you, as lon
 For instance, let's focus on the following template snippet:
 
 	{{#cart}}
-	    {{#items}}
-	        {{quantity}} × {{name}}
-	        {{#localize}}Delete{{/localize}}
-	    {{/items}}
+	  {{#items}}
+	    {{quantity}} × {{name}}
+	    {{#localize}}Delete{{/localize}}
+	  {{/items}}
 	{{/cart}}
 
 When the `localize` section is rendered, the context contains an item object, an items collection, a cart object, plus any surrounding objects.
 
 If the item object implements the `localizeSection:withContext:` selector, then its implementation will be called. Otherwise, the selector will be looked up in the items collection. Since this collection is likely an `NSArray` instance, the lookup will continue with the cart and its surrounding context, until some object is found that implements the `localizeSection:withContext:` selector.
 
-In order to have a reusable `localize` lambda, we'll isolate it in a specific class, `MustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
+In order to have a reusable `localize` helper, we'll isolate it in a specific class, `MustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
 
 Let's first declare our helper class:
 
@@ -454,7 +459,7 @@ Let's first declare our helper class:
 
 Since our helper doesn't carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
 
-	    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
+	  + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
 	@end
 
 #### The literal inner content
@@ -466,7 +471,7 @@ This _section_ object has a `templateString` property, which returns the literal
 	@implementation MustacheHelper
 	+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
 	{
-	    return NSLocalizedString(section.templateString, nil);
+	  return NSLocalizedString(section.templateString, nil);
 	}
 	@end
 
@@ -477,16 +482,16 @@ So far, so good, this would work as expected.
 Yet the application keeps on evolving, and it appears that the item names should also be localized. The template snippet now reads:
 
 	{{#cart}}
-	    {{#items}}
-	        {{quantity}} × {{#localize}}{{name}}{{/localize}}
-	        {{#localize}}Delete{{/localize}}
-	    {{/items}}
+	  {{#items}}
+	    {{quantity}} × {{#localize}}{{name}}{{/localize}}
+	    {{#localize}}Delete{{/localize}}
+	  {{/items}}
 	{{/cart}}
 
 Now the strings we have to localize may be:
 
-- literal strings from the template: `{{#localize}}Delete{{/localize}}`
-- strings coming from cart items : `{{#localize}}{{name}}{{/localize}}`
+- literal strings from the template: `Delete`
+- strings coming from cart items : `{{name}}`
 
 Our first `MustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
 
@@ -504,8 +509,8 @@ Now we can fix our implementation:
 	@implementation MustacheHelper
 	+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
 	{
-	    NSString *renderedContent = [section renderObject:context];
-	    return NSLocalizedString(renderedContent, nil);
+	  NSString *renderedContent = [section renderObject:context];
+	  return NSLocalizedString(renderedContent, nil);
 	}
 	@end
 
@@ -522,70 +527,159 @@ Let's first parse the template:
 
 	GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation" bundle:nil error:NULL];
 
-Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` lambda, and `self` that will provide the `cart`:
+Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` helper, and `self` that will provide the `cart`:
 
 	[template renderObjects:[MustacheHelper class], self, nil];
 
-### Implementing lambdas with blocks
+### Implementing helpers with blocks
 
-Starting MacOS6 and iOS4, blocks are available to the Objective-C language. GRMustache provides a block-based lambda API.
+Starting MacOS6 and iOS4, blocks are available to the Objective-C language. GRMustache provides a block-based helper API.
 
 This technique does not involve declaring any special selector. But when asked for the `localized` key, your context will return a GRMustacheBlockHelper instance, built in the same fashion as the helper methods seen above:
 
-	id localize = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
-	    NSString *renderedContent = [section renderObject:context];
-	    return NSLocalizedString(renderedContent, nil);
+	id localizeHelper = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
+	  NSString *renderedContent = [section renderObject:context];
+	  return NSLocalizedString(renderedContent, nil);
 	}];
 
-See how the block implementation is strictly identical to the lambda method discussed above.
+See how the block implementation is strictly identical to the helper method discussed above.
 
-Actually, your only concern is to make sure your values and lambda code can be reached by GRMustache when rendering your templates. Implementing `localizeSection:withContext` or returning a GRMustacheBlockHelper instance for the `localize` key is strictly equivalent.
+Actually, your only concern is to make sure your values and helper code can be reached by GRMustache when rendering your templates. Implementing `localizeSection:withContext` or returning a GRMustacheBlockHelper instance for the `localize` key is strictly equivalent.
 
-Speaking of the `localize` key, we need some container object:
+However, unlike the selector technique seen above, our code is not yet bound to the section name, `localize`. And actually, we need some container object. Let's go with a dictionary:
 
-	id mustacheHelper = [NSDictionary dictionaryWithObject:localize forKey:@"localize"];
+	id mustacheHelper = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
 
 And now the rendering is done as usual:
 
 	[template renderObjects:mustacheHelper, self, nil];
 
 
+### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
 
-### Usages of lambdas
+Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the two techniques seen above don't help us that much acheiving this goal:
 
-Lambdas can be used for whatever you may find relevant.
+- the selector technique binds the helper code to the section name, thus making impossible to share the helper code between various sections of various templates.
+- the block technique provides no way to cleanly encapsulate the helper code.
+
+The `GRMustacheHelper` protocol aims at giving you a way to create classes which encapsulate a helper.
+
+In our case, here would be the implementation of our localizing helper:
+
+	@interface LocalizedStringHelper: NSObject<GRMustacheHelper>
+	@end
+	
+	@implementation LocalizedStringHelper
+	// The renderSection:inContext method is required by the GRMustacheHelper protocol
+	- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+	{
+	  NSString *renderedContent = [section renderObject:context];
+	  return NSLocalizedString(renderedContent, nil);
+	}
+	@end
+
+We, again, need some container object, in order to attach our helper to the `localize` key:
+
+	LocalizedStringHelper *localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
+	id mustacheHelper = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
+
+And now the rendering is done as usual:
+
+	[template renderObjects:mustacheHelper, self, nil];
+
+Speaking of encapsulation, our `LocalizedStringHelper` can even now support localization tables. This is left as an exercise for the reader :-)
+
+### Usages of helpers
+
+Helpers can be used for whatever you may find relevant.
 
 You may implement caching:
 
-	// {{#cached}}...{{/cached}}
-	- (NSString *)cachedSection:(GRMustacheSection *)section withContext:(id)context {
+	- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	  if (self.cache == nil) { self.cache = [section renderObject:context]; }
 	  return self.cache;
 	};
 
 You may render an extended context:
 
-	// {{#extended}}...{{/extended}}
-	+ (NSString *)extendedSection:(GRMustacheSection *)section withContext:(id)context {
+	- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	  return [section renderObjects:context, ...];
 	});
 
-You may render a totally different context:
+You may render a totally different context (note that this is the base technique for the GRMustacheNumberFormatterHelper and GRMustacheDateFormatterHelper helpers that ship with GRMustache):
 
-	// {{#alternative}}...{{/alternative}}
-	+ (NSString *)alternativeSection:(GRMustacheSection *)section withContext:(id)context {
-	  return [section renderObject:[NSDictionary ...]];
+	- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+	  return [section renderObject:...];
 	});
 
 You may implement debugging sections:
 
-	// {{#debug}}...{{/debug}}
-	+ (NSString *)debugSection:(GRMustacheSection *)section withContext:(id)context {
+	- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
 	  NSLog(section.templateString);         // log the unrendered section 
 	  NSLog([section renderObject:context]); // log the rendered section 
 	  return nil;                            // don't render anything
 	});
 
+
+Utils
+-----
+
+GRMustache ships with a few helper classes. They do not belong the the core GRMustache code, and as such must be imported separately:
+
+	#import "GRMustacheUtils.h"
+
+### GRMustacheNumberFormatterHelper
+
+This helper allows you to format *all* numbers in a section of your template.
+
+For instance, given the following template:
+
+	raw: {{float}}
+	
+	{{#percent_format}}
+	percent: {{float}}
+	{{/percent_format}}
+	
+	{{#decimal_format}}
+	decimal: {{float}}
+	{{/decimal_format}}
+
+The float value would be displayed as a percentage in the `percent_format` section, and as a decimal in the `decimal_format` section.
+
+We just have to create two `GRMustacheNumberFormatterHelper` objects, provide them with `NSNumberFormatter` instances, and attach them to the section names:
+
+	#import "GRMustacheUtils.h"
+	
+	// The percent formatter, and helper:
+	NSNumberFormatter percentNumberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+	percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
+	GRMustacheNumberFormatterHelper *percentHelper = [GRMustacheNumberFormatterHelper helperWithNumberFormatter:percentNumberFormatter];
+	
+	// The decimal formatter, and helper:
+	NSNumberFormatter decimalNumberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+	decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
+	GRMustacheNumberFormatterHelper *decimalHelper = [GRMustacheNumberFormatterHelper helperWithNumberFormatter:decimalNumberFormatter];
+	
+	// The rendered data:
+	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+	                      percentHelper,                   @"percent_format",
+	                      decimalHelper,                   @"decimal_format",
+	                      [NSNumber numberWithFloat:0.5f], @"float",
+	                      nil];
+	
+	// The final rendering (on a French system):
+	//   raw: 0.5
+	//   percent: 50 %
+	//   decimal: 0,5
+	[template renderObject:data];
+
+It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the code for inspiration.
+
+### GRMustacheDateFormatterHelper
+
+This helper allows you to format *all* dates in a section of your template.
+
+Read the `GRMustacheNumberFormatterHelper` documentation above, because the principles are the same. You'll just provide a `NSDateFormatter` instead of a `NSNumberFormatter`.
 
 Template loaders
 ----------------

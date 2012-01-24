@@ -5,14 +5,16 @@ GRMustache Release Notes
 
 - **Better lambda encapsulation with classes conforming to the GRMustacheHelper protocol.**
 - **Format all numbers in a section with GRMustacheNumberFormatterHelper**
+- **Format all dates in a section with GRMustacheDateFormatterHelper**
 
 New protocol:
 
 - `GRMustacheHelper`
 
-New class:
+New classes:
 
 - `GRMustacheNumberFormatterHelper`
+- `GRMustacheDateFormatterHelper`
 
 ## v1.8.6
 
