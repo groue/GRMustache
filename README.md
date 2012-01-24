@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine, for MacOS 10.6+, iPhoneOS 3.0, iOS 4.0, and iOS 5.0.
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
 
 The Mustache syntax: http://mustache.github.com/mustache.5.html (not wrong, but somewhat outdated).
 
@@ -14,6 +14,8 @@ What you get
 ------------
 
 **An ARC-compatible static library**, that will run on your computers, devices, simulators.
+
+**MacOS 10.6+, iPhoneOS 3.0, iOS 4.0+ support**
 
 **Compatibility with other Mustache implementations**:
 
