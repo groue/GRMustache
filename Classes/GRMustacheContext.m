@@ -141,10 +141,14 @@ static const NSString *GRMustacheContextStrategyStackKey = @"GRMustacheContextSt
 - (id)valueForKeyComponent:(NSString *)key {
 	// value by selector
 	
-	SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
-	if ([object respondsToSelector:renderingSelector]) {
-		return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
-	}
+    SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
+    if ([object respondsToSelector:renderingSelector]) {
+        // Avoid the "render" key to be triggered by GRMustacheHelper instances,
+        // who implement the renderSection:withContext: selector.
+        if (![object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
+            return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
+        }
+    }
 	
 	// value by KVC
 	
