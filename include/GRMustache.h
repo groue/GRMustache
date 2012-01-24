@@ -165,4 +165,3 @@ typedef struct {
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
-#import "GRMustacheNumberFormatterHelper.h"
