@@ -628,7 +628,7 @@ GRMustache ships with a few helper classes. They do not belong the the core GRMu
 
 	#import "GRMustacheUtils.h"
 
-### GRMustacheNumberFormatterHelper
+### Number formatting with `GRMustacheNumberFormatterHelper`
 
 This helper allows you to format *all* numbers in a section of your template.
 
@@ -675,7 +675,7 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
 
 It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the code for inspiration.
 
-### GRMustacheDateFormatterHelper
+### Date formatting with `GRMustacheDateFormatterHelper`
 
 This helper allows you to format *all* dates in a section of your template.
 
