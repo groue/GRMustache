@@ -17,7 +17,7 @@ Full features list:
 - "implicit iterator": `{{.}}`
 - "extended paths" of [Handlebars.js](https://github.com/wycats/handlebars.js): `{{../foo/bar}}`
 
-On top of the core Mustache engine, GRMustache ships with a few handy stuff:
+On top of the core Mustache engine, GRMustache ships with a few handy features:
 
 - Number formatting
 - Date formatting
