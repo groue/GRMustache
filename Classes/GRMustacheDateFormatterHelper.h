@@ -20,9 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MIN_REQUIRED GRMUSTACHE_VERSION_1_9
-#define GRMUSTACHE_VERSION_MAX_REQUIRED GRMUSTACHE_VERSION_1_9
-#import "GRMustachePublicAPITest.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheLambda.h"
 
-@interface GRMustacheNumberFormatterHelperTest : GRMustachePublicAPITest
+@interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper> {
+@private
+	NSDateFormatter *dateFormatter;
+}
+@property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
++ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
 @end

@@ -146,6 +146,13 @@
 		5672485F13E0311D0043E2FA /* syntax_error.conf in Resources */ = {isa = PBXBuildFile; fileRef = 5672485E13E0311D0043E2FA /* syntax_error.conf */; };
 		569C86761424A6CF00D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
 		569C86771424A6D800D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
+		56A9235914CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9235614CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56A9235A14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9235614CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56A9235B14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9235714CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m */; };
+		56A9235C14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9235714CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m */; };
+		56A9235D14CEC07B00204EB8 /* GRMustacheUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9235814CEC07B00204EB8 /* GRMustacheUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56A9235F14CEC08400204EB8 /* GRMustacheUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9235814CEC07B00204EB8 /* GRMustacheUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56A9236014CEC49600204EB8 /* GRMustacheDateFormatterHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9235014CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.m */; };
 		56D585771447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
 		56D585781447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF72F14407B0D005A4F58 /* GRMustacheContextStrategy.m */; };
 		56D585791447F7F400DA3F67 /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BF71D14404493005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard.m */; };
@@ -285,6 +292,11 @@
 		5672485913E0310D0043E2FA /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5672485E13E0311D0043E2FA /* syntax_error.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = syntax_error.conf; sourceTree = "<group>"; };
 		569C86751424A6CE00D6BC77 /* GRBoolean_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBoolean_private.h; sourceTree = "<group>"; };
+		56A9234F14CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheDateFormatterHelperTest.h; sourceTree = "<group>"; };
+		56A9235014CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheDateFormatterHelperTest.m; sourceTree = "<group>"; };
+		56A9235614CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheDateFormatterHelper.h; sourceTree = "<group>"; };
+		56A9235714CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheDateFormatterHelper.m; sourceTree = "<group>"; };
+		56A9235814CEC07B00204EB8 /* GRMustacheUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheUtils.h; sourceTree = "<group>"; };
 		56D8810B14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheNumberFormatterHelper.h; sourceTree = "<group>"; };
 		56D8810C14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheNumberFormatterHelper.m; sourceTree = "<group>"; };
 		56D8811214CE91BD00AB3CE4 /* GRMustacheHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelperTest.h; sourceTree = "<group>"; };
@@ -564,6 +576,9 @@
 		56D8810A14CE916600AB3CE4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				56A9235814CEC07B00204EB8 /* GRMustacheUtils.h */,
+				56A9235614CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h */,
+				56A9235714CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m */,
 				56D8810B14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.h */,
 				56D8810C14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.m */,
 			);
@@ -577,6 +592,8 @@
 				56D8811314CE91BD00AB3CE4 /* GRMustacheHelperTest.m */,
 				56D8811414CE91BD00AB3CE4 /* GRMustacheNumberFormatterHelperTest.h */,
 				56D8811514CE91BD00AB3CE4 /* GRMustacheNumberFormatterHelperTest.m */,
+				56A9234F14CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.h */,
+				56A9235014CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.m */,
 			);
 			path = v1.9;
 			sourceTree = "<group>";
@@ -666,6 +683,8 @@
 				565F69A2139FF062004D1894 /* GRMustacheVersion.h in Headers */,
 				563BF73514407C06005A4F58 /* GRMustacheContextStrategy_private.h in Headers */,
 				56D8810D14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.h in Headers */,
+				56A9235914CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h in Headers */,
+				56A9235D14CEC07B00204EB8 /* GRMustacheUtils.h in Headers */,
 				565F697C139FF062004D1894 /* GRMustache_private.h in Headers */,
 				565F697E139FF062004D1894 /* GRMustacheBundleTemplateLoader_private.h in Headers */,
 				565F6983139FF062004D1894 /* GRMustacheContext_private.h in Headers */,
@@ -705,6 +724,8 @@
 				566529B113A12E9600B98B87 /* GRMustacheVersion.h in Headers */,
 				56D8810E14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.h in Headers */,
 				563BF73414407BED005A4F58 /* JRSwizzle.h in Headers */,
+				56A9235A14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h in Headers */,
+				56A9235F14CEC08400204EB8 /* GRMustacheUtils.h in Headers */,
 				563BF73114407BAF005A4F58 /* GRMustacheContextStrategy_private.h in Headers */,
 				563BF73214407BAF005A4F58 /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */,
 				563BF73314407BAF005A4F58 /* GRMustacheProperty_private.h in Headers */,
@@ -877,6 +898,7 @@
 				563BF72314404493005A4F58 /* GRMustacheProperty.m in Sources */,
 				56D585781447F7E300DA3F67 /* GRMustacheContextStrategy.m in Sources */,
 				56D8810F14CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.m in Sources */,
+				56A9235B14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -909,6 +931,7 @@
 				56FDC0A6144AD9B400022D47 /* GRMustacheContextStrategyTest.m in Sources */,
 				56D8811614CE91BD00AB3CE4 /* GRMustacheHelperTest.m in Sources */,
 				56D8811714CE91BD00AB3CE4 /* GRMustacheNumberFormatterHelperTest.m in Sources */,
+				56A9236014CEC49600204EB8 /* GRMustacheDateFormatterHelperTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -936,6 +959,7 @@
 				56D5857A1447F7F800DA3F67 /* GRMustacheProperty.m in Sources */,
 				560F68E11447FF7E002C50A4 /* JRSwizzle.m in Sources */,
 				56D8811014CE918600AB3CE4 /* GRMustacheNumberFormatterHelper.m in Sources */,
+				56A9235C14CEC07B00204EB8 /* GRMustacheDateFormatterHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

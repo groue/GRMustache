@@ -20,9 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MIN_REQUIRED GRMUSTACHE_VERSION_1_9
-#define GRMUSTACHE_VERSION_MAX_REQUIRED GRMUSTACHE_VERSION_1_9
-#import "GRMustachePublicAPITest.h"
-
-@interface GRMustacheNumberFormatterHelperTest : GRMustachePublicAPITest
-@end
+#import "GRMustache.h"
+#import "GRMustacheNumberFormatterHelper.h"
+#import "GRMustacheDateFormatterHelper.h"

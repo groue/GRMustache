@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheNumberFormatterHelperTest.h"
+#import "GRMustacheUtils.h"
 
 @implementation GRMustacheNumberFormatterHelperTest
 
