@@ -1,12 +1,25 @@
+[up](../runtime.md), [next](helpers.md)
+
 # Booleans
 
-[up](../rendering.md), [next](helpers.md)
+**TL;DR** Sections render or not, depending on the boolean value of the object they are attached to. Generally speaking, all objects are considered true, except:
+
+- `nil`, and missing KVC keys
+- `[NSNull null]`
+- `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
+- the empty string `@""`
+
+The most direct ways to provide sections with actual booleans are the explicit `[NSNumber numberWithBool:]` objects, and BOOL properties in your model objects.
+
+Beware zero (an NSNumber whose value is zero) is not considered false in GRMustache.
+
+---
 
 Mustache sections can be controlled by booleans. For instance, the following template would render as an empty string, or as `"whistle"`, depending on the boolean value of the `pretty` key in the rendering context:
 
 	{{#pretty}}whistle{{/pretty}}
 
-We'll first talk about some simple cases. We'll then discuss important caveats. Don't miss them!
+We'll first talk about some simple cases. We'll then discuss caveats.
 
 ## Simple booleans: [NSNumber numberWithBool:]
 
@@ -51,25 +64,36 @@ For instance:
 
 GRMustache considers as false the following values, and only those:
 
-- `nil`
+- `nil` and missing KVC keys
 - `[NSNull null]`
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
 
-    // returns @"": nil is false
-    [template renderObject:[NSDictionary dictionary]];
+Each of those renderings return the empty string:
 
-    // returns @"": [NSNull null] is false
+    // @"foobar" has no `pretty` key
+    [template renderObject:@"foobar"];
+    
+    // nil is false
+    [template renderObject:[NSDictionary dictionary]];
+    
+    // [NSNull null] is false
     [template renderObject:[NSDictionary dictionaryWithObject:[NSNull null]
                                                        forKey:@"pretty"]];
-
-    // returns @"": [NSNumber numberWithBool:NO] is false
+    
+    // [NSNumber numberWithBool:NO] is false
     [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
                                                        forKey:@"pretty"]];
-
-    // returns @"": @"" is false
+    
+    // @"" is false
     [template renderObject:[NSDictionary dictionaryWithObject:@""
                                                        forKey:@"pretty"]];
+
+Note that zero, as an explicit NSNumber whose value is zero, or as an int/float property, is not considered false in GRMustache:
+
+    // @"whistle"
+    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0]
+                                                   forKey:@"pretty"]];
 
 
 ## Caveats
@@ -145,4 +169,4 @@ You may consider using the unbeloved C99 `bool` type. They can reliably control 
     - (bool)pretty;
     @end
 
-[up](../rendering.md), [next](helpers.md)
+[up](../runtime.md), [next](helpers.md)

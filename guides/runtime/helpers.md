@@ -1,13 +1,13 @@
+[up](../runtime.md), [next](../forking.md)
+
 Helpers
 =======
-
-[up](../rendering.md), [next](../forking.md)
 
 GRMustache helpers allow you to implement "Mustache lambdas", that is to say have your own code executed when GRMustache renders a section such as `{{#name}}...{{/name}}`.
 
 ## Overview
 
-In GRMustache, the rendering is controlled by the data objects you provide to rendering methods. This topic is covered in detail in ([guides/rendering.md](rendering.md)).
+In GRMustache, the rendering is controlled by the data objects you provide to rendering methods. This topic is covered in detail in ([guides/runtime.md](runtime.md)).
 
 The principles covered here will thus always be the same: it's a matter of providing the rendering methods of GRMustache with data objects which have code attached to specific template keys.
 
@@ -27,7 +27,7 @@ For the purpose of demonstration, we'll implement a helper that translates, via 
 
 If the context used for mustache rendering implements the `localizeSection:withContext:` selector (generally, a method whose name is the name of the section, to which you append `Section:withContext:`), then this method will be called when rendering the section.
 
-The choice of the class that should implement this selector is up to you, as long as it can be reached when rendering the template, just as regular values (see ([guides/rendering.md](rendering.md))).
+The choice of the class that should implement this selector is up to you, as long as it can be reached when rendering the template, just as regular values (see ([guides/runtime.md](runtime.md))).
 
 For instance, let's focus on the following template snippet:
 
@@ -215,4 +215,4 @@ You may implement debugging sections:
       return nil;                            // don't render anything
     });
 
-[up](../rendering.md), [next](../forking.md)
+[up](../runtime.md), [next](../forking.md)

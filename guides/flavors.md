@@ -1,7 +1,7 @@
+[up](../README.md), [next]()
+
 Mustache flavors
 ================
-
-[up](../README.md), [next]()
 
 **TL;DR** Should you use compound key paths in your templates, you'd rather use the dot `"."` as a separator: `{{foo.bar}}`, and execute once, before any template processing, the following statement:
 

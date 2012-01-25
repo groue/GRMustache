@@ -1,7 +1,7 @@
+[up](../README.md), [next]()
+
 Date formatting with GRMustacheDateFormatterHelper
 ==================================================
-
-[up](../README.md), [next]()
 
 **This helper class allows you to format *all* dates in a section of your template.**
 

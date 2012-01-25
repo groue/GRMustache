@@ -1,7 +1,7 @@
+[up](../README.md), [next]()
+
 Embedding GRMustache in your XCode project
 ==========================================
-
-[up](../README.md), [next]()
 
 **TL;DR** Choose a static library in the `/lib` folder, and import the `/include/GRMustache.h` header.
 

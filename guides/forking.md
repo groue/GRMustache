@@ -1,6 +1,6 @@
-# Note on forking
-
 [up](../README.md), [next]()
+
+# Note on forking
 
 After you have forked groue/GRMustache, you might want to change stuff, test, and then build the library.
 

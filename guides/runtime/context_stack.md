@@ -1,7 +1,7 @@
+[up](../runtime.md), [next](loops.md)
+
 The context stack
 =================
-
-[up](../rendering.md), [next](loops.md)
 
 Mustache sections open new context
 ----------------------------------
@@ -54,5 +54,5 @@ The first will look for `bar` anywhere in the context stack, starting with the `
 
 The latter ensures the `bar` key comes (or not) from the `foo` object.
 
-[up](../rendering.md), [next](loops.md)
+[up](../runtime.md), [next](loops.md)
 

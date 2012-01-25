@@ -1,7 +1,7 @@
-GRMustache rendering
-====================
+[up](../README.md), [next](runtime/context_stack.md)
 
-[up](../README.md), [next](rendering/context_stack.md)
+GRMustache runtime
+==================
 
 GRMustache rendering is the combination of a template and of an object that will provide the data. This guide describes this interaction in detail.
 
@@ -20,9 +20,9 @@ You can thus provide rendering methods with NSDictionary instances, or custom ob
     // "arthur"
     [template renderObject:arthur];
 
-- [The context stack](rendering/context_stack.md) will cover Mustache sections
-- [Mustache loops](rendering/loops.md)
-- [Mustache booleans](rendering/booleans.md)
-- [Helpers](rendering/helpers.md)
+- [The context stack](runtime/context_stack.md) will cover Mustache sections and the KVC lookup mechanism.
+- [Mustache loops](runtime/loops.md)
+- [Mustache booleans](runtime/booleans.md)
+- [Helpers](runtime/helpers.md)
 
-[up](../README.md), [next](rendering/context_stack.md)
+[up](../README.md), [next](runtime/context_stack.md)

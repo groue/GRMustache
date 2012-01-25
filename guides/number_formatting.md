@@ -1,7 +1,7 @@
+[up](../README.md), [next](date_formatting.md)
+
 Number formatting with GRMustacheNumberFormatterHelper
 ======================================================
-
-[up](../README.md), [next](date_formatting.md)
 
 **This helper class allows you to format *all* numbers in a section of your template.**
 
@@ -54,6 +54,6 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
     //   decimal: 0,5
     [template renderObject:data];
 
-It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/rendering/helpers.md](rendering/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
+It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/runtime/helpers.md](runtime/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
 
 [up](../README.md), [next](date_formatting.md)

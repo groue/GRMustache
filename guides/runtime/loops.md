@@ -1,7 +1,7 @@
+[up](../runtime.md), [next](booleans.md)
+
 Mustache loops
 ==============
-
-[up](../rendering.md), [next](booleans.md)
 
 Mustache sections that are provided with an enumerable object will be rendered once for each item in it.
 
@@ -27,4 +27,4 @@ For instance, the following template can render `{ items: ['ham', 'jam'] }`.
     {{/items}}
     </ul>
 
-[up](../rendering.md), [next](booleans.md)
+[up](../runtime.md), [next](booleans.md)
