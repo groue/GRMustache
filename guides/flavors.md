@@ -1,6 +1,15 @@
 Mustache flavors
 ================
 
+[up](../README.md), [next]()
+
+**TL;DR** Should you use compound key paths in your templates, you'd rather use the dot `"."` as a separator: `{{foo.bar}}`, and execute once, before any template processing, the following statement:
+
+    // Use genuine Mustache flavor
+    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
+
+---
+
 GRMustache ships with two concurrent interpretations of Mustache templates:
 
 - genuine Mustache, as described by the [Mustache specification v1.1.2](https://github.com/mustache/spec)
@@ -9,13 +18,15 @@ GRMustache ships with two concurrent interpretations of Mustache templates:
 How to choose a flavor
 ----------------------
 
-The only difference so far between the two flavors implementation lies in the syntax for key paths: when genuine Mustache reads `{{foo.bar.baz}}`, Handlebars reads `{{foo/bar/baz}}`, and even `{{../foo/bar/baz}}`.
+The only difference so far between the two flavors implementation lies in the syntax for key paths: genuine Mustache reads `{{foo.bar.baz}}`, Handlebars reads `{{foo/bar/baz}}`, and even `{{../foo/bar/baz}}`.
 
 If your templates do not use compound key paths, you can ignore this guide entirely.
 
+If you are designing new templates from scratch, we encourage you writing your templates in the genuine Mustache flavor. Beware that GRMustache defaults to Handlebars: keep on reading.
+
 ### Application-wide flavor
 
-If all of the templates processed by your application belong to the same flavor, you may consider setting the application-wide flavor with one of the following statement, prior to any template processing:
+If all of the templates processed by your application belong to the same flavor, consider setting the application-wide flavor with one of the following statement, prior to any template processing:
 
     // Use genuine Mustache flavor
     [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
@@ -23,11 +34,9 @@ If all of the templates processed by your application belong to the same flavor,
     // Use Handlebars flavor (the default)
     [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionNone];
 
-Despite the fact that GRMustache defaults to Handlebars flavor, we encourage you writing your templates in genuine Mustache.
-
 ### Per-template flavor
 
-Your application can process templates of different flavors:
+Your application may have to process templates of different flavors.
 
 All GRMustache methods that are involved in template parsing have sister methods that take options as an argument.
 
@@ -81,3 +90,4 @@ That is to say, each character of your templates will be rendered as is, whitesp
 
 Actually, GRMustache implements a single one: the syntax for key paths `{{foo/bar/baz}}` and `{{../foo/bar/baz}}`.
 
+[up](../README.md), [next]()

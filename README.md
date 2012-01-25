@@ -39,14 +39,14 @@ GRMustache rendering is the combination of a template string and of an object th
     NSString *templateString = @"Hello {{name}}!";
     Person *arthur = [Person personWithName:@"Arthur"];
     
-    // return "Hello Arthur!"
+    // Returns "Hello Arthur!"
     [GRMustacheTemplate renderObject:arthur
                           fromString:templateString
                                error:NULL];
 
 Speaking of templates, GRMustache eats many kinds of them: raw strings, files, bundle resources. For more information, check [guides/templates.md](blob/master/guides/templates.md).
 
-Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](blob/master/guides/runtime.md).
+Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/rendering.md](blob/master/guides/rendering.md).
 
 
 Mustache flavors
@@ -72,7 +72,7 @@ Features worth noting
 
 Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
 
-Be sure to read GRMustache's take on the subject: [guides/helpers.md](blob/master/guides/helpers.md).
+Be sure to read GRMustache's take on the subject: [guides/rendering/helpers.md](blob/master/guides/rendering/helpers.md).
 
 ### Number and Date formatting
 
