@@ -7,7 +7,7 @@ GRMustache helpers allow you to implement "Mustache lambdas", that is to say hav
 
 ## Overview
 
-When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md). GRMustache may find a string, an array, a boolean, whatever, or a helper. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
+When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md). GRMustache may find a string, an [array](loops.md), a [boolean](booleans.md), whatever, or a helper. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
 We'll cover below three techniques:
 
