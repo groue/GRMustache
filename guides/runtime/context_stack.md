@@ -40,7 +40,7 @@ For instance, consider:
 
 The `{{title}}` value tag will fail finding the `title` key in the title string, and thus will look deeper, find the title string again, and render it.
 
-TODO: exceptions
+TODO: talk about NSUndefinedKeyException handling
 
 Sections vs. Key paths
 ----------------------
@@ -52,7 +52,7 @@ You should be aware that these two template snippets are quite similar, but not 
 
 The first will look for `bar` anywhere in the context stack, starting with the `foo` object.
 
-The latter ensures the `bar` key comes (or not) from the `foo` object.
+The latter ensures the `bar` key comes from the `foo` object.
 
 [up](../runtime.md), [next](loops.md)
 
