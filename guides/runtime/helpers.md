@@ -86,7 +86,7 @@ Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inn
 Fortunately, we have:
 
 - the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
-- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects. A noteworthy feature of this object is that it responds to `valueForKey:`. But we won't use this feature here.
+- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects. It is noteworthy that its `valueForKey:` method performs a stack lookup. But we won't use this nifty feature here.
 
 `[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
 
