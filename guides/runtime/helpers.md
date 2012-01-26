@@ -37,11 +37,11 @@ For instance, let's focus on the following template snippet:
 
 When the `localize` section is rendered, the context stack contains an item object, an items collection, a cart object, plus any other objects provided to the template.
 
-In order to have a template-wide `localize` helper, we won't attach it to any specific model. Instead, we'll isolate it in a specific class, `MustacheHelper`, and make sure this class is provided to GRMustache when rendering our template.
+In order to have a template-wide `localize` helper, we won't attach it to any specific model. Instead, we'll isolate it in a specific class, `TemplateUtils`, and make sure this class is provided to GRMustache when rendering our template.
 
 Let's first declare our helper class:
 
-    @interface MustacheHelper: NSObject
+    @interface TemplateUtils: NSObject
     @end
 
 Since our helper doesn't carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
@@ -54,7 +54,7 @@ Now up to the first implementation. The _section_ argument is a `GRMustacheSecti
 
 This _section_ object has a `templateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
-    @implementation MustacheHelper
+    @implementation TemplateUtils
     + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
     {
       return NSLocalizedString(section.templateString, nil);
@@ -79,7 +79,7 @@ Now the strings we have to localize may be:
 - literal strings from the template: `Delete`
 - strings coming from cart items : `{{name}}`
 
-Our first `MustacheHelper` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
+Our first `TemplateUtils` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
 
 Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
 
@@ -92,7 +92,7 @@ Fortunately, we have:
 
 Now we can fix our implementation:
 
-    @implementation MustacheHelper
+    @implementation TemplateUtils
     + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
     {
       NSString *renderedContent = [section renderObject:context];
@@ -102,9 +102,9 @@ Now we can fix our implementation:
 
 #### Using the helper object
 
-Now that our helper class is well defined, let's provide our template with two objects: our `MustacheHelper` class for the `localize` key, and another for the `cart`:
+Now that our helper class is well defined, let's provide our template with two objects: our `TemplateUtils` class for the `localize` key, and another for the `cart`:
 
-    NSString *rendering = [template renderObjects:[MustacheHelper class], data, nil];
+    NSString *rendering = [template renderObjects:[TemplateUtils class], data, nil];
 
 ### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
 
@@ -127,11 +127,12 @@ In our case, here would be the implementation of our localizing helper:
     @end
 
 This time, we need to explicitely attach our helper to the `localize` key. Let's go with a dictionary:
-
-    [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
-                             localizeHelper, @"localize",
-                             data.cart,      @"cart",
-                             nil]];
+    
+    id localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
+    NSString *rendering = [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                   localizeHelper, @"localize",
+                                                   data.cart,      @"cart",
+                                                   nil]];
 
 Did you notice? Our `LocalizedStringHelper` can now support localization tables. This is left as an exercise for the reader :-)
 
