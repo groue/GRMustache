@@ -4,14 +4,14 @@
 
 **TL;DR** Sections render or not, depending on the boolean value of the object they are attached to. Generally speaking, all objects are considered true, except:
 
-- `nil`, and missing KVC keys
+- `nil`, and missing keys
 - `[NSNull null]`
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
 
-The most direct ways to provide sections with actual booleans are the explicit `[NSNumber numberWithBool:]` objects, and BOOL properties in your model objects.
+The most direct ways to provide sections with actual booleans are the explicit `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
 
-Beware zero (an NSNumber whose value is zero) is not considered false in GRMustache.
+Beware zero (NSNumber whose value is zero) is not considered false in GRMustache.
 
 ---
 
@@ -44,20 +44,16 @@ For instance:
 
     @interface Person: NSObject
     @property BOOL pretty;
-    + (id)person;
     @end
 
-    Person *alice = [Person person];
+    Person *alice = [Person new];
     alice.pretty = YES;
 
-    Person *bob = [Person person];
+    Person *bob = [Person new];
     bob.pretty = NO;
 
-    // @"whistle"
-    [template renderObject:alice];
-
-    // @""
-    [template renderObject:bob];
+    [template renderObject:alice]; // @"whistle"
+    [template renderObject:bob];   // @""
 
 
 ## Other false values
@@ -69,31 +65,7 @@ GRMustache considers as false the following values, and only those:
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
 
-Each of those renderings return the empty string:
-
-    // @"foobar" has no `pretty` key
-    [template renderObject:@"foobar"];
-    
-    // nil is false
-    [template renderObject:[NSDictionary dictionary]];
-    
-    // [NSNull null] is false
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNull null]
-                                                       forKey:@"pretty"]];
-    
-    // [NSNumber numberWithBool:NO] is false
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                       forKey:@"pretty"]];
-    
-    // @"" is false
-    [template renderObject:[NSDictionary dictionaryWithObject:@""
-                                                       forKey:@"pretty"]];
-
-Note that zero, as an explicit NSNumber whose value is zero, or as an int/float property, is not considered false in GRMustache:
-
-    // @"whistle"
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0]
-                                                   forKey:@"pretty"]];
+Note that zero, as an explicit NSNumber whose value is zero, or as an int/float property, is not considered false in GRMustache.
 
 
 ## Caveats
@@ -105,12 +77,11 @@ GRMustache handles properly BOOL properties, but not methods which return BOOL v
 For instance, the following class would **not** render as expected:
 
     @interface BadPerson: NSObject
-    + (id)person;
     - (void)setPretty:(BOOL)value;
     - (BOOL)pretty;
     @end
 
-    Person *carol = [BadPerson person];
+    Person *carol = [BadPerson new];
     [carol setPretty:NO];
 
     // @"whistle"
@@ -128,10 +99,9 @@ For the very same reason, you should not use your property getters in templates:
 
     @interface Person: NSObject
     @property (getter=isPretty) BOOL pretty;
-    + (id)person;
     @end
 
-    Person *dave = [Person person];
+    Person *dave = [Person new];
     dave.pretty = NO;
 
     // Note the use of the property getter, this time

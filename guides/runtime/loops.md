@@ -19,7 +19,7 @@ Arrays of scalar values
 
 The "implicit iterator" `{{.}}` tag will help you iterating arrays of strings or numbers, generally objects that don't have any dedicated key for rendering themselves.
 
-For instance, the following template can render `{ items: ['ham', 'jam'] }`.
+For instance, the following template can render `{ items: ['ham', 'jam'] }`:
 
     <ul>
     {{#items}}

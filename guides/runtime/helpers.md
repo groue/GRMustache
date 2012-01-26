@@ -148,12 +148,12 @@ And now the rendering is done as usual:
 
 ### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
 
-Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the two techniques seen above don't help us that much acheiving this goal:
+Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the two techniques seen above don't help us that much achieving this goal:
 
 - the selector technique binds the helper code to the section name, thus making impossible to share the helper code between various sections of various templates.
 - the block technique provides no way to cleanly encapsulate the helper code.
 
-The `GRMustacheHelper` protocol aims at giving you a way to create classes which encapsulate a helper.
+The `GRMustacheHelper` protocol aims at giving you a way to create helper classes, with all expected benefits: encapsulation and reusability.
 
 In our case, here would be the implementation of our localizing helper:
 
