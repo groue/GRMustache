@@ -25,7 +25,7 @@ For the purpose of demonstration, we'll implement a helper that translates, via 
 
 If the context used for mustache rendering implements the `localizeSection:withContext:` selector (generally, a method whose name is the name of the section, to which you append `Section:withContext:`), then this method will be called when rendering the section.
 
-The choice of the class that should implement this selector is up to you, as long as it can be reached when rendering the template, just as regular values (see ([guides/runtime.md](runtime.md))).
+The choice of the class that should implement this selector is up to you, as long as it can be reached in the [context stack](context_stack.md).
 
 For instance, let's focus on the following template snippet:
 
@@ -36,11 +36,9 @@ For instance, let's focus on the following template snippet:
       {{/items}}
     {{/cart}}
 
-When the `localize` section is rendered, the context contains an item object, an items collection, a cart object, plus any surrounding objects.
+When the `localize` section is rendered, the context stack contains an item object, an items collection, a cart object, plus any other objects provided to the template.
 
-If the item object implements the `localizeSection:withContext:` selector, then its implementation will be called. Otherwise, the selector will be looked up in the items collection. Since this collection is likely an `NSArray` instance, the lookup will continue with the cart and its surrounding context, until some object is found that implements the `localizeSection:withContext:` selector.
-
-In order to have a reusable `localize` helper, we'll isolate it in a specific class, `MustacheHelper`, and make sure this helper is provided to GRMustache when rendering our template.
+In order to have a template-wide `localize` helper, we won't attach it to any specific model. Instead, we'll isolate it in a specific class, `MustacheHelper`, and make sure this class is provided to GRMustache when rendering our template.
 
 Let's first declare our helper class:
 
@@ -89,7 +87,7 @@ Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inn
 Fortunately, we have:
 
 - the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
-- the _context_ parameter, which is the current rendering context, containing a cart item, an item collection, a cart, and any surrouding objects.
+- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects. A noteworthy feature of this object is that it responds to `valueForKey:`. But we won't use this feature here.
 
 `[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
 
