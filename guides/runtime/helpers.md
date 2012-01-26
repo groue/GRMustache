@@ -9,13 +9,12 @@ GRMustache helpers allow you to implement "Mustache lambdas", that is to say hav
 
 When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md). GRMustache may find a string, an [array](loops.md), a [boolean](booleans.md), whatever, or a helper. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
-We'll cover below three techniques:
+We'll cover below two techniques:
 
 - specific selectors: one of your data objects implements a selector that matches a section name.
-- block helpers: one of your data objects returns a block through `valueForKey;`.
 - dedicated helper classes: one of your data objects returns a `<GRMustacheHelper>` object through `valueForKey:`.
 
-The first two techniques are easily implemented, but rather ad-hoc. The latest provides higher encapsulation and reusability, but you'll have to write a full Objective-C class.
+The selector technique is easily implemented, but rather ad-hoc. The latest provides higher encapsulation and reusability, but you'll have to write a full Objective-C class.
 
 ## Helpers in action: implementing a localizing helper
 
@@ -103,51 +102,13 @@ Now we can fix our implementation:
 
 #### Using the helper object
 
-Now that our helper class is well defined, let's use it.
+Now that our helper class is well defined, let's provide our template with two objects: our `MustacheHelper` class for the `localize` key, and another for the `cart`:
 
-Assuming:
-
-- `orderConfirmation.mustache` is a mustache template resource,
-- `self` has a `cart` property suitable for our template rendering,
-
-Let's first parse the template:
-
-    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation" bundle:nil error:NULL];
-
-Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` helper, and `self` that will provide the `cart`:
-
-    [template renderObjects:[MustacheHelper class], self, nil];
-
-### Implementing helpers with blocks
-
-Starting MacOS6 and iOS4, blocks are available to the Objective-C language. GRMustache provides a block-based helper API.
-
-This technique does not involve declaring any special selector. But when asked for the `localized` key, your context will return a GRMustacheBlockHelper instance, built in the same fashion as the helper methods seen above:
-
-    id localizeHelper = [GRMustacheBlockHelper helperWithBlock:(^(GRMustacheSection *section, id context) {
-      NSString *renderedContent = [section renderObject:context];
-      return NSLocalizedString(renderedContent, nil);
-    }];
-
-See how the block implementation is strictly identical to the helper method discussed above.
-
-Actually, your only concern is to make sure your values and helper code can be reached by GRMustache when rendering your templates. Implementing `localizeSection:withContext` or returning a GRMustacheBlockHelper instance for the `localize` key is strictly equivalent.
-
-However, unlike the selector technique seen above, our code is not yet bound to the section name, `localize`. And actually, we need some container object. Let's go with a dictionary:
-
-    id mustacheHelper = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
-
-And now the rendering is done as usual:
-
-    [template renderObjects:mustacheHelper, self, nil];
-
+    NSString *rendering = [template renderObjects:[MustacheHelper class], data, nil];
 
 ### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
 
-Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the two techniques seen above don't help us that much achieving this goal:
-
-- the selector technique binds the helper code to the section name, thus making impossible to share the helper code between various sections of various templates.
-- the block technique provides no way to cleanly encapsulate the helper code.
+Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the above selector technique doesn't help us that much achieving this goal: it binds the helper code to the section name, thus making impossible to share the helper code between various sections of various templates.
 
 The `GRMustacheHelper` protocol aims at giving you a way to create helper classes, with all expected benefits: encapsulation and reusability.
 
@@ -157,7 +118,7 @@ In our case, here would be the implementation of our localizing helper:
     @end
     
     @implementation LocalizedStringHelper
-    // The renderSection:inContext method is required by the GRMustacheHelper protocol
+    // required by the GRMustacheHelper protocol
     - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
     {
       NSString *renderedContent = [section renderObject:context];
@@ -165,16 +126,14 @@ In our case, here would be the implementation of our localizing helper:
     }
     @end
 
-We, again, need some container object, in order to attach our helper to the `localize` key:
+This time, we need to explicitely attach our helper to the `localize` key. Let's go with a dictionary:
 
-    LocalizedStringHelper *localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
-    id mustacheHelper = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
+    [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
+                             localizeHelper, @"localize",
+                             data.cart,      @"cart",
+                             nil]];
 
-And now the rendering is done as usual:
-
-    [template renderObjects:mustacheHelper, self, nil];
-
-Speaking of encapsulation, our `LocalizedStringHelper` can even now support localization tables. This is left as an exercise for the reader :-)
+Did you notice? Our `LocalizedStringHelper` can now support localization tables. This is left as an exercise for the reader :-)
 
 ## Usages of helpers
 
