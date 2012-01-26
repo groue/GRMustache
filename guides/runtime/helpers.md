@@ -7,9 +7,7 @@ GRMustache helpers allow you to implement "Mustache lambdas", that is to say hav
 
 ## Overview
 
-In GRMustache, the rendering is controlled by the data objects you provide to rendering methods. This topic is covered in detail in ([guides/runtime.md](runtime.md)).
-
-The principles covered here will thus always be the same: it's a matter of providing the rendering methods of GRMustache with data objects which have code attached to specific template keys.
+When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md). Helpers are no exception to this principle: it's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
 We'll cover below three techniques:
 
