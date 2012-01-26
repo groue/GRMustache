@@ -9,9 +9,9 @@
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
 
-The most direct ways to provide sections with actual booleans are the explicit `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
+All other objects are considered true, including zero (NSNumber whose value is zero), and trigger the rendering of sections they are attached to
 
-Beware zero (NSNumber whose value is zero) is not considered false in GRMustache.
+The most explicit booleans are `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
 
 ---
 
