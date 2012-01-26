@@ -42,7 +42,7 @@ In order to have a template-wide `localize` helper, we won't attach it to any sp
 Since we don't need to carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
 
     @interface TemplateUtils: NSObject
-        + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
+    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
     @end
 
 
@@ -68,7 +68,7 @@ Yet the application keeps on evolving, and it appears that the item names should
 
     {{#cart}}
       {{#items}}
-        {{quantity}} × {{#localize}}{{name}}{{/localize}}
+        {{quantity}} × {{#localize}}{{name}}{{/localize}}  <-- OMG
         {{#localize}}Delete{{/localize}}
       {{/items}}
     {{/cart}}
