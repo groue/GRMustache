@@ -39,14 +39,13 @@ When the `localize` section is rendered, the context stack contains an item obje
 
 In order to have a template-wide `localize` helper, we won't attach it to any specific model. Instead, we'll isolate it in a specific class, `TemplateUtils`, and make sure this class is provided to GRMustache when rendering our template.
 
-Let's first declare our helper class:
+Since we don't need to carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
 
     @interface TemplateUtils: NSObject
+        + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
     @end
 
-Since our helper doesn't carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
 
-      + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
 
 #### The literal inner content
 
@@ -100,9 +99,9 @@ Now we can fix our implementation:
     }
     @end
 
-#### Using the helper object
+#### Injecting the helper
 
-Now that our helper class is well defined, let's provide our template with two objects: our `TemplateUtils` class for the `localize` key, and another for the `cart`:
+Now let's render. Our template needs two objects: our `TemplateUtils` class for the `localize` key, and another for the `cart`:
 
     NSString *rendering = [template renderObjects:[TemplateUtils class], data, nil];
 
