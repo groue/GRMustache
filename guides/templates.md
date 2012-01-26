@@ -107,7 +107,7 @@ The latter method, which takes several arguments, is helpful when several object
 Partials
 --------
 
-When a `{{>name}}` Mustache tags occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
+When a `{{>name}}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
 
 Depending on the method which has been used to create the original template, partials will be looked for in different places :
 
