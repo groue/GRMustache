@@ -9,9 +9,9 @@
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
 
-All other objects are considered true, including zero (NSNumber whose value is zero), and trigger the rendering of sections they are attached to
+All other objects are considered true, including zero (NSNumber whose value is zero), and trigger the rendering of sections they are attached to.
 
-The most explicit booleans are `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
+The most straightforward booleans are `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
 
 ---
 
