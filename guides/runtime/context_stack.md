@@ -55,4 +55,3 @@ The first will look for `bar` anywhere in the context stack, starting with the `
 The latter ensures the `bar` key comes from the `foo` object.
 
 [up](../runtime.md), [next](loops.md)
-

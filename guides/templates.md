@@ -1,7 +1,11 @@
+[up](../README.md), [next](runtime.md)
+
 Templates
 =========
 
 You'll learn here how to load, and render templates. [guides/runtime.md](runtime.md) will talk about about what happens *during* the rendering itself.
+
+---
 
 **TL;DR** Let XCode autocompletion magic find the correct method for you: just type "`[GRMustacheTemplate render`" or "`[GRMustacheTemplate parse`".
 
@@ -102,7 +106,7 @@ Those methods return GRMustacheTemplate instances, which render objects with the
     - (NSString *)renderObject:(id)object;
     - (NSString *)renderObjects:(id)object, ...;    // nil-terminated list
 
-The latter method, which takes several arguments, is helpful when several objects should feed the template.
+The latter method, which takes several arguments, is helpful when several objects should feed the template. It actually initializes the rendering [context stack](runtime/context_stack.md) with those objects.
 
 Partials
 --------
@@ -133,3 +137,5 @@ More loading options
 --------------------
 
 All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [guides/template_loaders.md](template_loaders.md)
+
+[up](../README.md), [next](runtime.md)

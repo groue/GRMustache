@@ -56,13 +56,7 @@ GRMustache supports two Mustache flavors : the genuine Mustache, and a bit a [Ha
 
 The main difference lies in the syntax of key paths: genuine Mustache reads `{{foo.bar.baz}}`, while Handlebars reads `{{foo/bar/baz}}` and even `{{../foo/bar/baz}}`.
 
-GRMustache default flavor is Handlebars.
-
-**TL;DR**: Your application should globally follow the genuine Mustache way. Run prior to any GRMustache rendering the following statement:
-
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
-
-Longer version: in [guides/flavors.md](blob/master/guides/flavors.md), you'll read the exact extent of both specification coverage, and how to implement applications mixing templates of differents flavors.
+If your templates use such compound key paths, you should read [guides/flavors.md](blob/master/guides/flavors.md).
 
 
 Features worth noting
@@ -79,6 +73,11 @@ Be sure to read GRMustache's take on the subject: [guides/runtime/helpers.md](bl
 GRMustache ships with a few helper classes. One allows you to format all numbers in a section with a `NSNumberFormatter` instance, the other does the same, for dates.
 
 They are covered by [guides/number_formatting.md](blob/master/guides/number_formatting.md) and  [guides/date_formatting.md](blob/master/guides/date_formatting.md)
+
+Forking
+-------
+
+Please fork. You'll learn useful information in [guides/forking.md](blob/master/guides/forking.md).
 
 License
 -------

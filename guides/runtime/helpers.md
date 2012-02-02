@@ -1,4 +1,4 @@
-[up](../runtime.md), [next](../forking.md)
+[up](../runtime.md), [next](../number_formatting.md)
 
 Helpers
 =======
@@ -170,4 +170,4 @@ You may implement debugging sections:
       return nil;                            // don't render anything
     });
 
-[up](../runtime.md), [next](../forking.md)
+[up](../runtime.md), [next](../number_formatting.md)

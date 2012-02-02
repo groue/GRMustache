@@ -1,4 +1,4 @@
-[up](../README.md), [next]()
+[up](../README.md), [next](templates.md)
 
 Embedding GRMustache in your XCode project
 ==========================================
@@ -38,4 +38,4 @@ However, you will have to explicitely import:
     
     when you want to use these helpers in order to format your numbers and dates. See [guides/number_formatting.md](number_formatting.md) and [guides/date_formatting.md](date_formatting.md)
 
-[up](../README.md), [next]()
+[up](../README.md), [next](templates.md)
