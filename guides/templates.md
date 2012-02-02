@@ -1,4 +1,4 @@
-[up](../../../..), [next](runtime.md)
+[up](../../..), [next](runtime.md)
 
 Templates
 =========
@@ -138,4 +138,4 @@ More loading options
 
 All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [guides/template_loaders.md](template_loaders.md)
 
-[up](../../../..), [next](runtime.md)
+[up](../../..), [next](runtime.md)

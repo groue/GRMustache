@@ -1,4 +1,4 @@
-[up](../../../..), [next](runtime/context_stack.md)
+[up](../../..), [next](runtime/context_stack.md)
 
 GRMustache runtime
 ==================
@@ -25,4 +25,4 @@ You can thus provide rendering methods with NSDictionary instances, or custom ob
 - [Mustache booleans](runtime/booleans.md)
 - [Helpers](runtime/helpers.md)
 
-[up](../../../..), [next](runtime/context_stack.md)
+[up](../../..), [next](runtime/context_stack.md)

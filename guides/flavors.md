@@ -1,4 +1,4 @@
-[up](../../../..), [next](forking.md)
+[up](../../..), [next](forking.md)
 
 Mustache flavors
 ================
@@ -90,4 +90,4 @@ That is to say, each character of your templates will be rendered as is, whitesp
 
 Actually, GRMustache implements a single one: the syntax for key paths `{{foo/bar/baz}}` and `{{../foo/bar/baz}}`.
 
-[up](../../../..), [next](forking.md)
+[up](../../..), [next](forking.md)
