@@ -17,10 +17,7 @@ What you get
 
 **MacOS 10.6+, iPhoneOS 3.0, iOS 4.0+ support**
 
-**Compatibility with other Mustache implementations**:
-
-- [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance
-- a touch of [Handlebars.js](https://github.com/wycats/handlebars.js)
+**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (details in [guides/flavors.md](GRMustache/blob/master/guides/flavors.md)).
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy performance improvements and bugfixes, and don't change a line of your code.
 
