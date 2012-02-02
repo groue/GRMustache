@@ -24,9 +24,9 @@ What you get
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy performance improvements and bugfixes, and don't change a line of your code.
 
-**Number and date formatting.** No magic here, you could have implemented that yourself. Anyway, this is handy, and built-in.
+**Number and date formatting.** Handy, and built-in.
 
-You'll learn how to embed GRMustache in your XCode project in [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
+**Guides**: GRMustache online documentation is provided as guides. The first one tells you how to embed GRMustache in your XCode project: [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
 
 
 Usage
@@ -47,7 +47,6 @@ GRMustache rendering is the combination of a template string and of an object th
 Speaking of templates, GRMustache eats many kinds of them: raw strings, files, bundle resources. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
 Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
-
 
 Mustache flavors
 ----------------
