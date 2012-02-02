@@ -40,7 +40,7 @@ I can hear you: "What about the `NSUndefinedKeyException` raised by the Key-Valu
 For instance, the following code will ask `@"foo"` for the key `XXX`. The string will raise, GRMustache will catch, and the final rendering will be the empty string:
 
     [GRMustacheTemplate renderObject:@"foo"
-                          fromString:@"{{XXX}}!"
+                          fromString:@"{{XXX}}"
                                error:nil];
 
 When debugging your project, those exceptions may become a real annoyance, because you tell your debugger to stop on every Objective-C exceptions.
