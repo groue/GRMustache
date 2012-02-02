@@ -26,7 +26,7 @@ What you get
 
 **Number and date formatting.** No magic here, you could have implemented that yourself. Anyway, this is handy, and built-in.
 
-You'll learn how to embed GRMustache in your XCode project in [guides/embedding.md](blob/master/guides/embedding.md).
+You'll learn how to embed GRMustache in your XCode project in [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
 
 
 Usage
@@ -44,9 +44,9 @@ GRMustache rendering is the combination of a template string and of an object th
                           fromString:templateString
                                error:NULL];
 
-Speaking of templates, GRMustache eats many kinds of them: raw strings, files, bundle resources. For more information, check [guides/templates.md](blob/master/guides/templates.md).
+Speaking of templates, GRMustache eats many kinds of them: raw strings, files, bundle resources. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
-Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](blob/master/guides/runtime.md).
+Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
 
 
 Mustache flavors
@@ -56,7 +56,7 @@ GRMustache supports two Mustache flavors : the genuine Mustache, and a bit a [Ha
 
 The main difference lies in the syntax of key paths: genuine Mustache reads `{{foo.bar.baz}}`, while Handlebars reads `{{foo/bar/baz}}` and even `{{../foo/bar/baz}}`.
 
-If your templates use such compound key paths, you should read [guides/flavors.md](blob/master/guides/flavors.md).
+If your templates use such compound key paths, you should read [guides/flavors.md](GRMustache/blob/master/guides/flavors.md).
 
 
 Features worth noting
@@ -66,18 +66,18 @@ Features worth noting
 
 Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
 
-Be sure to read GRMustache's take on the subject: [guides/runtime/helpers.md](blob/master/guides/runtime/helpers.md).
+Be sure to read GRMustache's take on the subject: [guides/runtime/helpers.md](GRMustache/blob/master/guides/runtime/helpers.md).
 
 ### Number and Date formatting
 
 GRMustache ships with a few helper classes. One allows you to format all numbers in a section with a `NSNumberFormatter` instance, the other does the same, for dates.
 
-They are covered by [guides/number_formatting.md](blob/master/guides/number_formatting.md) and  [guides/date_formatting.md](blob/master/guides/date_formatting.md)
+They are covered by [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md) and  [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md)
 
 Forking
 -------
 
-Please fork. You'll learn useful information in [guides/forking.md](blob/master/guides/forking.md).
+Please fork. You'll learn useful information in [guides/forking.md](GRMustache/blob/master/guides/forking.md).
 
 License
 -------
