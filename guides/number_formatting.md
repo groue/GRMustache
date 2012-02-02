@@ -54,6 +54,6 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
     //   decimal: 0,5
     [template renderObject:data];
 
-It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/runtime/helpers.md](runtime/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
+It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../Classes/GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/runtime/helpers.md](runtime/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
 
 [up](../../../../GRMustache), [next](date_formatting.md)
