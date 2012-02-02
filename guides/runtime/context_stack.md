@@ -29,18 +29,33 @@ Finally, the `name` key will be looked in the pet.
 The stack in action: missing keys
 ---------------------------------
 
-However, should a key be missing in the current context, GRMustache will look for it in the enclosing contexts. This is the context stack. It starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
+Should a key be missing in the current context, GRMustache will look for it in the enclosing contexts. This is the context stack. It starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
 
-For instance, consider:
+### What about NSUndefinedKeyException?
 
-    {{! If there is a title, render it in a <h1> tag }}
-    {{#title}}
-      <h1>{{title}}</h1>
-    {{title}}
+I can hear you: "What about the `NSUndefinedKeyException` raised by the Key-Value Coding `valueForKey:` method when a key is missed?"
 
-The `{{title}}` value tag will fail finding the `title` key in the title string, and thus will look deeper, find the title string again, and render it.
+*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`.
 
-TODO: talk about NSUndefinedKeyException handling
+For instance, the following code will ask `@"foo"` for the key `XXX`. The string will raise, GRMustache will catch, and the final rendering will be the empty string:
+
+    [GRMustacheTemplate renderObject:@"foo"
+                          fromString:@"{{XXX}}!"
+                               error:nil];
+
+When debugging your project, those exceptions may become a real annoyance, because you tell your debugger to stop on every Objective-C exceptions.
+
+You can avoid that: make sure you call before any GRMustache rendering the following method:
+
+    [GRMustache preventNSUndefinedKeyExceptionAttack];
+
+You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration.
+
+One way to achieve this is to add `-DDEBUG` to the "Other C Flags" setting of your development configuration, and to wrap the preventNSUndefinedKeyExceptionAttack method call in a #if block, like:
+
+    #ifdef DEBUG
+    [GRMustache preventNSUndefinedKeyExceptionAttack];
+    #endif
 
 Sections vs. Key paths
 ----------------------
