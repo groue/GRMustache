@@ -1,4 +1,4 @@
-[up](../README.md)
+[up](../../../..)
 
 # Note on forking
 
@@ -74,4 +74,4 @@ The XCode GUI can not build them. Instead, you'll issue the following command in
 
     $ make clean && make
 
-[up](../README.md)
+[up](../../../..)

@@ -1,4 +1,4 @@
-[up](../README.md), [next](date_formatting.md)
+[up](../../../..), [next](date_formatting.md)
 
 Number formatting with GRMustacheNumberFormatterHelper
 ======================================================
@@ -56,4 +56,4 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
 
 It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/runtime/helpers.md](runtime/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
 
-[up](../README.md), [next](date_formatting.md)
+[up](../../../..), [next](date_formatting.md)
