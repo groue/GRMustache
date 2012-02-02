@@ -1,4 +1,4 @@
-[up](../../..), [next](flavors.md)
+[up](../../../../GRMustache), [next](flavors.md)
 
 Date formatting with GRMustacheDateFormatterHelper
 ==================================================
@@ -11,4 +11,4 @@ It does not belong the the core GRMustache code, and as such must be imported se
 
 Read [guides/number_formatting.md](number_formatting.md) documentation, because the principles are the same. You'll just provide a `NSDateFormatter` instead of a `NSNumberFormatter`.
 
-[up](../../..), [next](flavors.md)
+[up](../../../../GRMustache), [next](flavors.md)
