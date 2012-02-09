@@ -23,7 +23,7 @@ What you get
 
 **Number and date formatting.** Handy, and built-in.
 
-**Guides**: GRMustache online documentation is provided as guides. The first one tells you how to embed GRMustache in your XCode project: [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
+**Documentation**: GRMustache online documentation is provided as guides. The first one tells you how to embed GRMustache in your XCode project: [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
 
 
 Usage
