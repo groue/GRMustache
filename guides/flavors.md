@@ -20,7 +20,7 @@ How to choose a flavor
 
 The only difference so far between the two flavors implementation lies in the syntax for key paths: genuine Mustache reads `{{foo.bar.baz}}`, Handlebars reads `{{foo/bar/baz}}`, and even `{{../foo/bar/baz}}`.
 
-If your templates do not use compound key paths, you can ignore this guide entirely.
+If your templates do not use compound key paths, you can [skip](forking.md) this guide entirely.
 
 If you are designing new templates from scratch, we encourage you writing your templates in the genuine Mustache flavor. Beware that GRMustache defaults to Handlebars: keep on reading.
 

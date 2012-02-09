@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](runtime.md)
+[up](../../../../GRMustache), [next](template_loaders.md)
 
 Templates
 =========
@@ -123,4 +123,4 @@ More loading options
 
 All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [guides/template_loaders.md](template_loaders.md)
 
-[up](../../../../GRMustache), [next](runtime.md)
+[up](../../../../GRMustache), [next](template_loaders.md)

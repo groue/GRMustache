@@ -41,7 +41,7 @@ For instance, the following code will ask `@"foo"` for the key `XXX`. The string
 
     [GRMustacheTemplate renderObject:@"foo"
                           fromString:@"{{XXX}}"
-                               error:nil];
+                               error:NULL];
 
 When debugging your project, those exceptions may become a real annoyance, because you tell your debugger to stop on every Objective-C exceptions.
 

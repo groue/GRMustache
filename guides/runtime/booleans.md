@@ -26,7 +26,7 @@ We'll first talk about some simple cases. We'll then discuss caveats.
 The simplest way to provide booleans to GRMustache is to provide objects returned by the `[NSNumber numberWithBool:]` method:
 
     NSString *templateString = @"{{#pretty}}whistle{{/pretty}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
 
     // @"whistle"
     [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
@@ -106,7 +106,7 @@ For the very same reason, you should not use your property getters in templates:
 
     // Note the use of the property getter, this time
     NSString *templateString = @"{{#isPretty}}whistle{{/isPretty}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
 
     // @"whistle"
     [template renderObject:dave];
