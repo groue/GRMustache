@@ -31,6 +31,8 @@ Usage
 
 GRMustache rendering is the combination of a template string and of an object that will provide the data.
 
+You can render templates on the fly:
+
     #import "GRMustache.h"
     
     NSString *templateString = @"Hello {{name}}!";
@@ -41,7 +43,13 @@ GRMustache rendering is the combination of a template string and of an object th
                           fromString:templateString
                                error:NULL];
 
-Speaking of templates, GRMustache eats many kinds of them: raw strings, files, bundle resources. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
+You can also parse a template once, and render it many times.
+
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
+    [template renderObject:arthur];
+    [template renderObject:...];
+
+Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
 Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
 
