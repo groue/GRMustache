@@ -5,21 +5,6 @@ Templates
 
 You'll learn here how to load, and render templates. [guides/runtime.md](runtime.md) will talk about about what happens *during* the rendering itself.
 
----
-
-**TL;DR** Let XCode autocompletion magic find the correct method for you: just type "`[GRMustacheTemplate render`" or "`[GRMustacheTemplate parse`".
-
-The `render...` family parses and renders templates on-the-fly, from strings, bundle resources, or files. The `parse...` family parses only. You'll then have to invoke `renderObject:` on the generated GRMustacheTemplate instances:
-
-    // on-the-fly:
-    NSString *rendering = [GRMustacheTemplate renderObject:... from...];
-    
-    // parse once, render many times:
-    GRMustacheTemplate *template = [GRMustacheTemplate parse...];
-    NSString *rendering = [template renderObject:...]
-
----
-
 Errors
 ------
 
