@@ -141,3 +141,5 @@ Flavors
 -------
 
 Remember GRMustache supports two flavors of the Mustache language: check [guides/flavors.md](flavors.md)
+
+[up](../../../../GRMustache), [next](runtime.md)
