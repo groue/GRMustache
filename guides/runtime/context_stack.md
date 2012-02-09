@@ -3,8 +3,8 @@
 The context stack
 =================
 
-Mustache sections open new context
-----------------------------------
+Mustache sections open new contexts
+-----------------------------------
 
 Mustache sections allow you digging inside an object:
 
