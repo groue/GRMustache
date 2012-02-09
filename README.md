@@ -19,7 +19,7 @@ What you get
 
 **Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (details in [guides/flavors.md](GRMustache/blob/master/guides/flavors.md)).
     
-**Compatibility with previous GRMustache versions**: update GRMustache, enjoy performance improvements and bugfixes, and don't change a line of your code. Check the [release notes](RELEASE_NOTES.md).
+**Compatibility with previous GRMustache versions**: update GRMustache, enjoy performance improvements and bugfixes, and don't change a line of your code. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
 **Number and date formatting.** Handy, and built-in.
 
