@@ -9,8 +9,10 @@ Generally speaking, GRMustache will look for values in your data objects through
 
 You can thus provide rendering methods with NSDictionary instances, or custom objects with properties or methods whose name match the keys in the template tags.
 
+    // This template waits for a `name` key:
     GRMustacheTemplate *template = [GRMustacheTemplate parseString:@"{{name}}" error:NULL];
     
+    // Those two objects provide this `name` key:
     NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"dictionary" forKey:@"name"];
     Person *arthur = [Person personWithName:@"arthur"];
     
