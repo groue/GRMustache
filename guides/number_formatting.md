@@ -24,9 +24,9 @@ For instance, given the following template:
     decimal: {{float}}
     {{/decimal_format}}
 
-The float value would be displayed as a percentage in the `percent_format` section, and as a decimal in the `decimal_format` section.
+We would like the float value to be displayed as a percentage in the `percent_format` section, and as a decimal in the `decimal_format` section.
 
-We just have to create two `GRMustacheNumberFormatterHelper` objects, provide them with `NSNumberFormatter` instances, and attach them to the sections names:
+We just have to create two `GRMustacheNumberFormatterHelper` objects, provide them with `NSNumberFormatter` instances, and attach them to the `percent_format` and `decimal_format` section names:
 
     #import "GRMustacheNumberFormatterHelper.h"
     
