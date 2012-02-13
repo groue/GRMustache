@@ -23,8 +23,15 @@ What you get
 
 **Number and date formatting.** Handy, and built-in.
 
-**Documentation**: GRMustache online documentation is provided as guides. The first one tells you how to embed GRMustache in your XCode project: [guides/embedding.md](GRMustache/blob/master/guides/embedding.md).
+**Documentation**: GRMustache online documentation is provided as guides:
 
+- [guides/embedding.md](GRMustache/blob/master/guides/embedding.md): how to embed GRMustache in your Xcode projects
+- [guides/templates.md](GRMustache/blob/master/guides/templates.md): how to parse and render templates
+- [guides/runtime.md](GRMustache/blob/master/guides/runtime.md): how to provide data to templates
+- [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md): how to format numbers
+- [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md): how to format dates
+- [guides/flavors.md](GRMustache/blob/master/guides/flavors.md): a word on the Mustache and Handlebars flavors
+- [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
 
 Usage
 -----
