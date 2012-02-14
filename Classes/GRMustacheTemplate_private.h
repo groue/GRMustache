@@ -25,8 +25,6 @@
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheEnvironment.h"
 
-@class GRMustacheContextStrategy;
-
 typedef enum {
 	GRMustacheObjectKindFalseValue,
 	GRMustacheObjectKindTrueValue,
@@ -37,7 +35,7 @@ typedef enum {
 @interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
 @private
 	NSArray *elems;
-    GRMustacheContextStrategy *contextStrategy;
+    GRMustacheTemplateOptions options;
 }
 @property (nonatomic, retain) NSArray *elems;
 

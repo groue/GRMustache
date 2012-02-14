@@ -34,14 +34,14 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
 @interface GRMustacheTemplateLoader()
-@property (nonatomic) GRMustacheTemplateOptions templateOptions;
+@property (nonatomic) GRMustacheTemplateOptions options;
 - (GRMustacheTemplate *)parseString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
 @synthesize extension;
 @synthesize encoding;
-@synthesize templateOptions;
+@synthesize options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateLoaderWithBaseURL:(NSURL *)url {
@@ -138,7 +138,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     self = [self initWithExtension:theExtension encoding:theEncoding];
     if (self) {
-        self.templateOptions = theOptions;
+        options = theOptions;
     }
     return self;
 }
@@ -151,7 +151,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 		extension = [theExtension retain];
 		encoding = theEncoding;
 		templatesById = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
-        templateOptions = GRMustacheDefaultTemplateOptions;
+        options = GRMustacheDefaultTemplateOptions;
 	}
 	return self;
 }
@@ -190,7 +190,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 		}
 		
 		// store an empty template before parsing, so that we support recursive partials
-		template = [GRMustacheTemplate templateWithElements:nil options:self.templateOptions];
+		template = [GRMustacheTemplate templateWithElements:nil options:options];
 		[self setTemplate:template forTemplateId:templateId];
 		
 		// parse
@@ -208,7 +208,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateWithElements:(NSArray *)elements
 {
-    return [GRMustacheTemplate templateWithElements:elements options:self.templateOptions];
+    return [GRMustacheTemplate templateWithElements:elements options:options];
 }
 
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {

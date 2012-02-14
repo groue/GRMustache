@@ -32,7 +32,7 @@
 @interface GRMustacheTemplate: NSObject {
 @private
 	NSArray *elems;
-    id contextStrategy;
+    GRMustacheTemplateOptions options;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

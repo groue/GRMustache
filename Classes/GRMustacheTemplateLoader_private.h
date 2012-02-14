@@ -31,10 +31,11 @@
 	NSString *extension;
 	NSStringEncoding encoding;
 	NSMutableDictionary *templatesById;
-    GRMustacheTemplateOptions templateOptions;
+    GRMustacheTemplateOptions options;
 }
 @property (nonatomic, readonly, copy) NSString *extension;
 @property (nonatomic, readonly) NSStringEncoding encoding;
+@property (nonatomic, readonly) GRMustacheTemplateOptions options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateLoaderWithBaseURL:(NSURL *)url;

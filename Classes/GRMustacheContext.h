@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustache.h"
 
 /**
  @warning *Deprecated*: You should no longer use the GRMustacheContext class in your mustache lambda definitions.
@@ -35,6 +36,7 @@
 @private
 	id object;
 	GRMustacheContext *parent;
+    GRMustacheTemplateOptions options;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

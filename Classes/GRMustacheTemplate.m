@@ -28,16 +28,15 @@
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRBoolean_private.h"
-#import "GRMustacheContextStrategy_private.h"
 
 @interface GRMustacheTemplate()
-@property (nonatomic, retain) GRMustacheContextStrategy *contextStrategy;
+@property (nonatomic) GRMustacheTemplateOptions options;
 - (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options;
 @end
 
 @implementation GRMustacheTemplate
 @synthesize elems;
-@synthesize contextStrategy;
+@synthesize options;
 
 + (id)templateWithOptions:(GRMustacheTemplateOptions)options
 {
@@ -104,7 +103,6 @@
 
 - (void)dealloc {
 	[elems release];
-    [contextStrategy release];
 	[super dealloc];
 }
 
@@ -185,14 +183,14 @@
 }
 
 - (NSString *)renderObject:(id)object {
-	return [self renderContext:[GRMustacheContext contextWithObject:object]];
+	return [self renderContext:[GRMustacheContext contextWithObject:object options:options]];
 }
 
 - (NSString *)renderObjects:(id)object, ... {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options andObjectList:objectList];
     va_end(objectList);
     NSString *result = [[self renderContext:context] retain];
     [pool drain];
@@ -232,28 +230,21 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-    [GRMustacheContext pushContextStrategy:self.contextStrategy];
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     for (id<GRMustacheRenderingElement> elem in elems) {
         [result appendString:[elem renderContext:context]];
     }
     [pool drain];
-    [GRMustacheContext popContextStrategy];
     return result;
 }
 
 #pragma mark - Private
 
-- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options {
+- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)theOptions {
 	if ((self = [self init])) {
 		self.elems = theElems;
-        
-        if (options & GRMustacheTemplateOptionMustacheSpecCompatibility) {
-            self.contextStrategy = [GRMustacheContextStrategy mustacheSpecStrategy];
-        } else {
-            self.contextStrategy = [GRMustacheContextStrategy handlebarsStrategy];
-        }
+        self.options = theOptions;
 	}
 	return self;
 }

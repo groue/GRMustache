@@ -119,7 +119,8 @@
                                                                     baseTemplateString:token.templateString
                                                                                  range:range
 																			  inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
-																			  elements:currentElements];
+																			  elements:currentElements
+                                                                               options:templateLoader.options];
 				[sectionOpeningTokenStack removeLastObject];
 				self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
 				

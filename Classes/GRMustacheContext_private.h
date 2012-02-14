@@ -21,22 +21,21 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-@class GRMustacheContextStrategy;
+#import "GRMustache_private.h"
 
 @interface GRMustacheContext: NSObject {
 @private
 	id object;
 	GRMustacheContext *parent;
+    GRMustacheTemplateOptions options;
 }
 @property (nonatomic, retain, readonly) id object;
 @property (nonatomic, retain, readonly) GRMustacheContext *parent;
 + (void)preventNSUndefinedKeyExceptionAttack;
-+ (id)contextWithObject:(id)object;
-+ (id)contextWithObjects:(id)object, ...;
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList;
-+ (void)resetContextStrategyStack;
-+ (void)pushContextStrategy:(GRMustacheContextStrategy *)contextStrategy;
-+ (void)popContextStrategy;
++ (id)contextWithObject:(id)object UNAVAILABLE_ATTRIBUTE;
++ (id)contextWithObjects:(id)object, ... UNAVAILABLE_ATTRIBUTE;
++ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options andObjectList:(va_list)objectList;
++ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options;
 - (GRMustacheContext *)contextByAddingObject:(id)object;
 - (id)valueForKey:(NSString *)key;
 - (id)valueForKeyComponent:(NSString *)key;

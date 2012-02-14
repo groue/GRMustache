@@ -31,7 +31,7 @@
 @property (nonatomic) NSRange range;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
 @end
 
 
@@ -42,17 +42,18 @@
 @synthesize inverted;
 @synthesize elems;
 
-+ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
-	return [[[self alloc] initWithName:name baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
++ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems options:(GRMustacheTemplateOptions)options {
+	return [[[self alloc] initWithName:name baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems options:options] autorelease];
 }
 
-- (id)initWithName:(NSString *)theName baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems {
+- (id)initWithName:(NSString *)theName baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems options:(GRMustacheTemplateOptions)theOptions {
 	if ((self = [self init])) {
 		self.name = theName;
 		self.baseTemplateString = theBaseTemplateString;
         self.range = theRange;
 		self.inverted = theInverted;
 		self.elems = theElems;
+        options = theOptions;
 	}
 	return self;
 }
@@ -71,7 +72,7 @@
 - (NSString *)renderObject:(id)object {
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options];
     for (id<GRMustacheRenderingElement> elem in elems) {
         [result appendString:[elem renderContext:context]];
     }
@@ -82,7 +83,7 @@
 - (NSString *)renderObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options andObjectList:objectList];
     va_end(objectList);
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];

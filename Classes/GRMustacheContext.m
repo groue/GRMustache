@@ -25,18 +25,16 @@
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheProperty_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
-#import "GRMustacheContextStrategy_private.h"
 #import "GRMustacheTemplate_private.h"
 
 static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
-static const NSString *GRMustacheContextStrategyStackKey = @"GRMustacheContextStrategyStackKey";
 
 
 @interface GRMustacheContext()
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
-+ (GRMustacheContextStrategy *)currentContextStrategy;
-- (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
+@property (nonatomic) GRMustacheTemplateOptions options;
+- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent options:(GRMustacheTemplateOptions)theOptions;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
 @end
 
@@ -44,64 +42,39 @@ static const NSString *GRMustacheContextStrategyStackKey = @"GRMustacheContextSt
 @implementation GRMustacheContext
 @synthesize object;
 @synthesize parent;
-
-+ (void)resetContextStrategyStack
-{
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    [threadDictionary removeObjectForKey:GRMustacheContextStrategyStackKey];
-}
-
-+ (void)pushContextStrategy:(GRMustacheContextStrategy *)contextStrategy
-{
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
-    if (!contextStrategyStack) {
-        contextStrategyStack = [NSMutableArray array];
-        [threadDictionary setObject:contextStrategyStack forKey:GRMustacheContextStrategyStackKey];
-    }
-    [contextStrategyStack addObject:contextStrategy];
-}
-
-+ (void)popContextStrategy
-{
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
-    NSAssert(contextStrategyStack.count > 0, @"poping from empty context strategy stack");
-    [contextStrategyStack removeLastObject];
-}
-
-+ (GRMustacheContextStrategy *)currentContextStrategy
-{
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    NSMutableArray *contextStrategyStack = [threadDictionary objectForKey:GRMustacheContextStrategyStackKey];
-    NSUInteger count = contextStrategyStack.count;
-    NSAssert(count > 0, @"empty context strategy stack");
-    return [[[contextStrategyStack objectAtIndex:count-1] retain] autorelease];
-}
+@synthesize options;
 
 + (void)preventNSUndefinedKeyExceptionAttack {
     preventingNSUndefinedKeyExceptionAttack = YES;
+}
+
++ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options {
+	if ([object isKindOfClass:[GRMustacheContext class]]) {
+        NSAssert(((GRMustacheContext *)object).options == options, @"");
+		return object;
+	}
+	return [[[self alloc] initWithObject:object parent:nil options:options] autorelease];
 }
 
 + (id)contextWithObject:(id)object {
 	if ([object isKindOfClass:[GRMustacheContext class]]) {
 		return object;
 	}
-	return [[[self alloc] initWithObject:object parent:nil] autorelease];
+	return [[[self alloc] initWithObject:object parent:nil options:GRMustacheDefaultTemplateOptions] autorelease];
 }
 
 + (id)contextWithObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *result = [self contextWithObject:object andObjectList:objectList];
+    GRMustacheContext *result = [self contextWithObject:object options:GRMustacheDefaultTemplateOptions andObjectList:objectList];
     va_end(objectList);
     return result;
 }
 
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList {
++ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options andObjectList:(va_list)objectList {
     GRMustacheContext *context = nil;
     if (object) {
-        context = [GRMustacheContext contextWithObject:object];
+        context = [GRMustacheContext contextWithObject:object options:options];
         id eachObject;
         va_list objectListCopy;
         va_copy(objectListCopy, objectList);
@@ -110,26 +83,89 @@ static const NSString *GRMustacheContextStrategyStackKey = @"GRMustacheContextSt
         }
         va_end(objectListCopy);
     } else {
-        context = [self contextWithObject:nil];
+        context = [self contextWithObject:nil options:options];
     }
     return context;
 }
 
-- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
+- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent options:(GRMustacheTemplateOptions)theOptions {
 	if ((self = [self init])) {
 		object = [theObject retain];
 		parent = [theParent retain];
+        options = theOptions;
 	}
 	return self;
 }
 
 - (GRMustacheContext *)contextByAddingObject:(id)theObject {
-	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
+	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self options:options] autorelease];
 }
 
 - (id)valueForKey:(NSString *)key
 {
-    return [[GRMustacheContext currentContextStrategy] valueForKey:key inContext:self];
+    NSString *implicitIteratorKey = @".";
+    NSString *upContextKey = nil;
+    NSString *keyComponentsSeparator = nil;
+
+    if (options & GRMustacheTemplateOptionMustacheSpecCompatibility) {
+        keyComponentsSeparator = @".";
+        upContextKey = nil;
+    } else {
+        keyComponentsSeparator = @"/";
+        upContextKey = @"..";
+    }
+
+	// fast path for implicitIteratorKey
+    if ([implicitIteratorKey isEqualToString:key]) { // implicitIteratorKey may be nil
+        return self.object;
+    }
+    
+	// fast path for upContextKey
+    if ([upContextKey isEqualToString:key]) {   // upContextKey may be nil
+        if (self.parent == nil) {
+            // went too far
+            return nil;
+        }
+        return self.parent.object;
+    }
+    
+    NSArray *components = nil;
+    if (keyComponentsSeparator != nil) {
+        components = [key componentsSeparatedByString:keyComponentsSeparator];
+    }
+	
+	// fast path for single component
+	if (components == nil || components.count == 1) {
+		return [self valueForKeyComponent:key];
+	}
+	
+    GRMustacheContext *context = self;
+    
+	// slow path for multiple components
+	for (NSString *component in components) {
+		if (component.length == 0) {
+			continue;
+		}
+		if ([implicitIteratorKey isEqualToString:component]) { // implicitIteratorKey may be nil
+			continue;
+		}
+		if ([upContextKey isEqualToString:component]) {   // upContextKey may be nil
+			context = context.parent;
+			if (context == nil) {
+				// went too far
+				return nil;
+			}
+			continue;
+		}
+		id value = [context valueForKeyComponent:component];
+		if (value == nil) {
+			return nil;
+		}
+		// further contexts are not in the context stack
+		context = [GRMustacheContext contextWithObject:value options:options];
+	}
+	
+	return context.object;
 }
 
 - (void)dealloc {

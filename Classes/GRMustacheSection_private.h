@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheRendering_private.h"
+#import "GRMustache_private.h"
 
 
 @interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
@@ -31,10 +32,11 @@
     NSRange range;
 	BOOL inverted;
 	NSArray *elems;
+    GRMustacheTemplateOptions options;
 }
 @property (nonatomic, readonly) NSString *templateString;
 
-+ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
++ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
 
 - (NSString *)renderObject:(id)object;
 
