@@ -17,7 +17,7 @@ What you get
 
 **MacOS 10.6+, iPhoneOS 3.0, iOS 4.0+ support**
 
-**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (details in [guides/flavors.md](GRMustache/blob/master/guides/flavors.md)).
+**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (see below).
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy performance improvements and bugfixes, and don't change a line of your code. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
@@ -30,7 +30,6 @@ What you get
 - [guides/runtime.md](GRMustache/blob/master/guides/runtime.md): how to provide data to templates
 - [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md): how to format numbers
 - [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md): how to format dates
-- [guides/flavors.md](GRMustache/blob/master/guides/flavors.md): a word on the Mustache and Handlebars flavors
 - [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
 
 Usage
@@ -60,14 +59,14 @@ Speaking of templates, GRMustache eats many kinds of them: files and bundle reso
 
 Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
 
-Mustache flavors
-----------------
+Handlebars.js support
+---------------------
 
-GRMustache supports two Mustache flavors : the genuine Mustache, and a bit a [Handlebars.js](https://github.com/wycats/handlebars.js).
+[Handlebars.js](https://github.com/wycats/handlebars.js) is an extension to the Mustache templating language.
 
-The main difference lies in the syntax of key paths: genuine Mustache reads `{{foo.bar.baz}}`, while Handlebars reads `{{foo/bar/baz}}` and even `{{../foo/bar/baz}}`.
+GRMustache support for Handlebars is limited to the compound key paths that use the slash character `/` as a separator, such as `{{foo/bar/baz}}` and `{{../foo/bar/baz}}`.
 
-If your templates use such compound key paths, you should read [guides/flavors.md](GRMustache/blob/master/guides/flavors.md).
+Of course, GRMustache reads the genuine Mustache `{{foo.bar.baz}}` key paths.
 
 
 Features worth noting

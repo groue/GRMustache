@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2010 Gwendal Roué
+// Copyright (c) 2012 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheInvocation;
 
 /**
  `GRMustacheSection` is a class that is involved in mustache lambdas definition.
@@ -167,7 +168,7 @@
  */
 @interface GRMustacheSection: NSObject {
 @private
-	NSString *name;
+	GRMustacheInvocation *invocation;
 	NSString *baseTemplateString;
     NSRange range;
 	BOOL inverted;

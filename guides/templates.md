@@ -54,7 +54,6 @@ There are methods for rendering from strings, files, and bundle resources:
                         bundle:(NSBundle *)bundle   // nil stands for the main bundle
                          error:(NSError **)outError;
 
-Remember GRMustache supports two flavors of the Mustache language: check [guides/flavors.md](flavors.md)
 
 Parse-once-and-render-many-times methods
 ----------------------------------------

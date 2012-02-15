@@ -1,6 +1,12 @@
 GRMustache Release Notes
 ========================
 
+## v1.10
+
+- **Improved Handlebars.js support**
+
+Now `foo/bar` and `foo.bar` syntaxes are both supported.
+
 ## v1.9
 
 - **Better lambda encapsulation with classes conforming to the GRMustacheHelper protocol.**
