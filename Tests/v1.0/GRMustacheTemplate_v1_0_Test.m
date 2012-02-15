@@ -90,6 +90,64 @@
 }
 #endif
 
+- (void)testParsingReportsEmptyVariableTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsEmptyUnescapedVariableTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{{}}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{{ }}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{&}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{& }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsEmptySectionOpeningTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{#}}{{/ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{# }}{{/ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsEmptyInvertedSectionOpeningTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{^}}{{/ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{^ }}{{/ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsEmptySectionClosingTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{#foo}}{{/}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{#foo}}{{/ }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsEmptyPartialTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{>}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{> }}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
 - (void)testParsingReportsUnclosedSections {
 	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;

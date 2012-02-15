@@ -24,6 +24,7 @@
 
 
 typedef enum {
+    GRMustacheTokenTypeUndefined = 0,
 	GRMustacheTokenTypeText,
 	GRMustacheTokenTypeComment,
 	GRMustacheTokenTypeEscapedVariable,

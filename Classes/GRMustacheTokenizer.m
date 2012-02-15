@@ -23,7 +23,6 @@
 #import "GRMustacheTokenizer_private.h"
 #import "GRMustacheError.h"
 
-
 @interface GRMustacheTokenizer()
 @property (nonatomic, copy) NSString *otag;
 @property (nonatomic, copy) NSString *ctag;
@@ -60,8 +59,18 @@
 	NSRange orange;
 	NSRange crange;
 	NSString *tag;
-	unichar tagUnichar;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    static const GRMustacheTokenType tokenTypeForCharacter[] = {
+        ['!'] = GRMustacheTokenTypeComment,
+        ['#'] = GRMustacheTokenTypeSectionOpening,
+        ['^'] = GRMustacheTokenTypeInvertedSectionOpening,
+        ['/'] = GRMustacheTokenTypeSectionClosing,
+        ['>'] = GRMustacheTokenTypePartial,
+        ['='] = GRMustacheTokenTypeSetDelimiter,
+        ['{'] = GRMustacheTokenTypeUnescapedVariable,
+        ['&'] = GRMustacheTokenTypeUnescapedVariable,
+    };
+    
 	
 	if (![self shouldStart]) {
 		return;
@@ -130,80 +139,36 @@
 		}
 		
 		// interpret tag
-		tagUnichar = [tag characterAtIndex:0];
-		switch (tagUnichar) {
-			case '!':
-				tag = [tag substringFromIndex:1];
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-				
-			case '#':
+        GRMustacheTokenType tokenType = tokenTypeForCharacter[[tag characterAtIndex:0]];
+        switch (tokenType) {
+            case GRMustacheTokenTypeComment:
+            case GRMustacheTokenTypeSectionOpening:
+            case GRMustacheTokenTypeInvertedSectionOpening:
+            case GRMustacheTokenTypeSectionClosing:
+            case GRMustacheTokenTypePartial:
+            case GRMustacheTokenTypeUnescapedVariable:
 				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty section opening tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionOpening
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:tokenType
 																				  content:tag
 																		   templateString:templateString
 																					 line:line
 																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
-				break;
-				
-			case '^':
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty inverted section opening tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeInvertedSectionOpening
+                break;
+                
+            case GRMustacheTokenTypeUndefined:
+				tag = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
 																				  content:tag
 																		   templateString:templateString
 																					 line:line
 																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
-				break;
-				
-			case '/':
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty section closing tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSectionClosing
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-				
-			case '>':
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty partial tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-				
-			case '=':
+                break;
+                
+            case GRMustacheTokenTypeSetDelimiter:
 				if ([tag characterAtIndex:tag.length-1] != '=') {
 					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
 					return;
@@ -231,53 +196,13 @@
 																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
 					return;
 				}
-				break;
-				
-			case '{':
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-				
-			case '&':
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty unescaped variable tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeUnescapedVariable
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-				
-			default:
-				tag = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (tag.length == 0) {
-					[self didFinishWithParseErrorAtLine:line description:@"Empty variable tag"];
-					return;
-				}
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-				break;
-		}
+                break;
+                
+            case GRMustacheTokenTypeText:
+            case GRMustacheTokenTypeEscapedVariable:
+                NSAssert(NO, @"");
+                break;
+        }
 		
 		// update our cursors
 		p = crange.location + crange.length;

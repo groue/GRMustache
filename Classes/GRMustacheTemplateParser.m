@@ -94,21 +94,34 @@
 			break;
 			
 		case GRMustacheTokenTypeEscapedVariable:
+            if (token.content.length == 0) {
+                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty variable tag"]];
+            	return NO;
+            }
 			[currentElements addObject:[GRMustacheVariableElement variableElementWithName:token.content raw:NO]];
 			break;
 			
 		case GRMustacheTokenTypeUnescapedVariable:
+            if (token.content.length == 0) {
+                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty unescaped variable tag"]];
+            	return NO;
+            }
 			[currentElements addObject:[GRMustacheVariableElement variableElementWithName:token.content raw:YES]];
 			break;
 			
 		case GRMustacheTokenTypeSectionOpening:
-		case GRMustacheTokenTypeInvertedSectionOpening:
+		case GRMustacheTokenTypeInvertedSectionOpening: {
+            if (token.content.length == 0) {
+                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty section opening tag"]];
+            	return NO;
+            }
+            
 			self.currentSectionOpeningToken = token;
 			[sectionOpeningTokenStack addObject:token];
 			
 			self.currentElements = [NSMutableArray array];
 			[elementsStack addObject:currentElements];
-			break;
+        } break;
 			
 		case GRMustacheTokenTypeSectionClosing:
 			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
@@ -135,6 +148,10 @@
 			break;
 			
 		case GRMustacheTokenTypePartial: {
+            if (token.content.length == 0) {
+                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty partial tag"]];
+            	return NO;
+            }
 			NSError *partialError;
 			GRMustacheTemplate *partialTemplate = [templateLoader parseTemplateNamed:token.content
 																relativeToTemplateId:templateId
