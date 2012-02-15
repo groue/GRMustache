@@ -24,10 +24,9 @@
 
 
 typedef enum {
-    GRMustacheTokenTypeUndefined = 0,
+	GRMustacheTokenTypeEscapedVariable = 0, // 0 is used by GRMustacheTokenizer
 	GRMustacheTokenTypeText,
 	GRMustacheTokenTypeComment,
-	GRMustacheTokenTypeEscapedVariable,
 	GRMustacheTokenTypeUnescapedVariable,
 	GRMustacheTokenTypeSectionOpening,
 	GRMustacheTokenTypeInvertedSectionOpening,

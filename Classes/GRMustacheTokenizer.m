@@ -59,7 +59,11 @@
 	NSRange orange;
 	NSRange crange;
 	NSString *tag;
+    unichar character;
 	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *tokenContent;
+    GRMustacheTokenType tokenType;
+    NSRange tokenRange;
     static const GRMustacheTokenType tokenTypeForCharacter[] = {
         ['!'] = GRMustacheTokenTypeComment,
         ['#'] = GRMustacheTokenTypeSectionOpening,
@@ -70,6 +74,7 @@
         ['{'] = GRMustacheTokenTypeUnescapedVariable,
         ['&'] = GRMustacheTokenTypeUnescapedVariable,
     };
+    static const int tokenTypeForCharacterLength = sizeof(tokenTypeForCharacter) / sizeof(GRMustacheTokenType);
     
 	
 	if (![self shouldStart]) {
@@ -139,33 +144,21 @@
 		}
 		
 		// interpret tag
-        GRMustacheTokenType tokenType = tokenTypeForCharacter[[tag characterAtIndex:0]];
+        character = [tag characterAtIndex: 0];
+        tokenType = (character < tokenTypeForCharacterLength) ? tokenTypeForCharacter[character] : GRMustacheTokenTypeEscapedVariable;
+        tokenRange = NSMakeRange(orange.location, crange.location + crange.length - orange.location);
         switch (tokenType) {
+            case GRMustacheTokenTypeEscapedVariable:    // 0, hence default value in tokenTypeForCharacter
+				tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+                break;
+                
             case GRMustacheTokenTypeComment:
             case GRMustacheTokenTypeSectionOpening:
             case GRMustacheTokenTypeInvertedSectionOpening:
             case GRMustacheTokenTypeSectionClosing:
             case GRMustacheTokenTypePartial:
             case GRMustacheTokenTypeUnescapedVariable:
-				tag = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:tokenType
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
-                break;
-                
-            case GRMustacheTokenTypeUndefined:
-				tag = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
+				tokenContent = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
                 break;
                 
             case GRMustacheTokenTypeSetDelimiter:
@@ -173,8 +166,8 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
 					return;
 				}
-				tag = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				NSArray *newTags = [tag componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
+				tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+				NSArray *newTags = [tokenContent componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
 				NSMutableArray *nonBlankNewTags = [NSMutableArray array];
 				for (NSString *newTag in newTags) {
 					if (newTag.length > 0) {
@@ -188,22 +181,21 @@
 					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
 					return;
 				}
-				
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
-																				  content:tag
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
-					return;
-				}
                 break;
                 
             case GRMustacheTokenTypeText:
-            case GRMustacheTokenTypeEscapedVariable:
                 NSAssert(NO, @"");
                 break;
         }
-		
+
+        if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:tokenType
+                                                                          content:tokenContent
+                                                                   templateString:templateString
+                                                                             line:line
+                                                                            range:tokenRange]]) {
+            return;
+        }
+
 		// update our cursors
 		p = crange.location + crange.length;
 		line += consumedLines;
