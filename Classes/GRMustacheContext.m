@@ -33,48 +33,39 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @interface GRMustacheContext()
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
-@property (nonatomic) GRMustacheTemplateOptions options;
-- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent options:(GRMustacheTemplateOptions)theOptions;
+- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
+- (id)valueForKey:(NSString *)key scoped:(BOOL)scoped;
 @end
 
 
 @implementation GRMustacheContext
 @synthesize object;
 @synthesize parent;
-@synthesize options;
 
 + (void)preventNSUndefinedKeyExceptionAttack {
     preventingNSUndefinedKeyExceptionAttack = YES;
-}
-
-+ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options {
-	if ([object isKindOfClass:[GRMustacheContext class]]) {
-        NSAssert(((GRMustacheContext *)object).options == options, @"");
-		return object;
-	}
-	return [[[self alloc] initWithObject:object parent:nil options:options] autorelease];
 }
 
 + (id)contextWithObject:(id)object {
 	if ([object isKindOfClass:[GRMustacheContext class]]) {
 		return object;
 	}
-	return [[[self alloc] initWithObject:object parent:nil options:GRMustacheDefaultTemplateOptions] autorelease];
+	return [[[self alloc] initWithObject:object parent:nil] autorelease];
 }
 
 + (id)contextWithObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *result = [self contextWithObject:object options:GRMustacheDefaultTemplateOptions andObjectList:objectList];
+    GRMustacheContext *result = [self contextWithObject:object andObjectList:objectList];
     va_end(objectList);
     return result;
 }
 
-+ (id)contextWithObject:(id)object options:(GRMustacheTemplateOptions)options andObjectList:(va_list)objectList {
++ (id)contextWithObject:(id)object andObjectList:(va_list)objectList {
     GRMustacheContext *context = nil;
     if (object) {
-        context = [GRMustacheContext contextWithObject:object options:options];
+        context = [GRMustacheContext contextWithObject:object];
         id eachObject;
         va_list objectListCopy;
         va_copy(objectListCopy, objectList);
@@ -83,89 +74,33 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
         va_end(objectListCopy);
     } else {
-        context = [self contextWithObject:nil options:options];
+        context = [self contextWithObject:nil];
     }
     return context;
 }
 
-- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent options:(GRMustacheTemplateOptions)theOptions {
+- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
 	if ((self = [self init])) {
 		object = [theObject retain];
 		parent = [theParent retain];
-        options = theOptions;
 	}
 	return self;
 }
 
 - (GRMustacheContext *)contextByAddingObject:(id)theObject {
-	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self options:options] autorelease];
+	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
 }
 
-- (id)valueForKey:(NSString *)key
+- (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped
 {
-    NSString *implicitIteratorKey = @".";
-    NSString *upContextKey = nil;
-    NSString *keyComponentsSeparator = nil;
-
-    if (options & GRMustacheTemplateOptionMustacheSpecCompatibility) {
-        keyComponentsSeparator = @".";
-        upContextKey = nil;
-    } else {
-        keyComponentsSeparator = @"/";
-        upContextKey = @"..";
+    id value = [self valueForKey:key scoped:scoped];
+    if (!value) {
+        return nil;
     }
-
-	// fast path for implicitIteratorKey
-    if ([implicitIteratorKey isEqualToString:key]) { // implicitIteratorKey may be nil
-        return self.object;
+    if (scoped) {
+        return [GRMustacheContext contextWithObject:value];
     }
-    
-	// fast path for upContextKey
-    if ([upContextKey isEqualToString:key]) {   // upContextKey may be nil
-        if (self.parent == nil) {
-            // went too far
-            return nil;
-        }
-        return self.parent.object;
-    }
-    
-    NSArray *components = nil;
-    if (keyComponentsSeparator != nil) {
-        components = [key componentsSeparatedByString:keyComponentsSeparator];
-    }
-	
-	// fast path for single component
-	if (components == nil || components.count == 1) {
-		return [self valueForKeyComponent:key];
-	}
-	
-    GRMustacheContext *context = self;
-    
-	// slow path for multiple components
-	for (NSString *component in components) {
-		if (component.length == 0) {
-			continue;
-		}
-		if ([implicitIteratorKey isEqualToString:component]) { // implicitIteratorKey may be nil
-			continue;
-		}
-		if ([upContextKey isEqualToString:component]) {   // upContextKey may be nil
-			context = context.parent;
-			if (context == nil) {
-				// went too far
-				return nil;
-			}
-			continue;
-		}
-		id value = [context valueForKeyComponent:component];
-		if (value == nil) {
-			return nil;
-		}
-		// further contexts are not in the context stack
-		context = [GRMustacheContext contextWithObject:value options:options];
-	}
-	
-	return context.object;
+    return [self contextByAddingObject:value];
 }
 
 - (void)dealloc {
@@ -174,7 +109,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 	[super dealloc];
 }
 
-- (id)valueForKeyComponent:(NSString *)key {
+- (id)valueForKey:(NSString *)key {
+    return [self valueForKey:key scoped:NO];
+}
+
+- (id)valueForKey:(NSString *)key scoped:(BOOL)scoped {
 	// value by selector
 	
     SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
@@ -221,8 +160,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 	
 	// parent value
 	
-	if (parent == nil) { return nil; }
-	return [parent valueForKeyComponent:key];
+	if (scoped || parent == nil) { return nil; }
+	return [parent valueForKey:key scoped:NO];
 }
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {

@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheInvocation;
 
 /**
  `GRMustacheSection` is a class that is involved in mustache lambdas definition.
@@ -167,12 +168,11 @@
  */
 @interface GRMustacheSection: NSObject {
 @private
-	NSString *name;
+	GRMustacheInvocation *invocation;
 	NSString *baseTemplateString;
     NSRange range;
 	BOOL inverted;
 	NSArray *elems;
-    GRMustacheTemplateOptions options;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -23,43 +23,43 @@
 #import "GRMustacheSection_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheInvocation_private.h"
 #import "GRMustacheLambda_private.h"
 
 @interface GRMustacheSection()
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) GRMustacheInvocation *invocation;
 @property (nonatomic, retain) NSString *baseTemplateString;
 @property (nonatomic) NSRange range;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSection
 @synthesize baseTemplateString;
 @synthesize range;
-@synthesize name;
+@synthesize invocation;
 @synthesize inverted;
 @synthesize elems;
 
-+ (id)sectionElementWithName:(NSString *)name baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems options:(GRMustacheTemplateOptions)options {
-	return [[[self alloc] initWithName:name baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems options:options] autorelease];
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
+	return [[[self alloc] initWithInvocation:invocation baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
 }
 
-- (id)initWithName:(NSString *)theName baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems options:(GRMustacheTemplateOptions)theOptions {
+- (id)initWithInvocation:(GRMustacheInvocation *)theInvocation baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems {
 	if ((self = [self init])) {
-		self.name = theName;
+		self.invocation = theInvocation;
 		self.baseTemplateString = theBaseTemplateString;
         self.range = theRange;
 		self.inverted = theInverted;
 		self.elems = theElems;
-        options = theOptions;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[name release];
+	[invocation release];
 	[baseTemplateString release];
 	[elems release];
 	[super dealloc];
@@ -72,7 +72,7 @@
 - (NSString *)renderObject:(id)object {
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
     for (id<GRMustacheRenderingElement> elem in elems) {
         [result appendString:[elem renderContext:context]];
     }
@@ -83,7 +83,7 @@
 - (NSString *)renderObjects:(id)object, ... {
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options andObjectList:objectList];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
     va_end(objectList);
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
@@ -97,7 +97,8 @@
 - (NSString *)renderContext:(GRMustacheContext *)context {
     NSMutableString *result = nil;
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-	id value = [context valueForKey:name];
+    [invocation invokeWithContext:context];
+	id value = invocation.returnValue;
     GRMustacheObjectKind kind;
     [GRMustacheTemplate object:value kind:&kind boolValue:NULL];
 	switch(kind) {

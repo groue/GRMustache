@@ -26,7 +26,7 @@
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheSection_private.h"
-#import "GRBoolean.h"
+#import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 
 @interface GRMustacheTemplateParser()
@@ -40,6 +40,7 @@
 - (void)finish;
 - (void)finishWithError:(NSError *)error;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
+- (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateParser
@@ -55,6 +56,7 @@
 	if ((self = [self init])) {
 		self.templateLoader = theTemplateLoader;
 		self.templateId = theTemplateId;
+        options = theTemplateLoader.options;
 
 		currentElements = [[NSMutableArray alloc] initWithCapacity:20];
         elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
@@ -101,21 +103,35 @@
 		case GRMustacheTokenTypeComment:
 			break;
 			
-		case GRMustacheTokenTypeEscapedVariable:
+		case GRMustacheTokenTypeEscapedVariable: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty variable tag"]];
             	return NO;
             }
-			[currentElements addObject:[GRMustacheVariableElement variableElementWithName:token.content raw:NO]];
-			break;
+            NSError *invocationError;
+            GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
+            if (invocation) {
+                [currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:NO]];
+            } else {
+                [self finishWithError:invocationError];
+                return NO;
+            }
+        } break;
 			
-		case GRMustacheTokenTypeUnescapedVariable:
+		case GRMustacheTokenTypeUnescapedVariable: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty unescaped variable tag"]];
             	return NO;
             }
-			[currentElements addObject:[GRMustacheVariableElement variableElementWithName:token.content raw:YES]];
-			break;
+            NSError *invocationError;
+            GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
+            if (invocation) {
+                [currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:YES]];
+            } else {
+                [self finishWithError:invocationError];
+                return NO;
+            }
+        } break;
 			
 		case GRMustacheTokenTypeSectionOpening:
 		case GRMustacheTokenTypeInvertedSectionOpening: {
@@ -133,22 +149,28 @@
 			
 		case GRMustacheTokenTypeSectionClosing:
 			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
-				NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
-				NSAssert(currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
-                NSRange range = NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length);
-				GRMustacheSection *section = [GRMustacheSection sectionElementWithName:currentSectionOpeningToken.content
-                                                                    baseTemplateString:token.templateString
-                                                                                 range:range
-																			  inverted:currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening
-																			  elements:currentElements
-                                                                               options:templateLoader.options];
-				[sectionOpeningTokenStack removeLastObject];
-				self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
-				
-				[elementsStack removeLastObject];
-				self.currentElements = [elementsStack lastObject];
-				
-				[currentElements addObject:section];
+                NSError *invocationError;
+                GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
+                if (invocation) {
+                    NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
+                    NSAssert(currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
+                    NSRange range = NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length);
+                    GRMustacheSection *section = [GRMustacheSection sectionElementWithInvocation:invocation
+                                                                              baseTemplateString:token.templateString
+                                                                                           range:range
+                                                                                        inverted:(currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                                        elements:currentElements];
+                    [sectionOpeningTokenStack removeLastObject];
+                    self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
+                    
+                    [elementsStack removeLastObject];
+                    self.currentElements = [elementsStack lastObject];
+                    
+                    [currentElements addObject:section];
+                } else {
+                    [self finishWithError:invocationError];
+                    return NO;
+                }
 			} else {
 				[self finishWithError:[self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
 				return NO;
@@ -218,6 +240,102 @@
 	return [NSError errorWithDomain:GRMustacheErrorDomain
 							   code:GRMustacheErrorCodeParseError
 						   userInfo:userInfo];
+}
+
+- (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError {
+    NSString *content = token.content;
+    NSUInteger length = content.length;
+    BOOL acceptDotIdentifier = YES;
+    BOOL acceptDotDotIdentifier = YES;
+    BOOL acceptOtherIdentifier = YES;
+    BOOL acceptSeparator = NO;
+    BOOL availableDotSeparator = YES;
+    BOOL availableSlashSeparator = !(options & GRMustacheTemplateOptionMustacheSpecCompatibility);
+    NSMutableArray *keys = [NSMutableArray array];
+    unichar c;
+    NSUInteger identifierStart = 0;
+    for (NSUInteger i = 0; i < length; ++i) {
+        c = [content characterAtIndex:i];
+        switch (c) {
+            case '.':
+                if (acceptDotIdentifier) {
+                    acceptDotIdentifier = NO;
+                    acceptDotDotIdentifier = YES;
+                    acceptOtherIdentifier = NO;
+                    acceptSeparator = YES;
+                    availableDotSeparator = NO;
+                } else if (acceptDotDotIdentifier) {
+                    acceptDotIdentifier = NO;
+                    acceptDotDotIdentifier = NO;
+                    acceptOtherIdentifier = NO;
+                    acceptSeparator = YES;
+                    availableDotSeparator = NO;
+                } else if (acceptSeparator && availableDotSeparator) {
+                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
+                    identifierStart = i + 1;
+                    acceptDotIdentifier = NO;
+                    acceptDotDotIdentifier = NO;
+                    acceptOtherIdentifier = YES;
+                    acceptSeparator = NO;
+                    availableSlashSeparator = NO;
+                } else {
+                    if (outError != NULL) {
+                        *outError = [self parseErrorAtLine:token.line
+                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+                    }
+                    return nil;
+                }
+                break;
+                
+            case '/':
+                if (acceptSeparator && availableSlashSeparator) {
+                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
+                    identifierStart = i + 1;
+                    acceptDotIdentifier = YES;
+                    acceptDotDotIdentifier = YES;
+                    acceptOtherIdentifier = YES;
+                    acceptSeparator = NO;
+                    availableDotSeparator = NO;
+                } else if (acceptOtherIdentifier && !availableSlashSeparator) {
+                    acceptDotIdentifier = NO;
+                    acceptDotDotIdentifier = NO;
+                    acceptOtherIdentifier = YES;
+                    acceptSeparator = YES;
+                } else {
+                    if (outError != NULL) {
+                        *outError = [self parseErrorAtLine:token.line
+                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+                    }
+                    return nil;
+                }
+                break;
+            
+            default:
+                if (acceptOtherIdentifier) {
+                    acceptDotIdentifier = NO;
+                    acceptDotDotIdentifier = NO;
+                    acceptOtherIdentifier = YES;
+                    acceptSeparator = YES;
+                } else {
+                    if (outError != NULL) {
+                        *outError = [self parseErrorAtLine:token.line
+                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+                    }
+                    return nil;
+                }
+                
+        }
+    }
+    if (identifierStart >= length) {
+        if (outError != NULL) {
+            *outError = [self parseErrorAtLine:token.line
+                                   description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+        }
+        return nil;
+    } else {
+        [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
+    }
+    return [GRMustacheInvocation invocationWithKeys:keys];
 }
 
 @end

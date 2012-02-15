@@ -32,10 +32,12 @@
     NSString *result = nil;
     GRMustacheTemplateOptions originalTemplateOptions = [GRMustache defaultTemplateOptions];
     
+    // Handlebars accepts both / and . separators
     [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionNone];
     result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-    STAssertEqualObjects(result, @"baz---", @"");
+    STAssertEqualObjects(result, @"baz---baz", @"");
     
+    // Mustache only accepts . separator
     [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
     result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
     STAssertEqualObjects(result, @"---baz", @"");

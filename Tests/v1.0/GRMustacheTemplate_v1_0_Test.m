@@ -99,6 +99,23 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
+- (void)testParsingReportsBadlyFormattedVariableTag {
+	NSError *error;
+	STAssertNil([GRMustacheTemplate parseString:@"{{ /}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{a/}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{a/...}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{a.}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{...}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	STAssertNil([GRMustacheTemplate parseString:@"{{....}}" error:&error], nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
 - (void)testParsingReportsEmptyUnescapedVariableTag {
 	NSError *error;
 	STAssertNil([GRMustacheTemplate parseString:@"{{{}}}" error:&error], nil);

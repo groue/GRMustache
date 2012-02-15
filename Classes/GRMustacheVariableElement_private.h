@@ -23,10 +23,12 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheRendering_private.h"
 
+@class GRMustacheInvocation;
+
 @interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
 @private
-	NSString *name;
+	GRMustacheInvocation *invocation;
 	BOOL raw;
 }
-+ (id)variableElementWithName:(NSString *)name raw:(BOOL)raw;
++ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
 @end

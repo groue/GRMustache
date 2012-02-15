@@ -183,14 +183,14 @@
 }
 
 - (NSString *)renderObject:(id)object {
-	return [self renderContext:[GRMustacheContext contextWithObject:object options:options]];
+	return [self renderContext:[GRMustacheContext contextWithObject:object]];
 }
 
 - (NSString *)renderObjects:(id)object, ... {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     va_list objectList;
     va_start(objectList, object);
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object options:options andObjectList:objectList];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
     va_end(objectList);
     NSString *result = [[self renderContext:context] retain];
     [pool drain];

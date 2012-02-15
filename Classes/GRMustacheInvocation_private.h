@@ -21,24 +21,16 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheRendering_private.h"
 
-@class GRMustacheInvocation;
+@class GRMustacheContext;
 
-@interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheInvocation : NSObject {
 @private
-	GRMustacheInvocation *invocation;
-	NSString *baseTemplateString;
-    NSRange range;
-	BOOL inverted;
-	NSArray *elems;
+    id returnValue;
+    NSArray *keys;
 }
-@property (nonatomic, readonly) NSString *templateString;
 
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
-
-- (NSString *)renderObject:(id)object;
-
-- (NSString *)renderObjects:(id)object, ...;
-
+@property (nonatomic, retain, readonly) id returnValue;
++ (id)invocationWithKeys:(NSArray *)keys;
+- (void)invokeWithContext:(GRMustacheContext *)context;
 @end

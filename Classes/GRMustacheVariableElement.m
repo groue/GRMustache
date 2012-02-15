@@ -22,33 +22,34 @@
 
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheVariableElement()
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) GRMustacheInvocation *invocation;
 @property (nonatomic) BOOL raw;
-- (id)initWithName:(NSString *)name raw:(BOOL)raw;
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
-@synthesize name;
+@synthesize invocation;
 @synthesize raw;
 
-+ (id)variableElementWithName:(NSString *)name raw:(BOOL)raw {
-	return [[[self alloc] initWithName:name raw:raw] autorelease];
++ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
+	return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
 }
 
-- (id)initWithName:(NSString *)theName raw:(BOOL)theRaw {
+- (id)initWithInvocation:(GRMustacheInvocation *)theInvocation raw:(BOOL)theRaw {
 	if ((self = [self init])) {
-		self.name = theName;
+		self.invocation = theInvocation;
 		self.raw = theRaw;
 	}
 	return self;
 }
 
 - (void)dealloc {
-	[name release];
+	[invocation release];
 	[super dealloc];
 }
 
@@ -63,7 +64,8 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-	id value = [context valueForKey:name];
+    [invocation invokeWithContext:context];
+	id value = [invocation returnValue];
     BOOL boolValue;
     [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
 	if (boolValue == NO) {

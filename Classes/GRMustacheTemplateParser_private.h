@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheTokenizer_private.h"
+#import "GRMustache_private.h"
 
 
 @class GRMustacheTemplateLoader;
@@ -36,6 +37,7 @@
 	NSMutableArray *sectionOpeningTokenStack;
 	NSMutableArray *currentElements;
 	GRMustacheToken *currentSectionOpeningToken;
+    GRMustacheTemplateOptions options;
 }
 - (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId;
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError;
