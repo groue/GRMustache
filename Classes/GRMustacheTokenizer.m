@@ -27,7 +27,6 @@
 @property (nonatomic, copy) NSString *otag;
 @property (nonatomic, copy) NSString *ctag;
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-- (BOOL)shouldStart;
 - (void)didFinish;
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
@@ -76,10 +75,6 @@
     };
     static const int tokenTypeForCharacterLength = sizeof(tokenTypeForCharacter) / sizeof(GRMustacheTokenType);
     
-	
-	if (![self shouldStart]) {
-		return;
-	}
 	
 	while (YES) {
 		// look for otag
@@ -203,35 +198,28 @@
 }
 
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
-	if (delegate) {
+	if ([delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
 		return [delegate tokenizer:self shouldContinueAfterParsingToken:token];
 	}
 	return YES;
 }
 
-- (BOOL)shouldStart {
-	if (delegate && [delegate respondsToSelector:@selector(tokenizerShouldStart:)]) {
-		return [delegate tokenizerShouldStart:self];
-	}
-	return YES;
-}
-
 - (void)didFinish {
-	if (delegate) {
-		[delegate tokenizerDidFinish:self withError:nil];
+	if ([delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
+		[delegate tokenizerDidFinish:self];
 	}
 }
 
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
-	if (delegate) {
+	if ([delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
 		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
 					 forKey:NSLocalizedDescriptionKey];
 		[userInfo setObject:[NSNumber numberWithInteger:line]
 					 forKey:GRMustacheErrorLine];
-		[delegate tokenizerDidFinish:self withError:[NSError errorWithDomain:GRMustacheErrorDomain
-																			code:GRMustacheErrorCodeParseError
-																		userInfo:userInfo]];
+		[delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+                                                                      code:GRMustacheErrorCodeParseError
+                                                                  userInfo:userInfo]];
 	}
 }
 

@@ -28,10 +28,9 @@
 
 @protocol GRMustacheTokenizerDelegate<NSObject>
 @optional
-- (BOOL)tokenizerShouldStart:(GRMustacheTokenizer *)tokenizer;
-@required
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)error;
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer;
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError;
 @end
 
 @interface GRMustacheTokenizer : NSObject {

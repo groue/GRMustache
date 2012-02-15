@@ -37,7 +37,6 @@
 @property (nonatomic, retain) NSMutableArray *elementsStack;
 @property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
 @property (nonatomic, retain) id templateId;
-- (void)start;
 - (void)finish;
 - (void)finishWithError:(NSError *)error;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
@@ -56,11 +55,18 @@
 	if ((self = [self init])) {
 		self.templateLoader = theTemplateLoader;
 		self.templateId = theTemplateId;
-	}
+
+		currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+        elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [elementsStack addObject:currentElements];
+        sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+    }
 	return self;
 }
 
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
+    [self finish];
+    
 	if (error) {
 		if (outError != NULL) {
 			*outError = [[error retain] autorelease];
@@ -85,6 +91,8 @@
 #pragma mark GRMustacheTokenizerDelegate
 
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+    if (!elementsStack) return NO;
+    
 	switch (token.type) {
 		case GRMustacheTokenTypeText:
 			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
@@ -177,30 +185,11 @@
 	return YES;
 }
 
-- (BOOL)tokenizerShouldStart:(GRMustacheTokenizer *)tokenizer {
-	[self start];
-	return YES;
-}
-
-- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)theError {
-	if (theError) {
-		[self finishWithError:theError];
-	} else if (currentSectionOpeningToken) {
-		[self finishWithError:[self parseErrorAtLine:currentSectionOpeningToken.line
-										 description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]]];
-	} else {
-		[self finish];
-	}
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError {
+    [self finishWithError:theError];
 }
 
 #pragma mark Private
-
-- (void)start {
-	currentElements = [[NSMutableArray alloc] initWithCapacity:20];
-	elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-	[elementsStack addObject:currentElements];
-	sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
-}
 
 - (void)finishWithError:(NSError *)theError {
 	self.error = theError;
@@ -208,6 +197,10 @@
 }
 
 - (void)finish {
+    if (error == nil && currentSectionOpeningToken) {
+        self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
+                                description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]];
+    }
 	if (error) {
 		self.currentElements = nil;
 	}

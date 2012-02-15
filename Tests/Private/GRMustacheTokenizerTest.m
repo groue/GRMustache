@@ -75,7 +75,11 @@
 	return YES;
 }
 
-- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer withError:(NSError *)theError {
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer {
+	tokenizerDidFinish = YES;
+}
+
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError {
 	tokenizerDidFinish = YES;
 	error = [theError retain];
 }

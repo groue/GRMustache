@@ -149,7 +149,7 @@
 }
 
 - (void)testParsingReportsUnclosedSections {
-	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
+	NSString *templateString = @"{{#list}} <li>{{item}}</li>";
 	NSError *error;
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
 	STAssertNil(template, nil);
@@ -158,6 +158,24 @@
 }
 
 - (void)testRenderingReportsUnclosedSections {
+	NSString *templateString = @"{{#list}} <li>{{item}}</li>";
+	NSError *error;
+	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
+	STAssertNil(result, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testParsingReportsClosingSectionsMismatch {
+	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
+	NSError *error;
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
+	STAssertNil(template, nil);
+	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
+}
+
+- (void)testRenderingReportsClosingSectionsMismatch {
 	NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
 	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
@@ -166,7 +184,7 @@
 	// TODO: check value of [error.userInfo objectForKey:NSLocalizedDescriptionKey]
 }
 
-- (void)testParsingReportsUnclosedSectionsReportsTheLineNumber {
+- (void)testParsingReportsClosingSectionsMismatchReportsTheLineNumber {
 	NSString *templateString = @"hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:&error];
@@ -175,7 +193,7 @@
 	STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
 }
 
-- (void)testRenderingReportsUnclosedSectionsReportsTheLineNumber {
+- (void)testRenderingReportsClosingSectionsMismatchReportsTheLineNumber {
 	NSString *templateString = @"hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}";
 	NSError *error;
 	NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
