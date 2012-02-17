@@ -97,8 +97,7 @@
 - (NSString *)renderContext:(GRMustacheContext *)context {
     NSMutableString *result = nil;
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    [invocation invokeWithContext:context];
-	id value = invocation.returnValue;
+    id value = [invocation invokeWithContext:context];
     GRMustacheObjectKind kind;
     [GRMustacheTemplate object:value kind:&kind boolValue:NULL];
 	switch(kind) {

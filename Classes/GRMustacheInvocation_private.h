@@ -26,11 +26,9 @@
 
 @interface GRMustacheInvocation : NSObject {
 @private
-    id returnValue;
     NSArray *keys;
 }
 
-@property (nonatomic, retain, readonly) id returnValue;
 + (id)invocationWithKeys:(NSArray *)keys;
-- (void)invokeWithContext:(GRMustacheContext *)context;
+- (id)invokeWithContext:(GRMustacheContext *)context;
 @end

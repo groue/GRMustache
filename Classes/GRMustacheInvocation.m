@@ -24,12 +24,10 @@
 #import "GRMustacheContext_private.h"
 
 @interface GRMustacheInvocation()
-@property (nonatomic, retain) id returnValue;
 - (id)initWithKeys:(NSArray *)keys;
 @end
 
 @implementation GRMustacheInvocation
-@synthesize returnValue;
 
 + (id)invocationWithKeys:(NSArray *)keys
 {
@@ -39,7 +37,6 @@
 - (void)dealloc
 {
     [keys release];
-    [returnValue release];
     [super dealloc];
 }
 
@@ -52,7 +49,7 @@
     return self;
 }
 
-- (void)invokeWithContext:(GRMustacheContext *)context
+- (id)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
     for (NSString *key in keys) {
@@ -69,7 +66,7 @@
             break;
         }
     }
-    self.returnValue = context.object;
+    return context.object;
 }
 
 @end

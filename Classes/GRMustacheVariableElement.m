@@ -64,8 +64,7 @@
 }
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-    [invocation invokeWithContext:context];
-	id value = [invocation returnValue];
+    id value = [invocation invokeWithContext:context];
     BOOL boolValue;
     [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
 	if (boolValue == NO) {
