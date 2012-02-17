@@ -23,7 +23,37 @@
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheContext_private.h"
 
+typedef void (*GRMustacheInvocationFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext);
+
+static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
+    *inOutScoped = YES;
+}
+
+static void invokePopKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
+    *inOutScoped = NO;
+    *inOutContext = (*inOutContext).parent;
+}
+
+static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
+    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped];
+    *inOutScoped = YES;
+}
+
 @interface GRMustacheInvocation()
+- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
+@end
+
+@interface GRMustacheInvocationKey:GRMustacheInvocation {
+    GRMustacheInvocationFunction invocationFunction;
+    NSString *key;
+}
+- (id)initWithKey:(NSArray *)keys;
+@end
+
+@interface GRMustacheInvocationKeyPath:GRMustacheInvocation {
+    GRMustacheInvocationFunction *invocationFunctions;
+    NSArray *keys;
+}
 - (id)initWithKeys:(NSArray *)keys;
 @end
 
@@ -31,12 +61,66 @@
 
 + (id)invocationWithKeys:(NSArray *)keys
 {
-    return [[[GRMustacheInvocation alloc] initWithKeys:keys] autorelease];
+    if (keys.count > 1) {
+        return [[[GRMustacheInvocationKeyPath alloc] initWithKeys:keys] autorelease];
+    } else {
+        return [[[GRMustacheInvocationKey alloc] initWithKey:[keys objectAtIndex:0]] autorelease];
+    }
 }
+
+- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"."] || [key isEqualToString:@"this"]) {
+        return invokeImplicitIteratorKey;
+    } else if ([key isEqualToString:@".."]) {
+        return invokePopKey;
+    } else {
+        return invokeOtherKey;
+    }
+}
+
+- (id)invokeWithContext:(GRMustacheContext *)context
+{
+    // abstract method
+    return nil;
+}
+
+@end
+
+@implementation GRMustacheInvocationKey
+
+- (void)dealloc
+{
+    [key release];
+    [super dealloc];
+}
+
+- (id)initWithKey:(NSString *)theKey
+{
+    self = [super init];
+    if (self) {
+        key = [theKey retain];
+        invocationFunction = [self invocationFunctionForKey:key];
+    }
+    return self;
+}
+
+- (id)invokeWithContext:(GRMustacheContext *)context
+{
+    BOOL scoped = NO;
+    invocationFunction(key, &scoped, &context);
+    return context.object;
+}
+
+@end
+
+
+@implementation GRMustacheInvocationKeyPath
 
 - (void)dealloc
 {
     [keys release];
+    free(invocationFunctions);
     [super dealloc];
 }
 
@@ -45,6 +129,10 @@
     self = [super init];
     if (self) {
         keys = [theKeys retain];
+        GRMustacheInvocationFunction *f = invocationFunctions = malloc(theKeys.count*sizeof(GRMustacheInvocationFunction));
+        for (NSString *key in keys) {
+            *(f++) = [self invocationFunctionForKey:key];
+        }
     }
     return self;
 }
@@ -52,21 +140,15 @@
 - (id)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
+    
+    GRMustacheInvocationFunction *f = invocationFunctions;
     for (NSString *key in keys) {
-        if ([key isEqualToString:@"."] || [key isEqualToString:@"this"]) {
-            scoped = YES;
-        } else if ([key isEqualToString:@".."]) {
-            context = context.parent;
-            scoped = NO;
-        } else {
-            context = [context contextForKey:key scoped:scoped];
-            scoped = YES;
-        }
-        if (!context) {
-            break;
-        }
+        (*(f++))(key, &scoped, &context);
+        if (!context) return nil;
     }
+    
     return context.object;
 }
 
 @end
+

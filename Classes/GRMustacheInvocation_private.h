@@ -24,11 +24,7 @@
 
 @class GRMustacheContext;
 
-@interface GRMustacheInvocation : NSObject {
-@private
-    NSArray *keys;
-}
-
+@interface GRMustacheInvocation : NSObject
 + (id)invocationWithKeys:(NSArray *)keys;
 - (id)invokeWithContext:(GRMustacheContext *)context;
 @end
