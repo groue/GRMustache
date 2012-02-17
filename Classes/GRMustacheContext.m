@@ -114,22 +114,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 - (id)valueForKey:(NSString *)key scoped:(BOOL)scoped {
-	// value by selector
-	
-    SEL renderingSelector = NSSelectorFromString([NSString stringWithFormat:@"%@Section:withContext:", key]);
-    if ([object respondsToSelector:renderingSelector]) {
-        // Avoid the "render" key to be triggered by GRMustacheHelper instances,
-        // who implement the renderSection:withContext: selector.
-        if (![object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
-            return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
-        }
-    }
-	
-	// value by KVC
-	
 	id value = nil;
 	
     if (object) {
+        // value by KVC
+        
         @try {
             if (preventingNSUndefinedKeyExceptionAttack) {
                 value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:object];
@@ -144,6 +133,19 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             {
                 // that's some exception we are not related to
                 [exception raise];
+            }
+        }
+        
+        if (value == nil) {
+            // value by selector
+            
+            SEL renderingSelector = NSSelectorFromString([key stringByAppendingString:@"Section:withContext:"]);
+            if ([object respondsToSelector:renderingSelector]) {
+                // Avoid the "render" key to be triggered by GRMustacheHelper instances,
+                // who implement the renderSection:withContext: selector.
+                if (![object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
+                    return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
+                }
             }
         }
     }
