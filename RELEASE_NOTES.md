@@ -1,11 +1,15 @@
 GRMustache Release Notes
 ========================
 
+## v1.10.1
+
+Performance improvements
+
 ## v1.10
 
-- **Improved Handlebars.js support**
+**Improved Handlebars.js support and performance improvements**
 
-Now `foo/bar` and `foo.bar` syntaxes are both supported.
+Now `{{foo/bar}}` and `{{foo.bar}}` syntaxes are both supported.
 
 ## v1.9
 
