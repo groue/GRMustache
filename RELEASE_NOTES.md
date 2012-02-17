@@ -1,6 +1,10 @@
 GRMustache Release Notes
 ========================
 
+## v1.10.2
+
+Performance improvements
+
 ## v1.10.1
 
 Performance improvements
