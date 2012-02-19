@@ -114,7 +114,7 @@
 		5672484F13E02F430043E2FA /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5672484C13E02F430043E2FA /* Model.xcdatamodeld */; };
 		569C86701424A14F00D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C866F1424A14E00D6BC77 /* GRBoolean_private.h */; };
 		56A9234314CEBBFD00204EB8 /* GRMustacheUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9234214CEBBFD00204EB8 /* GRMustacheUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56A9234714CEBC5300204EB8 /* GRMustacheDateFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9234514CEBC5300204EB8 /* GRMustacheDateFormatterHelper.h */; };
+		56A9234714CEBC5300204EB8 /* GRMustacheDateFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9234514CEBC5300204EB8 /* GRMustacheDateFormatterHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56A9234814CEBC5300204EB8 /* GRMustacheDateFormatterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9234614CEBC5300204EB8 /* GRMustacheDateFormatterHelper.m */; };
 		56A9234B14CEBD2600204EB8 /* GRMustacheDateFormatterHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9234A14CEBD2600204EB8 /* GRMustacheDateFormatterHelperTest.m */; };
 		56D880F114CDE9DF00AB3CE4 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D880F014CDE9DF00AB3CE4 /* GRMustacheHelperTest.m */; };
