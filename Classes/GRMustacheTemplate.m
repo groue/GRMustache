@@ -22,11 +22,11 @@
 
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheTemplate+RenderingElement_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheDirectoryTemplateLoader_private.h"
-#import "GRMustacheRendering_private.h"
 #import "GRBoolean_private.h"
 
 @interface GRMustacheTemplate()
@@ -227,16 +227,6 @@
             *outBoolValue = YES;
         }
     }
-}
-
-- (NSString *)renderContext:(GRMustacheContext *)context {
-    NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    for (id<GRMustacheRenderingElement> elem in elems) {
-        [result appendString:[elem renderContext:context]];
-    }
-    [pool drain];
-    return result;
 }
 
 #pragma mark - Private

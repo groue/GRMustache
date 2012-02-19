@@ -48,10 +48,6 @@
 	[super dealloc];
 }
 
-- (NSString *)renderContext:(GRMustacheContext *)context {
-	return text;
-}
-
 @end
 
 

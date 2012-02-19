@@ -20,24 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheTemplate+RenderingElement_private.h"
 
-@class GRMustacheInvocation;
+@implementation GRMustacheTemplate (RenderingElement)
 
-@interface GRMustacheSection: NSObject {
-@private
-	GRMustacheInvocation *invocation;
-	NSString *baseTemplateString;
-    NSRange range;
-	BOOL inverted;
-	NSArray *elems;
+- (NSString *)renderContext:(GRMustacheContext *)context {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    for (id<GRMustacheRenderingElement> elem in elems) {
+        [result appendString:[elem renderContext:context]];
+    }
+    [pool drain];
+    return result;
 }
-@property (nonatomic, readonly) NSString *templateString;
-
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
-
-- (NSString *)renderObject:(id)object;
-
-- (NSString *)renderObjects:(id)object, ...;
 
 @end

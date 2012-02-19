@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustache_private.h"
-#import "GRMustacheRendering_private.h"
 #import "GRMustacheEnvironment.h"
 
 typedef enum {
@@ -32,7 +31,7 @@ typedef enum {
 	GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
-@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheTemplate: NSObject {
 @private
 	NSArray *elems;
     GRMustacheTemplateOptions options;

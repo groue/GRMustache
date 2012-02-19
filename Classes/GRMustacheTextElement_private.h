@@ -21,10 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheRendering_private.h"
 
-
-@interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheTextElement: NSObject {
 @private
 	NSString *text;
 }
