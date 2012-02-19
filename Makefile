@@ -1,49 +1,50 @@
-libGRMustache1-io3-iphoneos="build/iphoneos3/Release-iphoneos/libGRMustache1-ios3.a"
-libGRMustache1-io3-iphonesimulator="build/iphonesimulator3/Release-iphonesimulator/libGRMustache1-ios3.a"
-libGRMustache1-io3="lib/libGRMustache1-ios3.a"
-libGRMustache1-io4-iphoneos="build/iphoneos4/Release-iphoneos/libGRMustache1.a"
-libGRMustache1-io4-iphonesimulator="build/iphonesimulator4/Release-iphonesimulator/libGRMustache1.a"
-libGRMustache1-io4="lib/libGRMustache1-ios4.a"
-libGRMustache1-macosx10.6="lib/libGRMustache1-macosx10.6.a"
+all: lib/libGRMustache1-ios3.a lib/libGRMustache1-ios4.a lib/libGRMustache1-macosx10.6.a include/GRMustache.h
 
-all: libs includes
-
-libs: libGRMustache1-io3 libGRMustache1-io4 libGRMustache1-macosx10.6
-
-libGRMustache1-io3: libGRMustache1-io3-iphoneos libGRMustache1-io3-iphonesimulator
+lib/libGRMustache1-ios3.a: build/iosdevice3/Release-iphoneos/libGRMustache1-ios3.a build/iphonesimulator3/Release-iphonesimulator/libGRMustache1-ios3.a
 	mkdir -p lib
 	lipo -create \
 		"build/iphonesimulator3/Release-iphonesimulator/libGRMustache1-ios3.a" \
-		"build/iphoneos3/Release-iphoneos/libGRMustache1-ios3.a" \
+		"build/iosdevice3/Release-iphoneos/libGRMustache1-ios3.a" \
 		-output "lib/libGRMustache1-ios3.a"
 
-libGRMustache1-io3-iphoneos:
-	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1-ios3 -configuration Release                      -arch "armv6 armv7" build SYMROOT=build/iphoneos3
-
-libGRMustache1-io3-iphonesimulator:
-	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1-ios3 -configuration Release -sdk iphonesimulator -arch "i386"        build SYMROOT=build/iphonesimulator3
-
-libGRMustache1-io4: libGRMustache1-io4-iphoneos libGRMustache1-io4-iphonesimulator
+lib/libGRMustache1-ios4.a: build/iosdevice/Release-iphoneos/libGRMustache1.a build/iphonesimulator/Release-iphonesimulator/libGRMustache1.a
 	mkdir -p lib
 	lipo -create \
-		"build/iphonesimulator4/Release-iphonesimulator/libGRMustache1.a" \
-		"build/iphoneos4/Release-iphoneos/libGRMustache1.a" \
+		"build/iphonesimulator/Release-iphonesimulator/libGRMustache1.a" \
+		"build/iosdevice/Release-iphoneos/libGRMustache1.a" \
 		-output "lib/libGRMustache1-ios4.a"
 
-libGRMustache1-io4-iphoneos:
-	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1      -configuration Release                      -arch "armv6 armv7" build SYMROOT=build/iphoneos4
-
-libGRMustache1-io4-iphonesimulator:
-	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1      -configuration Release -sdk iphonesimulator -arch "i386"        build SYMROOT=build/iphonesimulator4
-
-libGRMustache1-macosx10.6:
-	xcodebuild -project GRMustache1-macosx.xcodeproj -target GRMustache1      -configuration Release                      -arch "i386 x86_64" build SYMROOT=build/macosx10.6
+lib/libGRMustache1-macosx10.6.a: build/macosx10.6/Release
 	mkdir -p lib
-	mv build/macosx10.6/Release/libGRMustache1.a lib/libGRMustache1-macosx10.6.a
+	cp build/macosx10.6/Release/libGRMustache1.a lib/libGRMustache1-macosx10.6.a
 
-includes: libGRMustache1-io4-iphoneos
-	rm -rf include
-	mv build/iphoneos4/Release-iphoneos/include .
+build/iosdevice3/Release-iphoneos/libGRMustache1-ios3.a: build/iosdevice3/Release-iphoneos
+
+build/iphonesimulator3/Release-iphonesimulator/libGRMustache1-ios3.a: build/iphonesimulator3/Release-iphonesimulator
+
+build/iosdevice/Release-iphoneos/libGRMustache1.a: build/iosdevice/Release-iphoneos
+
+build/iphonesimulator/Release-iphonesimulator/libGRMustache1.a: build/iphonesimulator/Release-iphonesimulator
+
+build/iosdevice3/Release-iphoneos:
+	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1-ios3 -configuration Release                      -arch "armv6 armv7" build SYMROOT=build/iosdevice3
+
+build/iphonesimulator3/Release-iphonesimulator:
+	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1-ios3 -configuration Release -sdk iphonesimulator -arch "i386"        build SYMROOT=build/iphonesimulator3
+
+build/iosdevice/Release-iphoneos:
+	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1      -configuration Release                      -arch "armv6 armv7" build SYMROOT=build/iosdevice
+
+build/iphonesimulator/Release-iphonesimulator:
+	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1      -configuration Release -sdk iphonesimulator -arch "i386"        build SYMROOT=build/iphonesimulator
+
+build/macosx10.6/Release:
+	xcodebuild -project GRMustache1-macosx.xcodeproj -target GRMustache1      -configuration Release                      -arch "i386 x86_64" build SYMROOT=build/macosx10.6
+
+include/GRMustache.h: build/macosx10.6/Release/include
+	cp -R build/macosx10.6/Release/include .
+
+build/macosx10.6/Release/include: build/macosx10.6/Release
 
 clean:
 	rm -rf build
