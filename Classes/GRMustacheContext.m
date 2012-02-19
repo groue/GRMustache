@@ -48,6 +48,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 + (id)contextWithObject:(id)object {
+    if (object == nil) {
+        return nil;
+    }
 	if ([object isKindOfClass:[GRMustacheContext class]]) {
 		return object;
 	}
@@ -64,18 +67,14 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList {
     GRMustacheContext *context = nil;
-    if (object) {
-        context = [GRMustacheContext contextWithObject:object];
-        id eachObject;
-        va_list objectListCopy;
-        va_copy(objectListCopy, objectList);
-        while ((eachObject = va_arg(objectListCopy, id))) {
-            context = [context contextByAddingObject:eachObject];
-        }
-        va_end(objectListCopy);
-    } else {
-        context = [self contextWithObject:nil];
+    context = [GRMustacheContext contextWithObject:object];
+    id eachObject;
+    va_list objectListCopy;
+    va_copy(objectListCopy, objectList);
+    while ((eachObject = va_arg(objectListCopy, id))) {
+        context = [context contextByAddingObject:eachObject];
     }
+    va_end(objectListCopy);
     return context;
 }
 
