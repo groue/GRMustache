@@ -1,0 +1,1 @@
+- Bring back rendering categories, in order not to mix abstract tree and rendering code in GRMustacheTemplate, GRMustache Section, etc. Read http://jverkoey.github.com/nimbus/group___preprocessor-_macros.html
