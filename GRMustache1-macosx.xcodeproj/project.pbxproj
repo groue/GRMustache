@@ -432,8 +432,8 @@
 				569C866F1424A14E00D6BC77 /* GRBoolean_private.h */,
 				565F694D139FF062004D1894 /* GRBoolean.m */,
 				565F694E139FF062004D1894 /* GRMustache.h */,
-				565F694F139FF062004D1894 /* GRMustache.m */,
 				565F6950139FF062004D1894 /* GRMustache_private.h */,
+				565F694F139FF062004D1894 /* GRMustache.m */,
 				5663FC411441779400B60CEA /* GRMustacheAvailabilityMacros.h */,
 				5651A82313B5B2CE0035E783 /* GRMustacheEnvironment.h */,
 				565F695A139FF062004D1894 /* GRMustacheError.h */,
@@ -630,14 +630,14 @@
 		56E29A6413BC3C62006336DB /* Loading */ = {
 			isa = PBXGroup;
 			children = (
-				565F6951139FF062004D1894 /* GRMustacheBundleTemplateLoader.m */,
 				565F6952139FF062004D1894 /* GRMustacheBundleTemplateLoader_private.h */,
-				565F6958139FF062004D1894 /* GRMustacheDirectoryTemplateLoader.m */,
+				565F6951139FF062004D1894 /* GRMustacheBundleTemplateLoader.m */,
 				565F6959139FF062004D1894 /* GRMustacheDirectoryTemplateLoader_private.h */,
+				565F6958139FF062004D1894 /* GRMustacheDirectoryTemplateLoader.m */,
 				565F6968139FF062004D1894 /* GRMustacheTemplateLoader.h */,
-				565F6969139FF062004D1894 /* GRMustacheTemplateLoader.m */,
-				565F696A139FF062004D1894 /* GRMustacheTemplateLoader_private.h */,
 				565F696B139FF062004D1894 /* GRMustacheTemplateLoader_protected.h */,
+				565F696A139FF062004D1894 /* GRMustacheTemplateLoader_private.h */,
+				565F6969139FF062004D1894 /* GRMustacheTemplateLoader.m */,
 			);
 			name = Loading;
 			sourceTree = "<group>";
@@ -645,12 +645,12 @@
 		56E29A6513BC3C6C006336DB /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
-				565F696C139FF062004D1894 /* GRMustacheTemplateParser.m */,
 				565F696D139FF062004D1894 /* GRMustacheTemplateParser_private.h */,
-				565F6970139FF062004D1894 /* GRMustacheToken.m */,
+				565F696C139FF062004D1894 /* GRMustacheTemplateParser.m */,
 				565F6971139FF062004D1894 /* GRMustacheToken_private.h */,
-				565F6972139FF062004D1894 /* GRMustacheTokenizer.m */,
+				565F6970139FF062004D1894 /* GRMustacheToken.m */,
 				565F6973139FF062004D1894 /* GRMustacheTokenizer_private.h */,
+				565F6972139FF062004D1894 /* GRMustacheTokenizer.m */,
 			);
 			name = Parsing;
 			sourceTree = "<group>";
@@ -942,7 +942,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -955,7 +954,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};

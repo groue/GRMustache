@@ -24,8 +24,8 @@
 
 @interface GRMustacheContext: NSObject {
 @private
-    id object;
-    GRMustacheContext *parent;
+    id _object;
+    GRMustacheContext *_parent;
 }
 @property (nonatomic, retain, readonly) id object;
 @property (nonatomic, retain, readonly) GRMustacheContext *parent;

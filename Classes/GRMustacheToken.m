@@ -29,30 +29,30 @@
 @end
 
 @implementation GRMustacheToken
-@synthesize type;
-@synthesize content;
-@synthesize templateString;
-@synthesize line;
-@synthesize range;
+@synthesize type=_type;
+@synthesize content=_content;
+@synthesize templateString=_templateString;
+@synthesize line=_line;
+@synthesize range=_range;
 
 + (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
     return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
 }
 
-- (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent templateString:(NSString *)theTemplateString line:(NSUInteger)theLine range:(NSRange)theRange {
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
     if ((self = [self init])) {
-        type = theType;
-        content = [theContent retain];
-        templateString = [theTemplateString retain];
-        line = theLine;
-        range = theRange;
+        _type = type;
+        _content = [content retain];
+        _templateString = [templateString retain];
+        _line = line;
+        _range = range;
     }
     return self;
 }
 
 - (void)dealloc {
-    [content release];
-    [templateString release];
+    [_content release];
+    [_templateString release];
     [super dealloc];
 }
 

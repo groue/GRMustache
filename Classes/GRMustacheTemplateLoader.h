@@ -32,24 +32,24 @@
  */
 @interface GRMustacheTemplateLoader: NSObject {
 @private
-    NSString *extension;
-    NSStringEncoding encoding;
-    NSMutableDictionary *templatesById;
-    GRMustacheTemplateOptions options;
+    NSString *_extension;
+    NSStringEncoding _encoding;
+    NSMutableDictionary *_templatesById;
+    GRMustacheTemplateOptions _options;
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  @return A GRMustacheTemplateLoader instance
- @param url The url of a directory
+ @param URL The URL of a directory
  
- The returned template loader will load templates and partials from the provided directory url,
+ The returned template loader will load templates and partials from the provided directory URL,
  with extension "mustache", encoded in UTF8.
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)url AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 #endif
 
 /**
@@ -78,10 +78,10 @@
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  @return A GRMustacheTemplateLoader instance
- @param url The url of a directory
+ @param URL The URL of a directory
  @param ext The file name extension of loaded templates.
  
- The returned template loader will load templates and partials from the provided directory url,
+ The returned template loader will load templates and partials from the provided directory URL,
  with provided extension, encoded in UTF8.
  
  If the ext parameter is nil, the "mustache" extension will be assumed.
@@ -90,8 +90,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 #endif
 
 /**
@@ -130,11 +130,11 @@
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 /**
  @return A GRMustacheTemplateLoader instance
- @param url The url of a directory
+ @param URL The URL of a directory
  @param ext The file name extension of loaded templates.
  @param encoding The encoding of template files.
  
- The returned template loader will load templates and partials from the provided directory url,
+ The returned template loader will load templates and partials from the provided directory URL,
  with provided extension, encoded in provided encoding.
  
  If the ext parameter is nil, the "mustache" extension will be assumed.
@@ -143,8 +143,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 #endif
 
 /**

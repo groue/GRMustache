@@ -166,7 +166,15 @@
  
  @since v1.3
  */
-@interface GRMustacheSection: NSObject
+@interface GRMustacheSection: NSObject {
+@private
+    GRMustacheInvocation *_invocation;
+    NSString *_baseTemplateString;
+    NSRange _range;
+    BOOL _inverted;
+    NSArray *_elems;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Accessing the literal inner content

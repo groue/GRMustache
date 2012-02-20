@@ -26,7 +26,7 @@
 
 @interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper> {
 @private
-    NSDateFormatter *dateFormatter;
+    NSDateFormatter *_dateFormatter;
 }
 @property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
 + (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;

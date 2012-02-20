@@ -24,48 +24,60 @@
 #import "GRMustacheTemplate_private.h"
 #import <Foundation/Foundation.h>
 
+
 @class GRMustacheTemplate;
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+@protocol GRMustacheURLTemplateLoader<NSObject>
+- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError;
+@end
+#endif
+
+@protocol GRMustachePathTemplateLoader<NSObject>
+- (GRMustacheTemplate *)parseContentsOfFile:(NSString *)templatePath error:(NSError **)outError;
+@end
+
 
 @interface GRMustacheTemplateLoader: NSObject {
 @private
-    NSString *extension;
-    NSStringEncoding encoding;
-    NSMutableDictionary *templatesById;
-    GRMustacheTemplateOptions options;
+    NSString *_extension;
+    NSStringEncoding _encoding;
+    NSMutableDictionary *_templatesById;
+    GRMustacheTemplateOptions _options;
 }
 @property (nonatomic, readonly, copy) NSString *extension;
 @property (nonatomic, readonly) NSStringEncoding encoding;
 @property (nonatomic, readonly) GRMustacheTemplateOptions options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id)templateLoaderWithBasePath:(NSString *)path __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path __attribute__((deprecated));
 
-+ (id)templateLoaderWithDirectory:(NSString *)path;
-+ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated));
 
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding __attribute__((deprecated));
 
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;

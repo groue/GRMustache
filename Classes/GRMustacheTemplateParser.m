@@ -44,24 +44,24 @@
 @end
 
 @implementation GRMustacheTemplateParser
-@synthesize error;
-@synthesize currentSectionOpeningToken;
-@synthesize templateLoader;
-@synthesize templateId;
-@synthesize currentElements;
-@synthesize elementsStack;
-@synthesize sectionOpeningTokenStack;
+@synthesize error=_error;
+@synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
+@synthesize templateLoader=_templateLoader;
+@synthesize templateId=_templateId;
+@synthesize currentElements=_currentElements;
+@synthesize elementsStack=_elementsStack;
+@synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
 
-- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId {
+- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId {
     if ((self = [self init])) {
-        self.templateLoader = theTemplateLoader;
-        self.templateId = theTemplateId;
-        options = theTemplateLoader.options;
+        self.templateLoader = templateLoader;
+        self.templateId = templateId;
+        _options = templateLoader.options;
 
-        currentElements = [[NSMutableArray alloc] initWithCapacity:20];
-        elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-        [elementsStack addObject:currentElements];
-        sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [_elementsStack addObject:_currentElements];
+        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
     }
     return self;
 }
@@ -69,35 +69,35 @@
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
     [self finish];
     
-    if (error) {
+    if (_error) {
         if (outError != NULL) {
-            *outError = [[error retain] autorelease];
+            *outError = [[_error retain] autorelease];
         }
         return nil;
     }
     
-    return [self.templateLoader templateWithElements:currentElements];
+    return [self.templateLoader templateWithElements:_currentElements];
 }
 
 - (void)dealloc {
-    [error release];
-    [currentSectionOpeningToken release];
-    [templateLoader release];
-    [templateId release];
-    [currentElements release];
-    [elementsStack release];
-    [sectionOpeningTokenStack release];
+    [_error release];
+    [_currentSectionOpeningToken release];
+    [_templateLoader release];
+    [_templateId release];
+    [_currentElements release];
+    [_elementsStack release];
+    [_sectionOpeningTokenStack release];
     [super dealloc];
 }
 
 #pragma mark GRMustacheTokenizerDelegate
 
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
-    if (!elementsStack) return NO;
+    if (!_elementsStack) return NO;
     
     switch (token.type) {
         case GRMustacheTokenTypeText:
-            [currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
+            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
             break;
             
         case GRMustacheTokenTypeComment:
@@ -111,7 +111,7 @@
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
             if (invocation) {
-                [currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:NO]];
+                [_currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:NO]];
             } else {
                 [self finishWithError:invocationError];
                 return NO;
@@ -126,7 +126,7 @@
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
             if (invocation) {
-                [currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:YES]];
+                [_currentElements addObject:[GRMustacheVariableElement variableElementWithInvocation:invocation raw:YES]];
             } else {
                 [self finishWithError:invocationError];
                 return NO;
@@ -141,32 +141,32 @@
             }
             
             self.currentSectionOpeningToken = token;
-            [sectionOpeningTokenStack addObject:token];
+            [_sectionOpeningTokenStack addObject:token];
             
             self.currentElements = [NSMutableArray array];
-            [elementsStack addObject:currentElements];
+            [_elementsStack addObject:_currentElements];
         } break;
             
         case GRMustacheTokenTypeSectionClosing:
-            if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
+            if ([token.content isEqualToString:_currentSectionOpeningToken.content]) {
                 NSError *invocationError;
                 GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
                 if (invocation) {
-                    NSRange currentSectionOpeningTokenRange = currentSectionOpeningToken.range;
-                    NSAssert(currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
+                    NSRange currentSectionOpeningTokenRange = _currentSectionOpeningToken.range;
+                    NSAssert(_currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
                     NSRange range = NSMakeRange(currentSectionOpeningTokenRange.location + currentSectionOpeningTokenRange.length, token.range.location - currentSectionOpeningTokenRange.location - currentSectionOpeningTokenRange.length);
                     GRMustacheSection *section = [GRMustacheSection sectionElementWithInvocation:invocation
                                                                               baseTemplateString:token.templateString
                                                                                            range:range
-                                                                                        inverted:(currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                                        elements:currentElements];
-                    [sectionOpeningTokenStack removeLastObject];
-                    self.currentSectionOpeningToken = [sectionOpeningTokenStack lastObject];
+                                                                                        inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                                        elements:_currentElements];
+                    [_sectionOpeningTokenStack removeLastObject];
+                    self.currentSectionOpeningToken = [_sectionOpeningTokenStack lastObject];
                     
-                    [elementsStack removeLastObject];
-                    self.currentElements = [elementsStack lastObject];
+                    [_elementsStack removeLastObject];
+                    self.currentElements = [_elementsStack lastObject];
                     
-                    [currentElements addObject:section];
+                    [_currentElements addObject:section];
                 } else {
                     [self finishWithError:invocationError];
                     return NO;
@@ -183,15 +183,15 @@
                 return NO;
             }
             NSError *partialError;
-            GRMustacheTemplate *partialTemplate = [templateLoader parseTemplateNamed:token.content
-                                                                relativeToTemplateId:templateId
-                                                                           asPartial:YES
-                                                                               error:&partialError];
+            GRMustacheTemplate *partialTemplate = [_templateLoader parseTemplateNamed:token.content
+                                                                 relativeToTemplateId:_templateId
+                                                                            asPartial:YES
+                                                                                error:&partialError];
             if (partialTemplate == nil) {
                 [self finishWithError:partialError];
                 return NO;
             } else {
-                [currentElements addObject:partialTemplate];
+                [_currentElements addObject:partialTemplate];
             }
         } break;
             
@@ -219,11 +219,11 @@
 }
 
 - (void)finish {
-    if (error == nil && currentSectionOpeningToken) {
-        self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
-                                description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]];
+    if (_error == nil && _currentSectionOpeningToken) {
+        self.error = [self parseErrorAtLine:_currentSectionOpeningToken.line
+                                description:[NSString stringWithFormat:@"Unclosed `%@` section", _currentSectionOpeningToken.content]];
     }
-    if (error) {
+    if (_error) {
         self.currentElements = nil;
     }
     self.currentSectionOpeningToken = nil;
@@ -250,7 +250,7 @@
     BOOL acceptOtherIdentifier = YES;
     BOOL acceptSeparator = NO;
     BOOL availableDotSeparator = YES;
-    BOOL availableSlashSeparator = !(options & GRMustacheTemplateOptionMustacheSpecCompatibility);
+    BOOL availableSlashSeparator = !(_options & GRMustacheTemplateOptionMustacheSpecCompatibility);
     NSMutableArray *keys = [NSMutableArray array];
     unichar c;
     NSUInteger identifierStart = 0;

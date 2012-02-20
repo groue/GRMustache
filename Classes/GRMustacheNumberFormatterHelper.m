@@ -25,8 +25,8 @@
 
 @interface GRNumberFormatterContext : NSObject {
 @private
-    NSNumberFormatter *numberFormatter;
-    id wrappedContext;
+    NSNumberFormatter *_numberFormatter;
+    id _wrappedContext;
 }
 @property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 @property (nonatomic, retain) id wrappedContext;
@@ -37,7 +37,7 @@
 @end
 
 @implementation GRMustacheNumberFormatterHelper
-@synthesize numberFormatter;
+@synthesize numberFormatter=_numberFormatter;
 
 - (void)dealloc
 {
@@ -54,7 +54,7 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
 {
-    if (numberFormatter == nil) {
+    if (_numberFormatter == nil) {
         return [section renderObject:context];
     }
     
@@ -62,7 +62,7 @@
     // that will output formatted numbers instead of raw numbers.
     GRNumberFormatterContext *numberFormatterContext = [[GRNumberFormatterContext alloc] init];
     numberFormatterContext.wrappedContext = context;
-    numberFormatterContext.numberFormatter = numberFormatter;
+    numberFormatterContext.numberFormatter = _numberFormatter;
     NSString *string = [section renderObject:numberFormatterContext];
     [numberFormatterContext release];
     return string;
@@ -71,8 +71,8 @@
 @end
 
 @implementation GRNumberFormatterContext
-@synthesize numberFormatter;
-@synthesize wrappedContext;
+@synthesize numberFormatter=_numberFormatter;
+@synthesize wrappedContext=_wrappedContext;
 
 - (void)dealloc
 {
@@ -84,7 +84,7 @@
 - (id)valueForKey:(NSString *)key
 {
     // Fetch the value that we may format
-    id value = [wrappedContext valueForKey:key];
+    id value = [_wrappedContext valueForKey:key];
     
     // We format only numbers
     if (![value isKindOfClass:[NSNumber class]]) {
@@ -97,7 +97,7 @@
     }
     
     // Let's format our number
-    return [numberFormatter stringFromNumber:(NSNumber *)value];
+    return [_numberFormatter stringFromNumber:(NSNumber *)value];
 }
 
 @end

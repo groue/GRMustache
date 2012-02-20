@@ -36,21 +36,21 @@
     return [[[self alloc] initWithObject:object selector:renderingSelector] autorelease];
 }
 
-- (id)initWithObject:(id)theObject selector:(SEL)theRenderingSelector {
+- (id)initWithObject:(id)object selector:(SEL)renderingSelector {
     if ((self = [self init])) {
-        object = [theObject retain];
-        renderingSelector = theRenderingSelector;
+        _object = [object retain];
+        _renderingSelector = renderingSelector;
     }
     return self;
 }
 
 - (void)dealloc {
-    [object release];
+    [_object release];
     [super dealloc];
 }
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSString *result = objc_msgSend(object, renderingSelector, section, context);
+    NSString *result = objc_msgSend(_object, _renderingSelector, section, context);
     if (result == nil) {
         return @"";
     }
@@ -73,15 +73,15 @@
     return [[(GRMustacheBlockHelper *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))theBlock {
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block {
     if ((self = [self init])) {
-        block = [theBlock copy];
+        _block = [block copy];
     }
     return self;
 }
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSString *result = block(section, context);
+    NSString *result = _block(section, context);
     if (result == nil) {
         return @"";
     }
@@ -93,7 +93,7 @@
 }
 
 - (void)dealloc {
-    [block release];
+    [_block release];
     [super dealloc];
 }
 
@@ -105,7 +105,7 @@
 
 @interface GRMustacheDeprecatedBlockHelper1: NSObject<GRMustacheHelper> {
 @private
-    NSString *(^block)(NSString *(^)(id object), id, NSString *);
+    NSString *(^_block)(NSString *(^)(id object), id, NSString *);
 }
 + (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
 - (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
@@ -118,15 +118,15 @@
     return [[(GRMustacheDeprecatedBlockHelper1 *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))theBlock {
+- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
     if ((self = [self init])) {
-        block = [theBlock copy];
+        _block = [block copy];
     }
     return self;
 }
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSString *result = block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
+    NSString *result = _block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
     if (result == nil) {
         return @"";
     }
@@ -138,7 +138,7 @@
 }
 
 - (void)dealloc {
-    [block release];
+    [_block release];
     [super dealloc];
 }
 
@@ -152,7 +152,7 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 
 @interface GRMustacheDeprecatedBlockHelper2: NSObject<GRMustacheHelper> {
 @private
-    GRMustacheRenderingBlock block;
+    GRMustacheRenderingBlock _block;
 }
 + (id)helperWithBlock:(GRMustacheRenderingBlock)block;
 - (id)initWithBlock:(GRMustacheRenderingBlock)block;
@@ -165,15 +165,15 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
     return [[(GRMustacheDeprecatedBlockHelper2 *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(GRMustacheRenderingBlock)theBlock {
+- (id)initWithBlock:(GRMustacheRenderingBlock)block {
     if ((self = [self init])) {
-        block = [theBlock copy];
+        _block = [block copy];
     }
     return self;
 }
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSString *result = block(section, context);
+    NSString *result = _block(section, context);
     if (result == nil) {
         return @"";
     }
@@ -185,7 +185,7 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 }
 
 - (void)dealloc {
-    [block release];
+    [_block release];
     [super dealloc];
 }
 

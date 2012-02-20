@@ -33,21 +33,21 @@
 @end
 
 @implementation GRMustacheTokenizer
-@synthesize delegate;
-@synthesize otag;
-@synthesize ctag;
+@synthesize delegate=_delegate;
+@synthesize otag=_otag;
+@synthesize ctag=_ctag;
 
 - (id)init {
     if ((self = [super init])) {
-        otag = [@"{{" retain];
-        ctag = [@"}}" retain];
+        _otag = [@"{{" retain]; // static strings don't need retain, but static ananlyser may complain :-)
+        _ctag = [@"}}" retain];
     }
     return self;
 }
 
 - (void)dealloc {
-    [otag release];
-    [ctag release];
+    [_otag release];
+    [_ctag release];
     [super dealloc];
 }
 
@@ -78,7 +78,7 @@
     
     while (YES) {
         // look for otag
-        orange = [self rangeOfString:otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        orange = [self rangeOfString:_otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         
         // otag was not found
         if (orange.location == NSNotFound) {
@@ -112,9 +112,9 @@
         
         // look for close tag
         if (p < templateString.length && [templateString characterAtIndex:p] == '{') {
-            crange = [self rangeOfString:[@"}" stringByAppendingString:ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+            crange = [self rangeOfString:[@"}" stringByAppendingString:_ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         } else {
-            crange = [self rangeOfString:ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+            crange = [self rangeOfString:_ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         }
         
         // ctag was not found
@@ -133,7 +133,7 @@
         }
         
         // tag must not contain otag
-        if ([tag rangeOfString:otag].location != NSNotFound) {
+        if ([tag rangeOfString:_otag].location != NSNotFound) {
             [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
             return;
         }
@@ -198,28 +198,28 @@
 }
 
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
-    if ([delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
-        return [delegate tokenizer:self shouldContinueAfterParsingToken:token];
+    if ([_delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
+        return [_delegate tokenizer:self shouldContinueAfterParsingToken:token];
     }
     return YES;
 }
 
 - (void)didFinish {
-    if ([delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
-        [delegate tokenizerDidFinish:self];
+    if ([_delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
+        [_delegate tokenizerDidFinish:self];
     }
 }
 
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
-    if ([delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
+    if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
         [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
                      forKey:NSLocalizedDescriptionKey];
         [userInfo setObject:[NSNumber numberWithInteger:line]
                      forKey:GRMustacheErrorLine];
-        [delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
-                                                                      code:GRMustacheErrorCodeParseError
-                                                                  userInfo:userInfo]];
+        [_delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+                                                                       code:GRMustacheErrorCodeParseError
+                                                                   userInfo:userInfo]];
     }
 }
 

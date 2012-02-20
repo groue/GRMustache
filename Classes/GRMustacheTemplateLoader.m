@@ -39,16 +39,16 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @end
 
 @implementation GRMustacheTemplateLoader
-@synthesize extension;
-@synthesize encoding;
-@synthesize options;
+@synthesize extension=_extension;
+@synthesize encoding=_encoding;
+@synthesize options=_options;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url {
-    return [self templateLoaderWithBaseURL:url options:GRMustacheDefaultTemplateOptions];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL {
+    return [self templateLoaderWithBaseURL:URL options:GRMustacheDefaultTemplateOptions];
 }
-+ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options {
-    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:nil encoding:NSUTF8StringEncoding options:options] autorelease];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options {
+    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:URL extension:nil encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 #endif
 
@@ -66,11 +66,11 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext {
-    return [self templateLoaderWithBaseURL:url extension:ext options:GRMustacheDefaultTemplateOptions];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext {
+    return [self templateLoaderWithBaseURL:URL extension:ext options:GRMustacheDefaultTemplateOptions];
 }
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
-    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
+    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:URL extension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 #endif
 
@@ -88,12 +88,12 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
-    return [self templateLoaderWithBaseURL:url extension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
+    return [self templateLoaderWithBaseURL:URL extension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions];
 }
 
-+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
-    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:url extension:ext encoding:encoding options:options] autorelease];
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
+    return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:URL extension:ext encoding:encoding options:options] autorelease];
 }
 #endif
 
@@ -134,24 +134,24 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
     return [[[GRMustacheBundleTemplateLoader alloc] initWithBundle:bundle extension:ext encoding:encoding options:options] autorelease];
 }
 
-- (id)initWithExtension:(NSString *)theExtension encoding:(NSStringEncoding)theEncoding options:(GRMustacheTemplateOptions)theOptions
+- (id)initWithExtension:(NSString *)extension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
-    self = [self initWithExtension:theExtension encoding:theEncoding];
+    self = [self initWithExtension:extension encoding:encoding];
     if (self) {
-        options = theOptions;
+        _options = options;
     }
     return self;
 }
 
-- (id)initWithExtension:(NSString *)theExtension encoding:(NSStringEncoding)theEncoding {
+- (id)initWithExtension:(NSString *)extension encoding:(NSStringEncoding)encoding {
     if ((self = [self init])) {
-        if (theExtension == nil) {
-            theExtension = GRMustacheDefaultExtension;
+        if (extension == nil) {
+            extension = GRMustacheDefaultExtension;
         }
-        extension = [theExtension retain];
-        encoding = theEncoding;
-        templatesById = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
-        options = GRMustacheDefaultTemplateOptions;
+        _extension = [extension retain];
+        _encoding = encoding;
+        _templatesById = [[NSMutableDictionary dictionaryWithCapacity:4] retain];
+        _options = GRMustacheDefaultTemplateOptions;
     }
     return self;
 }
@@ -168,7 +168,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
         return nil;
     }
     
-    GRMustacheTemplate *template = [templatesById objectForKey:templateId];
+    GRMustacheTemplate *template = [_templatesById objectForKey:templateId];
     
     if (template == nil) {
         // templateStringForTemplateId is a method that GRMustache users may implement.
@@ -190,7 +190,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
         }
         
         // store an empty template before parsing, so that we support recursive partials
-        template = [GRMustacheTemplate templateWithElements:nil options:options];
+        template = [GRMustacheTemplate templateWithElements:nil options:_options];
         [self setTemplate:template forTemplateId:templateId];
         
         // parse
@@ -208,7 +208,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateWithElements:(NSArray *)elements
 {
-    return [GRMustacheTemplate templateWithElements:elements options:options];
+    return [GRMustacheTemplate templateWithElements:elements options:_options];
 }
 
 - (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {
@@ -221,9 +221,9 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId {
     if (template) {
-        [templatesById setObject:template forKey:templateId];
+        [_templatesById setObject:template forKey:templateId];
     } else {
-        [templatesById removeObjectForKey:templateId];
+        [_templatesById removeObjectForKey:templateId];
     }
 }
 
@@ -238,8 +238,8 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 - (void)dealloc {
-    [extension release];
-    [templatesById release];
+    [_extension release];
+    [_templatesById release];
     [super dealloc];
 }
 

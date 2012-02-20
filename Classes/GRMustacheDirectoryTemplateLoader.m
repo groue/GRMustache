@@ -26,9 +26,9 @@
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 @implementation GRMustacheDirectoryURLTemplateLoader
 
-- (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
+- (id)initWithURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
     if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
-        url = [theURL retain];
+        _URL = [URL retain];
     }
     return self;
 }
@@ -42,9 +42,9 @@
         return [[NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
     }
     if (self.extension.length == 0) {
-        return [[url URLByAppendingPathComponent:name] URLByStandardizingPath];
+        return [[_URL URLByAppendingPathComponent:name] URLByStandardizingPath];
     }
-    return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
+    return [[[_URL URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
@@ -68,7 +68,7 @@
 }
 
 - (void)dealloc {
-    [url release];
+    [_URL release];
     [super dealloc];
 }
 
@@ -77,9 +77,9 @@
 
 @implementation GRMustacheDirectoryPathTemplateLoader
 
-- (id)initWithPath:(NSString *)thePath extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
+- (id)initWithPath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
     if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
-        path = [thePath retain];
+        _path = [path retain];
     }
     return self;
 }
@@ -94,9 +94,9 @@
         return [[basePath stringByAppendingPathComponent:[name stringByAppendingPathExtension:self.extension]] stringByStandardizingPath];
     }
     if (self.extension.length == 0) {
-        return [[path stringByAppendingPathComponent:name] stringByStandardizingPath];
+        return [[_path stringByAppendingPathComponent:name] stringByStandardizingPath];
     }
-    return [[[path stringByAppendingPathComponent:name] stringByAppendingPathExtension:self.extension] stringByStandardizingPath];
+    return [[[_path stringByAppendingPathComponent:name] stringByAppendingPathExtension:self.extension] stringByStandardizingPath];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
@@ -120,7 +120,7 @@
 }
 
 - (void)dealloc {
-    [path release];
+    [_path release];
     [super dealloc];
 }
 

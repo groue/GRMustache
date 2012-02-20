@@ -36,11 +36,11 @@ typedef enum {
 } GRMustacheTokenType;
 
 @interface GRMustacheToken : NSObject {
-    GRMustacheTokenType type;
-    NSString *content;
-    NSString *templateString;
-    NSUInteger line;
-    NSRange range;
+    GRMustacheTokenType _type;
+    NSString *_content;
+    NSString *_templateString;
+    NSUInteger _line;
+    NSRange _range;
 }
 @property (nonatomic, readonly) GRMustacheTokenType type;
 @property (nonatomic, readonly, retain) NSString *content;

@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @class GRMustacheContext;
 
 @protocol GRMustacheRenderingElement

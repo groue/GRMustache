@@ -24,6 +24,11 @@
 
 @class GRMustacheInvocation;
 
-@interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement>
+@interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
+@private
+    GRMustacheInvocation *_invocation;
+    BOOL _raw;
+}
+
 + (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
 @end

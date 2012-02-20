@@ -25,7 +25,7 @@
 
 @interface GRMustacheTextElement()
 @property (nonatomic, retain) NSString *text;
-- (id)initWithString:(NSString *)theText;
+- (id)initWithString:(NSString *)text;
 @end
 
 

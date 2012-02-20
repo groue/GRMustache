@@ -30,14 +30,14 @@
 
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
-    NSError *error;
-    GRMustacheTemplateLoader *templateLoader;
-    id templateId;
-    NSMutableArray *elementsStack;
-    NSMutableArray *sectionOpeningTokenStack;
-    NSMutableArray *currentElements;
-    GRMustacheToken *currentSectionOpeningToken;
-    GRMustacheTemplateOptions options;
+    NSError *_error;
+    GRMustacheTemplateLoader *_templateLoader;
+    id _templateId;
+    NSMutableArray *_elementsStack;
+    NSMutableArray *_sectionOpeningTokenStack;
+    NSMutableArray *_currentElements;
+    GRMustacheToken *_currentSectionOpeningToken;
+    GRMustacheTemplateOptions _options;
 }
 - (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId;
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError;

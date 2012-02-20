@@ -62,9 +62,8 @@
 }
 
 + (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
-    GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension] options:options];
-    NSAssert([loader isKindOfClass:[GRMustacheDirectoryURLTemplateLoader class]], @"");
-    return [(GRMustacheDirectoryURLTemplateLoader *)loader parseContentsOfURL:url error:outError];
+    id<GRMustacheURLTemplateLoader> loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:[url URLByDeletingLastPathComponent] extension:[url pathExtension] options:options];
+    return [loader parseContentsOfURL:url error:outError];
 }
 #endif
 
@@ -73,9 +72,8 @@
 }
 
 + (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError {
-    GRMustacheTemplateLoader *loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension] options:options];
-    NSAssert([loader isKindOfClass:[GRMustacheDirectoryPathTemplateLoader class]], @"");
-    return [(GRMustacheDirectoryPathTemplateLoader *)loader parseContentsOfFile:path error:outError];
+    id<GRMustachePathTemplateLoader> loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:[path stringByDeletingLastPathComponent] extension:[path pathExtension] options:options];
+    return [loader parseContentsOfFile:path error:outError];
 }
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError {

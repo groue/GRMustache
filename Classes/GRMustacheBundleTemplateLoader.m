@@ -25,18 +25,18 @@
 
 @implementation GRMustacheBundleTemplateLoader
 
-- (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options {
+- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options {
     if ((self = [self initWithExtension:ext encoding:encoding options:options])) {
-        if (theBundle == nil) {
-            theBundle = [NSBundle mainBundle];
+        if (bundle == nil) {
+            bundle = [NSBundle mainBundle];
         }
-        bundle = [theBundle retain];
+        _bundle = [bundle retain];
     }
     return self;
 }
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-    return [bundle pathForResource:name ofType:self.extension];
+    return [_bundle pathForResource:name ofType:self.extension];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
@@ -47,7 +47,7 @@
 }
 
 - (void)dealloc {
-    [bundle release];
+    [_bundle release];
     [super dealloc];
 }
 

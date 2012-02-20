@@ -31,7 +31,12 @@ typedef enum {
     GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
-@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement>
+@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
+@private
+    NSArray *_elems;
+    GRMustacheTemplateOptions _options;
+}
+
 @property (nonatomic, retain) NSArray *elems;
 
 + (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue;

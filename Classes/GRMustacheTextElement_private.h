@@ -22,7 +22,11 @@
 
 #import "GRMustacheRendering_private.h"
 
-@interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement>
+@interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement> {
+@private
+    NSString *_text;
+}
+
 + (id)textElementWithString:(NSString *)string;
 @end
 

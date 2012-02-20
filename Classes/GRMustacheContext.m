@@ -40,8 +40,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 
 @implementation GRMustacheContext
-@synthesize object;
-@synthesize parent;
+@synthesize object=_object;
+@synthesize parent=_parent;
 
 + (void)preventNSUndefinedKeyExceptionAttack {
     preventingNSUndefinedKeyExceptionAttack = YES;
@@ -78,10 +78,10 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return context;
 }
 
-- (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
+- (id)initWithObject:(id)object parent:(GRMustacheContext *)parent {
     if ((self = [self init])) {
-        object = [theObject retain];
-        parent = [theParent retain];
+        _object = [object retain];
+        _parent = [parent retain];
     }
     return self;
 }
@@ -103,8 +103,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 - (void)dealloc {
-    [object release];
-    [parent release];
+    [_object release];
+    [_parent release];
     [super dealloc];
 }
 
@@ -115,19 +115,19 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (id)valueForKey:(NSString *)key scoped:(BOOL)scoped {
     id value = nil;
     
-    if (object) {
+    if (_object) {
         // value by KVC
         
         @try {
             if (preventingNSUndefinedKeyExceptionAttack) {
-                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:object];
+                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:_object];
             } else {
-                value = [object valueForKey:key];
+                value = [_object valueForKey:key];
             }
         }
         @catch (NSException *exception) {
             if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-                [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != object ||
+                [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != _object ||
                 ![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
             {
                 // that's some exception we are not related to
@@ -139,11 +139,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             // value by selector
             
             SEL renderingSelector = NSSelectorFromString([key stringByAppendingString:@"Section:withContext:"]);
-            if ([object respondsToSelector:renderingSelector]) {
+            if ([_object respondsToSelector:renderingSelector]) {
                 // Avoid the "render" key to be triggered by GRMustacheHelper instances,
                 // who implement the renderSection:withContext: selector.
-                if (![object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
-                    return [GRMustacheSelectorHelper helperWithObject:object selector:renderingSelector];
+                if (![_object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
+                    return [GRMustacheSelectorHelper helperWithObject:_object selector:renderingSelector];
                 }
             }
         }
@@ -161,8 +161,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     
     // parent value
     
-    if (scoped || parent == nil) { return nil; }
-    return [parent valueForKey:key scoped:NO];
+    if (scoped || _parent == nil) { return nil; }
+    return [_parent valueForKey:key scoped:NO];
 }
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {
@@ -177,7 +177,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     
     if ([value isKindOfClass:[NSNumber class]] &&
         ![GRMustache strictBooleanMode] &&
-        [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key])
+        [GRMustacheProperty class:[_object class] hasBOOLPropertyNamed:key])
     {
         if (outBooleanRef) {
             *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;

@@ -25,8 +25,8 @@
 
 @interface GRDateFormatterContext : NSObject {
 @private
-    NSDateFormatter *dateFormatter;
-    id wrappedContext;
+    NSDateFormatter *_dateFormatter;
+    id _wrappedContext;
 }
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (nonatomic, retain) id wrappedContext;
@@ -37,7 +37,7 @@
 @end
 
 @implementation GRMustacheDateFormatterHelper
-@synthesize dateFormatter;
+@synthesize dateFormatter=_dateFormatter;
 
 - (void)dealloc
 {
@@ -54,7 +54,7 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
 {
-    if (dateFormatter == nil) {
+    if (_dateFormatter == nil) {
         return [section renderObject:context];
     }
     
@@ -62,7 +62,7 @@
     // that will output formatted dates instead of raw dates.
     GRDateFormatterContext *dateFormatterContext = [[GRDateFormatterContext alloc] init];
     dateFormatterContext.wrappedContext = context;
-    dateFormatterContext.dateFormatter = dateFormatter;
+    dateFormatterContext.dateFormatter = _dateFormatter;
     NSString *string = [section renderObject:dateFormatterContext];
     [dateFormatterContext release];
     return string;
@@ -71,8 +71,8 @@
 @end
 
 @implementation GRDateFormatterContext
-@synthesize dateFormatter;
-@synthesize wrappedContext;
+@synthesize dateFormatter=_dateFormatter;
+@synthesize wrappedContext=_wrappedContext;
 
 - (void)dealloc
 {
@@ -84,7 +84,7 @@
 - (id)valueForKey:(NSString *)key
 {
     // Fetch the value that we may format
-    id value = [wrappedContext valueForKey:key];
+    id value = [_wrappedContext valueForKey:key];
     
     // We format only dates
     if (![value isKindOfClass:[NSDate class]]) {
@@ -92,7 +92,7 @@
     }
     
     // Let's format our date
-    return [dateFormatter stringFromDate:(NSDate *)value];
+    return [_dateFormatter stringFromDate:(NSDate *)value];
 }
 
 @end

@@ -24,7 +24,15 @@
 
 @class GRMustacheInvocation;
 
-@interface GRMustacheSection: NSObject<GRMustacheRenderingElement>
+@interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
+@private
+    GRMustacheInvocation *_invocation;
+    NSString *_baseTemplateString;
+    NSRange _range;
+    BOOL _inverted;
+    NSArray *_elems;
+}
+
 @property (nonatomic, readonly) NSString *templateString;
 
 + (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
