@@ -24,23 +24,23 @@
 
 
 typedef enum {
-	GRMustacheTokenTypeEscapedVariable = 0, // 0 is used by GRMustacheTokenizer
-	GRMustacheTokenTypeText,
-	GRMustacheTokenTypeComment,
-	GRMustacheTokenTypeUnescapedVariable,
-	GRMustacheTokenTypeSectionOpening,
-	GRMustacheTokenTypeInvertedSectionOpening,
-	GRMustacheTokenTypeSectionClosing,
-	GRMustacheTokenTypePartial,
-	GRMustacheTokenTypeSetDelimiter,
+    GRMustacheTokenTypeEscapedVariable = 0, // 0 is used by GRMustacheTokenizer
+    GRMustacheTokenTypeText,
+    GRMustacheTokenTypeComment,
+    GRMustacheTokenTypeUnescapedVariable,
+    GRMustacheTokenTypeSectionOpening,
+    GRMustacheTokenTypeInvertedSectionOpening,
+    GRMustacheTokenTypeSectionClosing,
+    GRMustacheTokenTypePartial,
+    GRMustacheTokenTypeSetDelimiter,
 } GRMustacheTokenType;
 
 @interface GRMustacheToken : NSObject {
-	GRMustacheTokenType type;
-	NSString *content;
-	NSString *templateString;
-	NSUInteger line;
-	NSRange range;
+    GRMustacheTokenType type;
+    NSString *content;
+    NSString *templateString;
+    NSUInteger line;
+    NSRange range;
 }
 @property (nonatomic, readonly) GRMustacheTokenType type;
 @property (nonatomic, readonly, retain) NSString *content;

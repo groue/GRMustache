@@ -51,10 +51,10 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     if (object == nil) {
         return nil;
     }
-	if ([object isKindOfClass:[GRMustacheContext class]]) {
-		return object;
-	}
-	return [[[self alloc] initWithObject:object parent:nil] autorelease];
+    if ([object isKindOfClass:[GRMustacheContext class]]) {
+        return object;
+    }
+    return [[[self alloc] initWithObject:object parent:nil] autorelease];
 }
 
 + (id)contextWithObjects:(id)object, ... {
@@ -79,15 +79,15 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 - (id)initWithObject:(id)theObject parent:(GRMustacheContext *)theParent {
-	if ((self = [self init])) {
-		object = [theObject retain];
-		parent = [theParent retain];
-	}
-	return self;
+    if ((self = [self init])) {
+        object = [theObject retain];
+        parent = [theParent retain];
+    }
+    return self;
 }
 
 - (GRMustacheContext *)contextByAddingObject:(id)theObject {
-	return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
+    return [[[GRMustacheContext alloc] initWithObject:theObject parent:self] autorelease];
 }
 
 - (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped
@@ -103,9 +103,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 - (void)dealloc {
-	[object release];
-	[parent release];
-	[super dealloc];
+    [object release];
+    [parent release];
+    [super dealloc];
 }
 
 - (id)valueForKey:(NSString *)key {
@@ -113,8 +113,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 }
 
 - (id)valueForKey:(NSString *)key scoped:(BOOL)scoped {
-	id value = nil;
-	
+    id value = nil;
+    
     if (object) {
         // value by KVC
         
@@ -148,44 +148,44 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             }
         }
     }
-	
-	// value interpretation
-	
-	if (value != nil) {
-		CFBooleanRef booleanRef;
-		if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&booleanRef]) {
-			return (id)booleanRef;
-		}
-		return value;
-	}
-	
-	// parent value
-	
-	if (scoped || parent == nil) { return nil; }
-	return [parent valueForKey:key scoped:NO];
+    
+    // value interpretation
+    
+    if (value != nil) {
+        CFBooleanRef booleanRef;
+        if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&booleanRef]) {
+            return (id)booleanRef;
+        }
+        return value;
+    }
+    
+    // parent value
+    
+    if (scoped || parent == nil) { return nil; }
+    return [parent valueForKey:key scoped:NO];
 }
 
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef {
-	if ((CFBooleanRef)value == kCFBooleanTrue ||
-		(CFBooleanRef)value == kCFBooleanFalse)
-	{
-		if (outBooleanRef) {
-			*outBooleanRef = (CFBooleanRef)value;
-		}
-		return YES;
-	}
-	
-	if ([value isKindOfClass:[NSNumber class]] &&
-		![GRMustache strictBooleanMode] &&
-		[GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key])
-	{
-		if (outBooleanRef) {
-			*outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
-		}
-		return YES;
-	}
-	
-	return NO;
+    if ((CFBooleanRef)value == kCFBooleanTrue ||
+        (CFBooleanRef)value == kCFBooleanFalse)
+    {
+        if (outBooleanRef) {
+            *outBooleanRef = (CFBooleanRef)value;
+        }
+        return YES;
+    }
+    
+    if ([value isKindOfClass:[NSNumber class]] &&
+        ![GRMustache strictBooleanMode] &&
+        [GRMustacheProperty class:[object class] hasBOOLPropertyNamed:key])
+    {
+        if (outBooleanRef) {
+            *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
+        }
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end

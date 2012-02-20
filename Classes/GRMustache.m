@@ -30,22 +30,22 @@ GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateO
 @implementation GRMustache
 
 + (BOOL)strictBooleanMode {
-	return strictBooleanMode;
+    return strictBooleanMode;
 }
 
 + (void)setStrictBooleanMode:(BOOL)aBool {
-	strictBooleanMode = aBool;
+    strictBooleanMode = aBool;
 }
 
 + (void)preventNSUndefinedKeyExceptionAttack {
-	[GRMustacheContext preventNSUndefinedKeyExceptionAttack];
+    [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
 }
 
 + (GRMustacheVersion)version {
-	return (GRMustacheVersion){
-		.major = GRMUSTACHE_MAJOR_VERSION,
-		.minor = GRMUSTACHE_MINOR_VERSION,
-		.patch = GRMUSTACHE_PATCH_VERSION };
+    return (GRMustacheVersion){
+        .major = GRMUSTACHE_MAJOR_VERSION,
+        .minor = GRMUSTACHE_MINOR_VERSION,
+        .patch = GRMUSTACHE_PATCH_VERSION };
 }
 
 + (GRMustacheTemplateOptions)defaultTemplateOptions

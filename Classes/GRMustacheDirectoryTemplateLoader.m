@@ -27,49 +27,49 @@
 @implementation GRMustacheDirectoryURLTemplateLoader
 
 - (id)initWithURL:(NSURL *)theURL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
-	if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
-		url = [theURL retain];
-	}
-	return self;
+    if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
+        url = [theURL retain];
+    }
+    return self;
 }
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	if (baseTemplateId) {
-		NSAssert([baseTemplateId isKindOfClass:[NSURL class]], @"");
-		if (self.extension.length == 0) {
-			return [[NSURL URLWithString:name relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
-		}
-		return [[NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
-	}
-	if (self.extension.length == 0) {
-		return [[url URLByAppendingPathComponent:name] URLByStandardizingPath];
-	}
-	return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
+    if (baseTemplateId) {
+        NSAssert([baseTemplateId isKindOfClass:[NSURL class]], @"");
+        if (self.extension.length == 0) {
+            return [[NSURL URLWithString:name relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
+        }
+        return [[NSURL URLWithString:[name stringByAppendingPathExtension:self.extension] relativeToURL:(NSURL *)baseTemplateId] URLByStandardizingPath];
+    }
+    if (self.extension.length == 0) {
+        return [[url URLByAppendingPathComponent:name] URLByStandardizingPath];
+    }
+    return [[[url URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSURL class]], @"");
-	return [NSString stringWithContentsOfURL:(NSURL*)templateId
-									encoding:self.encoding
-									   error:outError];
+    NSAssert([templateId isKindOfClass:[NSURL class]], @"");
+    return [NSString stringWithContentsOfURL:(NSURL*)templateId
+                                    encoding:self.encoding
+                                       error:outError];
 }
 
 - (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
-	NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
-	if (!templateString) {
-		return nil;
-	}
-	GRMustacheTemplate *template = [self parseString:templateString error:outError];
-	if (!template) {
-		return nil;
-	}
-	[self setTemplate:template forTemplateId:templateURL];
-	return template;
+    NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
+    if (!templateString) {
+        return nil;
+    }
+    GRMustacheTemplate *template = [self parseString:templateString error:outError];
+    if (!template) {
+        return nil;
+    }
+    [self setTemplate:template forTemplateId:templateURL];
+    return template;
 }
 
 - (void)dealloc {
-	[url release];
-	[super dealloc];
+    [url release];
+    [super dealloc];
 }
 
 @end
@@ -78,50 +78,50 @@
 @implementation GRMustacheDirectoryPathTemplateLoader
 
 - (id)initWithPath:(NSString *)thePath extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
-	if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
-		path = [thePath retain];
-	}
-	return self;
+    if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
+        path = [thePath retain];
+    }
+    return self;
 }
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	if (baseTemplateId) {
-		NSAssert([baseTemplateId isKindOfClass:[NSString class]], @"");
-		NSString *basePath = [(NSString *)baseTemplateId stringByDeletingLastPathComponent];
-		if (self.extension.length == 0) {
-			return [[basePath stringByAppendingPathComponent:name] stringByStandardizingPath];
-		}
-		return [[basePath stringByAppendingPathComponent:[name stringByAppendingPathExtension:self.extension]] stringByStandardizingPath];
-	}
-	if (self.extension.length == 0) {
-		return [[path stringByAppendingPathComponent:name] stringByStandardizingPath];
-	}
-	return [[[path stringByAppendingPathComponent:name] stringByAppendingPathExtension:self.extension] stringByStandardizingPath];
+    if (baseTemplateId) {
+        NSAssert([baseTemplateId isKindOfClass:[NSString class]], @"");
+        NSString *basePath = [(NSString *)baseTemplateId stringByDeletingLastPathComponent];
+        if (self.extension.length == 0) {
+            return [[basePath stringByAppendingPathComponent:name] stringByStandardizingPath];
+        }
+        return [[basePath stringByAppendingPathComponent:[name stringByAppendingPathExtension:self.extension]] stringByStandardizingPath];
+    }
+    if (self.extension.length == 0) {
+        return [[path stringByAppendingPathComponent:name] stringByStandardizingPath];
+    }
+    return [[[path stringByAppendingPathComponent:name] stringByAppendingPathExtension:self.extension] stringByStandardizingPath];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSString class]], @"");
-	return [NSString stringWithContentsOfFile:(NSString*)templateId
-									 encoding:self.encoding
-										error:outError];
+    NSAssert([templateId isKindOfClass:[NSString class]], @"");
+    return [NSString stringWithContentsOfFile:(NSString*)templateId
+                                     encoding:self.encoding
+                                        error:outError];
 }
 
 - (GRMustacheTemplate *)parseContentsOfFile:(NSString *)templatePath error:(NSError **)outError {
-	NSString *templateString = [NSString stringWithContentsOfFile:templatePath encoding:self.encoding error:outError];
-	if (!templateString) {
-		return nil;
-	}
-	GRMustacheTemplate *template = [self parseString:templateString error:outError];
-	if (!template) {
-		return nil;
-	}
-	[self setTemplate:template forTemplateId:templatePath];
-	return template;
+    NSString *templateString = [NSString stringWithContentsOfFile:templatePath encoding:self.encoding error:outError];
+    if (!templateString) {
+        return nil;
+    }
+    GRMustacheTemplate *template = [self parseString:templateString error:outError];
+    if (!template) {
+        return nil;
+    }
+    [self setTemplate:template forTemplateId:templatePath];
+    return template;
 }
 
 - (void)dealloc {
-	[path release];
-	[super dealloc];
+    [path release];
+    [super dealloc];
 }
 
 @end

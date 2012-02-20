@@ -26,11 +26,11 @@
 
 @interface GRMustacheSection: NSObject {
 @private
-	GRMustacheInvocation *invocation;
-	NSString *baseTemplateString;
+    GRMustacheInvocation *invocation;
+    NSString *baseTemplateString;
     NSRange range;
-	BOOL inverted;
-	NSArray *elems;
+    BOOL inverted;
+    NSArray *elems;
 }
 @property (nonatomic, readonly) NSString *templateString;
 

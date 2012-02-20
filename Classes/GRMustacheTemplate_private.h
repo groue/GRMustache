@@ -25,15 +25,15 @@
 #import "GRMustacheEnvironment.h"
 
 typedef enum {
-	GRMustacheObjectKindFalseValue,
-	GRMustacheObjectKindTrueValue,
-	GRMustacheObjectKindEnumerable,
-	GRMustacheObjectKindLambda,
+    GRMustacheObjectKindFalseValue,
+    GRMustacheObjectKindTrueValue,
+    GRMustacheObjectKindEnumerable,
+    GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
 @interface GRMustacheTemplate: NSObject {
 @private
-	NSArray *elems;
+    NSArray *elems;
     GRMustacheTemplateOptions options;
 }
 @property (nonatomic, retain) NSArray *elems;

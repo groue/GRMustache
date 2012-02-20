@@ -24,7 +24,7 @@
 
 @interface GRMustacheTextElement: NSObject {
 @private
-	NSString *text;
+    NSString *text;
 }
 + (id)textElementWithString:(NSString *)string;
 @end

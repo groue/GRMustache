@@ -25,8 +25,8 @@
 
 @interface GRNumberFormatterContext : NSObject {
 @private
-	NSNumberFormatter *numberFormatter;
-	id wrappedContext;
+    NSNumberFormatter *numberFormatter;
+    id wrappedContext;
 }
 @property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 @property (nonatomic, retain) id wrappedContext;

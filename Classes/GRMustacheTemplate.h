@@ -31,7 +31,7 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
-	NSArray *elems;
+    NSArray *elems;
     GRMustacheTemplateOptions options;
 }
 

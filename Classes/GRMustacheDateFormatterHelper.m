@@ -25,8 +25,8 @@
 
 @interface GRDateFormatterContext : NSObject {
 @private
-	NSDateFormatter *dateFormatter;
-	id wrappedContext;
+    NSDateFormatter *dateFormatter;
+    id wrappedContext;
 }
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (nonatomic, retain) id wrappedContext;

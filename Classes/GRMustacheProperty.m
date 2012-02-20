@@ -39,49 +39,49 @@
 
 + (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName
 {
-	static NSMutableDictionary *classes = nil;
-	if (classes == nil) {
-		classes = [[NSMutableDictionary dictionary] retain];
-	}
-	
-	NSMutableDictionary *propertyNames = [classes objectForKey:class];
-	if (propertyNames == nil) {
-		propertyNames = [NSMutableDictionary dictionary];
-		[classes setObject:propertyNames forKey:class];
-	}
-	
-	NSNumber *boolNumber = [propertyNames objectForKey:propertyName];
-	if (boolNumber == nil) {
+    static NSMutableDictionary *classes = nil;
+    if (classes == nil) {
+        classes = [[NSMutableDictionary dictionary] retain];
+    }
+    
+    NSMutableDictionary *propertyNames = [classes objectForKey:class];
+    if (propertyNames == nil) {
+        propertyNames = [NSMutableDictionary dictionary];
+        [classes setObject:propertyNames forKey:class];
+    }
+    
+    NSNumber *boolNumber = [propertyNames objectForKey:propertyName];
+    if (boolNumber == nil) {
         static NSInteger BOOLPropertyType = NSNotFound;
-		if (BOOLPropertyType == NSNotFound) {
-			BOOLPropertyType = [self typeForPropertyNamed:@"BOOLProperty" ofClass:self];
-		}
-		BOOL booleanProperty = ([self typeForPropertyNamed:propertyName ofClass:class] == BOOLPropertyType);
-		[propertyNames setObject:[NSNumber numberWithBool:booleanProperty] forKey:propertyName];
-		return booleanProperty;
-	}
-	
-	return [boolNumber boolValue];
+        if (BOOLPropertyType == NSNotFound) {
+            BOOLPropertyType = [self typeForPropertyNamed:@"BOOLProperty" ofClass:self];
+        }
+        BOOL booleanProperty = ([self typeForPropertyNamed:propertyName ofClass:class] == BOOLPropertyType);
+        [propertyNames setObject:[NSNumber numberWithBool:booleanProperty] forKey:propertyName];
+        return booleanProperty;
+    }
+    
+    return [boolNumber boolValue];
 }
 
 #pragma mark - Private
 
 + (NSInteger)typeForPropertyNamed:(NSString *)propertyName ofClass:(Class)class
 {
-	objc_property_t property = class_getProperty(class, [propertyName cStringUsingEncoding:NSUTF8StringEncoding]);
-	if (property != NULL) {
-		const char *attributesCString = property_getAttributes(property);
-		while (attributesCString) {
-			if (attributesCString[0] == 'T') {
-				return attributesCString[1];
-			}
-			attributesCString = strchr(attributesCString, ',');
-			if (attributesCString) {
-				attributesCString++;
-			}
-		}
-	}
-	return NSNotFound;
+    objc_property_t property = class_getProperty(class, [propertyName cStringUsingEncoding:NSUTF8StringEncoding]);
+    if (property != NULL) {
+        const char *attributesCString = property_getAttributes(property);
+        while (attributesCString) {
+            if (attributesCString[0] == 'T') {
+                return attributesCString[1];
+            }
+            attributesCString = strchr(attributesCString, ',');
+            if (attributesCString) {
+                attributesCString++;
+            }
+        }
+    }
+    return NSNotFound;
 }
 
 @end

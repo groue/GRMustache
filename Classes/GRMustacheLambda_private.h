@@ -30,8 +30,8 @@
 @end
 
 @interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
-	SEL renderingSelector;
-	id object;
+    SEL renderingSelector;
+    id object;
 }
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector;
 @end
@@ -39,7 +39,7 @@
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 @interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
 @private
-	NSString *(^block)(GRMustacheSection* section, id context);
+    NSString *(^block)(GRMustacheSection* section, id context);
 }
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
 @end

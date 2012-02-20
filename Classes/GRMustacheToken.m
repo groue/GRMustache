@@ -36,24 +36,24 @@
 @synthesize range;
 
 + (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
-	return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
+    return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
 }
 
 - (id)initWithType:(GRMustacheTokenType)theType content:(NSString *)theContent templateString:(NSString *)theTemplateString line:(NSUInteger)theLine range:(NSRange)theRange {
-	if ((self = [self init])) {
-		type = theType;
-		content = [theContent retain];
-		templateString = [theTemplateString retain];
-		line = theLine;
-		range = theRange;
-	}
-	return self;
+    if ((self = [self init])) {
+        type = theType;
+        content = [theContent retain];
+        templateString = [theTemplateString retain];
+        line = theLine;
+        range = theRange;
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[content release];
-	[templateString release];
-	[super dealloc];
+    [content release];
+    [templateString release];
+    [super dealloc];
 }
 
 @end

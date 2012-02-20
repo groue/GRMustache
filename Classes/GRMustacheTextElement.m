@@ -33,19 +33,19 @@
 @synthesize text;
 
 + (id)textElementWithString:(NSString *)text {
-	return [[[self alloc] initWithString:text] autorelease];
+    return [[[self alloc] initWithString:text] autorelease];
 }
 
 - (id)initWithString:(NSString *)theText {
-	if ((self = [self init])) {
-		self.text = theText;
-	}
-	return self;
+    if ((self = [self init])) {
+        self.text = theText;
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[text release];
-	[super dealloc];
+    [text release];
+    [super dealloc];
 }
 
 @end

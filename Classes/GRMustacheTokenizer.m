@@ -38,28 +38,28 @@
 @synthesize ctag;
 
 - (id)init {
-	if ((self = [super init])) {
-		otag = [@"{{" retain];
-		ctag = [@"}}" retain];
-	}
-	return self;
+    if ((self = [super init])) {
+        otag = [@"{{" retain];
+        ctag = [@"}}" retain];
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[otag release];
-	[ctag release];
-	[super dealloc];
+    [otag release];
+    [ctag release];
+    [super dealloc];
 }
 
 - (void)parseTemplateString:(NSString *)templateString {
-	NSUInteger p = 0;
-	NSUInteger line = 1;
-	NSUInteger consumedLines = 0;
-	NSRange orange;
-	NSRange crange;
-	NSString *tag;
+    NSUInteger p = 0;
+    NSUInteger line = 1;
+    NSUInteger consumedLines = 0;
+    NSRange orange;
+    NSRange crange;
+    NSString *tag;
     unichar character;
-	NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *tokenContent;
     GRMustacheTokenType tokenType;
     NSRange tokenRange;
@@ -75,76 +75,76 @@
     };
     static const int tokenTypeForCharacterLength = sizeof(tokenTypeForCharacter) / sizeof(GRMustacheTokenType);
     
-	
-	while (YES) {
-		// look for otag
-		orange = [self rangeOfString:otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
-		
-		// otag was not found
-		if (orange.location == NSNotFound) {
-			if (p < templateString.length) {
-				if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-																				  content:[templateString substringFromIndex:p]
-																		   templateString:templateString
-																					 line:line
-																					range:NSMakeRange(p, templateString.length-p)]]) {
-					return;
-				}
-			}
-			[self didFinish];
-			return;
-		}
-		
-		if (orange.location > p) {
-			NSRange range = NSMakeRange(p, orange.location-p);
-			if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-																			  content:[templateString substringWithRange:range]
-																	   templateString:templateString
-																				 line:line
-																				range:range]]) {
-				return;
-			}
-		}
-		
-		// update our cursors
-		p = orange.location + orange.length;
-		line += consumedLines;
-		
-		// look for close tag
-		if (p < templateString.length && [templateString characterAtIndex:p] == '{') {
-			crange = [self rangeOfString:[@"}" stringByAppendingString:ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
-		} else {
-			crange = [self rangeOfString:ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
-		}
-		
-		// ctag was not found
-		if (crange.location == NSNotFound) {
-			[self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
-			return;
-		}
-		
-		// extract tag
-		tag = [templateString substringWithRange:NSMakeRange(orange.location + orange.length, crange.location - orange.location - orange.length)];
-		
-		// empty tag is not allowed
-		if (tag.length == 0) {
-			[self didFinishWithParseErrorAtLine:line description:@"Empty tag"];
-			return;
-		}
-		
-		// tag must not contain otag
-		if ([tag rangeOfString:otag].location != NSNotFound) {
-			[self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
-			return;
-		}
-		
-		// interpret tag
+    
+    while (YES) {
+        // look for otag
+        orange = [self rangeOfString:otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        
+        // otag was not found
+        if (orange.location == NSNotFound) {
+            if (p < templateString.length) {
+                if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+                                                                                  content:[templateString substringFromIndex:p]
+                                                                           templateString:templateString
+                                                                                     line:line
+                                                                                    range:NSMakeRange(p, templateString.length-p)]]) {
+                    return;
+                }
+            }
+            [self didFinish];
+            return;
+        }
+        
+        if (orange.location > p) {
+            NSRange range = NSMakeRange(p, orange.location-p);
+            if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+                                                                              content:[templateString substringWithRange:range]
+                                                                       templateString:templateString
+                                                                                 line:line
+                                                                                range:range]]) {
+                return;
+            }
+        }
+        
+        // update our cursors
+        p = orange.location + orange.length;
+        line += consumedLines;
+        
+        // look for close tag
+        if (p < templateString.length && [templateString characterAtIndex:p] == '{') {
+            crange = [self rangeOfString:[@"}" stringByAppendingString:ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        } else {
+            crange = [self rangeOfString:ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        }
+        
+        // ctag was not found
+        if (crange.location == NSNotFound) {
+            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
+            return;
+        }
+        
+        // extract tag
+        tag = [templateString substringWithRange:NSMakeRange(orange.location + orange.length, crange.location - orange.location - orange.length)];
+        
+        // empty tag is not allowed
+        if (tag.length == 0) {
+            [self didFinishWithParseErrorAtLine:line description:@"Empty tag"];
+            return;
+        }
+        
+        // tag must not contain otag
+        if ([tag rangeOfString:otag].location != NSNotFound) {
+            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
+            return;
+        }
+        
+        // interpret tag
         character = [tag characterAtIndex: 0];
         tokenType = (character < tokenTypeForCharacterLength) ? tokenTypeForCharacter[character] : GRMustacheTokenTypeEscapedVariable;
         tokenRange = NSMakeRange(orange.location, crange.location + crange.length - orange.location);
         switch (tokenType) {
             case GRMustacheTokenTypeEscapedVariable:    // 0, hence default value in tokenTypeForCharacter
-				tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+                tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
                 break;
                 
             case GRMustacheTokenTypeComment:
@@ -153,29 +153,29 @@
             case GRMustacheTokenTypeSectionClosing:
             case GRMustacheTokenTypePartial:
             case GRMustacheTokenTypeUnescapedVariable:
-				tokenContent = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+                tokenContent = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
                 break;
                 
             case GRMustacheTokenTypeSetDelimiter:
-				if ([tag characterAtIndex:tag.length-1] != '=') {
-					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
-					return;
-				}
-				tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-				NSArray *newTags = [tokenContent componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
-				NSMutableArray *nonBlankNewTags = [NSMutableArray array];
-				for (NSString *newTag in newTags) {
-					if (newTag.length > 0) {
-						[nonBlankNewTags addObject:newTag];
-					}
-				}
-				if (nonBlankNewTags.count == 2) {
-					self.otag = [nonBlankNewTags objectAtIndex:0];
-					self.ctag = [nonBlankNewTags objectAtIndex:1];
-				} else {
-					[self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
-					return;
-				}
+                if ([tag characterAtIndex:tag.length-1] != '=') {
+                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
+                    return;
+                }
+                tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+                NSArray *newTags = [tokenContent componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
+                NSMutableArray *nonBlankNewTags = [NSMutableArray array];
+                for (NSString *newTag in newTags) {
+                    if (newTag.length > 0) {
+                        [nonBlankNewTags addObject:newTag];
+                    }
+                }
+                if (nonBlankNewTags.count == 2) {
+                    self.otag = [nonBlankNewTags objectAtIndex:0];
+                    self.ctag = [nonBlankNewTags objectAtIndex:1];
+                } else {
+                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
+                    return;
+                }
                 break;
                 
             case GRMustacheTokenTypeText:
@@ -191,58 +191,58 @@
             return;
         }
 
-		// update our cursors
-		p = crange.location + crange.length;
-		line += consumedLines;
-	}
+        // update our cursors
+        p = crange.location + crange.length;
+        line += consumedLines;
+    }
 }
 
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
-	if ([delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
-		return [delegate tokenizer:self shouldContinueAfterParsingToken:token];
-	}
-	return YES;
+    if ([delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
+        return [delegate tokenizer:self shouldContinueAfterParsingToken:token];
+    }
+    return YES;
 }
 
 - (void)didFinish {
-	if ([delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
-		[delegate tokenizerDidFinish:self];
-	}
+    if ([delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
+        [delegate tokenizerDidFinish:self];
+    }
 }
 
 - (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
-	if ([delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
-		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
-		[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
-					 forKey:NSLocalizedDescriptionKey];
-		[userInfo setObject:[NSNumber numberWithInteger:line]
-					 forKey:GRMustacheErrorLine];
-		[delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+    if ([delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+        [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
+                     forKey:NSLocalizedDescriptionKey];
+        [userInfo setObject:[NSNumber numberWithInteger:line]
+                     forKey:GRMustacheErrorLine];
+        [delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
                                                                       code:GRMustacheErrorCodeParseError
                                                                   userInfo:userInfo]];
-	}
+    }
 }
 
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines {
-	NSUInteger stringLength = string.length;
-	NSUInteger templateStringLength = templateString.length;
-	unichar firstStringChar = [string characterAtIndex:0];
-	unichar templateChar;
-	
-	assert(outLines);
-	*outLines = 0;
-	
-	while (p + stringLength <= templateStringLength) {
-		templateChar = [templateString characterAtIndex:p];
-		if (templateChar == '\n') {
-			(*outLines)++;
-		} else if (templateChar == firstStringChar && [[templateString substringWithRange:NSMakeRange(p, string.length)] isEqualToString:string]) {
-			return NSMakeRange(p, string.length);
-		}
-		p++;
-	}
-	
-	return NSMakeRange(NSNotFound, 0);
+    NSUInteger stringLength = string.length;
+    NSUInteger templateStringLength = templateString.length;
+    unichar firstStringChar = [string characterAtIndex:0];
+    unichar templateChar;
+    
+    assert(outLines);
+    *outLines = 0;
+    
+    while (p + stringLength <= templateStringLength) {
+        templateChar = [templateString characterAtIndex:p];
+        if (templateChar == '\n') {
+            (*outLines)++;
+        } else if (templateChar == firstStringChar && [[templateString substringWithRange:NSMakeRange(p, string.length)] isEqualToString:string]) {
+            return NSMakeRange(p, string.length);
+        }
+        p++;
+    }
+    
+    return NSMakeRange(NSNotFound, 0);
 }
 
 @end

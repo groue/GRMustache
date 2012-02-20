@@ -46,19 +46,19 @@ extern NSString* const GRMustacheErrorLine AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_
  @since v1.0
  */
 typedef enum {
-	/**
-	 The error code for parse errors.
-	 
-	 @since v1.0
-	 */
-	GRMustacheErrorCodeParseError,
-	
-	/**
-	 The error code for not found templates and partials.
-	 
-	 @since v1.0
-	 */
-	GRMustacheErrorCodeTemplateNotFound,
+    /**
+     The error code for parse errors.
+     
+     @since v1.0
+     */
+    GRMustacheErrorCodeParseError,
+    
+    /**
+     The error code for not found templates and partials.
+     
+     @since v1.0
+     */
+    GRMustacheErrorCodeTemplateNotFound,
 } GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 
 

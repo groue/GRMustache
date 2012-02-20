@@ -34,60 +34,60 @@
     id value = [invocation invokeWithContext:context];
     GRMustacheObjectKind kind;
     [GRMustacheTemplate object:value kind:&kind boolValue:NULL];
-	switch(kind) {
-		case GRMustacheObjectKindFalseValue:
-			if (inverted) {
+    switch(kind) {
+        case GRMustacheObjectKindFalseValue:
+            if (inverted) {
                 result = [[NSMutableString string] retain];
                 for (id<GRMustacheRenderingElement> elem in elems) {
                     [(NSMutableString *)result appendString:[elem renderContext:context]];
                 }
-			}
-			break;
-			
-		case GRMustacheObjectKindTrueValue:
-			if (!inverted) {
+            }
+            break;
+            
+        case GRMustacheObjectKindTrueValue:
+            if (!inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:value];
                 result = [[NSMutableString string] retain];
                 for (id<GRMustacheRenderingElement> elem in elems) {
                     [(NSMutableString *)result appendString:[elem renderContext:innerContext]];
                 }
             }
-			break;
-			
-		case GRMustacheObjectKindEnumerable:
-			if (inverted) {
-				BOOL empty = YES;
-				for (id object in value) {
-					empty = NO;
-					break;
-				}
-				if (empty) {
+            break;
+            
+        case GRMustacheObjectKindEnumerable:
+            if (inverted) {
+                BOOL empty = YES;
+                for (id object in value) {
+                    empty = NO;
+                    break;
+                }
+                if (empty) {
                     result = [[NSMutableString string] retain];
                     for (id<GRMustacheRenderingElement> elem in elems) {
                         [(NSMutableString *)result appendString:[elem renderContext:context]];
                     }
-				}
-			} else {
+                }
+            } else {
                 result = [[NSMutableString string] retain];
-				for (id object in value) {
+                for (id object in value) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:object];
                     for (id<GRMustacheRenderingElement> elem in elems) {
                         [(NSMutableString *)result appendString:[elem renderContext:innerContext]];
                     }
-				}
-			}
-			break;
+                }
+            }
+            break;
             
-		case GRMustacheObjectKindLambda:
-			if (!inverted) {
+        case GRMustacheObjectKindLambda:
+            if (!inverted) {
                 result = [[(id<GRMustacheHelper>)value renderSection:self withContext:context] retain];
             }
-			break;
-			
-		default:
-			// should not be here
-			NSAssert(NO, @"");
-	}
+            break;
+            
+        default:
+            // should not be here
+            NSAssert(NO, @"");
+    }
     [pool drain];
     if (!result) {
         return @"";

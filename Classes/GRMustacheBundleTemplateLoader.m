@@ -26,29 +26,29 @@
 @implementation GRMustacheBundleTemplateLoader
 
 - (id)initWithBundle:(NSBundle *)theBundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options {
-	if ((self = [self initWithExtension:ext encoding:encoding options:options])) {
-		if (theBundle == nil) {
-			theBundle = [NSBundle mainBundle];
-		}
-		bundle = [theBundle retain];
-	}
-	return self;
+    if ((self = [self initWithExtension:ext encoding:encoding options:options])) {
+        if (theBundle == nil) {
+            theBundle = [NSBundle mainBundle];
+        }
+        bundle = [theBundle retain];
+    }
+    return self;
 }
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	return [bundle pathForResource:name ofType:self.extension];
+    return [bundle pathForResource:name ofType:self.extension];
 }
 
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	NSAssert([templateId isKindOfClass:[NSString class]], @"");
-	return [NSString stringWithContentsOfFile:(NSString*)templateId
-									 encoding:self.encoding
-										error:outError];
+    NSAssert([templateId isKindOfClass:[NSString class]], @"");
+    return [NSString stringWithContentsOfFile:(NSString*)templateId
+                                     encoding:self.encoding
+                                        error:outError];
 }
 
 - (void)dealloc {
-	[bundle release];
-	[super dealloc];
+    [bundle release];
+    [super dealloc];
 }
 
 @end

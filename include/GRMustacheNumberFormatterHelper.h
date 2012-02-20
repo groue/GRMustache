@@ -26,7 +26,7 @@
 
 @interface GRMustacheNumberFormatterHelper : NSObject<GRMustacheHelper> {
 @private
-	NSNumberFormatter *numberFormatter;
+    NSNumberFormatter *numberFormatter;
 }
 @property (nonatomic, readonly, retain) NSNumberFormatter *numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
 + (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;

@@ -35,9 +35,9 @@
 
 @interface GRMustacheTokenizer : NSObject {
 @private
-	id<GRMustacheTokenizerDelegate> delegate;
-	NSString *otag;
-	NSString *ctag;
+    id<GRMustacheTokenizerDelegate> delegate;
+    NSString *otag;
+    NSString *ctag;
 }
 @property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate;
 - (void)parseTemplateString:(NSString *)templateString;

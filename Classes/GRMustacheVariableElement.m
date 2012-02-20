@@ -34,20 +34,20 @@
 @synthesize raw;
 
 + (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
-	return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
+    return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
 }
 
 - (id)initWithInvocation:(GRMustacheInvocation *)theInvocation raw:(BOOL)theRaw {
-	if ((self = [self init])) {
-		self.invocation = theInvocation;
-		self.raw = theRaw;
-	}
-	return self;
+    if ((self = [self init])) {
+        self.invocation = theInvocation;
+        self.raw = theRaw;
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[invocation release];
-	[super dealloc];
+    [invocation release];
+    [super dealloc];
 }
 
 @end

@@ -34,7 +34,7 @@
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 @interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
 @private
-	NSString *(^block)(GRMustacheSection* section, id context);
+    NSString *(^block)(GRMustacheSection* section, id context);
 }
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 @end

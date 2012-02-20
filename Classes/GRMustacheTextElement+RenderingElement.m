@@ -25,7 +25,7 @@
 @implementation GRMustacheTextElement (RenderingElement)
 
 - (NSString *)renderContext:(GRMustacheContext *)context {
-	return text;
+    return text;
 }
 
 @end

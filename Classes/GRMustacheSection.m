@@ -42,25 +42,25 @@
 @synthesize elems;
 
 + (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
-	return [[[self alloc] initWithInvocation:invocation baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithInvocation:invocation baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
 }
 
 - (id)initWithInvocation:(GRMustacheInvocation *)theInvocation baseTemplateString:(NSString *)theBaseTemplateString range:(NSRange)theRange inverted:(BOOL)theInverted elements:(NSArray *)theElems {
-	if ((self = [self init])) {
-		self.invocation = theInvocation;
-		self.baseTemplateString = theBaseTemplateString;
+    if ((self = [self init])) {
+        self.invocation = theInvocation;
+        self.baseTemplateString = theBaseTemplateString;
         self.range = theRange;
-		self.inverted = theInverted;
-		self.elems = theElems;
-	}
-	return self;
+        self.inverted = theInverted;
+        self.elems = theElems;
+    }
+    return self;
 }
 
 - (void)dealloc {
-	[invocation release];
-	[baseTemplateString release];
-	[elems release];
-	[super dealloc];
+    [invocation release];
+    [baseTemplateString release];
+    [elems release];
+    [super dealloc];
 }
 
 - (NSString *)templateString {

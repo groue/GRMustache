@@ -37,9 +37,9 @@ typedef NSUInteger GRMustacheTemplateOptions;
  @since v1.0
  */
 typedef struct {
-	int major;	/**< The major component of the version. */
-	int minor;	/**< The minor component of the version. */
-	int patch;	/**< The patch-level component of the version. */
+    int major;    /**< The major component of the version. */
+    int minor;    /**< The minor component of the version. */
+    int patch;    /**< The patch-level component of the version. */
 } GRMustacheVersion;
 
 

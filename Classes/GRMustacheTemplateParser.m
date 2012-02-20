@@ -53,41 +53,41 @@
 @synthesize sectionOpeningTokenStack;
 
 - (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)theTemplateLoader templateId:(id)theTemplateId {
-	if ((self = [self init])) {
-		self.templateLoader = theTemplateLoader;
-		self.templateId = theTemplateId;
+    if ((self = [self init])) {
+        self.templateLoader = theTemplateLoader;
+        self.templateId = theTemplateId;
         options = theTemplateLoader.options;
 
-		currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+        currentElements = [[NSMutableArray alloc] initWithCapacity:20];
         elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
         [elementsStack addObject:currentElements];
         sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
     }
-	return self;
+    return self;
 }
 
 - (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
     [self finish];
     
-	if (error) {
-		if (outError != NULL) {
-			*outError = [[error retain] autorelease];
-		}
-		return nil;
-	}
-	
+    if (error) {
+        if (outError != NULL) {
+            *outError = [[error retain] autorelease];
+        }
+        return nil;
+    }
+    
     return [self.templateLoader templateWithElements:currentElements];
 }
 
 - (void)dealloc {
-	[error release];
-	[currentSectionOpeningToken release];
-	[templateLoader release];
-	[templateId release];
-	[currentElements release];
-	[elementsStack release];
-	[sectionOpeningTokenStack release];
-	[super dealloc];
+    [error release];
+    [currentSectionOpeningToken release];
+    [templateLoader release];
+    [templateId release];
+    [currentElements release];
+    [elementsStack release];
+    [sectionOpeningTokenStack release];
+    [super dealloc];
 }
 
 #pragma mark GRMustacheTokenizerDelegate
@@ -95,18 +95,18 @@
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
     if (!elementsStack) return NO;
     
-	switch (token.type) {
-		case GRMustacheTokenTypeText:
-			[currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
-			break;
-			
-		case GRMustacheTokenTypeComment:
-			break;
-			
-		case GRMustacheTokenTypeEscapedVariable: {
+    switch (token.type) {
+        case GRMustacheTokenTypeText:
+            [currentElements addObject:[GRMustacheTextElement textElementWithString:token.content]];
+            break;
+            
+        case GRMustacheTokenTypeComment:
+            break;
+            
+        case GRMustacheTokenTypeEscapedVariable: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty variable tag"]];
-            	return NO;
+                return NO;
             }
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
@@ -117,11 +117,11 @@
                 return NO;
             }
         } break;
-			
-		case GRMustacheTokenTypeUnescapedVariable: {
+            
+        case GRMustacheTokenTypeUnescapedVariable: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty unescaped variable tag"]];
-            	return NO;
+                return NO;
             }
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
@@ -132,23 +132,23 @@
                 return NO;
             }
         } break;
-			
-		case GRMustacheTokenTypeSectionOpening:
-		case GRMustacheTokenTypeInvertedSectionOpening: {
+            
+        case GRMustacheTokenTypeSectionOpening:
+        case GRMustacheTokenTypeInvertedSectionOpening: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty section opening tag"]];
-            	return NO;
+                return NO;
             }
             
-			self.currentSectionOpeningToken = token;
-			[sectionOpeningTokenStack addObject:token];
-			
-			self.currentElements = [NSMutableArray array];
-			[elementsStack addObject:currentElements];
+            self.currentSectionOpeningToken = token;
+            [sectionOpeningTokenStack addObject:token];
+            
+            self.currentElements = [NSMutableArray array];
+            [elementsStack addObject:currentElements];
         } break;
-			
-		case GRMustacheTokenTypeSectionClosing:
-			if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
+            
+        case GRMustacheTokenTypeSectionClosing:
+            if ([token.content isEqualToString:currentSectionOpeningToken.content]) {
                 NSError *invocationError;
                 GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
                 if (invocation) {
@@ -171,40 +171,40 @@
                     [self finishWithError:invocationError];
                     return NO;
                 }
-			} else {
-				[self finishWithError:[self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
-				return NO;
-			}
-			break;
-			
-		case GRMustacheTokenTypePartial: {
+            } else {
+                [self finishWithError:[self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
+                return NO;
+            }
+            break;
+            
+        case GRMustacheTokenTypePartial: {
             if (token.content.length == 0) {
                 [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty partial tag"]];
-            	return NO;
+                return NO;
             }
-			NSError *partialError;
-			GRMustacheTemplate *partialTemplate = [templateLoader parseTemplateNamed:token.content
-																relativeToTemplateId:templateId
+            NSError *partialError;
+            GRMustacheTemplate *partialTemplate = [templateLoader parseTemplateNamed:token.content
+                                                                relativeToTemplateId:templateId
                                                                            asPartial:YES
-																			   error:&partialError];
-			if (partialTemplate == nil) {
-				[self finishWithError:partialError];
-				return NO;
-			} else {
-				[currentElements addObject:partialTemplate];
-			}
-		} break;
-			
-		case GRMustacheTokenTypeSetDelimiter:
-			// ignore
-			break;
-			
-		default:
-			NSAssert(NO, @"");
-			break;
-			
-	}
-	return YES;
+                                                                               error:&partialError];
+            if (partialTemplate == nil) {
+                [self finishWithError:partialError];
+                return NO;
+            } else {
+                [currentElements addObject:partialTemplate];
+            }
+        } break;
+            
+        case GRMustacheTokenTypeSetDelimiter:
+            // ignore
+            break;
+            
+        default:
+            NSAssert(NO, @"");
+            break;
+            
+    }
+    return YES;
 }
 
 - (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError {
@@ -214,8 +214,8 @@
 #pragma mark Private
 
 - (void)finishWithError:(NSError *)theError {
-	self.error = theError;
-	[self finish];
+    self.error = theError;
+    [self finish];
 }
 
 - (void)finish {
@@ -223,23 +223,23 @@
         self.error = [self parseErrorAtLine:currentSectionOpeningToken.line
                                 description:[NSString stringWithFormat:@"Unclosed `%@` section", currentSectionOpeningToken.content]];
     }
-	if (error) {
-		self.currentElements = nil;
-	}
-	self.currentSectionOpeningToken = nil;
-	self.elementsStack = nil;
-	self.sectionOpeningTokenStack = nil;
+    if (error) {
+        self.currentElements = nil;
+    }
+    self.currentSectionOpeningToken = nil;
+    self.elementsStack = nil;
+    self.sectionOpeningTokenStack = nil;
 }
 
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
-	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
-	[userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
-				 forKey:NSLocalizedDescriptionKey];
-	[userInfo setObject:[NSNumber numberWithInteger:line]
-				 forKey:GRMustacheErrorLine];
-	return [NSError errorWithDomain:GRMustacheErrorDomain
-							   code:GRMustacheErrorCodeParseError
-						   userInfo:userInfo];
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
+    [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
+                 forKey:NSLocalizedDescriptionKey];
+    [userInfo setObject:[NSNumber numberWithInteger:line]
+                 forKey:GRMustacheErrorLine];
+    return [NSError errorWithDomain:GRMustacheErrorDomain
+                               code:GRMustacheErrorCodeParseError
+                           userInfo:userInfo];
 }
 
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError {

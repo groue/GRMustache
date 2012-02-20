@@ -32,9 +32,9 @@ typedef NSUInteger GRMustacheTemplateOptions;
 extern GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions;
 
 typedef struct {
-	int major;
-	int minor;
-	int patch;
+    int major;
+    int minor;
+    int patch;
 } GRMustacheVersion;
 
 @interface GRMustache: NSObject

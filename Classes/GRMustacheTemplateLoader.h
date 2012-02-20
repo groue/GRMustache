@@ -32,9 +32,9 @@
  */
 @interface GRMustacheTemplateLoader: NSObject {
 @private
-	NSString *extension;
-	NSStringEncoding encoding;
-	NSMutableDictionary *templatesById;
+    NSString *extension;
+    NSStringEncoding encoding;
+    NSMutableDictionary *templatesById;
     GRMustacheTemplateOptions options;
 }
 

@@ -31,13 +31,13 @@
 @implementation GRMustacheVariableElement(_RenderingElement)
 
 - (NSString *)htmlEscape:(NSString *)string {
-	NSMutableString *result = [NSMutableString stringWithString:string];
-	[result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	[result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-	return result;
+    NSMutableString *result = [NSMutableString stringWithString:string];
+    [result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    return result;
 }
 
 @end
@@ -48,13 +48,13 @@
     id value = [invocation invokeWithContext:context];
     BOOL boolValue;
     [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
-	if (boolValue == NO) {
-		return @"";
-	}
-	if (raw) {
-		return [value description];
-	}
-	return [self htmlEscape:[value description]];
+    if (boolValue == NO) {
+        return @"";
+    }
+    if (raw) {
+        return [value description];
+    }
+    return [self htmlEscape:[value description]];
 }
 
 @end

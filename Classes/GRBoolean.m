@@ -28,50 +28,50 @@ static GRYes *yes = nil;
 @implementation GRYes
 
 + (GRYes *)_yes {
-	if (yes == nil) {
-		yes = [[super allocWithZone:NULL] init];
-	}
-	return yes;
+    if (yes == nil) {
+        yes = [[super allocWithZone:NULL] init];
+    }
+    return yes;
 }
 
 + (GRYes *)yes {
-	return [self _yes];
+    return [self _yes];
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-	return [[self _yes] retain];
+    return [[self _yes] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-	return self;
+    return self;
 }
 
 - (id)retain {
-	return self;
+    return self;
 }
 
 - (NSUInteger)retainCount {
-	return NSUIntegerMax;  //denotes an object that cannot be released
+    return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 - (oneway void)release {
-	//do nothing
+    //do nothing
 }
 
 - (id)autorelease {
-	return self;
+    return self;
 }
 
 - (id)valueForKey:(NSString *)key {
-	return nil;
+    return nil;
 }
 
 - (BOOL)boolValue {
-	return YES;
+    return YES;
 }
 
 - (NSString *)description {
-	return @"(yes)";
+    return @"(yes)";
 }
 
 @end
@@ -81,50 +81,50 @@ static GRNo *no = nil;
 @implementation GRNo
 
 + (GRNo *)_no {
-	if (no == nil) {
-		no = [[super allocWithZone:NULL] init];
-	}
-	return no;
+    if (no == nil) {
+        no = [[super allocWithZone:NULL] init];
+    }
+    return no;
 }
 
 + (GRNo *)no {
-	return [self _no];
+    return [self _no];
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-	return [[self _no] retain];
+    return [[self _no] retain];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-	return self;
+    return self;
 }
 
 - (id)retain {
-	return self;
+    return self;
 }
 
 - (NSUInteger)retainCount {
-	return NSUIntegerMax;  //denotes an object that cannot be released
+    return NSUIntegerMax;  //denotes an object that cannot be released
 }
 
 - (oneway void)release {
-	//do nothing
+    //do nothing
 }
 
 - (id)autorelease {
-	return self;
+    return self;
 }
 
 - (id)valueForKey:(NSString *)key {
-	return nil;
+    return nil;
 }
 
 - (BOOL)boolValue {
-	return NO;
+    return NO;
 }
 
 - (NSString *)description {
-	return @"(no)";
+    return @"(no)";
 }
 
 @end
