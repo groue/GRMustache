@@ -20,18 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheRendering_private.h"
 
 @class GRMustacheInvocation;
 
-@interface GRMustacheSection: NSObject {
-@private
-    GRMustacheInvocation *invocation;
-    NSString *baseTemplateString;
-    NSRange range;
-    BOOL inverted;
-    NSArray *elems;
-}
+@interface GRMustacheSection: NSObject<GRMustacheRenderingElement>
 @property (nonatomic, readonly) NSString *templateString;
 
 + (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;

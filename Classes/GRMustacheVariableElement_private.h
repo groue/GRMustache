@@ -20,14 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheRendering_private.h"
 
 @class GRMustacheInvocation;
 
-@interface GRMustacheVariableElement: NSObject {
-@private
-    GRMustacheInvocation *invocation;
-    BOOL raw;
-}
+@interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement>
 + (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
 @end

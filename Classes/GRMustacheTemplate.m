@@ -22,7 +22,6 @@
 
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheTemplate+RenderingElement_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheTemplateLoader_private.h"
@@ -31,12 +30,12 @@
 
 @interface GRMustacheTemplate()
 @property (nonatomic) GRMustacheTemplateOptions options;
-- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)options;
+- (id)initWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
 @end
 
 @implementation GRMustacheTemplate
-@synthesize elems;
-@synthesize options;
+@synthesize elems=_elems;
+@synthesize options=_options;
 
 + (id)templateWithOptions:(GRMustacheTemplateOptions)options
 {
@@ -102,7 +101,7 @@
 }
 
 - (void)dealloc {
-    [elems release];
+    [_elems release];
     [super dealloc];
 }
 
@@ -229,12 +228,25 @@
     }
 }
 
+#pragma mark - GRMustacheRenderingElement
+
+- (NSString *)renderContext:(GRMustacheContext *)context {
+    NSMutableString *result = [NSMutableString string];
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+    for (id<GRMustacheRenderingElement> elem in _elems) {
+        [result appendString:[elem renderContext:context]];
+    }
+    [pool drain];
+    return result;
+}
+
+
 #pragma mark - Private
 
-- (id)initWithElements:(NSArray *)theElems options:(GRMustacheTemplateOptions)theOptions {
+- (id)initWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options {
     if ((self = [self init])) {
-        self.elems = theElems;
-        self.options = theOptions;
+        self.elems = elems;
+        self.options = options;
     }
     return self;
 }

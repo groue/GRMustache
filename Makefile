@@ -39,7 +39,7 @@ build/iphonesimulator/Release-iphonesimulator:
 	xcodebuild -project GRMustache1-ios.xcodeproj    -target GRMustache1      -configuration Release -sdk iphonesimulator -arch "i386"        build SYMROOT=build/iphonesimulator
 
 build/macosx10.6/Release:
-	xcodebuild -project GRMustache1-macosx.xcodeproj -target GRMustache1      -configuration Release                      -arch "i386 x86_64" build SYMROOT=build/macosx10.6
+	xcodebuild -project GRMustache1-macosx.xcodeproj -target GRMustache1      -configuration Release                      -arch "x86_64"      build SYMROOT=build/macosx10.6
 
 include/GRMustache.h: build/macosx10.6/Release/include
 	cp -R build/macosx10.6/Release/include .

@@ -21,33 +21,64 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
+#import "GRMustacheInvocation_private.h"
+#import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheVariableElement()
 @property (nonatomic, retain) GRMustacheInvocation *invocation;
 @property (nonatomic) BOOL raw;
 - (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
+- (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
-@synthesize invocation;
-@synthesize raw;
+@synthesize invocation=_invocation;
+@synthesize raw=_raw;
 
 + (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
     return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
 }
 
-- (id)initWithInvocation:(GRMustacheInvocation *)theInvocation raw:(BOOL)theRaw {
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
     if ((self = [self init])) {
-        self.invocation = theInvocation;
-        self.raw = theRaw;
+        self.invocation = invocation;
+        self.raw = raw;
     }
     return self;
 }
 
 - (void)dealloc {
-    [invocation release];
+    [_invocation release];
     [super dealloc];
+}
+
+#pragma mark - GRMustacheRenderingElement
+
+
+- (NSString *)renderContext:(GRMustacheContext *)context {
+    id value = [_invocation invokeWithContext:context];
+    BOOL boolValue;
+    [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
+    if (boolValue == NO) {
+        return @"";
+    }
+    if (_raw) {
+        return [value description];
+    }
+    return [self htmlEscape:[value description]];
+}
+
+#pragma mark - Private
+
+- (NSString *)htmlEscape:(NSString *)string {
+    NSMutableString *result = [NSMutableString stringWithString:string];
+    [result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    return result;
 }
 
 @end

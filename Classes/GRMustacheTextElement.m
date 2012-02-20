@@ -30,22 +30,28 @@
 
 
 @implementation GRMustacheTextElement
-@synthesize text;
+@synthesize text=_text;
 
 + (id)textElementWithString:(NSString *)text {
     return [[[self alloc] initWithString:text] autorelease];
 }
 
-- (id)initWithString:(NSString *)theText {
+- (id)initWithString:(NSString *)text {
     if ((self = [self init])) {
-        self.text = theText;
+        self.text = text;
     }
     return self;
 }
 
 - (void)dealloc {
-    [text release];
+    [_text release];
     [super dealloc];
+}
+
+#pragma mark - GRMustacheRenderingElement
+
+- (NSString *)renderContext:(GRMustacheContext *)context {
+    return _text;
 }
 
 @end

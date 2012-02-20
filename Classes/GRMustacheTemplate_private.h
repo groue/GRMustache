@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
 #import "GRMustache_private.h"
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheRendering_private.h"
 
 typedef enum {
     GRMustacheObjectKindFalseValue,
@@ -31,11 +31,7 @@ typedef enum {
     GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
-@interface GRMustacheTemplate: NSObject {
-@private
-    NSArray *elems;
-    GRMustacheTemplateOptions options;
-}
+@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement>
 @property (nonatomic, retain) NSArray *elems;
 
 + (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue;

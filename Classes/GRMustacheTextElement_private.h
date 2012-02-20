@@ -20,12 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "GRMustacheRendering_private.h"
 
-@interface GRMustacheTextElement: NSObject {
-@private
-    NSString *text;
-}
+@interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement>
 + (id)textElementWithString:(NSString *)string;
 @end
 
