@@ -31,7 +31,7 @@
  @since v1.3
  @deprecated v1.5
  */
-@interface GRMustacheContext: NSObject {
+TYPE_AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5 @interface GRMustacheContext: NSObject {
 @private
     id _object;
     GRMustacheContext *_parent;
@@ -52,7 +52,7 @@
  
  @deprecated v1.5
  */
-+ (id)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
++ (id)contextWithObject:(id)object;
 
 /**
  Returns a context objet containing several objects.
@@ -65,7 +65,7 @@
  
  @deprecated v1.5
  */
-+ (id)contextWithObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
++ (id)contextWithObjects:(id)object, ...;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Deriving new contexts
@@ -82,7 +82,7 @@
  
  @deprecated v1.5
  */
-- (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+- (GRMustacheContext *)contextByAddingObject:(id)object;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Key value coding
@@ -106,5 +106,5 @@
  
  @since v1.3
  */
-- (id)valueForKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER;
+- (id)valueForKey:(NSString *)key;
 @end

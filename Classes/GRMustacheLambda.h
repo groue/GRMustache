@@ -39,7 +39,7 @@
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 @end
 
-typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
+typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*) TYPE_AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
 typedef NSString *(^GRMustacheRenderer)(id object);
