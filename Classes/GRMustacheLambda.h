@@ -42,7 +42,7 @@
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*) TYPE_AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
-typedef NSString *(^GRMustacheRenderer)(id object);
-typedef id GRMustacheLambda;
+typedef NSString *(^GRMustacheRenderer)(id object) TYPE_AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3;
+typedef id GRMustacheLambda TYPE_AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3;
 GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3;
 #endif
