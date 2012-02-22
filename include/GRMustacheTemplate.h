@@ -31,9 +31,10 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
-    NSArray *elems;
-    GRMustacheTemplateOptions options;
+    NSArray *_elems;
+    GRMustacheTemplateOptions _options;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Parsing and Rendering Template Strings

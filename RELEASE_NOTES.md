@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.10.3
+
+Upgrade GRMustache, and get deprecation warnings when you use deprecated APIs. Your code will keep on running fine, though.
+
 ## v1.10.2
 
 Performance improvements
