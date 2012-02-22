@@ -21,6 +21,10 @@
 // THE SOFTWARE.
 
 
+
+
+
+
 /*
  * Set up standard GRMustache versions
  */
@@ -38,20 +42,22 @@
 
 
 
+
+
+
 /* 
  * If max GRMustacheVersion not specified, assume 1.10
  */
 #ifndef GRMUSTACHE_VERSION_MAX_ALLOWED
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_10
+#define GRMUSTACHE_VERSION_MAX_ALLOWED    GRMUSTACHE_VERSION_1_10
 #endif
 
 /*
  * if min GRMustacheVersion not specified, assume max
  */
 #ifndef GRMUSTACHE_VERSION_MIN_REQUIRED
-#define GRMUSTACHE_VERSION_MIN_REQUIRED GRMUSTACHE_VERSION_MAX_ALLOWED
+#define GRMUSTACHE_VERSION_MIN_REQUIRED    GRMUSTACHE_VERSION_MAX_ALLOWED
 #endif
-
 
 /*
  * Error on bad values
@@ -64,17 +70,21 @@
 #endif
 
 
+
+
+
+
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER
  * 
- * Used on functions introduced in GRMustache 1.0
+ * Used on declarations introduced in GRMustache 1.0
  */
 #define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER
 
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED
  * 
- * Used on functions introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0, 
  * and deprecated in GRMustache 1.0
  */
 #define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
@@ -84,7 +94,7 @@
  * 
  * Used on types deprecated in GRMustache 1.0
  */
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_0_AND_LATER     DEPRECATED_ATTRIBUTE
+#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_0_AND_LATER    DEPRECATED_ATTRIBUTE
 
 
 
@@ -94,12 +104,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.1 
+ * Used on declarations introduced in GRMustache 1.1
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER
 #endif
@@ -107,7 +117,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * and deprecated in GRMustache 1.1
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
@@ -119,7 +129,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_1
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.1
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
@@ -131,60 +141,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_1_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.1 
- */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_1_AND_LATER    DEPRECATED_ATTRIBUTE
-#else
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_1_AND_LATER
-#endif
-
-
-
-
-
-
-/*
- * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER
- * 
- * Used on declarations introduced in GRMustache 1.1 
- */
-#if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER     UNAVAILABLE_ATTRIBUTE
-#elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER     WEAK_IMPORT_ATTRIBUTE
-#else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER
-#endif
-
-/*
- * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED
- * 
- * Used on declarations introduced in GRMustache 1.1, 
- * and deprecated in GRMustache 1.1
- */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
-#else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED    AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER
-#endif
-
-/*
- * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_1
- * 
- * Used on declarations introduced in GRMustache 1.0, 
- * but later deprecated in GRMustache 1.1
- */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
-#define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_1    DEPRECATED_ATTRIBUTE
-#else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_1    AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER
-#endif
-
-/*
- * DEPRECATED_IN_GRMUSTACHE_VERSION_1_1_AND_LATER
- * 
- * Used on types deprecated in GRMustache 1.1 
+ * Used on types deprecated in GRMustache 1.1
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_1
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_1_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -200,12 +157,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.2 
+ * Used on declarations introduced in GRMustache 1.2
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_2
-#define AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_2
-#define AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER
 #endif
@@ -213,7 +170,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * and deprecated in GRMustache 1.2
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_2
@@ -225,7 +182,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.2
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_2
@@ -237,7 +194,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_2
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.2
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_2
@@ -249,7 +206,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_2_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.2 
+ * Used on types deprecated in GRMustache 1.2
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_2
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_2_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -265,12 +222,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.3 
+ * Used on declarations introduced in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_3
-#define AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_3
-#define AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER
 #endif
@@ -278,7 +235,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * and deprecated in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_3
@@ -290,7 +247,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_3
@@ -302,7 +259,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_3
@@ -314,7 +271,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_3
@@ -326,7 +283,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_3_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.3 
+ * Used on types deprecated in GRMustache 1.3
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_3
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_3_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -342,12 +299,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.4 
+ * Used on declarations introduced in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_4
-#define AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_4
-#define AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER
 #endif
@@ -355,7 +312,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * and deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
@@ -367,7 +324,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_4
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
@@ -379,7 +336,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_4
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
@@ -391,7 +348,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_4
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
@@ -403,7 +360,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_4
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
@@ -415,7 +372,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_4_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.4 
+ * Used on types deprecated in GRMustache 1.4
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_4
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_4_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -431,12 +388,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.5 
+ * Used on declarations introduced in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_5
-#define AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_5
-#define AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER
 #endif
@@ -444,7 +401,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * and deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -456,7 +413,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -468,7 +425,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -480,7 +437,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -492,7 +449,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -504,7 +461,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
@@ -516,7 +473,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.5 
+ * Used on types deprecated in GRMustache 1.5
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_5
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -532,12 +489,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.6 
+ * Used on declarations introduced in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_6
-#define AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_6
-#define AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER
 #endif
@@ -545,7 +502,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.6, 
+ * Used on declarations introduced in GRMustache 1.6,
  * and deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -557,7 +514,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -569,7 +526,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -581,7 +538,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -593,7 +550,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -605,7 +562,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -617,7 +574,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_6
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * but later deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
@@ -629,7 +586,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_6_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.6 
+ * Used on types deprecated in GRMustache 1.6
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_6
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_6_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -645,12 +602,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.7 
+ * Used on declarations introduced in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_7
-#define AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_7
-#define AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER
 #endif
@@ -658,7 +615,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.7, 
+ * Used on declarations introduced in GRMustache 1.7,
  * and deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -670,7 +627,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -682,7 +639,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -694,7 +651,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -706,7 +663,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -718,7 +675,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -730,7 +687,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -742,7 +699,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_7
  * 
- * Used on declarations introduced in GRMustache 1.6, 
+ * Used on declarations introduced in GRMustache 1.6,
  * but later deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
@@ -754,7 +711,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_7_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.7 
+ * Used on types deprecated in GRMustache 1.7
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_7
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_7_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -770,12 +727,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.8 
+ * Used on declarations introduced in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_8
-#define AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_8
-#define AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER
 #endif
@@ -783,7 +740,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.8, 
+ * Used on declarations introduced in GRMustache 1.8,
  * and deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -795,7 +752,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -807,7 +764,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -819,7 +776,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -831,7 +788,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -843,7 +800,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -855,7 +812,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -867,7 +824,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.6, 
+ * Used on declarations introduced in GRMustache 1.6,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -879,7 +836,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_8
  * 
- * Used on declarations introduced in GRMustache 1.7, 
+ * Used on declarations introduced in GRMustache 1.7,
  * but later deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
@@ -891,7 +848,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_8_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.8 
+ * Used on types deprecated in GRMustache 1.8
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_8
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_8_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -907,12 +864,12 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.9 
+ * Used on declarations introduced in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_9
-#define AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_9
-#define AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER
 #endif
@@ -920,7 +877,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.9, 
+ * Used on declarations introduced in GRMustache 1.9,
  * and deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -932,7 +889,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -944,7 +901,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -956,7 +913,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -968,7 +925,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -980,7 +937,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -992,7 +949,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -1004,7 +961,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.6, 
+ * Used on declarations introduced in GRMustache 1.6,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -1016,7 +973,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.7, 
+ * Used on declarations introduced in GRMustache 1.7,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -1028,7 +985,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_9
  * 
- * Used on declarations introduced in GRMustache 1.8, 
+ * Used on declarations introduced in GRMustache 1.8,
  * but later deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
@@ -1040,7 +997,7 @@
 /*
  * DEPRECATED_IN_GRMUSTACHE_VERSION_1_9_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.9 
+ * Used on types deprecated in GRMustache 1.9
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_9
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_9_AND_LATER    DEPRECATED_ATTRIBUTE
@@ -1059,9 +1016,9 @@
  * Used on declarations introduced in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_10
-#define AVAILABLE_GRMUSTACHE_VERSION_1_10_AND_LATER     UNAVAILABLE_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_10_AND_LATER    UNAVAILABLE_ATTRIBUTE
 #elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_10
-#define AVAILABLE_GRMUSTACHE_VERSION_1_10_AND_LATER     WEAK_IMPORT_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_1_10_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
 #define AVAILABLE_GRMUSTACHE_VERSION_1_10_AND_LATER
 #endif
@@ -1081,7 +1038,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.0, 
+ * Used on declarations introduced in GRMustache 1.0,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1093,7 +1050,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.1, 
+ * Used on declarations introduced in GRMustache 1.1,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1105,7 +1062,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_2_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.2, 
+ * Used on declarations introduced in GRMustache 1.2,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1117,7 +1074,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.3, 
+ * Used on declarations introduced in GRMustache 1.3,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1129,7 +1086,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.4, 
+ * Used on declarations introduced in GRMustache 1.4,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1141,7 +1098,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.5, 
+ * Used on declarations introduced in GRMustache 1.5,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1153,7 +1110,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.6, 
+ * Used on declarations introduced in GRMustache 1.6,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1165,7 +1122,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.7, 
+ * Used on declarations introduced in GRMustache 1.7,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1177,7 +1134,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.8, 
+ * Used on declarations introduced in GRMustache 1.8,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1189,7 +1146,7 @@
 /*
  * AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_10
  * 
- * Used on declarations introduced in GRMustache 1.9, 
+ * Used on declarations introduced in GRMustache 1.9,
  * but later deprecated in GRMustache 1.10
  */
 #if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_10
@@ -1208,3 +1165,9 @@
 #else
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_1_10_AND_LATER
 #endif
+
+
+
+
+
+
