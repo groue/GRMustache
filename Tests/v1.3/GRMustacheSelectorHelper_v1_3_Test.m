@@ -28,14 +28,24 @@
 
 @implementation GRMustacheSelectorHelper_v1_3_TestContext
 
-- (NSString*)boldSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	return [NSString stringWithFormat:@"<b>%@</b>", [section renderObject:context]];
+- (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
+	return [NSString stringWithFormat:
+			@"<a href=\"/people/%@\">%@</a>",
+			[context valueForKey:@"id"],
+			[section renderObject:context]];
+}
+
+- (NSString *)id {
+    return @"1";
+}
+
+- (NSString *)name {
+    return @"foo";
 }
 
 + (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
 	return [NSString stringWithFormat:
-			@"<a href=\"/people/%@\">%@</a>",
-			[context valueForKey:@"id"],
+			@"<a href=\"/people\">%@</a>",
 			[section renderObject:context]];
 }
 
@@ -44,24 +54,17 @@
 @implementation GRMustacheSelectorHelper_v1_3_Test
 
 - (void)testHelperInstanceMethod {
-	NSString *templateString = @"{{#bold}}text{{/bold}}";
+	NSString *templateString = @"{{#link}}{{name}}{{/link}}";
 	id context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
 	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<b>text</b>", nil);
+	STAssertEqualObjects(result, @"<a href=\"/people/1\">foo</a>", nil);
 }
 
 - (void)testHelperClassMethod {
-	NSString *templateString = @"<ul>{{#people}}<li>{{#link}}{{name}}{{/link}}</li>{{/people}}</ul>";
-	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSArray arrayWithObjects:
-						   [NSDictionary dictionaryWithObjectsAndKeys:@"Alan", @"name", @"1", @"id", nil],
-						   [NSDictionary dictionaryWithObjectsAndKeys:@"Roger", @"name", @"2", @"id", nil],
-						   nil], @"people",
-						  nil
-						  ];
+	NSString *templateString = @"{{#link}}{{name}}{{/link}}";
     GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];;
-	NSString *result = [template renderObjects:[GRMustacheSelectorHelper_v1_3_TestContext class], data, nil];
-	STAssertEqualObjects(result, @"<ul><li><a href=\"/people/1\">Alan</a></li><li><a href=\"/people/2\">Roger</a></li></ul>", nil);
+	NSString *result = [template renderObject:[GRMustacheSelectorHelper_v1_3_TestContext class]];
+	STAssertEqualObjects(result, @"<a href=\"/people\"></a>", nil);
 }
 
 @end

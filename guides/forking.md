@@ -60,11 +60,10 @@ You will use the macros defined in `Classes/GRMustacheAvailabilityMacros.h`. The
 
 For instance, all header files for public API tests in `Tests/v1.4` begin with:
 
-    #define GRMUSTACHE_VERSION_MIN_REQUIRED GRMUSTACHE_VERSION_1_4
-    #define GRMUSTACHE_VERSION_MAX_REQUIRED GRMUSTACHE_VERSION_1_4
+    #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_4
     #import "GRMustachePublicAPITest.h"
 
-When you add a test for a specific behavior of a public API, make sure you place it in the version that introduced this behavior (check the release notes).
+When you add a test for a public API, make sure you place it in the folder that introduced the API (check the release notes), and NOT in the version that will include the new code. For instance, if version 1.6 introduces a fix for an API that was introduced in version 1.2, the version 1.6 will then ship with new tests in the Tests/v1.2 folder.
 
 ## Building
 

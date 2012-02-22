@@ -123,7 +123,7 @@
 			[fm createDirectoryAtPath:[templatePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
 			[fm createFileAtPath:templatePath contents:[templateString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 		}
-		loader = [GRMustacheTemplateLoader templateLoaderWithDirectory:templatesDirectoryPath extension:[baseTemplatePath pathExtension]];
+		loader = [GRMustacheTemplateLoader templateLoaderWithBasePath:templatesDirectoryPath extension:[baseTemplatePath pathExtension]];
 		template = [loader parseTemplateNamed:[baseTemplatePath stringByDeletingPathExtension] error:&error];
 	} else {
 		loader = [GRMustacheTestSuiteTemplateLoader_v1_4 loaderWithDictionary:partials];
