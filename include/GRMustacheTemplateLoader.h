@@ -234,8 +234,21 @@
  Loads, parses, and returns the template of provided name.
  
  @since v1.0
+ @deprecated v1.11
  */
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_11;
+
+/**
+ @return a GRMustacheTemplate instance
+ @param name The name of the template
+ @param outError If there is an error loading or parsing the template, upon return
+ contains an NSError object that describes the problem.
+ 
+ Loads, parses, and returns the template of provided name.
+ 
+ @since v1.11
+ */
+- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
 
 /**
  @return a GRMustacheTemplate instance
@@ -246,6 +259,19 @@
  Parses the template string, and returns a GRMustacheTemplate instance.
  
  @since v1.0
+ @deprecated v1.11
  */
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_11;
+
+/**
+ @return a GRMustacheTemplate instance
+ @param templateString The template string
+ @param outError If there is an error parsing the template string or loading a partial, upon return
+ contains an NSError object that describes the problem.
+ 
+ Parses the template string, and returns a GRMustacheTemplate instance.
+ 
+ @since v1.11
+ */
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
 @end

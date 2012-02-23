@@ -56,11 +56,11 @@ For instance:
 
 You may now load a template from its location:
 
-    GRMustacheTemplate *template = [loader parseTemplateNamed:@"document" error:NULL];
+    GRMustacheTemplate *template = [loader templateWithName:@"document" error:NULL];
     
 You may also have the loader parse a template string. Only partials would then be loaded from the loader's location:
 
-    GRMustacheTemplate *template = [loader parseString:@"..." error:NULL];
+    GRMustacheTemplate *template = [loader templateFromString:@"..." error:NULL];
     
 The rendering is done as usual:
 
@@ -128,8 +128,8 @@ Now we may instanciate one:
 
 Then load templates from it:
 
-    GRMustacheTemplate *template1 = [loader parseString:@"{{>partial}}" error:NULL];
-    GRMustacheTemplate *template2 = [loader parseTemplateNamed:@"partial" error:NULL];
+    GRMustacheTemplate *template1 = [loader templateFromString:@"{{>partial}}" error:NULL];
+    GRMustacheTemplate *template2 = [loader templateWithTemplateName:@"partial" error:NULL];
 
 And finally render:
 

@@ -51,7 +51,7 @@ You can render templates on the fly:
 
 You can also parse a template once, and render it many times.
 
-    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     [template renderObject:arthur];
     [template renderObject:...];
 

@@ -63,27 +63,27 @@ It's efficient to parse a template once, and then render it as often as needed:
     @interface GRMustacheTemplate
     
     // Parses the templateString.
-    + (id)parseString:(NSString *)templateString
-                error:(NSError **)outError;
-    
-    // Loads and parses the template from url. (from MacOS 10.6 and iOS 4.0)
-    + (id)parseContentsOfURL:(NSURL *)url
+    + (id)templateFromString:(NSString *)templateString
                        error:(NSError **)outError;
     
+    // Loads and parses the template from url. (from MacOS 10.6 and iOS 4.0)
+    + (id)templateFromContentsOfURL:(NSURL *)url
+                              error:(NSError **)outError;
+    
     // Loads and parses the template from path.
-    + (id)parseContentsOfFile:(NSString *)path
-                        error:(NSError **)outError;
+    + (id)templateFromContentsOfFile:(NSString *)path
+                               error:(NSError **)outError;
     
     // Loads and parses the template from a bundle resource of extension "mustache".
-    + (id)parseResource:(NSString *)name
-                 bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                  error:(NSError **)outError;
+    + (id)templateFromResource:(NSString *)name
+                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                         error:(NSError **)outError;
     
     // Loads and parses the template from a bundle resource of provided extension.
-    + (id)parseResource:(NSString *)name
-          withExtension:(NSString *)ext
-                 bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                  error:(NSError **)outError;
+    + (id)templateFromResource:(NSString *)name
+                 withExtension:(NSString *)ext
+                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                         error:(NSError **)outError;
 
 Those methods return GRMustacheTemplate instances, which render objects with the following methods:
 
@@ -101,19 +101,19 @@ Depending on the method which has been used to create the original template, par
 
 - In the main bundle, with ".mustache" extension:
     - `renderObject:fromString:error:`
-    - `parseString:error:`
+    - `templateFromString:error:`
 - In the specified bundle, with ".mustache" extension:
     - `renderObject:fromResource:bundle:error:`
-    - `parseResource:bundle:error:`
+    - `templateFromResource:bundle:error:`
 - In the specified bundle, with the provided extension:
     - `renderObject:fromResource:withExtension:bundle:error:`
-    - `parseResource:withExtension:bundle:error:`
+    - `templateFromResource:withExtension:bundle:error:`
 - Relatively to the URL of the including template, with the same extension:
     - `renderObject:fromContentsOfURL:error:`
-    - `parseContentsOfURL:error:`
+    - `templateFromContentsOfURL:error:`
 - Relatively to the path of the including template, with the same extension:
     - `renderObject:fromContentsOfFile:error:`
-    - `parseContentsOfFile:error:`
+    - `templateFromContentsOfFile:error:`
 
 You can write recursive partials. Just avoid infinite loops in your context objects.
 

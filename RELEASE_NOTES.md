@@ -3,6 +3,46 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.11
+
+**API cleanup**
+
+New GRMustacheTemplateLoader methods:
+
+- `- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError;`
+- `- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError;`
+
+New GRMustacheTemplate methods:
+
+- `+ (id)templateFromString:(NSString *)templateString error:(NSError **)outError;`
+- `+ (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError;`
+- `+ (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;`
+- `+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;`
+- `+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError;`
+- `+ (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+
+Deprecated GRMustacheTemplateLoader methods (use `templateWithName:error:` and `templateFromString:error:` instead):
+
+- `- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;`
+- `- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;`
+
+Deprecated GRMustacheTemplate methods (replace `parse` with `templateFrom`):
+
+- `+ (id)parseString:(NSString *)templateString error:(NSError **)outError;`
+- `+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;`
+- `+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;`
+- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+- `+ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;`
+- `+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+
 ## v1.10.3
 
 Upgrade GRMustache, and get deprecation warnings when you use deprecated APIs. Your code will keep on running fine, though.
