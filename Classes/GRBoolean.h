@@ -36,7 +36,7 @@
  @since v1.0
  @deprecated v1.2
  */
-DEPRECATED_IN_GRMUSTACHE_VERSION_1_2_AND_LATER @interface GRYes : NSObject <NSCopying>
+@interface GRYes : NSObject <NSCopying>
 /**
  @deprecated Use `[NSNumber numberWithBool:YES]` instead.
  @return the GRYes singleton.
@@ -65,7 +65,7 @@ DEPRECATED_IN_GRMUSTACHE_VERSION_1_2_AND_LATER @interface GRYes : NSObject <NSCo
  @see GRYes
  @since v1.0
  */
-DEPRECATED_IN_GRMUSTACHE_VERSION_1_2_AND_LATER @interface GRNo : NSObject <NSCopying>
+@interface GRNo : NSObject <NSCopying>
 /**
  @deprecated Use `[NSNumber numberWithBool:NO]` instead.
  @return the GRNo singleton.
