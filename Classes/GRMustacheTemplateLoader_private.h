@@ -54,7 +54,7 @@
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path;
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
@@ -64,7 +64,7 @@
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
@@ -74,7 +74,7 @@
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 #endif
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding __attribute__((deprecated));
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
 + (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;

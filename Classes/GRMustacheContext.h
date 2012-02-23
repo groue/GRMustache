@@ -52,7 +52,7 @@ DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER @interface GRMustacheContext: NSO
  
  @deprecated v1.5
  */
-+ (id)contextWithObject:(id)object;
++ (id)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
 /**
  Returns a context objet containing several objects.
@@ -65,7 +65,7 @@ DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER @interface GRMustacheContext: NSO
  
  @deprecated v1.5
  */
-+ (id)contextWithObjects:(id)object, ...;
++ (id)contextWithObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Deriving new contexts
@@ -82,7 +82,7 @@ DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER @interface GRMustacheContext: NSO
  
  @deprecated v1.5
  */
-- (GRMustacheContext *)contextByAddingObject:(id)object;
+- (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Key value coding

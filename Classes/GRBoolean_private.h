@@ -22,12 +22,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GRYes : NSObject <NSCopying>
-+ (GRYes *)yes;
-- (BOOL)boolValue;
+@interface GRYes : NSObject <NSCopying> // deprecated
++ (GRYes *)yes; // deprecated
+- (BOOL)boolValue UNAVAILABLE_ATTRIBUTE;    // privately unavailable deprecated public method
 @end
 
-@interface GRNo : NSObject <NSCopying>
-+ (GRNo *)no;
-- (BOOL)boolValue;
+@interface GRNo : NSObject <NSCopying> // deprecated
++ (GRNo *)no; // deprecated
+- (BOOL)boolValue UNAVAILABLE_ATTRIBUTE;    // privately unavailable deprecated public method
 @end

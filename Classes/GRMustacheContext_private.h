@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GRMustacheContext: NSObject {
+@interface GRMustacheContext: NSObject { // deprecated
 @private
     id _object;
     GRMustacheContext *_parent;
@@ -30,10 +30,10 @@
 @property (nonatomic, retain, readonly) id object;
 @property (nonatomic, retain, readonly) GRMustacheContext *parent;
 + (void)preventNSUndefinedKeyExceptionAttack;
-+ (id)contextWithObject:(id)object;
-+ (id)contextWithObjects:(id)object, ... UNAVAILABLE_ATTRIBUTE;
++ (id)contextWithObject:(id)object; // deprecated
++ (id)contextWithObjects:(id)object, ... UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList;
-- (GRMustacheContext *)contextByAddingObject:(id)object;
+- (GRMustacheContext *)contextByAddingObject:(id)object; // deprecated
 - (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped;
 - (id)valueForKey:(NSString *)key;
 @end

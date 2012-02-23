@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRBoolean.h"
+#import "GRBoolean_private.h"
 
 
 static GRYes *yes = nil;

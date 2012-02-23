@@ -45,9 +45,9 @@
 @end
 
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block);
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 
 typedef NSString *(^GRMustacheRenderer)(id object);
 typedef id GRMustacheLambda;
-GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *));
+GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
 #endif
