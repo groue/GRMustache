@@ -1,4 +1,21 @@
 - Bring back categories. Read http://jverkoey.github.com/nimbus/group___preprocessor-_macros.html
 - deprecate [XXX parseYYY] and introduce [XXX templateFromYYY]
 - deprecate [GRMustacheTemplateLoader parseTemplateNamed:error:] and introduce [GRMustacheTemplateLoader parseTemplate:error:]
+- support BOOL property getters `{{#isPretty}}`
+- Handlebars: support `\{{foo}}` escaped tag
+- Handlebars: support `{{#section value}}...{{/section}}`
+- Handlebars: support `{{#section value value ...}}...{{/section}}`
+- Handlebars: support `{{#section name=value ...}}...{{/section}}`
+- Handlebars: support `{{#with value}}...{{/with}}` built-in helper
+- Handlebars: support `{{#each value}}...{{/each}}` built-in helper
+- Handlebars: support `{{#if value}}...{{/if}}` built-in helper
+- Handlebars: support `{{#if value}}...{{/if}}` built-in helper
+- Handlebars: support `{{#if value}}...{{else}}...{{/if}}` built-in helper
+- Handlebars: support `{{#unless value}}...{{/unless}}` built-in helper
+- Handlebars: support `articles.[10].comments` value
+- Handlebars: support literal string values `"foo"`
+- Handlebars: support literal numeric values `1.23`
+- Handlebars: support literal boolean values `true`
+- provide a way to return an explicit HTML-safe string from a helper
+- provide a way to return an explicit HTML-unsafe string from a helper
 + deprecate full GRMustacheContext class
