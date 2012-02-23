@@ -133,9 +133,9 @@
  
  Let's first parse the template:
  
-    GRMustacheTemplate *template = [GRMustacheTemplate parseResource:@"orderConfirmation"
-                                                              bundle:nil
-                                                               error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"orderConfirmation"
+                                                                     bundle:nil
+                                                                      error:NULL];
  
  Let's now render, with two objects: our `MustacheHelper` class that will provide the `localize` lambda, and `self` that will provide the `cart`:
  

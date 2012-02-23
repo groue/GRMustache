@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRendering_private.h"
 
 @class GRMustacheInvocation;
@@ -33,12 +34,9 @@
     NSArray *_elems;
 }
 
-@property (nonatomic, readonly) NSString *templateString;
-
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
-
-- (NSString *)renderObject:(id)object;
-
-- (NSString *)renderObjects:(id)object, ...;
+@property (nonatomic, readonly) NSString *templateString GRMUSTACHE_API_PUBLIC;
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObjects:(id)object, ... GRMUSTACHE_API_PUBLIC;
 
 @end

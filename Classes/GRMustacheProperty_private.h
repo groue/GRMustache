@@ -21,7 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 @interface GRMustacheProperty : NSObject
-+ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName;
++ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName GRMUSTACHE_API_INTERNAL;
 @end

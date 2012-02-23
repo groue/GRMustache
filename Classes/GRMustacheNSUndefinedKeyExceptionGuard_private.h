@@ -21,7 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 @interface GRMustacheNSUndefinedKeyExceptionGuard : NSObject
-+ (id)valueForKey:(NSString *)key inObject:(id)object;
++ (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 @end

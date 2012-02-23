@@ -54,15 +54,18 @@
                                        error:outError];
 }
 
-- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
+#pragma mark GRMustacheURLTemplateLoader
+
+- (GRMustacheTemplate *)templateFromContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
     NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
     if (!templateString) {
         return nil;
     }
-    GRMustacheTemplate *template = [self parseString:templateString error:outError];
+    GRMustacheTemplate *template = [self templateFromString:templateString error:outError];
     if (!template) {
         return nil;
     }
+    // we can cache this template
     [self setTemplate:template forTemplateId:templateURL];
     return template;
 }
@@ -106,15 +109,18 @@
                                         error:outError];
 }
 
-- (GRMustacheTemplate *)parseContentsOfFile:(NSString *)templatePath error:(NSError **)outError {
+#pragma mark GRMustachePathTemplateLoader
+
+- (GRMustacheTemplate *)templateFromContentsOfFile:(NSString *)templatePath error:(NSError **)outError {
     NSString *templateString = [NSString stringWithContentsOfFile:templatePath encoding:self.encoding error:outError];
     if (!templateString) {
         return nil;
     }
-    GRMustacheTemplate *template = [self parseString:templateString error:outError];
+    GRMustacheTemplate *template = [self templateFromString:templateString error:outError];
     if (!template) {
         return nil;
     }
+    // we can cache this template
     [self setTemplate:template forTemplateId:templatePath];
     return template;
 }

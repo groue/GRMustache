@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRendering_private.h"
 
 @interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement> {
@@ -27,7 +28,8 @@
     NSString *_text;
 }
 
-+ (id)textElementWithString:(NSString *)string;
++ (id)textElementWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
+
 @end
 
 

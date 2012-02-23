@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 
 typedef enum {
@@ -42,10 +43,13 @@ typedef enum {
     NSUInteger _line;
     NSRange _range;
 }
+
+#pragma mark Internal APIs
+
 @property (nonatomic, readonly) GRMustacheTokenType type;
 @property (nonatomic, readonly, retain) NSString *content;
 @property (nonatomic, readonly, retain) NSString *templateString;
 @property (nonatomic, readonly) NSUInteger line;
 @property (nonatomic, readonly) NSRange range;
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
 @end

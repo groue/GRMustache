@@ -31,9 +31,9 @@
 }
 
 - (GRMustacheTemplate *)parseResource:(NSString *)name {
-	return [GRMustacheTemplate parseResource:name
-                                      bundle:self.testBundle
-                                       error:nil];
+	return [GRMustacheTemplate templateFromResource:name
+                                             bundle:self.testBundle
+                                              error:nil];
 }
 
 - (NSString *)renderObject:(id)object fromResource:(NSString *)name {

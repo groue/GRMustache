@@ -21,10 +21,14 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
 
 @interface GRMustacheInvocation : NSObject
-+ (id)invocationWithKeys:(NSArray *)keys;
-- (id)invokeWithContext:(GRMustacheContext *)context;
+
+#pragma mark Internal APIs
+
++ (id)invocationWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
+- (id)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

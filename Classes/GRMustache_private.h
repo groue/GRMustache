@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 enum {
     GRMustacheTemplateOptionNone = 0,
@@ -39,16 +40,11 @@ typedef struct {
 
 @interface GRMustache: NSObject
 
-+ (GRMustacheVersion)version;
-
-+ (BOOL)strictBooleanMode;
-
-+ (void)setStrictBooleanMode:(BOOL)aBool;
-
-+ (void)preventNSUndefinedKeyExceptionAttack;
-
-+ (GRMustacheTemplateOptions)defaultTemplateOptions;
-
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
++ (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
++ (BOOL)strictBooleanMode GRMUSTACHE_API_PUBLIC;
++ (void)setStrictBooleanMode:(BOOL)aBool GRMUSTACHE_API_PUBLIC;
++ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
++ (GRMustacheTemplateOptions)defaultTemplateOptions GRMUSTACHE_API_PUBLIC;
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions GRMUSTACHE_API_PUBLIC;
 
 @end

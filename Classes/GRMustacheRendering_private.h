@@ -21,10 +21,11 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
 
 @protocol GRMustacheRenderingElement
 @required
-- (NSString *)renderContext:(GRMustacheContext *)context;
+- (NSString *)renderContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

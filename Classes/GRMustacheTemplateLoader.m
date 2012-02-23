@@ -35,7 +35,8 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @interface GRMustacheTemplateLoader()
 @property (nonatomic) GRMustacheTemplateOptions options;
-- (GRMustacheTemplate *)parseString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
+- (GRMustacheTemplate *)templateWithName:(NSString *)name relativeToTemplateId:(id)baseTemplateId asPartial:(BOOL)partial error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateLoader
@@ -52,7 +53,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 #endif
 
-// deprecated
 + (id)templateLoaderWithBasePath:(NSString *)path {
     return [self templateLoaderWithDirectory:path options:GRMustacheDefaultTemplateOptions];
 }
@@ -66,24 +66,23 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext {
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext {
     return [self templateLoaderWithBaseURL:URL extension:ext options:GRMustacheDefaultTemplateOptions];
 }
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
     return [[[GRMustacheDirectoryURLTemplateLoader alloc] initWithURL:URL extension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 #endif
 
-// deprecated
-+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext {
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext {
     return [self templateLoaderWithDirectory:path extension:ext options:GRMustacheDefaultTemplateOptions];
 }
 
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext {
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext {
     return [self templateLoaderWithDirectory:path extension:ext options:GRMustacheDefaultTemplateOptions];
 }
 
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options {
     return [[[GRMustacheDirectoryPathTemplateLoader alloc] initWithPath:path extension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 
@@ -97,7 +96,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 #endif
 
-// deprecated
 + (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding {
     return [self templateLoaderWithDirectory:path extension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions];
 }
@@ -156,7 +154,65 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
     return self;
 }
 
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId asPartial:(BOOL)partial error:(NSError **)outError {
+- (GRMustacheTemplate *)templateWithElements:(NSArray *)elements
+{
+    return [GRMustacheTemplate templateWithElements:elements options:_options];
+}
+
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {
+    return [self templateWithName:name relativeToTemplateId:nil asPartial:NO error:outError];
+}
+
+- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError {
+    return [self templateWithName:name relativeToTemplateId:nil asPartial:NO error:outError];
+}
+
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError {
+    return [self templateFromString:templateString templateId:nil error:outError];
+}
+
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError {
+    return [self templateFromString:templateString templateId:nil error:outError];
+}
+
+- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId {
+    if (template) {
+        [_templatesById setObject:template forKey:templateId];
+    } else {
+        [_templatesById removeObjectForKey:templateId];
+    }
+}
+
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+    NSAssert(NO, @"abstract method");
+    return nil;
+}
+
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+    NSAssert(NO, @"abstract method");
+    return nil;
+}
+
+- (void)dealloc {
+    [_extension release];
+    [_templatesById release];
+    [super dealloc];
+}
+
+#pragma mark Private
+
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError {
+    GRMustacheTemplateParser *parser = [[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId];
+    GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
+    tokenizer.delegate = parser;
+    [tokenizer parseTemplateString:templateString];
+    [tokenizer release];
+    GRMustacheTemplate *res = [parser templateReturningError:outError];
+    [parser release];
+    return res;
+}
+
+- (GRMustacheTemplate *)templateWithName:(NSString *)name relativeToTemplateId:(id)baseTemplateId asPartial:(BOOL)partial error:(NSError **)outError {
     id templateId = [self templateIdForTemplateNamed:name relativeToTemplateId:baseTemplateId];
     if (templateId == nil) {
         if (outError != NULL) {
@@ -194,7 +250,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
         [self setTemplate:template forTemplateId:templateId];
         
         // parse
-        GRMustacheTemplate *parsedTemplate = [self parseString:templateString templateId:templateId error:outError];
+        GRMustacheTemplate *parsedTemplate = [self templateFromString:templateString templateId:templateId error:outError];
         if (parsedTemplate == nil) {
             [self setTemplate:nil forTemplateId:templateId];
             return nil;
@@ -204,56 +260,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
     }
     
     return template;
-}
-
-- (GRMustacheTemplate *)templateWithElements:(NSArray *)elements
-{
-    return [GRMustacheTemplate templateWithElements:elements options:_options];
-}
-
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError {
-    return [self parseTemplateNamed:name relativeToTemplateId:nil asPartial:NO error:outError];
-}
-
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError {
-    return [self parseString:templateString templateId:nil error:outError];
-}
-
-- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId {
-    if (template) {
-        [_templatesById setObject:template forKey:templateId];
-    } else {
-        [_templatesById removeObjectForKey:templateId];
-    }
-}
-
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-    NSAssert(NO, @"abstract method");
-    return nil;
-}
-
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-    NSAssert(NO, @"abstract method");
-    return nil;
-}
-
-- (void)dealloc {
-    [_extension release];
-    [_templatesById release];
-    [super dealloc];
-}
-
-#pragma mark Private
-
-- (GRMustacheTemplate *)parseString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError {
-    GRMustacheTemplateParser *parser = [[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId];
-    GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
-    tokenizer.delegate = parser;
-    [tokenizer parseTemplateString:templateString];
-    [tokenizer release];
-    GRMustacheTemplate *res = [parser templateReturningError:outError];
-    [parser release];
-    return res;
 }
 
 @end

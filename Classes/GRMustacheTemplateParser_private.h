@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheAvailabilityMacros_private.h"
 #import <Foundation/Foundation.h>
 #import "GRMustacheTokenizer_private.h"
 #import "GRMustache_private.h"
@@ -39,6 +40,7 @@
     GRMustacheToken *_currentSectionOpeningToken;
     GRMustacheTemplateOptions _options;
 }
-- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId;
-- (GRMustacheTemplate *)templateReturningError:(NSError **)outError;
+
+- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId GRMUSTACHE_API_INTERNAL;
+- (GRMustacheTemplate *)templateReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

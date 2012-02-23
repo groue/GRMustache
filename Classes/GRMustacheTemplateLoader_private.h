@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_private.h"
 #import <Foundation/Foundation.h>
@@ -27,16 +28,21 @@
 
 @class GRMustacheTemplate;
 
+#pragma mark -
+
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 @protocol GRMustacheURLTemplateLoader<NSObject>
-- (GRMustacheTemplate *)parseContentsOfURL:(NSURL *)templateURL error:(NSError **)outError;
+- (GRMustacheTemplate *)templateFromContentsOfURL:(NSURL *)templateURL error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
 #endif
 
+#pragma mark -
+
 @protocol GRMustachePathTemplateLoader<NSObject>
-- (GRMustacheTemplate *)parseContentsOfFile:(NSString *)templatePath error:(NSError **)outError;
+- (GRMustacheTemplate *)templateFromContentsOfFile:(NSString *)templatePath error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
 
+#pragma mark -
 
 @interface GRMustacheTemplateLoader: NSObject {
 @private
@@ -45,63 +51,63 @@
     NSMutableDictionary *_templatesById;
     GRMustacheTemplateOptions _options;
 }
-@property (nonatomic, readonly, copy) NSString *extension;
-@property (nonatomic, readonly) NSStringEncoding encoding;
-@property (nonatomic, readonly) GRMustacheTemplateOptions options;
+
+@property (nonatomic, readonly, copy) NSString *extension GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, readonly) NSStringEncoding encoding GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, readonly) GRMustacheTemplateOptions options GRMUSTACHE_API_INTERNAL;
+
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
+
+#pragma mark Directory
+
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
+
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_DEPRECATED_PUBLIC;
+
+#pragma mark Bundle
+
++ (id)templateLoaderWithBundle:(NSBundle *)bundle GRMUSTACHE_API_PUBLIC;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
+
+#pragma mark Base URL
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL;
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 #endif
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
+#pragma mark Template by name
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path;
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
+- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateWithName:(NSString *)name relativeToTemplateId:(id)templateId asPartial:(BOOL)partial error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext;
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
-#endif
+#pragma mark Template from string
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateWithElements:(NSArray *)elements GRMUSTACHE_API_INTERNAL;
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
+#pragma mark Template IDs
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-+ (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
-#endif
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId GRMUSTACHE_API_PUBLIC;
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId GRMUSTACHE_API_INTERNAL;
 
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding UNAVAILABLE_ATTRIBUTE; // privately unavailable deprecated public method
-
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-+ (id<GRMustachePathTemplateLoader>)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
-
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;
-
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
-
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
-
-- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
-
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;
-
-- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
-
-- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name relativeToTemplateId:(id)templateId asPartial:(BOOL)partial error:(NSError **)outError;
-
-- (GRMustacheTemplate *)templateWithElements:(NSArray *)elements;
-
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId;
-
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError;
-
-- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId;
 @end

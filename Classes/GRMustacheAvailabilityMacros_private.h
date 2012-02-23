@@ -20,23 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
 
-@interface GRMustacheContext: NSObject {
-@private
-    id _object;
-    GRMustacheContext *_parent;
-}
+/*
+ * GRMUSTACHE_API_PUBLIC
+ * 
+ * Used on public declarations
+ */
+#define GRMUSTACHE_API_PUBLIC
 
-@property (nonatomic, retain, readonly) id object GRMUSTACHE_API_INTERNAL;
-@property (nonatomic, retain, readonly) GRMustacheContext *parent GRMUSTACHE_API_INTERNAL;
+/*
+ * GRMUSTACHE_API_DEPRECATED_PUBLIC
+ * 
+ * Used on public but deprecated declarations
+ */
+#define GRMUSTACHE_API_DEPRECATED_PUBLIC    UNAVAILABLE_ATTRIBUTE
 
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
-+ (id)contextWithObject:(id)object GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
-+ (id)contextWithObjects:(id)object, ... GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList GRMUSTACHE_API_INTERNAL;
-- (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
-- (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped GRMUSTACHE_API_INTERNAL;
+/*
+ * GRMUSTACHE_API_INTERNAL
+ * 
+ * Used on internal declaration
+ */
+#define GRMUSTACHE_API_INTERNAL
 
-@end
+/*
+ * GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC
+ * 
+ * Used on internal declaration that are publicly deprecated
+ */
+#define GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC

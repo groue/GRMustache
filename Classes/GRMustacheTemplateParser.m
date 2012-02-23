@@ -183,10 +183,10 @@
                 return NO;
             }
             NSError *partialError;
-            GRMustacheTemplate *partialTemplate = [_templateLoader parseTemplateNamed:token.content
-                                                                 relativeToTemplateId:_templateId
-                                                                            asPartial:YES
-                                                                                error:&partialError];
+            GRMustacheTemplate *partialTemplate = [_templateLoader templateWithName:token.content
+                                                                       relativeToTemplateId:_templateId
+                                                                                  asPartial:YES
+                                                                                      error:&partialError];
             if (partialTemplate == nil) {
                 [self finishWithError:partialError];
                 return NO;

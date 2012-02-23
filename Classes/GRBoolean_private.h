@@ -21,13 +21,16 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
-@interface GRYes : NSObject <NSCopying> // deprecated
-+ (GRYes *)yes; // deprecated
-- (BOOL)boolValue UNAVAILABLE_ATTRIBUTE;    // privately unavailable deprecated public method
+@interface GRYes : NSObject <NSCopying>
++ (GRYes *)yes GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
+- (BOOL)boolValue GRMUSTACHE_API_DEPRECATED_PUBLIC;
 @end
 
-@interface GRNo : NSObject <NSCopying> // deprecated
-+ (GRNo *)no; // deprecated
-- (BOOL)boolValue UNAVAILABLE_ATTRIBUTE;    // privately unavailable deprecated public method
+#pragma mark -
+
+@interface GRNo : NSObject <NSCopying>
++ (GRNo *)no GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
+- (BOOL)boolValue GRMUSTACHE_API_DEPRECATED_PUBLIC;
 @end

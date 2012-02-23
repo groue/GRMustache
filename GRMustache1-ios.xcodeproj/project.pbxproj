@@ -145,6 +145,8 @@
 		5672485B13E0310D0043E2FA /* GRMustacheTemplate_v1_7_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 5672485713E0310D0043E2FA /* GRMustacheTemplate_v1_7_Test.m */; };
 		5672485C13E0310D0043E2FA /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5672485813E0310D0043E2FA /* Model.xcdatamodeld */; };
 		5672485F13E0311D0043E2FA /* syntax_error.conf in Resources */ = {isa = PBXBuildFile; fileRef = 5672485E13E0311D0043E2FA /* syntax_error.conf */; };
+		5679E07E14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 5679E07D14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h */; };
+		5679E07F14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 5679E07D14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h */; };
 		569C86761424A6CF00D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
 		569C86771424A6D800D6BC77 /* GRBoolean_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569C86751424A6CE00D6BC77 /* GRBoolean_private.h */; };
 		56A9235914CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A9235614CEC07B00204EB8 /* GRMustacheDateFormatterHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -286,6 +288,7 @@
 		5672485713E0310D0043E2FA /* GRMustacheTemplate_v1_7_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplate_v1_7_Test.m; sourceTree = "<group>"; };
 		5672485913E0310D0043E2FA /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		5672485E13E0311D0043E2FA /* syntax_error.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = syntax_error.conf; sourceTree = "<group>"; };
+		5679E07D14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheAvailabilityMacros_private.h; sourceTree = "<group>"; };
 		569C86751424A6CE00D6BC77 /* GRBoolean_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBoolean_private.h; sourceTree = "<group>"; };
 		56A9234F14CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheDateFormatterHelperTest.h; sourceTree = "<group>"; };
 		56A9235014CEC05C00204EB8 /* GRMustacheDateFormatterHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheDateFormatterHelperTest.m; sourceTree = "<group>"; };
@@ -416,6 +419,7 @@
 				565F694F139FF062004D1894 /* GRMustache.m */,
 				565F6950139FF062004D1894 /* GRMustache_private.h */,
 				5663FC4814418B9F00B60CEA /* GRMustacheAvailabilityMacros.h */,
+				5679E07D14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h */,
 				566529CC13A132A400B98B87 /* GRMustacheEnvironment.h */,
 				565F695A139FF062004D1894 /* GRMustacheError.h */,
 				565F695B139FF062004D1894 /* GRMustacheError.m */,
@@ -684,6 +688,7 @@
 				563BF72214404493005A4F58 /* GRMustacheProperty_private.h in Headers */,
 				5663FC4914418B9F00B60CEA /* GRMustacheAvailabilityMacros.h in Headers */,
 				5643505B14EC5DFD00D7C00D /* GRMustacheInvocation_private.h in Headers */,
+				5679E07E14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,6 +730,7 @@
 				569C86771424A6D800D6BC77 /* GRBoolean_private.h in Headers */,
 				5663FC4A14418BE300B60CEA /* GRMustacheAvailabilityMacros.h in Headers */,
 				5643505C14EC5DFD00D7C00D /* GRMustacheInvocation_private.h in Headers */,
+				5679E07F14F6398C0052A1ED /* GRMustacheAvailabilityMacros_private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

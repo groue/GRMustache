@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheToken_private.h"
 
 
@@ -28,10 +29,12 @@
 
 @protocol GRMustacheTokenizerDelegate<NSObject>
 @optional
-- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer;
-- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError;
+- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
+- (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer GRMUSTACHE_API_INTERNAL;
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError GRMUSTACHE_API_INTERNAL;
 @end
+
+#pragma mark -
 
 @interface GRMustacheTokenizer : NSObject {
 @private
@@ -39,6 +42,7 @@
     NSString *_otag;
     NSString *_ctag;
 }
+
 @property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate;
-- (void)parseTemplateString:(NSString *)templateString;
+- (void)parseTemplateString:(NSString *)templateString GRMUSTACHE_API_INTERNAL;
 @end

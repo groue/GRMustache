@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRendering_private.h"
 
 @class GRMustacheInvocation;
@@ -30,5 +31,6 @@
     BOOL _raw;
 }
 
-+ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
++ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
+
 @end
