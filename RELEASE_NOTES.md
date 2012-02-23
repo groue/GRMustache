@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.11.1
+
+Avoid deprecation warning in GRMustache headers.
+
 ## v1.11
 
 **API cleanup**

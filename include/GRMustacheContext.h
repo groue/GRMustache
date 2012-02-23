@@ -31,7 +31,7 @@
  @since v1.3
  @deprecated v1.5
  */
-DEPRECATED_IN_GRMUSTACHE_VERSION_1_5_AND_LATER @interface GRMustacheContext: NSObject {
+@interface GRMustacheContext: NSObject {
 @private
     id _object;
     GRMustacheContext *_parent;
