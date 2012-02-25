@@ -55,6 +55,8 @@ For instance:
     [template renderObject:alice]; // @"whistle"
     [template renderObject:bob];   // @""
 
+Your custom property getters will work just as fine.
+
 
 ## Other false values
 
@@ -64,6 +66,12 @@ GRMustache considers as false the following values, and only those:
 - `[NSNull null]`
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
+
+All those values will never be rendered with `{{name}}` tags.
+
+They all prevent Mustache sections `{{#name}}...{{/name}}` rendering.
+
+They all trigger inverted sections `{{^name}}...{{/name}}` rendering.
 
 Note that zero, as an explicit NSNumber whose value is zero, or as an int/float property, is not considered false in GRMustache.
 
@@ -89,29 +97,9 @@ For instance, the following class would **not** render as expected:
 
 GRMustache considers Carol as pretty, although she's not!
 
-That is because `BOOL` type is defined as `signed char` in `<objc/objc.h>`. Since `char` is a number, `[carol objectForKey:@"pretty"]` is `[NSNumber numberWithChar:0]`, which GRMustache considers as an actual number, and not as a falsy value.
+That is because `BOOL` type is defined as `signed char` in `<objc/objc.h>`. Since `char` is a number, `[carol objectForKey:@"pretty"]` is `[NSNumber numberWithChar:0]`, which GRMustache considers as an actual number whose value is zero, and not as a falsy value.
 
 Objective-C properties can be analysed at runtime, and that is why GRMustache is able to nicely handle the `BOOL` property of the `Person` class. However, `BadPerson`, which defines no property, can not be applied this extra care.
-
-### Avoid property getters
-
-For the very same reason, you should not use your property getters in templates:
-
-    @interface Person: NSObject
-    @property (getter=isPretty) BOOL pretty;
-    @end
-
-    Person *dave = [Person new];
-    dave.pretty = NO;
-
-    // Note the use of the property getter, this time
-    NSString *templateString = @"{{#isPretty}}whistle{{/isPretty}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-
-    // @"whistle"
-    [template renderObject:dave];
-
-GRMustache considers Dave as pretty, although he's not! That is because there is no `isPretty` property. `isPretty` behaves just like a plain method returning BOOL, and we have seen above how GRMustache handles those.
 
 ### Collateral damage: signed characters properties
 
