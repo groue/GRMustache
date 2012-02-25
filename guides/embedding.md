@@ -3,10 +3,6 @@
 Embedding GRMustache in your XCode project
 ==========================================
 
-**TL;DR** Choose a static library in the `/lib` folder, and import the `/include/GRMustache.h` header.
-
----
-
 GRMustache ships as a static library and a header file, and only depends on the Foundation.framework.
 
 The `GRMustache.h` header file is located into the `/include` folder at the root of the GRMustache repository. Add it to your project.
