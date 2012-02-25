@@ -5,7 +5,7 @@ You can compare the performances of GRMustache version at https://github.com/gro
 
 ## v1.11.2
 
-Support BOOL property custom getters. Custom BOOL getters used to be interpreted as numbers, and could not control boolean sections.
+BOOL property custom getters can be used to control boolean sections.
 
 ## v1.11.1
 
