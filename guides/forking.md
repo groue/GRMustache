@@ -33,6 +33,10 @@ Private headers have names ending in `_private.h`. They must not import or inclu
 
 ## Test GRMustache
 
+Before running the tests, make sure git submodules are downloaded:
+
+    $ git submodule update --init
+
 There are two kinds of tests, all stored in the `Tests` folder.
 
 - tests of private APIs
@@ -67,9 +71,11 @@ When you add a test for a public API, make sure you place it in the folder that 
 
 ## Building
 
-The GRMustache "product" itself is made of both the `lib` and `include` folders.
+Make sure git submodules are downloaded first:
 
-The XCode GUI can not build them. Instead, you'll issue the following command in the terminal:
+    $ git submodule update --init
+
+Then, issue the following command:
 
     $ make clean && make
 
