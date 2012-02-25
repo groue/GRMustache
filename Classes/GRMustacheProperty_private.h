@@ -24,5 +24,5 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @interface GRMustacheProperty : NSObject
-+ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName GRMUSTACHE_API_INTERNAL;
++ (BOOL)class:(Class)class hasBOOLPropertyGetterNamed:(NSString *)getterName GRMUSTACHE_API_INTERNAL;
 @end

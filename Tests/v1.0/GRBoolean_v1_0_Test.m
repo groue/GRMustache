@@ -75,6 +75,13 @@
 @synthesize dead;
 @end
 
+@interface GRBooleanTestCustomGetter2: GRBooleanTestCustomGetter
+@end
+
+@implementation GRBooleanTestCustomGetter2
+@end
+
+
 @implementation GRBoolean_v1_0_Test
 
 - (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key {
@@ -163,6 +170,37 @@
 	[GRMustache setStrictBooleanMode:strictBooleanMode];
 	[context release];
 	[inheritingContext release];
+}
+
+
+- (void)testCustomGetter {
+	GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
+	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+	NSString *result;
+	
+	object.dead = NO;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"dead-isDead", nil);
+	
+	object.dead = YES;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"dead-isDead", nil);
+}
+
+- (void)testSuperClassPropertiesAndCustomGetter {
+	GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
+	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+	NSString *result;
+	
+	object.dead = NO;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"dead-isDead", nil);
+	
+	object.dead = YES;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
 - (void)test_boolFalseDeclared_isFalseValue {
@@ -265,19 +303,34 @@
 	[inheritingContext release];
 }
 
-- (void)testCustomGetterForBOOLPropertyIsTrueValue {
+- (void)testCustomGetter {
 	GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
-	NSString *templateString = @"{{#dead}}dead{{/dead}}{{#isDead}}isDead{{/isDead}}";
+	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
 	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
 	NSString *result;
 	
 	object.dead = NO;
 	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"isDead", nil);
+	STAssertEqualObjects(result, @"-", nil);
 	
 	object.dead = YES;
 	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"deadisDead", nil);
+	STAssertEqualObjects(result, @"dead-isDead", nil);
+}
+
+- (void)testSuperClassPropertiesAndCustomGetter {
+	GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
+	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+	NSString *result;
+	
+	object.dead = NO;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"-", nil);
+	
+	object.dead = YES;
+	result = [template renderObject:object];
+	STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
 - (void)test_boolFalseDeclared_isFalseValue {

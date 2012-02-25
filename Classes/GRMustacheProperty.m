@@ -31,57 +31,63 @@
 
 @interface GRMustacheProperty()
 @property BOOL BOOLProperty;
-+ (NSInteger)typeForPropertyNamed:(NSString *)propertyName ofClass:(Class)class;
 @end
 
 @implementation GRMustacheProperty
 @dynamic BOOLProperty;
 
-+ (BOOL)class:(Class)class hasBOOLPropertyNamed:(NSString *)propertyName
++ (BOOL)class:(Class)class hasBOOLPropertyGetterNamed:(NSString *)getterName
 {
-    static NSMutableDictionary *classes = nil;
-    if (classes == nil) {
-        classes = [[NSMutableDictionary dictionary] retain];
+    // You can use the property_getAttributes function to discover the name,
+    // the @encode type string of a property, and other attributes of the property.
+    //    
+    // The string starts with a T followed by the @encode type and a comma,
+    // and finishes with a V followed by the name of the backing instance variable.
+    // Between these, the attributes are specified by the following descriptors,
+    // separated by commas:
+    //
+    // ...
+    // G<name>  The property defines a custom getter selector name.
+    //          The name follows the G (for example, GcustomGetter,).
+    // ...
+    
+    static char BOOLEncodeTypePrefix = 0;
+    if (BOOLEncodeTypePrefix == 0) {
+        objc_property_t BOOLproperty = class_getProperty([GRMustacheProperty class], "BOOLProperty");
+        const char *BOOLpropertyAttributes = property_getAttributes(BOOLproperty);
+        BOOLEncodeTypePrefix = BOOLpropertyAttributes[1];
     }
     
-    NSMutableDictionary *propertyNames = [classes objectForKey:class];
-    if (propertyNames == nil) {
-        propertyNames = [NSMutableDictionary dictionary];
-        [classes setObject:propertyNames forKey:class];
-    }
+    const char *getterNameCString = [getterName cStringUsingEncoding:NSUTF8StringEncoding];
     
-    NSNumber *boolNumber = [propertyNames objectForKey:propertyName];
-    if (boolNumber == nil) {
-        static NSInteger BOOLPropertyType = NSNotFound;
-        if (BOOLPropertyType == NSNotFound) {
-            BOOLPropertyType = [self typeForPropertyNamed:@"BOOLProperty" ofClass:self];
-        }
-        BOOL booleanProperty = ([self typeForPropertyNamed:propertyName ofClass:class] == BOOLPropertyType);
-        [propertyNames setObject:[NSNumber numberWithBool:booleanProperty] forKey:propertyName];
-        return booleanProperty;
-    }
-    
-    return [boolNumber boolValue];
-}
-
-#pragma mark - Private
-
-+ (NSInteger)typeForPropertyNamed:(NSString *)propertyName ofClass:(Class)class
-{
-    objc_property_t property = class_getProperty(class, [propertyName cStringUsingEncoding:NSUTF8StringEncoding]);
+    // first look for property with the same name
+    objc_property_t property = class_getProperty(class, getterNameCString);
     if (property != NULL) {
-        const char *attributesCString = property_getAttributes(property);
-        while (attributesCString) {
-            if (attributesCString[0] == 'T') {
-                return attributesCString[1];
-            }
-            attributesCString = strchr(attributesCString, ',');
-            if (attributesCString) {
-                attributesCString++;
-            }
+        const char *propertyAttributes = property_getAttributes(property);
+        if (propertyAttributes[1] == BOOLEncodeTypePrefix) {
+            return YES;
         }
     }
-    return NSNotFound;
+
+    // now look for check for custom getter in all properties
+    size_t getterNeedleSize = strlen(getterNameCString) + 3; // room for 'G', selector name, ',', and '\0'
+    char *getterNeedleCString = malloc(getterNeedleSize);
+    sprintf(getterNeedleCString, "G%s,", getterNameCString);
+    BOOL found = NO;
+    for (; class; class = class_getSuperclass(class)) {
+        objc_property_t *properties = class_copyPropertyList(class, NULL);
+        if (properties == NULL) continue;
+        for (objc_property_t *p = properties; *p; ++p) {
+            const char *propertyAttributes = property_getAttributes(*p);
+            found = ((propertyAttributes[1] == BOOLEncodeTypePrefix) && strstr(propertyAttributes, getterNeedleCString));
+            if (found) break;
+        }
+        free(properties);
+        if (found) break;
+    }
+    free(getterNeedleCString);
+    return found;
 }
+
 
 @end

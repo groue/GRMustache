@@ -177,7 +177,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     
     if ([value isKindOfClass:[NSNumber class]] &&
         ![GRMustache strictBooleanMode] &&
-        [GRMustacheProperty class:[_object class] hasBOOLPropertyNamed:key])
+        [GRMustacheProperty class:[_object class] hasBOOLPropertyGetterNamed:key])
     {
         if (outBooleanRef) {
             *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
