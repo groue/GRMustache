@@ -45,15 +45,13 @@ You can render templates on the fly:
     Person *arthur = [Person personWithName:@"Arthur"];
     
     // Returns "Hello Arthur!"
-    [GRMustacheTemplate renderObject:arthur
-                          fromString:templateString
-                               error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
 
 You can also parse a template once, and render it many times.
 
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    [template renderObject:arthur];
-    [template renderObject:...];
+    rendering = [template renderObject:arthur];
+    rendering = [template renderObject:...];
 
 Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
