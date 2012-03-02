@@ -13,13 +13,13 @@ Breaking news on Twitter: http://twitter.com/GRMustache
 What you get
 ------------
 
-**An ARC-compatible static library**, that will run on your computers, devices, simulators.
-
 **MacOS 10.6+, iPhoneOS 3.0, iOS 4.0+ support**
+
+**An ARC-compatible static library**, that will run on your computers, devices, simulators.
 
 **Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (see below).
     
-**Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
+**Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
 **Number and date formatting.** Handy, and built-in.
 
@@ -31,6 +31,7 @@ What you get
 - [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md): how to format numbers
 - [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md): how to format dates
 - [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
+
 
 Usage
 -----
@@ -44,7 +45,7 @@ You can render templates on the fly:
     NSString *templateString = @"Hello {{name}}!";
     Person *arthur = [Person personWithName:@"Arthur"];
     
-    // Returns "Hello Arthur!"
+    // Renders "Hello Arthur!"
     NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
 
 You can also parse a template once, and render it many times.
@@ -57,6 +58,7 @@ Speaking of templates, GRMustache eats many kinds of them: files and bundle reso
 
 Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
 
+
 Handlebars.js support
 ---------------------
 
@@ -67,25 +69,11 @@ GRMustache support for Handlebars is limited to the compound key paths that use 
 Of course, GRMustache reads the genuine Mustache `{{foo.bar.baz}}` key paths.
 
 
-Features worth noting
----------------------
-
-### Lambda sections
-
-Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
-
-Be sure to read GRMustache's take on the subject: [guides/runtime/helpers.md](GRMustache/blob/master/guides/runtime/helpers.md).
-
-### Number and Date formatting
-
-GRMustache ships with a few helper classes. One allows you to format all numbers in a section with a `NSNumberFormatter` instance, the other does the same, for dates.
-
-They are covered by [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md) and  [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md)
-
 Forking
 -------
 
 Please fork. You'll learn useful information in [guides/forking.md](GRMustache/blob/master/guides/forking.md).
+
 
 License
 -------

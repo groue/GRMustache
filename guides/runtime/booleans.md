@@ -2,19 +2,6 @@
 
 # Booleans
 
-**TL;DR** Sections render or not, depending on the boolean value of the object they are attached to. Generally speaking, all objects are considered true, except:
-
-- `nil`, and missing keys
-- `[NSNull null]`
-- `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
-- the empty string `@""`
-
-All other objects are considered true, including zero (NSNumber whose value is zero), and trigger the rendering of sections they are attached to.
-
-The most straightforward booleans are `[NSNumber numberWithBool:]` objects, and `BOOL` properties in your model objects.
-
----
-
 Mustache sections can be controlled by booleans. For instance, the following template would render as an empty string, or as `"whistle"`, depending on the boolean value of the `pretty` key in the rendering context:
 
 	{{#pretty}}whistle{{/pretty}}

@@ -22,9 +22,22 @@ You can thus provide rendering methods with NSDictionary instances, or custom ob
     // "arthur"
     [template renderObject:arthur];
 
-- [The context stack](runtime/context_stack.md) will cover Mustache sections and the KVC lookup mechanism.
-- [Mustache loops](runtime/loops.md)
-- [Mustache booleans](runtime/booleans.md)
-- [Helpers](runtime/helpers.md)
+
+- [context_stack.md](runtime/context_stack.md)
+
+    This guide digs into the key lookup mechanism.
+    
+- [loops.md](runtime/loops.md)
+    
+    Learn how to iterate through enumerable objects such as arrays.
+    
+- [booleans.md](runtime/booleans.md)
+
+    Control whether a Mustache section should render or not.
+    
+- [helpers.md](runtime/helpers.md)
+
+    Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
+
 
 [up](../../../../GRMustache), [next](runtime/context_stack.md)
