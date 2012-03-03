@@ -54,8 +54,8 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
     //   decimal: 0,5
     [template renderObject:data];
 
-Scope
------
+Scope & Caveats
+---------------
 
 GRMustacheNumberFormatterHelper does not format numbers in sub sections. For instance, if you plan to format numbers in a collection, make sure your formatter helper is invoked *inside* the collection section:
 
@@ -64,5 +64,7 @@ GRMustacheNumberFormatterHelper does not format numbers in sub sections. For ins
             {{float}}
         {{/decimal_format}}
     {{/items}}
+
+In the same fashion, it won't format numbers that are the result of a compound key path such as `foo.bar`.
 
 [up](../../../../GRMustache), [next](date_formatting.md)

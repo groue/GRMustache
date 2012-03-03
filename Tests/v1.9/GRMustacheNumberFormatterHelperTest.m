@@ -41,14 +41,28 @@
 
 - (void)testNumberFormattingFailsInSubSection
 {
-    NSString *templateString = @"{{#format}}{{#section}}{{value}}{{/section}}{{/format}}";
+    NSString *templateString = @"{{#format}}{{#object}}{{value}}{{/object}}{{/format}}";
     GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
     
     NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     numberFormatter.numberStyle = kCFNumberFormatterScientificStyle;
     NSDictionary *helper = [NSDictionary dictionaryWithObject:[GRMustacheNumberFormatterHelper helperWithNumberFormatter:numberFormatter] forKey:@"format"];
     
-    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.5] forKey:@"value"] forKey:@"section"];
+    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.5] forKey:@"value"] forKey:@"object"];
+    NSString *result = [template renderObjects:helper, data, nil];
+    STAssertEqualObjects(result, @"0.5", nil);
+}
+
+- (void)testNumberFormattingFailsWithKeyPaths
+{
+    NSString *templateString = @"{{#format}}{{object.value}}{{/format}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
+    
+    NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    numberFormatter.numberStyle = kCFNumberFormatterScientificStyle;
+    NSDictionary *helper = [NSDictionary dictionaryWithObject:[GRMustacheNumberFormatterHelper helperWithNumberFormatter:numberFormatter] forKey:@"format"];
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.5] forKey:@"value"] forKey:@"object"];
     NSString *result = [template renderObjects:helper, data, nil];
     STAssertEqualObjects(result, @"0.5", nil);
 }
