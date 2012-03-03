@@ -66,7 +66,7 @@
 @end
 
 @interface GRBooleanTestCustomGetter: NSObject {
-	BOOL dead;
+    BOOL dead;
 }
 @property (getter=isDead) BOOL dead;
 @end
@@ -84,204 +84,238 @@
 
 @implementation GRBoolean_v1_0_Test
 
-- (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key {
-	NSString *templateString = [NSString stringWithFormat:@"{{#%@}}YES{{/%@}}{{^%@}}NO{{/%@}}", key, key, key, key];
-	NSString *result = [GRMustacheTemplate renderObject:object fromString:templateString error:nil];
-	if ([result isEqualToString:@"YES"]) {
-		return YES;
-	} else if ([result isEqualToString:@"NO"]) {
-		return NO;
-	}
-	return NSNotFound;
-}	
+- (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key
+{
+    NSString *templateString = [NSString stringWithFormat:@"{{#%@}}YES{{/%@}}{{^%@}}NO{{/%@}}", key, key, key, key];
+    NSString *result = [GRMustacheTemplate renderObject:object fromString:templateString error:nil];
+    if ([result isEqualToString:@"YES"]) {
+        return YES;
+    } else if ([result isEqualToString:@"NO"]) {
+        return NO;
+    }
+    return NSNotFound;
+}    
 
-- (void)test_Nil_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionary];
-	STAssertNil([context valueForKey:@"bool"], nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+- (void)test_Nil_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionary];
+    STAssertNil([context valueForKey:@"bool"], nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_NSNull_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+- (void)test_NSNull_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_EmptyString_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+- (void)test_EmptyString_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:@"" forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_EmptyArray_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray array] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+- (void)test_EmptyArray_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray array] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_GRYes_isTrueValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
+- (void)test_GRYes_isTrueValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[GRYes yes] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
 }
 
-- (void)test_GRNo_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+- (void)test_GRNo_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[GRNo no] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
 }
 
-- (void)test_NSNumberWithBoolYES_isTrueValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:YES] key:@"."], (NSInteger)YES, nil);
+- (void)test_NSNumberWithBoolYES_isTrueValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:YES] key:@"."], (NSInteger)YES, nil);
 }
 
-- (void)test_NSNumberWithBoolNO_isFalseValue {
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"bool"];
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:NO] key:@"."], (NSInteger)NO, nil);
+- (void)test_NSNumberWithBoolNO_isFalseValue
+{
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"bool"];
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithBool:NO] key:@"."], (NSInteger)NO, nil);
 }
 
-- (void)test_NSNumberWithZero_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithChar:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithFloat:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithDouble:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInt:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInteger:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLong:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLongLong:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithShort:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedChar:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInt:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInteger:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLong:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLongLong:0] key:@"."], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedShort:0] key:@"."], (NSInteger)YES, nil);
+- (void)test_NSNumberWithZero_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithChar:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithFloat:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithDouble:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInt:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithInteger:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLong:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithLongLong:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithShort:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedChar:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInt:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedInteger:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLong:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLongLong:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedShort:0] key:@"."], (NSInteger)YES, nil);
 }
 
 @end
 
 @implementation GRStrictBooleanMode_v1_0_Test
 
-- (void)setUp {
-	strictBooleanMode = [GRMustache strictBooleanMode];
-	[GRMustache setStrictBooleanMode:YES];
-	context = [[GRBooleanTestSupport alloc] init];
-	inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
+- (void)setUp
+{
+    strictBooleanMode = [GRMustache strictBooleanMode];
+    [GRMustache setStrictBooleanMode:YES];
+    context = [[GRBooleanTestSupport alloc] init];
+    inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
 }
 
-- (void)tearDown {
-	[GRMustache setStrictBooleanMode:strictBooleanMode];
-	[context release];
-	[inheritingContext release];
+- (void)tearDown
+{
+    [GRMustache setStrictBooleanMode:strictBooleanMode];
+    [context release];
+    [inheritingContext release];
 }
 
 
-- (void)testCustomGetter {
-	GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
-	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result;
-	
-	object.dead = NO;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
-	
-	object.dead = YES;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
+- (void)testCustomGetter
+{
+    GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
+    NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    NSString *result;
+    
+    object.dead = NO;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
+    
+    object.dead = YES;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
-- (void)testSuperClassPropertiesAndCustomGetter {
-	GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
-	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result;
-	
-	object.dead = NO;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
-	
-	object.dead = YES;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
+- (void)testSuperClassPropertiesAndCustomGetter
+{
+    GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
+    NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    NSString *result;
+    
+    object.dead = NO;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
+    
+    object.dead = YES;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
-- (void)test_boolFalseDeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseDeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseDeclared"], (NSInteger)NO, nil);
+- (void)test_boolFalseDeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseDeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseDeclared"], (NSInteger)NO, nil);
 }
-- (void)test_boolTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_boolTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_charFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_charTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_intFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_intTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_boolFalseUndeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
+- (void)test_boolFalseUndeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
 }
-- (void)test_boolTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_boolTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_charFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_charTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_intFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_intTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueUndeclared"], (NSInteger)YES, nil);
 }
 
 @end
@@ -290,128 +324,152 @@
 
 @implementation GRNotStrictBooleanMode_v1_0_Test
 
-- (void)setUp {
-	strictBooleanMode = [GRMustache strictBooleanMode];
-	[GRMustache setStrictBooleanMode:NO];
-	context = [[GRBooleanTestSupport alloc] init];
-	inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
+- (void)setUp
+{
+    strictBooleanMode = [GRMustache strictBooleanMode];
+    [GRMustache setStrictBooleanMode:NO];
+    context = [[GRBooleanTestSupport alloc] init];
+    inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
 }
 
-- (void)tearDown {
-	[GRMustache setStrictBooleanMode:strictBooleanMode];
-	[context release];
-	[inheritingContext release];
+- (void)tearDown
+{
+    [GRMustache setStrictBooleanMode:strictBooleanMode];
+    [context release];
+    [inheritingContext release];
 }
 
-- (void)testCustomGetter {
-	GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
-	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result;
-	
-	object.dead = NO;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"-", nil);
-	
-	object.dead = YES;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
+- (void)testCustomGetter
+{
+    GRBooleanTestCustomGetter *object = [[[GRBooleanTestCustomGetter alloc] init] autorelease];
+    NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    NSString *result;
+    
+    object.dead = NO;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"-", nil);
+    
+    object.dead = YES;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
-- (void)testSuperClassPropertiesAndCustomGetter {
-	GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
-	NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result;
-	
-	object.dead = NO;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"-", nil);
-	
-	object.dead = YES;
-	result = [template renderObject:object];
-	STAssertEqualObjects(result, @"dead-isDead", nil);
+- (void)testSuperClassPropertiesAndCustomGetter
+{
+    GRBooleanTestCustomGetter2 *object = [[[GRBooleanTestCustomGetter2 alloc] init] autorelease];
+    NSString *templateString = @"{{#dead}}dead{{/dead}}-{{#isDead}}isDead{{/isDead}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    NSString *result;
+    
+    object.dead = NO;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"-", nil);
+    
+    object.dead = YES;
+    result = [template renderObject:object];
+    STAssertEqualObjects(result, @"dead-isDead", nil);
 }
 
-- (void)test_boolFalseDeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseDeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseDeclared"], (NSInteger)NO, nil);
+- (void)test_boolFalseDeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseDeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseDeclared"], (NSInteger)NO, nil);
 }
-- (void)test_boolTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_boolTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLFalseDeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseDeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseDeclared"], (NSInteger)NO, nil);
+- (void)test_BOOLFalseDeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseDeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseDeclared"], (NSInteger)NO, nil);
 }
-- (void)test_BOOLTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charFalseDeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseDeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseDeclared"], (NSInteger)NO, nil);
+- (void)test_charFalseDeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseDeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseDeclared"], (NSInteger)NO, nil);
 }
-- (void)test_charTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_charTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intFalseDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseDeclared"], (NSInteger)YES, nil);
+- (void)test_intFalseDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intTrueDeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueDeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueDeclared"], (NSInteger)YES, nil);
+- (void)test_intTrueDeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueDeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueDeclared"], (NSInteger)YES, nil);
 }
-- (void)test_boolFalseUndeclared_isFalseValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
+- (void)test_boolFalseUndeclared_isFalseValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolFalseUndeclared"], (NSInteger)NO, nil);
 }
-- (void)test_boolTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_boolTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"boolTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_BOOLTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_BOOLTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"BOOLTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_charFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_charTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_charTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"charTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"charTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_unsigned_charTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_unsigned_charTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"unsigned_charTrueUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intFalseUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseUndeclared"], (NSInteger)YES, nil);
+- (void)test_intFalseUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intFalseUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intFalseUndeclared"], (NSInteger)YES, nil);
 }
-- (void)test_intTrueUndeclared_isTrueValue {
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueUndeclared"], (NSInteger)YES, nil);
-	STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueUndeclared"], (NSInteger)YES, nil);
+- (void)test_intTrueUndeclared_isTrueValue
+{
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"intTrueUndeclared"], (NSInteger)YES, nil);
+    STAssertEquals((NSInteger)[self booleanInterpretationForObject:inheritingContext key:@"intTrueUndeclared"], (NSInteger)YES, nil);
 }
 
 @end

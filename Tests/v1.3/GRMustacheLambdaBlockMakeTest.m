@@ -26,94 +26,101 @@
 @implementation GRMustacheLambdaBlockMakeTest
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
-- (void)testDoesntExecuteWhatItDoesntNeedTo {
-	__block BOOL dead = NO;
-	id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		dead = YES;
-		return @"foo";
-	});
-	NSString *templateString = @"{{#show}}<li>{{die}}</li>{{/show}}yay";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:dieLambda forKey:@"die"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"yay", nil);
-	STAssertEquals(dead, NO, nil);
+
+- (void)testDoesntExecuteWhatItDoesntNeedTo
+{
+    __block BOOL dead = NO;
+    id dieLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        dead = YES;
+        return @"foo";
+    });
+    NSString *templateString = @"{{#show}}<li>{{die}}</li>{{/show}}yay";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:dieLambda forKey:@"die"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"yay", nil);
+    STAssertEquals(dead, NO, nil);
 }
 
-- (void)testSectionsReturningLambdasGetCalledWithText {
-	__block int renderedCalls = 0;
-	__block NSString *cache = nil;
-	
-	id renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		if (cache == nil) {
-			renderedCalls++;
-			cache = [[section renderObject:context] retain];
-		}
-		return cache;
-	});
+- (void)testSectionsReturningLambdasGetCalledWithText
+{
+    __block int renderedCalls = 0;
+    __block NSString *cache = nil;
+    
+    id renderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        if (cache == nil) {
+            renderedCalls++;
+            cache = [[section renderObject:context] retain];
+        }
+        return cache;
+    });
     [cache release];
-	
-	id notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		return section.templateString;
-	});
-	
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 renderedLambda, @"rendered",
-							 notRenderedLambda, @"not_rendered",
-							 @"Gwendal", @"name",
-							 nil];
-	
-	NSString *result;
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
-	
-	result = [self renderObject:context fromResource:@"lambda"];
-	STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
-	STAssertEquals(renderedCalls, 1, @"");
+    
+    id notRenderedLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        return section.templateString;
+    });
+    
+    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                             renderedLambda, @"rendered",
+                             notRenderedLambda, @"not_rendered",
+                             @"Gwendal", @"name",
+                             nil];
+    
+    NSString *result;
+    
+    result = [self renderObject:context fromResource:@"lambda"];
+    STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
+    STAssertEquals(renderedCalls, 1, @"");
+    
+    result = [self renderObject:context fromResource:@"lambda"];
+    STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
+    STAssertEquals(renderedCalls, 1, @"");
+    
+    result = [self renderObject:context fromResource:@"lambda"];
+    STAssertEqualObjects(result, @"|Gwendal|-|{{name}}|", @"");
+    STAssertEquals(renderedCalls, 1, @"");
 }
 
-- (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate {
-	NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
-	GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
-	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		return [wrapperTemplate renderObject:context];
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 wrapperLambda, @"wrapper",
-							 @"Gwendal", @"name",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
+- (void)testSectionLambdasCanRenderCurrentContextInSpecificTemplate
+{
+    NSString *templateString = @"{{#wrapper}}{{/wrapper}}";
+    GRMustacheTemplate *wrapperTemplate = [GRMustacheTemplate parseString:@"<b>{{name}}</b>" error:nil];
+    id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        return [wrapperTemplate renderObject:context];
+    });
+    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                             wrapperLambda, @"wrapper",
+                             @"Gwendal", @"name",
+                             nil];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"<b>Gwendal</b>", nil);
 }
 
-- (void)testSectionLambdasCanRenderExtendedContext {
-	NSString *templateString = @"{{#wrapper}}{{foo}}{{bar}}{{/wrapper}}";
-	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		return [section renderObject:[context contextByAddingObject:[NSDictionary dictionaryWithObject:@"wrapperbar" forKey:@"bar"]]];
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 wrapperLambda, @"wrapper",
-							 @"bar", @"bar",
-							 @"foo", @"foo",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foowrapperbar", nil);
+- (void)testSectionLambdasCanRenderExtendedContext
+{
+    NSString *templateString = @"{{#wrapper}}{{foo}}{{bar}}{{/wrapper}}";
+    id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        return [section renderObject:[context contextByAddingObject:[NSDictionary dictionaryWithObject:@"wrapperbar" forKey:@"bar"]]];
+    });
+    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                             wrapperLambda, @"wrapper",
+                             @"bar", @"bar",
+                             @"foo", @"foo",
+                             nil];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foowrapperbar", nil);
 }
 
-- (void)testSectionLambdasCanReturnNil {
-	NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
-	id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
-		return (NSString *)nil;
-	});
-	NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foobar", nil);
+- (void)testSectionLambdasCanReturnNil
+{
+    NSString *templateString = @"foo{{#wrapper}}{{/wrapper}}bar";
+    id wrapperLambda = GRMustacheLambdaBlockMake(^(GRMustacheSection *section, GRMustacheContext *context) {
+        return (NSString *)nil;
+    });
+    NSDictionary *context = [NSDictionary dictionaryWithObject:wrapperLambda forKey:@"wrapper"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foobar", nil);
 }
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 @end

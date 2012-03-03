@@ -37,21 +37,25 @@
 @synthesize otag=_otag;
 @synthesize ctag=_ctag;
 
-- (id)init {
-    if ((self = [super init])) {
+- (id)init
+{
+    self = [super init];
+    if (self) {
         _otag = [@"{{" retain]; // static strings don't need retain, but static ananlyser may complain :-)
         _ctag = [@"}}" retain];
     }
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_otag release];
     [_ctag release];
     [super dealloc];
 }
 
-- (void)parseTemplateString:(NSString *)templateString {
+- (void)parseTemplateString:(NSString *)templateString
+{
     NSUInteger p = 0;
     NSUInteger line = 1;
     NSUInteger consumedLines = 0;
@@ -197,20 +201,25 @@
     }
 }
 
-- (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+#pragma mark Private
+
+- (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token
+{
     if ([_delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
         return [_delegate tokenizer:self shouldContinueAfterParsingToken:token];
     }
     return YES;
 }
 
-- (void)didFinish {
+- (void)didFinish
+{
     if ([_delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
         [_delegate tokenizerDidFinish:self];
     }
 }
 
-- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description {
+- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description
+{
     if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
         [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
@@ -223,7 +232,8 @@
     }
 }
 
-- (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines {
+- (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines
+{
     NSUInteger stringLength = string.length;
     NSUInteger templateStringLength = templateString.length;
     unichar firstStringChar = [string characterAtIndex:0];

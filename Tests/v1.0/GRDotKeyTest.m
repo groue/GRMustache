@@ -25,48 +25,49 @@
 
 @implementation GRDotKeyTest
 
-- (void)testDotVariable {
-	NSString *templateString = @"{{.}}";
-	NSString *result = [GRMustacheTemplate renderObject:@"foobar" fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foobar", nil);
+- (void)testDotVariable
+{
+    NSString *templateString = @"{{.}}";
+    NSString *result = [GRMustacheTemplate renderObject:@"foobar" fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foobar", nil);
 }
 
-- (void)testDotVariableInEnumeration {
-	NSString *templateString = @"{{#names}}{{.}}{{/names}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																@"foo",
-																@"bar",
-																nil
-																]
-														forKey:@"names"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foobar", nil);
+- (void)testDotVariableInEnumeration
+{
+    NSString *templateString = @"{{#names}}{{.}}{{/names}}";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
+                                                                @"foo",
+                                                                @"bar",
+                                                                nil]
+                                                        forKey:@"names"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foobar", nil);
 }
 
-- (void)testNonGRMustacheContextCanDefineBooleanSection {
-	NSString *templateString = @"{{#item}}{{#name}}{{name}},{{/name}}{{/item}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																[NSDictionary dictionaryWithObject:@"foo" forKey:@"name"],
-																[NSDictionary dictionary],
-																[NSDictionary dictionaryWithObject:@"bar" forKey:@"name"],
-																nil
-																]
-														forKey:@"item"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foo,bar,", nil);
+- (void)testNonGRMustacheContextCanDefineBooleanSection
+{
+    NSString *templateString = @"{{#item}}{{#name}}{{name}},{{/name}}{{/item}}";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
+                                                                [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"],
+                                                                [NSDictionary dictionary],
+                                                                [NSDictionary dictionaryWithObject:@"bar" forKey:@"name"],
+                                                                nil]
+                                                        forKey:@"item"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foo,bar,", nil);
 }
 
-- (void)testDotVariableInNonGRMustacheContextBooleanSection {
-	NSString *templateString = @"{{#item}}{{#name}}{{.}},{{/name}}{{/item}}";
-	NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
-																[NSDictionary dictionaryWithObject:@"foo" forKey:@"name"],
-																[NSDictionary dictionary],
-																[NSDictionary dictionaryWithObject:@"bar" forKey:@"name"],
-																nil
-																]
-														forKey:@"item"];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"foo,bar,", nil);
+- (void)testDotVariableInNonGRMustacheContextBooleanSection
+{
+    NSString *templateString = @"{{#item}}{{#name}}{{.}},{{/name}}{{/item}}";
+    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects:
+                                                                [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"],
+                                                                [NSDictionary dictionary],
+                                                                [NSDictionary dictionaryWithObject:@"bar" forKey:@"name"],
+                                                                nil]
+                                                        forKey:@"item"];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"foo,bar,", nil);
 }
 
 @end

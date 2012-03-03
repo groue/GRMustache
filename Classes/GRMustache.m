@@ -29,19 +29,23 @@ GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateO
 
 @implementation GRMustache
 
-+ (BOOL)strictBooleanMode {
++ (BOOL)strictBooleanMode
+{
     return strictBooleanMode;
 }
 
-+ (void)setStrictBooleanMode:(BOOL)aBool {
-    strictBooleanMode = aBool;
++ (void)setStrictBooleanMode:(BOOL)strict
+{
+    strictBooleanMode = strict;
 }
 
-+ (void)preventNSUndefinedKeyExceptionAttack {
++ (void)preventNSUndefinedKeyExceptionAttack
+{
     [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
 }
 
-+ (GRMustacheVersion)version {
++ (GRMustacheVersion)version
+{
     return (GRMustacheVersion){
         .major = GRMUSTACHE_MAJOR_VERSION,
         .minor = GRMUSTACHE_MINOR_VERSION,

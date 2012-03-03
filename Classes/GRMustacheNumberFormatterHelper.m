@@ -23,6 +23,10 @@
 #import "GRMustache.h"
 #import "GRMustacheNumberFormatterHelper.h"
 
+
+// =============================================================================
+#pragma mark - GRNumberFormatterContext
+
 @interface GRNumberFormatterContext : NSObject {
 @private
     NSNumberFormatter *_numberFormatter;
@@ -30,44 +34,6 @@
 }
 @property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 @property (nonatomic, retain) id wrappedContext;
-@end
-
-@interface GRMustacheNumberFormatterHelper()
-@property (nonatomic, retain) NSNumberFormatter *numberFormatter;
-@end
-
-@implementation GRMustacheNumberFormatterHelper
-@synthesize numberFormatter=_numberFormatter;
-
-- (void)dealloc
-{
-    self.numberFormatter = nil;
-    [super dealloc];
-}
-
-+ (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter
-{
-    GRMustacheNumberFormatterHelper *helper = [[[GRMustacheNumberFormatterHelper alloc] init] autorelease];
-    helper.numberFormatter = numberFormatter;
-    return helper;
-}
-
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-{
-    if (_numberFormatter == nil) {
-        return [section renderObject:context];
-    }
-    
-    // Let's replace the current context with a GRNumberFormatterContext
-    // that will output formatted numbers instead of raw numbers.
-    GRNumberFormatterContext *numberFormatterContext = [[GRNumberFormatterContext alloc] init];
-    numberFormatterContext.wrappedContext = context;
-    numberFormatterContext.numberFormatter = _numberFormatter;
-    NSString *string = [section renderObject:numberFormatterContext];
-    [numberFormatterContext release];
-    return string;
-}
-
 @end
 
 @implementation GRNumberFormatterContext
@@ -98,6 +64,51 @@
     
     // Let's format our number
     return [_numberFormatter stringFromNumber:(NSNumber *)value];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheNumberFormatterHelper
+
+@interface GRMustacheNumberFormatterHelper()
+@property (nonatomic, retain) NSNumberFormatter *numberFormatter;
+@end
+
+@implementation GRMustacheNumberFormatterHelper
+@synthesize numberFormatter=_numberFormatter;
+
+- (void)dealloc
+{
+    self.numberFormatter = nil;
+    [super dealloc];
+}
+
++ (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter
+{
+    GRMustacheNumberFormatterHelper *helper = [[[GRMustacheNumberFormatterHelper alloc] init] autorelease];
+    helper.numberFormatter = numberFormatter;
+    return helper;
+}
+
+
+#pragma mark <GRMustacheHelper>
+
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    if (_numberFormatter == nil) {
+        return [section renderObject:context];
+    }
+    
+    // Let's replace the current context with a GRNumberFormatterContext
+    // that will output formatted numbers instead of raw numbers.
+    GRNumberFormatterContext *numberFormatterContext = [[GRNumberFormatterContext alloc] init];
+    numberFormatterContext.wrappedContext = context;
+    numberFormatterContext.numberFormatter = _numberFormatter;
+    NSString *string = [section renderObject:numberFormatterContext];
+    [numberFormatterContext release];
+    return string;
 }
 
 @end

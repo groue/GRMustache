@@ -43,13 +43,10 @@ typedef enum {
     NSUInteger _line;
     NSRange _range;
 }
-
-#pragma mark Internal APIs
-
-@property (nonatomic, readonly) GRMustacheTokenType type;
-@property (nonatomic, readonly, retain) NSString *content;
-@property (nonatomic, readonly, retain) NSString *templateString;
-@property (nonatomic, readonly) NSUInteger line;
-@property (nonatomic, readonly) NSRange range;
+@property (nonatomic, readonly) GRMustacheTokenType type GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly, retain) NSString *content GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly, retain) NSString *templateString GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) NSUInteger line GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) NSRange range GRMUSTACHE_API_INTERNAL;
 + (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
 @end

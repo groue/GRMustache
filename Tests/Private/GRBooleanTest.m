@@ -27,21 +27,24 @@
 
 @implementation GRBooleanTest
 
-- (void)testNSNumberWithBoolReturnCFBoolean {
-	STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:YES], kCFBooleanTrue, nil);
-	STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:NO], kCFBooleanFalse, nil);
+- (void)testNSNumberWithBoolReturnCFBoolean
+{
+    STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:YES], kCFBooleanTrue, nil);
+    STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:NO], kCFBooleanFalse, nil);
 }
 
-- (void)testGRYesIsTrueObject {
+- (void)testGRYesIsTrueObject
+{
     GRMustacheObjectKind kind;
     [GRMustacheTemplate object:[GRYes yes] kind:&kind boolValue:NULL];
-	STAssertEquals(kind, GRMustacheObjectKindTrueValue, nil);
+    STAssertEquals(kind, GRMustacheObjectKindTrueValue, nil);
 }
 
-- (void)testGRNoIsFalseObject {
+- (void)testGRNoIsFalseObject
+{
     GRMustacheObjectKind kind;
     [GRMustacheTemplate object:[GRNo no] kind:&kind boolValue:NULL];
-	STAssertEquals(kind, GRMustacheObjectKindFalseValue, nil);
+    STAssertEquals(kind, GRMustacheObjectKindFalseValue, nil);
 }
 
 @end

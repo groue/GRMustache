@@ -65,7 +65,7 @@
     NSDictionary *object;
     NSString *path;
     
-	path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
+    path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfFile:path
                                                         error:NULL];
     object = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"baz" forKey:@"bar"] forKey:@"foo"];
@@ -80,7 +80,7 @@
     NSDictionary *object;
     NSString *path;
     
-	path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
+    path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfFile:path
                                                       options:GRMustacheTemplateOptionNone
                                                         error:NULL];
@@ -88,7 +88,7 @@
     result = [template renderObject:object];
     STAssertEqualObjects(result, @"baz", nil);
     
-	path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
+    path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfFile:path
                                                       options:GRMustacheTemplateOptionMustacheSpecCompatibility
                                                         error:NULL];
@@ -104,7 +104,7 @@
     NSDictionary *object;
     NSURL *URL;
     
-	URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
+    URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfURL:URL
                                                        error:NULL];
     object = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"baz" forKey:@"bar"] forKey:@"foo"];
@@ -119,7 +119,7 @@
     NSDictionary *object;
     NSURL *URL;
     
-	URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
+    URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfURL:URL
                                                      options:GRMustacheTemplateOptionNone
                                                        error:NULL];
@@ -127,7 +127,7 @@
     result = [template renderObject:object];
     STAssertEqualObjects(result, @"baz", nil);
     
-	URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
+    URL = [[self.testBundle resourceURL] URLByAppendingPathComponent:@"foo_bar.mustache"];
     template = [GRMustacheTemplate templateFromContentsOfURL:URL
                                                      options:GRMustacheTemplateOptionMustacheSpecCompatibility
                                                        error:NULL];

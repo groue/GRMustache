@@ -36,27 +36,22 @@
 @synthesize invocation=_invocation;
 @synthesize raw=_raw;
 
-+ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
++ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw
+{
     return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
 }
 
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw {
-    if ((self = [self init])) {
-        self.invocation = invocation;
-        self.raw = raw;
-    }
-    return self;
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     [_invocation release];
     [super dealloc];
 }
 
-#pragma mark - GRMustacheRenderingElement
 
+#pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context {
+- (NSString *)renderContext:(GRMustacheContext *)context
+{
     id value = [_invocation invokeWithContext:context];
     BOOL boolValue;
     [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
@@ -69,9 +64,21 @@
     return [self htmlEscape:[value description]];
 }
 
-#pragma mark - Private
 
-- (NSString *)htmlEscape:(NSString *)string {
+#pragma mark Private
+
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw
+{
+    self = [self init];
+    if (self) {
+        self.invocation = invocation;
+        self.raw = raw;
+    }
+    return self;
+}
+
+- (NSString *)htmlEscape:(NSString *)string
+{
     NSMutableString *result = [NSMutableString stringWithString:string];
     [result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
     [result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
@@ -82,4 +89,3 @@
 }
 
 @end
-

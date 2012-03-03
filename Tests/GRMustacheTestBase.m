@@ -26,25 +26,29 @@
 @implementation GRMustacheTestBase
 @dynamic testBundle;
 
-- (NSBundle *)testBundle {
-	return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
+- (NSBundle *)testBundle
+{
+    return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
 }
 
-- (GRMustacheTemplate *)parseResource:(NSString *)name {
-	return [GRMustacheTemplate templateFromResource:name
+- (GRMustacheTemplate *)parseResource:(NSString *)name
+{
+    return [GRMustacheTemplate templateFromResource:name
                                              bundle:self.testBundle
                                               error:nil];
 }
 
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name {
-	return [GRMustacheTemplate renderObject:object
+- (NSString *)renderObject:(id)object fromResource:(NSString *)name
+{
+    return [GRMustacheTemplate renderObject:object
                                fromResource:name
                                      bundle:self.testBundle
                                       error:nil];
 }
 
-- (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext {
-	return [GRMustacheTemplate renderObject:object
+- (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext
+{
+    return [GRMustacheTemplate renderObject:object
                                fromResource:name
                               withExtension:ext
                                      bundle:self.testBundle

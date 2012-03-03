@@ -32,28 +32,33 @@
 @implementation GRMustacheTextElement
 @synthesize text=_text;
 
-+ (id)textElementWithString:(NSString *)text {
++ (id)textElementWithString:(NSString *)text
+{
     return [[[self alloc] initWithString:text] autorelease];
 }
 
-- (id)initWithString:(NSString *)text {
-    if ((self = [self init])) {
+- (void)dealloc
+{
+    [_text release];
+    [super dealloc];
+}
+
+#pragma mark <GRMustacheRenderingElement>
+
+- (NSString *)renderContext:(GRMustacheContext *)context
+{
+    return _text;
+}
+
+#pragma mark Private
+
+- (id)initWithString:(NSString *)text
+{
+    self = [self init];
+    if (self) {
         self.text = text;
     }
     return self;
 }
 
-- (void)dealloc {
-    [_text release];
-    [super dealloc];
-}
-
-#pragma mark - GRMustacheRenderingElement
-
-- (NSString *)renderContext:(GRMustacheContext *)context {
-    return _text;
-}
-
 @end
-
-

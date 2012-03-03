@@ -42,7 +42,7 @@ typedef struct {
 
 + (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
 + (BOOL)strictBooleanMode GRMUSTACHE_API_PUBLIC;
-+ (void)setStrictBooleanMode:(BOOL)aBool GRMUSTACHE_API_PUBLIC;
++ (void)setStrictBooleanMode:(BOOL)strict GRMUSTACHE_API_PUBLIC;
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
 + (GRMustacheTemplateOptions)defaultTemplateOptions GRMUSTACHE_API_PUBLIC;
 + (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions GRMUSTACHE_API_PUBLIC;

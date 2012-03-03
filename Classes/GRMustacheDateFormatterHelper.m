@@ -23,6 +23,10 @@
 #import "GRMustache.h"
 #import "GRMustacheDateFormatterHelper.h"
 
+
+// =============================================================================
+#pragma mark - GRDateFormatterContext
+
 @interface GRDateFormatterContext : NSObject {
 @private
     NSDateFormatter *_dateFormatter;
@@ -30,44 +34,6 @@
 }
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (nonatomic, retain) id wrappedContext;
-@end
-
-@interface GRMustacheDateFormatterHelper()
-@property (nonatomic, retain) NSDateFormatter *dateFormatter;
-@end
-
-@implementation GRMustacheDateFormatterHelper
-@synthesize dateFormatter=_dateFormatter;
-
-- (void)dealloc
-{
-    self.dateFormatter = nil;
-    [super dealloc];
-}
-
-+ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter
-{
-    GRMustacheDateFormatterHelper *helper = [[[GRMustacheDateFormatterHelper alloc] init] autorelease];
-    helper.dateFormatter = dateFormatter;
-    return helper;
-}
-
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-{
-    if (_dateFormatter == nil) {
-        return [section renderObject:context];
-    }
-    
-    // Let's replace the current context with a GRDateFormatterContext
-    // that will output formatted dates instead of raw dates.
-    GRDateFormatterContext *dateFormatterContext = [[GRDateFormatterContext alloc] init];
-    dateFormatterContext.wrappedContext = context;
-    dateFormatterContext.dateFormatter = _dateFormatter;
-    NSString *string = [section renderObject:dateFormatterContext];
-    [dateFormatterContext release];
-    return string;
-}
-
 @end
 
 @implementation GRDateFormatterContext
@@ -93,6 +59,50 @@
     
     // Let's format our date
     return [_dateFormatter stringFromDate:(NSDate *)value];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - GRDateFormatterContext
+
+@interface GRMustacheDateFormatterHelper()
+@property (nonatomic, retain) NSDateFormatter *dateFormatter;
+@end
+
+@implementation GRMustacheDateFormatterHelper
+@synthesize dateFormatter=_dateFormatter;
+
+- (void)dealloc
+{
+    self.dateFormatter = nil;
+    [super dealloc];
+}
+
++ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter
+{
+    GRMustacheDateFormatterHelper *helper = [[[GRMustacheDateFormatterHelper alloc] init] autorelease];
+    helper.dateFormatter = dateFormatter;
+    return helper;
+}
+
+#pragma mark <GRMustacheHelper>
+
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    if (_dateFormatter == nil) {
+        return [section renderObject:context];
+    }
+    
+    // Let's replace the current context with a GRDateFormatterContext
+    // that will output formatted dates instead of raw dates.
+    GRDateFormatterContext *dateFormatterContext = [[GRDateFormatterContext alloc] init];
+    dateFormatterContext.wrappedContext = context;
+    dateFormatterContext.dateFormatter = _dateFormatter;
+    NSString *string = [section renderObject:dateFormatterContext];
+    [dateFormatterContext release];
+    return string;
 }
 
 @end

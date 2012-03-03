@@ -38,7 +38,7 @@ typedef enum {
     GRMustacheTemplateOptions _options;
 }
 
-#pragma marj Objects kinds
+#pragma mark Objects kinds
 
 + (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue GRMUSTACHE_API_INTERNAL;
 
@@ -80,16 +80,18 @@ typedef enum {
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 #pragma mark URL template
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
 + (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 #pragma mark Rendering
 

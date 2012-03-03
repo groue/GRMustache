@@ -25,7 +25,7 @@
 
 @class GRMustacheContext;
 
-@protocol GRMustacheRenderingElement
+@protocol GRMustacheRenderingElement<NSObject>
 @required
 - (NSString *)renderContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

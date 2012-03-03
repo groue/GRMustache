@@ -52,8 +52,10 @@
 @synthesize elementsStack=_elementsStack;
 @synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
 
-- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId {
-    if ((self = [self init])) {
+- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId
+{
+    self = [self init];
+    if (self) {
         self.templateLoader = templateLoader;
         self.templateId = templateId;
         _options = templateLoader.options;
@@ -66,7 +68,8 @@
     return self;
 }
 
-- (GRMustacheTemplate *)templateReturningError:(NSError **)outError {
+- (GRMustacheTemplate *)templateReturningError:(NSError **)outError
+{
     [self finish];
     
     if (_error) {
@@ -79,7 +82,8 @@
     return [self.templateLoader templateWithElements:_currentElements];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_error release];
     [_currentSectionOpeningToken release];
     [_templateLoader release];
@@ -92,7 +96,8 @@
 
 #pragma mark GRMustacheTokenizerDelegate
 
-- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token {
+- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token
+{
     if (!_elementsStack) return NO;
     
     switch (token.type) {
@@ -207,18 +212,21 @@
     return YES;
 }
 
-- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError {
-    [self finishWithError:theError];
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error
+{
+    [self finishWithError:error];
 }
 
 #pragma mark Private
 
-- (void)finishWithError:(NSError *)theError {
-    self.error = theError;
+- (void)finishWithError:(NSError *)error
+{
+    self.error = error;
     [self finish];
 }
 
-- (void)finish {
+- (void)finish
+{
     if (_error == nil && _currentSectionOpeningToken) {
         self.error = [self parseErrorAtLine:_currentSectionOpeningToken.line
                                 description:[NSString stringWithFormat:@"Unclosed `%@` section", _currentSectionOpeningToken.content]];
@@ -231,7 +239,8 @@
     self.sectionOpeningTokenStack = nil;
 }
 
-- (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description {
+- (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description
+{
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
     [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
                  forKey:NSLocalizedDescriptionKey];
@@ -242,7 +251,8 @@
                            userInfo:userInfo];
 }
 
-- (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError {
+- (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError
+{
     NSString *content = token.content;
     NSUInteger length = content.length;
     BOOL acceptDotIdentifier = YES;

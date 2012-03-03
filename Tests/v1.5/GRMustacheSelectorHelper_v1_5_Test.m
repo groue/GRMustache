@@ -28,30 +28,33 @@
 
 @implementation GRMustacheSelectorHelper_v1_5_TestContext
 
-- (NSString*)fooSection:(GRMustacheSection *)section withContext:(id)context {
-	NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:
-						  @"foobaz", @"baz",
-						  nil];
-	return [section renderObjects:context, baz, nil];
+- (NSString*)fooSection:(GRMustacheSection *)section withContext:(id)context
+{
+    NSDictionary *baz = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"foobaz", @"baz",
+                          nil];
+    return [section renderObjects:context, baz, nil];
 }
 
 @end
 
 @implementation GRMustacheSelectorHelper_v1_5_Test
 
-- (void)testMultipleObjectSectionRendering {
-	NSString *templateString = @"{{#foo}}{{bar}}{{baz}}{{/foo}}";
-	id context = [[[GRMustacheSelectorHelper_v1_5_TestContext alloc] init] autorelease];
-	NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-						  @"baz", @"baz",
-						  @"bar", @"bar",
-						  nil];
-	GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
-	NSString *result = [template renderObjects:context, data, nil];
-	STAssertEqualObjects(result, @"barfoobaz", nil);
+- (void)testMultipleObjectSectionRendering
+{
+    NSString *templateString = @"{{#foo}}{{bar}}{{baz}}{{/foo}}";
+    id context = [[[GRMustacheSelectorHelper_v1_5_TestContext alloc] init] autorelease];
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"baz", @"baz",
+                          @"bar", @"bar",
+                          nil];
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
+    NSString *result = [template renderObjects:context, data, nil];
+    STAssertEqualObjects(result, @"barfoobaz", nil);
 }
 
-- (void)testMultipleObjectsRendering {
+- (void)testMultipleObjectsRendering
+{
     NSString *templateString = @"{{A}}{{B}}{{C}}";
     GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];
     

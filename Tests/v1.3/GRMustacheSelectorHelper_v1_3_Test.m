@@ -28,43 +28,49 @@
 
 @implementation GRMustacheSelectorHelper_v1_3_TestContext
 
-- (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	return [NSString stringWithFormat:
-			@"<a href=\"/people/%@\">%@</a>",
-			[context valueForKey:@"id"],
-			[section renderObject:context]];
+- (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context
+{
+    return [NSString stringWithFormat:
+            @"<a href=\"/people/%@\">%@</a>",
+            [context valueForKey:@"id"],
+            [section renderObject:context]];
 }
 
-- (NSString *)id {
+- (NSString *)id
+{
     return @"1";
 }
 
-- (NSString *)name {
+- (NSString *)name
+{
     return @"foo";
 }
 
-+ (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context {
-	return [NSString stringWithFormat:
-			@"<a href=\"/people\">%@</a>",
-			[section renderObject:context]];
++ (NSString*)linkSection:(GRMustacheSection *)section withContext:(GRMustacheContext *)context
+{
+    return [NSString stringWithFormat:
+            @"<a href=\"/people\">%@</a>",
+            [section renderObject:context]];
 }
 
 @end
 
 @implementation GRMustacheSelectorHelper_v1_3_Test
 
-- (void)testHelperInstanceMethod {
-	NSString *templateString = @"{{#link}}{{name}}{{/link}}";
-	id context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
-	NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-	STAssertEqualObjects(result, @"<a href=\"/people/1\">foo</a>", nil);
+- (void)testHelperInstanceMethod
+{
+    NSString *templateString = @"{{#link}}{{name}}{{/link}}";
+    id context = [[[GRMustacheSelectorHelper_v1_3_TestContext alloc] init] autorelease];
+    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    STAssertEqualObjects(result, @"<a href=\"/people/1\">foo</a>", nil);
 }
 
-- (void)testHelperClassMethod {
-	NSString *templateString = @"{{#link}}{{name}}{{/link}}";
+- (void)testHelperClassMethod
+{
+    NSString *templateString = @"{{#link}}{{name}}{{/link}}";
     GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:nil];;
-	NSString *result = [template renderObject:[GRMustacheSelectorHelper_v1_3_TestContext class]];
-	STAssertEqualObjects(result, @"<a href=\"/people\"></a>", nil);
+    NSString *result = [template renderObject:[GRMustacheSelectorHelper_v1_3_TestContext class]];
+    STAssertEqualObjects(result, @"<a href=\"/people\"></a>", nil);
 }
 
 @end

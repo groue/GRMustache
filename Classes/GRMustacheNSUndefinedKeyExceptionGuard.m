@@ -25,6 +25,10 @@
 
 static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"GRMustacheNSUndefinedKeyExceptionGuardSilentObjects";
 
+
+// =============================================================================
+#pragma mark - GRMustacheNSUndefinedKeyExceptionGuard
+
 @interface GRMustacheNSUndefinedKeyExceptionGuard()
 + (void)swizzleIfNeeded;
 + (NSMutableSet *)silentObjectsForCurrentThread;
@@ -42,7 +46,7 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
     return value;
 }
 
-#pragma mark - Private
+#pragma mark Private
 
 + (NSMutableSet *)silentObjectsForCurrentThread
 {
@@ -75,10 +79,15 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
 
 @end
 
+
+// =============================================================================
+#pragma mark - NSObject(GRMustacheNSUndefinedKeyExceptionGuard)
+
 @implementation NSObject(GRMustacheNSUndefinedKeyExceptionGuard)
 
 // NSObject
-- (id)GRMustacheSilentValueForUndefinedKey_NSObject:(NSString *)key {
+- (id)GRMustacheSilentValueForUndefinedKey_NSObject:(NSString *)key
+{
     NSMutableSet *silentObjects = [GRMustacheNSUndefinedKeyExceptionGuard silentObjectsForCurrentThread];
     if ([silentObjects containsObject:self]) {
         return nil;
@@ -87,7 +96,8 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
 }
 
 // NSManagedObject
-- (id)GRMustacheSilentValueForUndefinedKey_NSManagedObject:(NSString *)key {
+- (id)GRMustacheSilentValueForUndefinedKey_NSManagedObject:(NSString *)key
+{
     NSMutableSet *silentObjects = [GRMustacheNSUndefinedKeyExceptionGuard silentObjectsForCurrentThread];
     if ([silentObjects containsObject:self]) {
         return nil;

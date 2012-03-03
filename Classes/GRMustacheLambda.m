@@ -25,6 +25,10 @@
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheSection_private.h"
 
+
+// =============================================================================
+#pragma mark - GRMustacheSelectorHelper
+
 @interface GRMustacheSelectorHelper()
 - (id)initWithObject:(id)object selector:(SEL)renderingSelector;
 @end
@@ -32,24 +36,21 @@
 
 @implementation GRMustacheSelectorHelper
 
-+ (id)helperWithObject:(id)object selector:(SEL)renderingSelector {
++ (id)helperWithObject:(id)object selector:(SEL)renderingSelector
+{
     return [[[self alloc] initWithObject:object selector:renderingSelector] autorelease];
 }
 
-- (id)initWithObject:(id)object selector:(SEL)renderingSelector {
-    if ((self = [self init])) {
-        _object = [object retain];
-        _renderingSelector = renderingSelector;
-    }
-    return self;
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     [_object release];
     [super dealloc];
 }
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+#pragma mark <GRMustacheHelper>
+
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
     NSString *result = objc_msgSend(_object, _renderingSelector, section, context);
     if (result == nil) {
         return @"";
@@ -57,10 +58,25 @@
     return result;
 }
 
+#pragma mark Private
+
+- (id)initWithObject:(id)object selector:(SEL)renderingSelector
+{
+    self = [self init];
+    if (self) {
+        _object = [object retain];
+        _renderingSelector = renderingSelector;
+    }
+    return self;
+}
+
 @end
 
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
+
+// =============================================================================
+#pragma mark - GRMustacheBlockHelper
 
 @interface GRMustacheBlockHelper()
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
@@ -69,18 +85,21 @@
 
 @implementation GRMustacheBlockHelper
 
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block {
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
+{
     return [[(GRMustacheBlockHelper *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block {
-    if ((self = [self init])) {
-        _block = [block copy];
-    }
-    return self;
+- (void)dealloc
+{
+    [_block release];
+    [super dealloc];
 }
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+#pragma mark <GRMustacheHelper>
+
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
     NSString *result = _block(section, context);
     if (result == nil) {
         return @"";
@@ -88,20 +107,22 @@
     return result;
 }
 
-- (NSString *)description {
-    return @"<GRMustacheBlockHelper>";
-}
+#pragma mark Private
 
-- (void)dealloc {
-    [_block release];
-    [super dealloc];
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
+{
+    self = [self init];
+    if (self) {
+        _block = [block copy];
+    }
+    return self;
 }
 
 @end
 
 
-// =================== DEPRECATED STUFF BELOW ===================
-
+// =============================================================================
+#pragma mark - Deprecated stuff
 
 @interface GRMustacheDeprecatedBlockHelper1: NSObject<GRMustacheHelper> {
 @private
@@ -114,18 +135,22 @@
 
 @implementation GRMustacheDeprecatedBlockHelper1
 
-+ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
++ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block
+{
     return [[(GRMustacheDeprecatedBlockHelper1 *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block {
-    if ((self = [self init])) {
+- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block
+{
+    self = [self init];
+    if (self) {
         _block = [block copy];
     }
     return self;
 }
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
     NSString *result = _block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
     if (result == nil) {
         return @"";
@@ -133,11 +158,8 @@
     return result;
 }
 
-- (NSString *)description {
-    return @"<GRMustacheDeprecatedBlockHelper1>";
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     [_block release];
     [super dealloc];
 }
@@ -161,18 +183,22 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
 
 @implementation GRMustacheDeprecatedBlockHelper2
 
-+ (id)helperWithBlock:(GRMustacheRenderingBlock)block {
++ (id)helperWithBlock:(GRMustacheRenderingBlock)block
+{
     return [[(GRMustacheDeprecatedBlockHelper2 *)[self alloc] initWithBlock:block] autorelease];
 }
 
-- (id)initWithBlock:(GRMustacheRenderingBlock)block {
-    if ((self = [self init])) {
+- (id)initWithBlock:(GRMustacheRenderingBlock)block
+{
+    self = [self init];
+    if (self) {
         _block = [block copy];
     }
     return self;
 }
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
     NSString *result = _block(section, context);
     if (result == nil) {
         return @"";
@@ -180,11 +206,8 @@ id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSStrin
     return result;
 }
 
-- (NSString *)description {
-    return @"<GRMustacheDeprecatedBlockHelper2>";
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     [_block release];
     [super dealloc];
 }
@@ -195,5 +218,4 @@ id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) {
     return [GRMustacheDeprecatedBlockHelper2 helperWithBlock:block];
 }
 
-
-#endif
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */

@@ -28,21 +28,29 @@
 
 @class GRMustacheTemplate;
 
-#pragma mark -
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
+// =============================================================================
+#pragma mark - <GRMustacheURLTemplateLoader>
+
 @protocol GRMustacheURLTemplateLoader<NSObject>
 - (GRMustacheTemplate *)templateFromContentsOfURL:(NSURL *)templateURL error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
-#endif
 
-#pragma mark -
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+
+
+// =============================================================================
+#pragma mark - <GRMustachePathTemplateLoader>
 
 @protocol GRMustachePathTemplateLoader<NSObject>
 - (GRMustacheTemplate *)templateFromContentsOfFile:(NSString *)templatePath error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
 
-#pragma mark -
+
+// =============================================================================
+#pragma mark - GRMustacheTemplateLoader
 
 @interface GRMustacheTemplateLoader: NSObject {
 @private
@@ -81,16 +89,18 @@
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 #pragma mark Base URL
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 + (id<GRMustacheURLTemplateLoader>)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 #pragma mark Template by name
 

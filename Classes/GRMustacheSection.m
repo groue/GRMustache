@@ -44,22 +44,26 @@
 @synthesize inverted=_inverted;
 @synthesize elems=_elems;
 
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
+{
     return [[[self alloc] initWithInvocation:invocation baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_invocation release];
     [_baseTemplateString release];
     [_elems release];
     [super dealloc];
 }
 
-- (NSString *)templateString {
+- (NSString *)templateString
+{
     return [_baseTemplateString substringWithRange:_range];
 }
 
-- (NSString *)renderObject:(id)object {
+- (NSString *)renderObject:(id)object
+{
     NSMutableString *result = [NSMutableString string];
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
@@ -70,7 +74,8 @@
     return result;
 }
 
-- (NSString *)renderObjects:(id)object, ... {
+- (NSString *)renderObjects:(id)object, ...
+{
     va_list objectList;
     va_start(objectList, object);
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
@@ -84,9 +89,10 @@
     return result;
 }
 
-#pragma mark - GRMustacheRenderingElement
+#pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context {
+- (NSString *)renderContext:(GRMustacheContext *)context
+{
     NSString *result = nil;
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
     id value = [_invocation invokeWithContext:context];
@@ -154,10 +160,12 @@
 }
 
 
-#pragma mark - Private
+#pragma mark Private
 
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems {
-    if ((self = [self init])) {
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
+{
+    self = [self init];
+    if (self) {
         self.invocation = invocation;
         self.baseTemplateString = baseTemplateString;
         self.range = range;

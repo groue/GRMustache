@@ -39,6 +39,7 @@
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 /**
  @return A GRMustacheTemplateLoader instance
  @param URL The URL of a directory
@@ -50,7 +51,8 @@
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 /**
  @return A GRMustacheTemplateLoader instance
@@ -76,6 +78,7 @@
 + (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 /**
  @return A GRMustacheTemplateLoader instance
  @param URL The URL of a directory
@@ -92,7 +95,8 @@
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 /**
  @return A GRMustacheTemplateLoader instance
@@ -128,6 +132,7 @@
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 /**
  @return A GRMustacheTemplateLoader instance
  @param URL The URL of a directory
@@ -145,7 +150,8 @@
  */
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 /**
  @return A GRMustacheTemplateLoader instance

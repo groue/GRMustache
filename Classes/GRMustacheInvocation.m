@@ -23,6 +23,10 @@
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheContext_private.h"
 
+
+// =============================================================================
+#pragma mark - Invocation functions
+
 typedef void (*GRMustacheInvocationFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext);
 
 static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
@@ -39,9 +43,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     *inOutScoped = YES;
 }
 
-@interface GRMustacheInvocation()
-- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
-@end
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheInvocationKey
 
 @interface GRMustacheInvocationKey:GRMustacheInvocation {
     GRMustacheInvocationFunction _invocationFunction;
@@ -50,11 +54,23 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 - (id)initWithKey:(NSArray *)keys;
 @end
 
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheInvocationKeyPath
+
 @interface GRMustacheInvocationKeyPath:GRMustacheInvocation {
     GRMustacheInvocationFunction *_invocationFunctions;
     NSArray *_keys;
 }
 - (id)initWithKeys:(NSArray *)keys;
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheInvocation
+
+@interface GRMustacheInvocation()
+- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
 @implementation GRMustacheInvocation
@@ -68,6 +84,14 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     }
 }
 
+- (id)invokeWithContext:(GRMustacheContext *)context
+{
+    // abstract method
+    return nil;
+}
+
+#pragma mark Private
+
 - (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key
 {
     if ([key isEqualToString:@"."] || [key isEqualToString:@"this"]) {
@@ -79,13 +103,11 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     }
 }
 
-- (id)invokeWithContext:(GRMustacheContext *)context
-{
-    // abstract method
-    return nil;
-}
-
 @end
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheInvocationKey
 
 @implementation GRMustacheInvocationKey
 
@@ -114,6 +136,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 @end
 
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheInvocationKeyPath
 
 @implementation GRMustacheInvocationKeyPath
 

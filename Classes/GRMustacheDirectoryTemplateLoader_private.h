@@ -26,6 +26,11 @@
 
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
+
+// =============================================================================
+#pragma mark - GRMustacheDirectoryURLTemplateLoader
+
 @interface GRMustacheDirectoryURLTemplateLoader: GRMustacheTemplateLoader<GRMustacheURLTemplateLoader> {
 @private
     NSURL *_URL;
@@ -33,9 +38,12 @@
 
 - (id)initWithURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_INTERNAL;
 @end
-#endif
 
-#pragma mark -
+#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+
+
+// =============================================================================
+#pragma mark - GRMustacheDirectoryPathTemplateLoader
 
 @interface GRMustacheDirectoryPathTemplateLoader: GRMustacheTemplateLoader<GRMustachePathTemplateLoader> {
 @private

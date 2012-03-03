@@ -25,31 +25,34 @@
 
 @implementation GRMustacheTemplate_v1_4_Test
 
-- (void)testRenderFromFile {
-	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"passenger.conf"];
-	NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-							 @"example.com", @"server",
-							 @"/var/www/example.com", @"deploy_to",
-							 @"production", @"stage",
-							 nil];
-	NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfFile:path error:nil];
-	STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
+- (void)testRenderFromFile
+{
+    NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"passenger.conf"];
+    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"example.com", @"server",
+                             @"/var/www/example.com", @"deploy_to",
+                             @"production", @"stage",
+                             nil];
+    NSString *result = [GRMustacheTemplate renderObject:context fromContentsOfFile:path error:nil];
+    STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
 }
 
-- (void)testParseFromFileReportsError {
-	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
+- (void)testParseFromFileReportsError
+{
+    NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
     NSError *error = nil;
     GRMustacheTemplate *template = [GRMustacheTemplate parseContentsOfFile:path error:&error];
     STAssertNil(template, nil);
-	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testRenderFromFileReportsError {
-	NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
+- (void)testRenderFromFileReportsError
+{
+    NSString *path = [[self.testBundle resourcePath] stringByAppendingPathComponent:@"syntax_error.conf"];
     NSError *error = nil;
-	NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfFile:path error:&error];
+    NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfFile:path error:&error];
     STAssertNil(result, nil);
-	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
 @end

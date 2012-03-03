@@ -25,8 +25,10 @@
 
 @implementation GRMustacheBundleTemplateLoader
 
-- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options {
-    if ((self = [self initWithExtension:ext encoding:encoding options:options])) {
+- (id)initWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions) options
+{
+    self = [self initWithExtension:ext encoding:encoding options:options];
+    if (self) {
         if (bundle == nil) {
             bundle = [NSBundle mainBundle];
         }
@@ -35,18 +37,21 @@
     return self;
 }
 
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
     return [_bundle pathForResource:name ofType:self.extension];
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError
+{
     NSAssert([templateId isKindOfClass:[NSString class]], @"");
     return [NSString stringWithContentsOfFile:(NSString*)templateId
                                      encoding:self.encoding
                                         error:outError];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_bundle release];
     [super dealloc];
 }

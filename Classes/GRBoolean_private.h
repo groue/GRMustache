@@ -23,12 +23,18 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+
+// =============================================================================
+#pragma mark - GRYes
+
 @interface GRYes : NSObject <NSCopying>
 + (GRYes *)yes GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
 - (BOOL)boolValue GRMUSTACHE_API_DEPRECATED_PUBLIC;
 @end
 
-#pragma mark -
+
+// =============================================================================
+#pragma mark - GRNo
 
 @interface GRNo : NSObject <NSCopying>
 + (GRNo *)no GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;

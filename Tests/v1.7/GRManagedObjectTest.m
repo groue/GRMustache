@@ -33,20 +33,23 @@
 @synthesize persistentStoreCoordinator;
 @synthesize managedObjectContext;
 
-- (void)setUp {
+- (void)setUp
+{
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:self.testBundle]];
     self.persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel] autorelease];
     self.managedObjectContext = [[[NSManagedObjectContext alloc] init] autorelease];
     [managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     self.managedObjectModel = nil;
     self.persistentStoreCoordinator = nil;
     self.managedObjectContext = nil;
 }
 
-- (void)testNSUndefinedKeyExceptionSilencing {
+- (void)testNSUndefinedKeyExceptionSilencing
+{
     NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
     // The actual test is:
     // 1. have the debugger stops on every exception

@@ -35,12 +35,10 @@
 @synthesize line=_line;
 @synthesize range=_range;
 
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
-    return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
-}
-
-- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range {
-    if ((self = [self init])) {
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range
+{
+    self = [self init];
+    if (self) {
         _type = type;
         _content = [content retain];
         _templateString = [templateString retain];
@@ -50,10 +48,19 @@
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_content release];
     [_templateString release];
     [super dealloc];
+}
+
+
+#pragma mark Private
+
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range
+{
+    return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
 }
 
 @end

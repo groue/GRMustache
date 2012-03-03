@@ -26,12 +26,17 @@
 @class GRMustacheSection;
 @class GRMustacheContext;
 
+// =============================================================================
+#pragma mark - <GRMustacheHelper>
+
 @protocol GRMustacheHelper<NSObject>
 @required
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context GRMUSTACHE_API_PUBLIC;
 @end
 
-#pragma mark -
+
+// =============================================================================
+#pragma mark - GRMustacheSelectorHelper
 
 @interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
     SEL _renderingSelector;
@@ -40,9 +45,12 @@
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector GRMUSTACHE_API_INTERNAL;
 @end
 
-#pragma mark -
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
+
+// =============================================================================
+#pragma mark - GRMustacheBlockHelper
+
 @interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
 @private
     NSString *(^_block)(GRMustacheSection* section, id context);
@@ -50,18 +58,15 @@
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block GRMUSTACHE_API_PUBLIC;
 @end
 
-#pragma mark -
 
-#pragma mark Deprecated public APIs
+// =============================================================================
+#pragma mark - Deprecated stuff
 
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) GRMUSTACHE_API_DEPRECATED_PUBLIC;
 
-#pragma mark -
-
-#pragma mark Deprecated public APIs
-
 typedef NSString *(^GRMustacheRenderer)(id object);
 typedef id GRMustacheLambda;
 GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) GRMUSTACHE_API_DEPRECATED_PUBLIC;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */

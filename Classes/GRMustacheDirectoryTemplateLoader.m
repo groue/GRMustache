@@ -24,16 +24,23 @@
 #import "GRMustacheDirectoryTemplateLoader_private.h"
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
+// =============================================================================
+#pragma mark - GRMustacheDirectoryURLTemplateLoader
+
 @implementation GRMustacheDirectoryURLTemplateLoader
 
-- (id)initWithURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
-    if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
+- (id)initWithURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+{
+    self = [super initWithExtension:ext encoding:encoding options:options];
+    if (self) {
         _URL = [URL retain];
     }
     return self;
 }
 
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
     if (baseTemplateId) {
         NSAssert([baseTemplateId isKindOfClass:[NSURL class]], @"");
         if (self.extension.length == 0) {
@@ -47,16 +54,18 @@
     return [[[_URL URLByAppendingPathComponent:name] URLByAppendingPathExtension:self.extension] URLByStandardizingPath];
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError
+{
     NSAssert([templateId isKindOfClass:[NSURL class]], @"");
     return [NSString stringWithContentsOfURL:(NSURL*)templateId
                                     encoding:self.encoding
                                        error:outError];
 }
 
-#pragma mark GRMustacheURLTemplateLoader
+#pragma mark <GRMustacheURLTemplateLoader>
 
-- (GRMustacheTemplate *)templateFromContentsOfURL:(NSURL *)templateURL error:(NSError **)outError {
+- (GRMustacheTemplate *)templateFromContentsOfURL:(NSURL *)templateURL error:(NSError **)outError
+{
     NSString *templateString = [NSString stringWithContentsOfURL:templateURL encoding:self.encoding error:outError];
     if (!templateString) {
         return nil;
@@ -70,24 +79,33 @@
     return template;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_URL release];
     [super dealloc];
 }
 
 @end
-#endif
+
+#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+
+
+// =============================================================================
+#pragma mark - GRMustacheDirectoryPathTemplateLoader
 
 @implementation GRMustacheDirectoryPathTemplateLoader
 
-- (id)initWithPath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options {
-    if ((self = [super initWithExtension:ext encoding:encoding options:options])) {
+- (id)initWithPath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+{
+    self = [super initWithExtension:ext encoding:encoding options:options];
+    if (self) {
         _path = [path retain];
     }
     return self;
 }
 
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
     if (baseTemplateId) {
         NSAssert([baseTemplateId isKindOfClass:[NSString class]], @"");
         NSString *basePath = [(NSString *)baseTemplateId stringByDeletingLastPathComponent];
@@ -102,16 +120,18 @@
     return [[[_path stringByAppendingPathComponent:name] stringByAppendingPathExtension:self.extension] stringByStandardizingPath];
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError
+{
     NSAssert([templateId isKindOfClass:[NSString class]], @"");
     return [NSString stringWithContentsOfFile:(NSString*)templateId
                                      encoding:self.encoding
                                         error:outError];
 }
 
-#pragma mark GRMustachePathTemplateLoader
+#pragma mark <GRMustachePathTemplateLoader>
 
-- (GRMustacheTemplate *)templateFromContentsOfFile:(NSString *)templatePath error:(NSError **)outError {
+- (GRMustacheTemplate *)templateFromContentsOfFile:(NSString *)templatePath error:(NSError **)outError
+{
     NSString *templateString = [NSString stringWithContentsOfFile:templatePath encoding:self.encoding error:outError];
     if (!templateString) {
         return nil;
@@ -125,7 +145,8 @@
     return template;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_path release];
     [super dealloc];
 }

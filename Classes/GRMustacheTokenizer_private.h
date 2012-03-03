@@ -27,14 +27,20 @@
 
 @class GRMustacheTokenizer;
 
+
+// =============================================================================
+#pragma mark - <GRMustacheTokenizerDelegate>
+
 @protocol GRMustacheTokenizerDelegate<NSObject>
 @optional
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 - (void)tokenizerDidFinish:(GRMustacheTokenizer *)tokenizer GRMUSTACHE_API_INTERNAL;
-- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)theError GRMUSTACHE_API_INTERNAL;
+- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
 @end
 
-#pragma mark -
+
+// =============================================================================
+#pragma mark - GRMustacheTokenizer
 
 @interface GRMustacheTokenizer : NSObject {
 @private
@@ -43,6 +49,6 @@
     NSString *_ctag;
 }
 
-@property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate;
+@property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate GRMUSTACHE_API_INTERNAL;
 - (void)parseTemplateString:(NSString *)templateString GRMUSTACHE_API_INTERNAL;
 @end

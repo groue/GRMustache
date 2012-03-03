@@ -26,9 +26,6 @@
 @class GRMustacheContext;
 
 @interface GRMustacheInvocation : NSObject
-
-#pragma mark Internal APIs
-
 + (id)invocationWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
 - (id)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

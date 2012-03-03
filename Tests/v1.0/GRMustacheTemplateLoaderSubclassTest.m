@@ -29,8 +29,9 @@
 @end
 
 @implementation FailingOnTemplateIdTemplateLoader
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	return nil;
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
+    return nil;
 }
 @end
 
@@ -39,13 +40,15 @@
 @end
 
 @implementation FailingOnTemplateStringLazyTemplateLoader
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	return name;
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
+    return name;
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	// lazy because returns nil but doesn't set outError
-	return nil;
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError
+{
+    // lazy because returns nil but doesn't set outError
+    return nil;
 }
 @end
 
@@ -54,46 +57,51 @@
 @end
 
 @implementation FailingOnTemplateStringNotLazyTemplateLoader
-- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-	return name;
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
+{
+    return name;
 }
 
-- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-	// not lazy because returns nil and set outError
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError
+{
+    // not lazy because returns nil and set outError
     if (outError != NULL) {
         *outError = [NSError errorWithDomain:@"FailingOnTemplateStringNotLazyTemplateLoader" code:0 userInfo:nil];
     }
-	return nil;
+    return nil;
 }
 @end
 
 
 @implementation GRMustacheTemplateLoaderSubclassTest
 
-- (void)testThatTemplateLoaderSubclassFailingOnTemplateIdGeneratesError {
-	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateIdTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
-	NSError *error;
-	GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
-	STAssertNil(template, nil);
-	STAssertNotNil(error, nil);
-	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);
+- (void)testThatTemplateLoaderSubclassFailingOnTemplateIdGeneratesError
+{
+    GRMustacheTemplateLoader *loader = [[[FailingOnTemplateIdTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
+    NSError *error;
+    GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
+    STAssertNil(template, nil);
+    STAssertNotNil(error, nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);
 }
 
-- (void)testThatLazyTemplateLoaderSubclassFailingOnTemplateStringGeneratesError {
-	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringLazyTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
-	NSError *error;
-	GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
-	STAssertNil(template, nil);
-	STAssertNotNil(error, nil);
-	STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);
+- (void)testThatLazyTemplateLoaderSubclassFailingOnTemplateStringGeneratesError
+{
+    GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringLazyTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
+    NSError *error;
+    GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
+    STAssertNil(template, nil);
+    STAssertNotNil(error, nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);
 }
 
-- (void)testThatNotLazyTemplateLoaderSubclassFailingOnTemplateStringGeneratesError {
-	GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringNotLazyTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
-	NSError *error;
-	GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
-	STAssertNil(template, nil);
-	STAssertNotNil(error, nil);
+- (void)testThatNotLazyTemplateLoaderSubclassFailingOnTemplateStringGeneratesError
+{
+    GRMustacheTemplateLoader *loader = [[[FailingOnTemplateStringNotLazyTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
+    NSError *error;
+    GRMustacheTemplate *template = [loader parseString:@"{{>partial}}" error:&error];
+    STAssertNil(template, nil);
+    STAssertNotNil(error, nil);
     STAssertEqualObjects(error.domain, @"FailingOnTemplateStringNotLazyTemplateLoader", @"");
 }
 
