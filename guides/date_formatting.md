@@ -3,7 +3,7 @@
 Date formatting with GRMustacheDateFormatterHelper
 ==================================================
 
-**This helper class allows you to format *all* dates in a section of your template.**
+**This helper class allows you to format the dates in a section of your template.**
 
 It does not belong the the core GRMustache code, and as such must be imported separately:
 

@@ -44,4 +44,23 @@
     STAssertEqualObjects(result, @"Thursday, January 1, 1970 12:00 AM", nil);
 }
 
+- (void)testDateFormattingFailsInSubSection
+{
+    NSString *templateString = @"{{#format}}{{#section}}{{value}}{{/section}}{{/format}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
+    
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    dateFormatter.dateStyle = NSDateFormatterFullStyle;
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    dateFormatter.doesRelativeDateFormatting = NO;
+    dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+    dateFormatter.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+    NSDictionary *helper = [NSDictionary dictionaryWithObject:[GRMustacheDateFormatterHelper helperWithDateFormatter:dateFormatter] forKey:@"format"];
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSDate dateWithTimeIntervalSince1970:0] forKey:@"value"] forKey:@"section"];
+    NSString *result = [template renderObjects:helper, data, nil];
+    STAssertEqualObjects(result, @"1970-01-01 00:00:00 +0000", nil);
+}
+
 @end

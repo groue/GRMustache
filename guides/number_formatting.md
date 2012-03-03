@@ -3,7 +3,7 @@
 Number formatting with GRMustacheNumberFormatterHelper
 ======================================================
 
-**This helper class allows you to format *all* numbers in a section of your template.**
+**This helper class allows you to format the numbers in a section of your template.**
 
 It does not belong the the core GRMustache code, and as such must be imported separately:
 
@@ -54,6 +54,15 @@ We just have to create two `GRMustacheNumberFormatterHelper` objects, provide th
     //   decimal: 0,5
     [template renderObject:data];
 
-It is worth noting that the `GRMustacheNumberFormatterHelper` is implemented on top of public GRMustache APIs. Check the [code](../Classes/GRMustacheNumberFormatterHelper.m) for inspiration, and [guides/runtime/helpers.md](runtime/helpers.md) for more information on GRMustache's take on Mustache lambda sections.
+Scope
+-----
+
+GRMustacheNumberFormatterHelper does not format numbers in sub sections. For instance, if you plan to format numbers in a collection, make sure your formatter helper is invoked *inside* the collection section:
+
+    {{#items}}
+        {{#decimal_format}}
+            {{float}}
+        {{/decimal_format}}
+    {{/items}}
 
 [up](../../../../GRMustache), [next](date_formatting.md)

@@ -39,6 +39,20 @@
     STAssertEqualObjects(result, @"5E-1", nil);
 }
 
+- (void)testNumberFormattingFailsInSubSection
+{
+    NSString *templateString = @"{{#format}}{{#section}}{{value}}{{/section}}{{/format}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate parseString:templateString error:NULL];
+    
+    NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    numberFormatter.numberStyle = kCFNumberFormatterScientificStyle;
+    NSDictionary *helper = [NSDictionary dictionaryWithObject:[GRMustacheNumberFormatterHelper helperWithNumberFormatter:numberFormatter] forKey:@"format"];
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.5] forKey:@"value"] forKey:@"section"];
+    NSString *result = [template renderObjects:helper, data, nil];
+    STAssertEqualObjects(result, @"0.5", nil);
+}
+
 - (void)testBooleansAreNotAffected
 {
     NSString *templateString = @"{{#format}}{{value}}{{/format}}";
