@@ -1,3 +1,4 @@
+- Helpers that are fetched from the context stack: deprecate them (with runtime warnings). That's because they can be overriden by any context object, and thus they can not help building a stable, reusable helpers library (stable keys + stable code). Also deprecate [renderObjects:...] methods, since providing a helpers container was their only purpose. Instead, provide with a way to provide helpers to a template ([template renderObject:... withHelpers:...]). Think about the usefulness of having [section renderObject:... withHelpers:...] as well (I'd rather avoid letting sections declaring new helpers, but I'm not sure).
 - Bring back categories. Read http://jverkoey.github.com/nimbus/group___preprocessor-_macros.html
 - Handlebars: support `\{{foo}}` escaped tag
 - Handlebars: support `{{#section value}}...{{/section}}`
@@ -6,15 +7,13 @@
 - Handlebars: support `{{#with value}}...{{/with}}` built-in helper
 - Handlebars: support `{{#each value}}...{{/each}}` built-in helper
 - Handlebars: support `{{#if value}}...{{/if}}` built-in helper
-- Handlebars: support `{{#if value}}...{{/if}}` built-in helper
 - Handlebars: support `{{#if value}}...{{else}}...{{/if}}` built-in helper
 - Handlebars: support `{{#unless value}}...{{/unless}}` built-in helper
 - Handlebars: support `articles.[10].comments` value
 - Handlebars: support literal string values `"foo"`
 - Handlebars: support literal numeric values `1.23`
 - Handlebars: support literal boolean values `true`
-- provide a way to return an explicit HTML-safe string from a helper
-- provide a way to return an explicit HTML-unsafe string from a helper
+- think about the usefulness of returning explicit HTML-safe or HTML-unsafe strings from getters and helpers
 + deprecate full GRMustacheContext class
 + deprecate [XXX parseYYY] and introduce [XXX templateFromYYY]
 + deprecate [GRMustacheTemplateLoader parseTemplateNamed:error:] and introduce [GRMustacheTemplateLoader templateWithName:error:]
