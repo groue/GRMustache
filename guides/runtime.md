@@ -39,5 +39,8 @@ You can thus provide rendering methods with NSDictionary instances, or custom ob
 
     Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
 
+- [delegate.md](runtime/delegate.md)
+    
+    The GRMustacheTemplateDelegate protocol.
 
 [up](../../../../GRMustache), [next](runtime/context_stack.md)

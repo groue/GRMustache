@@ -21,16 +21,16 @@ What you get
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
-**Number and date formatting.** Handy, and built-in.
-
 **Documentation**: GRMustache online documentation is provided as guides:
 
 - [guides/embedding.md](GRMustache/blob/master/guides/embedding.md): how to embed GRMustache in your Xcode projects
 - [guides/templates.md](GRMustache/blob/master/guides/templates.md): how to parse and render templates
 - [guides/runtime.md](GRMustache/blob/master/guides/runtime.md): how to provide data to templates
-- [guides/number_formatting.md](GRMustache/blob/master/guides/number_formatting.md): how to format numbers
-- [guides/date_formatting.md](GRMustache/blob/master/guides/date_formatting.md): how to format dates
 - [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
+
+**Sample code**: because some tasks are easier to do with some guidelines.
+
+- [SampleCode/NumberFormatting](GRMustache/blob/master/SampleCode/NumberFormatting): how to use NSNumberFormatter instances to format numbers in sections of your templates.
 
 
 Usage

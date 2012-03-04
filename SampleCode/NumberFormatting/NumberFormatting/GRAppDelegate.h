@@ -20,14 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheLambda.h"
+#import <Cocoa/Cocoa.h>
 
-@interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper> {
-@private
-    NSDateFormatter *_dateFormatter;
-}
-@property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
-+ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
+@interface GRAppDelegate : NSObject <NSApplicationDelegate>
+
+@property (assign) IBOutlet NSWindow *window;
+
 @end

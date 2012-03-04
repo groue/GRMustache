@@ -22,12 +22,11 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheLambda.h"
 
-@interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper> {
+@interface GRMustacheInvocation : NSObject {
 @private
-    NSDateFormatter *_dateFormatter;
+    id _returnValue;
 }
-@property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
-+ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
+@property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
+@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
 @end

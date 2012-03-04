@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheTemplateDelegate.h"
 #import "GRMustache.h"
 
 /**
@@ -34,7 +35,10 @@
 @private
     NSArray *_elems;
     GRMustacheTemplateOptions _options;
+    id<GRMustacheTemplateDelegate> _delegate;
 }
+
+@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +163,7 @@
 + (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 /**
  Parses a template file, and returns a compiled template.
  
@@ -187,7 +192,8 @@
  */
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
 + (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 /**
  Renders a context object from a file template.
@@ -204,7 +210,9 @@
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
 
+
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+
 /**
  Renders a context object from a file template.
  
@@ -219,7 +227,8 @@
  */
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

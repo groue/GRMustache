@@ -23,15 +23,25 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheAvailabilityMacros.h"
+
 @class GRMustacheSection;
 @class GRMustacheContext;
+
+
+// =============================================================================
+#pragma mark - <GRMustacheHelper>
 
 @protocol GRMustacheHelper<NSObject>
 @required
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
 @end
 
+
 #if GRMUSTACHE_BLOCKS_AVAILABLE
+
+// =============================================================================
+#pragma mark - GRMustacheBlockHelper
+
 @interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
 @private
     NSString *(^_block)(GRMustacheSection* section, id context);
@@ -39,10 +49,19 @@
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block AVAILABLE_GRMUSTACHE_VERSION_1_5_AND_LATER;
 @end
 
+
+// =============================================================================
+#pragma mark -
+
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
 id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) AVAILABLE_GRMUSTACHE_VERSION_1_3_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_5;
+
+
+// =============================================================================
+#pragma mark -
 
 typedef NSString *(^GRMustacheRenderer)(id object);
 typedef id GRMustacheLambda;
 GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_3;
-#endif
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */

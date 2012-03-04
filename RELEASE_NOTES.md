@@ -3,6 +3,15 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.12
+
+- **GRMustacheTemplateDelegate protocol**
+
+Deprecated classes:
+
+- `GRMustacheNumberFormatterHelper`
+- `GRMustacheDateFormatterHelper`
+
 ## v1.11.2
 
 BOOL property custom getters can be used to control boolean sections.
