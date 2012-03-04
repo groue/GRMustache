@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheTemplateDelegate.h"
 #import "GRMustache.h"
 
 /**
@@ -34,7 +35,10 @@
 @private
     NSArray *_elems;
     GRMustacheTemplateOptions _options;
+    id<GRMustacheTemplateDelegate> _delegate;
 }
+
+@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

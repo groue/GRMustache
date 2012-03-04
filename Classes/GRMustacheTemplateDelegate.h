@@ -20,45 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTextElement_private.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheTemplate;
+@class GRMustacheInvocation;
 
-@interface GRMustacheTextElement()
-@property (nonatomic, retain) NSString *text;
-- (id)initWithString:(NSString *)text;
-@end
-
-
-@implementation GRMustacheTextElement
-@synthesize text=_text;
-
-+ (id)textElementWithString:(NSString *)text
-{
-    return [[[self alloc] initWithString:text] autorelease];
-}
-
-- (void)dealloc
-{
-    [_text release];
-    [super dealloc];
-}
-
-#pragma mark <GRMustacheRenderingElement>
-
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
-{
-    return _text;
-}
-
-#pragma mark Private
-
-- (id)initWithString:(NSString *)text
-{
-    self = [self init];
-    if (self) {
-        self.text = text;
-    }
-    return self;
-}
-
+@protocol GRMustacheTemplateDelegate<NSObject>
+@optional
+- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
+- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
 @end

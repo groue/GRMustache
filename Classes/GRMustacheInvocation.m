@@ -48,6 +48,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 #pragma mark - Private concrete class GRMustacheInvocationKey
 
 @interface GRMustacheInvocationKey:GRMustacheInvocation {
+@private
     GRMustacheInvocationFunction _invocationFunction;
     NSString *_key;
 }
@@ -59,8 +60,10 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 #pragma mark - Private concrete class GRMustacheInvocationKeyPath
 
 @interface GRMustacheInvocationKeyPath:GRMustacheInvocation {
+@private
     GRMustacheInvocationFunction *_invocationFunctions;
     NSArray *_keys;
+    NSString *_lastUsedKey;
 }
 - (id)initWithKeys:(NSArray *)keys;
 @end
@@ -74,6 +77,8 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 @end
 
 @implementation GRMustacheInvocation
+@synthesize returnValue=_returnValue;
+@dynamic key;
 
 + (id)invocationWithKeys:(NSArray *)keys
 {
@@ -84,10 +89,15 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     }
 }
 
-- (id)invokeWithContext:(GRMustacheContext *)context
+- (void)dealloc
+{
+    [_returnValue release];
+    [super dealloc];
+}
+
+- (void)invokeWithContext:(GRMustacheContext *)context
 {
     // abstract method
-    return nil;
 }
 
 #pragma mark Private
@@ -127,11 +137,16 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     return self;
 }
 
-- (id)invokeWithContext:(GRMustacheContext *)context
+- (NSString *)key
+{
+    return [[_key retain] autorelease];
+}
+
+- (void)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
     _invocationFunction(_key, &scoped, &context);
-    return context.object;
+    self.returnValue = context.object;
 }
 
 @end
@@ -162,17 +177,23 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     return self;
 }
 
-- (id)invokeWithContext:(GRMustacheContext *)context
+- (NSString *)key
+{
+    return [[_lastUsedKey retain] autorelease];
+}
+
+- (void)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
-    
     GRMustacheInvocationFunction *f = _invocationFunctions;
-    for (NSString *key in _keys) {
-        (*(f++))(key, &scoped, &context);
-        if (!context) return nil;
+    for (_lastUsedKey in _keys) {
+        (*(f++))(_lastUsedKey, &scoped, &context);
+        if (!context) {
+            self.returnValue = nil;
+            return;
+        }
     }
-    
-    return context.object;
+    self.returnValue = context.object;
 }
 
 @end

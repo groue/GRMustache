@@ -50,18 +50,40 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context
+- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
 {
-    id value = [_invocation invokeWithContext:context];
+    // invoke
+    
+    [_invocation invokeWithContext:context];
+    if ([rootTemplate.delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+        [rootTemplate.delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
+    }
+    id value = _invocation.returnValue;
+    
+    
+    // interpret
+    
+    NSString *result = nil;
     BOOL boolValue;
     [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
-    if (boolValue == NO) {
+    if (boolValue) {
+        result = [value description];
+        if (!_raw) {
+            result = [self htmlEscape:result];
+        }
+    }
+    
+    
+    // finish
+    
+    if ([rootTemplate.delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+        [rootTemplate.delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
+    }
+    
+    if (!result) {
         return @"";
     }
-    if (_raw) {
-        return [value description];
-    }
-    return [self htmlEscape:[value description]];
+    return result;
 }
 
 

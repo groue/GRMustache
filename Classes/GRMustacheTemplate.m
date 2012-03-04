@@ -36,6 +36,7 @@
 @implementation GRMustacheTemplate
 @synthesize elems=_elems;
 @synthesize options=_options;
+@synthesize delegate=_delegate;
 
 + (id)parseString:(NSString *)templateString error:(NSError **)outError
 {
@@ -164,11 +165,13 @@
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString options:options error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    if (!template && outError != NULL) [*outError retain];
-    [pool drain];
+    NSString *result;
+    GRMustacheTemplate *template;
+    @autoreleasepool {
+        template = [GRMustacheTemplate templateFromString:templateString options:options error:outError];
+        result = [[template renderObject:object] retain];
+        if (!template && outError != NULL) [*outError retain];
+    }
     if (!template && outError != NULL) [*outError autorelease];
     return [result autorelease];
 }
@@ -182,11 +185,13 @@
 
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options error:(NSError **)outError
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:URL options:options error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    if (!template && outError != NULL) [*outError retain];
-    [pool drain];
+    NSString *result;
+    GRMustacheTemplate *template;
+    @autoreleasepool {
+        template = [GRMustacheTemplate templateFromContentsOfURL:URL options:options error:outError];
+        result = [[template renderObject:object] retain];
+        if (!template && outError != NULL) [*outError retain];
+    }
     if (!template && outError != NULL) [*outError autorelease];
     return [result autorelease];
 }
@@ -200,11 +205,13 @@
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:path options:options error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    if (!template && outError != NULL) [*outError retain];
-    [pool drain];
+    NSString *result;
+    GRMustacheTemplate *template;
+    @autoreleasepool {
+        template = [GRMustacheTemplate templateFromContentsOfFile:path options:options error:outError];
+        result = [[template renderObject:object] retain];
+        if (!template && outError != NULL) [*outError retain];
+    }
     if (!template && outError != NULL) [*outError autorelease];
     return [result autorelease];
 }
@@ -216,11 +223,13 @@
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:name bundle:bundle options:options error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    if (!template && outError != NULL) [*outError retain];
-    [pool drain];
+    NSString *result;
+    GRMustacheTemplate *template;
+    @autoreleasepool {
+        template = [GRMustacheTemplate templateFromResource:name bundle:bundle options:options error:outError];
+        result = [[template renderObject:object] retain];
+        if (!template && outError != NULL) [*outError retain];
+    }
     if (!template && outError != NULL) [*outError autorelease];
     return [result autorelease];
 }
@@ -232,11 +241,13 @@
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:options error:outError];
-    NSString *result = [[template renderObject:object] retain];
-    if (!template && outError != NULL) [*outError retain];
-    [pool drain];
+    NSString *result;
+    GRMustacheTemplate *template;
+    @autoreleasepool {
+        template = [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:options error:outError];
+        result = [[template renderObject:object] retain];
+        if (!template && outError != NULL) [*outError retain];
+    }
     if (!template && outError != NULL) [*outError autorelease];
     return [result autorelease];
 }
@@ -248,18 +259,19 @@
 
 - (NSString *)renderObject:(id)object
 {
-    return [self renderContext:[GRMustacheContext contextWithObject:object]];
+    return [self renderContext:[GRMustacheContext contextWithObject:object] inRootTemplate:self];
 }
 
 - (NSString *)renderObjects:(id)object, ...
 {
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    va_list objectList;
-    va_start(objectList, object);
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
-    va_end(objectList);
-    NSString *result = [[self renderContext:context] retain];
-    [pool drain];
+    NSString *result;
+    @autoreleasepool {
+        va_list objectList;
+        va_start(objectList, object);
+        GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
+        va_end(objectList);
+        result = [[self renderContext:context inRootTemplate:self] retain];
+    }
     return [result autorelease];
 }
 
@@ -297,14 +309,20 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context
+- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
 {
     NSMutableString *result = [NSMutableString string];
-    NSAutoreleasePool *pool = [NSAutoreleasePool new];
-    for (id<GRMustacheRenderingElement> elem in _elems) {
-        [result appendString:[elem renderContext:context]];
+    @autoreleasepool {
+        if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
+            [_delegate templateWillRender:self];
+        }
+        for (id<GRMustacheRenderingElement> elem in _elems) {
+            [result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
+        }
+        if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
+            [_delegate templateDidRender:self];
+        }
     }
-    [pool drain];
     return result;
 }
 

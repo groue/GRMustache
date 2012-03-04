@@ -24,8 +24,9 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
+@class GRMustacheTemplate;
 
 @protocol GRMustacheRenderingElement<NSObject>
 @required
-- (NSString *)renderContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
 @end

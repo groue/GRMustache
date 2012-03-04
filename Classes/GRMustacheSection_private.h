@@ -24,10 +24,12 @@
 #import "GRMustacheRendering_private.h"
 
 @class GRMustacheInvocation;
+@class GRMustacheTemplate;
 
 @interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
 @private
     GRMustacheInvocation *_invocation;
+    GRMustacheTemplate *_rootTemplate;
     NSString *_baseTemplateString;
     NSRange _range;
     BOOL _inverted;

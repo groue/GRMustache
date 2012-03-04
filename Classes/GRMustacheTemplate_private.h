@@ -23,6 +23,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRendering_private.h"
 
 typedef enum {
@@ -36,11 +37,16 @@ typedef enum {
 @private
     NSArray *_elems;
     GRMustacheTemplateOptions _options;
+    id<GRMustacheTemplateDelegate> _delegate;
 }
 
 #pragma mark Objects kinds
 
 + (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue GRMUSTACHE_API_INTERNAL;
+
+#pragma mark Delegate
+
+@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
 
 #pragma mark Template elements
 

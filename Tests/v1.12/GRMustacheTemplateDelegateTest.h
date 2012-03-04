@@ -20,45 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTextElement_private.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_12
+#import "GRMustachePublicAPITest.h"
 
-
-@interface GRMustacheTextElement()
-@property (nonatomic, retain) NSString *text;
-- (id)initWithString:(NSString *)text;
-@end
-
-
-@implementation GRMustacheTextElement
-@synthesize text=_text;
-
-+ (id)textElementWithString:(NSString *)text
-{
-    return [[[self alloc] initWithString:text] autorelease];
-}
-
-- (void)dealloc
-{
-    [_text release];
-    [super dealloc];
-}
-
-#pragma mark <GRMustacheRenderingElement>
-
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
-{
-    return _text;
-}
-
-#pragma mark Private
-
-- (id)initWithString:(NSString *)text
-{
-    self = [self init];
-    if (self) {
-        self.text = text;
-    }
-    return self;
-}
+@interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
 
 @end
