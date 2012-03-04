@@ -30,8 +30,4 @@ However, you will have to explicitely import:
     
     when you want to subclass `GRMustacheTemplateLoader`, and provide your own template loading strategy. See [guides/template_loaders.md](template_loaders.md)
 
-- `GRMustacheNumberFormatterHelper.h` and `GRMustacheDateFormatterHelper.h`
-    
-    when you want to use these helpers in order to format your numbers and dates. See [guides/number_formatting.md](number_formatting.md) and [guides/date_formatting.md](date_formatting.md)
-
 [up](../../../../GRMustache), [next](templates.md)

@@ -156,7 +156,7 @@ You may render an extended context:
       return [section renderObjects:context, ..., nil];
     });
 
-You may render a totally different context (note that this is the base technique for the [GRMustacheNumberFormatterHelper](../number_formatting.md) and [GRMustacheDateFormatterHelper](../date_formatting.md) helpers that ship with GRMustache):
+You may render a totally different context:
 
     - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
       return [section renderObject:...];
