@@ -28,6 +28,6 @@
 @private
     NSNumberFormatter *_numberFormatter;
 }
-@property (nonatomic, readonly, retain) NSNumberFormatter *numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
-+ (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
+@property (nonatomic, readonly, retain) NSNumberFormatter *numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
++ (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
 @end
