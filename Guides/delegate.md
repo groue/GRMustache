@@ -76,5 +76,8 @@ The `returnValue` property of the *invocation* argument can be written. If you s
 }
 ```
 
+### Even more practical uses: sample code
+
+In the next guide, [sample_code.md](sample_code.md), you'll see the GRMustacheTemplateDelegate protocol in action.
 
 [up](../../../../GRMustache), [next](sample_code.md)
