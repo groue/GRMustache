@@ -1,4 +1,4 @@
-[up](../sample_code.md), [next](counters.md)
+[up](../sample_code.md), [next](../forking.md)
 
 Number formatting
 =================
@@ -220,4 +220,4 @@ And then implement the delegate methods:
 @end
 ```
 
-[up](../sample_code.md), [next](counters.md)
+[up](../sample_code.md), [next](../forking.md)
