@@ -46,18 +46,19 @@ A practical use: debugging templates
 
 You may, for instance, locate keys that could not find any data:
 
-    - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
-    {
-        // When returnValue is nil, GRMustache could not find any value to render.
-        if (invocation.returnValue == nil) {
-            
-            // Log the missing key...
-            NSLog(@"GRMustache missing key: %@", invocation.key);
-            
-            // ...and render a big visible value so that we can't miss it.
-            invocation.returnValue = "[MISSING]";
-        }
+```objc
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+{
+    // When returnValue is nil, GRMustache could not find any value to render.
+    if (invocation.returnValue == nil) {
+        
+        // Log the missing key...
+        NSLog(@"GRMustache missing key: %@", invocation.key);
+        
+        // ...and render a big visible value so that we can't miss it.
+        invocation.returnValue = "[MISSING]";
     }
-
+}
+```
 
 [up](../../../../GRMustache), [next](forking.md)
