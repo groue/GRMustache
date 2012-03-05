@@ -138,7 +138,7 @@ Here is the rendering code:
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"template" bundle:nil error:NULL];
     template.delegate = self;
-    NSString *result = [template renderObject:data];
+    return [template renderObject:data];
 }
 @end
 ```
