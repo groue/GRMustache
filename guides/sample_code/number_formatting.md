@@ -74,18 +74,18 @@ The sample code below format all numbers in specific sections, without any coope
 
     raw: {{float}}
 
-    {{#percent_format}}
+    {{#PERCENT_FORMAT}}
     percent: {{float}}
-    {{/percent_format}}
+    {{/PERCENT_FORMAT}}
 
-    {{#decimal_format}}
+    {{#DECIMAL_FORMAT}}
     decimal: {{float}}
-    {{/decimal_format}}
+    {{/DECIMAL_FORMAT}}
 
 It will render, on a French system:
 
     raw: 0.5
-    percent: 50%
+    percent: 50 %
     decimal: 0,5
 
 Here is the rendering code:
@@ -96,8 +96,8 @@ Here is the rendering code:
 - (NSString *)render
 {
     /**
-     So, our goal is to format all numbers in the `{{#percent_format}}` and
-     `{{#decimal_format}}` sections of template.mustache.
+     So, our goal is to format all numbers in the `{{#PERCENT_FORMAT}}` and
+     `{{#DECIMAL_FORMAT}}` sections of template.mustache.
      
      First, we attach a NSNumberFormatter instance to those sections. This is
      done by setting NSNumberFormatter instances to corresponding keys in the
@@ -111,15 +111,15 @@ Here is the rendering code:
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
-    // Attach a percent NSNumberFormatter to the "percent_format" key
+    // Attach a percent NSNumberFormatter to the "PERCENT_FORMAT" key
     NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
     percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-    [data setObject:percentNumberFormatter forKey:@"percent_format"];
+    [data setObject:percentNumberFormatter forKey:@"PERCENT_FORMAT"];
     
-    // Attach a decimal NSNumberFormatter to the "percent_format" key
+    // Attach a decimal NSNumberFormatter to the "DECIMAL_FORMAT" key
     NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
     decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
-    [data setObject:decimalNumberFormatter forKey:@"decimal_format"];
+    [data setObject:decimalNumberFormatter forKey:@"DECIMAL_FORMAT"];
     
     
     /**
