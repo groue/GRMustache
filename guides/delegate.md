@@ -13,44 +13,34 @@ For everybody else, this protocol brings some yummy expressiveness.
 Observe the template rendering
 ------------------------------
 
-The protocol allows you to observe the rendering of a whole template:
+### Whole template rendering
+
+The following methods are called before, and after the whole template rendering:
 
 ```objc
 - (void)templateWillRender:(GRMustacheTemplate *)template;
 - (void)templateDidRender:(GRMustacheTemplate *)template;
 ```
 
-Two other methods allow to observe the rendering of Mustache tags:
+### Tag rendering
+
+The following methods are called before, and after the rendering of substitution and sections tags (`{{name}}` and `{{#name}}...{{/name}}`):
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
 - (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
 ```
 
-Maybe verbose. But quite on target.
-
-Those methods are called before and after GRMustache renders the result of an *invocation*. As a matter of fact, in order to render `{{name}}` or `{{#name}}...{{/name}}`, GRMustache has to *invoke* `name` on the rendered object, the one you've given to the template. The return value may be, for instance, "Eric Paul".
+Maybe verbose. But quite on target: as a matter of fact, in order to render a tag, GRMustache has to *invoke* the tag name on the rendered object, the one you've given to the template.
 
 You can read the following properties of the *invocation* argument:
 
-```objc
-@property (nonatomic, readonly) NSString *key;
-@property (nonatomic, retain) id returnValue;
-```
+- `id returnValue`: the return value of the invocation.
+- `NSString *key`: the key that did provide this value.
 
-`returnValue` will give you the return value (`@"Eric Paul"`, in our example).
+Note that a tag like `{{person.name}}` is rendered once. Thus `template:willRenderReturnValueOfInvocation:` will be called once. If the person has been found, the invocation's key will be `@"name"`, and the return value the name of the person. If the person could not be found, the key will be `@"person"`, and the return value `nil`.
 
-`key` contains the key that did provide this value (`@"name"`, in our example).
-
-
-Alter the template rendering
-----------------------------
-
-The `returnValue` property of the *invocation* argument can be written. If you set it in `template:willRenderReturnValueOfInvocation:`, GRMustache will render the value you have provided.
-
-
-A practical use: debugging templates
-----------------------------------
+### A practical use: debugging templates
 
 You may, for instance, locate keys that could not find any data:
 
@@ -62,11 +52,40 @@ You may, for instance, locate keys that could not find any data:
         
         // Log the missing key...
         NSLog(@"GRMustache missing key: %@", invocation.key);
-        
-        // ...and render a big visible value so that we can't miss it.
-        invocation.returnValue = "[MISSING]";
     }
 }
 ```
+
+Alter the template rendering
+----------------------------
+
+The `returnValue` property of the *invocation* argument can be written. If you set it in `template:willRenderReturnValueOfInvocation:`, GRMustache will render the value you have provided.
+
+```objc
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+{
+    invocation.returnValue = @"blah";
+}
+```
+
+### A practical use: more debugging templates
+
+Let's improve the targetting of missing keys by rendering a big visible value in the template right there should have been the correct data:
+
+```objc
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+{
+    // When returnValue is nil, GRMustache could not find any value to render.
+    if (invocation.returnValue == nil) {
+        
+        // Log the missing key...
+        NSLog(@"GRMustache missing key: %@", invocation.key);
+        
+        // ...and render a big visible value so that we can't miss it.
+        invocation.returnValue = @"[MISSING]";
+    }
+}
+```
+
 
 [up](../../../../GRMustache), [next](forking.md)
