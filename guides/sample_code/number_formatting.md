@@ -161,6 +161,9 @@ And then implement the delegate methods:
 @implementation MYObject()
 @synthesize templateNumberFormatterStack;
 
+/**
+ This method is called right before the template start rendering.
+ */
 - (void)templateWillRender:(GRMustacheTemplate *)template
 {
     /**
@@ -173,6 +176,9 @@ And then implement the delegate methods:
     self.templateNumberFormatterStack = [NSMutableArray array];
 }
 
+/**
+ This method is called when the template is about to render a tag.
+ */
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
 {
     /**
@@ -201,6 +207,9 @@ And then implement the delegate methods:
     }
 }
 
+/**
+ This method is called right after the template has rendered a tag.
+ */
 - (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
 {
     /**
@@ -212,6 +221,9 @@ And then implement the delegate methods:
     }
 }
 
+/**
+ This method is called right after the template has finished rendering.
+ */
 - (void)templateDidRender:(GRMustacheTemplate *)template
 {
     /**
