@@ -18,7 +18,7 @@ GRMustache can help you implement *counters*. This is not quite exactly the same
 
 Here we will have the tag `{{index}}` render a sequence of numbers, without any cooperation from the data objects. Each time a new collection is rendered, the counter will be reset.
 
-The technique involves the [GRMustacheTemplateDelegate](delegate.md) protocol. **It thus may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
+The technique involves the [GRMustacheTemplateDelegate](../delegate.md) protocol. **It thus may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
 
 So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
 
