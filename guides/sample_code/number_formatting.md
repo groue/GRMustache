@@ -151,7 +151,7 @@ First declare a property that will hold the number formatters stack, and pose ou
 
 ```objc
 @interface MYObject(GRMustache) <GRMustacheTemplateDelegate>
-@property (nonatomic, retain) NSMutableArray *templateNumberFormatterStack;
+@property (nonatomic, strong) NSMutableArray *templateNumberFormatterStack;
 @end
 ```
 
