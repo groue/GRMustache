@@ -61,7 +61,7 @@ Alter the template rendering
 
 The `returnValue` property of the *invocation* argument can be written. If you set it in `template:willRenderReturnValueOfInvocation:`, GRMustache will render the value you have provided.
 
-**Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this feature.**
+**Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use this feature with great care.**
 
 
 ### A practical use: providing default values for missing keys
