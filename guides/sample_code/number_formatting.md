@@ -1,4 +1,4 @@
-[up](../sample_code.md), [next](../forking.md)
+[up](../sample_code.md), [next](counters.md)
 
 Number formatting
 =================
@@ -102,7 +102,7 @@ Here is the rendering code:
      First, we attach a NSNumberFormatter instance to those sections. This is
      done by setting NSNumberFormatter instances to corresponding keys in the
      data object that we will render. We'll use a NSDictionary for storing
-     the data, but you can use any other container.
+     the data, but you can use any other KVC-compliant container.
      
      The NSNumberFormatter instances will never be rendered: GRMustache
      considers them as "true" objects that will trigger the rendering of the
@@ -143,14 +143,14 @@ Here is the rendering code:
 @end
 ```
 
-But we haven't yet told how those number formatters will be used for rendering the `{{float}}` tags.
+But we haven't told yet how those number formatters will be used for rendering the `{{float}}` tags.
 
 We'll build a stack of number formatters. When GRMustache is about to render a section attached to a number formatter, we'll enqueue it. When the section has been rendered, we'll dequeue. Meanwhile, when we'll have to render a number, we'll format it with the last enqueued number formatter.
 
 First declare a property that will hold the number formatters stack, and pose ourselves as a GRMustacheTemplateDelegate:
 
 ```objc
-@interface MYObject(GRMustache) <GRMustacheTemplateDelegate>
+@interface MYObject() <GRMustacheTemplateDelegate>
 @property (nonatomic, strong) NSMutableArray *templateNumberFormatterStack;
 @end
 ```
@@ -158,7 +158,9 @@ First declare a property that will hold the number formatters stack, and pose ou
 And then implement the delegate methods:
 
 ```objc
-@implementation MYObject(GRMustache)
+@implementation MYObject()
+@synthesize templateNumberFormatterStack;
+
 - (void)templateWillRender:(GRMustacheTemplate *)template
 {
     /**
@@ -220,4 +222,4 @@ And then implement the delegate methods:
 @end
 ```
 
-[up](../sample_code.md), [next](../forking.md)
+[up](../sample_code.md), [next](counters.md)
