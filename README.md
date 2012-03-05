@@ -26,6 +26,7 @@ What you get
 - [guides/embedding.md](GRMustache/blob/master/guides/embedding.md): how to embed GRMustache in your Xcode projects
 - [guides/templates.md](GRMustache/blob/master/guides/templates.md): how to parse and render templates
 - [guides/runtime.md](GRMustache/blob/master/guides/runtime.md): how to provide data to templates
+- [guides/delegate.md](GRMustache/blob/master/guides/delegate.md): how to hook into template rendering
 - [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
 
 **Sample code**: because some tasks are easier to do with some guidelines.
