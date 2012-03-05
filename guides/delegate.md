@@ -15,13 +15,17 @@ Observe the template rendering
 
 The protocol allows you to observe the rendering of a whole template:
 
-- `- (void)templateWillRender:(GRMustacheTemplate *)template;`
-- `- (void)templateDidRender:(GRMustacheTemplate *)template;`
+```objc
+- (void)templateWillRender:(GRMustacheTemplate *)template;
+- (void)templateDidRender:(GRMustacheTemplate *)template;
+```
 
 Two other methods allow to observe the rendering of Mustache tags:
 
-- `- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;`
-- `- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;`
+```objc
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+```
 
 Maybe verbose. But quite on target.
 
@@ -29,8 +33,10 @@ Those methods are called before and after GRMustache renders the result of an *i
 
 You can read the following properties of the *invocation* argument:
 
-- `@property (nonatomic, readonly) NSString *key;`
-- `@property (nonatomic, retain) id returnValue;`
+```objc
+@property (nonatomic, readonly) NSString *key;
+@property (nonatomic, retain) id returnValue;
+```
 
 `returnValue` will give you the return value (`@"Eric Paul"`, in our example). `key` contains the key that did provide this value (`@"name"`, in our example).
 
