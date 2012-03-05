@@ -17,7 +17,7 @@ What you get
 
 **An ARC-compatible static library**, that will run on your computers, devices, simulators.
 
-**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance, and a touch of [Handlebars.js](https://github.com/wycats/handlebars.js) (see below).
+**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance.
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
@@ -57,16 +57,6 @@ You can also parse a template once, and render it many times.
 Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
 Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
-
-
-Handlebars.js support
----------------------
-
-[Handlebars.js](https://github.com/wycats/handlebars.js) is an extension to the Mustache templating language.
-
-GRMustache support for Handlebars is limited to the compound key paths that use the slash character `/` as a separator, such as `{{foo/bar/baz}}` and `{{../foo/bar/baz}}`.
-
-Of course, GRMustache reads the genuine Mustache `{{foo.bar.baz}}` key paths.
 
 
 Forking
