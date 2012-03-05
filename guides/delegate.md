@@ -38,7 +38,9 @@ You can read the following properties of the *invocation* argument:
 - `id returnValue`: the return value of the invocation.
 - `NSString *key`: the key that did provide this value.
 
-Note that a tag like `{{person.name}}` is rendered once. Thus `template:willRenderReturnValueOfInvocation:` will be called once. If the person has been found, the invocation's key will be `@"name"`, and the return value the name of the person. If the person could not be found, the key will be `@"person"`, and the return value `nil`.
+Note that those methods do not allow you to build a complete "stack trace" of GRMustache rendering. They are not called for each accessed key. They are called for each tag rendering, which is quite different.
+
+For instance, a tag like `{{person.name}}` is rendered once. Thus `template:willRenderReturnValueOfInvocation:` will be called once. If the person has been found, the invocation's key will be `@"name"`, and the return value the name of the person. If the person could not be found, the key will be `@"person"`, and the return value `nil`.
 
 ### A practical use: debugging templates
 
