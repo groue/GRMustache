@@ -12,47 +12,51 @@ Not funny, but those happens.
 
 Once and for all: GRMustache methods may return errors whose domain is `GRMustacheErrorDomain`, and error codes interpreted with the `GRMustacheErrorCode` enumeration:
 
-    extern NSString* const GRMustacheErrorDomain;
-    
-    typedef enum {
-        GRMustacheErrorCodeParseError,
-        GRMustacheErrorCodeTemplateNotFound,
-    } GRMustacheErrorCode;
+```objc
+extern NSString* const GRMustacheErrorDomain;
+
+typedef enum {
+    GRMustacheErrorCodeParseError,
+    GRMustacheErrorCodeTemplateNotFound,
+} GRMustacheErrorCode;
+```
 
 On-the-fly rendering methods
 ----------------------------
 
 There are methods for rendering from strings, files, and bundle resources:
     
-    @interface GRMustacheTemplate
-    
-    // Renders the provided templateString.
-    + (NSString *)renderObject:(id)object
-                    fromString:(NSString *)templateString
-                         error:(NSError **)outError;
-    
-    // Renders the template loaded from a url. (from MacOS 10.6 and iOS 4.0)
-    + (NSString *)renderObject:(id)object
-             fromContentsOfURL:(NSURL *)url
-                         error:(NSError **)outError;
-    
-    // Renders the template loaded from a path.
-    + (NSString *)renderObject:(id)object
-            fromContentsOfFile:(NSString *)path
-                         error:(NSError **)outError;
-    
-    // Renders the template loaded from a bundle resource of extension "mustache".
-    + (NSString *)renderObject:(id)object
-                  fromResource:(NSString *)name
-                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                         error:(NSError **)outError;
-    
-    // Renders the template loaded from a bundle resource of provided extension.
-    + (NSString *)renderObject:(id)object
-                  fromResource:(NSString *)name
-                 withExtension:(NSString *)ext
-                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                         error:(NSError **)outError;
+```objc
+@interface GRMustacheTemplate
+
+// Renders the provided templateString.
++ (NSString *)renderObject:(id)object
+                fromString:(NSString *)templateString
+                     error:(NSError **)outError;
+
+// Renders the template loaded from a url. (from MacOS 10.6 and iOS 4.0)
++ (NSString *)renderObject:(id)object
+         fromContentsOfURL:(NSURL *)url
+                     error:(NSError **)outError;
+
+// Renders the template loaded from a path.
++ (NSString *)renderObject:(id)object
+        fromContentsOfFile:(NSString *)path
+                     error:(NSError **)outError;
+
+// Renders the template loaded from a bundle resource of extension "mustache".
++ (NSString *)renderObject:(id)object
+              fromResource:(NSString *)name
+                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                     error:(NSError **)outError;
+
+// Renders the template loaded from a bundle resource of provided extension.
++ (NSString *)renderObject:(id)object
+              fromResource:(NSString *)name
+             withExtension:(NSString *)ext
+                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                     error:(NSError **)outError;
+```
 
 
 Parse-once-and-render-many-times methods
@@ -60,35 +64,39 @@ Parse-once-and-render-many-times methods
 
 It's efficient to parse a template once, and then render it as often as needed:
 
-    @interface GRMustacheTemplate
-    
-    // Parses the templateString.
-    + (id)templateFromString:(NSString *)templateString
-                       error:(NSError **)outError;
-    
-    // Loads and parses the template from url. (from MacOS 10.6 and iOS 4.0)
-    + (id)templateFromContentsOfURL:(NSURL *)url
-                              error:(NSError **)outError;
-    
-    // Loads and parses the template from path.
-    + (id)templateFromContentsOfFile:(NSString *)path
-                               error:(NSError **)outError;
-    
-    // Loads and parses the template from a bundle resource of extension "mustache".
-    + (id)templateFromResource:(NSString *)name
-                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                         error:(NSError **)outError;
-    
-    // Loads and parses the template from a bundle resource of provided extension.
-    + (id)templateFromResource:(NSString *)name
-                 withExtension:(NSString *)ext
-                        bundle:(NSBundle *)bundle   // nil stands for the main bundle
-                         error:(NSError **)outError;
+```objc
+@interface GRMustacheTemplate
+
+// Parses the templateString.
++ (id)templateFromString:(NSString *)templateString
+                   error:(NSError **)outError;
+
+// Loads and parses the template from url. (from MacOS 10.6 and iOS 4.0)
++ (id)templateFromContentsOfURL:(NSURL *)url
+                          error:(NSError **)outError;
+
+// Loads and parses the template from path.
++ (id)templateFromContentsOfFile:(NSString *)path
+                           error:(NSError **)outError;
+
+// Loads and parses the template from a bundle resource of extension "mustache".
++ (id)templateFromResource:(NSString *)name
+                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                     error:(NSError **)outError;
+
+// Loads and parses the template from a bundle resource of provided extension.
++ (id)templateFromResource:(NSString *)name
+             withExtension:(NSString *)ext
+                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                     error:(NSError **)outError;
+```
 
 Those methods return GRMustacheTemplate instances, which render objects with the following methods:
 
-    - (NSString *)renderObject:(id)object;
-    - (NSString *)renderObjects:(id)object, ...;    // nil-terminated list
+```objc
+- (NSString *)renderObject:(id)object;
+- (NSString *)renderObjects:(id)object, ...;    // nil-terminated list
+```
 
 The latter method, which takes several arguments, is helpful when several objects should feed the template. It actually initializes the rendering [context stack](runtime/context_stack.md) with those objects.
 

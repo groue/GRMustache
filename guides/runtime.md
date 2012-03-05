@@ -9,19 +9,20 @@ Generally speaking, GRMustache will look for values in your data objects through
 
 You can thus provide rendering methods with NSDictionary instances, or custom objects with properties or methods whose name match the keys in the template tags.
 
-    // This template waits for a `name` key:
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
-    
-    // Those two objects provide this `name` key:
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"dictionary" forKey:@"name"];
-    Person *arthur = [Person personWithName:@"arthur"];
-    
-    // "dictionary"
-    [template renderObject:dictionary];
-    
-    // "arthur"
-    [template renderObject:arthur];
+```objc
+// This template waits for a `name` key:
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
 
+// Those two objects provide this `name` key:
+NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"dictionary" forKey:@"name"];
+Person *arthur = [Person personWithName:@"arthur"];
+
+// "dictionary"
+[template renderObject:dictionary];
+
+// "arthur"
+[template renderObject:arthur];
+```
 
 - [context_stack.md](runtime/context_stack.md)
 
@@ -39,8 +40,5 @@ You can thus provide rendering methods with NSDictionary instances, or custom ob
 
     Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
 
-- [delegate.md](runtime/delegate.md)
-    
-    The GRMustacheTemplateDelegate protocol.
 
 [up](../../../../GRMustache), [next](runtime/context_stack.md)

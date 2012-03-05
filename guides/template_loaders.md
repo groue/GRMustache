@@ -14,57 +14,67 @@ Loading templates from the file system
 
 GRMustacheTemplateLoader ships with the following class methods:
 
-    // Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
-    + (id)templateLoaderWithBaseURL:(NSURL *)url;
+```objc
+// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
++ (id)templateLoaderWithBaseURL:(NSURL *)url;
 
-    // Loads templates and partials from a directory, with provided extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
-    + (id)templateLoaderWithBaseURL:(NSURL *)url
-                          extension:(NSString *)ext;
+// Loads templates and partials from a directory, with provided extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
++ (id)templateLoaderWithBaseURL:(NSURL *)url
+                      extension:(NSString *)ext;
 
-    // Loads templates and partials from a directory, with provided extension, encoded in provided encoding (from MacOS 10.6 and iOS 4.0)
-    + (id)templateLoaderWithBaseURL:(NSURL *)url
-                          extension:(NSString *)ext
-                           encoding:(NSStringEncoding)encoding;
+// Loads templates and partials from a directory, with provided extension, encoded in provided encoding (from MacOS 10.6 and iOS 4.0)
++ (id)templateLoaderWithBaseURL:(NSURL *)url
+                      extension:(NSString *)ext
+                       encoding:(NSStringEncoding)encoding;
 
-    // Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
-    + (id)templateLoaderWithDirectory:(NSString *)path;
+// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
++ (id)templateLoaderWithDirectory:(NSString *)path;
 
-    // Loads templates and partials from a directory, with provided extension, encoded in UTF8
-    + (id)templateLoaderWithDirectory:(NSString *)path
-                            extension:(NSString *)ext;
+// Loads templates and partials from a directory, with provided extension, encoded in UTF8
++ (id)templateLoaderWithDirectory:(NSString *)path
+                        extension:(NSString *)ext;
 
-    // Loads templates and partials from a directory, with provided extension, encoded in provided encoding
-    + (id)templateLoaderWithDirectory:(NSString *)path
-                            extension:(NSString *)ext
-                             encoding:(NSStringEncoding)encoding;
+// Loads templates and partials from a directory, with provided extension, encoded in provided encoding
++ (id)templateLoaderWithDirectory:(NSString *)path
+                        extension:(NSString *)ext
+                         encoding:(NSStringEncoding)encoding;
 
-    // Loads templates and partials from a bundle, with "mustache" extension, encoded in UTF8
-    + (id)templateLoaderWithBundle:(NSBundle *)bundle;
+// Loads templates and partials from a bundle, with "mustache" extension, encoded in UTF8
++ (id)templateLoaderWithBundle:(NSBundle *)bundle;
 
-    // Loads templates and partials from a bundle, with provided extension, encoded in UTF8
-    + (id)templateLoaderWithBundle:(NSBundle *)bundle
-                         extension:(NSString *)ext;
+// Loads templates and partials from a bundle, with provided extension, encoded in UTF8
++ (id)templateLoaderWithBundle:(NSBundle *)bundle
+                     extension:(NSString *)ext;
 
-    // Loads templates and partials from a bundle, with provided extension, encoded in provided encoding
-    + (id)templateLoaderWithBundle:(NSBundle *)bundle
-                         extension:(NSString *)ext
-                          encoding:(NSStringEncoding)encoding;
+// Loads templates and partials from a bundle, with provided extension, encoded in provided encoding
++ (id)templateLoaderWithBundle:(NSBundle *)bundle
+                     extension:(NSString *)ext
+                      encoding:(NSStringEncoding)encoding;
+```
 
 For instance:
 
-    GRMustacheTemplateLoader *loader = [GRMustacheTemplate templateLoaderWithBaseURL:...];
+```objc
+GRMustacheTemplateLoader *loader = [GRMustacheTemplate templateLoaderWithBaseURL:...];
+```
 
 You may now load a template from its location:
 
-    GRMustacheTemplate *template = [loader templateWithName:@"document" error:NULL];
-    
+```objc
+GRMustacheTemplate *template = [loader templateWithName:@"document" error:NULL];
+```
+ 
 You may also have the loader parse a template string. Only partials would then be loaded from the loader's location:
 
-    GRMustacheTemplate *template = [loader templateFromString:@"..." error:NULL];
-    
+```objc
+GRMustacheTemplate *template = [loader templateFromString:@"..." error:NULL];
+```
+ 
 The rendering is done as usual:
 
-    NSString *rendering = [template renderObject:...];
+```objc
+NSString *rendering = [template renderObject:...];
+```
 
 Other sources for templates
 ---------------------------
@@ -75,65 +85,79 @@ We provide below the implementation of a template loader which loads partials fr
 
 The header file:
 
-    #import "GRMustache.h"
+```objc
+#import "GRMustache.h"
 
-    @interface DictionaryTemplateLoader : GRMustacheTemplateLoader
-    + (id)loaderWithDictionary:(NSDictionary *)templatesByName;
-    @end
+@interface DictionaryTemplateLoader : GRMustacheTemplateLoader
++ (id)loaderWithDictionary:(NSDictionary *)templatesByName;
+@end
+```
 
 In our implementation file, import the `GRMustacheTemplateLoader_protected.h` header, dedicated to GRMustacheTemplateLoader subclasses:
 
-    #import "GRMustacheTemplateLoader_protected.h"
-    
-    @interface DictionaryTemplateLoader()
-    @property (nonatomic, retain) NSDictionary *templatesByName;
-    @end
-    
-    @implementation DictionaryTemplateLoader
-    @synthetise templatesByName;
+```objc
+#import "GRMustacheTemplateLoader_protected.h"
 
-    + (id)loaderWithDictionary:(NSDictionary *)templatesByName {
-        // initWithExtension:encoding: is the designated initializer.
-        // provide it with some values, even if we won't use them.
-        DictionaryTemplateLoader *loader = [[[self alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
-        loader.templatesByName = templatesByName;
-        return loader;
-    }
+@interface DictionaryTemplateLoader()
+@property (nonatomic, retain) NSDictionary *templatesByName;
+@end
 
-    - (void)dealloc {
-        self.templatesByName = nil;
-        [super dealloc];
-    }
+@implementation DictionaryTemplateLoader
+@synthetise templatesByName;
+
++ (id)loaderWithDictionary:(NSDictionary *)templatesByName {
+    // initWithExtension:encoding: is the designated initializer.
+    // provide it with some values, even if we won't use them.
+    DictionaryTemplateLoader *loader = [[[self alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
+    loader.templatesByName = templatesByName;
+    return loader;
+}
+
+- (void)dealloc {
+    self.templatesByName = nil;
+    [super dealloc];
+}
+```
 
 Now let's implement the `templateIdForTemplateNamed:relativeToTemplateId:` method.
 
 Provided with a partial name that comes from a `{{>name}}` mustache tag, it should return an object which uniquely identifies a template. In our case, we ignore the second argument that would come in handy when implementing a partial hierarchy. However, the template name looks like a perfect way to identify the partials:
 
-    - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
-        return name;
-    }
+```objc
+- (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId {
+    return name;
+}
+```
 
 And finally, we have to provide template strings:
 
-    - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
-        return [self.templatesByName objectForKey:templateId];
-    }
+```objc
+- (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError {
+    return [self.templatesByName objectForKey:templateId];
+}
 
-    @end
+@end
+```
 
 Now we may instanciate one:
     
-    NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works!" forKey:@"partial"];
-    DictionaryTemplateLoader *loader = [DictionaryTemplateLoader loaderWithDictionary:templates];
+```objc
+NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works!" forKey:@"partial"];
+DictionaryTemplateLoader *loader = [DictionaryTemplateLoader loaderWithDictionary:templates];
+```
 
 Then load templates from it:
 
-    GRMustacheTemplate *template1 = [loader templateFromString:@"{{>partial}}" error:NULL];
-    GRMustacheTemplate *template2 = [loader templateWithTemplateName:@"partial" error:NULL];
+```objc
+GRMustacheTemplate *template1 = [loader templateFromString:@"{{>partial}}" error:NULL];
+GRMustacheTemplate *template2 = [loader templateWithTemplateName:@"partial" error:NULL];
+```
 
 And finally render:
 
-    [template1 render];     // "It works!"
-    [template2 render];     // "It works!"
+```objc
+[template1 render];     // "It works!"
+[template2 render];     // "It works!"
+```
 
 [up](../../../../GRMustache), [next](runtime.md)
