@@ -16,7 +16,7 @@ Indices vs counters
 
 GRMustache can help you implement *counters*. This is not quite exactly the same as array indices, but they are close enough.
 
-Here we will have the tag `{{index}}` render a sequence of numbers, without any cooperation from the data object. Each time a new collection is rendered, the counter will be reset.
+Here we will have the tag `{{index}}` render a sequence of numbers, without any cooperation from the data objects. Each time a new collection is rendered, the counter will be reset.
 
 The technique involves the [GRMustacheTemplateDelegate](delegate.md) protocol. As such, it may not be compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations).
 
@@ -98,6 +98,9 @@ And then implement the delegate methods:
 @implementation MYObject()
 @synthesize templateCounter;
 
+/**
+ This method is called when the template is about to render a tag.
+ */
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
 {
     /**
@@ -120,6 +123,9 @@ And then implement the delegate methods:
     }
 }
 
+/**
+ This method is called right after the template has finished rendering.
+ */
 - (void)templateDidRender:(GRMustacheTemplate *)template
 {
     /**
