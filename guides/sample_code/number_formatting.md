@@ -103,6 +103,10 @@ Here is the rendering code:
      done by setting NSNumberFormatter instances to corresponding keys in the
      data object that we will render. We'll use a NSDictionary for storing
      the data, but you can use any other container.
+     
+     The NSNumberFormatter instances will never be rendered: GRMustache
+     considers them as "true" objects that will trigger the rendering of the
+     sections they are attached to. We use them as plain sentinels.
      */
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
@@ -119,10 +123,6 @@ Here is the rendering code:
     
     
     /**
-     The NSNumberFormatter instances will never be rendered: GRMustache
-     considers them as "true" objects that will trigger the rendering of the
-     sections they are attached to. We use them as plain sentinels.
-     
      Now we need a float to be rendered as the {{float}} tags of our
      template.
      */
