@@ -39,19 +39,23 @@ GRMustache rendering is the combination of a template string and of an object th
 
 You can render templates on the fly:
 
-    #import "GRMustache.h"
-    
-    NSString *templateString = @"Hello {{name}}!";
-    Person *arthur = [Person personWithName:@"Arthur"];
-    
-    // Renders "Hello Arthur!"
-    NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
+```objc
+#import "GRMustache.h"
+
+NSString *templateString = @"Hello {{name}}!";
+Person *arthur = [Person personWithName:@"Arthur"];
+
+// Renders "Hello Arthur!"
+NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
+```
 
 You can also parse a template once, and render it many times.
 
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    rendering = [template renderObject:arthur];
-    rendering = [template renderObject:...];
+```objc
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+rendering = [template renderObject:arthur];
+rendering = [template renderObject:...];
+```
 
 Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
 
