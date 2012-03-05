@@ -41,10 +41,11 @@ In order to have a template-wide `localize` helper, we won't attach it to any sp
 
 Since we don't need to carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
 
-    @interface TemplateUtils: NSObject
-    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
-    @end
-
+```objc
+@interface TemplateUtils: NSObject
++ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
+@end
+```
 
 
 #### The literal inner content
@@ -53,12 +54,14 @@ Now up to the first implementation. The _section_ argument is a `GRMustacheSecti
 
 This _section_ object has a `templateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
-    @implementation TemplateUtils
-    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
-    {
-      return NSLocalizedString(section.templateString, nil);
-    }
-    @end
+```objc
+@implementation TemplateUtils
++ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
+{
+    return NSLocalizedString(section.templateString, nil);
+}
+@end
+```
 
 So far, so good, this would work as expected.
 
@@ -91,19 +94,23 @@ Fortunately, we have:
 
 Now we can fix our implementation:
 
-    @implementation TemplateUtils
-    + (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
-    {
-      NSString *renderedContent = [section renderObject:context];
-      return NSLocalizedString(renderedContent, nil);
-    }
-    @end
+```objc
+@implementation TemplateUtils
++ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
+{
+    NSString *renderedContent = [section renderObject:context];
+    return NSLocalizedString(renderedContent, nil);
+}
+@end
+```
 
 #### Injecting the helper
 
 Now let's render. Our template needs two objects: our `TemplateUtils` class for the `localize` key, and another for the `cart`:
 
-    NSString *rendering = [template renderObjects:[TemplateUtils class], data, nil];
+```objc
+NSString *rendering = [template renderObjects:[TemplateUtils class], data, nil];
+```
 
 ### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
 
@@ -113,25 +120,29 @@ The `GRMustacheHelper` protocol aims at giving you a way to create helper classe
 
 In our case, here would be the implementation of our localizing helper:
 
-    @interface LocalizedStringHelper: NSObject<GRMustacheHelper>
-    @end
-    
-    @implementation LocalizedStringHelper
-    // required by the GRMustacheHelper protocol
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-    {
-      NSString *renderedContent = [section renderObject:context];
-      return NSLocalizedString(renderedContent, nil);
-    }
-    @end
+```objc
+@interface LocalizedStringHelper: NSObject<GRMustacheHelper>
+@end
+
+@implementation LocalizedStringHelper
+// required by the GRMustacheHelper protocol
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    NSString *renderedContent = [section renderObject:context];
+    return NSLocalizedString(renderedContent, nil);
+}
+@end
+```
 
 This time, we need to explicitely attach our helper to the `localize` key. Let's go with a dictionary:
     
-    id localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
-    NSString *rendering = [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   localizeHelper, @"localize",
-                                                   data.cart,      @"cart",
-                                                   nil]];
+```objc
+id localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
+NSString *rendering = [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               localizeHelper, @"localize",
+                                               data.cart,      @"cart",
+                                               nil]];
+```
 
 Did you notice? Our `LocalizedStringHelper` can now support localization tables. This is left as an exercise for the reader :-)
 
@@ -143,31 +154,39 @@ You may implement filters, as we have seen above.
 
 You may also implement caching:
 
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-      if (self.cache == nil) {
+```objc
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+    if (self.cache == nil) {
         self.cache = [section renderObject:context];
-      }
-      return self.cache;
-    };
+    }
+    return self.cache;
+};
+```
 
 You may render an extended context:
 
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-      return [section renderObjects:context, ..., nil];
-    });
+```objc
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+    return [section renderObjects:context, ..., nil];
+});
+```
 
 You may render a totally different context:
 
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-      return [section renderObject:...];
-    });
+```objc
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+    return [section renderObject:...];
+});
+```
 
 You may implement debugging sections:
 
-    - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-      NSLog(section.templateString);         // log the unrendered section 
-      NSLog([section renderObject:context]); // log the rendered section 
-      return nil;                            // don't render anything
-    });
+```objc
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
+    NSLog(section.templateString);         // log the unrendered section 
+    NSLog([section renderObject:context]); // log the rendered section 
+    return nil;                            // don't render anything
+});
+```
 
 [up](../runtime.md), [next](../delegate.md)
