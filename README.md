@@ -25,12 +25,12 @@ What you get
 
 **Documentation**: GRMustache online documentation is provided as guides and sample code:
 
-- [guides/embedding.md](GRMustache/blob/master/guides/embedding.md): how to embed GRMustache in your Xcode projects
-- [guides/templates.md](GRMustache/blob/master/guides/templates.md): how to parse and render templates
-- [guides/runtime.md](GRMustache/blob/master/guides/runtime.md): how to provide data to templates
-- [guides/delegate.md](GRMustache/blob/master/guides/delegate.md): how to hook into template rendering
-- [guides/sample_code.md](GRMustache/blob/master/guides/sample_code.md): because some tasks are easier to do with some guidelines.
-- [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
+- [Guides/embedding.md](GRMustache/blob/master/Guides/embedding.md): how to embed GRMustache in your Xcode projects
+- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to parse and render templates
+- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
+- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
+- [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
+- [Guides/forking.md](GRMustache/blob/master/Guides/forking.md): how GRMustache is organized
 
 Usage
 -----
@@ -57,15 +57,15 @@ rendering = [template renderObject:arthur];
 rendering = [template renderObject:...];
 ```
 
-Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [guides/templates.md](GRMustache/blob/master/guides/templates.md).
+Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [Guides/templates.md](GRMustache/blob/master/Guides/templates.md).
 
-Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [guides/runtime.md](GRMustache/blob/master/guides/runtime.md).
+Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md).
 
 
 Forking
 -------
 
-Please fork. You'll learn useful information in [guides/forking.md](GRMustache/blob/master/guides/forking.md).
+Please fork. You'll learn useful information in [Guides/forking.md](GRMustache/blob/master/Guides/forking.md).
 
 
 License

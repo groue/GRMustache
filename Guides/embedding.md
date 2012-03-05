@@ -28,6 +28,6 @@ However, you will have to explicitely import:
 
 - `GRMustacheTemplateLoader_protected.h`
     
-    when you want to subclass `GRMustacheTemplateLoader`, and provide your own template loading strategy. See [guides/template_loaders.md](template_loaders.md)
+    when you want to subclass `GRMustacheTemplateLoader`, and provide your own template loading strategy. See [Guides/template_loaders.md](template_loaders.md)
 
 [up](../../../../GRMustache), [next](templates.md)

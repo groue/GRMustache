@@ -3,7 +3,7 @@
 Templates
 =========
 
-You'll learn here how to load, and render templates. [guides/runtime.md](runtime.md) will talk about about what happens *during* the rendering itself.
+You'll learn here how to load, and render templates. [Guides/runtime.md](runtime.md) will talk about about what happens *during* the rendering itself.
 
 Errors
 ------
@@ -128,6 +128,6 @@ You can write recursive partials. Just avoid infinite loops in your context obje
 More loading options
 --------------------
 
-All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [guides/template_loaders.md](template_loaders.md)
+All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [Guides/template_loaders.md](template_loaders.md)
 
 [up](../../../../GRMustache), [next](template_loaders.md)
