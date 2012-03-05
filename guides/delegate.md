@@ -38,7 +38,9 @@ You can read the following properties of the *invocation* argument:
 @property (nonatomic, retain) id returnValue;
 ```
 
-`returnValue` will give you the return value (`@"Eric Paul"`, in our example). `key` contains the key that did provide this value (`@"name"`, in our example).
+`returnValue` will give you the return value (`@"Eric Paul"`, in our example).
+
+`key` contains the key that did provide this value (`@"name"`, in our example).
 
 
 Alter the template rendering
