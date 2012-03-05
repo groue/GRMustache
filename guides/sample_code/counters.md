@@ -106,12 +106,15 @@ And then implement the delegate methods:
     /**
      The invocation object tells us which object is about to be rendered.
      */
-    if ([invocation.returnValue isKindOfClass:[NSArray class]]) {
+    if ([invocation.returnValue isKindOfClass:[NSArray class]])
+    {
         /**
          If it is an NSArray, reset our counter.
          */
         self.templateCounter = [NSNumber numberWithUnsignedInteger:0];
-    } else if (self.templateCounter && [invocation.key isEqualToString:@"index"]) {
+    }
+    else if (self.templateCounter && [invocation.key isEqualToString:@"index"])
+    {
         /**
          If we have a counter, and we're asked for the `index` key, set the
          invocation's returnValue to the counter: it will be rendered.
