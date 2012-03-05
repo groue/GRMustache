@@ -38,6 +38,8 @@ Note that those methods do not allow you to build a complete "stack trace" of GR
 
 For instance, a tag like `{{person.name}}` is rendered once. Thus `template:willRenderReturnValueOfInvocation:` will be called once. If the person has been found, the invocation's key will be `@"name"`, and the return value the name of the person. If the person could not be found, the key will be `@"person"`, and the return value `nil`.
 
+Also: if a section tag `{{#name}}...{{/name}}` is provided with an NSArray, it will be rendered several times. However `template:willRenderReturnValueOfInvocation:` will be called once, with the array stored in the return value of the invocation.
+
 ### A practical use: debugging templates
 
 You may, for instance, locate keys that could not find any data:
