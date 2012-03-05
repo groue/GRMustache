@@ -179,21 +179,23 @@ And then implement the delegate methods:
     if ([invocation.returnValue isKindOfClass:[NSNumberFormatter class]])
     {
         /**
-         If it is a NSNumberFormatter, enqueue it in templateNumberFormatterStack.
+         If it is a NSNumberFormatter, enqueue it in
+         templateNumberFormatterStack.
          */
         [self.templateNumberFormatterStack addObject:invocation.returnValue];
     }
     else if (self.templateNumberFormatterStack.count > 0 && [invocation.returnValue isKindOfClass:[NSNumber class]])
     {
         /**
-         If it is a NSNumber, and if our templateNumberFormatterStack is not empty,
-         use the top NSNumberFormatter to format the number.
+         If it is a NSNumber, and if our templateNumberFormatterStack is not
+         empty, use the top NSNumberFormatter to format the number.
          
-         The invocation's returnValue can be set: this is the object that will be
+         Set the invocation's returnValue: this is the object that will be
          rendered.
          */
         NSNumberFormatter *numberFormatter = self.templateNumberFormatterStack.lastObject;
-        invocation.returnValue = [numberFormatter stringFromNumber:(NSNumber *)invocation.returnValue];
+        NSNumber *number = invocation.returnValue;
+        invocation.returnValue = [numberFormatter stringFromNumber:number];
     }
 }
 
