@@ -70,7 +70,7 @@ Before you answer "Of course not, I'm a lazy bastard, just gimme the code", bewa
 
 So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
 
-The sample code below format all numbers in specific sections. For instance, the following template:
+The sample code below format all numbers in specific sections, without any cooperation from the data object. For instance, consider the following template, that uses a single `{{float}}` value:
 
     raw: {{float}}
 
@@ -82,7 +82,7 @@ The sample code below format all numbers in specific sections. For instance, the
     decimal: {{float}}
     {{/decimal_format}}
 
-...will render, on a French system:
+It will render, on a French system:
 
     raw: 0.5
     percent: 50%
