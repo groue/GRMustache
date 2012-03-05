@@ -5,10 +5,6 @@ GRMustacheTemplateDelegate protocol
 
 This protocol lets you observe, and possibly alter the rendering of a template.
 
-**Whoever needs to develop and use templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) should make sure he does not use this protocol to alter template rendering.**
-
-For everybody else, this protocol brings some yummy expressiveness.
-
 
 Observe the template rendering
 ------------------------------
@@ -63,12 +59,8 @@ Alter the template rendering
 
 The `returnValue` property of the *invocation* argument can be written. If you set it in `template:willRenderReturnValueOfInvocation:`, GRMustache will render the value you have provided.
 
-```objc
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
-{
-    invocation.returnValue = @"blah";
-}
-```
+**Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this feature.**
+
 
 ### A practical use: more debugging templates
 
