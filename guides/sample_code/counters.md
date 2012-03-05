@@ -127,14 +127,17 @@ And then implement the delegate methods:
 }
 
 /**
- This method is called right after the template has finished rendering.
+ This method is called right after the template has rendered a tag.
  */
-- (void)templateDidRender:(GRMustacheTemplate *)template
+- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
 {
     /**
-     Final cleanup: release the counter.
+     Make sure we release the counter when we leave an NSArray.
      */
-    self.templateCounter = nil;
+    if ([invocation.returnValue isKindOfClass:[NSArray class]])
+    {
+        self.templateCounter = nil;
+    }
 }
 @end
 ```
