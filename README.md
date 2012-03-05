@@ -21,6 +21,8 @@ What you get
     
 **Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
 
+**Expressiveness**: GRMustache lets you break out of Mustache limits, in conscience, when you need.
+
 **Documentation**: GRMustache online documentation is provided as guides and sample code:
 
 - [guides/embedding.md](GRMustache/blob/master/guides/embedding.md): how to embed GRMustache in your Xcode projects
@@ -29,7 +31,6 @@ What you get
 - [guides/delegate.md](GRMustache/blob/master/guides/delegate.md): how to hook into template rendering
 - [guides/sample_code.md](GRMustache/blob/master/guides/sample_code.md): because some tasks are easier to do with some guidelines.
 - [guides/forking.md](GRMustache/blob/master/guides/forking.md): how GRMustache is organized
-
 
 Usage
 -----
