@@ -70,7 +70,7 @@ The `returnValue` property of the *invocation* argument can be written. If you s
 
 ### A practical use: more debugging templates
 
-Let's improve the targetting of missing keys by rendering a big visible value in the template right there should have been the correct data:
+Let's improve the targetting of missing keys by rendering a big visible value in the template where there should have been some correct data:
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
