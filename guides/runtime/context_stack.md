@@ -39,9 +39,11 @@ I can hear you: "What about the `NSUndefinedKeyException` raised by the Key-Valu
 
 For instance, the following code will ask `@"foo"` for the key `XXX`. The string will raise, GRMustache will catch, and the final rendering will be the empty string:
 
-    [GRMustacheTemplate renderObject:@"foo"
-                          fromString:@"{{XXX}}"
-                               error:NULL];
+```objc
+[GRMustacheTemplate renderObject:@"foo"
+                      fromString:@"{{XXX}}"
+                           error:NULL];
+```
 
 When debugging your project, those exceptions may become a real annoyance, because you tell your debugger to stop on every Objective-C exceptions.
 
@@ -53,9 +55,11 @@ You'll get a slight performance hit, so you'd probably make sure this call does 
 
 One way to achieve this is to add `-DDEBUG` to the "Other C Flags" setting of your development configuration, and to wrap the preventNSUndefinedKeyExceptionAttack method call in a #if block, like:
 
-    #ifdef DEBUG
-    [GRMustache preventNSUndefinedKeyExceptionAttack];
-    #endif
+```objc
+#ifdef DEBUG
+[GRMustache preventNSUndefinedKeyExceptionAttack];
+#endif
+```
 
 Sections vs. Key paths
 ----------------------
