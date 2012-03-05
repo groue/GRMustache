@@ -12,16 +12,17 @@ We'll first talk about some simple cases. We'll then discuss caveats.
 
 The simplest way to provide booleans to GRMustache is to provide objects returned by the `[NSNumber numberWithBool:]` method:
 
-    NSString *templateString = @"{{#pretty}}whistle{{/pretty}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+```objc
+NSString *templateString = @"{{#pretty}}whistle{{/pretty}}";
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
 
-    // @"whistle"
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
-                                                       forKey:@"pretty"]];
-    // @""
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                       forKey:@"pretty"]];
-
+// @"whistle"
+[template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
+                                                   forKey:@"pretty"]];
+// @""
+[template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                   forKey:@"pretty"]];
+```
 
 ## BOOL properties
 
@@ -29,18 +30,20 @@ Since GRMustache uses Key-Value Coding for accessing context keys, you may also 
 
 For instance:
 
-    @interface Person: NSObject
-    @property BOOL pretty;
-    @end
+```objc
+@interface Person: NSObject
+@property BOOL pretty;
+@end
 
-    Person *alice = [Person new];
-    alice.pretty = YES;
+Person *alice = [Person new];
+alice.pretty = YES;
 
-    Person *bob = [Person new];
-    bob.pretty = NO;
+Person *bob = [Person new];
+bob.pretty = NO;
 
-    [template renderObject:alice]; // @"whistle"
-    [template renderObject:bob];   // @""
+[template renderObject:alice]; // @"whistle"
+[template renderObject:bob];   // @""
+```
 
 Your custom property getters will work just as fine.
 
@@ -71,16 +74,18 @@ GRMustache handles properly BOOL properties, but not methods which return BOOL v
 
 For instance, the following class would **not** render as expected:
 
-    @interface BadPerson: NSObject
-    - (void)setPretty:(BOOL)value;
-    - (BOOL)pretty;
-    @end
+```objc
+@interface BadPerson: NSObject
+- (void)setPretty:(BOOL)value;
+- (BOOL)pretty;
+@end
 
-    Person *carol = [BadPerson new];
-    [carol setPretty:NO];
+Person *carol = [BadPerson new];
+[carol setPretty:NO];
 
-    // @"whistle"
-    [template renderObject:carol];
+// @"whistle"
+[template renderObject:carol];
+```
 
 GRMustache considers Carol as pretty, although she's not!
 
@@ -92,9 +97,11 @@ Objective-C properties can be analysed at runtime, and that is why GRMustache is
 
 A consequence is that all properties declared as `char` will be considered as booleans...:
 
-    @interface Person: NSObject
-    @property char initial;	// will be considered as boolean
-    @end
+```objc
+@interface Person: NSObject
+@property char initial;	// will be considered as boolean
+@end
+```
 
 We thought that built-in support for `BOOL` properties was worth this annoyance, since it should be pretty rare  that you would use a value of such a type in a template.
 
@@ -102,7 +109,9 @@ However, should this behavior annoy you, we provide a mechanism for having GRMus
 
 Enter the *strict boolean mode* with the following statement, prior to any rendering:
 
-    [GRMustache setStrictBooleanMode:YES];
+```objc
+[GRMustache setStrictBooleanMode:YES];
+```
 
 In strict boolean mode, `char` and `BOOL` properties will be considered as what they really are: numbers.
 
@@ -110,8 +119,10 @@ In strict boolean mode, `char` and `BOOL` properties will be considered as what 
 
 You may consider using the unbeloved C99 `bool` type. They can reliably control boolean sections whatever the boolean mode, and with ou without property declaration.
 
-    @interface Person: NSObject
-    - (bool)pretty;
-    @end
+```objc
+@interface Person: NSObject
+- (bool)pretty;
+@end
+```
 
 [up](../runtime.md), [next](helpers.md)
