@@ -64,21 +64,14 @@ The `returnValue` property of the *invocation* argument can be written. If you s
 **Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this feature.**
 
 
-### A practical use: more debugging templates
-
-Let's improve the targetting of missing keys by rendering a big visible value in the template where there should have been some correct data:
+### A practical use: providing default values for missing keys
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
 {
     // When returnValue is nil, GRMustache could not find any value to render.
     if (invocation.returnValue == nil) {
-        
-        // Log the missing key...
-        NSLog(@"GRMustache missing key: %@", invocation.key);
-        
-        // ...and render a big visible value so that we can't miss it.
-        invocation.returnValue = @"[MISSING]";
+        invocation.returnValue = @"[DEFAULT]";
     }
 }
 ```
