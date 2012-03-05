@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](forking.md)
+[up](../../../../GRMustache), [next](sample_code.md)
 
 GRMustacheTemplateDelegate protocol
 ===================================
@@ -82,4 +82,4 @@ Let's improve the targetting of missing keys by rendering a big visible value in
 ```
 
 
-[up](../../../../GRMustache), [next](forking.md)
+[up](../../../../GRMustache), [next](sample_code.md)

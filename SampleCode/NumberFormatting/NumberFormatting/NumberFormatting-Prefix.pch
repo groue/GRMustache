@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'NumberFormatting' target in the 'NumberFormatting' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif
