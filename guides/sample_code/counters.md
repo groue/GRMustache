@@ -5,7 +5,7 @@ Counters
 
 A frequent request of Mustache (not only GRMustache) users is: "My template renders some arrays. How do I render each index, with some {{index}} tag or whatever?"
 
-The frequent answer is: "Mustache does not provide this feature. Just have each of your data objects provide that index."
+The frequent answer is: "Mustache does not provide this feature. Just have each of your data objects provide its own index."
 
 That's right. Mustache is a simple template language. This is why there are so many [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations). And there is no support for indices in the [Mustache specification](https://github.com/mustache/spec).
 
