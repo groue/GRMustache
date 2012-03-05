@@ -50,7 +50,7 @@ You may, for instance, locate keys that could not find any data:
     // When returnValue is nil, GRMustache could not find any value to render.
     if (invocation.returnValue == nil) {
         
-        // Log the missing key...
+        // Log the missing key
         NSLog(@"GRMustache missing key: %@", invocation.key);
     }
 }
