@@ -9,6 +9,6 @@ Sample code
 
 - [counters.md](sample_code/counters.md)
     
-    How to implement counters (have GRMustache render a sequence of numbers)
+    How to have GRMustache render numbers in sequence.
 
 [up](../../../../GRMustache), [next](sample_code/number_formatting.md)
