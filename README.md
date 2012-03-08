@@ -10,34 +10,20 @@ A list of Mustache implementations in other languages: http://mustache.github.co
 Breaking news on Twitter: http://twitter.com/GRMustache
 
 
-What you get
-------------
+Three steps to GRMustache
+-------------------------
 
-**MacOS 10.6+, iPhoneOS 3.0, iOS 4.0+ support**
+### 1. Download GRMustache
 
-**An ARC-compatible static library**, that will run on your computers, devices, simulators.
+    $ git clone https://github.com/groue/GRMustache.git
 
-**Compatibility with other Mustache implementations**: [Mustache specification v1.1.2](https://github.com/mustache/spec) conformance.
-    
-**Compatibility with previous GRMustache versions**: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though. Check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md).
+### 2. Embed GRMustache in your Xcode project
 
-**Expressiveness**: GRMustache lets you break out of Mustache limits, in conscience, when you need.
+- For MacOS 10.6+ development, import `/include/GRMustache.h` and `lib/libGRMustache1-macosx10.6.a` in your project.
+- For iOS4+ development, import `/include/GRMustache.h` and `lib/libGRMustache1-ios4.a` in your project.
+- For iOS3+ development, import `/include/GRMustache.h` and `lib/libGRMustache1-ios3.a` in your project.
 
-**Documentation**: GRMustache online documentation is provided as guides and sample code:
-
-- [Guides/embedding.md](GRMustache/blob/master/Guides/embedding.md): how to embed GRMustache in your Xcode projects
-- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to parse and render templates
-- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
-- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
-- [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
-- [Guides/forking.md](GRMustache/blob/master/Guides/forking.md): how GRMustache is organized
-
-Usage
------
-
-GRMustache rendering is the combination of a template string and of an object that will provide the data.
-
-You can render templates on the fly:
+### 3. Import "GRMustache.h" and start rendering templates
 
 ```objc
 #import "GRMustache.h"
@@ -49,7 +35,7 @@ Person *arthur = [Person personWithName:@"Arthur"];
 NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
 ```
 
-You can also parse a template once, and render it many times.
+You can also render many times a single template:
 
 ```objc
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
@@ -57,9 +43,21 @@ rendering = [template renderObject:arthur];
 rendering = [template renderObject:...];
 ```
 
-Speaking of templates, GRMustache eats many kinds of them: files and bundle resources as well as raw strings. For more information, check [Guides/templates.md](GRMustache/blob/master/Guides/templates.md).
 
-Regarding the data objects, GRMustache fetches values with the standard Key-Value Coding `valueForKey:` method. Check [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md).
+Why GRMustache?
+---------------
+
+GRMustache conforms to the [Mustache specification v1.1.2](https://github.com/mustache/spec).
+
+GRMustache respects your code: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though (check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md)).
+
+GRMustache online documentation is provided as guides and sample code:
+
+- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to parse and render templates
+- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
+- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
+- [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
+- [Guides/forking.md](GRMustache/blob/master/Guides/forking.md): how GRMustache is organized
 
 
 Forking
