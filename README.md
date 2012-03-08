@@ -34,14 +34,6 @@ NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"
                                                  error:NULL];
 ```
 
-You can also render many times a single template:
-
-```objc
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:... error:NULL];
-rendering = [template renderObject:...];
-rendering = [template renderObject:...];
-```
-
 
 Why GRMustache?
 ---------------
