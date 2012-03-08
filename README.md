@@ -19,9 +19,9 @@ Three steps to GRMustache
 
 ### 2. Embed GRMustache in your Xcode project
 
-- For MacOS 10.6+ development, import `include/GRMustache.h` and `lib/libGRMustache1-macosx10.6.a` in your project.
-- For iOS4+ development, import `include/GRMustache.h` and `lib/libGRMustache1-ios4.a` in your project.
-- For iOS3+ development, import `include/GRMustache.h` and `lib/libGRMustache1-ios3.a` in your project.
+- For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache1-macosx10.6.a` to your project.
+- For iOS4+ development, add `include/GRMustache.h` and `lib/libGRMustache1-ios4.a` to your project.
+- For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache1-ios3.a` to your project.
 
 ### 3. Import "GRMustache.h" and start rendering templates
 
