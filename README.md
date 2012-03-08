@@ -28,18 +28,17 @@ Three steps to GRMustache
 ```objc
 #import "GRMustache.h"
 
-NSString *templateString = @"Hello {{name}}!";
-Person *arthur = [Person personWithName:@"Arthur"];
-
 // Renders "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:arthur fromString:templateString error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
+                                            fromString:@"Hello {{name}}!"
+                                                 error:NULL];
 ```
 
 You can also render many times a single template:
 
 ```objc
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-rendering = [template renderObject:arthur];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:... error:NULL];
+rendering = [template renderObject:...];
 rendering = [template renderObject:...];
 ```
 
