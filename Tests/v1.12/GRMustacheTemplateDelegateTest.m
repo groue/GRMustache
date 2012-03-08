@@ -49,6 +49,12 @@
 @synthesize booleanReturnValueCount=_booleanReturnValueCount;
 @synthesize lastUsedKey=_lastUsedKey;
 
+- (void)dealloc
+{
+    self.lastUsedKey = nil;
+    [super dealloc];
+}
+
 - (void)templateWillRender:(GRMustacheTemplate *)template
 {
     self.templateWillRenderCount += 1;
