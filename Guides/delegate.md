@@ -33,6 +33,7 @@ You can read the following properties of the *invocation* argument:
 
 - `id returnValue`: the return value of the invocation.
 - `NSString *key`: the key that did provide this value.
+- `NSString *description`: a string that helps you locate the corresponding Mustache tag.
 
 Note that those methods do not allow you to build a complete "stack trace" of GRMustache rendering. They are not called for each accessed key. They are called for each tag rendering, which is quite different.
 
@@ -51,9 +52,15 @@ You may, for instance, locate keys that could not find any data:
     if (invocation.returnValue == nil) {
         
         // Log the missing key
-        NSLog(@"GRMustache missing key: %@", invocation.key);
+        NSLog(@"GRMustache missing key: `%@` for %@", invocation.key, invocation.description);
     }
 }
+```
+
+You'll get something like:
+
+```
+GRMustache missing key: `items` for <GRMustacheInvocation: {{#items}} at line 23 in template .../foobar.mustache>
 ```
 
 Alter the template rendering
