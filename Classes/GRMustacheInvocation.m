@@ -52,7 +52,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     GRMustacheInvocationFunction _invocationFunction;
     NSString *_key;
 }
-- (id)initWithKey:(NSArray *)keys;
+- (id)initWithDescription:(NSString *)description key:(NSArray *)keys;
 @end
 
 
@@ -65,7 +65,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
-- (id)initWithKeys:(NSArray *)keys;
+- (id)initWithDescription:(NSString *)description keys:(NSArray *)keys;
 @end
 
 
@@ -73,6 +73,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 #pragma mark - GRMustacheInvocation
 
 @interface GRMustacheInvocation()
+- (id)initWithDescription:(NSString *)description;
 - (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
@@ -80,19 +81,34 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
-+ (id)invocationWithKeys:(NSArray *)keys
++ (id)invocationWithDescription:(NSString *)description keys:(NSArray *)keys
 {
     if (keys.count > 1) {
-        return [[[GRMustacheInvocationKeyPath alloc] initWithKeys:keys] autorelease];
+        return [[[GRMustacheInvocationKeyPath alloc] initWithDescription:description keys:keys] autorelease];
     } else {
-        return [[[GRMustacheInvocationKey alloc] initWithKey:[keys objectAtIndex:0]] autorelease];
+        return [[[GRMustacheInvocationKey alloc] initWithDescription:description key:[keys objectAtIndex:0]] autorelease];
     }
+}
+
+- (id)initWithDescription:(NSString *)description
+{
+    self = [self init];
+    if (self) {
+        _description = [description retain];
+    }
+    return self;
 }
 
 - (void)dealloc
 {
+    [_description release];
     [_returnValue release];
     [super dealloc];
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<GRMustacheInvocation: %@>", _description];
 }
 
 - (void)invokeWithContext:(GRMustacheContext *)context
@@ -127,9 +143,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithKey:(NSString *)key
+- (id)initWithDescription:(NSString *)description key:(NSString *)key
 {
-    self = [super init];
+    self = [self initWithDescription:description];
     if (self) {
         _key = [key retain];
         _invocationFunction = [self invocationFunctionForKey:key];
@@ -164,9 +180,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithKeys:(NSArray *)keys
+- (id)initWithDescription:(NSString *)description keys:(NSArray *)keys
 {
-    self = [super init];
+    self = [self initWithDescription:description];
     if (self) {
         _keys = [keys retain];
         GRMustacheInvocationFunction *f = _invocationFunctions = malloc(keys.count*sizeof(GRMustacheInvocationFunction));

@@ -35,8 +35,8 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @interface GRMustacheTemplateLoader()
 @property (nonatomic) GRMustacheTemplateOptions options;
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError;
 - (GRMustacheTemplate *)templateWithName:(NSString *)name relativeToTemplateId:(id)baseTemplateId asPartial:(BOOL)partial error:(NSError **)outError;
+- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId;
 @end
 
 @implementation GRMustacheTemplateLoader
@@ -208,13 +208,19 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
     return [self templateFromString:templateString templateId:nil error:outError];
 }
 
-- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError
 {
-    if (template) {
-        [_templatesById setObject:template forKey:templateId];
-    } else {
-        [_templatesById removeObjectForKey:templateId];
+    GRMustacheTemplateParser *parser = [[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId];
+    GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
+    tokenizer.delegate = parser;
+    [tokenizer parseTemplateString:templateString];
+    [tokenizer release];
+    GRMustacheTemplate *template = [parser templateReturningError:outError];
+    [parser release];
+    if (templateId) {
+        [self setTemplate:template forTemplateId:templateId];
     }
+    return template;
 }
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId
@@ -237,18 +243,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 }
 
 #pragma mark Private
-
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError
-{
-    GRMustacheTemplateParser *parser = [[GRMustacheTemplateParser alloc] initWithTemplateLoader:self templateId:templateId];
-    GRMustacheTokenizer *tokenizer = [[GRMustacheTokenizer alloc] init];
-    tokenizer.delegate = parser;
-    [tokenizer parseTemplateString:templateString];
-    [tokenizer release];
-    GRMustacheTemplate *res = [parser templateReturningError:outError];
-    [parser release];
-    return res;
-}
 
 - (GRMustacheTemplate *)templateWithName:(NSString *)name relativeToTemplateId:(id)baseTemplateId asPartial:(BOOL)partial error:(NSError **)outError
 {
@@ -290,15 +284,21 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
         
         // parse
         GRMustacheTemplate *parsedTemplate = [self templateFromString:templateString templateId:templateId error:outError];
-        if (parsedTemplate == nil) {
-            [self setTemplate:nil forTemplateId:templateId];
-            return nil;
-        } else {
+        if (parsedTemplate) {
             template.elems = parsedTemplate.elems;
         }
     }
     
     return template;
+}
+
+- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId
+{
+    if (template) {
+        [_templatesById setObject:template forKey:templateId];
+    } else {
+        [_templatesById removeObjectForKey:templateId];
+    }
 }
 
 @end

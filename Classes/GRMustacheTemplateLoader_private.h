@@ -112,12 +112,12 @@
 
 - (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString templateId:(id)templateId error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 - (GRMustacheTemplate *)templateWithElements:(NSArray *)elements GRMUSTACHE_API_INTERNAL;
 
 #pragma mark Template IDs
 
 - (id)templateIdForTemplateNamed:(NSString *)name relativeToTemplateId:(id)baseTemplateId GRMUSTACHE_API_PUBLIC;
 - (NSString *)templateStringForTemplateId:(id)templateId error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-- (void)setTemplate:(GRMustacheTemplate *)template forTemplateId:(id)templateId GRMUSTACHE_API_INTERNAL;
 
 @end

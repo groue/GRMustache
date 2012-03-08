@@ -155,7 +155,7 @@
         case GRMustacheTokenTypeSectionClosing:
             if ([token.content isEqualToString:_currentSectionOpeningToken.content]) {
                 NSError *invocationError;
-                GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
+                GRMustacheInvocation *invocation = [self invocationWithToken:_currentSectionOpeningToken error:&invocationError];
                 if (invocation) {
                     NSRange currentSectionOpeningTokenRange = _currentSectionOpeningToken.range;
                     NSAssert(_currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
@@ -345,7 +345,14 @@
     } else {
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
     }
-    return [GRMustacheInvocation invocationWithKeys:keys];
+    
+    NSString *description;
+    if (_templateId) {
+        description = [NSString stringWithFormat:@"%@ at line %d of template %@", [token.templateString substringWithRange:token.range], token.line, _templateId];
+    } else {
+        description = [NSString stringWithFormat:@"%@ at line %d", [token.templateString substringWithRange:token.range], token.line];
+    }
+    return [GRMustacheInvocation invocationWithDescription:description keys:keys];
 }
 
 @end

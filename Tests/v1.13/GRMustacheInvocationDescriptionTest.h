@@ -20,19 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_13
+#import "GRMustachePublicAPITest.h"
 
-@class GRMustacheContext;
-
-@interface GRMustacheInvocation : NSObject {
-@private
-    id _returnValue;
-    NSString *_description;
-}
-@property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
-@property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
-@property (nonatomic, retain, readonly) NSString *description GRMUSTACHE_API_PUBLIC;
-+ (id)invocationWithDescription:(NSString *)description keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
-- (void)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
+@interface GRMustacheInvocationDescriptionTest : GRMustachePublicAPITest
 @end

@@ -70,13 +70,7 @@
     if (!templateString) {
         return nil;
     }
-    GRMustacheTemplate *template = [self templateFromString:templateString error:outError];
-    if (!template) {
-        return nil;
-    }
-    // we can cache this template
-    [self setTemplate:template forTemplateId:templateURL];
-    return template;
+    return [self templateFromString:templateString templateId:templateURL error:outError];
 }
 
 - (void)dealloc
@@ -136,13 +130,7 @@
     if (!templateString) {
         return nil;
     }
-    GRMustacheTemplate *template = [self templateFromString:templateString error:outError];
-    if (!template) {
-        return nil;
-    }
-    // we can cache this template
-    [self setTemplate:template forTemplateId:templatePath];
-    return template;
+    return [self templateFromString:templateString templateId:templatePath error:outError];
 }
 
 - (void)dealloc
