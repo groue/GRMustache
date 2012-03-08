@@ -42,6 +42,10 @@ GRMustache conforms to the [Mustache specification v1.1.2](https://github.com/mu
 
 GRMustache respects your code: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though (check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md)).
 
+
+Documentation
+-------------
+
 GRMustache online documentation is provided as guides and sample code:
 
 - [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to parse and render templates
