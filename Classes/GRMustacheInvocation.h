@@ -26,7 +26,8 @@
 @interface GRMustacheInvocation : NSObject {
 @private
     id _returnValue;
-    NSString *_description;
+    id _token;
+    id _templateId;
 }
 @property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
 @property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;

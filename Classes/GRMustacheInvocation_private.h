@@ -24,15 +24,17 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
+@class GRMustacheToken;
 
 @interface GRMustacheInvocation : NSObject {
 @private
     id _returnValue;
-    NSString *_description;
+    GRMustacheToken *_token;
+    id _templateId;
 }
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, retain, readonly) NSString *description GRMUSTACHE_API_PUBLIC;
-+ (id)invocationWithDescription:(NSString *)description keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
++ (id)invocationWithToken:(GRMustacheToken *)token templateId:(id)templateId keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
 - (void)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

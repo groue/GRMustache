@@ -346,13 +346,7 @@
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
     }
     
-    NSString *description;
-    if (_templateId) {
-        description = [NSString stringWithFormat:@"%@ at line %d of template %@", [token.templateString substringWithRange:token.range], token.line, _templateId];
-    } else {
-        description = [NSString stringWithFormat:@"%@ at line %d", [token.templateString substringWithRange:token.range], token.line];
-    }
-    return [GRMustacheInvocation invocationWithDescription:description keys:keys];
+    return [GRMustacheInvocation invocationWithToken:token templateId:_templateId keys:keys];
 }
 
 @end

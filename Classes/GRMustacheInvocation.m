@@ -22,6 +22,7 @@
 
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheToken_private.h"
 
 
 // =============================================================================
@@ -52,7 +53,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     GRMustacheInvocationFunction _invocationFunction;
     NSString *_key;
 }
-- (id)initWithDescription:(NSString *)description key:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId key:(NSArray *)keys;
 @end
 
 
@@ -65,7 +66,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
-- (id)initWithDescription:(NSString *)description keys:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId keys:(NSArray *)keys;
 @end
 
 
@@ -73,7 +74,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 #pragma mark - GRMustacheInvocation
 
 @interface GRMustacheInvocation()
-- (id)initWithDescription:(NSString *)description;
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId;
 - (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
@@ -81,34 +82,40 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
-+ (id)invocationWithDescription:(NSString *)description keys:(NSArray *)keys
++ (id)invocationWithToken:(GRMustacheToken *)token templateId:(id)templateId keys:(NSArray *)keys
 {
     if (keys.count > 1) {
-        return [[[GRMustacheInvocationKeyPath alloc] initWithDescription:description keys:keys] autorelease];
+        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token templateId:templateId keys:keys] autorelease];
     } else {
-        return [[[GRMustacheInvocationKey alloc] initWithDescription:description key:[keys objectAtIndex:0]] autorelease];
+        return [[[GRMustacheInvocationKey alloc] initWithToken:token templateId:templateId key:[keys objectAtIndex:0]] autorelease];
     }
 }
 
-- (id)initWithDescription:(NSString *)description
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId
 {
     self = [self init];
     if (self) {
-        _description = [description retain];
+        _token = [token retain];
+        _templateId = [templateId retain];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_description release];
+    [_token release];
+    [_templateId release];
     [_returnValue release];
     [super dealloc];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<GRMustacheInvocation: %@>", _description];
+    if (_templateId) {
+        return [NSString stringWithFormat:@"%@ at line %d of template %@", [_token.templateString substringWithRange:_token.range], _token.line, _templateId];
+    } else {
+        return [NSString stringWithFormat:@"%@ at line %d", [_token.templateString substringWithRange:_token.range], _token.line];
+    }
 }
 
 - (void)invokeWithContext:(GRMustacheContext *)context
@@ -143,9 +150,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithDescription:(NSString *)description key:(NSString *)key
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId key:(NSString *)key
 {
-    self = [self initWithDescription:description];
+    self = [self initWithToken:token templateId:templateId];
     if (self) {
         _key = [key retain];
         _invocationFunction = [self invocationFunctionForKey:key];
@@ -180,9 +187,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithDescription:(NSString *)description keys:(NSArray *)keys
+- (id)initWithToken:(GRMustacheToken *)token templateId:(id)templateId keys:(NSArray *)keys
 {
-    self = [self initWithDescription:description];
+    self = [self initWithToken:token templateId:templateId];
     if (self) {
         _keys = [keys retain];
         GRMustacheInvocationFunction *f = _invocationFunctions = malloc(keys.count*sizeof(GRMustacheInvocationFunction));
