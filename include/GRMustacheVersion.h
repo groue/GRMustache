@@ -40,5 +40,5 @@
  
  @since v1.0
  */
-#define GRMUSTACHE_PATCH_VERSION 1
+#define GRMUSTACHE_PATCH_VERSION 2
 

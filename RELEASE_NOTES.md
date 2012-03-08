@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.12.2
+
+Restore performances of v1.12.0
+
 ## v1.12.1
 
 Easier template debugging with `[GRMustacheInvocation description]`
