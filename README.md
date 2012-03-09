@@ -40,8 +40,11 @@ Why GRMustache?
 
 GRMustache conforms to the [Mustache specification v1.1.2](https://github.com/mustache/spec).
 
-GRMustache respects your code: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though (check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md)).
+GRMustache lets you break out of Mustache limits, in conscience, when you need. The documentation will let you know when you may lose compatibility with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations).
 
+GRMustache provides you with tools for observing the rendering of your templates, and debug them.
+
+GRMustache respects your code: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though (check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md)).
 
 Documentation
 -------------
