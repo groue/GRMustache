@@ -42,7 +42,7 @@ We need an object that conforms to the `GRMustacheHelper` protocol, so we'll dec
 @end
 ```
 
-That `renderSection:withContext:` method will be invoked when GRMustache renders the sections attached to our helper. It should return the string that should be rendered.
+That `renderSection:withContext:` method will be invoked when GRMustache renders the sections attached to our helper. It returns the raw string that should be rendered.
 
 #### The literal inner content
 
@@ -84,7 +84,7 @@ Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inn
 Fortunately, we have:
 
 - the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
-- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects.
+- the _context_ parameter, which represents the current rendering context stack.
 
 `[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
 
@@ -130,7 +130,7 @@ Starting iOS4 and MacOS 10.6, the Objective-C language provides us with blocks. 
 // Prepare data
 id data = ...;
 
-// Prepare helper
+// Prepare helper (no need for a specific class)
 GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {
     NSString *renderedContent = [section renderObject:context];
     return NSLocalizedString(renderedContent, nil);
@@ -159,9 +159,7 @@ In the example below, the `{{foo}}` tags embedded in the section will render as 
 });
 ```
 
-You may even provide a totally different context:
-
-In the example below, the `{{foo}}` tags embedded in the section will be the only ones that will be rendered:
+You may even render a totally different context. In the example below, the `{{foo}}` tags embedded in the section will be the only ones that will be rendered:
 
 ```objc
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
