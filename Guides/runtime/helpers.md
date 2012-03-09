@@ -7,24 +7,13 @@ GRMustache helpers allow you to implement "Mustache lambdas", that is to say hav
 
 ## Overview
 
-When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md). GRMustache may find a string, an [array](loops.md), a [boolean](booleans.md), whatever, or a helper. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
+When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](context_stack.md), using the standard Key-Value Coding `valueForKey:` method. GRMustache may find a string, an [array](loops.md), a [boolean](booleans.md), whatever, or a helper. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
-We'll cover below two techniques:
-
-- specific selectors: one of your data objects implements a selector that matches a section name.
-- dedicated helper classes: one of your data objects returns a `<GRMustacheHelper>` object through `valueForKey:`.
-
-The selector technique is easily implemented, but rather ad-hoc. The latest provides higher encapsulation and reusability, but you'll have to write a full Objective-C class.
+GRMustache recognizes a helper when it finds an object that conforms to the `GRMustacheHelper` protocol.
 
 ## Helpers in action: implementing a localizing helper
 
-For the purpose of demonstration, we'll implement a helper that translates, via `NSLocalizedString`, the content of the section: one will expect `{{#localize}}Delete{{/localize}}` to output `Effacer` when the locale is French.
-
-### Implementing helpers with specific selectors
-
-If the context used for mustache rendering implements the `localizeSection:withContext:` selector (generally, a method whose name is the name of the section, to which you append `Section:withContext:`), then this method will be called when rendering the section.
-
-The choice of the class that should implement this selector is up to you, as long as it can be reached in the [context stack](context_stack.md).
+For the purpose of demonstration, we'll implement a helper that translates, via `NSLocalizedString`, the content of the section.
 
 For instance, let's focus on the following template snippet:
 
@@ -35,18 +24,25 @@ For instance, let's focus on the following template snippet:
       {{/items}}
     {{/cart}}
 
-When the `localize` section is rendered, the context stack contains an item object, an items collection, a cart object, plus any other objects provided to the template.
+One will expect `{{#localize}}Delete{{/localize}}` to output `Effacer` when the locale is French.
 
-In order to have a template-wide `localize` helper, we won't attach it to any specific model. Instead, we'll isolate it in a specific class, `TemplateUtils`, and make sure this class is provided to GRMustache when rendering our template.
+### Declaring our localizing helper
 
-Since we don't need to carry any state, let's declare our `localizeSection:withContext:` selector as a class method:
+We need an object that conforms to the `GRMustacheHelper` protocol, so we'll declare a new class.
 
 ```objc
-@interface TemplateUtils: NSObject
-+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context;
+@interface LocalizedStringHelper: NSObject<GRMustacheHelper>
+@end
+
+@implementation LocalizedStringHelper
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    return ...;
+}
 @end
 ```
 
+That `renderSection:withContext:` method will be invoked when GRMustache renders the sections attached to our helper. It should return the string that should be rendered.
 
 #### The literal inner content
 
@@ -55,8 +51,8 @@ Now up to the first implementation. The _section_ argument is a `GRMustacheSecti
 This _section_ object has a `templateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
 ```objc
-@implementation TemplateUtils
-+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
+@implementation LocalizedStringHelper
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
 {
     return NSLocalizedString(section.templateString, nil);
 }
@@ -81,51 +77,21 @@ Now the strings we have to localize may be:
 - literal strings from the template: `Delete`
 - strings coming from cart items : `{{name}}`
 
-Our first `TemplateUtils` will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
+Our first implementation will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
 
 Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
 
 Fortunately, we have:
 
 - the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
-- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects. It is noteworthy that its `valueForKey:` method performs a stack lookup. But we won't use this nifty feature here.
+- the _context_ parameter, which represents the current rendering context stack, containing a cart item, an item collection, a cart, and any surrouding objects.
 
 `[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
 
 Now we can fix our implementation:
 
 ```objc
-@implementation TemplateUtils
-+ (NSString *)localizeSection:(GRMustacheSection *)section withContext:(id)context
-{
-    NSString *renderedContent = [section renderObject:context];
-    return NSLocalizedString(renderedContent, nil);
-}
-@end
-```
-
-#### Injecting the helper
-
-Now let's render. Our template needs two objects: our `TemplateUtils` class for the `localize` key, and another for the `cart`:
-
-```objc
-NSString *rendering = [template renderObjects:[TemplateUtils class], data, nil];
-```
-
-### Implementing helpers with classes conforming to the `GRMustacheHelper` protocol
-
-Now that we have a nice working localizing helper, we may well want to reuse it in some other projects. Unfortunately, the above selector technique doesn't help us that much achieving this goal: it binds the helper code to the section name, thus making impossible to share the helper code between various sections of various templates.
-
-The `GRMustacheHelper` protocol aims at giving you a way to create helper classes, with all expected benefits: encapsulation and reusability.
-
-In our case, here would be the implementation of our localizing helper:
-
-```objc
-@interface LocalizedStringHelper: NSObject<GRMustacheHelper>
-@end
-
 @implementation LocalizedStringHelper
-// required by the GRMustacheHelper protocol
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
 {
     NSString *renderedContent = [section renderObject:context];
@@ -134,58 +100,73 @@ In our case, here would be the implementation of our localizing helper:
 @end
 ```
 
-This time, we need to explicitely attach our helper to the `localize` key. Let's go with a dictionary:
-    
+#### Attaching the helper to the `localize` key
+
+Now we have to have GRMustache find our helper when rendering the `{{#localize}}` sections.
+
+We could have one of our model objects implement a `localize` property. But this feature is not really tied to any of them. Instead, we'll provide our helper aside, thanks to the `renderObjects:` (with an s) method.
+
 ```objc
-id localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
-NSString *rendering = [template renderObjects:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               localizeHelper, @"localize",
-                                               data.cart,      @"cart",
-                                               nil]];
+// Prepare data
+id data = ...;
+
+// Prepare helper
+LocalizedStringHelper *localizeHelper = [[[LocalizedStringHelper alloc] init] autorelease];
+NSDictionary *helpers = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
+
+// Render
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+NSString *rendering = [template renderObjects:helpers, data, nil];
 ```
 
-Did you notice? Our `LocalizedStringHelper` can now support localization tables. This is left as an exercise for the reader :-)
+`renderObjects:` is documented in [Guides/templates.md](../templates.md).
 
-## Usages of helpers
 
-Helpers can be used for whatever you may find relevant.
+### Implementing helpers with blocks
 
-You may implement filters, as we have seen above.
+Starting iOS4 and MacOS 10.6, the Objective-C language provides us with blocks. This can relieve the burden of declaring a full class for each helper:
 
-You may also implement caching:
+```objc
+// Prepare data
+id data = ...;
+
+// Prepare helper
+GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {
+    NSString *renderedContent = [section renderObject:context];
+    return NSLocalizedString(renderedContent, nil);
+}];
+NSDictionary *helpers = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
+
+// Render
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+NSString *rendering = [template renderObjects:helpers, data, nil];
+```
+
+## GRMustache helpers vs Mustache lambdas
+
+GRMustache helpers are more expressive than required by the [Mustache specification v1.1.2](https://github.com/mustache/spec).
+
+**Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use the features exposed below with great care.**
+
+You may extend the set of rendered keys inside a section.
+
+In the example below, the `{{foo}}` tags embedded in the section will render as `bar`, even though no model object provides any `foo` key:
 
 ```objc
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    if (self.cache == nil) {
-        self.cache = [section renderObject:context];
-    }
-    return self.cache;
-};
-```
-
-You may render an extended context:
-
-```objc
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    return [section renderObjects:context, ..., nil];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];
+    return [section renderObjects:context, dictionary, nil];
 });
 ```
 
-You may render a totally different context:
+You may even provide a totally different context:
+
+In the example below, the `{{foo}}` tags embedded in the section will be the only ones that will be rendered:
 
 ```objc
 - (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    return [section renderObject:...];
-});
-```
-
-You may implement debugging sections:
-
-```objc
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSLog(section.templateString);         // log the unrendered section 
-    NSLog([section renderObject:context]); // log the rendered section 
-    return nil;                            // don't render anything
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];
+    return [section renderObject:dictionary];
 });
 ```
 
