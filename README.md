@@ -13,11 +13,11 @@ Breaking news on Twitter: http://twitter.com/GRMustache
 Three steps to GRMustache
 -------------------------
 
-### 1. Download GRMustache
+### 1. Download
 
     $ git clone https://github.com/groue/GRMustache.git
 
-### 2. Embed GRMustache in your Xcode project
+### 2. Add to your Xcode project
 
 - For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache1-macosx10.6.a` to your project.
 - For iOS4+ development, add `include/GRMustache.h` and `lib/libGRMustache1-ios4.a` to your project.
