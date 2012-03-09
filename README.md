@@ -10,8 +10,8 @@ A list of Mustache implementations in other languages: http://mustache.github.co
 Breaking news on Twitter: http://twitter.com/GRMustache
 
 
-Three steps to GRMustache
--------------------------
+How To
+------
 
 ### 1. Download
 
@@ -32,8 +32,13 @@ Three steps to GRMustache
 NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
                                             fromString:@"Hello {{name}}!"
                                                  error:NULL];
-```
 
+// Renders from a resource
+NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
+                                          fromResource:@"Profile"  // loads `Profile.mustache`
+                                                bundle:nil
+                                                 error:NULL];
+```
 
 Why GRMustache?
 ---------------
