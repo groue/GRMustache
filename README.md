@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine that conforms to the [Mustache specification v1.1.2](https://github.com/mustache/spec).
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template language ([version 1.1.2](https://github.com/mustache/spec)).
 
 The Mustache syntax: http://mustache.github.com/mustache.5.html (not wrong, but somewhat outdated).
 
@@ -54,10 +54,6 @@ GRMustache online documentation is provided as guides and sample code:
 FAQ
 ---
 
-- **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
-    
-    A: No need to rush: GRMustache won't break your code until it reaches version 2.0. Meanwhile, check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md). They'll tell you how to update your deprecated code.
-
 - **Q: I have a bunch of templates strings and partials that live in memory, not in the file system. How do I render them?**
     
     A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
@@ -77,6 +73,10 @@ FAQ
 - **Q: How do I render default values for missing keys?**
 
     A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
+
+- **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
+    
+    A: No need to rush: GRMustache won't break your code until it reaches version 2.0. Meanwhile, check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md). They'll tell you how to update your deprecated code.
 
 - **Q: You do not render white spaces in a spec-conformant fashion.**
 
