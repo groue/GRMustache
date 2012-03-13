@@ -54,10 +54,6 @@ GRMustache online documentation is provided as guides and sample code:
 FAQ
 ---
 
-- **Q: I have a bunch of templates strings and partials that live in memory, not in the file system. How do I render them?**
-    
-    A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
-
 - **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
     
     A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
@@ -73,6 +69,10 @@ FAQ
 - **Q: How do I render default values for missing keys?**
 
     A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
+
+- **Q: I have a bunch of templates strings and partials that live in memory, not in the file system. How do I render them?**
+    
+    A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
 
 - **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
     
