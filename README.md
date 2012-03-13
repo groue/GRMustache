@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine.
+GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template engine that conforms to the [Mustache specification v1.1.2](https://github.com/mustache/spec).
 
 The Mustache syntax: http://mustache.github.com/mustache.5.html (not wrong, but somewhat outdated).
 
@@ -40,17 +40,6 @@ NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"
                                                  error:NULL];
 ```
 
-Why GRMustache?
----------------
-
-GRMustache conforms to the [Mustache specification v1.1.2](https://github.com/mustache/spec).
-
-GRMustache lets you break out of Mustache limits, in conscience, when you need. The documentation will let you know when you may lose compatibility with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations).
-
-GRMustache provides you with tools for observing the rendering of your templates, and debug them.
-
-GRMustache respects your code: update GRMustache, enjoy [performance improvements](https://github.com/groue/GRMustacheBenchmark) and bugfixes, and don't change a line of your code. You may get harmless deprecation warnings, though (check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md)).
-
 Documentation
 -------------
 
@@ -60,7 +49,44 @@ GRMustache online documentation is provided as guides and sample code:
 - [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
 - [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
 - [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
-- [Guides/forking.md](GRMustache/blob/master/Guides/forking.md): how GRMustache is organized
+
+
+FAQ
+---
+
+- **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
+    
+    A: No need to rush: GRMustache won't break your code until it reaches version 2.0. Meanwhile, check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md). They'll tell you how to update your deprecated code.
+
+- **Q: I have a bunch of templates strings and partials that live in memory, not in the file system. How do I render them?**
+    
+    A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
+
+- **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
+    
+    A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
+
+- **Q: What is this NSUndefinedKeyException stuff?**
+
+    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
+
+- **Q: How do I render array indices?**
+    
+    A: Mustache the language does not provide any easy way to render array indices. However, GRMustache can help you:  [Guides/sample_code/counters.md](GRMustache/blob/master/Guides/sample_code/counters.md).
+
+- **Q: How do I render default values for missing keys?**
+
+    A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
+
+- **Q: You do not render white spaces in a spec-conformant fashion.**
+
+    A: No, we haven't taken the time to do that. XML and HTML parsers do not care that much, actually. Feel free to submit a patch.
+
+
+Contribution wish-list
+----------------------
+
+I wish somebody would review my non-native English, and clean up the guides, if you ask.
 
 
 Forking
