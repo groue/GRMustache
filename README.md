@@ -64,7 +64,7 @@ FAQ
 
 - **Q: How do I render array indices?**
     
-    A: Mustache the language does not provide any easy way to render array indices. However, GRMustache can help you:  [Guides/sample_code/counters.md](GRMustache/blob/master/Guides/sample_code/counters.md).
+    A: Check [Guides/sample_code/counters.md](GRMustache/blob/master/Guides/sample_code/counters.md).
 
 - **Q: How do I render default values for missing keys?**
 
