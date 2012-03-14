@@ -54,14 +54,6 @@ GRMustache online documentation is provided as guides and sample code:
 FAQ
 ---
 
-- **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
-    
-    A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
-
-- **Q: What is this NSUndefinedKeyException stuff?**
-
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
-
 - **Q: How do I render array indices?**
     
     A: Check [Guides/sample_code/counters.md](GRMustache/blob/master/Guides/sample_code/counters.md).
@@ -70,7 +62,7 @@ FAQ
 
     A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
 
-- **Q: I have a bunch of templates strings and partials that live in memory, not in the file system. How do I render them?**
+- **Q: I have a bunch of template partials that live in memory, not in the file system. How do I include them?**
     
     A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
 
@@ -78,9 +70,13 @@ FAQ
     
     A: No need to rush: GRMustache won't break your code until it reaches version 2.0. Meanwhile, check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md). They'll tell you how to update your deprecated code.
 
-- **Q: You do not render white spaces in a spec-conformant fashion.**
+- **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
+    
+    A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
 
-    A: No, we haven't taken the time to do that. XML and HTML parsers do not care that much, actually. Feel free to submit a patch.
+- **Q: What is this NSUndefinedKeyException stuff?**
+
+    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
 
 
 Contribution wish-list
