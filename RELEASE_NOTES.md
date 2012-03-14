@@ -1,7 +1,7 @@
 GRMustache Release Notes
 ========================
 
-You can compare the performances of GRMustache version at https://github.com/groue/GRMustacheBenchmark.
+You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 ## v1.12.2
 
