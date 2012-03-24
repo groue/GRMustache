@@ -57,8 +57,8 @@ typedef enum {
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id)parseString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
@@ -66,8 +66,8 @@ typedef enum {
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
@@ -77,10 +77,10 @@ typedef enum {
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
@@ -92,8 +92,8 @@ typedef enum {
 
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
-+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 

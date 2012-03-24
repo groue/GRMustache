@@ -20,27 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheAvailabilityMacros_private.h"
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTokenizer_private.h"
 #import "GRMustache_private.h"
 
 
-@class GRMustacheTemplateLoader;
 @class GRMustacheTemplate;
+@class GRMustacheTemplateParser;
+@class GRMustacheInvocation;
+@protocol GRMustacheRenderingElement;
+
+@protocol GRMustacheTemplateParserDataSource <NSObject>
+@required
+- (id<GRMustacheRenderingElement>)templateParser:(GRMustacheTemplateParser *)templateParser renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
+- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
+@end
 
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
     NSError *_error;
-    GRMustacheTemplateLoader *_templateLoader;
-    id _templateId;
     NSMutableArray *_elementsStack;
     NSMutableArray *_sectionOpeningTokenStack;
     NSMutableArray *_currentElements;
     GRMustacheToken *_currentSectionOpeningToken;
+    id<GRMustacheTemplateParserDataSource> _dataSource;
     GRMustacheTemplateOptions _options;
 }
+@property (nonatomic, assign) id<GRMustacheTemplateParserDataSource> dataSource GRMUSTACHE_API_INTERNAL;
 
-- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId GRMUSTACHE_API_INTERNAL;
-- (GRMustacheTemplate *)templateReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
++ (id)templateParserWithOptions:(GRMustacheTemplateOptions)options GRMUSTACHE_API_INTERNAL;
+- (NSArray *)renderingElementsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

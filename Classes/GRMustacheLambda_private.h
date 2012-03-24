@@ -63,10 +63,10 @@
 #pragma mark - Deprecated stuff
 
 typedef NSString *(^GRMustacheRenderingBlock)(GRMustacheSection*, GRMustacheContext*);
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) GRMUSTACHE_API_DEPRECATED_PUBLIC;
+id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 typedef NSString *(^GRMustacheRenderer)(id object);
 typedef id GRMustacheLambda;
-GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) GRMUSTACHE_API_DEPRECATED_PUBLIC;
+GRMustacheLambda GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */

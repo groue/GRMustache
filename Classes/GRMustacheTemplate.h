@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheEnvironment.h"
+#import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustache.h"
 
@@ -139,7 +139,7 @@
  @param path The path of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.4
  @deprecated v1.11
@@ -155,7 +155,7 @@
  @param path The path of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.11
  */
@@ -171,7 +171,7 @@
  @param url The URL of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at url must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  @deprecated v1.11
@@ -186,7 +186,7 @@
  @param url The URL of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at url must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.11
  */
@@ -203,7 +203,7 @@
  @param path The path of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at path must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at path must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.4
  */
@@ -221,7 +221,7 @@
  @param url The URL of the template
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
  
- The template at url must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template at url must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  */
@@ -245,7 +245,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  @deprecated v1.11
@@ -263,7 +263,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.11
  */
@@ -281,7 +281,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  @deprecated v1.11
@@ -300,7 +300,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.11
  */
@@ -319,7 +319,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  */
@@ -338,7 +338,7 @@
  
  If you provide nil as a bundle, the resource will be looked in the main bundle.
  
- The template resource must be encoded in UTF8. See the GRMustacheTemplateLoader class for more encoding options.
+ The template resource must be encoded in UTF8. See the GRMustacheTemplateRepository class for more encoding options.
  
  @since v1.0
  */

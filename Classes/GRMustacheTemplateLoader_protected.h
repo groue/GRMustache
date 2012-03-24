@@ -71,8 +71,8 @@
  @see GRMustacheTemplateLoader#templateStringForTemplateId:error:
  @since v1.0
  */
-- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
-- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
+- (id)initWithExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  Don't use this method.

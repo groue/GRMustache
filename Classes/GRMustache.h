@@ -161,6 +161,7 @@ typedef struct {
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateLoader.h"
+#import "GRMustacheTemplateRepository.h"
 #import "GRMustacheContext.h"
 #import "GRMustacheLambda.h"
 #import "GRBoolean.h"

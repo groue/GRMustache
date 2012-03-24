@@ -101,6 +101,12 @@
     STAssertEqualObjects(result, @"<html><body><ul><li>1<ul><li>2<ul><li>3<ul></ul></li></ul></li><li>4<ul><li>5<ul><li>6<ul></ul></li></ul></li></ul></li></ul></li></ul></body></html>", @"");
 }
 
+- (void)testDeepPartials
+{
+    NSURL *URL = [self.testBundle URLForResource:@"file1" withExtension:@"mustache" subdirectory:@"deep_partials"];
+    NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
+}
 
 
 @end

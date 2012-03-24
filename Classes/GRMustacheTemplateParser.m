@@ -22,7 +22,6 @@
 
 #import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheTemplateLoader_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheSection_private.h"
@@ -32,11 +31,10 @@
 @interface GRMustacheTemplateParser()
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, retain) GRMustacheToken *currentSectionOpeningToken;
-@property (nonatomic, retain) GRMustacheTemplateLoader *templateLoader;
 @property (nonatomic, retain) NSMutableArray *currentElements;
 @property (nonatomic, retain) NSMutableArray *elementsStack;
 @property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
-@property (nonatomic, retain) id templateId;
+- (id)initWithOptions:(GRMustacheTemplateOptions)options;
 - (void)finish;
 - (void)finishWithError:(NSError *)error;
 - (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
@@ -46,29 +44,17 @@
 @implementation GRMustacheTemplateParser
 @synthesize error=_error;
 @synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
-@synthesize templateLoader=_templateLoader;
-@synthesize templateId=_templateId;
+@synthesize dataSource=_dataSource;
 @synthesize currentElements=_currentElements;
 @synthesize elementsStack=_elementsStack;
 @synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
 
-- (id)initWithTemplateLoader:(GRMustacheTemplateLoader *)templateLoader templateId:(id)templateId
++ (id)templateParserWithOptions:(GRMustacheTemplateOptions)options
 {
-    self = [self init];
-    if (self) {
-        self.templateLoader = templateLoader;
-        self.templateId = templateId;
-        _options = templateLoader.options;
-
-        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
-        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-        [_elementsStack addObject:_currentElements];
-        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
-    }
-    return self;
+    return [[[self alloc] initWithOptions:options] autorelease];
 }
 
-- (GRMustacheTemplate *)templateReturningError:(NSError **)outError
+- (NSArray *)renderingElementsReturningError:(NSError **)outError
 {
     [self finish];
     
@@ -79,15 +65,13 @@
         return nil;
     }
     
-    return [self.templateLoader templateWithElements:_currentElements];
+    return [[_currentElements retain] autorelease];
 }
 
 - (void)dealloc
 {
     [_error release];
     [_currentSectionOpeningToken release];
-    [_templateLoader release];
-    [_templateId release];
     [_currentElements release];
     [_elementsStack release];
     [_sectionOpeningTokenStack release];
@@ -188,15 +172,12 @@
                 return NO;
             }
             NSError *partialError;
-            GRMustacheTemplate *partialTemplate = [_templateLoader templateWithName:token.content
-                                                               relativeToTemplateId:_templateId
-                                                                          asPartial:YES
-                                                                              error:&partialError];
-            if (partialTemplate == nil) {
+            id<GRMustacheRenderingElement> partial = [_dataSource templateParser:self renderingElementForPartialName:token.content error:&partialError];
+            if (partial == nil) {
                 [self finishWithError:partialError];
                 return NO;
             } else {
-                [_currentElements addObject:partialTemplate];
+                [_currentElements addObject:partial];
             }
         } break;
             
@@ -218,6 +199,19 @@
 }
 
 #pragma mark Private
+
+- (id)initWithOptions:(GRMustacheTemplateOptions)options
+{
+    self = [self init];
+    if (self) {
+        _options = options;
+        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [_elementsStack addObject:_currentElements];
+        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+    }
+    return self;
+}
 
 - (void)finishWithError:(NSError *)error
 {
@@ -346,7 +340,7 @@
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
     }
     
-    return [GRMustacheInvocation invocationWithToken:token templateId:_templateId keys:keys];
+    return [_dataSource templateParser:self invocationWithToken:token keys:keys];
 }
 
 @end

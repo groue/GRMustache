@@ -30,11 +30,11 @@
 @private
     id _returnValue;
     GRMustacheToken *_token;
-    id _templateId;
+    id _templateID;
 }
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, retain, readonly) NSString *description GRMUSTACHE_API_PUBLIC;
-+ (id)invocationWithToken:(GRMustacheToken *)token templateId:(id)templateId keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
++ (id)invocationWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
 - (void)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 @end

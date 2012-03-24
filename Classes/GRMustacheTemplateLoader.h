@@ -20,8 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheEnvironment.h"
 #import <Foundation/Foundation.h>
+#import "GRMustacheEnvironment.h"
+#import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheTemplate;
 
@@ -32,9 +33,9 @@
  */
 @interface GRMustacheTemplateLoader: NSObject {
 @private
+    id _templateRepository;
     NSString *_extension;
     NSStringEncoding _encoding;
-    NSMutableDictionary *_templatesById;
     GRMustacheTemplateOptions _options;
 }
 
@@ -49,8 +50,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
@@ -74,8 +75,8 @@
  
  @since v1.6
  */
-+ (id)templateLoaderWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER;
-+ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
@@ -93,8 +94,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
@@ -128,8 +129,8 @@
  
  @since v1.6
  */
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER;
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
@@ -148,8 +149,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
@@ -185,8 +186,8 @@
  
  @since v1.4
  */
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER;
-+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_4_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  @return A GRMustacheTemplateLoader instance
@@ -197,8 +198,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  @return A GRMustacheTemplateLoader instance
@@ -212,8 +213,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  @return A GRMustacheTemplateLoader instance
@@ -228,8 +229,8 @@
  
  @since v1.0
  */
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  @return a GRMustacheTemplate instance
@@ -254,7 +255,7 @@
  
  @since v1.11
  */
-- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
+- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 
 /**
  @return a GRMustacheTemplate instance
@@ -279,5 +280,5 @@
  
  @since v1.11
  */
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_1_11_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_13;
 @end

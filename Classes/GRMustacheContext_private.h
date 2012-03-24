@@ -33,10 +33,10 @@
 @property (nonatomic, retain, readonly) GRMustacheContext *parent GRMUSTACHE_API_INTERNAL;
 
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
-+ (id)contextWithObject:(id)object GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
-+ (id)contextWithObjects:(id)object, ... GRMUSTACHE_API_DEPRECATED_PUBLIC;
++ (id)contextWithObject:(id)object GRMUSTACHE_API_INTERNAL_PUBLIC_BUT_DEPRECATED;
++ (id)contextWithObjects:(id)object, ... GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList GRMUSTACHE_API_INTERNAL;
-- (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL_DEPRECATED_PUBLIC;
+- (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL_PUBLIC_BUT_DEPRECATED;
 - (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped GRMUSTACHE_API_INTERNAL;
 
 @end
