@@ -179,7 +179,7 @@
     if (ext == nil) {
         ext = GRMustacheDefaultExtension;
     }
-    return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext directory:nil encoding:encoding]];
+    return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext encoding:encoding]];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
@@ -187,7 +187,7 @@
     if (ext == nil) {
         ext = GRMustacheDefaultExtension;
     }
-    return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext directory:nil encoding:encoding options:options]];
+    return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext encoding:encoding options:options]];
 }
 
 - (id)initWithExtension:(NSString *)extension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options

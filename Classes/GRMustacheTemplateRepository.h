@@ -64,10 +64,8 @@
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_1_13_AND_LATER;

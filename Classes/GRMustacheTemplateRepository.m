@@ -65,11 +65,10 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepositoryBundle : GRMustacheTemplateRepository {
 @private
     NSBundle *_bundle;
-    NSString *_directoryPath;
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension directory:(NSString *)directoryPath encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 @end
 
 
@@ -161,42 +160,32 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension directory:nil encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension directory:nil encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:nil encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:nil encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
 }
 
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:subpath encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions] autorelease];
 }
 
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath options:(GRMustacheTemplateOptions)options
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:subpath encoding:NSUTF8StringEncoding options:options] autorelease];
-}
-
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding
-{
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:subpath encoding:encoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext directory:subpath encoding:encoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:encoding options:options] autorelease];
 }
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary
@@ -465,7 +454,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryBundle
 
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension directory:(NSString *)directoryPath encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
     self = [self initWithOptions:options];
     if (self) {
@@ -473,7 +462,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
             bundle = [NSBundle mainBundle];
         }
         _bundle = [bundle retain];
-        _directoryPath = [directoryPath retain];
         _templateExtension = [templateExtension retain];
         _encoding = encoding;
         self.dataSource = self;
@@ -484,7 +472,6 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)dealloc
 {
     [_bundle release];
-    [_directoryPath release];
     [_templateExtension release];
     [super dealloc];
 }
@@ -493,20 +480,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
 {
-    if (templateID) {
-        NSAssert([templateID isKindOfClass:[NSString class]], @"");
-        NSString *basePath = [(NSString *)templateID stringByDeletingLastPathComponent];
-        if (_templateExtension.length == 0) {
-            return [[basePath stringByAppendingPathComponent:name] stringByStandardizingPath];
-        }
-        return [[basePath stringByAppendingPathComponent:[name stringByAppendingPathExtension:_templateExtension]] stringByStandardizingPath];
-    }
-
-    if (_directoryPath) {
-        return [_bundle pathForResource:name ofType:_templateExtension inDirectory:_directoryPath];
-    } else {
-        return [_bundle pathForResource:name ofType:_templateExtension];    // not sure inDirectory:nil would produce the same result
-    }
+    return [_bundle pathForResource:name ofType:_templateExtension];
 }
 
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError

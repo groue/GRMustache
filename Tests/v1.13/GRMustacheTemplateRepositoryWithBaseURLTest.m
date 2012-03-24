@@ -30,12 +30,30 @@
     GRMustacheTemplateRepository *repository;
     GRMustacheTemplate *template;
     NSString *result;
+    NSError *error;
     
     URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL];
+    
+    template = [repository templateForName:@"notFound" error:&error];
+    STAssertNil(template, @"");
+    STAssertNotNil(error, @"");
+    
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
+
+    template = [repository templateFromString:@"{{>file1}}" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
+    
+    template = [repository templateFromString:@"{{>dir/file1}}" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"dir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n", @"");
+    
+    template = [repository templateFromString:@"{{>dir/dir/file1}}" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"dir/dir/file1.mustache\ndir/dir/file2.mustache\n\n", @"");
 }
 
 - (void)testTemplateRepositoryWithBaseURL_templateExtension

@@ -65,10 +65,8 @@ extern NSString* const GRMustacheDefaultExtension;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext directory:(NSString *)subpath encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
