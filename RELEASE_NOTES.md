@@ -3,6 +3,64 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.13.0
+
+Deprecated class (use [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:], or the new GRMustacheTemplateRepositoryDataSource protocol instead):
+
+- `GRMustacheTemplateLoader`
+
+New class:
+
+- `GRMustacheTemplateRepository`
+
+```objc
+@interface GRMustacheTemplateRepository : NSObject
+@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource;
+
++ (id)templateRepository;
++ (id)templateRepositoryWithOptions:(GRMustacheTemplateOptions)options;
+
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+
++ (id)templateRepositoryWithDirectory:(NSString *)path;
++ (id)templateRepositoryWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext;
++ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding;
++ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+
++ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary;
++ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options;
+
+- (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError;
+```
+
+New protocol:
+
+- `GRMustacheTemplateRepositoryDataSource`
+
+```objc
+@protocol GRMustacheTemplateRepositoryDataSource <NSObject>
+@required
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID;
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError;
+@end
+```
+
 ## v1.12.2
 
 Restore performances of v1.12.0
@@ -34,39 +92,47 @@ Avoid deprecation warning in GRMustache headers.
 
 New GRMustacheTemplateLoader methods:
 
-- `- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError;`
-- `- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError;`
+```objc
+- (GRMustacheTemplate *)templateWithName:(NSString *)name error:(NSError **)outError;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError;
+```
 
 New GRMustacheTemplate methods:
 
-- `+ (id)templateFromString:(NSString *)templateString error:(NSError **)outError;`
-- `+ (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError;`
-- `+ (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;`
-- `+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;`
-- `+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError;`
-- `+ (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+```objc
++ (id)templateFromString:(NSString *)templateString error:(NSError **)outError;
++ (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
+```
 
 Deprecated GRMustacheTemplateLoader methods (use `templateWithName:error:` and `templateFromString:error:` instead):
 
-- `- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;`
-- `- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;`
+```objc
+- (GRMustacheTemplate *)parseTemplateNamed:(NSString *)name error:(NSError **)outError;
+- (GRMustacheTemplate *)parseString:(NSString *)templateString error:(NSError **)outError;
+```
 
 Deprecated GRMustacheTemplate methods (replace `parse` with `templateFrom`):
 
-- `+ (id)parseString:(NSString *)templateString error:(NSError **)outError;`
-- `+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;`
-- `+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;`
-- `+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+```objc
++ (id)parseString:(NSString *)templateString error:(NSError **)outError;
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
+```
 
 ## v1.10.3
 
@@ -96,10 +162,29 @@ New protocol:
 
 - `GRMustacheHelper`
 
+```objc
+@protocol GRMustacheHelper<NSObject>
+@required
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
+@end
+```
+
 New classes:
 
 - `GRMustacheNumberFormatterHelper`
 - `GRMustacheDateFormatterHelper`
+
+```objc
+@interface GRMustacheNumberFormatterHelper : NSObject<GRMustacheHelper>
+@property (nonatomic, readonly, retain) NSNumberFormatter *numberFormatter;
++ (id)helperWithNumberFormatter:(NSNumberFormatter *)numberFormatter;
+@end
+
+@interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper>
+@property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter;
++ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter;
+@end
+```
 
 ## v1.8.6
 
@@ -131,42 +216,50 @@ Bug fixes
 
 New type and enum:
 
-    enum {
-        GRMustacheTemplateOptionNone = 0,
-        GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
-    };
+```objc
+enum {
+    GRMustacheTemplateOptionNone = 0,
+    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+};
 
-    typedef NSUInteger GRMustacheTemplateOptions;
+typedef NSUInteger GRMustacheTemplateOptions;
+```
 
 New GRMustache methods:
 
-- `+ (GRMustacheTemplateOptions)defaultTemplateOptions;`
-- `+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;`
+```objc
++ (GRMustacheTemplateOptions)defaultTemplateOptions;
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions;
+```
 
 New GRMustacheTemplate methods:
 
-- `+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
-- `+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;`
+```objc
++ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError;
+```
 
 New GRMustacheTemplateLoader methods:
 
-- `+ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;`
-- `+ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;`
+```objc
++ (id)templateLoaderWithBaseURL:(NSURL *)url options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithBaseURL:(NSURL *)url extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options;
++ (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+```
 
 
 ## v1.7.4
@@ -208,15 +301,19 @@ The NSUndefinedKeyException silencing activated by the DEBUG macro applies to NS
 
 New GRMustacheTemplateLoader methods:
 
-- `+ (id)templateLoaderWithDirectory:(NSString *)path;`
-- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;`
-- `+ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;`
+```objc
++ (id)templateLoaderWithDirectory:(NSString *)path;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext;
++ (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+```
 
 Deprecated GRMustacheTemplateLoader methods (replace `BasePath` with `Directory`):
 
-- `+ (id)templateLoaderWithBasePath:(NSString *)path;`
-- `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;`
-- `+ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;`
+```objc
++ (id)templateLoaderWithBasePath:(NSString *)path;
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext;
++ (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding;
+```
 
 Bug fixes around the NSUndefinedKeyException handling when the `DEBUG` macro is set (thanks to [Mike Ash](http://www.mikeash.com/)).
 
