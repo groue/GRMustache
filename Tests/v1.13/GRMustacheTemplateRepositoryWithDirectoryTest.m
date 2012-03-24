@@ -20,107 +20,107 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateRepositoryWithBaseURLTest.h"
+#import "GRMustacheTemplateRepositoryWithDirectoryTest.h"
 
-@implementation GRMustacheTemplateRepositoryWithBaseURLTest
+@implementation GRMustacheTemplateRepositoryWithDirectoryTest
 
-- (void)testTemplateRepositoryWithBaseURL
+- (void)testTemplateRepositoryWithDirectory
 {
-    NSURL *URL;
+    NSString *directoryPath;
     GRMustacheTemplateRepository *repository;
     GRMustacheTemplate *template;
     NSString *result;
     
-    URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
 }
 
-- (void)testTemplateRepositoryWithBaseURL_templateExtension
+- (void)testTemplateRepositoryWithDirectory_templateExtension
 {
-    NSURL *URL;
+    NSString *directoryPath;
     GRMustacheTemplateRepository *repository;
     GRMustacheTemplate *template;
     NSString *result;
     
-    URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache"];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache"];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt"];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt"];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1.txt\ndir/file1.txt\ndir/dir/file1.txt\ndir/dir/file2.txt\n\n\ndir/file2.txt\n\n\nfile2.txt\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@""];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@""];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
 }
 
-- (void)testTemplateRepositoryWithBaseURL_templateExtension_encoding
+- (void)testTemplateRepositoryWithDirectory_templateExtension_encoding
 {
-    NSURL *URL;
+    NSString *directoryPath;
     GRMustacheTemplateRepository *repository;
     GRMustacheTemplate *template;
     NSString *result;
     
-    URL = [self.testBundle URLForResource:@"deep_partials_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache" encoding:NSUTF8StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_UTF8" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache" encoding:NSUTF8StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt" encoding:NSUTF8StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_UTF8" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt" encoding:NSUTF8StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"" encoding:NSUTF8StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_UTF8" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"" encoding:NSUTF8StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil encoding:NSUTF8StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_UTF8" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil encoding:NSUTF8StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_ISOLatin1" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache" encoding:NSISOLatin1StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_ISOLatin1" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache" encoding:NSISOLatin1StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_ISOLatin1" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt" encoding:NSISOLatin1StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_ISOLatin1" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt" encoding:NSISOLatin1StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_ISOLatin1" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"" encoding:NSISOLatin1StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_ISOLatin1" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"" encoding:NSISOLatin1StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"deep_partials_ISOLatin1" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil encoding:NSISOLatin1StringEncoding];
+    directoryPath = [self.testBundle pathForResource:@"deep_partials_ISOLatin1" ofType:nil];
+    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil encoding:NSISOLatin1StringEncoding];
     template = [repository templateForName:@"file1" error:NULL];
     result = [template render];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
