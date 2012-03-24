@@ -9,9 +9,13 @@ The GRMustacheTemplateRepository class allows you to load template strings and p
 Loading templates and partials from the file system
 ---------------------------------------------------
 
-GRMustacheTemplateRepository ships with the following class methods:
+The GRMustacheTemplate class itself provides [convenient methods](templates.md) for loading UTF8-encoded templates from the file system. GRMustacheTemplateRepository fills the remaining less-common needs.
+
+It ships with the following class methods:
 
 ```objc
+@interface GRMustacheTemplateRepository : NSObject
+
 // Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
 + (id)templateRepositoryWithBaseURL:(NSURL *)url;
 
@@ -47,6 +51,7 @@ GRMustacheTemplateRepository ships with the following class methods:
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle   // nil stands for the main bundle
                  templateExtension:(NSString *)ext
                           encoding:(NSStringEncoding)encoding;
+@end
 ```
 
 For instance:
@@ -82,8 +87,12 @@ Loading templates and partials from a dictionary of template strings
 Use the following GRMustacheTemplateRepository class method:
 
 ```objc
+@interface GRMustacheTemplateRepository : NSObject
+
 // _partialsDictionary_ is a dictionary whose keys are partial names, and values template strings.
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary;
+
+@end
 ```
 
 Now we may instanciate one:
