@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](template_loaders.md)
+[up](../../../../GRMustache), [next](template_repositories.md)
 
 Templates
 =========
@@ -128,6 +128,6 @@ You can write recursive partials. Just avoid infinite loops in your context obje
 More loading options
 --------------------
 
-All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [Guides/template_loaders.md](template_loaders.md)
+All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [Guides/template_repositories.md](template_repositories.md)
 
-[up](../../../../GRMustache), [next](template_loaders.md)
+[up](../../../../GRMustache), [next](template_repositories.md)

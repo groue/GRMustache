@@ -64,7 +64,7 @@ FAQ
 
 - **Q: I have a bunch of template partials that live in memory, not in the file system. How do I include them?**
     
-    A: Check [Guides/template_loaders.md](GRMustache/blob/master/Guides/template_loaders.md).
+    A: Check [Guides/template_repositories.md](GRMustache/blob/master/Guides/template_repositories.md).
 
 - **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
     
