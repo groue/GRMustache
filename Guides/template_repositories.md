@@ -82,7 +82,7 @@ Loading templates and partials from a dictionary of template strings
 Use the following GRMustacheTemplateRepository class method:
 
 ```objc
-// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
+// _partialsDictionary_ is a dictionary whose keys are partial names, and values template strings.
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary;
 ```
 
