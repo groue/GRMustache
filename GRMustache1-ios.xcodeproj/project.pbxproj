@@ -1039,6 +1039,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
@@ -1057,6 +1058,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
@@ -1123,6 +1125,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/Tests/syck\\\"",
@@ -1145,6 +1148,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/GRMustache1.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/Tests/syck\\\"",

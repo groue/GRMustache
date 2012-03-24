@@ -1021,6 +1021,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1038,6 +1039,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Tests/syck\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
