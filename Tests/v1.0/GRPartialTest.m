@@ -103,9 +103,102 @@
 
 - (void)testDeepPartials
 {
-    NSURL *URL = [self.testBundle URLForResource:@"file1" withExtension:@"mustache" subdirectory:@"deep_partials"];
-    NSString *result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    NSURL *URL;
+    NSString *result;
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"mustache" subdirectory:@"deep_partials"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"txt" subdirectory:@"deep_partials"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"file1.txt\ndir/file1.txt\ndir/dir/file1.txt\ndir/dir/file2.txt\n\n\ndir/file2.txt\n\n\nfile2.txt\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"" subdirectory:@"deep_partials"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
     STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:nil subdirectory:@"deep_partials"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
+}
+
+- (void)testDeepPartialsContainingUTF8Data
+{
+    NSURL *URL;
+    NSString *result;
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"mustache" subdirectory:@"deep_partials_UTF8"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"txt" subdirectory:@"deep_partials_UTF8"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:@"" subdirectory:@"deep_partials_UTF8"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
+    
+    URL = [self.testBundle URLForResource:@"file1" withExtension:nil subdirectory:@"deep_partials_UTF8"];
+    result = [GRMustacheTemplate renderObject:nil fromContentsOfURL:URL error:NULL];
+    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
+}
+
+- (void)testDeepPartialsContainingISOLatin1Data
+{
+    NSURL *URL = [self.testBundle URLForResource:@"deep_partials_ISOLatin1" withExtension:nil];
+    GRMustacheTemplateLoader *loader;
+    GRMustacheTemplate *template;
+    NSString *result;
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:nil encoding:NSISOLatin1StringEncoding];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:@"txt" encoding:NSISOLatin1StringEncoding];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:@"" encoding:NSISOLatin1StringEncoding];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:nil encoding:NSISOLatin1StringEncoding];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
+}
+
+- (void)testDeepPartialsWithTemplateLoader
+{
+    NSURL *URL = [self.testBundle URLForResource:@"deep_partials" withExtension:nil];
+    GRMustacheTemplateLoader *loader;
+    GRMustacheTemplate *template;
+    NSString *result;
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:@"mustache"];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:@"txt"];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"file1.txt\ndir/file1.txt\ndir/dir/file1.txt\ndir/dir/file2.txt\n\n\ndir/file2.txt\n\n\nfile2.txt\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:@""];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"file1\ndir/file1\ndir/dir/file1\ndir/dir/file2\n\n\ndir/file2\n\n\nfile2\n\n", @"");
+    
+    loader = [GRMustacheTemplateLoader templateLoaderWithBaseURL:URL extension:nil];
+    template = [loader parseTemplateNamed:@"file1" error:NULL];
+    result = [template render];
+    STAssertEqualObjects(result, @"file1.mustache\ndir/file1.mustache\ndir/dir/file1.mustache\ndir/dir/file2.mustache\n\n\ndir/file2.mustache\n\n\nfile2.mustache\n\n", @"");
 }
 
 

@@ -1,0 +1,2 @@
+dir/dir/file1.txt
+{{>file2}}

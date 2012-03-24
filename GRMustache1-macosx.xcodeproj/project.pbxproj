@@ -120,7 +120,10 @@
 		56C1ED95151DCF3900A473C7 /* GRMustacheTemplateRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C1ED93151DCF3900A473C7 /* GRMustacheTemplateRepository.m */; };
 		56C1ED97151DD3B300A473C7 /* GRMustacheTemplateRepository_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56C1ED96151DD3B300A473C7 /* GRMustacheTemplateRepository_private.h */; };
 		56C1ED99151DE4FE00A473C7 /* GRMustacheTemplateLoader_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56C1ED98151DE4FE00A473C7 /* GRMustacheTemplateLoader_private.h */; };
-		56C1EDA4151DFF3700A473C7 /* deep_partials in Resources */ = {isa = PBXBuildFile; fileRef = 56C1EDA3151DFF3700A473C7 /* deep_partials */; };
+		56C1EDAA151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C1EDA9151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.m */; };
+		56C1EDAC151E056900A473C7 /* deep_partials in Resources */ = {isa = PBXBuildFile; fileRef = 56C1EDAB151E056900A473C7 /* deep_partials */; };
+		56C1EDB1151E0C8B00A473C7 /* deep_partials_ISOLatin1 in Resources */ = {isa = PBXBuildFile; fileRef = 56C1EDAF151E0C8B00A473C7 /* deep_partials_ISOLatin1 */; };
+		56C1EDB2151E0C8B00A473C7 /* deep_partials_UTF8 in Resources */ = {isa = PBXBuildFile; fileRef = 56C1EDB0151E0C8B00A473C7 /* deep_partials_UTF8 */; };
 		56D880F114CDE9DF00AB3CE4 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D880F014CDE9DF00AB3CE4 /* GRMustacheHelperTest.m */; };
 		56D8810114CE85E600AB3CE4 /* GRMustacheNumberFormatterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D880FF14CE85E600AB3CE4 /* GRMustacheNumberFormatterHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56D8810214CE85E600AB3CE4 /* GRMustacheNumberFormatterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D8810014CE85E600AB3CE4 /* GRMustacheNumberFormatterHelper.m */; };
@@ -296,7 +299,11 @@
 		56C1ED93151DCF3900A473C7 /* GRMustacheTemplateRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepository.m; sourceTree = "<group>"; };
 		56C1ED96151DD3B300A473C7 /* GRMustacheTemplateRepository_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateRepository_private.h; sourceTree = "<group>"; };
 		56C1ED98151DE4FE00A473C7 /* GRMustacheTemplateLoader_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateLoader_private.h; sourceTree = "<group>"; };
-		56C1EDA3151DFF3700A473C7 /* deep_partials */ = {isa = PBXFileReference; lastKnownFileType = folder; path = deep_partials; sourceTree = "<group>"; };
+		56C1EDA8151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateRepositoryWithBaseURLTest.h; sourceTree = "<group>"; };
+		56C1EDA9151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithBaseURLTest.m; sourceTree = "<group>"; };
+		56C1EDAB151E056900A473C7 /* deep_partials */ = {isa = PBXFileReference; lastKnownFileType = folder; path = deep_partials; sourceTree = "<group>"; };
+		56C1EDAF151E0C8B00A473C7 /* deep_partials_ISOLatin1 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = deep_partials_ISOLatin1; sourceTree = "<group>"; };
+		56C1EDB0151E0C8B00A473C7 /* deep_partials_UTF8 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = deep_partials_UTF8; sourceTree = "<group>"; };
 		56D880EF14CDE9DF00AB3CE4 /* GRMustacheHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelperTest.h; sourceTree = "<group>"; };
 		56D880F014CDE9DF00AB3CE4 /* GRMustacheHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelperTest.m; sourceTree = "<group>"; };
 		56D880FF14CE85E600AB3CE4 /* GRMustacheNumberFormatterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheNumberFormatterHelper.h; sourceTree = "<group>"; };
@@ -485,6 +492,7 @@
 				56D880ED14CDE9A600AB3CE4 /* v1.9 */,
 				5679E08114F63CD80052A1ED /* v1.11 */,
 				56E540A91503C616002F5D6E /* v1.12 */,
+				56C1EDA7151E03AF00A473C7 /* v1.13 */,
 			);
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
@@ -510,7 +518,9 @@
 				563BF74514408BCC005A4F58 /* dotted_names */,
 				563BF73A1440847D005A4F58 /* file_system */,
 				563BF743144085A5005A4F58 /* handlebars */,
-				56C1EDA3151DFF3700A473C7 /* deep_partials */,
+				56C1EDAB151E056900A473C7 /* deep_partials */,
+				56C1EDAF151E0C8B00A473C7 /* deep_partials_ISOLatin1 */,
+				56C1EDB0151E0C8B00A473C7 /* deep_partials_UTF8 */,
 				565F6B23139FF13B004D1894 /* complex_view.mustache */,
 				565F6B24139FF13B004D1894 /* crazy_recursive.mustache */,
 				5679E08514F640460052A1ED /* foo_bar.mustache */,
@@ -617,6 +627,15 @@
 				5679E08314F63CFF0052A1ED /* GRMustacheTemplateFromMethodsTest.m */,
 			);
 			path = v1.11;
+			sourceTree = "<group>";
+		};
+		56C1EDA7151E03AF00A473C7 /* v1.13 */ = {
+			isa = PBXGroup;
+			children = (
+				56C1EDA8151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.h */,
+				56C1EDA9151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.m */,
+			);
+			path = v1.13;
 			sourceTree = "<group>";
 		};
 		56D880ED14CDE9A600AB3CE4 /* v1.9 */ = {
@@ -880,7 +899,9 @@
 				563BF74614408BCC005A4F58 /* dotted_names in Resources */,
 				5679E08614F640460052A1ED /* foo_bar.mustache in Resources */,
 				5679E08814F641F00052A1ED /* foo_bar.txt in Resources */,
-				56C1EDA4151DFF3700A473C7 /* deep_partials in Resources */,
+				56C1EDAC151E056900A473C7 /* deep_partials in Resources */,
+				56C1EDB1151E0C8B00A473C7 /* deep_partials_ISOLatin1 in Resources */,
+				56C1EDB2151E0C8B00A473C7 /* deep_partials_UTF8 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,6 +991,7 @@
 				5679E08414F63CFF0052A1ED /* GRMustacheTemplateFromMethodsTest.m in Sources */,
 				56E540AC1503C6DB002F5D6E /* GRMustacheTemplateDelegateTest.m in Sources */,
 				56A24079150892500003843A /* GRMustacheInvocationDescriptionTest.m in Sources */,
+				56C1EDAA151E03E200A473C7 /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
