@@ -519,7 +519,7 @@ NSString* const GRMustacheDefaultExtension = @"mustache";
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheTemplateRepositoryBundle
+#pragma mark - Private concrete class GRMustacheTemplateRepositoryPartialsDictionary
 
 @interface GRMustacheTemplateRepositoryPartialsDictionary()<GRMustacheTemplateRepositoryDataSource>
 @end
