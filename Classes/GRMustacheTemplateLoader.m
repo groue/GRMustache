@@ -65,10 +65,16 @@
 
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:ext]];
 }
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:ext options:options]];
 }
 
@@ -76,16 +82,25 @@
 
 + (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext]];
 }
 
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext]];
 }
 
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext options:options]];
 }
 
@@ -93,11 +108,17 @@
 
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:ext encoding:encoding]];
 }
 
 + (id)templateLoaderWithBaseURL:(NSURL *)URL extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:ext encoding:encoding options:options]];
 }
 
@@ -105,16 +126,25 @@
 
 + (id)templateLoaderWithBasePath:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext encoding:encoding]];
 }
 
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext encoding:encoding]];
 }
 
 + (id)templateLoaderWithDirectory:(NSString *)path extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithDirectory:path templateExtension:ext encoding:encoding options:options]];
 }
 
@@ -130,21 +160,33 @@
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext]];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext options:options]];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext directory:nil encoding:encoding]];
 }
 
 + (id)templateLoaderWithBundle:(NSBundle *)bundle extension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
 {
+    if (ext == nil) {
+        ext = GRMustacheDefaultExtension;
+    }
     return [self templateLoaderWithTemplateRepository:[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext directory:nil encoding:encoding options:options]];
 }
 
