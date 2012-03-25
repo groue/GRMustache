@@ -112,7 +112,7 @@
 
 + (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [GRMustacheTemplate parseResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
+    return [GRMustacheTemplate templateFromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
@@ -133,7 +133,7 @@
 
 + (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [GRMustacheTemplate parseResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
+    return [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
