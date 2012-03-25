@@ -72,7 +72,7 @@ You may also have the repository parse a template string. Only partials would th
 
 ```objc
 // Would load path/to/templates/partial.mustache
-GRMustacheTemplate *template = [repository templateFromString:@"...{(> partial)}..." error:NULL];
+GRMustacheTemplate *template = [repository templateFromString:@"...{{> partial}}..." error:NULL];
 ```
  
 The rendering is done as usual:
@@ -106,7 +106,7 @@ Then load templates from it:
 
 ```objc
 GRMustacheTemplate *template1 = [repository templateFromString:@"{{>partial}}" error:NULL];
-GRMustacheTemplate *template2 = [repository templateWithTemplateName:@"partial" error:NULL];
+GRMustacheTemplate *template2 = [repository templateForName:@"partial" error:NULL];
 ```
 
 And finally render:
