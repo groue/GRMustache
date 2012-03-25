@@ -142,30 +142,34 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 NSString *rendering = [template renderObjects:helpers, data, nil];
 ```
 
-## GRMustache helpers vs Mustache lambdas
+## GRMustache helpers vs. Mustache lambdas
 
-GRMustache helpers are more expressive than required by the [Mustache specification v1.1.2](https://github.com/mustache/spec).
+**Warning: If your goal is to design GRMustache helpers that remain compatible with Mustache lambdas of [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), read the following with great care.**
 
-**Warning: If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use the features exposed below with great care.**
+GRMustache helpers are by far more expressive than required by the Mustache lambda specification.
 
-You may extend the set of rendered keys inside a section.
+Especially, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L27) that lambdas return a *template string* that is automatically rendered (read, processed as a Mustache template, and rendered in the current context).
 
-In the example below, the `{{foo}}` tags embedded in the section will render as `bar`, even though no model object provides any `foo` key:
-
-```objc
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];
-    return [section renderObjects:context, dictionary, nil];
-});
-```
-
-You may even render a totally different context. In the example below, the `{{foo}}` tags embedded in the section will be the only ones that will be rendered:
+No problem: GRMustache allows you to comply with the genuine Mustache behavior:
 
 ```objc
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context {
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];
-    return [section renderObject:dictionary];
-});
+@implementation BoldHelper
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    // build the genuine Mustache lambda template string...
+    NSString *templateString = [NSString stringWithFormat:@"<b>%@</b>", section.templateString];
+    
+    // ...and render it, as genuine Mustache would:
+    return [GRMustacheTemplate renderObject:context fromString:templateString error:NULL];
+}
+@end
 ```
+
+You can still safely call `[section renderObject:context]`, and include the rendered inner content in your final lambda template string. This is not explicitely stated by the specification, but this possibility is evoked in the "Lambdas" section of http://mustache.github.com/mustache.5.html, and at https://github.com/mustache/spec/issues/19.
+
+However, beware! `[section renderObject:context]` could return a string that contains unexpected mustache tags `{{junk}}`, that would be processed, and rendered as whatever junk would be found.
+
+Also, should you change the Mustache tag delimiters with a `{{=[ ]=}}` tag, be warned that the specification explicitely [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L40) that lambda strings should be rendered with the default delimiters. This prevents you from rendering a template such as `{{=[ ]=}}[#bold]Welcome, [name].[/bold]`, since `[name]` would not be interpolated.
+
 
 [up](../runtime.md), [next](../delegate.md)
