@@ -21,17 +21,22 @@
 // THE SOFTWARE.
 
 #import "GRMustacheEnvironment.h"
-#import "GRMustacheTemplateLoader_private.h"
-#import "GRMustacheTemplateRepository_private.h"
+#import "GRMustacheTemplateLoader.h"
+#import "GRMustacheTemplateLoader_protected.h"
+#import "GRMustacheTemplateRepository.h"
 
+static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @interface GRMustacheTemplateLoader()<GRMustacheTemplateRepositoryDataSource>
 @property (nonatomic, retain) GRMustacheTemplateRepository *templateRepository;
 + (id)templateLoaderWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository;
 @end
 
 @implementation GRMustacheTemplateLoader
 @synthesize templateRepository=_templateRepository;
+@synthesize extension=_extension;
+@synthesize encoding=_encoding;
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
@@ -211,7 +216,7 @@
         _extension = [extension retain];
         _encoding = encoding;
         
-        GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithOptions:GRMustacheDefaultTemplateOptions];
+        GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithOptions:[GRMustache defaultTemplateOptions]];
         templateRepository.dataSource = self;
         self.templateRepository = templateRepository;
     }
@@ -271,11 +276,18 @@
 
 #pragma mark Private
 
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository
+{
+    self = [self init];
+    if (self) {
+        self.templateRepository = templateRepository;
+    }
+    return self;
+}
+
 + (id)templateLoaderWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
-    GRMustacheTemplateLoader *loader = [[[GRMustacheTemplateLoader alloc] initWithExtension:nil encoding:NSUTF8StringEncoding] autorelease];
-    loader.templateRepository = templateRepository;
-    return loader;
+    return [[[GRMustacheTemplateLoader alloc] initWithTemplateRepository:templateRepository] autorelease];
 }
 
 @end

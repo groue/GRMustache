@@ -25,8 +25,6 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 
-extern NSString* const GRMustacheDefaultExtension;
-
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 

@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustache.h"
 
 @class GRMustacheTemplate;
 
@@ -36,7 +37,6 @@
     id _templateRepository;
     NSString *_extension;
     NSStringEncoding _encoding;
-    GRMustacheTemplateOptions _options;
 }
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
