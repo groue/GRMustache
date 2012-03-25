@@ -120,7 +120,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
-    // abstract method
+    NSAssert(NO, @"abstract method");
 }
 
 #pragma mark Private
