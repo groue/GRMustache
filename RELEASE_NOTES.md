@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v1.13.1
+
+The deprecated class GRMustacheTemplateLoader was broken by 1.13.0. Deprecated does not mean unavailable: it is restored.
+
 ## v1.13.0
 
 Deprecated class (use [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:], or the new GRMustacheTemplateRepositoryDataSource protocol instead):
