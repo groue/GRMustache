@@ -246,9 +246,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
 
-- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys
+- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options
 {
-    return [GRMustacheInvocation invocationWithToken:token templateID:_currentlyParsedTemplateID keys:keys];
+    return [GRMustacheInvocation invocationWithToken:token templateID:_currentlyParsedTemplateID keys:keys options:options];
 }
 
 #pragma mark Private

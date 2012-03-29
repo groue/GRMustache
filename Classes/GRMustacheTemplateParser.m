@@ -340,7 +340,7 @@
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
     }
     
-    return [_dataSource templateParser:self invocationWithToken:token keys:keys];
+    return [_dataSource templateParser:self invocationWithToken:token keys:keys options:_options];
 }
 
 @end

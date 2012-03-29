@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustache_private.h"
 
 @interface GRMustacheContext: NSObject {
 @private
@@ -36,6 +37,6 @@
 + (id)contextWithObject:(id)object GRMUSTACHE_API_INTERNAL;
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList GRMUSTACHE_API_INTERNAL;
 - (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL;
-- (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped GRMUSTACHE_API_INTERNAL;
+- (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_INTERNAL;
 
 @end

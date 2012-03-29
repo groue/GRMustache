@@ -24,20 +24,9 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheVersion.h"
 
-static BOOL strictBooleanMode = NO;
 GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateOptionNone;
 
 @implementation GRMustache
-
-+ (BOOL)strictBooleanMode
-{
-    return strictBooleanMode;
-}
-
-+ (void)setStrictBooleanMode:(BOOL)strict
-{
-    strictBooleanMode = strict;
-}
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {

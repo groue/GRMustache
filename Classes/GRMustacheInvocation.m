@@ -28,19 +28,19 @@
 // =============================================================================
 #pragma mark - Invocation functions
 
-typedef void (*GRMustacheInvocationFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext);
+typedef void (*GRMustacheInvocationFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options);
 
-static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
+static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
     *inOutScoped = YES;
 }
 
-static void invokePopKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
-    *inOutScoped = NO;
+static void invokePopKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
     *inOutContext = (*inOutContext).parent;
+    *inOutScoped = NO;
 }
 
-static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
-    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped];
+static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
+    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped options:options];
     *inOutScoped = YES;
 }
 
@@ -53,7 +53,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     GRMustacheInvocationFunction _invocationFunction;
     NSString *_key;
 }
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID key:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID key:(NSArray *)keys options:(GRMustacheTemplateOptions)options;
 @end
 
 
@@ -66,7 +66,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options;
 @end
 
 
@@ -74,7 +74,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 #pragma mark - GRMustacheInvocation
 
 @interface GRMustacheInvocation()
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID;
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID options:(GRMustacheTemplateOptions)options;
 - (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
@@ -82,21 +82,22 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
-+ (id)invocationWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys
++ (id)invocationWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options
 {
     if (keys.count > 1) {
-        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token templateID:templateID keys:keys] autorelease];
+        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token templateID:templateID keys:keys options:options] autorelease];
     } else {
-        return [[[GRMustacheInvocationKey alloc] initWithToken:token templateID:templateID key:[keys objectAtIndex:0]] autorelease];
+        return [[[GRMustacheInvocationKey alloc] initWithToken:token templateID:templateID key:[keys objectAtIndex:0] options:options] autorelease];
     }
 }
 
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID options:(GRMustacheTemplateOptions)options
 {
     self = [self init];
     if (self) {
         _token = [token retain];
         _templateID = [templateID retain];
+        _options = options;
     }
     return self;
 }
@@ -150,9 +151,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID key:(NSString *)key
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID key:(NSString *)key options:(GRMustacheTemplateOptions)options
 {
-    self = [self initWithToken:token templateID:templateID];
+    self = [self initWithToken:token templateID:templateID options:options];
     if (self) {
         _key = [key retain];
         _invocationFunction = [self invocationFunctionForKey:key];
@@ -168,7 +169,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
-    _invocationFunction(_key, &scoped, &context);
+    _invocationFunction(_key, &scoped, &context, _options);
     self.returnValue = context.object;
 }
 
@@ -187,9 +188,9 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys
+- (id)initWithToken:(GRMustacheToken *)token templateID:(id)templateID keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options
 {
-    self = [self initWithToken:token templateID:templateID];
+    self = [self initWithToken:token templateID:templateID options:options];
     if (self) {
         _keys = [keys retain];
         GRMustacheInvocationFunction *f = _invocationFunctions = malloc(keys.count*sizeof(GRMustacheInvocationFunction));
@@ -210,7 +211,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     BOOL scoped = NO;
     GRMustacheInvocationFunction *f = _invocationFunctions;
     for (_lastUsedKey in _keys) {
-        (*(f++))(_lastUsedKey, &scoped, &context);
+        (*(f++))(_lastUsedKey, &scoped, &context, _options);
         if (!context) {
             self.returnValue = nil;
             return;

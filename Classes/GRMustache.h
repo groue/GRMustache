@@ -26,6 +26,7 @@
 enum {
     GRMustacheTemplateOptionNone = 0,
     GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+    GRMustacheTemplateOptionStrictBoolean = 0x02,
 };
 
 typedef NSUInteger GRMustacheTemplateOptions;
@@ -61,44 +62,6 @@ typedef struct {
  @since v1.0
  */
 + (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Handling of BOOL properties
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- Returns a Boolean value that determines whether GRMustache renders templates in strict
- boolean mode.
- 
- In strict boolean mode, properties of context objects that are declared as BOOL
- are interpreted as numbers, and can not be used for controlling Mustache
- boolean sections.
- 
- In non-strict boolean mode, all properties declared as signed char (including
- those declared as BOOL), are interpreted as booleans, and can be used for
- controlling Mustache boolean sections.
- 
- @return YES if GRMustache renders templates in strict boolean mode,
- NO otherwise. The default value is NO.
- 
- @see setStrictBooleanMode:
- @since v1.0
- */
-+ (BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
-/**
- Sets the strict boolean mode of GMustache.
- 
- See the documentation for strictBooleanMode for more information.
- 
- @param strictBooleanMode YES if GRMustache should render templates in strict boolean mode,
- NO otherwise.
- 
- @see strictBooleanMode
- @since v1.0
- */
-+ (void)setStrictBooleanMode:(BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration

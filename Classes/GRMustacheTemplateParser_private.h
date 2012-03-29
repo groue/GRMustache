@@ -34,7 +34,7 @@
 @protocol GRMustacheTemplateParserDataSource <NSObject>
 @required
 - (id<GRMustacheRenderingElement>)templateParser:(GRMustacheTemplateParser *)templateParser renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
-- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
+- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_INTERNAL;
 @end
 
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {

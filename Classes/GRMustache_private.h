@@ -26,6 +26,7 @@
 enum {
     GRMustacheTemplateOptionNone = 0,
     GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+    GRMustacheTemplateOptionStrictBoolean = 0x02,
 };
 
 typedef NSUInteger GRMustacheTemplateOptions;
@@ -41,8 +42,6 @@ typedef struct {
 @interface GRMustache: NSObject
 
 + (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
-+ (BOOL)strictBooleanMode GRMUSTACHE_API_PUBLIC;
-+ (void)setStrictBooleanMode:(BOOL)strict GRMUSTACHE_API_PUBLIC;
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
 + (GRMustacheTemplateOptions)defaultTemplateOptions GRMUSTACHE_API_PUBLIC;
 + (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions GRMUSTACHE_API_PUBLIC;
