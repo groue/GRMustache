@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheRendering_private.h"
+#import "GRMustacheRenderingElement_private.h"
 
 @class GRMustacheInvocation;
 @class GRMustacheTemplate;

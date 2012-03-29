@@ -60,7 +60,7 @@ typedef struct {
  @return The version of GRMustache as a GRMustacheVersion struct.
  @since v1.0
  */
-+ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Handling of BOOL properties
@@ -82,10 +82,9 @@ typedef struct {
  NO otherwise. The default value is NO.
  
  @see setStrictBooleanMode:
- @see [GRMustacheContext valueForKey:]
  @since v1.0
  */
-+ (BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 /**
  Sets the strict boolean mode of GMustache.
@@ -96,10 +95,9 @@ typedef struct {
  NO otherwise.
  
  @see strictBooleanMode
- @see [GRMustacheContext valueForKey:]
  @since v1.0
  */
-+ (void)setStrictBooleanMode:(BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
++ (void)setStrictBooleanMode:(BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +121,7 @@ typedef struct {
  
  @since v1.7
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +135,7 @@ typedef struct {
  @see setDefaultTemplateOptions:
  @since v1.8
  */
-+ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 /**
  Sets the default template options.
@@ -152,7 +150,7 @@ typedef struct {
  @see defaultTemplateOptions
  @since v1.8
  */
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 @end
 
@@ -160,11 +158,8 @@ typedef struct {
 #import "GRMustacheInvocation.h"
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheTemplateLoader.h"
 #import "GRMustacheTemplateRepository.h"
-#import "GRMustacheContext.h"
 #import "GRMustacheLambda.h"
-#import "GRBoolean.h"
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"

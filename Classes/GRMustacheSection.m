@@ -24,7 +24,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheLambda_private.h"
-#import "GRMustacheRendering_private.h"
+#import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheSection()

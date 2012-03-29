@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-MAX_MINOR_VERSION = 13
+MAX_MINOR_VERSION = 0
 
 puts <<-LICENSE
 // The MIT License
@@ -40,7 +40,7 @@ puts <<-VERSIONS
 VERSIONS
 
 (MAX_MINOR_VERSION+1).times do |minor_version|
-  puts "#define GRMUSTACHE_VERSION_1_#{"%-2d"%minor_version} 1#{"%02d"%minor_version}0"
+  puts "#define GRMUSTACHE_VERSION_2_#{"%-2d"%minor_version} 2#{"%02d"%minor_version}0"
 end
 
 puts #----------
@@ -52,10 +52,10 @@ puts #----------
 
 puts <<-GRMUSTACHE_VERSION_MAX_ALLOWED
 /* 
- * If max GRMustacheVersion not specified, assume 1.#{MAX_MINOR_VERSION}
+ * If max GRMustacheVersion not specified, assume 2.#{MAX_MINOR_VERSION}
  */
 #ifndef GRMUSTACHE_VERSION_MAX_ALLOWED
-#define GRMUSTACHE_VERSION_MAX_ALLOWED    GRMUSTACHE_VERSION_1_#{MAX_MINOR_VERSION}
+#define GRMUSTACHE_VERSION_MAX_ALLOWED    GRMUSTACHE_VERSION_2_#{MAX_MINOR_VERSION}
 #endif
 GRMUSTACHE_VERSION_MAX_ALLOWED
 
@@ -79,8 +79,8 @@ puts <<-ERROR_ON_BAD_VALUES
 #if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_MIN_REQUIRED
 #error GRMUSTACHE_VERSION_MAX_ALLOWED must be >= GRMUSTACHE_VERSION_MIN_REQUIRED
 #endif
-#if GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_0
-#error GRMUSTACHE_VERSION_MIN_REQUIRED must be >= GRMUSTACHE_VERSION_1_0
+#if GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_2_0
+#error GRMUSTACHE_VERSION_MIN_REQUIRED must be >= GRMUSTACHE_VERSION_2_0
 #endif
 ERROR_ON_BAD_VALUES
 
@@ -91,29 +91,29 @@ puts #----------
 puts #----------
 puts #----------
 
-puts <<-GRMUSTACHE_VERSION_1_0
+puts <<-GRMUSTACHE_VERSION_2_0
 /*
- * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER
+ * AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.0
+ * Used on declarations introduced in GRMustache 2.0
  */
-#define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER
+#define AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER
 
 /*
- * AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED
+ * AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.0, 
- * and deprecated in GRMustache 1.0
+ * Used on declarations introduced in GRMustache 2.0, 
+ * and deprecated in GRMustache 2.0
  */
-#define AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
+#define AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
 
 /*
- * DEPRECATED_IN_GRMUSTACHE_VERSION_1_0_AND_LATER
+ * DEPRECATED_IN_GRMUSTACHE_VERSION_2_0_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.0
+ * Used on types deprecated in GRMustache 2.0
  */
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_0_AND_LATER    DEPRECATED_ATTRIBUTE
-GRMUSTACHE_VERSION_1_0
+#define DEPRECATED_IN_GRMUSTACHE_VERSION_2_0_AND_LATER    DEPRECATED_ATTRIBUTE
+GRMUSTACHE_VERSION_2_0
 
 puts #----------
 puts #----------
@@ -124,71 +124,71 @@ puts #----------
 
 (1..MAX_MINOR_VERSION).each do |minor_version|
   
-  puts <<-AVAILABLE_GRMUSTACHE_VERSION_1_x_AND_LATER
+  puts <<-AVAILABLE_GRMUSTACHE_VERSION_2_x_AND_LATER
 /*
- * AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER
+ * AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER
  * 
- * Used on declarations introduced in GRMustache 1.#{minor_version}
+ * Used on declarations introduced in GRMustache 2.#{minor_version}
  */
-#if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_1_#{minor_version}
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER    UNAVAILABLE_ATTRIBUTE
-#elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_1_#{minor_version}
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER    WEAK_IMPORT_ATTRIBUTE
+#if GRMUSTACHE_VERSION_MAX_ALLOWED < GRMUSTACHE_VERSION_2_#{minor_version}
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER    UNAVAILABLE_ATTRIBUTE
+#elif GRMUSTACHE_VERSION_MIN_REQUIRED < GRMUSTACHE_VERSION_2_#{minor_version}
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER    WEAK_IMPORT_ATTRIBUTE
 #else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER
 #endif
-AVAILABLE_GRMUSTACHE_VERSION_1_x_AND_LATER
+AVAILABLE_GRMUSTACHE_VERSION_2_x_AND_LATER
     
   puts #----------
   
-  puts <<-AVAILABLE_GRMUSTACHE_VERSION_1_x_AND_LATER_BUT_DEPRECATED
+  puts <<-AVAILABLE_GRMUSTACHE_VERSION_2_x_AND_LATER_BUT_DEPRECATED
 /*
- * AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER_BUT_DEPRECATED
+ * AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER_BUT_DEPRECATED
  * 
- * Used on declarations introduced in GRMustache 1.#{minor_version},
- * and deprecated in GRMustache 1.#{minor_version}
+ * Used on declarations introduced in GRMustache 2.#{minor_version},
+ * and deprecated in GRMustache 2.#{minor_version}
  */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_#{minor_version}
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
+#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_2_#{minor_version}
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER_BUT_DEPRECATED    DEPRECATED_ATTRIBUTE
 #else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER_BUT_DEPRECATED    AVAILABLE_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER_BUT_DEPRECATED    AVAILABLE_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER
 #endif
-AVAILABLE_GRMUSTACHE_VERSION_1_x_AND_LATER_BUT_DEPRECATED
+AVAILABLE_GRMUSTACHE_VERSION_2_x_AND_LATER_BUT_DEPRECATED
   
   puts #----------
   
   (0...minor_version).each do |previous_minor_version|
     
-    puts <<-AVAILABLE_GRMUSTACHE_VERSION_1_y_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_x
+    puts <<-AVAILABLE_GRMUSTACHE_VERSION_2_y_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_2_x
 /*
- * AVAILABLE_GRMUSTACHE_VERSION_1_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}
+ * AVAILABLE_GRMUSTACHE_VERSION_2_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}
  * 
- * Used on declarations introduced in GRMustache 1.#{previous_minor_version},
- * but later deprecated in GRMustache 1.#{minor_version}
+ * Used on declarations introduced in GRMustache 2.#{previous_minor_version},
+ * but later deprecated in GRMustache 2.#{minor_version}
  */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_#{minor_version}
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}    DEPRECATED_ATTRIBUTE
+#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_2_#{minor_version}
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}    DEPRECATED_ATTRIBUTE
 #else
-#define AVAILABLE_GRMUSTACHE_VERSION_1_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}    AVAILABLE_GRMUSTACHE_VERSION_1_#{previous_minor_version}_AND_LATER
+#define AVAILABLE_GRMUSTACHE_VERSION_2_#{previous_minor_version}_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}    AVAILABLE_GRMUSTACHE_VERSION_2_#{previous_minor_version}_AND_LATER
 #endif
-AVAILABLE_GRMUSTACHE_VERSION_1_y_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_x
+AVAILABLE_GRMUSTACHE_VERSION_2_y_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_2_x
 
     puts #----------
     
   end
 
-  puts <<-DEPRECATED_IN_GRMUSTACHE_VERSION_1_x_AND_LATER
+  puts <<-DEPRECATED_IN_GRMUSTACHE_VERSION_2_x_AND_LATER
 /*
- * DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER
+ * DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER
  * 
- * Used on types deprecated in GRMustache 1.#{minor_version}
+ * Used on types deprecated in GRMustache 2.#{minor_version}
  */
-#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_1_#{minor_version}
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER    DEPRECATED_ATTRIBUTE
+#if GRMUSTACHE_VERSION_MIN_REQUIRED >= GRMUSTACHE_VERSION_2_#{minor_version}
+#define DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER    DEPRECATED_ATTRIBUTE
 #else
-#define DEPRECATED_IN_GRMUSTACHE_VERSION_1_#{minor_version}_AND_LATER
+#define DEPRECATED_IN_GRMUSTACHE_VERSION_2_#{minor_version}_AND_LATER
 #endif
-DEPRECATED_IN_GRMUSTACHE_VERSION_1_x_AND_LATER
+DEPRECATED_IN_GRMUSTACHE_VERSION_2_x_AND_LATER
 
   puts #----------
   puts #----------

@@ -24,7 +24,7 @@
 #import "GRMustache_private.h"
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheRendering_private.h"
+#import "GRMustacheRenderingElement_private.h"
 
 typedef enum {
     GRMustacheObjectKindFalseValue,
@@ -57,8 +57,6 @@ typedef enum {
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
@@ -66,8 +64,6 @@ typedef enum {
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
@@ -77,27 +73,21 @@ typedef enum {
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 #pragma mark URL template
+
+#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-+ (id)parseContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-+ (id)parseContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 #pragma mark Rendering
 

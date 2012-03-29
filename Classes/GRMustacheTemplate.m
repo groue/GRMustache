@@ -25,7 +25,6 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheLambda_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRBoolean_private.h"
 
 @interface GRMustacheTemplate()
 @property (nonatomic) GRMustacheTemplateOptions options;
@@ -37,19 +36,9 @@
 @synthesize options=_options;
 @synthesize delegate=_delegate;
 
-+ (id)parseString:(NSString *)templateString error:(NSError **)outError
-{
-    return [GRMustacheTemplate templateFromString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError
 {
     return [GRMustacheTemplate templateFromString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)parseString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    return [self templateFromString:templateString options:options error:outError];
 }
 
 + (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -60,19 +49,9 @@
 
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
-+ (id)parseContentsOfURL:(NSURL *)URL error:(NSError **)outError
-{
-    return [GRMustacheTemplate templateFromContentsOfURL:URL options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
 + (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError
 {
     return [GRMustacheTemplate templateFromContentsOfURL:URL options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)parseContentsOfURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    return [self templateFromContentsOfURL:URL options:options error:outError];
 }
 
 + (id)templateFromContentsOfURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -84,21 +63,11 @@
     return [templateRepository templateForName:templateName error:outError];
 }
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
-
-+ (id)parseContentsOfFile:(NSString *)path error:(NSError **)outError
-{
-    return [GRMustacheTemplate templateFromContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
-}
+#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError
 {
     return [GRMustacheTemplate templateFromContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)parseContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    return [self templateFromContentsOfFile:path options:options error:outError];
 }
 
 + (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -110,19 +79,9 @@
     return [templateRepository templateForName:templateName error:outError];
 }
 
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
-{
-    return [GRMustacheTemplate templateFromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
 {
     return [GRMustacheTemplate templateFromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)parseResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    return [self templateFromResource:name bundle:bundle options:options error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -131,19 +90,9 @@
     return [templateRepository templateForName:name error:outError];
 }
 
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
-{
-    return [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
 {
     return [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)parseResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    return [self templateFromResource:name withExtension:ext bundle:bundle options:options error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
@@ -203,7 +152,7 @@
     return [result autorelease];
 }
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError
 {
@@ -289,7 +238,6 @@
 {
     if (object == nil ||
         object == [NSNull null] ||
-        object == [GRNo no] ||
         (void *)object == (void *)kCFBooleanFalse ||
         ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0))
     {

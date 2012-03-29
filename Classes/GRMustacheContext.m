@@ -59,15 +59,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return [[[self alloc] initWithObject:object parent:nil] autorelease];
 }
 
-+ (id)contextWithObjects:(id)object, ...
-{
-    va_list objectList;
-    va_start(objectList, object);
-    GRMustacheContext *result = [self contextWithObject:object andObjectList:objectList];
-    va_end(objectList);
-    return result;
-}
-
 + (id)contextWithObject:(id)object andObjectList:(va_list)objectList
 {
     GRMustacheContext *context = nil;

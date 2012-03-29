@@ -73,10 +73,10 @@
 @end
 
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
-
 // =============================================================================
 #pragma mark - GRMustacheBlockHelper
+
+#if GRMUSTACHE_BLOCKS_AVAILABLE
 
 @interface GRMustacheBlockHelper()
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
@@ -119,103 +119,5 @@
 }
 
 @end
-
-
-// =============================================================================
-#pragma mark - Deprecated stuff
-
-@interface GRMustacheDeprecatedBlockHelper1: NSObject<GRMustacheHelper> {
-@private
-    NSString *(^_block)(NSString *(^)(id object), id, NSString *);
-}
-+ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
-- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block;
-@end
-
-
-@implementation GRMustacheDeprecatedBlockHelper1
-
-+ (id)helperWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block
-{
-    return [[(GRMustacheDeprecatedBlockHelper1 *)[self alloc] initWithBlock:block] autorelease];
-}
-
-- (id)initWithBlock:(NSString *(^)(NSString *(^)(id object), id, NSString *))block
-{
-    self = [self init];
-    if (self) {
-        _block = [block copy];
-    }
-    return self;
-}
-
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-{
-    NSString *result = _block(^(id object){ return [section renderObject:object]; }, context, section.templateString);
-    if (result == nil) {
-        return @"";
-    }
-    return result;
-}
-
-- (void)dealloc
-{
-    [_block release];
-    [super dealloc];
-}
-
-@end
-
-
-id GRMustacheLambdaMake(NSString *(^block)(NSString *(^)(id object), id, NSString *)) {
-    return [GRMustacheDeprecatedBlockHelper1 helperWithBlock:block];
-}
-
-
-@interface GRMustacheDeprecatedBlockHelper2: NSObject<GRMustacheHelper> {
-@private
-    GRMustacheRenderingBlock _block;
-}
-+ (id)helperWithBlock:(GRMustacheRenderingBlock)block;
-- (id)initWithBlock:(GRMustacheRenderingBlock)block;
-@end
-
-
-@implementation GRMustacheDeprecatedBlockHelper2
-
-+ (id)helperWithBlock:(GRMustacheRenderingBlock)block
-{
-    return [[(GRMustacheDeprecatedBlockHelper2 *)[self alloc] initWithBlock:block] autorelease];
-}
-
-- (id)initWithBlock:(GRMustacheRenderingBlock)block
-{
-    self = [self init];
-    if (self) {
-        _block = [block copy];
-    }
-    return self;
-}
-
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
-{
-    NSString *result = _block(section, context);
-    if (result == nil) {
-        return @"";
-    }
-    return result;
-}
-
-- (void)dealloc
-{
-    [_block release];
-    [super dealloc];
-}
-
-@end
-
-id GRMustacheLambdaBlockMake(GRMustacheRenderingBlock block) {
-    return [GRMustacheDeprecatedBlockHelper2 helperWithBlock:block];
-}
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
