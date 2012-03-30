@@ -1,6 +1,9 @@
-[submodule "Tests/spec"]
-	path = Tests/spec
+[submodule "src/tests/vendor/mustache/spec"]
+	path = src/tests/vendor/mustache/spec
 	url = https://github.com/mustache/spec.git
-[submodule "Libs/groue/jrswizzle"]
-	path = Libs/groue/jrswizzle
-	url = git://github.com/groue/jrswizzle.git
+[submodule "src/vendor/groue/jrswizzle"]
+	path = src/vendor/groue/jrswizzle
+	url = https://github.com/groue/jrswizzle.git
+[submodule "src/tests/vendor/groue/JSONKit"]
+	path = src/tests/vendor/groue/JSONKit
+	url = https://github.com/groue/JSONKit.git

@@ -20,7 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePrivateAPITest.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_0
+#import "GRMustachePublicAPITest.h"
 
-@interface GRBooleanTest: GRMustachePrivateAPITest
+@interface GRSpecificationSuitesTest : GRMustachePublicAPITest
 @end

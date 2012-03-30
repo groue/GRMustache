@@ -20,31 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRBooleanTest.h"
-#import "GRBoolean_private.h"
-#import "GRMustacheTemplate_private.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_0
+#import "GRMustachePublicAPITest.h"
 
-
-@implementation GRBooleanTest
-
-- (void)testNSNumberWithBoolReturnCFBoolean
-{
-    STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:YES], kCFBooleanTrue, nil);
-    STAssertEquals((CFBooleanRef)[NSNumber numberWithBool:NO], kCFBooleanFalse, nil);
-}
-
-- (void)testGRYesIsTrueObject
-{
-    GRMustacheObjectKind kind;
-    [GRMustacheTemplate object:[GRYes yes] kind:&kind boolValue:NULL];
-    STAssertEquals(kind, GRMustacheObjectKindTrueValue, nil);
-}
-
-- (void)testGRNoIsFalseObject
-{
-    GRMustacheObjectKind kind;
-    [GRMustacheTemplate object:[GRNo no] kind:&kind boolValue:NULL];
-    STAssertEquals(kind, GRMustacheObjectKindFalseValue, nil);
-}
+@interface GRMustacheSuitesTest : GRMustachePublicAPITest
 
 @end
