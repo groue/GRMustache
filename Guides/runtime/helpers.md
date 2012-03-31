@@ -123,7 +123,7 @@ Starting iOS4 and MacOS 10.6, the Objective-C language provides us with blocks. 
 id data = ...;
 
 // Prepare helper (no need for a specific class)
-GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section) {
+GRMustacheHelper *localizeHelper = [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
     return NSLocalizedString([section render], nil);
 }];
 NSDictionary *helpers = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
