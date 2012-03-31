@@ -22,7 +22,7 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustacheHelper_private.h"
 #import "GRMustacheProperty_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheTemplate_private.h"

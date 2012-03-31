@@ -23,7 +23,7 @@
 #import "GRMustacheSection_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustacheHelper_private.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
 
@@ -62,28 +62,17 @@
     return [_templateString substringWithRange:_range];
 }
 
-- (NSString *)renderObject:(id)object
+- (id)renderingContext
 {
-    NSMutableString *result = [NSMutableString string];
-    @autoreleasepool {
-        GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-        for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context inRootTemplate:_rootTemplate]];
-        }
-    }
-    return result;
+    return [[_renderingContext retain] autorelease];
 }
 
-- (NSString *)renderObjects:(id)object, ...
+- (NSString *)render
 {
     NSMutableString *result = [NSMutableString string];
     @autoreleasepool {
-        va_list objectList;
-        va_start(objectList, object);
-        GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
-        va_end(objectList);
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context inRootTemplate:_rootTemplate]];
+            [result appendString:[elem renderContext:_renderingContext inRootTemplate:_rootTemplate]];
         }
     }
     return result;
@@ -156,7 +145,9 @@
             case GRMustacheObjectKindLambda:
                 if (!_inverted) {
                     _rootTemplate = rootTemplate;
-                    result = [[(id<GRMustacheHelper>)value renderSection:self withContext:context] retain];
+                    _renderingContext = context;
+                    result = [[(id<GRMustacheHelper>)value renderSection:self] retain];
+                    _renderingContext = nil;
                     _rootTemplate = nil;
                 }
                 break;

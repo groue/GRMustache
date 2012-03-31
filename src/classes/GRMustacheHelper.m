@@ -22,7 +22,7 @@
 
 #import <objc/message.h>
 #import "GRMustacheEnvironment.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustacheHelper_private.h"
 #import "GRMustacheSection_private.h"
 
 
@@ -33,9 +33,9 @@
 
 @interface GRMustacheBlockHelper: GRMustacheHelper {
 @private
-    NSString *(^_block)(GRMustacheSection* section, id context);
+    NSString *(^_block)(GRMustacheSection* section);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block;
 @end
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
@@ -60,7 +60,7 @@
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
     return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
 }
@@ -74,7 +74,7 @@
 
 #pragma mark <GRMustacheHelper>
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
     NSAssert(NO, @"abstract method");
     return nil;
@@ -108,9 +108,9 @@
 
 #pragma mark <GRMustacheHelper>
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *result = objc_msgSend(_object, _renderingSelector, section, context);
+    NSString *result = objc_msgSend(_object, _renderingSelector, section);
     if (result == nil) {
         return @"";
     }
@@ -127,7 +127,7 @@
 
 @implementation GRMustacheBlockHelper
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
     self = [self init];
     if (self) {
@@ -145,9 +145,9 @@
 
 #pragma mark <GRMustacheHelper>
 
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *result = _block(section, context);
+    NSString *result = _block(section);
     if (result == nil) {
         return @"";
     }

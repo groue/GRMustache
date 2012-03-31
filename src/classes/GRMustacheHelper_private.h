@@ -31,7 +31,7 @@
 
 @protocol GRMustacheHelper<NSObject>
 @required
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderSection:(GRMustacheSection *)section GRMUSTACHE_API_PUBLIC;
 @end
 
 
@@ -40,7 +40,7 @@
 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
 #if GRMUSTACHE_BLOCKS_AVAILABLE
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block GRMUSTACHE_API_PUBLIC;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block GRMUSTACHE_API_PUBLIC;
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector GRMUSTACHE_API_INTERNAL;
 @end

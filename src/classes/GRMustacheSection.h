@@ -34,7 +34,22 @@
     NSRange _range;
     BOOL _inverted;
     NSArray *_elems;
+    id _renderingContext;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/// @name Accessing the current rendering context
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ Returns the current rendering context.
+ 
+ @since v2.0
+ */
+@property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +59,7 @@
 /**
  Returns the literal inner content of the section, with unprocessed mustache `{{tags}}`.
  
- @since v1.3
+ @since v2.0
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
@@ -54,23 +69,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- Renders the inner content of the receiver with a context object.
+ Renders the inner content of the receiver with the current context
  
  @return A string containing the rendered inner content.
- @param object A context object used for interpreting Mustache tags.
  
- @since v1.3
+ @since v2.0
  */
-- (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
-/**
- Renders the inner content of the receiver with a context objects.
- 
- @return A string containing the rendered inner content.
- @param object, ... A comma-separated list of objects used for interpreting Mustache tags, ending with nil.
- 
- @since v1.5
- */
-- (NSString *)renderObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 @end

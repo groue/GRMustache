@@ -34,11 +34,12 @@
     NSRange _range;
     BOOL _inverted;
     NSArray *_elems;
+    id _renderingContext;
 }
 
+@property (nonatomic, readonly) id renderingContext GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 + (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
-- (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
-- (NSString *)renderObjects:(id)object, ... GRMUSTACHE_API_PUBLIC;
+- (NSString *)render;
 
 @end

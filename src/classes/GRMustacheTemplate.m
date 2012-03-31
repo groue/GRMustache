@@ -23,7 +23,7 @@
 #import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheLambda_private.h"
+#import "GRMustacheHelper_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheTemplate()
