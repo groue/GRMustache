@@ -27,7 +27,7 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheSelectorHelper
+#pragma mark - Private concrete class GRMustacheBlockHelper
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 
@@ -39,18 +39,6 @@
 @end
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
-
-
-// =============================================================================
-#pragma mark - Private concrete class GRMustacheSelectorHelper
-
-@interface GRMustacheSelectorHelper: GRMustacheHelper {
-@private
-    SEL _renderingSelector;
-    id _object;
-}
-- (id)initWithObject:(id)object selector:(SEL)renderingSelector;
-@end
 
 
 // =============================================================================
@@ -67,11 +55,6 @@
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
-+ (id)helperWithObject:(id)object selector:(SEL)renderingSelector
-{
-    return [[[GRMustacheSelectorHelper alloc] initWithObject:object selector:renderingSelector] autorelease];
-}
-
 #pragma mark <GRMustacheHelper>
 
 - (NSString *)renderSection:(GRMustacheSection *)section
@@ -83,45 +66,8 @@
 @end
 
 
-
-
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheSelectorHelper
-
-@implementation GRMustacheSelectorHelper
-
-- (id)initWithObject:(id)object selector:(SEL)renderingSelector
-{
-    self = [self init];
-    if (self) {
-        _object = [object retain];
-        _renderingSelector = renderingSelector;
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_object release];
-    [super dealloc];
-}
-
-#pragma mark <GRMustacheHelper>
-
-- (NSString *)renderSection:(GRMustacheSection *)section
-{
-    NSString *result = objc_msgSend(_object, _renderingSelector, section);
-    if (result == nil) {
-        return @"";
-    }
-    return result;
-}
-
-@end
-
-
-// =============================================================================
-#pragma mark - Private concrete class GRMustacheSelectorHelper
+#pragma mark - Private concrete class GRMustacheBlockHelper
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 

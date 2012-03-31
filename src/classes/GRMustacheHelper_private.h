@@ -39,8 +39,11 @@
 #pragma mark - GRMustacheHelper
 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
+
 #if GRMUSTACHE_BLOCKS_AVAILABLE
+
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block GRMUSTACHE_API_PUBLIC;
+
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
-+ (id)helperWithObject:(id)object selector:(SEL)renderingSelector GRMUSTACHE_API_INTERNAL;
+
 @end

@@ -138,8 +138,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     id value = nil;
     
     if (_object) {
-        // value by KVC
-        
         @try {
             if (preventingNSUndefinedKeyExceptionAttack) {
                 value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:_object];
@@ -154,19 +152,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             {
                 // that's some exception we are not related to
                 [exception raise];
-            }
-        }
-        
-        if (value == nil) {
-            // value by selector
-            
-            SEL renderingSelector = NSSelectorFromString([key stringByAppendingString:@"Section:withContext:"]);
-            if ([_object respondsToSelector:renderingSelector]) {
-                // Avoid the "render" key to be triggered by GRMustacheHelper instances,
-                // who implement the renderSection:withContext: selector.
-                if (![_object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
-                    return [GRMustacheHelper helperWithObject:_object selector:renderingSelector];
-                }
             }
         }
     }
