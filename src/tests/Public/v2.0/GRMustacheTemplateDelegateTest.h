@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_12
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheInvocationDescriptionTest : GRMustachePublicAPITest
+@interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
 @end
