@@ -27,8 +27,10 @@
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheTemplate_private.h"
 
-static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
+// For testing purpose
+BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 
+static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 @interface GRMustacheContext()
 @property (nonatomic, retain) id object;
@@ -146,6 +148,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             }
         }
         @catch (NSException *exception) {
+            // For testing purpose
+            GRMustacheContextDidCatchNSUndefinedKeyException = YES;
+            
             if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
                 [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != _object ||
                 ![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])

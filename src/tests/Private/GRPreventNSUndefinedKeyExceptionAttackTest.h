@@ -20,14 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_7
-#import "GRMustachePublicAPITest.h"
-#import <CoreData/CoreData.h>
+#import "GRMustachePrivateAPITest.h"
 
-
-@interface GRManagedObjectTest : GRMustachePublicAPITest {
-    NSManagedObjectModel *managedObjectModel;
-    NSPersistentStoreCoordinator *persistentStoreCoordinator;
-    NSManagedObjectContext *managedObjectContext;
-}
+@interface GRPreventNSUndefinedKeyExceptionAttackTest : GRMustachePrivateAPITest
 @end

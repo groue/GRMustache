@@ -20,25 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRManagedObjectTest.h"
+#import "GRPreventNSUndefinedKeyExceptionAttackTest.h"
+#import "GRMustache_private.h"
+#import "GRMustacheTemplate_private.h"
+#import "GRMustacheContext_private.h"
+#import <CoreData/CoreData.h>
 
-@interface GRManagedObjectTest()
+@interface GRPreventNSUndefinedKeyExceptionAttackTest()
 @property (nonatomic, retain) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @end
 
-@implementation GRManagedObjectTest
-@synthesize managedObjectModel;
-@synthesize persistentStoreCoordinator;
-@synthesize managedObjectContext;
+@implementation GRPreventNSUndefinedKeyExceptionAttackTest
+@synthesize managedObjectModel=_managedObjectModel;
+@synthesize persistentStoreCoordinator=_persistentStoreCoordinator;
+@synthesize managedObjectContext=_managedObjectContext;
 
 - (void)setUp
 {
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:self.testBundle]];
     self.persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel] autorelease];
     self.managedObjectContext = [[[NSManagedObjectContext alloc] init] autorelease];
-    [managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+    [self.managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
 }
 
 - (void)tearDown
@@ -50,12 +54,40 @@
 
 - (void)testNSUndefinedKeyExceptionSilencing
 {
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"foo:{{foo}}" error:nil];
     NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
-    // The actual test is:
-    // 1. have the debugger stops on every exception
-    // 2. check that the second line does not stop the debugger
+    id object = [[[NSObject alloc] init] autorelease];
+    
+    
+    // GRMustacheContext should catch exceptions
+    
+    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+    [template renderObject:object];
+    STAssertEquals(YES, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+    
+    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+    [template renderObject:managedObject];
+    STAssertEquals(YES, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+    
+    
+    // Now GRMustacheContext should not catch any exception
+    
     [GRMustache preventNSUndefinedKeyExceptionAttack];
-    [GRMustacheTemplate renderObject:managedObject fromString:@"{{foo}}" error:nil];
+    
+    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+    [template renderObject:object];
+    STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+    
+    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+    [template renderObject:managedObject];
+    STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+
+    
+    // Regression test: until 1.7.2, NSUndefinedKeyException guard would prevent rendering nil object
+    
+    STAssertEqualObjects([template render], @"foo:", nil);
+    STAssertEqualObjects([template renderObject:nil], @"foo:", nil);
+    STAssertEqualObjects([template renderObjects:nil], @"foo:", nil);
 }
 
 @end

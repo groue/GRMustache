@@ -38,10 +38,22 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
 
 + (id)valueForKey:(NSString *)key inObject:(id)object
 {
+    if (object == nil) {
+        return nil;
+    }
     [self swizzleIfNeeded];
     NSMutableSet *silentObjects = [self silentObjectsForCurrentThread];
     [silentObjects addObject:object];
-    id value = [object valueForKey:key];
+    id value = nil;
+    @try {
+        value = [object valueForKey:key];
+    }
+    @catch (NSException *exception) {
+        // We may not prevent all exceptions.
+        // Make sure we do not leak any memory, and raise again.
+        [silentObjects removeObject:object];
+        [exception raise];
+    }
     [silentObjects removeObject:object];
     return value;
 }

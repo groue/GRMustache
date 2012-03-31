@@ -24,6 +24,9 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 
+// For testing purpose
+extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
+
 @interface GRMustacheContext: NSObject {
 @private
     id _object;
