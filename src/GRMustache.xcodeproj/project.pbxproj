@@ -12,6 +12,8 @@
 		560CE88F1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */; };
 		560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
 		560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
+		5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
+		5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
 		563D66D715264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
 		563D66D815264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
 		563D66D915264739008628C5 /* delimiters.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D215264739008628C5 /* delimiters.json */; };
@@ -208,6 +210,8 @@
 		560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanPropertyTest.m; sourceTree = "<group>"; };
 		560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBooleanInterpretationTest.h; sourceTree = "<group>"; };
 		560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanInterpretationTest.m; sourceTree = "<group>"; };
+		5623B78F1527224000DF16A6 /* GRMustacheHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelperTest.h; sourceTree = "<group>"; };
+		5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelperTest.m; sourceTree = "<group>"; };
 		563D66CE152641F7008628C5 /* GRMustache2Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache2Tests-Info.plist"; sourceTree = "<group>"; };
 		563D66D115264739008628C5 /* comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comments.json; sourceTree = "<group>"; };
 		563D66D215264739008628C5 /* delimiters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delimiters.json; sourceTree = "<group>"; };
@@ -564,6 +568,8 @@
 				560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */,
 				560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */,
 				560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */,
+				5623B78F1527224000DF16A6 /* GRMustacheHelperTest.h */,
+				5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */,
 			);
 			path = v2.0;
 			sourceTree = "<group>";
@@ -905,6 +911,7 @@
 				563D66F1152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
 				560CE88B1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
 				560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
+				5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -945,6 +952,7 @@
 				563D66F2152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
 				560CE88C1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
 				560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
+				5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
