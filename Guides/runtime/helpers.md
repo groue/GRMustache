@@ -79,9 +79,7 @@ Now the strings we have to localize may be:
 
 Our first implementation will fail, since it will return `NSLocalizedString(@"{{name}}", nil)` when localizing item names.
 
-Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
-
-Fortunately, we have the `render` method of `GRMustacheSection`, which returns the rendering of the receiver's inner content, in the current context.
+Fortunately, we have the `render` method of `GRMustacheSection`, which returns the rendering of the receiver's inner content, in the current context. It would return `Delete`, or an item name, in our specific case.
 
 Now we can fix our implementation:
 
@@ -89,8 +87,7 @@ Now we can fix our implementation:
 @implementation LocalizedStringHelper
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *renderedContent = [section render];
-    return NSLocalizedString(renderedContent, nil);
+    return NSLocalizedString([section render], nil);
 }
 @end
 ```
@@ -127,8 +124,7 @@ id data = ...;
 
 // Prepare helper (no need for a specific class)
 GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section) {
-    NSString *renderedContent = [section render];
-    return NSLocalizedString(renderedContent, nil);
+    return NSLocalizedString([section render], nil);
 }];
 NSDictionary *helpers = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
 
