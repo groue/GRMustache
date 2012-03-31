@@ -36,26 +36,11 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheSelectorHelper
+#pragma mark - GRMustacheHelper
 
-@interface GRMustacheSelectorHelper: NSObject<GRMustacheHelper> {
-    SEL _renderingSelector;
-    id _object;
-}
+@interface GRMustacheHelper: NSObject<GRMustacheHelper>
+#if GRMUSTACHE_BLOCKS_AVAILABLE
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block GRMUSTACHE_API_PUBLIC;
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector GRMUSTACHE_API_INTERNAL;
 @end
-
-
-// =============================================================================
-#pragma mark - GRMustacheBlockHelper
-
-#if GRMUSTACHE_BLOCKS_AVAILABLE
-
-@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
-@private
-    NSString *(^_block)(GRMustacheSection* section, id context);
-}
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block GRMUSTACHE_API_PUBLIC;
-@end
-
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */

@@ -27,18 +27,77 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheSelectorHelper
+#pragma mark - Private concrete class GRMustacheSelectorHelper
 
-@interface GRMustacheSelectorHelper()
+#if GRMUSTACHE_BLOCKS_AVAILABLE
+
+@interface GRMustacheBlockHelper: GRMustacheHelper {
+@private
+    NSString *(^_block)(GRMustacheSection* section, id context);
+}
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+@end
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheSelectorHelper
+
+@interface GRMustacheSelectorHelper: GRMustacheHelper {
+@private
+    SEL _renderingSelector;
+    id _object;
+}
 - (id)initWithObject:(id)object selector:(SEL)renderingSelector;
 @end
 
 
-@implementation GRMustacheSelectorHelper
+// =============================================================================
+#pragma mark - GRMustacheHelper
+
+@implementation GRMustacheHelper
+
+#if GRMUSTACHE_BLOCKS_AVAILABLE
+
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
+{
+    return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
+}
+
+#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
 + (id)helperWithObject:(id)object selector:(SEL)renderingSelector
 {
-    return [[[self alloc] initWithObject:object selector:renderingSelector] autorelease];
+    return [[[GRMustacheSelectorHelper alloc] initWithObject:object selector:renderingSelector] autorelease];
+}
+
+#pragma mark <GRMustacheHelper>
+
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+{
+    NSAssert(NO, @"abstract method");
+    return nil;
+}
+
+@end
+
+
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheSelectorHelper
+
+@implementation GRMustacheSelectorHelper
+
+- (id)initWithObject:(id)object selector:(SEL)renderingSelector
+{
+    self = [self init];
+    if (self) {
+        _object = [object retain];
+        _renderingSelector = renderingSelector;
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -58,37 +117,25 @@
     return result;
 }
 
-#pragma mark Private
-
-- (id)initWithObject:(id)object selector:(SEL)renderingSelector
-{
-    self = [self init];
-    if (self) {
-        _object = [object retain];
-        _renderingSelector = renderingSelector;
-    }
-    return self;
-}
-
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheBlockHelper
+#pragma mark - Private concrete class GRMustacheSelectorHelper
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 
-@interface GRMustacheBlockHelper()
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
-@end
-
-
 @implementation GRMustacheBlockHelper
 
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
 {
-    return [[(GRMustacheBlockHelper *)[self alloc] initWithBlock:block] autorelease];
+    self = [self init];
+    if (self) {
+        _block = [block copy];
+    }
+    return self;
 }
+
 
 - (void)dealloc
 {
@@ -105,17 +152,6 @@
         return @"";
     }
     return result;
-}
-
-#pragma mark Private
-
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block
-{
-    self = [self init];
-    if (self) {
-        _block = [block copy];
-    }
-    return self;
 }
 
 @end

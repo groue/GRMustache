@@ -30,7 +30,7 @@
 @private
     GRMustacheInvocation *_invocation;
     GRMustacheTemplate *_rootTemplate;
-    NSString *_baseTemplateString;
+    NSString *_templateString;
     NSRange _range;
     BOOL _inverted;
     NSArray *_elems;
@@ -46,7 +46,7 @@
  
  @since v1.3
  */
-@property (nonatomic, readonly) NSString *templateString AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

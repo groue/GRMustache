@@ -37,14 +37,11 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheBlockHelper
+#pragma mark - GRMustacheHelper
 
 #if GRMUSTACHE_BLOCKS_AVAILABLE
 
-@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
-@private
-    NSString *(^_block)(GRMustacheSection* section, id context);
-}
+@interface GRMustacheHelper: NSObject<GRMustacheHelper>
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 @end
 

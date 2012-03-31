@@ -165,7 +165,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
                 // Avoid the "render" key to be triggered by GRMustacheHelper instances,
                 // who implement the renderSection:withContext: selector.
                 if (![_object conformsToProtocol:@protocol(GRMustacheHelper)] || ![@"render" isEqualToString:key]) {
-                    return [GRMustacheSelectorHelper helperWithObject:_object selector:renderingSelector];
+                    return [GRMustacheHelper helperWithObject:_object selector:renderingSelector];
                 }
             }
         }

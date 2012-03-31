@@ -30,14 +30,14 @@
 @private
     GRMustacheInvocation *_invocation;
     GRMustacheTemplate *_rootTemplate;
-    NSString *_baseTemplateString;
+    NSString *_templateString;
     NSRange _range;
     BOOL _inverted;
     NSArray *_elems;
 }
 
-@property (nonatomic, readonly) NSString *templateString GRMUSTACHE_API_PUBLIC;
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 - (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
 - (NSString *)renderObjects:(id)object, ... GRMUSTACHE_API_PUBLIC;
 

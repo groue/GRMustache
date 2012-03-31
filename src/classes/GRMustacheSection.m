@@ -29,37 +29,37 @@
 
 @interface GRMustacheSection()
 @property (nonatomic, retain) GRMustacheInvocation *invocation;
-@property (nonatomic, retain) NSString *baseTemplateString;
+@property (nonatomic, retain) NSString *templateString;
 @property (nonatomic) NSRange range;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSection
-@synthesize baseTemplateString=_baseTemplateString;
+@synthesize templateString=_templateString;
 @synthesize range=_range;
 @synthesize invocation=_invocation;
 @synthesize inverted=_inverted;
 @synthesize elems=_elems;
 
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
 {
-    return [[[self alloc] initWithInvocation:invocation baseTemplateString:baseTemplateString range:range inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithInvocation:invocation templateString:templateString range:range inverted:inverted elements:elems] autorelease];
 }
 
 - (void)dealloc
 {
     [_invocation release];
-    [_baseTemplateString release];
+    [_templateString release];
     [_elems release];
     [super dealloc];
 }
 
-- (NSString *)templateString
+- (NSString *)innerTemplateString
 {
-    return [_baseTemplateString substringWithRange:_range];
+    return [_templateString substringWithRange:_range];
 }
 
 - (NSString *)renderObject:(id)object
@@ -182,12 +182,12 @@
 
 #pragma mark Private
 
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation baseTemplateString:(NSString *)baseTemplateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
         self.invocation = invocation;
-        self.baseTemplateString = baseTemplateString;
+        self.templateString = templateString;
         self.range = range;
         self.inverted = inverted;
         self.elems = elems;
