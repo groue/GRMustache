@@ -124,7 +124,7 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
 
 // With a GRMustacheTemplate loaded from a GRMustacheTemplateRepository:
 GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWith... options:GRMustacheTemplateOptionStrictBoolean];
-GRMustacheTemplate *template = [templateRepository templateFromString:templateString];
+GRMustacheTemplate *template = [templateRepository templateFromString:templateString error:NULL];
 [template renderObject:alice];
 ```
 
