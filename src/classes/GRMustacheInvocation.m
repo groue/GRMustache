@@ -34,11 +34,6 @@ static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustac
     *inOutScoped = YES;
 }
 
-static void invokePopKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
-    *inOutContext = (*inOutContext).parent;
-    *inOutScoped = NO;
-}
-
 static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
     *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped options:options];
     *inOutScoped = YES;
@@ -130,8 +125,6 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 {
     if ([key isEqualToString:@"."]) {
         return invokeImplicitIteratorKey;
-    } else if ([key isEqualToString:@".."]) {
-        return invokePopKey;
     } else {
         return invokeOtherKey;
     }
