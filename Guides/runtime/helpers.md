@@ -35,7 +35,7 @@ We need an object that conforms to the `GRMustacheHelper` protocol, so we'll dec
 @end
 
 @implementation LocalizedStringHelper
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
     return ...;
 }
@@ -48,13 +48,13 @@ That `renderSection:withContext:` method will be invoked when GRMustache renders
 
 Now up to the first implementation. The _section_ argument is a `GRMustacheSection` object, which represents the section being rendered: `{{#localize}}Delete{{/localize}}`.
 
-This _section_ object has a `templateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
+This _section_ object has a `innerTemplateString` property, which returns the literal inner content of the section. It will return `@"Delete"` in our specific example. This looks like a perfect argument for `NSLocalizedString`:
 
 ```objc
 @implementation LocalizedStringHelper
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
-    return NSLocalizedString(section.templateString, nil);
+    return NSLocalizedString(section.innerTemplateString, nil);
 }
 @end
 ```
@@ -81,20 +81,15 @@ Our first implementation will fail, since it will return `NSLocalizedString(@"{{
 
 Actually we now need to feed `NSLocalizedString` with the _rendering_ of the inner content, not the _literal_ inner content.
 
-Fortunately, we have:
-
-- the `renderObject:` method of `GRMustacheSection`, which renders the content of the receiver with the provided object. 
-- the _context_ parameter, which represents the current rendering context stack.
-
-`[section renderObject:context]` is exactly what we need: the inner content rendered in the current context.
+Fortunately, we have the `render` method of `GRMustacheSection`, which returns the rendering of the receiver's inner content, in the current context.
 
 Now we can fix our implementation:
 
 ```objc
 @implementation LocalizedStringHelper
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *renderedContent = [section renderObject:context];
+    NSString *renderedContent = [section render];
     return NSLocalizedString(renderedContent, nil);
 }
 @end
@@ -131,8 +126,8 @@ Starting iOS4 and MacOS 10.6, the Objective-C language provides us with blocks. 
 id data = ...;
 
 // Prepare helper (no need for a specific class)
-GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section, id context) {
-    NSString *renderedContent = [section renderObject:context];
+GRMustacheBlockHelper *localizeHelper = [GRMustacheBlockHelper helperWithBlock:^(GRMustacheSection *section) {
+    NSString *renderedContent = [section render];
     return NSLocalizedString(renderedContent, nil);
 }];
 NSDictionary *helpers = [NSDictionary dictionaryWithObject:localizeHelper forKey:@"localize"];
@@ -154,20 +149,20 @@ No problem: GRMustache allows you to comply with the genuine Mustache behavior:
 
 ```objc
 @implementation BoldHelper
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context
+- (NSString *)renderSection:(GRMustacheSection *)section
 {
     // build the genuine Mustache lambda template string...
-    NSString *templateString = [NSString stringWithFormat:@"<b>%@</b>", section.templateString];
+    NSString *templateString = [NSString stringWithFormat:@"<b>%@</b>", section.innerTemplateString];
     
     // ...and render it, as genuine Mustache would:
-    return [GRMustacheTemplate renderObject:context fromString:templateString error:NULL];
+    return [GRMustacheTemplate renderObject:section.renderingContext fromString:templateString error:NULL];
 }
 @end
 ```
 
-You can still safely call `[section renderObject:context]`, and include the rendered inner content in your final lambda template string. This is not explicitely stated by the specification, but this possibility is evoked in the "Lambdas" section of http://mustache.github.com/mustache.5.html, and at https://github.com/mustache/spec/issues/19.
+When you use this genuine Mustache technique, you can call `[section render]`, and include the rendered inner content in your final lambda template string. This is not explicitely stated by the specification, but this possibility is evoked in the "Lambdas" section of http://mustache.github.com/mustache.5.html, and at https://github.com/mustache/spec/issues/19.
 
-However, beware! `[section renderObject:context]` could return a string that contains unexpected mustache tags `{{junk}}`, that would be processed, and rendered as whatever junk would be found.
+However, beware! `[section render]` could return a string that contains unexpected mustache tags `{{junk}}`, that would be processed, and rendered as whatever junk would be found.
 
 Also, should you change the Mustache tag delimiters with a `{{=[ ]=}}` tag, be warned that the specification explicitely [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L40) that lambda strings should be rendered with the default delimiters. This prevents you from rendering a template such as `{{=[ ]=}}[#bold]Welcome, [name].[/bold]`, since `[name]` would not be interpolated.
 
