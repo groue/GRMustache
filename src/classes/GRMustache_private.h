@@ -25,8 +25,7 @@
 
 enum {
     GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
-    GRMustacheTemplateOptionStrictBoolean = 0x02,
+    GRMustacheTemplateOptionStrictBoolean = 0x01,
 };
 
 typedef NSUInteger GRMustacheTemplateOptions;

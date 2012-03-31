@@ -64,12 +64,6 @@
  
  The behavior of the returned template is determined by the _options_ parameter, not by [GRMustache defaultTemplateOptions].
  
- For instance, you'll trigger support for the [Mustache Specification 1.1.2](https://github.com/mustache/spec) with:
- 
- [GRMustacheTemplate templateFromString:templateString
- options:GRMustacheTemplateOptionMustacheSpecCompatibility
- error:NULL];
- 
  @return A GRMustacheTemplate instance
  @param templateString The template string
  @param options A mask of options indicating the behavior of the template.

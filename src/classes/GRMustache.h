@@ -25,8 +25,7 @@
 
 enum {
     GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
-    GRMustacheTemplateOptionStrictBoolean = 0x02,
+    GRMustacheTemplateOptionStrictBoolean = 0x01,
 };
 
 typedef NSUInteger GRMustacheTemplateOptions;
@@ -104,10 +103,6 @@ typedef struct {
  Sets the default template options.
  
  Those options will be used by all GRMustacheTemplate rendering and parsing methods, such as [GRMustacheTemplate templateFromString:error:] and [GRMustacheTemplate renderObject:fromString:error:].
- 
- For instance, you'll trigger support for the [Mustache Specification 1.1.2](https://github.com/mustache/spec) with:
- 
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
  
  @param templateOptions A mask of options indicating the default behavior of templates.
  @see defaultTemplateOptions

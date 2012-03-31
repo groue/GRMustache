@@ -247,100 +247,12 @@
 
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError
 {
-    NSString *content = token.content;
-    NSUInteger length = content.length;
-    BOOL acceptDotIdentifier = YES;
-    BOOL acceptDotDotIdentifier = YES;
-    BOOL acceptOtherIdentifier = YES;
-    BOOL acceptSeparator = NO;
-    BOOL availableDotSeparator = YES;
-    BOOL availableSlashSeparator = !(_options & GRMustacheTemplateOptionMustacheSpecCompatibility);
-    NSMutableArray *keys = [NSMutableArray array];
-    unichar c;
-    NSUInteger identifierStart = 0;
-    for (NSUInteger i = 0; i < length; ++i) {
-        c = [content characterAtIndex:i];
-        switch (c) {
-            case '.':
-                if (acceptDotIdentifier) {
-                    acceptDotIdentifier = NO;
-                    acceptDotDotIdentifier = YES;
-                    acceptOtherIdentifier = NO;
-                    acceptSeparator = YES;
-                    availableDotSeparator = NO;
-                } else if (acceptDotDotIdentifier) {
-                    acceptDotIdentifier = NO;
-                    acceptDotDotIdentifier = NO;
-                    acceptOtherIdentifier = NO;
-                    acceptSeparator = YES;
-                    availableDotSeparator = NO;
-                } else if (acceptSeparator && availableDotSeparator) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
-                    identifierStart = i + 1;
-                    acceptDotIdentifier = NO;
-                    acceptDotDotIdentifier = NO;
-                    acceptOtherIdentifier = YES;
-                    acceptSeparator = NO;
-                    availableSlashSeparator = NO;
-                } else {
-                    if (outError != NULL) {
-                        *outError = [self parseErrorAtLine:token.line
-                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
-                    }
-                    return nil;
-                }
-                break;
-                
-            case '/':
-                if (acceptSeparator && availableSlashSeparator) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
-                    identifierStart = i + 1;
-                    acceptDotIdentifier = YES;
-                    acceptDotDotIdentifier = YES;
-                    acceptOtherIdentifier = YES;
-                    acceptSeparator = NO;
-                    availableDotSeparator = NO;
-                } else if (acceptOtherIdentifier && !availableSlashSeparator) {
-                    acceptDotIdentifier = NO;
-                    acceptDotDotIdentifier = NO;
-                    acceptOtherIdentifier = YES;
-                    acceptSeparator = YES;
-                } else {
-                    if (outError != NULL) {
-                        *outError = [self parseErrorAtLine:token.line
-                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
-                    }
-                    return nil;
-                }
-                break;
-            
-            default:
-                if (acceptOtherIdentifier) {
-                    acceptDotIdentifier = NO;
-                    acceptDotDotIdentifier = NO;
-                    acceptOtherIdentifier = YES;
-                    acceptSeparator = YES;
-                } else {
-                    if (outError != NULL) {
-                        *outError = [self parseErrorAtLine:token.line
-                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
-                    }
-                    return nil;
-                }
-                
-        }
-    }
-    if (identifierStart >= length) {
-        if (outError != NULL) {
-            *outError = [self parseErrorAtLine:token.line
-                                   description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
-        }
-        return nil;
+    if ([token.content isEqualToString:@"."]) {
+        return [_dataSource templateParser:self invocationWithToken:token keys:[NSArray arrayWithObject:token.content] options:_options];
     } else {
-        [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
+        NSArray *keys = [token.content componentsSeparatedByString:@"."];
+        return [_dataSource templateParser:self invocationWithToken:token keys:keys options:_options];
     }
-    
-    return [_dataSource templateParser:self invocationWithToken:token keys:keys options:_options];
 }
 
 @end
