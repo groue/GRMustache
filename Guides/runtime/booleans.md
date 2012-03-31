@@ -113,11 +113,18 @@ Use the GRMustacheTemplateOptionStrictBoolean option when loading and rendering 
 Person *alice = [Person new];
 alice.pretty = NO;
 
-// All those renderings return @"whistle", because alice's pretty property is now considered as a number.
+// All the following renderings return @"whistle", because alice's pretty property is now considered as a number.
 
+// On-the-fly rendering:
 [GRMustacheTemplate renderObject:alice fromString:@"{{#pretty}}whistle{{/pretty}}" options:GRMustacheTemplateOptionStrictBoolean];
 
+// With a GRMustacheTemplate:
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString options:GRMustacheTemplateOptionStrictBoolean error:NULL];
+[template renderObject:alice];
+
+// With a GRMustacheTemplate loaded from a GRMustacheTemplateRepository:
+GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWith... options:GRMustacheTemplateOptionStrictBoolean];
+GRMustacheTemplate *template = [templateRepository templateForName:...];
 [template renderObject:alice];
 ```
 
