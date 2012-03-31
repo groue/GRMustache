@@ -105,9 +105,9 @@ A consequence is that all properties declared as `char` will be considered as bo
 
 We thought that built-in support for `BOOL` properties was worth this annoyance, since it should be pretty rare  that you would use a value of such a type in a template.
 
-However, should this behavior annoy you, we provide a mechanism for having GRMustache consider `char` and `BOOL` properties as what they really are: numbers;
+However, should this behavior annoy you, we provide a mechanism for having GRMustache consider `char` and `BOOL` properties as what they really are: numbers.
 
-Use the GRMustacheTemplateOptionStrictBoolean option when loading and rendering templates:
+Use the `GRMustacheTemplateOptionStrictBoolean` option when loading and rendering templates:
 
 ```objc
 Person *alice = [Person new];
