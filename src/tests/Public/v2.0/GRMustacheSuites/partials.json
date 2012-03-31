@@ -1,0 +1,199 @@
+{
+  "tests": [
+    {
+      "name": "Partial should be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "<{{>text}}>",
+      "partials": { "text": "from partial" },
+      "expected": "<from partial>"
+    },
+    {
+      "name": "Partial should be rendered in the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "text": "content" },
+      "template": "<{{>partial}}>",
+      "partials": { "partial": "*{{text}}*" },
+      "expected": "<*content*>"
+    },
+    {
+      "name": "Recursive partials should be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
+      "template": "<{{>node}}>",
+      "partials": { "node": "{{content}}<{{#nodes}}{{>node}}{{/nodes}}>" },
+      "expected": "<X<Y<>>>"
+    },
+    
+    // File system
+
+    {
+      "name": "Partials loaded from a template with .mustache extension should have the extension .mustache",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.mustache",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "none",
+        "partial.mustache": "mustache",
+        "partial.text": "text"
+      },
+      "expected": "<mustache>"
+    },
+    {
+      "name": "Partials loaded from a template with .text extension should have the extension .text",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.text",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "none",
+        "partial.mustache": "mustache",
+        "partial.text": "text"
+      },
+      "expected": "<text>"
+    },
+    {
+      "name": "Partials loaded from a template without extension should have no extension",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "none",
+        "partial.mustache": "mustache",
+        "partial.text": "text"
+      },
+      "expected": "<none>"
+    },
+    {
+      "name": "Deep partials loaded from a template with .mustache extension should have the extension .mustache",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.mustache",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "{{>deep_partial}}",
+        "partial.mustache": "{{>deep_partial}}",
+        "partial.text": "{{>deep_partial}}",
+        "deep_partial": "none",
+        "deep_partial.mustache": "mustache",
+        "deep_partial.text": "text"
+      },
+      "expected": "<mustache>"
+    },
+    {
+      "name": "Deep partials loaded from a template with .text extension should have the extension .text",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.text",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "{{>deep_partial}}",
+        "partial.mustache": "{{>deep_partial}}",
+        "partial.text": "{{>deep_partial}}",
+        "deep_partial": "none",
+        "deep_partial.mustache": "mustache",
+        "deep_partial.text": "text"
+      },
+      "expected": "<text>"
+    },
+    {
+      "name": "Deep partials loaded from a template without extension should have no extension",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template",
+      "template": "<{{>partial}}>",
+      "partials": {
+        "partial": "{{>deep_partial}}",
+        "partial.mustache": "{{>deep_partial}}",
+        "partial.text": "{{>deep_partial}}",
+        "deep_partial": "none",
+        "deep_partial.mustache": "mustache",
+        "deep_partial.text": "text"
+      },
+      "expected": "<none>"
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.mustache",
+      "template": "<{{>partials/partial}}>",
+      "partials": {
+        "partials/partial.mustache": "---"
+      },
+      "expected": "<--->"
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.mustache",
+      "template": "<{{>partials/partial}}>",
+      "partials": {
+        "partials/partial.mustache": "{{>deep_partial}}",
+        "partials/deep_partial.mustache": "---"
+      },
+      "expected": "<--->"
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_path": "template.mustache",
+      "template": "<{{>partials/partial}}>",
+      "partials": {
+        "partials/partial.mustache": "{{>../other_partials/deep_partial}}",
+        "other_partials/deep_partial.mustache": "---"
+      },
+      "expected": "<--->"
+    },
+
+    // Whitespace Insensitivity
+
+    {
+      "name": "Whitespace in tag should be ignored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "boolean": true },
+      "template": "<{{> partial }}>",
+      "partials": { "partial": "=" },
+      "expected": "<=>"
+    },
+
+    // Whitespace Sensitivity
+    
+    {
+      "name": "Single left outer whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "< {{>partial}}>",
+      "partials": { "partial": "---" },
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right outer whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{>partial}} >",
+      "partials": { "partial": "---" },
+      "expected": "<--- >"
+    },
+    {
+      "name": "Single left inner whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{>partial}}>",
+      "partials": { "partial": " ---" },
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right inner whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{>partial}}>",
+      "partials": { "partial": "--- " },
+      "expected": "<--- >"
+    }
+  ]
+}

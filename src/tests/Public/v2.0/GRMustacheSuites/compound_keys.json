@@ -1,0 +1,40 @@
+{
+  "tests": [
+    {
+      "name": "3rd assertion of test 'zeros' of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "num1" : { "num2" : 0 }},
+      "template": "num: {{num1.num2}}",
+      "expected": "num: 0"
+    },
+    {
+      "name": "1st assertion of test 'nested paths' of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "alan": { "expression": "beautiful" } },
+      "template": "Goodbye {{alan.expression}} world!",
+      "expected": "Goodbye beautiful world!"
+    },
+    {
+      "name": "1st assertion of test 'nested paths with empty string value' of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "alan": { "expression": "" } },
+      "template": "Goodbye {{alan.expression}} world!",
+      "expected": "Goodbye  world!"
+    },
+    {
+      "name": "1st assertion of test 'complex but empty paths' of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "person": { "name": null } },
+      "template": "{{person.name}}",
+      "expected": ""
+    },
+    {
+      "name": "2nd assertion of test 'complex but empty paths' of handlebars.js (c54cadcf8f2a13607888fd78fc5505caceb4bdd2)",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "person": { } },
+      "template": "{{person.name}}",
+      "expected": ""
+    }
+  ]
+}
+

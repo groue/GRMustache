@@ -41,8 +41,19 @@
 
 - (void)testSuiteFromContentsOfJSONFile:(NSString *)path
 {
-    NSDictionary *testSuite = [[NSData dataWithContentsOfFile:path] objectFromJSONData];
-    for (NSDictionary *test in [testSuite objectForKey:@"tests"]) {
+    NSError *error;
+    NSData *testSuiteData = [NSData dataWithContentsOfFile:path];
+    STAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
+    if (!testSuiteData) return;
+    
+    NSDictionary *testSuite = [testSuiteData objectFromJSONDataWithParseOptions:JKParseOptionComments error:&error];
+    STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
+    if (!testSuite) return;
+    
+    NSArray *tests = [testSuite objectForKey:@"tests"];
+    STAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
+    
+    for (NSDictionary *test in tests) {
         id data = [test objectForKey:@"data"];
         NSString *templateString = [test objectForKey:@"template"];
         NSDictionary *partialsDictionary = [test objectForKey:@"partials"];

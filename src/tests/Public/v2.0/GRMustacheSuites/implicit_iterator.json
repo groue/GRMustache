@@ -1,0 +1,53 @@
+{
+  "tests": [
+    {
+      "name": "The implicit iterator should render the root context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": "---",
+      "template": "<{{.}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "The implicit iterator should render the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{#subject}}{{.}}{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "The implicit iterator should render the current list item.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ "1", "2", "3" ] },
+      "template": "<{{#list}}{{.}}{{/list}}>",
+      "expected": "<123>"
+    },
+    {
+      "name": "Lists should be iterated.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": [ "1", "2", "3" ],
+      "template": "<{{#.}}-{{/.}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "List items should become the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": [ "1", "2", "3" ],
+      "template": "<{{#.}}{{.}}{{/.}}>",
+      "expected": "<123>"
+    },
+    {
+      "name": "True should trigger the section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": true,
+      "template": "<{{#.}}---{{/.}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Object should become the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": "---",
+      "template": "<{{#.}}{{.}}{{/.}}>",
+      "expected": "<--->"
+    }
+  ]
+}
