@@ -116,7 +116,7 @@ alice.pretty = NO;
 // All the following renderings return @"whistle", because alice's pretty property is now considered as a number.
 
 // On-the-fly rendering:
-[GRMustacheTemplate renderObject:alice fromString:@"{{#pretty}}whistle{{/pretty}}" options:GRMustacheTemplateOptionStrictBoolean];
+[GRMustacheTemplate renderObject:alice fromString:templateString options:GRMustacheTemplateOptionStrictBoolean];
 
 // With a GRMustacheTemplate:
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString options:GRMustacheTemplateOptionStrictBoolean error:NULL];
@@ -124,7 +124,7 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
 
 // With a GRMustacheTemplate loaded from a GRMustacheTemplateRepository:
 GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWith... options:GRMustacheTemplateOptionStrictBoolean];
-GRMustacheTemplate *template = [templateRepository templateForName:...];
+GRMustacheTemplate *template = [templateRepository templateFromString:templateString];
 [template renderObject:alice];
 ```
 
