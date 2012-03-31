@@ -137,11 +137,11 @@ NSString *rendering = [template renderObjects:helpers, data, nil];
 
 **Warning: If your goal is to design GRMustache helpers that remain compatible with Mustache lambdas of [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), read the following with great care.**
 
-GRMustache helpers are by far more expressive than required by the Mustache lambda specification.
+The strings returned by GRMustache helpers are directly inserted in the final rendering, without any further processing.
 
-Especially, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L27) that lambdas return a *template string* that is automatically rendered (read, processed as a Mustache template, and rendered in the current context).
+However, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L27) that lambdas return a *template string* that is automatically rendered (read, processed as a Mustache template, and rendered in the current context).
 
-No problem: GRMustache allows you to comply with the genuine Mustache behavior:
+GRMustache helpers allow you to comply with the genuine Mustache behavior:
 
 ```objc
 @implementation BoldHelper
@@ -150,17 +150,10 @@ No problem: GRMustache allows you to comply with the genuine Mustache behavior:
     // build the genuine Mustache lambda template string...
     NSString *templateString = [NSString stringWithFormat:@"<b>%@</b>", section.innerTemplateString];
     
-    // ...and render it, as genuine Mustache would:
+    // ...and render it in a specification-compliant way:
     return [GRMustacheTemplate renderObject:section.renderingContext fromString:templateString error:NULL];
 }
 @end
 ```
-
-When you use this genuine Mustache technique, you can call `[section render]`, and include the rendered inner content in your final lambda template string. This is not explicitely stated by the specification, but this possibility is evoked in the "Lambdas" section of http://mustache.github.com/mustache.5.html, and at https://github.com/mustache/spec/issues/19.
-
-However, beware! `[section render]` could return a string that contains unexpected mustache tags `{{junk}}`, that would be processed, and rendered as whatever junk would be found.
-
-Also, should you change the Mustache tag delimiters with a `{{=[ ]=}}` tag, be warned that the specification explicitely [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L40) that lambda strings should be rendered with the default delimiters. This prevents you from rendering a template such as `{{=[ ]=}}[#bold]Welcome, [name].[/bold]`, since `[name]` would not be interpolated.
-
 
 [up](../runtime.md), [next](../delegate.md)
