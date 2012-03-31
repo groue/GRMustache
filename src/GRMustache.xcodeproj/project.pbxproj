@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		560CE88B1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */; };
+		560CE88C1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */; };
+		560CE88F1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */; };
+		560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
+		560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
 		563D66D715264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
 		563D66D815264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
 		563D66D915264739008628C5 /* delimiters.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D215264739008628C5 /* delimiters.json */; };
@@ -199,6 +204,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		560CE8871526EDD0004F935E /* GRMustacheBooleanPropertyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBooleanPropertyTest.h; sourceTree = "<group>"; };
+		560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanPropertyTest.m; sourceTree = "<group>"; };
+		560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBooleanInterpretationTest.h; sourceTree = "<group>"; };
+		560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanInterpretationTest.m; sourceTree = "<group>"; };
 		563D66CE152641F7008628C5 /* GRMustache2Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache2Tests-Info.plist"; sourceTree = "<group>"; };
 		563D66D115264739008628C5 /* comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comments.json; sourceTree = "<group>"; };
 		563D66D215264739008628C5 /* delimiters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delimiters.json; sourceTree = "<group>"; };
@@ -219,9 +228,7 @@
 		56DEC1C915262FF70031E8DC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1CB15262FF70031E8DC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1F4152630710031E8DC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		56DEC1F7152630710031E8DC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		56DEC1F8152630710031E8DC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		56DEC1F9152630710031E8DC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56DEC248152631040031E8DC /* libGRMustache2-MacOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache2-MacOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56DEC255152631040031E8DC /* GRMustache2-MacOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache2-MacOSTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56DEC26E1526311B0031E8DC /* libGRMustache2-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache2-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -414,19 +421,9 @@
 				56DEC1C915262FF70031E8DC /* SenTestingKit.framework */,
 				56DEC1CB15262FF70031E8DC /* UIKit.framework */,
 				56DEC1F4152630710031E8DC /* Cocoa.framework */,
-				56DEC1F6152630710031E8DC /* Other Frameworks */,
+				56DEC1F8152630710031E8DC /* CoreData.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		56DEC1F6152630710031E8DC /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				56DEC1F7152630710031E8DC /* AppKit.framework */,
-				56DEC1F8152630710031E8DC /* CoreData.framework */,
-				56DEC1F9152630710031E8DC /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		56DEC291152631300031E8DC /* classes */ = {
@@ -563,6 +560,10 @@
 				563D66E71526497E008628C5 /* GRMustacheSuitesTest.h */,
 				563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */,
 				563D66F315264B40008628C5 /* GRMustacheSuites */,
+				560CE8871526EDD0004F935E /* GRMustacheBooleanPropertyTest.h */,
+				560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */,
+				560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */,
+				560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */,
 			);
 			path = v2.0;
 			sourceTree = "<group>";
@@ -611,6 +612,7 @@
 				56DEC30C152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */,
 				56DEC30E152631300031E8DC /* GRMustacheVersion.h in Headers */,
 				563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */,
+				560CE88F1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -901,6 +903,8 @@
 				563D66E91526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66EF152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
 				563D66F1152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
+				560CE88B1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
+				560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +943,8 @@
 				563D66EA1526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66F0152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
 				563D66F2152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
+				560CE88C1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
+				560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

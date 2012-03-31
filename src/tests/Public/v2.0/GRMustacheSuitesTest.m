@@ -33,16 +33,17 @@
 {
     NSString *path = [self.testBundle pathForResource:@"GRMustacheSuites" ofType:nil];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"comments.json"]];
+    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"compound_keys.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"delimiters.json"]];
+    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"encodings.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"false_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"general.json"]];
+    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"implicit_iterator.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"inverted_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"list_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"non_false_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"partials.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"variables.json"]];
-    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"implicit_iterator.json"]];
-    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"compound_keys.json"]];
 }
 
 - (void)testSuiteFromContentsOfJSONFile:(NSString *)path
@@ -60,13 +61,15 @@
     STAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
     
     for (NSDictionary *test in tests) {
+        
+        // Load template
+        
         GRMustacheTemplate *template = nil;
         
-        NSString *templateString = [test objectForKey:@"template"];
         NSInteger options = [[test objectForKey:@"options"] integerValue];  // missing key will translate into GRMustacheTemplateOptionsNone
         NSDictionary *partialsDictionary = [test objectForKey:@"partials"];
-        NSString *baseTemplatePath = [test objectForKey:@"template_path"];
-        if (baseTemplatePath.length > 0) {
+        NSString *templateName = [test objectForKey:@"template_name"];
+        if (templateName.length > 0) {
             
             // Write partials in a file hierarchy
             
@@ -74,27 +77,33 @@
             NSString *templatesDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"GRMustacheTest"];
             [fm removeItemAtPath:templatesDirectoryPath error:nil];
             
-            NSString *templatePath = [templatesDirectoryPath stringByAppendingPathComponent:baseTemplatePath];
-            [fm createDirectoryAtPath:[templatePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
-            [fm createFileAtPath:templatePath contents:[templateString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+            NSNumber *encodingNumber = [test objectForKey:@"encoding"];
+            NSStringEncoding encoding = encodingNumber ? [encodingNumber unsignedIntegerValue] : NSUTF8StringEncoding;
             
             for (NSString *partialName in partialsDictionary) {
                 NSString *partialString = [partialsDictionary objectForKey:partialName];
                 NSString *partialPath = [templatesDirectoryPath stringByAppendingPathComponent:partialName];
                 [fm createDirectoryAtPath:[partialPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
-                [fm createFileAtPath:partialPath contents:[partialString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+                [fm createFileAtPath:partialPath contents:[partialString dataUsingEncoding:encoding] attributes:nil];
             }
             
-            template = [GRMustacheTemplate templateFromContentsOfFile:templatePath options:options error:&error];
+            GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath
+                                                                                                   templateExtension:[templateName pathExtension]
+                                                                                                            encoding:encoding
+                                                                                                             options:options];
+            template = [repository templateForName:[templateName stringByDeletingPathExtension] error:&error];
             
             [fm removeItemAtPath:templatesDirectoryPath error:NULL];
         } else {
             
             // Keep partials in memory
             
+            NSString *templateString = [test objectForKey:@"template"];
             GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary options:options];
-            template = [repository templateFromString:templateString error:NULL];
+            template = [repository templateFromString:templateString error:&error];
         }
+        STAssertNotNil(template, @"Could not template: %@", error);
+        if (!template) continue;
 
         
         // Test rendering

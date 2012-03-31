@@ -31,25 +31,25 @@
       "name": "Partials loaded from a template with .mustache extension should have the extension .mustache",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.mustache",
-      "template": "<{{>partial}}>",
+      "template_name": "template.mustache",
       "partials": {
+        "template.mustache": "<{{>partial}}>",
         "partial": "none",
         "partial.mustache": "mustache",
-        "partial.text": "text"
+        "partial.txt": "text"
       },
       "expected": "<mustache>"
     },
     {
-      "name": "Partials loaded from a template with .text extension should have the extension .text",
+      "name": "Partials loaded from a template with .txt extension should have the extension .txt",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.text",
-      "template": "<{{>partial}}>",
+      "template_name": "template.txt",
       "partials": {
+        "template.txt": "<{{>partial}}>",
         "partial": "none",
         "partial.mustache": "mustache",
-        "partial.text": "text"
+        "partial.txt": "text"
       },
       "expected": "<text>"
     },
@@ -57,12 +57,12 @@
       "name": "Partials loaded from a template without extension should have no extension",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template",
-      "template": "<{{>partial}}>",
+      "template_name": "template",
       "partials": {
+        "template": "<{{>partial}}>",
         "partial": "none",
         "partial.mustache": "mustache",
-        "partial.text": "text"
+        "partial.txt": "text"
       },
       "expected": "<none>"
     },
@@ -70,31 +70,31 @@
       "name": "Deep partials loaded from a template with .mustache extension should have the extension .mustache",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.mustache",
-      "template": "<{{>partial}}>",
+      "template_name": "template.mustache",
       "partials": {
+        "template.mustache": "<{{>partial}}>",
         "partial": "{{>deep_partial}}",
         "partial.mustache": "{{>deep_partial}}",
-        "partial.text": "{{>deep_partial}}",
+        "partial.txt": "{{>deep_partial}}",
         "deep_partial": "none",
         "deep_partial.mustache": "mustache",
-        "deep_partial.text": "text"
+        "deep_partial.txt": "text"
       },
       "expected": "<mustache>"
     },
     {
-      "name": "Deep partials loaded from a template with .text extension should have the extension .text",
+      "name": "Deep partials loaded from a template with .txt extension should have the extension .txt",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.text",
-      "template": "<{{>partial}}>",
+      "template_name": "template.txt",
       "partials": {
+        "template.txt": "<{{>partial}}>",
         "partial": "{{>deep_partial}}",
         "partial.mustache": "{{>deep_partial}}",
-        "partial.text": "{{>deep_partial}}",
+        "partial.txt": "{{>deep_partial}}",
         "deep_partial": "none",
         "deep_partial.mustache": "mustache",
-        "deep_partial.text": "text"
+        "deep_partial.txt": "text"
       },
       "expected": "<text>"
     },
@@ -102,15 +102,15 @@
       "name": "Deep partials loaded from a template without extension should have no extension",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template",
-      "template": "<{{>partial}}>",
+      "template_name": "template",
       "partials": {
+        "template": "<{{>partial}}>",
         "partial": "{{>deep_partial}}",
         "partial.mustache": "{{>deep_partial}}",
-        "partial.text": "{{>deep_partial}}",
+        "partial.txt": "{{>deep_partial}}",
         "deep_partial": "none",
         "deep_partial.mustache": "mustache",
-        "deep_partial.text": "text"
+        "deep_partial.txt": "text"
       },
       "expected": "<none>"
     },
@@ -118,9 +118,9 @@
       "name": "Posix relative path should navigate the file system",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.mustache",
-      "template": "<{{>partials/partial}}>",
+      "template_name": "template.mustache",
       "partials": {
+        "template.mustache": "<{{>partials/partial}}>",
         "partials/partial.mustache": "---"
       },
       "expected": "<--->"
@@ -129,9 +129,9 @@
       "name": "Posix relative path should navigate the file system",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.mustache",
-      "template": "<{{>partials/partial}}>",
+      "template_name": "template.mustache",
       "partials": {
+        "template.mustache": "<{{>partials/partial}}>",
         "partials/partial.mustache": "{{>deep_partial}}",
         "partials/deep_partial.mustache": "---"
       },
@@ -141,13 +141,113 @@
       "name": "Posix relative path should navigate the file system",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template_path": "template.mustache",
-      "template": "<{{>partials/partial}}>",
+      "template_name": "template.mustache",
+      "encoding": 4, // NSUTF8StringEncoding
       "partials": {
+        "template.mustache": "<{{>partials/partial}}>",
         "partials/partial.mustache": "{{>../other_partials/deep_partial}}",
         "other_partials/deep_partial.mustache": "---"
       },
       "expected": "<--->"
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_name": "partials/template.mustache",
+      "encoding": 4, // NSUTF8StringEncoding
+      "partials": {
+        "partials/template.mustache": "<{{>partial}}>",
+        "partials/partial.mustache": "{{>../other_partials/deep_partial}}",
+        "other_partials/deep_partial.mustache": "---"
+      },
+      "expected": "<--->"
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_name": "file1",
+      "encoding": 4, // NSUTF8StringEncoding
+      "partials": {
+        "file1": "file1 {{>dir/file1}}{{>file2}}",
+        "file1.mustache": "file1.mustache {{>dir/file1}}{{>file2}}",
+        "file1.txt": "file1.txt {{>dir/file1}}{{>file2}}",
+        "file2": "file2 ",
+        "file2.mustache": "file2.mustache ",
+        "file2.txt": "file2.txt ",
+        "dir/file1": "dir/file1 {{>dir/file1}}{{>file2}}",
+        "dir/file1.mustache": "dir/file1.mustache {{>dir/file1}}{{>file2}}",
+        "dir/file1.txt": "dir/file1.txt {{>dir/file1}}{{>file2}}",
+        "dir/file2": "dir/file2 ",
+        "dir/file2.mustache": "dir/file2.mustache ",
+        "dir/file2.txt": "dir/file2.txt ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt ",
+        "dir/dir/file1": "dir/dir/file1 {{>file2}}",
+        "dir/dir/file1.mustache": "dir/dir/file1.mustache {{>file2}}",
+        "dir/dir/file1.txt": "dir/dir/file1.txt {{>file2}}",
+        "dir/dir/file2": "dir/dir/file2 ",
+        "dir/dir/file2.mustache": "dir/dir/file2.mustache ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt "
+      },
+      "expected": "file1 dir/file1 dir/dir/file1 dir/dir/file2 dir/file2 file2 "
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_name": "file1.mustache",
+      "encoding": 4, // NSUTF8StringEncoding
+      "partials": {
+        "file1": "file1 {{>dir/file1}}{{>file2}}",
+        "file1.mustache": "file1.mustache {{>dir/file1}}{{>file2}}",
+        "file1.txt": "file1.txt {{>dir/file1}}{{>file2}}",
+        "file2": "file2 ",
+        "file2.mustache": "file2.mustache ",
+        "file2.txt": "file2.txt ",
+        "dir/file1": "dir/file1 {{>dir/file1}}{{>file2}}",
+        "dir/file1.mustache": "dir/file1.mustache {{>dir/file1}}{{>file2}}",
+        "dir/file1.txt": "dir/file1.txt {{>dir/file1}}{{>file2}}",
+        "dir/file2": "dir/file2 ",
+        "dir/file2.mustache": "dir/file2.mustache ",
+        "dir/file2.txt": "dir/file2.txt ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt ",
+        "dir/dir/file1": "dir/dir/file1 {{>file2}}",
+        "dir/dir/file1.mustache": "dir/dir/file1.mustache {{>file2}}",
+        "dir/dir/file1.txt": "dir/dir/file1.txt {{>file2}}",
+        "dir/dir/file2": "dir/dir/file2 ",
+        "dir/dir/file2.mustache": "dir/dir/file2.mustache ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt "
+      },
+      "expected": "file1.mustache dir/file1.mustache dir/dir/file1.mustache dir/dir/file2.mustache dir/file2.mustache file2.mustache "
+    },
+    {
+      "name": "Posix relative path should navigate the file system",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template_name": "file1.txt",
+      "partials": {
+        "file1": "file1 {{>dir/file1}}{{>file2}}",
+        "file1.mustache": "file1.mustache {{>dir/file1}}{{>file2}}",
+        "file1.txt": "file1.txt {{>dir/file1}}{{>file2}}",
+        "file2": "file2 ",
+        "file2.mustache": "file2.mustache ",
+        "file2.txt": "file2.txt ",
+        "dir/file1": "dir/file1 {{>dir/file1}}{{>file2}}",
+        "dir/file1.mustache": "dir/file1.mustache {{>dir/file1}}{{>file2}}",
+        "dir/file1.txt": "dir/file1.txt {{>dir/file1}}{{>file2}}",
+        "dir/file2": "dir/file2 ",
+        "dir/file2.mustache": "dir/file2.mustache ",
+        "dir/file2.txt": "dir/file2.txt ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt ",
+        "dir/dir/file1": "dir/dir/file1 {{>file2}}",
+        "dir/dir/file1.mustache": "dir/dir/file1.mustache {{>file2}}",
+        "dir/dir/file1.txt": "dir/dir/file1.txt {{>file2}}",
+        "dir/dir/file2": "dir/dir/file2 ",
+        "dir/dir/file2.mustache": "dir/dir/file2.mustache ",
+        "dir/dir/file2.txt": "dir/dir/file2.txt "
+      },
+      "expected": "file1.txt dir/file1.txt dir/dir/file1.txt dir/dir/file2.txt dir/file2.txt file2.txt "
     },
 
     // Whitespace Insensitivity

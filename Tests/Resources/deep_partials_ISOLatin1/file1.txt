@@ -1,3 +1,0 @@
-é1.txt
-{{>dir/file1}}
-{{>file2}}

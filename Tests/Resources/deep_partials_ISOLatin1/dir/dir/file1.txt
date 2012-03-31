@@ -1,2 +1,0 @@
-dir/dir/é1.txt
-{{>file2}}

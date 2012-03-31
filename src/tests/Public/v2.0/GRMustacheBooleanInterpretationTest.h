@@ -20,25 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_1_0
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_0
 #import "GRMustachePublicAPITest.h"
 
-
-@interface GRBoolean_v1_0_Test: GRMustachePublicAPITest
-- (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key;
-@end
-
-@interface GRStrictBooleanMode_v1_0_Test: GRBoolean_v1_0_Test {
-	id context;
-	id inheritingContext;
-	BOOL strictBooleanMode;
-}
-@end
-
-@interface GRNotStrictBooleanMode_v1_0_Test: GRBoolean_v1_0_Test {
-	id context;
-	id inheritingContext;
-	BOOL strictBooleanMode;
-}
+@interface GRMustacheBooleanInterpretationTest : GRMustachePublicAPITest
 
 @end
