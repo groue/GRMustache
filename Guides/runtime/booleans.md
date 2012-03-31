@@ -105,19 +105,26 @@ A consequence is that all properties declared as `char` will be considered as bo
 
 We thought that built-in support for `BOOL` properties was worth this annoyance, since it should be pretty rare  that you would use a value of such a type in a template.
 
-However, should this behavior annoy you, we provide a mechanism for having GRMustache behave strictly about boolean properties:
+However, should this behavior annoy you, we provide a mechanism for having GRMustache consider `char` and `BOOL` properties as what they really are: numbers;
 
-Enter the *strict boolean mode* with the following statement, prior to any rendering:
+Use the GRMustacheTemplateOptionStrictBoolean option when loading and rendering templates:
 
 ```objc
-[GRMustache setStrictBooleanMode:YES];
+Person *alice = [Person new];
+alice.pretty = NO;
+
+// All those renderings return @"whistle", because alice's pretty property is now considered as a number.
+
+[GRMustacheTemplate renderObject:alice fromString:@"{{#pretty}}whistle{{/pretty}}" options:GRMustacheTemplateOptionStrictBoolean];
+
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString options:GRMustacheTemplateOptionStrictBoolean error:NULL];
+[template renderObject:alice];
 ```
 
-In strict boolean mode, `char` and `BOOL` properties will be considered as what they really are: numbers.
 
 ### The case for C99 bool
 
-You may consider using the unbeloved C99 `bool` type. They can reliably control boolean sections whatever the boolean mode, and with ou without property declaration.
+You may consider using the unbeloved C99 `bool` type. They can reliably control boolean sections whatever the template options, and with ou without property declaration.
 
 ```objc
 @interface Person: NSObject
