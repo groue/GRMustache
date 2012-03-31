@@ -45,6 +45,7 @@
     NSDictionary *context = [NSDictionary dictionary];
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:nil key:@"."], (NSInteger)NO, nil);
+    STAssertEqualObjects([GRMustacheTemplate renderObject:context fromString:@"<{{bool}}>" error:NULL], @"<>", @"");
 }
 
 - (void)test_NSNull_isFalseValue
@@ -53,6 +54,7 @@
     NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)NO, nil);
+    STAssertEqualObjects([GRMustacheTemplate renderObject:context fromString:@"<{{bool}}>" error:NULL], @"<>", @"");
 }
 
 - (void)test_NSNumberWithZero_isTrueValue
@@ -71,6 +73,20 @@
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLong:0] key:@"."], (NSInteger)YES, nil);
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedLongLong:0] key:@"."], (NSInteger)YES, nil);
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:[NSNumber numberWithUnsignedShort:0] key:@"."], (NSInteger)YES, nil);
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithChar:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithFloat:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithDouble:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithInt:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithInteger:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithLong:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithLongLong:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithShort:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedChar:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedInt:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedInteger:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedLong:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedLongLong:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
+    STAssertEqualObjects([GRMustacheTemplate renderObject:[NSNumber numberWithUnsignedShort:0] fromString:@"<{{.}}>" error:NULL], @"<0>", @"");
 }
 
 @end

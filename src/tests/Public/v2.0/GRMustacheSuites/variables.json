@@ -1,21 +1,8 @@
 {
   "tests": [
+
     {
-      "name": "An empty string should not be rendered.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "subject": "" },
-      "template": "<{{subject}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "A key miss should not be rendered.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { },
-      "template": "<{{subject}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Strings should be rendered as is.",
+      "name": "String should be rendered as is.",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { "subject": "---" },
       "template": "<{{subject}}>",
@@ -63,8 +50,39 @@
       "template": "<{{first-subject}}{{middle_subject!}}{{lastSubject?}}>",
       "expected": "<123>"
     },
+    
+    // Boolean interpretation
+    
+    {
+      "name": "Missing key should not be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "<{{subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Null should not be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": null },
+      "template": "<{{subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "False should not be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": false },
+      "template": "<{{subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Empty string should not be rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "" },
+      "template": "<{{subject}}>",
+      "expected": "<>"
+    },
 
-      // Whitespace Insensitivity
+    // Whitespace Insensitivity
 
     {
       "name": "Whitespace in double mustache tag should be ignored.",
@@ -88,7 +106,7 @@
       "expected": "<--->"
     },
 
-      // Whitespace Sensitivity
+    // Whitespace Sensitivity
 
     {
       "name": "Single left outer whitespace should be honored.",
