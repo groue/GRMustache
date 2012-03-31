@@ -128,7 +128,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 - (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key
 {
-    if ([key isEqualToString:@"."] || [key isEqualToString:@"this"]) {
+    if ([key isEqualToString:@"."]) {
         return invokeImplicitIteratorKey;
     } else if ([key isEqualToString:@".."]) {
         return invokePopKey;
