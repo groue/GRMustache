@@ -1,86 +1,146 @@
 {
   "tests": [
     {
-      "name": "False should trigger the inverted section rendering.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "boolean": false },
-      "template": "<{{^boolean}}---{{/boolean}}>",
-      "expected": "<--->"
-    },
-    {
-      "name": "True should trigger the inverted section omission.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "boolean": true },
-      "template": "<{{^boolean}}---{{/boolean}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Object should trigger the inverted section omission.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "context": { "name": "2" } },
-      "template": "<{{^context}}1{{name}}{{/context}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Non-empty list should trigger the inverted section omission.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "list": [ { "n": 1 }, { "n": 2 }, { "n": 3 } ] },
-      "template": "<{{^list}}{{n}}{{/list}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Empty list should trigger the inverted section rendering.",
-      "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "list": [ ] },
-      "template": "<{{^list}}---{{/list}}>",
-      "expected": "<--->"
-    },
-    {
       "name": "Multiple inverted sections per template should be permitted.",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { "t": false, "two": "2" },
       "template": "<{{^t}}1{{/t}}{{two}}{{^t}}3{{/t}}>",
       "expected": "<123>"
     },
-
-      // Whitespace Insensitivity
+    
+    // Boolean interpretation
+    
+    {
+      "name": "Missing key should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Null should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": null },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "False should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": false },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Empty string should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "" },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Empty list should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": [] },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "True should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Zero should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": 0 },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Object should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": { } },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Non-empty string should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Non-empty blank string should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": " " },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Non-empty list should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": [ { "n": 1 }, { "n": 2 }, { "n": 3 } ] },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    
+    // Whitespace Insensitivity
 
     {
       "name": "Whitespace in tag should be ignored.",
       "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "boolean": false },
-      "template": "<{{^ boolean }}={{/ boolean }}>",
-      "expected": "<=>"
+      "data": { "subject": false },
+      "template": "<{{^ subject }}---{{/ subject }}>",
+      "expected": "<--->"
     },
 
-      // Whitespace Sensitivity
+    // Whitespace Sensitivity
+    
     {
-      "name": "Single left outer whitespace should be honored.",
+      "name": "Single left outer whitespace should be honored when inverted section is rendered.",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template": "< {{^boolean}}---{{/boolean}}>",
+      "template": "< {{^subject}}---{{/subject}}>",
       "expected": "< --->"
     },
     {
-      "name": "Single right outer whitespace should be honored.",
+      "name": "Single right outer whitespace should be honored when inverted section is rendered.",
       "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
-      "template": "<{{^boolean}}---{{/boolean}} >",
+      "template": "<{{^subject}}---{{/subject}} >",
       "expected": "<--- >"
     },
     {
-      "name": "Single left inner whitespace should be honored.",
+      "name": "Single left inner whitespace should be honored when inverted section is rendered.",
       "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "boolean": false },
-      "template": "<{{^boolean}} ---{{/boolean}}>",
+      "data": { },
+      "template": "<{{^subject}} ---{{/subject}}>",
       "expected": "< --->"
     },
     {
-      "name": "Single right inner whitespace should be honored.",
+      "name": "Single right inner whitespace should be honored when inverted section is rendered.",
       "options": 0, // GRMustacheTemplateOptionNone
-      "data": { "boolean": false },
-      "template": "1{{^boolean}}--- {{/boolean}}2",
-      "expected": "1--- 2"
+      "data": { },
+      "template": "<{{^subject}}--- {{/subject}}>",
+      "expected": "<--- >"
+    },
+    {
+      "name": "Single left outer whitespace should be honored when inverted section is omitted.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "< {{^subject}}---{{/subject}}--->",
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right outer whitespace should be honored when inverted section is omitted.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<---{{^subject}}---{{/subject}} >",
+      "expected": "<--- >"
     }
   ]
 }

@@ -36,13 +36,11 @@
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"compound_keys.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"delimiters.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"encodings.json"]];
-    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"false_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"general.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"implicit_iterator.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"inverted_sections.json"]];
-    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"list_sections.json"]];
-    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"non_false_sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"partials.json"]];
+    [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"sections.json"]];
     [self testSuiteFromContentsOfJSONFile:[path stringByAppendingPathComponent:@"variables.json"]];
 }
 

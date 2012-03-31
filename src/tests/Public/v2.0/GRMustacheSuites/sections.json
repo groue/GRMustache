@@ -1,0 +1,222 @@
+{
+  "tests": [
+    {
+      "name": "Multiple sections per template should be permitted.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "t": true, "two": "2" },
+      "template": "<{{#t}}1{{/t}}{{two}}{{#t}}3{{/t}}>",
+      "expected": "<123>"
+    },
+    
+    // Boolean interpretation
+    
+    {
+      "name": "Missing key should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Null should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": null },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "False should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Empty string should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "" },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "Empty list should trigger the inverted section omission.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": [] },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "True should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Zero should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": 0 },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Object should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": { } },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Non-empty string should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---" },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Non-empty blank string should trigger the inverted section rendering.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": " " },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    
+    // Context stack
+    
+    {
+      "name": "Object should become the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "context": { "subject": "---" } },
+      "template": "<{{#context}}{{subject}}{{/context}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "A key miss should look in including context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---", "context": { } },
+      "template": "<{{#context}}{{subject}}{{/context}}>",
+      "expected": "<--->"
+    },
+    {  
+      "name": "Nested sections with same name should be isolated.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "context": { "subject": "1", "context": { "subject": "a" }}},
+      "template": "<{{#context}}{{subject}}{{#context}}{{subject}}{{/context}}{{/context}}>",
+      "expected": "<1a>"
+    },
+    
+    // Lists
+    
+    {
+      "name": "Lists should be iterated.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ 1, 2, 3 ] },
+      "template": "<{{#list}}-{{/list}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "List items should become the current context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ { "n": 1 }, { "n": 2 }, { "n": 3 } ] },
+      "template": "<{{#list}}{{n}}{{/list}}>",
+      "expected": "<123>"
+    },
+    {
+      "name": "A key miss should look in including context.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": "---", "list": [ { "n": 1 }, { "n": 2 }, { "n": 3 } ] },
+      "template": "<{{#list}}{{subject}}{{n}}{{/list}}>",
+      "expected": "<---1---2---3>"
+    },
+    {
+      "name": "Nested sections with same name should be isolated.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "context": [ { "subject": "1", "context": [ { "subject": "a" }, { "subject": "b" }, { "subject": "c" } ] } ] },
+      "template": "<{{#context}}{{subject}}{{#context}}{{subject}}{{/context}}{{/context}}>",
+      "expected": "<1abc>"
+    },
+    
+    // Whitespace Insensitivity
+    
+    {
+      "name": "Whitespace in tag should be ignored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{# subject }}---{{/ subject }}>",
+      "expected": "<--->"
+    },
+    
+    // Whitespace Sensitivity
+    
+    {
+      "name": "Single left outer whitespace should be honored when section is rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "< {{#subject}}---{{/subject}}>",
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right outer whitespace should be honored when section is rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{#subject}}---{{/subject}} >",
+      "expected": "<--- >"
+    },
+    {
+      "name": "Single left inner whitespace should be honored when section is rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{#subject}} ---{{/subject}}>",
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right inner whitespace should be honored when section is rendered.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "subject": true },
+      "template": "<{{#subject}}--- {{/subject}}>",
+      "expected": "<--- >"
+    },
+    {
+      "name": "Single left outer whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ 1, 2, 3 ] },
+      "template": "< {{#list}}-{{/list}}>",
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right outer whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ 1, 2, 3] },
+      "template": "<{{#list}}-{{/list}} >",
+      "expected": "<--- >"
+    },
+    {
+      "name": "Single left inner whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ 1, 2, 3 ] },
+      "template": "<{{#list}} -{{/list}}>",
+      "expected": "< - - ->"
+    },
+    {
+      "name": "Single right inner whitespace should be honored.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { "list": [ 1, 2, 3] },
+      "template": "<{{#list}}- {{/list}}>",
+      "expected": "<- - - >"
+    },
+    {
+      "name": "Single left outer whitespace should be honored when section is omitted.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "< {{#subject}}---{{/subject}}--->",
+      "expected": "< --->"
+    },
+    {
+      "name": "Single right outer whitespace should be honored when section is omitted.",
+      "options": 0, // GRMustacheTemplateOptionNone
+      "data": { },
+      "template": "<---{{#subject}}---{{/subject}} >",
+      "expected": "<--- >"
+    }
+  ]
+}

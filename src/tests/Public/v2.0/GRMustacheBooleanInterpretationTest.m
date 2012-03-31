@@ -24,6 +24,10 @@
 
 @implementation GRMustacheBooleanInterpretationTest
 
+/**
+ Here we test boolean interpretation of values that we could not test in GRMustacheSuites/sections.json and GRMustacheSuites/inverted_sections.json
+ */
+
 - (NSInteger)booleanInterpretationForObject:(id)object key:(NSString *)key
 {
     NSString *templateString = [NSString stringWithFormat:@"{{#%@}}YES{{/%@}}{{^%@}}NO{{/%@}}", key, key, key, key];
@@ -46,38 +50,6 @@
 - (void)test_NSNull_isFalseValue
 {
     id value = [NSNull null];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)NO, nil);
-}
-
-- (void)test_EmptyString_isFalseValue
-{
-    id value = @"";
-    NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)NO, nil);
-}
-
-- (void)test_EmptyArray_isFalseValue
-{
-    id value = [NSArray array];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)NO, nil);
-}
-
-- (void)test_NSNumberWithBoolYES_isTrueValue
-{
-    id value = [NSNumber numberWithBool:YES];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)YES, nil);
-    STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)YES, nil);
-}
-
-- (void)test_NSNumberWithBoolNO_isFalseValue
-{
-    id value = [NSNumber numberWithBool:NO];
     NSDictionary *context = [NSDictionary dictionaryWithObject:value forKey:@"bool"];
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:context key:@"bool"], (NSInteger)NO, nil);
     STAssertEquals((NSInteger)[self booleanInterpretationForObject:value key:@"."], (NSInteger)NO, nil);
