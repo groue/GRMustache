@@ -28,45 +28,6 @@
 
 @implementation GRMustacheTemplate_v1_0_Test
 
-- (void)testPassenger
-{
-    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"example.com", @"server",
-                             @"/var/www/example.com", @"deploy_to",
-                             @"production", @"stage",
-                             nil];
-    NSString *result = [self renderObject:context fromResource:@"passenger" withExtension:@"conf"];
-    STAssertEqualObjects(result, @"<VirtualHost *>\n  ServerName example.com\n  DocumentRoot /var/www/example.com\n  RailsEnv production\n</VirtualHost>\n", nil);
-}
-
-- (void)testComplexView
-{
-    // TODO
-}
-
-- (void)testNestedObjects
-{
-    // TODO
-}
-
-- (void)testDictionaryAssignment
-{
-    // TODO
-}
-
-- (void)testCrazierDictionaryAssignment
-{
-    // TODO
-}
-
-- (void)testFilelessTemplates
-{
-    NSString *templateString = @"Hi {{person}}!";
-    NSDictionary *context = [NSDictionary dictionaryWithObject:@"Mom" forKey:@"person"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-    STAssertEqualObjects(result, @"Hi Mom!", nil);
-}
-
 #if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 - (void)testRenderFromURL
@@ -101,27 +62,5 @@
 
 #endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
 
-- (void)testUTF8
-{
-    NSDictionary *context = [NSDictionary dictionaryWithObject:@"中文" forKey:@"test"];
-    NSString *result = [self renderObject:context fromResource:@"utf8"];
-    STAssertEqualObjects(result, @"<h1>中文 中文</h1>\n\n<h2>中文又来啦</h2>\n", nil);
-}
-
-- (void)testIndentation_Obsolete
-{
-    NSString *templateString = @"def {{name}}\n  {{text}}\nend\n";
-    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             @"indent", @"name",
-                             @"puts :indented!", @"text",
-                             nil];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-    STAssertEqualObjects(result, @"def indent\n  puts :indented!\nend\n", nil);
-}
-
-- (void)testIndentation
-{
-    // TODO
-}
 
 @end
