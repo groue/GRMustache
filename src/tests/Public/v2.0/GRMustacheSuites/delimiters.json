@@ -2,21 +2,18 @@
   "tests": [
     {
       "name": "Non-symetric delimiters should be honored.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { "text": "---" },
       "template": "<{{=<% %>=}}<%text%>>",
       "expected": "<--->"
     },
     {
       "name": "Symetric delimiters should be honored.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { "text": "---" },
       "template": "<{{=| |=}}|text|>",
       "expected": "<--->"
     },
     {
       "name": "Delimiters changes should chain.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { "start": "1", "middle": [ { "item": "2" }, { "item": "3" } ], "final": "4" },
       "template": "<{{=<% %>=}}<% start %><%=| |=%>|# middle || item ||/ middle ||={{ }}=|{{ final }}>",
       "expected": "<1234>"
@@ -26,7 +23,6 @@
     
     {
       "name": "Whitespace in tag should be ignored.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { "text": "---" },
       "template": "<{{= @   @ =}}@text@>",
       "expected": "<--->"
@@ -36,14 +32,12 @@
 
     {
       "name": "Single left outer whitespace should be honored.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template": "< {{=<% %>=}}>",
       "expected": "< >"
     },
     {
       "name": "Single right outer whitespace should be honored.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template": "<{{=<% %>=}} >",
       "expected": "< >"

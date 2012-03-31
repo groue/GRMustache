@@ -2,21 +2,18 @@
   "tests": [
     {
       "name": "The empty template should be rendered as the empty string.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template": "",
       "expected": ""
     },
     {
       "name": "The single whitespace template should be rendered as a single whitespace.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template": " ",
       "expected": " "
     },
     {
       "name": "A word template should be rendered as is.",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template": "Hello",
       "expected": "Hello"

@@ -2,7 +2,6 @@
   "tests": [
     {
       "name": "Encoding should be honored",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template_name": "template",
       "encoding": 4, // NSUTF8StringEncoding
@@ -13,7 +12,6 @@
     },
     {
       "name": "Encoding should be honored",
-      "options": 0, // GRMustacheTemplateOptionNone
       "data": { },
       "template_name": "template",
       "encoding": 5, // NSISOLatin1StringEncoding
