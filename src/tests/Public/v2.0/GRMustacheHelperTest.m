@@ -144,12 +144,14 @@
         // [GRMustacheHelper helperWithBlock:]
         __block NSString *lastInnerTemplateString = nil;
         id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section, id context) {
-            lastInnerTemplateString = section.innerTemplateString;
+            [lastInnerTemplateString release];
+            lastInnerTemplateString = [section.innerTemplateString retain];
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
         [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{subject}}{{/helper}}" error:nil];
         STAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
+        [lastInnerTemplateString release];
     }
 }
 
@@ -168,7 +170,8 @@
         // [GRMustacheHelper helperWithBlock:]
         __block NSString *lastRenderedContent = nil;
         id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section, id context) {
-            lastRenderedContent = [section renderObject:context];
+            [lastRenderedContent release];
+            lastRenderedContent = [[section renderObject:context] retain];
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -176,6 +179,7 @@
                                  @"---", @"subject", nil];
         [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{subject}}==={{subject}}{{/helper}}" error:nil];
         STAssertEqualObjects(lastRenderedContent, @"---===---", @"");
+        [lastRenderedContent release];
     }
 }
 
