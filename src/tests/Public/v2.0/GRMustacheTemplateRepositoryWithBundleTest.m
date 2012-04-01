@@ -34,9 +34,13 @@
         STAssertNil(template, @"");
         STAssertNotNil(error, @"");
     }
-    
     {
         GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateRepositoryWithBundleTest" error:NULL];
+        NSString *result = [template render];
+        STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest.mustache GRMustacheTemplateRepositoryWithBundleTest_partial.mustache", @"");
+    }
+    {
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateRepositoryWithBundleTest}}" error:NULL];
         NSString *result = [template render];
         STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest.mustache GRMustacheTemplateRepositoryWithBundleTest_partial.mustache", @"");
     }
@@ -53,9 +57,13 @@
             STAssertNil(template, @"");
             STAssertNotNil(error, @"");
         }
-        
         {
             GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateRepositoryWithBundleTest" error:NULL];
+            NSString *result = [template render];
+            STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest.text GRMustacheTemplateRepositoryWithBundleTest_partial.text", @"");
+        }
+        {
+            GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateRepositoryWithBundleTest}}" error:NULL];
             NSString *result = [template render];
             STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest.text GRMustacheTemplateRepositoryWithBundleTest_partial.text", @"");
         }
@@ -68,9 +76,13 @@
             STAssertNil(template, @"");
             STAssertNotNil(error, @"");
         }
-        
         {
             GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateRepositoryWithBundleTest" error:NULL];
+            NSString *result = [template render];
+            STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest GRMustacheTemplateRepositoryWithBundleTest_partial", @"");
+        }
+        {
+            GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateRepositoryWithBundleTest}}" error:NULL];
             NSString *result = [template render];
             STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest GRMustacheTemplateRepositoryWithBundleTest_partial", @"");
         }
@@ -83,9 +95,13 @@
             STAssertNil(template, @"");
             STAssertNotNil(error, @"");
         }
-        
         {
             GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateRepositoryWithBundleTest" error:NULL];
+            NSString *result = [template render];
+            STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest GRMustacheTemplateRepositoryWithBundleTest_partial", @"");
+        }
+        {
+            GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateRepositoryWithBundleTest}}" error:NULL];
             NSString *result = [template render];
             STAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest GRMustacheTemplateRepositoryWithBundleTest_partial", @"");
         }
