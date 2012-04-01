@@ -51,6 +51,16 @@
 		5682B46615282BCA00ADD123 /* GRMustacheTemplateFromMethodsTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B46415282BC900ADD123 /* GRMustacheTemplateFromMethodsTest.mustache */; };
 		5682B4681528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */; };
 		5682B4691528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */; };
+		5682B46C1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B46B1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m */; };
+		5682B46D1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B46B1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m */; };
+		5682B46F1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest in Resources */ = {isa = PBXBuildFile; fileRef = 5682B46E1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest */; };
+		5682B4701528370E00ADD123 /* GRMustacheTemplateFromMethodsTest in Resources */ = {isa = PBXBuildFile; fileRef = 5682B46E1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest */; };
+		5682B4741528372000ADD123 /* GRMustacheTemplateRenderMethodsTest in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4711528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest */; };
+		5682B4751528372000ADD123 /* GRMustacheTemplateRenderMethodsTest in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4711528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest */; };
+		5682B4761528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4721528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.json */; };
+		5682B4771528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4721528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.json */; };
+		5682B4781528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4731528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache */; };
+		5682B4791528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4731528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache */; };
 		56A8D48C15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */; };
 		56A8D48D15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */; };
 		56A8D4931527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */; };
@@ -256,6 +266,12 @@
 		5682B46015282B8200ADD123 /* GRMustacheTemplateFromMethodsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateFromMethodsTest.m; sourceTree = "<group>"; };
 		5682B46415282BC900ADD123 /* GRMustacheTemplateFromMethodsTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest.mustache; sourceTree = "<group>"; };
 		5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GRMustacheTemplateFromMethodsTest.json; sourceTree = "<group>"; };
+		5682B46A1528342C00ADD123 /* GRMustacheTemplateRenderMethodsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateRenderMethodsTest.h; sourceTree = "<group>"; };
+		5682B46B1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRenderMethodsTest.m; sourceTree = "<group>"; };
+		5682B46E1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest; sourceTree = "<group>"; };
+		5682B4711528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRenderMethodsTest; sourceTree = "<group>"; };
+		5682B4721528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GRMustacheTemplateRenderMethodsTest.json; sourceTree = "<group>"; };
+		5682B4731528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRenderMethodsTest.mustache; sourceTree = "<group>"; };
 		56A8D48A15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateDelegateTest.h; sourceTree = "<group>"; };
 		56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateDelegateTest.m; sourceTree = "<group>"; };
 		56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateDelegateTest.mustache; sourceTree = "<group>"; };
@@ -438,6 +454,70 @@
 			name = GRMustache;
 			sourceTree = "<group>";
 		};
+		5682B47A1528392300ADD123 /* GRMustacheSuitesTest */ = {
+			isa = PBXGroup;
+			children = (
+				563D66F315264B40008628C5 /* GRMustacheSuites */,
+				563D66E71526497E008628C5 /* GRMustacheSuitesTest.h */,
+				563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */,
+			);
+			name = GRMustacheSuitesTest;
+			sourceTree = "<group>";
+		};
+		5682B47B1528393200ADD123 /* GRMustacheTemplateDelegateTest */ = {
+			isa = PBXGroup;
+			children = (
+				56A8D48A15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.h */,
+				56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */,
+				56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */,
+				56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */,
+			);
+			name = GRMustacheTemplateDelegateTest;
+			sourceTree = "<group>";
+		};
+		5682B47D1528396700ADD123 /* GRMustacheTemplateFromMethodsTest */ = {
+			isa = PBXGroup;
+			children = (
+				5682B45F15282B8100ADD123 /* GRMustacheTemplateFromMethodsTest.h */,
+				5682B46015282B8200ADD123 /* GRMustacheTemplateFromMethodsTest.m */,
+				5682B46E1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest */,
+				5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */,
+				5682B46415282BC900ADD123 /* GRMustacheTemplateFromMethodsTest.mustache */,
+			);
+			name = GRMustacheTemplateFromMethodsTest;
+			sourceTree = "<group>";
+		};
+		5682B47E1528397300ADD123 /* GRMustacheTemplateRenderMethodsTest */ = {
+			isa = PBXGroup;
+			children = (
+				5682B46A1528342C00ADD123 /* GRMustacheTemplateRenderMethodsTest.h */,
+				5682B46B1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m */,
+				5682B4711528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest */,
+				5682B4721528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.json */,
+				5682B4731528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache */,
+			);
+			name = GRMustacheTemplateRenderMethodsTest;
+			sourceTree = "<group>";
+		};
+		5682B47F1528399100ADD123 /* mustache/spec */ = {
+			isa = PBXGroup;
+			children = (
+				56DEC3BE152639560031E8DC /* GRSpecificationSuitesTest.h */,
+				56DEC3BF152639560031E8DC /* GRSpecificationSuitesTest.m */,
+				5682B480152839A400ADD123 /* vendor */,
+			);
+			name = mustache/spec;
+			sourceTree = "<group>";
+		};
+		5682B480152839A400ADD123 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				563D66CF152646FC008628C5 /* mustache */,
+			);
+			name = vendor;
+			path = ../../vendor;
+			sourceTree = "<group>";
+		};
 		56DEC19A15262FC80031E8DC = {
 			isa = PBXGroup;
 			children = (
@@ -550,7 +630,6 @@
 			isa = PBXGroup;
 			children = (
 				56DEC34B1526361E0031E8DC /* groue */,
-				563D66CF152646FC008628C5 /* mustache */,
 			);
 			path = vendor;
 			sourceTree = "<group>";
@@ -614,19 +693,11 @@
 				5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */,
 				5623B794152731B600DF16A6 /* GRMustacheParsingErrorsTest.h */,
 				5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */,
-				563D66F315264B40008628C5 /* GRMustacheSuites */,
-				563D66E71526497E008628C5 /* GRMustacheSuitesTest.h */,
-				563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */,
-				56A8D48A15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.h */,
-				56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */,
-				56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */,
-				56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */,
-				5682B45F15282B8100ADD123 /* GRMustacheTemplateFromMethodsTest.h */,
-				5682B46015282B8200ADD123 /* GRMustacheTemplateFromMethodsTest.m */,
-				5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */,
-				5682B46415282BC900ADD123 /* GRMustacheTemplateFromMethodsTest.mustache */,
-				56DEC3BE152639560031E8DC /* GRSpecificationSuitesTest.h */,
-				56DEC3BF152639560031E8DC /* GRSpecificationSuitesTest.m */,
+				5682B47A1528392300ADD123 /* GRMustacheSuitesTest */,
+				5682B47B1528393200ADD123 /* GRMustacheTemplateDelegateTest */,
+				5682B47D1528396700ADD123 /* GRMustacheTemplateFromMethodsTest */,
+				5682B47E1528397300ADD123 /* GRMustacheTemplateRenderMethodsTest */,
+				5682B47F1528399100ADD123 /* mustache/spec */,
 			);
 			path = v2.0;
 			sourceTree = "<group>";
@@ -886,6 +957,10 @@
 				56A8D4961527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache in Resources */,
 				5682B46515282BCA00ADD123 /* GRMustacheTemplateFromMethodsTest.mustache in Resources */,
 				5682B4681528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json in Resources */,
+				5682B46F1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest in Resources */,
+				5682B4741528372000ADD123 /* GRMustacheTemplateRenderMethodsTest in Resources */,
+				5682B4761528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */,
+				5682B4781528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -904,6 +979,10 @@
 				56A8D4971527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache in Resources */,
 				5682B46615282BCA00ADD123 /* GRMustacheTemplateFromMethodsTest.mustache in Resources */,
 				5682B4691528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json in Resources */,
+				5682B4701528370E00ADD123 /* GRMustacheTemplateFromMethodsTest in Resources */,
+				5682B4751528372000ADD123 /* GRMustacheTemplateRenderMethodsTest in Resources */,
+				5682B4771528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */,
+				5682B4791528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,6 +1061,7 @@
 				56A8D48C15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m in Sources */,
 				56A8D49A152818AA00D9C718 /* GRDefaultTemplateOptionsTest.m in Sources */,
 				5682B46115282B8200ADD123 /* GRMustacheTemplateFromMethodsTest.m in Sources */,
+				5682B46C1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1028,6 +1108,7 @@
 				56A8D48D15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m in Sources */,
 				56A8D49B152818AA00D9C718 /* GRDefaultTemplateOptionsTest.m in Sources */,
 				5682B46215282B8200ADD123 /* GRMustacheTemplateFromMethodsTest.m in Sources */,
+				5682B46D1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
