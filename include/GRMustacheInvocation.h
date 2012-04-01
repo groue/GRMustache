@@ -27,8 +27,7 @@
 @private
     id _returnValue;
     id _token;
-    id _templateID;
 }
-@property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
-@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_1_12_AND_LATER;
+@property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 @end

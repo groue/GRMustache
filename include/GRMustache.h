@@ -25,7 +25,7 @@
 
 enum {
     GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionMustacheSpecCompatibility = 0x01,
+    GRMustacheTemplateOptionStrictBoolean = 0x01,
 };
 
 typedef NSUInteger GRMustacheTemplateOptions;
@@ -60,47 +60,7 @@ typedef struct {
  @return The version of GRMustache as a GRMustacheVersion struct.
  @since v1.0
  */
-+ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Handling of BOOL properties
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- Returns a Boolean value that determines whether GRMustache renders templates in strict
- boolean mode.
- 
- In strict boolean mode, properties of context objects that are declared as BOOL
- are interpreted as numbers, and can not be used for controlling Mustache
- boolean sections.
- 
- In non-strict boolean mode, all properties declared as signed char (including
- those declared as BOOL), are interpreted as booleans, and can be used for
- controlling Mustache boolean sections.
- 
- @return YES if GRMustache renders templates in strict boolean mode,
- NO otherwise. The default value is NO.
- 
- @see setStrictBooleanMode:
- @see [GRMustacheContext valueForKey:]
- @since v1.0
- */
-+ (BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-
-/**
- Sets the strict boolean mode of GMustache.
- 
- See the documentation for strictBooleanMode for more information.
- 
- @param strictBooleanMode YES if GRMustache should render templates in strict boolean mode,
- NO otherwise.
- 
- @see strictBooleanMode
- @see [GRMustacheContext valueForKey:]
- @since v1.0
- */
-+ (void)setStrictBooleanMode:(BOOL)strictBooleanMode AVAILABLE_GRMUSTACHE_VERSION_1_0_AND_LATER;
-
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
@@ -123,7 +83,7 @@ typedef struct {
  
  @since v1.7
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_1_7_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -137,22 +97,18 @@ typedef struct {
  @see setDefaultTemplateOptions:
  @since v1.8
  */
-+ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 /**
  Sets the default template options.
  
  Those options will be used by all GRMustacheTemplate rendering and parsing methods, such as [GRMustacheTemplate templateFromString:error:] and [GRMustacheTemplate renderObject:fromString:error:].
  
- For instance, you'll trigger support for the [Mustache Specification 1.1.2](https://github.com/mustache/spec) with:
- 
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
- 
  @param templateOptions A mask of options indicating the default behavior of templates.
  @see defaultTemplateOptions
  @since v1.8
  */
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_1_8_AND_LATER;
++ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 @end
 
@@ -160,11 +116,7 @@ typedef struct {
 #import "GRMustacheInvocation.h"
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheTemplateLoader.h"
 #import "GRMustacheTemplateRepository.h"
-#import "GRMustacheContext.h"
-#import "GRMustacheLambda.h"
-#import "GRBoolean.h"
-#import "GRMustacheEnvironment.h"
+#import "GRMustacheHelper.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"

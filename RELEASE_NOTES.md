@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v2.0.0
+
+**Performance improvements and API simplification**
+
 ## v1.13.1
 
 The deprecated class GRMustacheTemplateLoader was broken by 1.13.0. Deprecated does not mean unavailable: it is restored.

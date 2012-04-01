@@ -22,12 +22,26 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheLambda.h"
 
-@interface GRMustacheDateFormatterHelper : NSObject<GRMustacheHelper> {
-@private
-    NSDateFormatter *_dateFormatter;
-}
-@property (nonatomic, readonly, retain) NSDateFormatter *dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
-+ (id)helperWithDateFormatter:(NSDateFormatter *)dateFormatter AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_1_12;
+@class GRMustacheSection;
+
+
+// =============================================================================
+#pragma mark - <GRMustacheHelper>
+
+@protocol GRMustacheHelper<NSObject>
+@required
+- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 @end
+
+
+// =============================================================================
+#pragma mark - GRMustacheHelper
+
+#if NS_BLOCKS_AVAILABLE
+
+@interface GRMustacheHelper: NSObject<GRMustacheHelper>
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+@end
+
+#endif /* if NS_BLOCKS_AVAILABLE */
