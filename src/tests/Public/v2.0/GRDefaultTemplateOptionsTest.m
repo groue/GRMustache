@@ -20,28 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheDefaultTemplateOptionsTest.h"
+#import "GRDefaultTemplateOptionsTest.h"
 
+@interface GRDefaultTemplateOptionsTestSupport : NSObject
+@property (nonatomic) BOOL pretty;
+@end
 
-@implementation GRMustacheDefaultTemplateOptionsTest
+@implementation GRDefaultTemplateOptionsTestSupport
+@synthesize pretty;
+@end
+
+@implementation GRDefaultTemplateOptionsTest
 
 - (void)testDefaultTemplateOptions
 {
-    NSString *templateString = @"{{foo/bar}}---{{foo.bar}}";
-    NSDictionary *context = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:@"baz" forKey:@"bar"] forKey:@"foo"];
+    NSString *templateString = @"{{#pretty}}YES{{/pretty}}{{^pretty}}NO{{/pretty}}";
+    GRDefaultTemplateOptionsTestSupport *context = [[[GRDefaultTemplateOptionsTestSupport alloc] init] autorelease];
+    context.pretty = NO;
     NSString *result = nil;
+    
     GRMustacheTemplateOptions originalTemplateOptions = [GRMustache defaultTemplateOptions];
-    
-    // Handlebars accepts both / and . separators
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionNone];
-    result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-    STAssertEqualObjects(result, @"baz---baz", @"");
-    
-    // Mustache only accepts . separator
-    [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionMustacheSpecCompatibility];
-    result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
-    STAssertEqualObjects(result, @"---baz", @"");
-
+    {
+        // Expect NO BOOL property to be interpreted as false boolean
+        [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionNone];
+        result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+        STAssertEqualObjects(result, @"NO", @"");
+        
+        // Expect NO BOOL property to be interpreted as true NSNumber
+        [GRMustache setDefaultTemplateOptions:GRMustacheTemplateOptionStrictBoolean];
+        result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+        STAssertEqualObjects(result, @"YES", @"");
+    }
     [GRMustache setDefaultTemplateOptions:originalTemplateOptions];
 }
 
