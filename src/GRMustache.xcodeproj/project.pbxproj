@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		560CE88B1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */; };
-		560CE88C1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */; };
-		560CE88F1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */; };
-		560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
-		560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */; };
+		560CE88F1526EEF4004F935E /* GRBooleanTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 560CE88D1526EEF4004F935E /* GRBooleanTest.h */; };
+		560CE8911526F672004F935E /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRBooleanTest.m */; };
+		560CE8921526F673004F935E /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRBooleanTest.m */; };
 		5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
 		5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
 		5623B796152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */; };
@@ -221,10 +219,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		560CE8871526EDD0004F935E /* GRMustacheBooleanPropertyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBooleanPropertyTest.h; sourceTree = "<group>"; };
-		560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanPropertyTest.m; sourceTree = "<group>"; };
-		560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBooleanInterpretationTest.h; sourceTree = "<group>"; };
-		560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheBooleanInterpretationTest.m; sourceTree = "<group>"; };
+		560CE88D1526EEF4004F935E /* GRBooleanTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBooleanTest.h; sourceTree = "<group>"; };
+		560CE88E1526EEF4004F935E /* GRBooleanTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRBooleanTest.m; sourceTree = "<group>"; };
 		5623B78F1527224000DF16A6 /* GRMustacheHelperTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelperTest.h; sourceTree = "<group>"; };
 		5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelperTest.m; sourceTree = "<group>"; };
 		5623B794152731B600DF16A6 /* GRMustacheParsingErrorsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheParsingErrorsTest.h; sourceTree = "<group>"; };
@@ -600,12 +596,10 @@
 		56DEC3BD152639420031E8DC /* v2.0 */ = {
 			isa = PBXGroup;
 			children = (
+				560CE88D1526EEF4004F935E /* GRBooleanTest.h */,
+				560CE88E1526EEF4004F935E /* GRBooleanTest.m */,
 				56A8D498152818A800D9C718 /* GRDefaultTemplateOptionsTest.h */,
 				56A8D499152818A900D9C718 /* GRDefaultTemplateOptionsTest.m */,
-				560CE88D1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h */,
-				560CE88E1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.m */,
-				560CE8871526EDD0004F935E /* GRMustacheBooleanPropertyTest.h */,
-				560CE8881526EDD0004F935E /* GRMustacheBooleanPropertyTest.m */,
 				5623B78F1527224000DF16A6 /* GRMustacheHelperTest.h */,
 				5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */,
 				5623B794152731B600DF16A6 /* GRMustacheParsingErrorsTest.h */,
@@ -667,7 +661,7 @@
 				56DEC30C152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */,
 				56DEC30E152631300031E8DC /* GRMustacheVersion.h in Headers */,
 				563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */,
-				560CE88F1526EEF4004F935E /* GRMustacheBooleanInterpretationTest.h in Headers */,
+				560CE88F1526EEF4004F935E /* GRBooleanTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,8 +956,7 @@
 				563D66E91526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66EF152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
 				563D66F1152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
-				560CE88B1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
-				560CE8921526F673004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
+				560CE8921526F673004F935E /* GRBooleanTest.m in Sources */,
 				5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 				5623B796152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */,
 				567AEC4A152789FF0009CA61 /* GRPreventNSUndefinedKeyExceptionAttackTest.m in Sources */,
@@ -1008,8 +1001,7 @@
 				563D66EA1526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66F0152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
 				563D66F2152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
-				560CE88C1526EDE1004F935E /* GRMustacheBooleanPropertyTest.m in Sources */,
-				560CE8911526F672004F935E /* GRMustacheBooleanInterpretationTest.m in Sources */,
+				560CE8911526F672004F935E /* GRBooleanTest.m in Sources */,
 				5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 				5623B797152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */,
 				567AEC4B152789FF0009CA61 /* GRPreventNSUndefinedKeyExceptionAttackTest.m in Sources */,

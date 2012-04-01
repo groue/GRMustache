@@ -56,6 +56,7 @@ GRMustache considers as false the following values, and only those:
 - `[NSNull null]`
 - `[NSNumber numberWithBool:NO]`, aka `kCFBooleanFalse`
 - the empty string `@""`
+- empty enumerables (all objects conforming to the NSFastEnumeration protocol, but NSDictionary -- the most obvious enumerable is NSArray).
 
 All those values will never be rendered with `{{name}}` tags.
 

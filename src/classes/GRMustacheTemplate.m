@@ -234,34 +234,33 @@
     return [result autorelease];
 }
 
-+ (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue
++ (GRMustacheObjectKind)objectKind:(id)object
 {
     if (object == nil ||
         object == [NSNull null] ||
         (void *)object == (void *)kCFBooleanFalse ||
         ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0))
     {
-        if (outKind != NULL) {
-            *outKind = GRMustacheObjectKindFalseValue;
+        return GRMustacheObjectKindFalse;
+    }
+    else if ([object isKindOfClass:[NSDictionary class]])
+    {
+        return GRMustacheObjectKindObject;
+    }
+    else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+    {
+        for (id _ in object) {
+            return GRMustacheObjectKindNonEmptyEnumerable;
         }
-        if (outBoolValue != NULL) {
-            *outBoolValue = NO;
-        }
-    } else {
-        if (outKind != NULL) {
-            if ([object conformsToProtocol:@protocol(GRMustacheHelper)]) {
-                *outKind = GRMustacheObjectKindLambda;
-            } else if ([object isKindOfClass:[NSDictionary class]]) {
-                *outKind = GRMustacheObjectKindTrueValue;
-            } else if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
-                *outKind = GRMustacheObjectKindEnumerable;
-            } else {
-                *outKind = GRMustacheObjectKindTrueValue;
-            }
-        }
-        if (outBoolValue != NULL) {
-            *outBoolValue = YES;
-        }
+        return GRMustacheObjectKindFalse;
+    }
+    else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
+    {
+        return GRMustacheObjectKindLambda;
+    }
+    else
+    {
+        return GRMustacheObjectKindObject;
     }
 }
 

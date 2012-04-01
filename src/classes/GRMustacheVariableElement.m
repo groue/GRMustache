@@ -64,13 +64,16 @@
     // interpret
     
     NSString *result = nil;
-    BOOL boolValue;
-    [GRMustacheTemplate object:value kind:NULL boolValue:&boolValue];
-    if (boolValue) {
-        result = [value description];
-        if (!_raw) {
-            result = [self htmlEscape:result];
-        }
+    switch([GRMustacheTemplate objectKind:value]) {
+        case GRMustacheObjectKindFalse:
+            break;
+            
+        default:
+            result = [value description];
+            if (!_raw) {
+                result = [self htmlEscape:result];
+            }
+            break;
     }
     
     

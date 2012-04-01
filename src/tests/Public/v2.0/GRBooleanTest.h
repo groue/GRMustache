@@ -23,6 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheBooleanInterpretationTest : GRMustachePublicAPITest
+@interface GRBooleanTest : GRMustachePublicAPITest
 
 @end

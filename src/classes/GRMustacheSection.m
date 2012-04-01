@@ -96,10 +96,8 @@
         
         // interpret
         
-        GRMustacheObjectKind kind;
-        [GRMustacheTemplate object:value kind:&kind boolValue:NULL];
-        switch(kind) {
-            case GRMustacheObjectKindFalseValue:
+        switch([GRMustacheTemplate objectKind:value]) {
+            case GRMustacheObjectKindFalse:
                 if (_inverted) {
                     result = [[NSMutableString string] retain];
                     for (id<GRMustacheRenderingElement> elem in _elems) {
@@ -108,7 +106,7 @@
                 }
                 break;
                 
-            case GRMustacheObjectKindTrueValue:
+            case GRMustacheObjectKindObject:
                 if (!_inverted) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:value];
                     result = [[NSMutableString string] retain];
@@ -118,20 +116,8 @@
                 }
                 break;
                 
-            case GRMustacheObjectKindEnumerable:
-                if (_inverted) {
-                    BOOL empty = YES;
-                    for (id object in value) {
-                        empty = NO;
-                        break;
-                    }
-                    if (empty) {
-                        result = [[NSMutableString string] retain];
-                        for (id<GRMustacheRenderingElement> elem in _elems) {
-                            [(NSMutableString *)result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
-                        }
-                    }
-                } else {
+            case GRMustacheObjectKindNonEmptyEnumerable:
+                if (!_inverted) {
                     result = [[NSMutableString string] retain];
                     for (id object in value) {
                         GRMustacheContext *innerContext = [context contextByAddingObject:object];

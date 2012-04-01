@@ -70,6 +70,12 @@
       "template": "<{{subject}}>",
       "expected": "<>"
     },
+    {
+      "name": "Empty list should not be rendered.",
+      "data": { "subject": [] },
+      "template": "<{{subject}}>",
+      "expected": "<>"
+    },
 
     // Whitespace Insensitivity
 

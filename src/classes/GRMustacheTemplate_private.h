@@ -27,9 +27,9 @@
 #import "GRMustacheRenderingElement_private.h"
 
 typedef enum {
-    GRMustacheObjectKindFalseValue,
-    GRMustacheObjectKindTrueValue,
-    GRMustacheObjectKindEnumerable,
+    GRMustacheObjectKindFalse,
+    GRMustacheObjectKindObject,
+    GRMustacheObjectKindNonEmptyEnumerable,
     GRMustacheObjectKindLambda,
 } GRMustacheObjectKind;
 
@@ -42,7 +42,7 @@ typedef enum {
 
 #pragma mark Objects kinds
 
-+ (void)object:(id)object kind:(GRMustacheObjectKind *)outKind boolValue:(BOOL *)outBoolValue GRMUSTACHE_API_INTERNAL;
++ (GRMustacheObjectKind)objectKind:(id)object GRMUSTACHE_API_INTERNAL;
 
 #pragma mark Delegate
 
