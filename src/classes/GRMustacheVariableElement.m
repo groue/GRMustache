@@ -64,7 +64,7 @@
     // interpret
     
     NSString *result = nil;
-    if([GRMustacheTemplate objectShouldBeRendered:value]) {
+    if (value && (value != [NSNull null])) {
         result = [value description];
         if (!_raw) {
             result = [self htmlEscape:result];

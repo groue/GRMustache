@@ -58,8 +58,6 @@ GRMustache considers as false the following values, and only those:
 - the empty string `@""`
 - empty enumerables (all objects conforming to the NSFastEnumeration protocol, but NSDictionary -- the most obvious enumerable is NSArray).
 
-All those values will never be rendered with `{{name}}` tags.
-
 They all prevent Mustache sections `{{#name}}...{{/name}}` rendering.
 
 They all trigger inverted sections `{{^name}}...{{/name}}` rendering.

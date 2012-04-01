@@ -58,24 +58,6 @@
       "template": "<{{subject}}>",
       "expected": "<>"
     },
-    {
-      "name": "False should not be rendered.",
-      "data": { "subject": false },
-      "template": "<{{subject}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Empty string should not be rendered.",
-      "data": { "subject": "" },
-      "template": "<{{subject}}>",
-      "expected": "<>"
-    },
-    {
-      "name": "Empty list should not be rendered.",
-      "data": { "subject": [] },
-      "template": "<{{subject}}>",
-      "expected": "<>"
-    },
 
     // Whitespace Insensitivity
 

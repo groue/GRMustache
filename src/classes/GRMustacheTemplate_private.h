@@ -42,7 +42,6 @@ typedef enum {
 #pragma mark Objects kinds
 
 + (GRMustacheObjectKind)objectKind:(id)object GRMUSTACHE_API_INTERNAL;
-+ (BOOL)objectShouldBeRendered:(id)object GRMUSTACHE_API_INTERNAL;
 
 #pragma mark Delegate
 

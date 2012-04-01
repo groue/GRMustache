@@ -263,10 +263,6 @@
     }
 }
 
-+ (BOOL)objectShouldBeRendered:(id)object
-{
-    return (object && (object != [NSNull null]) && ((void *)object != (void *)kCFBooleanFalse));
-}
 
 #pragma mark <GRMustacheRenderingElement>
 
