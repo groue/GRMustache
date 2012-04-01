@@ -39,7 +39,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
 - (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef options:(GRMustacheTemplateOptions)options;
-- (id)valueForKey:(NSString *)key scoped:(BOOL)scoped options:(GRMustacheTemplateOptions)options;
 @end
 
 
@@ -94,49 +93,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return [self contextByAddingObject:value];
 }
 
-- (void)dealloc
-{
-    [_object release];
-    [_parent release];
-    [super dealloc];
-}
-
-#pragma mark Private
-
-- (id)initWithObject:(id)object parent:(GRMustacheContext *)parent
-{
-    self = [self init];
-    if (self) {
-        _object = [object retain];
-        _parent = [parent retain];
-    }
-    return self;
-}
-
-- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef options:(GRMustacheTemplateOptions)options
-{
-    if ((CFBooleanRef)value == kCFBooleanTrue ||
-        (CFBooleanRef)value == kCFBooleanFalse)
-    {
-        if (outBooleanRef) {
-            *outBooleanRef = (CFBooleanRef)value;
-        }
-        return YES;
-    }
-    
-    if ([value isKindOfClass:[NSNumber class]] &&
-        !(options & GRMustacheTemplateOptionStrictBoolean) &&
-        [GRMustacheProperty class:[_object class] hasBOOLPropertyGetterNamed:key])
-    {
-        if (outBooleanRef) {
-            *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
-        }
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (id)valueForKey:(NSString *)key scoped:(BOOL)scoped options:(GRMustacheTemplateOptions)options
 {
     id value = nil;
@@ -179,6 +135,49 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     
     if (scoped || _parent == nil) { return nil; }
     return [_parent valueForKey:key scoped:NO options:options];
+}
+
+- (void)dealloc
+{
+    [_object release];
+    [_parent release];
+    [super dealloc];
+}
+
+#pragma mark Private
+
+- (id)initWithObject:(id)object parent:(GRMustacheContext *)parent
+{
+    self = [self init];
+    if (self) {
+        _object = [object retain];
+        _parent = [parent retain];
+    }
+    return self;
+}
+
+- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef options:(GRMustacheTemplateOptions)options
+{
+    if ((CFBooleanRef)value == kCFBooleanTrue ||
+        (CFBooleanRef)value == kCFBooleanFalse)
+    {
+        if (outBooleanRef) {
+            *outBooleanRef = (CFBooleanRef)value;
+        }
+        return YES;
+    }
+    
+    if ([value isKindOfClass:[NSNumber class]] &&
+        !(options & GRMustacheTemplateOptionStrictBoolean) &&
+        [GRMustacheProperty class:[_object class] hasBOOLPropertyGetterNamed:key])
+    {
+        if (outBooleanRef) {
+            *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
+        }
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end

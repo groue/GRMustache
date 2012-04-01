@@ -26,26 +26,11 @@
 
 
 // =============================================================================
-#pragma mark - Invocation functions
-
-typedef void (*GRMustacheInvocationFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options);
-
-static void invokeImplicitIteratorKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
-    *inOutScoped = YES;
-}
-
-static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
-    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped options:options];
-    *inOutScoped = YES;
-}
-
-
-// =============================================================================
 #pragma mark - Private concrete class GRMustacheInvocationKey
 
 @interface GRMustacheInvocationKey:GRMustacheInvocation {
 @private
-    GRMustacheInvocationFunction _invocationFunction;
+    BOOL _implicitIterator;
     NSString *_key;
 }
 - (id)initWithToken:(GRMustacheToken *)token key:(NSArray *)keys options:(GRMustacheTemplateOptions)options;
@@ -55,13 +40,16 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheInvocationKeyPath
 
+typedef void (*GRMustacheInvocationKeyPathFunction)(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options);
+
 @interface GRMustacheInvocationKeyPath:GRMustacheInvocation {
 @private
-    GRMustacheInvocationFunction *_invocationFunctions;
+    GRMustacheInvocationKeyPathFunction *_invocationFunctions;
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
 - (id)initWithToken:(GRMustacheToken *)token keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options;
+- (GRMustacheInvocationKeyPathFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
 
@@ -70,7 +58,6 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 @interface GRMustacheInvocation()
 - (id)initWithToken:(GRMustacheToken *)token options:(GRMustacheTemplateOptions)options;
-- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key;
 @end
 
 @implementation GRMustacheInvocation
@@ -117,17 +104,6 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     NSAssert(NO, @"abstract method");
 }
 
-#pragma mark Private
-
-- (GRMustacheInvocationFunction)invocationFunctionForKey:(NSString *)key
-{
-    if ([key isEqualToString:@"."]) {
-        return invokeImplicitIteratorKey;
-    } else {
-        return invokeOtherKey;
-    }
-}
-
 @end
 
 
@@ -147,7 +123,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     self = [self initWithToken:token options:options];
     if (self) {
         _key = [key retain];
-        _invocationFunction = [self invocationFunctionForKey:key];
+        _implicitIterator = [key isEqualToString:@"."];
     }
     return self;
 }
@@ -159,9 +135,11 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
-    BOOL scoped = NO;
-    _invocationFunction(_key, &scoped, &context, _options);
-    self.returnValue = context.object;
+    if (_implicitIterator) {
+        self.returnValue = context.object;
+    } else {
+        self.returnValue = [context valueForKey:_key scoped:NO options:_options];
+    }
 }
 
 @end
@@ -169,6 +147,15 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheInvocationKeyPath
+
+static void invokeImplicitIteratorKeyPath(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
+    *inOutScoped = YES;
+}
+
+static void invokeOtherKeyPath(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext, GRMustacheTemplateOptions options) {
+    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped options:options];
+    *inOutScoped = YES;
+}
 
 @implementation GRMustacheInvocationKeyPath
 
@@ -184,7 +171,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     self = [self initWithToken:token options:options];
     if (self) {
         _keys = [keys retain];
-        GRMustacheInvocationFunction *f = _invocationFunctions = malloc(keys.count*sizeof(GRMustacheInvocationFunction));
+        GRMustacheInvocationKeyPathFunction *f = _invocationFunctions = malloc(keys.count*sizeof(GRMustacheInvocationKeyPathFunction));
         for (NSString *key in _keys) {
             *(f++) = [self invocationFunctionForKey:key];
         }
@@ -200,7 +187,7 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
     BOOL scoped = NO;
-    GRMustacheInvocationFunction *f = _invocationFunctions;
+    GRMustacheInvocationKeyPathFunction *f = _invocationFunctions;
     for (_lastUsedKey in _keys) {
         (*(f++))(_lastUsedKey, &scoped, &context, _options);
         if (!context) {
@@ -211,5 +198,16 @@ static void invokeOtherKey(NSString *key, BOOL *inOutScoped, GRMustacheContext *
     self.returnValue = context.object;
 }
 
+
+#pragma mark Private
+
+- (GRMustacheInvocationKeyPathFunction)invocationFunctionForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"."]) {
+        return invokeImplicitIteratorKeyPath;
+    } else {
+        return invokeOtherKeyPath;
+    }
+}
 @end
 

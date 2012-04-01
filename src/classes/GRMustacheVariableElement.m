@@ -64,16 +64,11 @@
     // interpret
     
     NSString *result = nil;
-    switch([GRMustacheTemplate objectKind:value]) {
-        case GRMustacheObjectKindFalse:
-            break;
-            
-        default:
-            result = [value description];
-            if (!_raw) {
-                result = [self htmlEscape:result];
-            }
-            break;
+    if([GRMustacheTemplate objectShouldBeRendered:value]) {
+        result = [value description];
+        if (!_raw) {
+            result = [self htmlEscape:result];
+        }
     }
     
     

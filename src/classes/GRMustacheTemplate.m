@@ -263,11 +263,16 @@
     }
 }
 
++ (BOOL)objectShouldBeRendered:(id)object
+{
+    return (object && (object != [NSNull null]) && ((void *)object != (void *)kCFBooleanFalse));
+}
+
 #pragma mark <GRMustacheRenderingElement>
 
 - (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
 {
-    NSMutableString *result = [NSMutableString string];
+    NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
         if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
             [_delegate templateWillRender:self];
