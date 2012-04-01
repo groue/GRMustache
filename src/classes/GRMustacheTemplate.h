@@ -259,7 +259,7 @@
  
  @since v1.5
  */
-- (NSString *)renderObjects:(id)object, ... AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
+- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 /**
  Renders a template without any context object for interpreting Mustache tags.

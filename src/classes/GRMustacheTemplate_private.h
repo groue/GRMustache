@@ -92,7 +92,7 @@ typedef enum {
 #pragma mark Rendering
 
 - (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
-- (NSString *)renderObjects:(id)object, ... GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) GRMUSTACHE_API_PUBLIC;
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 @end

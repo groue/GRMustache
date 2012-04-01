@@ -87,7 +87,6 @@
     
     STAssertEqualObjects([template render], @"foo:", nil);
     STAssertEqualObjects([template renderObject:nil], @"foo:", nil);
-    STAssertEqualObjects([template renderObjects:nil], @"foo:", nil);
 }
 
 @end
