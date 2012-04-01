@@ -27,8 +27,10 @@
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheTemplate_private.h"
 
+#if !defined(NS_BLOCK_ASSERTIONS)
 // For testing purpose
 BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
+#endif
 
 static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
@@ -148,8 +150,10 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
             }
         }
         @catch (NSException *exception) {
+#if !defined(NS_BLOCK_ASSERTIONS)
             // For testing purpose
             GRMustacheContextDidCatchNSUndefinedKeyException = YES;
+#endif
             
             if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
                 [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != _object ||

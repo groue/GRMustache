@@ -24,8 +24,10 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 
+#if !defined(NS_BLOCK_ASSERTIONS)
 // For testing purpose
 extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
+#endif
 
 @interface GRMustacheContext: NSObject {
 @private
