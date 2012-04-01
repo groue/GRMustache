@@ -10,61 +10,61 @@
     // Boolean interpretation
     
     {
-      "name": "Missing key should trigger the inverted section omission.",
+      "name": "Missing key should trigger the section omission.",
       "data": { },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<>"
     },
     {
-      "name": "Null should trigger the inverted section omission.",
+      "name": "Null should trigger the section omission.",
       "data": { "subject": null },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<>"
     },
     {
-      "name": "False should trigger the inverted section omission.",
+      "name": "False should trigger the section omission.",
       "data": { "subject": false },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<>"
     },
     {
-      "name": "Empty string should trigger the inverted section omission.",
+      "name": "Empty string should trigger the section omission.",
       "data": { "subject": "" },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<>"
     },
     {
-      "name": "Empty list should trigger the inverted section omission.",
+      "name": "Empty list should trigger the section omission.",
       "data": { "subject": [] },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<>"
     },
     {
-      "name": "True should trigger the inverted section rendering.",
+      "name": "True should trigger the section rendering.",
       "data": { "subject": true },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
     {
-      "name": "Zero should trigger the inverted section rendering.",
+      "name": "Zero should trigger the section rendering.",
       "data": { "subject": 0 },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
     {
-      "name": "Object should trigger the inverted section rendering.",
+      "name": "Object should trigger the section rendering.",
       "data": { "subject": { } },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
     {
-      "name": "Non-empty string should trigger the inverted section rendering.",
+      "name": "Non-empty string should trigger the section rendering.",
       "data": { "subject": "---" },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
     {
-      "name": "Non-empty blank string should trigger the inverted section rendering.",
+      "name": "Non-empty blank string should trigger the section rendering.",
       "data": { "subject": " " },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
