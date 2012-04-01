@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import <objc/message.h>
-#import "GRMustacheEnvironment.h"
 #import "GRMustacheHelper_private.h"
 #import "GRMustacheSection_private.h"
 
@@ -29,7 +28,7 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockHelper
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
+#if NS_BLOCKS_AVAILABLE
 
 @interface GRMustacheBlockHelper: GRMustacheHelper {
 @private
@@ -38,7 +37,7 @@
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block;
 @end
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if NS_BLOCKS_AVAILABLE */
 
 
 // =============================================================================
@@ -46,14 +45,14 @@
 
 @implementation GRMustacheHelper
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
+#if NS_BLOCKS_AVAILABLE
 
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
     return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
 }
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if NS_BLOCKS_AVAILABLE */
 
 #pragma mark <GRMustacheHelper>
 
@@ -69,7 +68,7 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockHelper
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
+#if NS_BLOCKS_AVAILABLE
 
 @implementation GRMustacheBlockHelper
 
@@ -102,4 +101,4 @@
 
 @end
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if NS_BLOCKS_AVAILABLE */

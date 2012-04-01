@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheEnvironment.h"
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheSection;
@@ -39,10 +38,10 @@
 // =============================================================================
 #pragma mark - GRMustacheHelper
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
+#if NS_BLOCKS_AVAILABLE
 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 @end
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if NS_BLOCKS_AVAILABLE */

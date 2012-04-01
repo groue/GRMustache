@@ -22,7 +22,6 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
-#import "GRMustacheEnvironment.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRenderingElement_private.h"
 
@@ -80,14 +79,14 @@ typedef enum {
 
 #pragma mark URL template
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (id)templateFromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url options:(GRMustacheTemplateOptions)options error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
-#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 #pragma mark Rendering
 

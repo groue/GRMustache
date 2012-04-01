@@ -32,7 +32,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryBaseURL
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 @interface GRMustacheTemplateRepositoryBaseURL : GRMustacheTemplateRepository {
 @private
@@ -43,7 +43,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
 @end
 
-#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 
 // =============================================================================
@@ -94,7 +94,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @implementation GRMustacheTemplateRepository
 @synthesize dataSource=_dataSource;
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL
 {
@@ -126,7 +126,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:encoding options:options] autorelease];
 }
 
-#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateRepositoryWithDirectory:(NSString *)path
 {
@@ -338,7 +338,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryBaseURL
 
-#if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 @interface GRMustacheTemplateRepositoryBaseURL()<GRMustacheTemplateRepositoryDataSource>
 @end
@@ -389,7 +389,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @end
 
-#endif /* if !TARGET_OS_IPHONE || GRMUSTACHE_IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
+#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 
 // =============================================================================

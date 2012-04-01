@@ -40,10 +40,10 @@
 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
 
-#if GRMUSTACHE_BLOCKS_AVAILABLE
+#if NS_BLOCKS_AVAILABLE
 
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block GRMUSTACHE_API_PUBLIC;
 
-#endif /* if GRMUSTACHE_BLOCKS_AVAILABLE */
+#endif /* if NS_BLOCKS_AVAILABLE */
 
 @end
