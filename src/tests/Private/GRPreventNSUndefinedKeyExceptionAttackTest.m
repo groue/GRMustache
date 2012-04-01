@@ -54,34 +54,21 @@
 
 - (void)testNSUndefinedKeyExceptionSilencing
 {
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"foo:{{foo}}" error:nil];
-    NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
-    id object = [[[NSObject alloc] init] autorelease];
-    
-    
-    // GRMustacheContext should catch exceptions
-    
-    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
-    [template renderObject:object];
-    STAssertEquals(YES, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
-    
-    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
-    [template renderObject:managedObject];
-    STAssertEquals(YES, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
-    
-    
-    // Now GRMustacheContext should not catch any exception
-    
     [GRMustache preventNSUndefinedKeyExceptionAttack];
     
-    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
-    [template renderObject:object];
-    STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
-    
-    GRMustacheContextDidCatchNSUndefinedKeyException = NO;
-    [template renderObject:managedObject];
-    STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
-
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"foo:{{foo}}" error:nil];
+    {
+        GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+        id object = [[[NSObject alloc] init] autorelease];
+        [template renderObject:object];
+        STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+    }
+    {
+        GRMustacheContextDidCatchNSUndefinedKeyException = NO;
+        NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
+        [template renderObject:managedObject];
+        STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
+    }
     
     // Regression test: until 1.7.2, NSUndefinedKeyException guard would prevent rendering nil object
     
