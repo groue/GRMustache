@@ -1,0 +1,3 @@
+dir/é1
+{{>dir/file1}}
+{{>file2}}
