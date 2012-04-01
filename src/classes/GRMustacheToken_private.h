@@ -40,13 +40,15 @@ typedef enum {
     GRMustacheTokenType _type;
     NSString *_content;
     NSString *_templateString;
+    id _templateID;
     NSUInteger _line;
     NSRange _range;
 }
 @property (nonatomic, readonly) GRMustacheTokenType type GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, readonly, retain) NSString *content GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, readonly, retain) NSString *templateString GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly, retain) id templateID GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, readonly) NSUInteger line GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, readonly) NSRange range GRMUSTACHE_API_INTERNAL;
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
 @end

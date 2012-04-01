@@ -24,4 +24,3 @@
 
 
 NSString* const GRMustacheErrorDomain = @"GRMustacheErrorDomain";
-NSString* const GRMustacheErrorLine = @"GRMustacheErrorLine";

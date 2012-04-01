@@ -25,42 +25,45 @@
 
 @interface GRMustacheToken()
 @property (nonatomic, retain) NSString *content;
-- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range;
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range;
 @end
 
 @implementation GRMustacheToken
 @synthesize type=_type;
 @synthesize content=_content;
 @synthesize templateString=_templateString;
+@synthesize templateID=_templateID;
 @synthesize line=_line;
 @synthesize range=_range;
 
-- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range
+- (void)dealloc
+{
+    [_content release];
+    [_templateString release];
+    [_templateID release];
+    [super dealloc];
+}
+
++ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range
+{
+    return [[[self alloc] initWithType:type content:content templateString:templateString templateID:templateID line:line range:range] autorelease];
+}
+
+
+#pragma mark Private
+
+- (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range
 {
     self = [self init];
     if (self) {
         _type = type;
         _content = [content retain];
         _templateString = [templateString retain];
+        _templateID = [templateID retain];
         _line = line;
         _range = range;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_content release];
-    [_templateString release];
-    [super dealloc];
-}
-
-
-#pragma mark Private
-
-+ (id)tokenWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString line:(NSUInteger)line range:(NSRange)range
-{
-    return [[[self alloc] initWithType:type content:content templateString:templateString line:line range:range] autorelease];
 }
 
 @end

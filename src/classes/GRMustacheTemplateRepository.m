@@ -88,7 +88,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @interface GRMustacheTemplateRepository()<GRMustacheTemplateParserDataSource>
 - (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)templateID error:(NSError **)outError;
-- (NSArray *)renderingElementsFromString:(NSString *)templateString error:(NSError **)outError;
+- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateRepository
@@ -232,7 +232,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError
 {
-    NSArray *renderingElements = [self renderingElementsFromString:templateString error:outError];
+    NSArray *renderingElements = [self renderingElementsFromString:templateString templateID:nil error:outError];
     if (!renderingElements) {
         return nil;
     }
@@ -246,14 +246,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
 
-- (GRMustacheInvocation *)templateParser:(GRMustacheTemplateParser *)templateParser invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys options:(GRMustacheTemplateOptions)options
-{
-    return [GRMustacheInvocation invocationWithToken:token templateID:_currentlyParsedTemplateID keys:keys options:options];
-}
-
 #pragma mark Private
 
-- (NSArray *)renderingElementsFromString:(NSString *)templateString error:(NSError **)outError
+- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError
 {
     NSArray *renderingElements = nil;
     @autoreleasepool {
@@ -264,7 +259,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // tokenize
         GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
         tokenizer.delegate = parser;
-        [tokenizer parseTemplateString:templateString];
+        [tokenizer parseTemplateString:templateString templateID:templateID];
         
         // extract rendering elements
         renderingElements = [[parser renderingElementsReturningError:outError] retain];
@@ -315,15 +310,20 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         template = [GRMustacheTemplate templateWithElements:nil options:_options];
         [_templateForTemplateID setObject:template forKey:templateID];
         
-        // parse
+        // prepare for GRMustacheTemplateParserDataSource methods
         id previousParsedTemplateID = _currentlyParsedTemplateID;
-        _currentlyParsedTemplateID = templateID; // prepare for GRMustacheTemplateParserDataSource methods
-        NSArray *renderingElements = [self renderingElementsFromString:templateString error:outError];
-        _currentlyParsedTemplateID = previousParsedTemplateID;        // OK, parsing done
+        _currentlyParsedTemplateID = templateID;
+        
+        // parse
+        NSArray *renderingElements = [self renderingElementsFromString:templateString templateID:templateID error:outError];
+        
+        // parsing done
+        _currentlyParsedTemplateID = previousParsedTemplateID;
         
         if (renderingElements) {
             template.elems = renderingElements;
         } else {
+            // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];
             template = nil;
         }

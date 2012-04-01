@@ -50,5 +50,5 @@
 }
 
 @property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate GRMUSTACHE_API_INTERNAL;
-- (void)parseTemplateString:(NSString *)templateString GRMUSTACHE_API_INTERNAL;
+- (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID GRMUSTACHE_API_INTERNAL;
 @end

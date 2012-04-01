@@ -37,7 +37,7 @@
 - (id)initWithOptions:(GRMustacheTemplateOptions)options;
 - (void)finish;
 - (void)finishWithError:(NSError *)error;
-- (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description;
+- (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description;
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError;
 @end
 
@@ -94,7 +94,7 @@
             
         case GRMustacheTokenTypeEscapedVariable: {
             if (token.content.length == 0) {
-                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty variable tag"]];
+                [self finishWithError:[self parseErrorAtToken:token description:@"Empty variable tag"]];
                 return NO;
             }
             NSError *invocationError;
@@ -109,7 +109,7 @@
             
         case GRMustacheTokenTypeUnescapedVariable: {
             if (token.content.length == 0) {
-                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty unescaped variable tag"]];
+                [self finishWithError:[self parseErrorAtToken:token description:@"Empty unescaped variable tag"]];
                 return NO;
             }
             NSError *invocationError;
@@ -125,7 +125,7 @@
         case GRMustacheTokenTypeSectionOpening:
         case GRMustacheTokenTypeInvertedSectionOpening: {
             if (token.content.length == 0) {
-                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty section opening tag"]];
+                [self finishWithError:[self parseErrorAtToken:token description:@"Empty section opening tag"]];
                 return NO;
             }
             
@@ -161,14 +161,14 @@
                     return NO;
                 }
             } else {
-                [self finishWithError:[self parseErrorAtLine:token.line description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
+                [self finishWithError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
                 return NO;
             }
             break;
             
         case GRMustacheTokenTypePartial: {
             if (token.content.length == 0) {
-                [self finishWithError:[self parseErrorAtLine:token.line description:@"Empty partial tag"]];
+                [self finishWithError:[self parseErrorAtToken:token description:@"Empty partial tag"]];
                 return NO;
             }
             NSError *partialError;
@@ -222,8 +222,7 @@
 - (void)finish
 {
     if (_error == nil && _currentSectionOpeningToken) {
-        self.error = [self parseErrorAtLine:_currentSectionOpeningToken.line
-                                description:[NSString stringWithFormat:@"Unclosed `%@` section", _currentSectionOpeningToken.content]];
+        self.error = [self parseErrorAtToken:_currentSectionOpeningToken description:[NSString stringWithFormat:@"Unclosed `%@` section", _currentSectionOpeningToken.content]];
     }
     if (_error) {
         self.currentElements = nil;
@@ -233,16 +232,17 @@
     self.sectionOpeningTokenStack = nil;
 }
 
-- (NSError *)parseErrorAtLine:(NSInteger)line description:(NSString *)description
+- (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description
 {
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
-    [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
-                 forKey:NSLocalizedDescriptionKey];
-    [userInfo setObject:[NSNumber numberWithInteger:line]
-                 forKey:GRMustacheErrorLine];
+    NSString *localizedDescription;
+    if (token.templateID) {
+        localizedDescription = [NSString stringWithFormat:@"Parse error at line %d of template %@: %@", token.line, description, token.templateID];
+    } else {
+        localizedDescription = [NSString stringWithFormat:@"Parse error at line %d: %@", token.line, description];
+    }
     return [NSError errorWithDomain:GRMustacheErrorDomain
                                code:GRMustacheErrorCodeParseError
-                           userInfo:userInfo];
+                           userInfo:[NSDictionary dictionaryWithObject:localizedDescription forKey:NSLocalizedDescriptionKey]];
 }
 
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError
@@ -272,8 +272,7 @@
                     acceptSeparator = NO;
                 } else {
                     if (outError != NULL) {
-                        *outError = [self parseErrorAtLine:token.line
-                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+                        *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
                     }
                     return nil;
                 }
@@ -286,8 +285,7 @@
                     acceptSeparator = YES;
                 } else {
                     if (outError != NULL) {
-                        *outError = [self parseErrorAtLine:token.line
-                                               description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+                        *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
                     }
                     return nil;
                 }
@@ -298,13 +296,12 @@
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
     } else if (acceptIdentifier) {
         if (outError != NULL) {
-            *outError = [self parseErrorAtLine:token.line
-                                   description:[NSString stringWithFormat:@"Invalid identifier at line %d: %@", token.line, content]];
+            *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
         }
         return nil;
     }
     
-    return [_dataSource templateParser:self invocationWithToken:token keys:keys options:_options];
+    return [GRMustacheInvocation invocationWithToken:token keys:keys options:_options];
 }
 
 @end

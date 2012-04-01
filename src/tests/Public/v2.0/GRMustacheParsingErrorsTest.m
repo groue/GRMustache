@@ -170,7 +170,8 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:&error];
     STAssertNil(template, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
+    NSRange range = [error.localizedDescription rangeOfString:@"line 3"];
+    STAssertTrue(range.location != NSNotFound, @"");
 }
 
 - (void)testRenderingReportsClosingSectionsMismatchReportsTheLineNumber
@@ -180,7 +181,8 @@
     NSString *result = [GRMustacheTemplate renderObject:nil fromString:templateString error:&error];
     STAssertNil(result, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertEquals([(NSNumber *)[error.userInfo objectForKey:GRMustacheErrorLine] intValue], 3, nil);
+    NSRange range = [error.localizedDescription rangeOfString:@"line 3"];
+    STAssertTrue(range.location != NSNotFound, @"");
 }
 
 - (void)testParsingReportsLotsOfStaches

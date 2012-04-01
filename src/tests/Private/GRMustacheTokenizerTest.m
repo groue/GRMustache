@@ -114,7 +114,7 @@
 - (void)testTokenizerParsesSingleTextToken
 {
     NSString *templateString = @"text";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -125,7 +125,7 @@
 - (void)testTokenizerParsesSingleCommentToken
 {
     NSString *templateString = @"{{!comment}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -136,7 +136,7 @@
 - (void)testTokenizerParsesSingleEscapedVariableToken
 {
     NSString *templateString = @"{{name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -147,7 +147,7 @@
 - (void)testTokenizerTrimsSingleEscapedVariableToken
 {
     NSString *templateString = @"{{ \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -158,7 +158,7 @@
 - (void)testTokenizerParsesSingleUnescapedVariableTokenWithThreeMustache
 {
     NSString *templateString = @"{{{name}}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -169,7 +169,7 @@
 - (void)testTokenizerTrimsSingleUnescapedVariableTokenWithThreeMustache
 {
     NSString *templateString = @"{{{ \n\tname \n\t}}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -180,7 +180,7 @@
 - (void)testTokenizerParsesSingleUnescapedVariableTokenWithAmpersand
 {
     NSString *templateString = @"{{&name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -191,7 +191,7 @@
 - (void)testTokenizerTrimsSingleUnescapedVariableTokenWithAmpersand
 {
     NSString *templateString = @"{{& \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -202,7 +202,7 @@
 - (void)testTokenizerParsesSingleSectionOpeningToken
 {
     NSString *templateString = @"{{#name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -213,7 +213,7 @@
 - (void)testTokenizerTrimsSingleSectionOpeningToken
 {
     NSString *templateString = @"{{# \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -224,7 +224,7 @@
 - (void)testTokenizerParsesSingleInvertedSectionOpeningToken
 {
     NSString *templateString = @"{{^name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -235,7 +235,7 @@
 - (void)testTokenizerTrimsSingleInvertedSectionOpeningToken
 {
     NSString *templateString = @"{{^ \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -246,7 +246,7 @@
 - (void)testTokenizerParsesSingleSectionClosingToken
 {
     NSString *templateString = @"{{/name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -257,7 +257,7 @@
 - (void)testTokenizerTrimsSingleSectionClosingToken
 {
     NSString *templateString = @"{{/ \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -268,7 +268,7 @@
 - (void)testTokenizerParsesSinglePartialToken
 {
     NSString *templateString = @"{{>name}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -279,7 +279,7 @@
 - (void)testTokenizerTrimsSinglePartialToken
 {
     NSString *templateString = @"{{> \n\tname \n\t}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -290,7 +290,7 @@
 - (void)testTokenizerParsesSingleSetDelimiterToken
 {
     NSString *templateString = @"{{=< >=}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -301,7 +301,7 @@
 - (void)testTokenizerTrimsSingleSetDelimiterToken
 {
     NSString *templateString = @"{{= \n\t< > \n\t=}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
@@ -312,7 +312,7 @@
 - (void)testTokenizerParsesTokenSuite
 {
     NSString *templateString = @"<{{!comment}}{{escaped_variable}}{{{unescaped_variable_1}}}{{&unescaped_variable_2}}{{#section_opening}}{{^inverted_section_opening}}{{/section_closing}}{{=< >=}}>";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)10, tokenRecorder.tokenCount, nil);
@@ -341,7 +341,7 @@
 - (void)testSetDelimiterTokensChain
 {
     NSString *templateString = @"<{{=<% %>=}}<% start %><%=| |=%>|# middle || item ||/ middle ||={{ }}=|{{ final }}>";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)10, tokenRecorder.tokenCount, nil);
@@ -370,7 +370,7 @@
 - (void)testLotsOfStache
 {
     NSString *templateString = @"{{{{foo}}}}";
-    [tokenizer parseTemplateString:templateString];
+    [tokenizer parseTemplateString:templateString templateID:nil];
     STAssertTrue(tokenRecorder.tokenizerDidFinish, nil);
     STAssertNotNil(tokenRecorder.error, nil);
     STAssertEqualObjects(tokenRecorder.error.domain, GRMustacheErrorDomain, nil);

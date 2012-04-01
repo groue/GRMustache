@@ -28,7 +28,7 @@
 @property (nonatomic, copy) NSString *ctag;
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 - (void)didFinish;
-- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description;
+- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID;
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 @end
 
@@ -54,7 +54,7 @@
     [super dealloc];
 }
 
-- (void)parseTemplateString:(NSString *)templateString
+- (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID
 {
     NSUInteger p = 0;
     NSUInteger line = 1;
@@ -67,7 +67,7 @@
     NSString *tokenContent;
     GRMustacheTokenType tokenType;
     NSRange tokenRange;
-    static const GRMustacheTokenType tokenTypeForCharacter[] = {
+    static const GRMustacheTokenType tokenTypeForCharacter[] = {    // tokenTypeForCharacter[unspecified character] = 0 = GRMustacheTokenTypeEscapedVariable
         ['!'] = GRMustacheTokenTypeComment,
         ['#'] = GRMustacheTokenTypeSectionOpening,
         ['^'] = GRMustacheTokenTypeInvertedSectionOpening,
@@ -90,6 +90,7 @@
                 if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
                                                                                   content:[templateString substringFromIndex:p]
                                                                            templateString:templateString
+                                                                               templateID:templateID
                                                                                      line:line
                                                                                     range:NSMakeRange(p, templateString.length-p)]]) {
                     return;
@@ -104,6 +105,7 @@
             if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
                                                                               content:[templateString substringWithRange:range]
                                                                        templateString:templateString
+                                                                           templateID:templateID
                                                                                  line:line
                                                                                 range:range]]) {
                 return;
@@ -123,7 +125,7 @@
         
         // ctag was not found
         if (crange.location == NSNotFound) {
-            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
+            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
             return;
         }
         
@@ -132,13 +134,13 @@
         
         // empty tag is not allowed
         if (tag.length == 0) {
-            [self didFinishWithParseErrorAtLine:line description:@"Empty tag"];
+            [self didFinishWithParseErrorAtLine:line description:@"Empty tag" templateID:templateID];
             return;
         }
         
         // tag must not contain otag
         if ([tag rangeOfString:_otag].location != NSNotFound) {
-            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag"];
+            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
             return;
         }
         
@@ -147,7 +149,7 @@
         tokenType = (character < tokenTypeForCharacterLength) ? tokenTypeForCharacter[character] : GRMustacheTokenTypeEscapedVariable;
         tokenRange = NSMakeRange(orange.location, crange.location + crange.length - orange.location);
         switch (tokenType) {
-            case GRMustacheTokenTypeEscapedVariable:    // 0, hence default value in tokenTypeForCharacter
+            case GRMustacheTokenTypeEscapedVariable:    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
                 tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
                 break;
                 
@@ -162,7 +164,7 @@
                 
             case GRMustacheTokenTypeSetDelimiter:
                 if ([tag characterAtIndex:tag.length-1] != '=') {
-                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
+                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
                 tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
@@ -177,7 +179,7 @@
                     self.otag = [nonBlankNewTags objectAtIndex:0];
                     self.ctag = [nonBlankNewTags objectAtIndex:1];
                 } else {
-                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag"];
+                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
                 break;
@@ -190,6 +192,7 @@
         if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:tokenType
                                                                           content:tokenContent
                                                                    templateString:templateString
+                                                                       templateID:templateID
                                                                              line:line
                                                                             range:tokenRange]]) {
             return;
@@ -218,17 +221,19 @@
     }
 }
 
-- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description
+- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
 {
     if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
-        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:3];
-        [userInfo setObject:[NSString stringWithFormat:@"Parse error at line %d: %@", line, description]
-                     forKey:NSLocalizedDescriptionKey];
-        [userInfo setObject:[NSNumber numberWithInteger:line]
-                     forKey:GRMustacheErrorLine];
+        NSString *localizedDescription;
+        if (templateID) {
+            localizedDescription = [NSString stringWithFormat:@"Parse error at line %d of template %@: %@", line, description, templateID];
+        } else {
+            localizedDescription = [NSString stringWithFormat:@"Parse error at line %d: %@", line, description];
+        }
         [_delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
                                                                        code:GRMustacheErrorCodeParseError
-                                                                   userInfo:userInfo]];
+                                                                   userInfo:[NSDictionary dictionaryWithObject:localizedDescription
+                                                                                                        forKey:NSLocalizedDescriptionKey]]];
     }
 }
 
