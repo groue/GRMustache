@@ -75,7 +75,7 @@ GRMustache1 used to parse and interpret Handlebars tags such as `{{../foo/bar}}`
 
 GRMustache1 used to parse and interpret `this` identifier is tags such as `{{this.foo}}`. GRMustache2 does no longer parse the `this` identifier.
 
-GRMustache1 used to look for `localizeSection:inContext:` protocol when rendering a `{{#localize}}...{{/localize}}` section. GRMustache2 does no longer look for those selector, and relies on the GRMustacheHelper protocol only.
+GRMustache1 used to look for implementations of the `localizeSection:inContext:` selector when rendering a `{{#localize}}...{{/localize}}` section. GRMustache2 relies on the GRMustacheHelper protocol only when rendering Mustache lambda sections.
 
 
 ## v1.13.1
