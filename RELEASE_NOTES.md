@@ -71,7 +71,7 @@ extern NSString* const GRMustacheErrorLine;
 @end
 ```
 
-GRMustache1 used to parse and interpret Handlebars tags such as `{{../foo/bar}}`. GRMustache2 does no longer parse those tags.
+GRMustache1 used to parse and interpret [Handlebars](http://handlebarsjs.com/) tags such as `{{../foo/bar}}`. GRMustache2 does no longer parse those tags.
 
 GRMustache1 used to parse and interpret `this` identifier is tags such as `{{this.foo}}`. GRMustache2 does no longer parse the `this` identifier.
 
