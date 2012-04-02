@@ -7,6 +7,77 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 **Performance improvements and API simplification**
 
+### New APIs:
+
+```objc
+enum {
+    // New option for processing BOOL properties as numbers
+    GRMustacheTemplateOptionStrictBoolean = 1
+}
+
+@protocol GRMustacheHelper<NSObject>
+@required
+// New required method
+- (NSString *)renderSection:(GRMustacheSection *)section;
+@end
+
+// New GRMustacheHelper class
+@interface GRMustacheHelper: NSObject<GRMustacheHelper>
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block;
+@end
+
+// New GRMustacheSection properties and methods
+@interface GRMustacheSection: NSObject
+@property (nonatomic, readonly) NSString *innerTemplateString;
+@property (nonatomic, readonly) id renderingContext;
+- (NSString *)render;
+@end
+```
+
+### Removed APIs and behaviors
+
+```objc
+enum {
+    // GRMustache is now compliant by default to the Mustache specification:
+    GRMustacheTemplateOptionMustacheSpecCompatibility = 1
+}
+
+// NSErrors with GRMustacheErrorDomain now store the line number in localizedDescription.
+extern NSString* const GRMustacheErrorLine;
+
+@interface GRMustache: NSObject
+// This global state has been replaced by the GRMustacheTemplateOptionStrictBoolean option:
++ (BOOL)strictBooleanMode:
++ (void)setStrictBooleanMode:(BOOL)strictBooleanMode;
+@end
+
+@protocol GRMustacheHelper<NSObject>
+@required
+// Replaced by renderSection: method
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context;
+@end
+
+// Replaced by the GRMustacheHelper class:
+@interface GRMustacheBlockHelper: NSObject<GRMustacheHelper> {
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section, id context))block;
+@end
+
+@interface GRMustacheSection: NSObject
+// Replaced by the innerTemplateString property
+@property (nonatomic, readonly) NSString *templateString;
+// See the new render method
+- (NSString *)renderObject:(id)object;
+- (NSString *)renderObjects:(id)object, ...;
+@end
+```
+
+GRMustache1 used to parse and interpret Handlebars tags such as `{{../foo/bar}}`. GRMustache2 does no longer parse those tags.
+
+GRMustache1 used to parse and interpret `this` identifier is tags such as `{{this.foo}}`. GRMustache2 does no longer parse the `this` identifier.
+
+GRMustache1 used to look for `localizeSection:inContext:` protocol when rendering a `{{#localize}}...{{/localize}}` section. GRMustache2 does no longer look for those selector, and relies on the GRMustacheHelper protocol only.
+
+
 ## v1.13.1
 
 The deprecated class GRMustacheTemplateLoader was broken by 1.13.0. Deprecated does not mean unavailable: it is restored.
