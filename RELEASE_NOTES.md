@@ -11,7 +11,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ```objc
 enum {
-    // New option for processing BOOL properties as numbers
+    // New option for processing `BOOL` and `char` properties as numbers
     GRMustacheTemplateOptionStrictBoolean = 1
 }
 
