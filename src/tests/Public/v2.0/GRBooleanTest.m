@@ -70,10 +70,10 @@
 
 @implementation GRBooleanTest
 
-- (BOOL)booleanInterpretationForKey:(NSString *)key inObject:(id)object options:(GRMustacheTemplateOptions) options
+- (BOOL)booleanInterpretationForKey:(NSString *)key inObject:(id)object
 {
     NSString *templateString = [NSString stringWithFormat:@"{{#%@}}YES{{/%@}}{{^%@}}NO{{/%@}}", key, key, key, key];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString options:options error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     NSString *result = [template renderObject:object];
     if ([result isEqualToString:@"YES"]) {
         return YES;
@@ -85,20 +85,10 @@
     }
 }
 
-- (BOOL)strictBooleanInterpretationForKey:(NSString *)key inObject:(id)object
-{
-    return [self booleanInterpretationForKey:key inObject:object options:GRMustacheTemplateOptionStrictBoolean];
-}
-
-- (BOOL)looseBooleanInterpretationForKey:(NSString *)key inObject:(id)object
-{
-    return [self booleanInterpretationForKey:key inObject:object options:GRMustacheTemplateOptionNone];
-}
-
 - (BOOL)booleanInterpretationOfObject:(id)object
 {
     NSDictionary *context = object ? [NSDictionary dictionaryWithObject:object forKey:@"bool"] : [NSDictionary dictionary];
-    return [self looseBooleanInterpretationForKey:@"bool" inObject:context];
+    return [self booleanInterpretationForKey:@"bool" inObject:context];
 }
 
 - (BOOL)doesObjectRender:(id)object
@@ -174,366 +164,185 @@
     STAssertEquals(YES, [self doesObjectRender:[NSNumber numberWithUnsignedShort:0]], @"");
 }
 
-- (void)testStrictCustomGetterBOOLProperty
+- (void)testCustomGetterBOOLProperty
 {
     GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
     GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
     
     context.customGetterBOOLProperty = NO;
     inheritingContext.customGetterBOOLProperty = NO;
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
     
     context.customGetterBOOLProperty = YES;
     inheritingContext.customGetterBOOLProperty = YES;
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
 }
 
-- (void)testStrictCustomGetterboolProperty
+- (void)testCustomGetterboolProperty
 {
     GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
     GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
     
     context.customGetterboolProperty = NO;
     inheritingContext.customGetterboolProperty = NO;
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
     
     context.customGetterboolProperty = YES;
     inheritingContext.customGetterboolProperty = YES;
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
 }
 
-- (void)testStrict_boolFalseProperty_isFalseValue
+- (void)test_boolFalseProperty_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"boolFalseProperty" inObject:context], @"");
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"boolFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"boolFalseProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"boolFalseProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_boolTrueProperty_isTrueValue
+- (void)test_boolTrueProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"boolTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"boolTrueProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_BOOLFalseProperty_isTrueValue
+- (void)test_BOOLFalseProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"BOOLFalseProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"BOOLFalseProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_BOOLTrueProperty_isTrueValue
+- (void)test_BOOLTrueProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLTrueProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_charFalseProperty_isTrueValue
+- (void)test_charFalseProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"charFalseProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"charFalseProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_charTrueProperty_isTrueValue
+- (void)test_charTrueProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charTrueProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_unsigned_charFalseProperty_isTrueValue
+- (void)test_unsigned_charFalseProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_unsigned_charTrueProperty_isTrueValue
+- (void)test_unsigned_charTrueProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_intFalseProperty_isTrueValue
+- (void)test_intFalseProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_intTrueProperty_isTrueValue
+- (void)test_intTrueProperty_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intTrueProperty" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intTrueProperty" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)testStrict_boolFalseMethod_isFalseValue
+- (void)test_boolFalseMethod_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"boolFalseMethod" inObject:context], @"");
-    STAssertEquals(NO, [self strictBooleanInterpretationForKey:@"boolFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"boolFalseMethod" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"boolFalseMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_boolTrueMethod_isTrueValue
+- (void)test_boolTrueMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"boolTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"boolTrueMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_BOOLFalseMethod_isTrueValue
+- (void)test_BOOLFalseMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_BOOLTrueMethod_isTrueValue
+- (void)test_BOOLTrueMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"BOOLTrueMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_charFalseMethod_isTrueValue
+- (void)test_charFalseMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_charTrueMethod_isTrueValue
+- (void)test_charTrueMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"charTrueMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_unsigned_charFalseMethod_isTrueValue
+- (void)test_unsigned_charFalseMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_unsigned_charTrueMethod_isTrueValue
+- (void)test_unsigned_charTrueMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_intFalseMethod_isTrueValue
+- (void)test_intFalseMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
 }
-- (void)testStrict_intTrueMethod_isTrueValue
+- (void)test_intTrueMethod_isTrueValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self strictBooleanInterpretationForKey:@"intTrueMethod" inObject:inheritingContext], @"");
-}
-
-- (void)testLooseCustomGetterBOOLProperty
-{
-    GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    
-    context.customGetterBOOLProperty = NO;
-    inheritingContext.customGetterBOOLProperty = NO;
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
-    
-    context.customGetterBOOLProperty = YES;
-    inheritingContext.customGetterBOOLProperty = YES;
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"customGetterBOOLProperty" inObject:inheritingContext], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"isCustomGetterBOOLProperty" inObject:inheritingContext], @"");
-}
-
-- (void)testLooseCustomGetterboolProperty
-{
-    GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    
-    context.customGetterboolProperty = NO;
-    inheritingContext.customGetterboolProperty = NO;
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
-    
-    context.customGetterboolProperty = YES;
-    inheritingContext.customGetterboolProperty = YES;
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"customGetterboolProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"customGetterboolProperty" inObject:inheritingContext], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"isCustomGetterboolProperty" inObject:inheritingContext], @"");
-}
-
-- (void)testLoose_boolFalseProperty_isFalseValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"boolFalseProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"boolFalseProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_boolTrueProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"boolTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"boolTrueProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_BOOLFalseProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"BOOLFalseProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"BOOLFalseProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_BOOLTrueProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLTrueProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_charFalseProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"charFalseProperty" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"charFalseProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_charTrueProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charTrueProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_unsigned_charFalseProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_unsigned_charTrueProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_intFalseProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_intTrueProperty_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intTrueProperty" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intTrueProperty" inObject:inheritingContext], @"");
-}
-- (void)testLoose_boolFalseMethod_isFalseValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"boolFalseMethod" inObject:context], @"");
-    STAssertEquals(NO, [self looseBooleanInterpretationForKey:@"boolFalseMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_boolTrueMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"boolTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"boolTrueMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_BOOLFalseMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_BOOLTrueMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"BOOLTrueMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_charFalseMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_charTrueMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"charTrueMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_unsigned_charFalseMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_unsigned_charTrueMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_intFalseMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
-}
-- (void)testLoose_intTrueMethod_isTrueValue
-{
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intTrueMethod" inObject:context], @"");
-    STAssertEquals(YES, [self looseBooleanInterpretationForKey:@"intTrueMethod" inObject:inheritingContext], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intTrueMethod" inObject:context], @"");
+    STAssertEquals(YES, [self booleanInterpretationForKey:@"intTrueMethod" inObject:inheritingContext], @"");
 }
 
 @end

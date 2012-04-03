@@ -23,11 +23,11 @@
 #import "GRMustacheTemplateDelegateTest.h"
 
 @interface GRMustacheTemplateDelegateAssistant : NSObject
-@property (nonatomic) BOOL boolProperty;
+@property (nonatomic) BOOL BOOLProperty;
 @end
 
 @implementation GRMustacheTemplateDelegateAssistant
-@synthesize boolProperty;
+@synthesize BOOLProperty;
 @end
 
 @interface GRMustacheTemplateRecorder : NSObject<GRMustacheTemplateDelegate>
@@ -215,12 +215,12 @@
 - (void)testDelegateCanReadInvocationReturnValueFromBooleanProperties
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#1}}{{boolProperty}}{{/1}}{{#2}}{{boolProperty}}{{/2}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#1}}{{BOOLProperty}}{{/1}}{{#2}}{{BOOLProperty}}{{/2}}" error:NULL];
     template.delegate = recorder;
     GRMustacheTemplateDelegateAssistant *assistant1 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
     GRMustacheTemplateDelegateAssistant *assistant2 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    assistant1.boolProperty = YES;
-    assistant2.boolProperty = NO;
+    assistant1.BOOLProperty = YES;
+    assistant2.BOOLProperty = NO;
     [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", assistant2, @"2", nil]];
     STAssertEquals(recorder.booleanReturnValueCount, (NSUInteger)2, @"");
 }
@@ -228,12 +228,12 @@
 - (void)testDelegateCanReadInvocationReturnValueFromKeyPath
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{1.boolProperty}}{{2.boolProperty}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{1.BOOLProperty}}{{2.BOOLProperty}}" error:NULL];
     template.delegate = recorder;
     GRMustacheTemplateDelegateAssistant *assistant1 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
     GRMustacheTemplateDelegateAssistant *assistant2 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    assistant1.boolProperty = YES;
-    assistant2.boolProperty = NO;
+    assistant1.BOOLProperty = YES;
+    assistant2.BOOLProperty = NO;
     [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", assistant2, @"2", nil]];
     STAssertEquals(recorder.booleanReturnValueCount, (NSUInteger)2, @"");
 }

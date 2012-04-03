@@ -64,7 +64,6 @@
         
         GRMustacheTemplate *template = nil;
         
-        NSInteger options = [[test objectForKey:@"options"] integerValue];  // missing key will translate into GRMustacheTemplateOptionsNone
         NSDictionary *partialsDictionary = [test objectForKey:@"partials"];
         NSString *templateName = [test objectForKey:@"template_name"];
         if (templateName.length > 0) {
@@ -87,8 +86,7 @@
             
             GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath
                                                                                                    templateExtension:[templateName pathExtension]
-                                                                                                            encoding:encoding
-                                                                                                             options:options];
+                                                                                                            encoding:encoding];
             template = [repository templateForName:[templateName stringByDeletingPathExtension] error:&error];
             
             [fm removeItemAtPath:templatesDirectoryPath error:NULL];
@@ -97,7 +95,7 @@
             // Keep partials in memory
             
             NSString *templateString = [test objectForKey:@"template"];
-            GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary options:options];
+            GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
             template = [repository templateFromString:templateString error:&error];
         }
         STAssertNotNil(template, @"Could not template: %@", error);

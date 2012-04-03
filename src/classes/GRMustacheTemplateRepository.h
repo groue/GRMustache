@@ -36,7 +36,6 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    GRMustacheTemplateOptions _options;
     NSMutableDictionary *_templateForTemplateID;
     id _currentlyParsedTemplateID;
 }
@@ -44,33 +43,22 @@
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 + (id)templateRepository AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-+ (id)templateRepositoryWithOptions:(GRMustacheTemplateOptions)options AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 
 - (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;

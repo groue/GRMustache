@@ -23,15 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-enum {
-    GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionStrictBoolean = 0x01,
-};
-
-typedef NSUInteger GRMustacheTemplateOptions;
-
-extern GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions;
-
 typedef struct {
     int major;
     int minor;
@@ -42,7 +33,5 @@ typedef struct {
 
 + (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
-+ (GRMustacheTemplateOptions)defaultTemplateOptions GRMUSTACHE_API_PUBLIC;
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions GRMUSTACHE_API_PUBLIC;
 
 @end

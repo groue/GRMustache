@@ -26,13 +26,11 @@
 @interface GRMustacheTemplateRenderMethodsTestSupport: NSObject
 @property (nonatomic, retain) NSString *stringProperty;
 @property (nonatomic) BOOL BOOLProperty;
-@property (nonatomic) bool boolProperty;
 @end
 
 @implementation GRMustacheTemplateRenderMethodsTestSupport
 @synthesize stringProperty;
 @synthesize BOOLProperty;
-@synthesize boolProperty;
 @end
 
 @interface GRMustacheTemplateRenderMethodsTest()
@@ -79,13 +77,6 @@
     return [(NSNumber *)value boolValue];
 }
 
-- (BOOL)valueForboolPropertyInRendering:(NSString *)rendering
-{
-    id value = [self valueForKey:@"boolProperty" inRendering:rendering];
-    STAssertNotNil(value, @"nil boolProperty");
-    return [(NSNumber *)value boolValue];
-}
-
 - (NSString *)valueForStringPropertyInRendering:(NSString *)rendering
 {
     return [self valueForKey:@"stringProperty" inRendering:rendering];
@@ -107,32 +98,6 @@
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
-- (void)testGRMustacheTemplate_renderObject_fromString_options_error
-{
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                    fromString:self.templateString
-                                                       options:GRMustacheTemplateOptionNone
-                                                         error:NULL];
-        STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                    fromString:self.templateString
-                                                       options:GRMustacheTemplateOptionStrictBoolean
-                                                         error:NULL];
-        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
-}
-
 - (void)testGRMustacheTemplate_renderObject_fromContentsOfFile_error
 {
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
@@ -141,32 +106,6 @@
                                         fromContentsOfFile:self.templatePath
                                                      error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
-}
-
-- (void)testGRMustacheTemplate_renderObject_fromContentsOfFile_options_error
-{
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                            fromContentsOfFile:self.templatePath
-                                                       options:GRMustacheTemplateOptionNone
-                                                         error:NULL];
-        STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                            fromContentsOfFile:self.templatePath
-                                                       options:GRMustacheTemplateOptionStrictBoolean
-                                                         error:NULL];
-        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
 }
 
 - (void)testGRMustacheTemplate_renderObject_fromContentsOfURL_error
@@ -179,32 +118,6 @@
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
-- (void)testGRMustacheTemplate_renderObject_fromContentsOfURL_options_error
-{
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                             fromContentsOfURL:self.templateURL
-                                                       options:GRMustacheTemplateOptionNone
-                                                         error:NULL];
-        STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                             fromContentsOfURL:self.templateURL
-                                                       options:GRMustacheTemplateOptionStrictBoolean
-                                                         error:NULL];
-        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-    }
-}
-
 - (void)testGRMustacheTemplate_renderObject_fromResource_bundle_error
 {
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
@@ -215,36 +128,6 @@
                                                      error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
     STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
-}
-
-- (void)testGRMustacheTemplate_renderObject_fromResource_bundle_options_error
-{
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                  fromResource:self.templateName
-                                                        bundle:self.testBundle
-                                                       options:GRMustacheTemplateOptionNone
-                                                         error:NULL];
-        STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-        STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-        context.BOOLProperty = NO;
-        context.boolProperty = NO;
-        NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                  fromResource:self.templateName
-                                                        bundle:self.testBundle
-                                                       options:GRMustacheTemplateOptionStrictBoolean
-                                                         error:NULL];
-        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-        STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-        STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
-    }
 }
 
 - (void)testGRMustacheTemplate_renderObject_fromResource_withExtension_bundle_error
@@ -284,98 +167,6 @@
     }
 }
 
-- (void)testGRMustacheTemplate_renderObject_fromResource_withExtension_bundle_options_error
-{
-    {
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:@"json"
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionNone
-                                                             error:NULL];
-            STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"json", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:@""
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionNone
-                                                             error:NULL];
-            STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:nil
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionNone
-                                                             error:NULL];
-            STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-    }
-    {
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:@"json"
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionStrictBoolean
-                                                             error:NULL];
-            STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"json", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:@""
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionStrictBoolean
-                                                             error:NULL];
-            STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-        {
-            GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
-            context.BOOLProperty = NO;
-            context.boolProperty = NO;
-            NSString *rendering = [GRMustacheTemplate renderObject:context
-                                                      fromResource:self.templateName
-                                                     withExtension:nil
-                                                            bundle:self.testBundle
-                                                           options:GRMustacheTemplateOptionStrictBoolean
-                                                             error:NULL];
-            STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
-            STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
-            STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-        }
-    }
-}
-
 - (void)testGRMustacheTemplate_renderObject
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
@@ -390,13 +181,13 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    context.boolProperty = YES;
+    context.BOOLProperty = YES;
     NSDictionary *extraContext = [NSDictionary dictionaryWithObject:@"bar" forKey:@"stringProperty"];
     
     {
         NSString *rendering = [template renderObjects:context, extraContext, nil];
         STAssertEqualObjects(@"bar", [self valueForStringPropertyInRendering:rendering], nil);
-        STAssertEquals(YES, [self valueForboolPropertyInRendering:rendering], nil);
+        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
     }
     {
         NSString *rendering = [template renderObjects:extraContext, context, nil];
@@ -408,7 +199,8 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
     NSString *rendering = [template render];
-    STAssertEquals(NO, [self valueForboolPropertyInRendering:rendering], nil);
+    STAssertEqualObjects(@"", [self valueForStringPropertyInRendering:rendering], nil);
+    STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
 }
 
 @end

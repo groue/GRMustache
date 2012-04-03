@@ -35,7 +35,6 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    GRMustacheTemplateOptions _options;
     NSMutableDictionary *_templateForTemplateID;
     id _currentlyParsedTemplateID;
 }
@@ -43,33 +42,22 @@
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateRepositoryWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
 + (id)templateRepository GRMUSTACHE_API_PUBLIC;
-+ (id)templateRepositoryWithOptions:(GRMustacheTemplateOptions)options GRMUSTACHE_API_PUBLIC;
 
 - (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;

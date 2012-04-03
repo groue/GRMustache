@@ -34,7 +34,6 @@
 @property (nonatomic, retain) NSMutableArray *currentElements;
 @property (nonatomic, retain) NSMutableArray *elementsStack;
 @property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
-- (id)initWithOptions:(GRMustacheTemplateOptions)options;
 - (void)finish;
 - (void)finishWithError:(NSError *)error;
 - (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description;
@@ -49,9 +48,16 @@
 @synthesize elementsStack=_elementsStack;
 @synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
 
-+ (id)templateParserWithOptions:(GRMustacheTemplateOptions)options
+- (id)init
 {
-    return [[[self alloc] initWithOptions:options] autorelease];
+    self = [super init];
+    if (self) {
+        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
+        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [_elementsStack addObject:_currentElements];
+        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+    }
+    return self;
 }
 
 - (NSArray *)renderingElementsReturningError:(NSError **)outError
@@ -200,19 +206,6 @@
 
 #pragma mark Private
 
-- (id)initWithOptions:(GRMustacheTemplateOptions)options
-{
-    self = [self init];
-    if (self) {
-        _options = options;
-        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
-        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-        [_elementsStack addObject:_currentElements];
-        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
-    }
-    return self;
-}
-
 - (void)finishWithError:(NSError *)error
 {
     self.error = error;
@@ -301,7 +294,7 @@
         return nil;
     }
     
-    return [GRMustacheInvocation invocationWithToken:token keys:keys options:_options];
+    return [GRMustacheInvocation invocationWithToken:token keys:keys];
 }
 
 @end

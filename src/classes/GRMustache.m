@@ -24,8 +24,6 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheVersion.h"
 
-GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateOptionNone;
-
 @implementation GRMustache
 
 + (void)preventNSUndefinedKeyExceptionAttack
@@ -39,16 +37,6 @@ GRMustacheTemplateOptions GRMustacheDefaultTemplateOptions = GRMustacheTemplateO
         .major = GRMUSTACHE_MAJOR_VERSION,
         .minor = GRMUSTACHE_MINOR_VERSION,
         .patch = GRMUSTACHE_PATCH_VERSION };
-}
-
-+ (GRMustacheTemplateOptions)defaultTemplateOptions
-{
-    return GRMustacheDefaultTemplateOptions;
-}
-
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions
-{
-    GRMustacheDefaultTemplateOptions = templateOptions;
 }
 
 @end

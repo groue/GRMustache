@@ -40,7 +40,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
@@ -55,7 +55,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 
@@ -68,7 +68,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options;
+- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 
@@ -79,7 +79,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @private
     NSDictionary *_partialsDictionary;
 }
-- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options;
+- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary;
 @end
 
 
@@ -98,123 +98,66 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL
 {
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext
 {
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:encoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBaseURL alloc] initWithBaseURL:URL templateExtension:ext encoding:encoding] autorelease];
 }
 
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateRepositoryWithDirectory:(NSString *)path
 {
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithDirectory:(NSString *)path options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext
 {
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:encoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryDirectory alloc] initWithDirectory:path templateExtension:ext encoding:encoding] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:GRMustacheDefaultExtension encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:NSUTF8StringEncoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:NSUTF8StringEncoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding
 {
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:encoding options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:encoding options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryBundle alloc] initWithBundle:bundle templateExtension:ext encoding:encoding] autorelease];
 }
 
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary
 {
-    return [[[GRMustacheTemplateRepositoryPartialsDictionary alloc] initWithPartialsDictionary:partialsDictionary options:GRMustacheDefaultTemplateOptions] autorelease];
-}
-
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepositoryPartialsDictionary alloc] initWithPartialsDictionary:partialsDictionary options:options] autorelease];
+    return [[[GRMustacheTemplateRepositoryPartialsDictionary alloc] initWithPartialsDictionary:partialsDictionary] autorelease];
 }
 
 + (id)templateRepository
 {
-    return [[[GRMustacheTemplateRepository alloc] initWithOptions:GRMustacheDefaultTemplateOptions] autorelease];
+    return [[[GRMustacheTemplateRepository alloc] init] autorelease];
 }
 
-+ (id)templateRepositoryWithOptions:(GRMustacheTemplateOptions)options
-{
-    return [[[GRMustacheTemplateRepository alloc] initWithOptions:options] autorelease];
-}
-
-// designated initializer
-- (id)initWithOptions:(GRMustacheTemplateOptions)options
+- (id)init
 {
     self = [super init];
     if (self) {
         _templateForTemplateID = [[NSMutableDictionary alloc] init];
-        _options = options;
     }
     return self;
 }
@@ -236,7 +179,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     if (!renderingElements) {
         return nil;
     }
-    return [GRMustacheTemplate templateWithElements:renderingElements options:_options];
+    return [GRMustacheTemplate templateWithElements:renderingElements];
 }
 
 #pragma mark GRMustacheTemplateParserDataSource
@@ -253,7 +196,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSArray *renderingElements = nil;
     @autoreleasepool {
         // setup parser
-        GRMustacheTemplateParser *parser = [GRMustacheTemplateParser templateParserWithOptions:_options];
+        GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] init] autorelease];
         parser.dataSource = self;
         
         // tokenize
@@ -307,7 +250,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         }
         
         // store an empty template before parsing, so that we support recursive partials
-        template = [GRMustacheTemplate templateWithElements:nil options:_options];
+        template = [GRMustacheTemplate templateWithElements:nil];
         [_templateForTemplateID setObject:template forKey:templateID];
         
         // prepare for GRMustacheTemplateParserDataSource methods
@@ -345,9 +288,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryBaseURL
 
-- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self initWithOptions:options];
+    self = [self init];
     if (self) {
         _baseURL = [baseURL retain];
         _templateExtension = [templateExtension retain];
@@ -400,9 +343,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryDirectory
 
-- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self initWithOptions:options];
+    self = [self init];
     if (self) {
         _directoryPath = [directoryPath retain];
         _templateExtension = [templateExtension retain];
@@ -454,9 +397,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryBundle
 
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding options:(GRMustacheTemplateOptions)options
+- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self initWithOptions:options];
+    self = [self init];
     if (self) {
         if (bundle == nil) {
             bundle = [NSBundle mainBundle];
@@ -500,9 +443,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryPartialsDictionary
 
-- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary options:(GRMustacheTemplateOptions)options
+- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary
 {
-    self = [self initWithOptions:options];
+    self = [self init];
     if (self) {
         _partialsDictionary = [partialsDictionary retain];
         self.dataSource = self;

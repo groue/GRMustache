@@ -44,10 +44,8 @@
     NSMutableArray *_currentElements;
     GRMustacheToken *_currentSectionOpeningToken;
     id<GRMustacheTemplateParserDataSource> _dataSource;
-    GRMustacheTemplateOptions _options;
 }
 @property (nonatomic, assign) id<GRMustacheTemplateParserDataSource> dataSource GRMUSTACHE_API_INTERNAL;
 
-+ (id)templateParserWithOptions:(GRMustacheTemplateOptions)options GRMUSTACHE_API_INTERNAL;
 - (NSArray *)renderingElementsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

@@ -26,23 +26,16 @@
 #import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheTemplate()
-@property (nonatomic) GRMustacheTemplateOptions options;
-- (id)initWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options;
+- (id)initWithElements:(NSArray *)elems;
 @end
 
 @implementation GRMustacheTemplate
 @synthesize elems=_elems;
-@synthesize options=_options;
 @synthesize delegate=_delegate;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError
 {
-    return [GRMustacheTemplate templateFromString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)templateFromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle] options:options];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
     return [templateRepository templateFromString:templateString error:outError];
 }
 
@@ -50,15 +43,10 @@
 
 + (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError
 {
-    return [GRMustacheTemplate templateFromContentsOfURL:URL options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)templateFromContentsOfURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSURL *baseURL = [URL URLByDeletingLastPathComponent];
     NSString *templateExtension = [URL pathExtension];
     NSString *templateName = [[URL lastPathComponent] stringByDeletingPathExtension];
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension options:options];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension];
     return [templateRepository templateForName:templateName error:outError];
 }
 
@@ -66,43 +54,28 @@
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError
 {
-    return [GRMustacheTemplate templateFromContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)templateFromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *directoryPath = [path stringByDeletingLastPathComponent];
     NSString *templateExtension = [path pathExtension];
     NSString *templateName = [[path lastPathComponent] stringByDeletingPathExtension];
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension options:options];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension];
     return [templateRepository templateForName:templateName error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [GRMustacheTemplate templateFromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle options:options];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
     return [templateRepository templateForName:name error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext options:options];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext];
     return [templateRepository templateForName:name error:outError];
 }
 
-+ (id)templateWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options
++ (id)templateWithElements:(NSArray *)elems
 {
-    return [[[self alloc] initWithElements:elems options:options] autorelease];
+    return [[[self alloc] initWithElements:elems] autorelease];
 }
 
 - (void)dealloc
@@ -113,15 +86,10 @@
 
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError
 {
-    return [self renderObject:object fromString:templateString options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *result;
     GRMustacheTemplate *template;
     @autoreleasepool {
-        template = [GRMustacheTemplate templateFromString:templateString options:options error:outError];
+        template = [GRMustacheTemplate templateFromString:templateString error:outError];
         result = [[template renderObject:object] retain];
         // make sure outError is not released by autoreleasepool
         if (!template && outError != NULL) [*outError retain];
@@ -134,15 +102,10 @@
 
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)URL error:(NSError **)outError
 {
-    return [self renderObject:object fromContentsOfURL:URL options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)URL options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *result;
     GRMustacheTemplate *template;
     @autoreleasepool {
-        template = [GRMustacheTemplate templateFromContentsOfURL:URL options:options error:outError];
+        template = [GRMustacheTemplate templateFromContentsOfURL:URL error:outError];
         result = [[template renderObject:object] retain];
         // make sure outError is not released by autoreleasepool
         if (!template && outError != NULL) [*outError retain];
@@ -155,15 +118,10 @@
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError
 {
-    return [self renderObject:object fromContentsOfFile:path options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *result;
     GRMustacheTemplate *template;
     @autoreleasepool {
-        template = [GRMustacheTemplate templateFromContentsOfFile:path options:options error:outError];
+        template = [GRMustacheTemplate templateFromContentsOfFile:path error:outError];
         result = [[template renderObject:object] retain];
         // make sure outError is not released by autoreleasepool
         if (!template && outError != NULL) [*outError retain];
@@ -174,15 +132,10 @@
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [self renderObject:object fromResource:name bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *result;
     GRMustacheTemplate *template;
     @autoreleasepool {
-        template = [GRMustacheTemplate templateFromResource:name bundle:bundle options:options error:outError];
+        template = [GRMustacheTemplate templateFromResource:name bundle:bundle error:outError];
         result = [[template renderObject:object] retain];
         // make sure outError is not released by autoreleasepool
         if (!template && outError != NULL) [*outError retain];
@@ -193,15 +146,10 @@
 
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
 {
-    return [self renderObject:object fromResource:name withExtension:ext bundle:bundle options:GRMustacheDefaultTemplateOptions error:outError];
-}
-
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle options:(GRMustacheTemplateOptions)options error:(NSError **)outError
-{
     NSString *result;
     GRMustacheTemplate *template;
     @autoreleasepool {
-        template = [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle options:options error:outError];
+        template = [GRMustacheTemplate templateFromResource:name withExtension:ext bundle:bundle error:outError];
         result = [[template renderObject:object] retain];
         // make sure outError is not released by autoreleasepool
         if (!template && outError != NULL) [*outError retain];
@@ -286,12 +234,11 @@
 
 #pragma mark Private
 
-- (id)initWithElements:(NSArray *)elems options:(GRMustacheTemplateOptions)options
+- (id)initWithElements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
         self.elems = elems;
-        self.options = options;
     }
     return self;
 }
