@@ -52,7 +52,7 @@ typedef struct {
  @return The version of GRMustache as a GRMustacheVersion struct.
  @since v1.0
  */
-+ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
@@ -75,7 +75,7 @@ typedef struct {
  
  @since v1.7
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
 
 @end
 
