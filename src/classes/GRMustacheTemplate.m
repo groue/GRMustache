@@ -181,36 +181,6 @@
     return [result autorelease];
 }
 
-+ (GRMustacheObjectKind)objectKind:(id)object
-{
-    if (object == nil ||
-        object == [NSNull null] ||
-        (void *)object == (void *)kCFBooleanFalse ||
-        ([object isKindOfClass:[NSString class]] && ((NSString*)object).length == 0))
-    {
-        return GRMustacheObjectKindFalse;
-    }
-    else if ([object isKindOfClass:[NSDictionary class]])
-    {
-        return GRMustacheObjectKindObject;
-    }
-    else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
-    {
-        for (id _ in object) {
-            return GRMustacheObjectKindNonEmptyEnumerable;
-        }
-        return GRMustacheObjectKindFalse;
-    }
-    else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
-    {
-        return GRMustacheObjectKindLambda;
-    }
-    else
-    {
-        return GRMustacheObjectKindObject;
-    }
-}
-
 
 #pragma mark <GRMustacheRenderingElement>
 

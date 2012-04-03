@@ -96,51 +96,76 @@
         
         // interpret
         
-        switch([GRMustacheTemplate objectKind:value]) {
-            case GRMustacheObjectKindFalse:
-                if (_inverted) {
+        if (value == nil ||
+            value == [NSNull null] ||
+            (void *)value == (void *)kCFBooleanFalse ||
+            ([value isKindOfClass:[NSString class]] && ((NSString*)value).length == 0))
+        {
+            // False value
+            if (_inverted) {
+                result = [[NSMutableString string] retain];
+                for (id<GRMustacheRenderingElement> elem in _elems) {
+                    [(NSMutableString *)result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
+                }
+            }
+        }
+        else if ([value isKindOfClass:[NSDictionary class]])
+        {
+            // True object value
+            if (!_inverted) {
+                GRMustacheContext *innerContext = [context contextByAddingObject:value];
+                result = [[NSMutableString string] retain];
+                for (id<GRMustacheRenderingElement> elem in _elems) {
+                    [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
+                }
+            }
+        }
+        else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
+        {
+            // Enumerable
+            if (_inverted) {
+                BOOL empty = YES;
+                for (id object in value) {
+                    empty = NO;
+                    break;
+                }
+                if (empty) {
                     result = [[NSMutableString string] retain];
                     for (id<GRMustacheRenderingElement> elem in _elems) {
                         [(NSMutableString *)result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
                     }
                 }
-                break;
-                
-            case GRMustacheObjectKindObject:
-                if (!_inverted) {
-                    GRMustacheContext *innerContext = [context contextByAddingObject:value];
-                    result = [[NSMutableString string] retain];
+            } else {
+                result = [[NSMutableString string] retain];
+                for (id object in value) {
+                    GRMustacheContext *innerContext = [context contextByAddingObject:object];
                     for (id<GRMustacheRenderingElement> elem in _elems) {
                         [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
                     }
                 }
-                break;
-                
-            case GRMustacheObjectKindNonEmptyEnumerable:
-                if (!_inverted) {
-                    result = [[NSMutableString string] retain];
-                    for (id object in value) {
-                        GRMustacheContext *innerContext = [context contextByAddingObject:object];
-                        for (id<GRMustacheRenderingElement> elem in _elems) {
-                            [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
-                        }
-                    }
+            }
+        }
+        else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
+        {
+            // Helper
+            if (!_inverted) {
+                _rootTemplate = rootTemplate;
+                _renderingContext = context;
+                result = [[(id<GRMustacheHelper>)value renderSection:self] retain];
+                _renderingContext = nil;
+                _rootTemplate = nil;
+            }
+        }
+        else
+        {
+            // True object value
+            if (!_inverted) {
+                GRMustacheContext *innerContext = [context contextByAddingObject:value];
+                result = [[NSMutableString string] retain];
+                for (id<GRMustacheRenderingElement> elem in _elems) {
+                    [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
                 }
-                break;
-                
-            case GRMustacheObjectKindLambda:
-                if (!_inverted) {
-                    _rootTemplate = rootTemplate;
-                    _renderingContext = context;
-                    result = [[(id<GRMustacheHelper>)value renderSection:self] retain];
-                    _renderingContext = nil;
-                    _rootTemplate = nil;
-                }
-                break;
-                
-            default:
-                // should not be here
-                NSAssert(NO, @"");
+            }
         }
         
         

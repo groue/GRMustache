@@ -25,22 +25,11 @@
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRenderingElement_private.h"
 
-typedef enum {
-    GRMustacheObjectKindFalse,
-    GRMustacheObjectKindObject,
-    GRMustacheObjectKindNonEmptyEnumerable,
-    GRMustacheObjectKindLambda,
-} GRMustacheObjectKind;
-
 @interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
 @private
     NSArray *_elems;
     id<GRMustacheTemplateDelegate> _delegate;
 }
-
-#pragma mark Objects kinds
-
-+ (GRMustacheObjectKind)objectKind:(id)object GRMUSTACHE_API_INTERNAL;
 
 #pragma mark Delegate
 
