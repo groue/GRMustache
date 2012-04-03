@@ -23,14 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-enum {
-    GRMustacheTemplateOptionNone = 0,
-    GRMustacheTemplateOptionStrictBoolean = 0x01,
-};
-
-typedef NSUInteger GRMustacheTemplateOptions;
-
-
 /**
  A C struct that hold GRMustache version information
  
@@ -60,7 +52,7 @@ typedef struct {
  @return The version of GRMustache as a GRMustacheVersion struct.
  @since v1.0
  */
-+ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
@@ -83,32 +75,7 @@ typedef struct {
  
  @since v1.7
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-/// @name Global template options
-//////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- Returns the default template options. The default value is GRMustacheTemplateOptionNone.
- 
- @return The default template options. The default value is GRMustacheTemplateOptionNone.
- @see setDefaultTemplateOptions:
- @since v1.8
- */
-+ (GRMustacheTemplateOptions)defaultTemplateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
-
-/**
- Sets the default template options.
- 
- Those options will be used by all GRMustacheTemplate rendering and parsing methods, such as [GRMustacheTemplate templateFromString:error:] and [GRMustacheTemplate renderObject:fromString:error:].
- 
- @param templateOptions A mask of options indicating the default behavior of templates.
- @see defaultTemplateOptions
- @since v1.8
- */
-+ (void)setDefaultTemplateOptions:(GRMustacheTemplateOptions)templateOptions AVAILABLE_GRMUSTACHE_VERSION_2_0_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
 
 @end
 
