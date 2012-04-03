@@ -63,7 +63,7 @@
         GRMustacheTemplate *template = [repository templateFromString:templateString error:NULL];
         NSString *rendering = [template renderObject:data];
         
-        // GRMustache2 doesn't care about white space rules of the Mustache specification.
+        // GRMustache3 doesn't care about white space rules of the Mustache specification.
         // Compare rendering and expected rendering, but ignoring white space.
         NSCharacterSet *w = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         rendering = [[rendering componentsSeparatedByCharactersInSet:w] componentsJoinedByString:@""];

@@ -8,7 +8,7 @@ You'll find below some useful information on each of those topics.
 
 ## Change GRMustache
 
-Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache2-MacOS` and `GRMustache2-iOS` targets of the `src/GRMustache.xcodeproj` project.
+Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache3-MacOS` and `GRMustache3-iOS` targets of the `src/GRMustache.xcodeproj` project.
 
 Headers are splitted in two categories:
 
@@ -38,7 +38,7 @@ There are two kinds of tests, all stored in the `src/tests` folder.
 - tests of private APIs
 - tests of public APIs
 
-When a file is added or removed from the `src/tests` folder, both `GRMustache2-MacOSTests` and `GRMustache2-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
+When a file is added or removed from the `src/tests` folder, both `GRMustache3-MacOSTests` and `GRMustache3-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
 
 ### Tests of private APIs
 
