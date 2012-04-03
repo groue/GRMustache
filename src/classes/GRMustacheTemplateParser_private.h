@@ -26,15 +26,21 @@
 #import "GRMustache_private.h"
 
 
-@class GRMustacheTemplate;
 @class GRMustacheTemplateParser;
-@class GRMustacheInvocation;
 @protocol GRMustacheRenderingElement;
+
+
+// =============================================================================
+#pragma mark - <GRMustacheTemplateParserDataSource>
 
 @protocol GRMustacheTemplateParserDataSource <NSObject>
 @required
 - (id<GRMustacheRenderingElement>)templateParser:(GRMustacheTemplateParser *)templateParser renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
+
+
+// =============================================================================
+#pragma mark - GRMustacheTemplateParser
 
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private

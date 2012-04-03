@@ -290,7 +290,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self init];
+    self = [super init];
     if (self) {
         _baseURL = [baseURL retain];
         _templateExtension = [templateExtension retain];
@@ -345,7 +345,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self init];
+    self = [super init];
     if (self) {
         _directoryPath = [directoryPath retain];
         _templateExtension = [templateExtension retain];
@@ -399,7 +399,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
-    self = [self init];
+    self = [super init];
     if (self) {
         if (bundle == nil) {
             bundle = [NSBundle mainBundle];
@@ -445,7 +445,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary
 {
-    self = [self init];
+    self = [super init];
     if (self) {
         _partialsDictionary = [partialsDictionary retain];
         self.dataSource = self;
