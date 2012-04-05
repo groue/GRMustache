@@ -65,10 +65,6 @@ FAQ
     
     A: Check [Guides/template_repositories.md](GRMustache/blob/master/Guides/template_repositories.md).
 
-- **Q: I have no clue how to get rid of deprecation warnings after I have updated GRMustache.**
-    
-    A: No need to rush: GRMustache won't break your code until it reaches version 2.0. Meanwhile, check the [release notes](GRMustache/blob/master/RELEASE_NOTES.md). They'll tell you how to update your deprecated code.
-
 - **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
     
     A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
