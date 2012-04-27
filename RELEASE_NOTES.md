@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v3.0.1
+
+Restored intended architectures: armv6+armv7+i386 for libGRMustache3-iOS, i386+x86_64 for libGRMustache3-MacOS.
+
 ## v3.0.0
 
 **There is no option**
