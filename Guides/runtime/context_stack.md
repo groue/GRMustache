@@ -8,44 +8,42 @@ Mustache sections open new contexts
 
 Mustache sections allow you digging inside an object:
 
-    {{#me}}
+    {{#person}}
       {{#pet}}
           My pet is named {{name}}.
       {{/pet}}
-    {{/me}}
+    {{/person}}
 
-Suppose this template is provided this object (forgive the JSON notation):
+Suppose this template is provided this object:
 
-    { me: {
-        pet: {
-          name: 'Plato' }}}
+    { person: { pet: { name: 'Plato' }}}
 
-The `me` key will return a person.
+The `person` key will return a person.
 
-This person becomes the context in the `me` section: the `pet` key will be looked in that person.
+This person becomes the context in the `person` section: the `pet` key will be looked in that person.
 
 Finally, the `name` key will be looked in the pet.
 
 The stack in action: missing keys
 ---------------------------------
 
-Should a key be missing in the current context, GRMustache will look for it in the enclosing contexts. This is the context stack. It starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
+Should a key be missing in the current context, GRMustache will look for it in the enclosing contexts, the values that populated the enclosing sections.
 
-### What about NSUndefinedKeyException?
+For instance, when rendering the above template, the `name` key will be ask to the pet first. In case of failure, GRMustache will then check the `person` object. Eventually, when all objects in the context stack have failed providing the key, the lookup will stop.
 
-I can hear you: "What about the `NSUndefinedKeyException` raised by the Key-Value Coding `valueForKey:` method when a key is missed?"
+### GRMustache catches NSUndefinedKeyException
 
-*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`. Precisely, it catches exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being an black hole.
+GRMustache uses the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method when performing key lookup.
 
-For instance, the following code will ask `@"foo"` for the key `XXX`. The string will raise, GRMustache will catch, and the final rendering will be the empty string:
+NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` invokes `valueForUndefinedKey:` when asked for an unknown key. `valueForUndefinedKey:`, in turn, raises an `NSUndefinedKeyException` in its default implementation.
 
-```objc
-[GRMustacheTemplate renderObject:@"foo"
-                      fromString:@"{{XXX}}"
-                           error:NULL];
-```
+*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`. Precisely, it catches `NSUndefinedKeyException` exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being a black hole.
 
-When debugging your project, those exceptions may become a real annoyance, because you tell your debugger to stop on every Objective-C exceptions.
+For instance, if the pet above has to `name` property, it will raise an `NSUndefinedKeyException` that will be caught by GRMustache so that the key lookup can continue with the `person` object.
+
+### Debugging
+
+When debugging your project, those exceptions may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
 
 You can avoid that: make sure you call before any GRMustache rendering the following method:
 
