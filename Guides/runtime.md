@@ -15,20 +15,30 @@ Those are the only interfaces that you have to care about when providing data to
 
 - `NSFastEnumeration` is the standard protocol for [enumerable objects](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html). The most obvious enumerable is NSArray. There are others, and you may provide your own. Objects that conform to the `NSFastEnumeration` protocol are the base of GRMustache loops. You'll read more on this topic in the [loops.md](runtime/loops.md) guide.
 
-You do not need to know more in order to talk to GRMustache.
+For instance, let's consider the following code:
+
+```obcj
+NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"Arthur" forKey:@"name"];
+NSString *templateString = @"Hello {{name}}!";
+NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:templateString error:NULL];
+```
+
+1. When GRMustache renders the `{{name}}` tag, it invokes `valueForKey:` with the key `@"name"` on the dictionary. It gets `@"Arthur"` as a result.
+2. The `description` method of NSString returns the string itself: `@"Arthur"`.
+3. Hence we'll get the expected rendering: `@"Hello Arthur!"`.
 
 
 ## In Detail
 
-Mustache does a little more than rendering plain `{{tags}}`. Let's review Mustache features and how GRMustache help you leverage them.
+Mustache does a little more than rendering plain `{{name}}` tags. Let's review Mustache features and how GRMustache help you leverage them.
 
 - [context_stack.md](runtime/context_stack.md)
 
-    This guide digs into Mustache `{{#sections}}`, and the key lookup mechanism.
+    This guide digs into Mustache sections such as `{{#section}}...{{/section}}`, and the key lookup mechanism.
     
 - [loops.md](runtime/loops.md)
     
-    Learn how to iterate through enumerable objects such as arrays.
+    Learn how to render template sections as many times as there are objects in enumerable objects such as arrays.
     
 - [booleans.md](runtime/booleans.md)
 
