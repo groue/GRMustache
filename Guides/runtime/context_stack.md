@@ -28,12 +28,25 @@ Finally, the `name` key will be looked in the pet.
 Context stack and missing keys
 ------------------------------
 
-Should a key be missing in the current context, GRMustache will look for it in the enclosing contexts, the values that populated the enclosing sections.
+GRMustache uses the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method when performing key lookup.
+
+GRMustache considers a key to be missing if and only if this method returns nil or throws an `NSUndefinedKeyException`.
+
+When a key is missing, GRMustache looks for it in the enclosing contexts, the values that populated the enclosing sections, one after the other, until it finds a non-nil value.
 
 For instance, when rendering the above template, the `name` key will be asked to the pet first. In case of failure, GRMustache will then check the `person` object. Eventually, when all previous objects have failed providing the key, the lookup will stop.
 
 This is the context stack: it starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
 
+A pratical use of this feature is the conditional rendering of a string:
+
+```
+{{#title}}
+  <h1>{{title}}</h1>
+{{/title}}
+```
+
+The `{{#title}}` section renders only if the title is not empty. In the section, the current context is the title string itself. Since this string fails providing the `title` key, the key loopup hence goes on, and finds again the title in the enclosing context, so that it can be rendered.
 
 Sections vs. Key paths
 ----------------------
@@ -53,11 +66,9 @@ Missing keys in detail: NSUndefinedKeyException
 
 ### GRMustache catches NSUndefinedKeyException
 
-GRMustache uses the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method when performing key lookup.
-
 NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` invokes `valueForUndefinedKey:` when asked for an unknown key. `valueForUndefinedKey:`, in turn, raises an `NSUndefinedKeyException` in its default implementation.
 
-*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`. Precisely, it catches `NSUndefinedKeyException` exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being a black hole.
+*GRMustache catches those exceptions*. Precisely, it catches `NSUndefinedKeyException` exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being a black hole.
 
 For instance, if the pet above has to `name` property, it will raise an `NSUndefinedKeyException` that will be caught by GRMustache so that the key lookup can continue with the `person` object.
 
