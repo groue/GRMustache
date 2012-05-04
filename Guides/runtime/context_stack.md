@@ -35,7 +35,7 @@ Should a key be missing in the current context, GRMustache will look for it in t
 
 I can hear you: "What about the `NSUndefinedKeyException` raised by the Key-Value Coding `valueForKey:` method when a key is missed?"
 
-*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`.
+*GRMustache catches those exceptions*, and behaves as if the value for that key were `nil`. Precisely, it catches exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being an black hole.
 
 For instance, the following code will ask `@"foo"` for the key `XXX`. The string will raise, GRMustache will catch, and the final rendering will be the empty string:
 
