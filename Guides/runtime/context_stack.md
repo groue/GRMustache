@@ -24,12 +24,32 @@ This person becomes the context in the `person` section: the `pet` key will be l
 
 Finally, the `name` key will be looked in the pet.
 
-The stack in action: missing keys
----------------------------------
+
+Context stack and missing keys
+------------------------------
 
 Should a key be missing in the current context, GRMustache will look for it in the enclosing contexts, the values that populated the enclosing sections.
 
-For instance, when rendering the above template, the `name` key will be ask to the pet first. In case of failure, GRMustache will then check the `person` object. Eventually, when all objects in the context stack have failed providing the key, the lookup will stop.
+For instance, when rendering the above template, the `name` key will be asked to the pet first. In case of failure, GRMustache will then check the `person` object. Eventually, when all previous objects have failed providing the key, the lookup will stop.
+
+This is the context stack: it starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
+
+
+Sections vs. Key paths
+----------------------
+
+You should be aware that these two template snippets are quite similar, but not stricly equivalent:
+
+- `...{{#foo}}{{bar}}{{/foo}}...`
+- `...{{foo.bar}}...`
+
+The first will look for `bar` anywhere in the context stack, starting with the `foo` object.
+
+The latter ensures the `bar` key comes from the `foo` object.
+
+
+Missing keys in detail: NSUndefinedKeyException
+-----------------------------------------------
 
 ### GRMustache catches NSUndefinedKeyException
 
@@ -59,16 +79,5 @@ One way to achieve this is to add `-DDEBUG` to the "Other C Flags" setting of yo
 #endif
 ```
 
-Sections vs. Key paths
-----------------------
-
-You should be aware that these two template snippets are quite similar, but not stricly equivalent:
-
-- `...{{#foo}}{{bar}}{{/foo}}...`
-- `...{{foo.bar}}...`
-
-The first will look for `bar` anywhere in the context stack, starting with the `foo` object.
-
-The latter ensures the `bar` key comes from the `foo` object.
-
 [up](../runtime.md), [next](loops.md)
+
