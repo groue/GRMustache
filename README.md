@@ -20,7 +20,7 @@ How To
 
 Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods). Append to your Podfile:
 
-    dependency 'GRMustache', '~> 3'
+    dependency 'GRMustache'
 
 
 ### 2. Import "GRMustache.h" and start rendering templates
