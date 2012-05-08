@@ -13,16 +13,19 @@ Breaking news on Twitter: http://twitter.com/GRMustache
 How To
 ------
 
-### 1. Download
+### 1. Download and add to your Xcode project
 
     $ git clone https://github.com/groue/GRMustache.git
-
-### 2. Add to your Xcode project
 
 - For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache3-MacOS.a` to your project.
 - For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache3-iOS.a` to your project.
 
-### 3. Import "GRMustache.h" and start rendering templates
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods). Append to your Podfile:
+
+    dependency 'GRMustache', '~> 3'
+
+
+### 2. Import "GRMustache.h" and start rendering templates
 
 ```objc
 #import "GRMustache.h"
@@ -38,6 +41,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"
                                                 bundle:nil
                                                  error:NULL];
 ```
+
 
 Documentation
 -------------
