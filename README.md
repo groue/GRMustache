@@ -18,10 +18,7 @@ How To
 - For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache3-MacOS.a` to your project.
 - For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache3-iOS.a` to your project.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods). Append to your Podfile:
-
-    dependency 'GRMustache'
-
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `dependency 'GRMustache'` to your Podfile. In its current version, CocoaPods exposes private headers that you should not rely on, because future versions of GRMustache may change them, without notice, in an incompatible fashion. Make sure you only import `GRMustache.h`.
 
 ### 2. Import "GRMustache.h" and start rendering templates
 
