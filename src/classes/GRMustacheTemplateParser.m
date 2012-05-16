@@ -246,47 +246,49 @@
     BOOL acceptIdentifier = YES;
     BOOL acceptSeparator = NO;
     NSMutableArray *keys = [NSMutableArray array];
-    unichar c;
-    NSUInteger identifierStart = 0;
-    for (NSUInteger i = 0; i < length; ++i) {
-        c = [content characterAtIndex:i];
-        switch (c) {
-            case '.':
-                if (acceptDotIdentifier) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i+1-identifierStart)]];
-                    acceptDotIdentifier = NO;
-                    acceptIdentifier = NO;
-                    acceptSeparator = NO;
-                } else if (acceptSeparator) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
-                    identifierStart = i + 1;
-                    acceptDotIdentifier = NO;
-                    acceptIdentifier = YES;
-                    acceptSeparator = NO;
-                } else {
-                    if (outError != NULL) {
-                        *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
-                    }
-                    return nil;
+    NSUInteger identifierLocation = 0;
+    NSRange range = [content rangeOfComposedCharacterSequenceAtIndex:0];
+    while (YES) {
+        NSString *c = [content substringWithRange:range];
+        if ([@"." isEqualToString:c]) {
+            if (acceptDotIdentifier) {
+                [keys addObject:@"."];
+                acceptDotIdentifier = NO;
+                acceptIdentifier = NO;
+                acceptSeparator = NO;
+            } else if (acceptSeparator) {
+                [keys addObject:[content substringWithRange:NSMakeRange(identifierLocation, range.location-identifierLocation)]];
+                identifierLocation = range.location + range.length;
+                acceptDotIdentifier = NO;
+                acceptIdentifier = YES;
+                acceptSeparator = NO;
+            } else {
+                if (outError != NULL) {
+                    *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
                 }
-                break;
-                
-            default:
-                if (acceptIdentifier) {
-                    acceptDotIdentifier = NO;
-                    acceptIdentifier = YES;
-                    acceptSeparator = YES;
-                } else {
-                    if (outError != NULL) {
-                        *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
-                    }
-                    return nil;
+                return nil;
+            }
+        } else {
+            if (acceptIdentifier) {
+                acceptDotIdentifier = NO;
+                acceptIdentifier = YES;
+                acceptSeparator = YES;
+            } else {
+                if (outError != NULL) {
+                    *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
                 }
-                
+                return nil;
+            }
+        }
+        
+        if (range.location + range.length < length) {
+            range = [content rangeOfComposedCharacterSequenceAtIndex:range.location + range.length];
+        } else {
+            break;
         }
     }
     if (acceptSeparator) {
-        [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
+        [keys addObject:[content substringWithRange:NSMakeRange(identifierLocation, length - identifierLocation)]];
     } else if (acceptIdentifier) {
         if (outError != NULL) {
             *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
