@@ -56,17 +56,21 @@
 
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID
 {
-    NSUInteger p = 0;
+    NSUInteger length = templateString.length;
+    if (length == 0) {
+        [self didFinish];
+        return;
+    }
+    
+    NSRange p = [templateString rangeOfComposedCharacterSequenceAtIndex:0];
     NSUInteger line = 1;
     NSUInteger consumedLines = 0;
     NSRange orange;
     NSRange crange;
     NSString *tag;
-    unichar character;
     NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *tokenContent;
     GRMustacheTokenType tokenType;
-    NSRange tokenRange;
     static const GRMustacheTokenType tokenTypeForCharacter[] = {    // tokenTypeForCharacter[unspecified character] = 0 = GRMustacheTokenTypeEscapedVariable
         ['!'] = GRMustacheTokenTypeComment,
         ['#'] = GRMustacheTokenTypeSectionOpening,
@@ -82,17 +86,17 @@
     
     while (YES) {
         // look for otag
-        orange = [self rangeOfString:_otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        orange = [self rangeOfString:_otag inTemplateString:templateString startingAtIndex:p.location consumedNewLines:&consumedLines];
         
         // otag was not found
         if (orange.location == NSNotFound) {
-            if (p < templateString.length) {
+            if (p.location < length) {
                 if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                                  content:[templateString substringFromIndex:p]
+                                                                                  content:[templateString substringFromIndex:p.location]
                                                                            templateString:templateString
                                                                                templateID:templateID
                                                                                      line:line
-                                                                                    range:NSMakeRange(p, templateString.length-p)]]) {
+                                                                                    range:NSMakeRange(p.location, length - p.location)]]) {
                     return;
                 }
             }
@@ -100,8 +104,8 @@
             return;
         }
         
-        if (orange.location > p) {
-            NSRange range = NSMakeRange(p, orange.location-p);
+        if (orange.location > p.location) {
+            NSRange range = NSMakeRange(p.location, orange.location - p.location);
             if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
                                                                               content:[templateString substringWithRange:range]
                                                                        templateString:templateString
@@ -112,15 +116,19 @@
             }
         }
         
+        if (orange.location + orange.length >= length) {
+            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
+            return;
+        }
+
         // update our cursors
-        p = orange.location + orange.length;
+        p = [templateString rangeOfComposedCharacterSequenceAtIndex:orange.location + orange.length];
         line += consumedLines;
         
-        // look for close tag
-        if (p < templateString.length && [templateString characterAtIndex:p] == '{') {
-            crange = [self rangeOfString:[@"}" stringByAppendingString:_ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        if ([@"{" isEqualToString:[templateString substringWithRange:p]]) {
+            crange = [self rangeOfString:[@"}" stringByAppendingString:_ctag] inTemplateString:templateString startingAtIndex:p.location consumedNewLines:&consumedLines];
         } else {
-            crange = [self rangeOfString:_ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+            crange = [self rangeOfString:_ctag inTemplateString:templateString startingAtIndex:p.location consumedNewLines:&consumedLines];
         }
         
         // ctag was not found
@@ -145,9 +153,15 @@
         }
         
         // interpret tag
-        character = [tag characterAtIndex: 0];
-        tokenType = (character < tokenTypeForCharacterLength) ? tokenTypeForCharacter[character] : GRMustacheTokenTypeEscapedVariable;
-        tokenRange = NSMakeRange(orange.location, crange.location + crange.length - orange.location);
+        {
+            NSRange initialTagGraphemeClusterRange = [tag rangeOfComposedCharacterSequenceAtIndex:0];
+            if (initialTagGraphemeClusterRange.length == 1) {   // check for single character grapheme cluster
+                unichar initialTagCharacter = [tag characterAtIndex:0];  // safe since we have a single character grapheme cluster at the beginning of the tag.
+                tokenType = (initialTagCharacter < tokenTypeForCharacterLength) ? tokenTypeForCharacter[initialTagCharacter] : GRMustacheTokenTypeEscapedVariable;
+            } else {
+                tokenType = GRMustacheTokenTypeEscapedVariable;
+            }
+        }
         switch (tokenType) {
             case GRMustacheTokenTypeEscapedVariable:    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
                 tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
@@ -194,13 +208,18 @@
                                                                    templateString:templateString
                                                                        templateID:templateID
                                                                              line:line
-                                                                            range:tokenRange]]) {
+                                                                            range:NSMakeRange(orange.location, crange.location + crange.length - orange.location)]]) {
             return;
         }
 
         // update our cursors
-        p = crange.location + crange.length;
-        line += consumedLines;
+        if (crange.location + crange.length < length) {
+            p = [templateString rangeOfComposedCharacterSequenceAtIndex:crange.location + crange.length];
+            line += consumedLines;
+        } else {
+            [self didFinish];
+            return;
+        }
     }
 }
 
