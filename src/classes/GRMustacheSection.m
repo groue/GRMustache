@@ -98,8 +98,8 @@
         
         if (value == nil ||
             value == [NSNull null] ||
-            (void *)value == (void *)kCFBooleanFalse ||
-            ([value isKindOfClass:[NSString class]] && ((NSString*)value).length == 0))
+            ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
+            ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
         {
             // False value
             if (_inverted) {

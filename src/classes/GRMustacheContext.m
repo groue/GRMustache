@@ -23,7 +23,6 @@
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheHelper_private.h"
-#import "GRMustacheProperty_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheTemplate_private.h"
 
@@ -38,7 +37,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
-- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef;
 @end
 
 
@@ -121,18 +119,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
     }
     
-    // value interpretation
-    
-    if (value != nil) {
-        CFBooleanRef booleanRef;
-        if ([self shouldConsiderObjectValue:value forKey:key asBoolean:&booleanRef]) {
-            return (id)booleanRef;
-        }
-        return value;
-    }
-    
-    // parent value
-    
+    if (value != nil) { return value; }
     if (scoped || _parent == nil) { return nil; }
     return [_parent valueForKey:key scoped:NO];
 }
@@ -154,29 +141,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         _parent = [parent retain];
     }
     return self;
-}
-
-- (BOOL)shouldConsiderObjectValue:(id)value forKey:(NSString *)key asBoolean:(CFBooleanRef *)outBooleanRef
-{
-    if ((CFBooleanRef)value == kCFBooleanTrue ||
-        (CFBooleanRef)value == kCFBooleanFalse)
-    {
-        if (outBooleanRef) {
-            *outBooleanRef = (CFBooleanRef)value;
-        }
-        return YES;
-    }
-    
-    if ([value isKindOfClass:[NSNumber class]] &&
-        [GRMustacheProperty class:[_object class] hasBOOLPropertyGetterNamed:key])
-    {
-        if (outBooleanRef) {
-            *outBooleanRef = [(NSNumber *)value boolValue] ? kCFBooleanTrue : kCFBooleanFalse;
-        }
-        return YES;
-    }
-    
-    return NO;
 }
 
 @end

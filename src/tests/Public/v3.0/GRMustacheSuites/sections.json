@@ -40,14 +40,14 @@
       "expected": "<>"
     },
     {
-      "name": "True should trigger the section rendering.",
-      "data": { "subject": true },
+      "name": "Zero should trigger the section omission.",
+      "data": { "subject": 0 },
       "template": "<{{#subject}}---{{/subject}}>",
-      "expected": "<--->"
+      "expected": "<>"
     },
     {
-      "name": "Zero should trigger the section rendering.",
-      "data": { "subject": 0 },
+      "name": "True should trigger the section rendering.",
+      "data": { "subject": true },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },

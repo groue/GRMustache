@@ -126,23 +126,23 @@
     STAssertEquals(NO, [self doesObjectRender:[NSNull null]], @"");
 }
 
-- (void)test_NSNumberWithZero_isTrueValue
+- (void)test_NSNumberWithZero_isFalseValue
 {
     // Test boolean interpretation of values that we could not test in GRMustacheSuites/sections.json and GRMustacheSuites/inverted_sections.json
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithChar:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithFloat:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithDouble:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithInt:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithInteger:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithLong:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithLongLong:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithShort:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedChar:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedInt:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedInteger:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedLong:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedLongLong:0]], nil);
-    STAssertEquals(YES, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedShort:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithChar:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithFloat:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithDouble:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithInt:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithInteger:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithLong:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithLongLong:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithShort:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedChar:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedInt:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedInteger:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedLong:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedLongLong:0]], nil);
+    STAssertEquals(NO, [self booleanInterpretationOfObject:[NSNumber numberWithUnsignedShort:0]], nil);
 }
 
 - (void)test_NSNumberWithZero_doesRender
@@ -246,12 +246,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueProperty" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)test_unsigned_charFalseProperty_isTrueValue
+- (void)test_unsigned_charFalseProperty_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charTrueProperty_isTrueValue
 {
@@ -260,12 +260,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:inheritingContext], @"");
 }
-- (void)test_intFalseProperty_isTrueValue
+- (void)test_intFalseProperty_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_intTrueProperty_isTrueValue
 {
@@ -288,12 +288,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueMethod" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"boolTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)test_BOOLFalseMethod_isTrueValue
+- (void)test_BOOLFalseMethod_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_BOOLTrueMethod_isTrueValue
 {
@@ -302,12 +302,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)test_charFalseMethod_isTrueValue
+- (void)test_charFalseMethod_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_charTrueMethod_isTrueValue
 {
@@ -316,12 +316,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueMethod" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"charTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)test_unsigned_charFalseMethod_isTrueValue
+- (void)test_unsigned_charFalseMethod_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charTrueMethod_isTrueValue
 {
@@ -330,12 +330,12 @@
     STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:context], @"");
     STAssertEquals(YES, [self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:inheritingContext], @"");
 }
-- (void)test_intFalseMethod_isTrueValue
+- (void)test_intFalseMethod_isFalseValue
 {
     id context = [[[GRBooleanTestSupport alloc] init] autorelease];
     id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
-    STAssertEquals(YES, [self booleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
+    STAssertEquals(NO, [self booleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_intTrueMethod_isTrueValue
 {

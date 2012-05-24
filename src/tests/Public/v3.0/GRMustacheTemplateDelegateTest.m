@@ -23,11 +23,11 @@
 #import "GRMustacheTemplateDelegateTest.h"
 
 @interface GRMustacheTemplateDelegateAssistant : NSObject
-@property (nonatomic) BOOL BOOLProperty;
+@property (nonatomic, retain) NSString *stringProperty;
 @end
 
 @implementation GRMustacheTemplateDelegateAssistant
-@synthesize BOOLProperty;
+@synthesize stringProperty;
 @end
 
 @interface GRMustacheTemplateRecorder : NSObject<GRMustacheTemplateDelegate>
@@ -37,7 +37,7 @@
 @property (nonatomic) NSUInteger willRenderReturnValueOfInvocationCount;
 @property (nonatomic) NSUInteger didRenderReturnValueOfInvocationCount;
 @property (nonatomic) NSUInteger nilReturnValueCount;
-@property (nonatomic) NSUInteger booleanReturnValueCount;
+@property (nonatomic, retain) NSString *lastUsedValue;
 @property (nonatomic, retain) NSString *lastUsedKey;
 @end
 
@@ -48,11 +48,12 @@
 @synthesize willRenderReturnValueOfInvocationCount=_willRenderReturnValueOfInvocationCount;
 @synthesize didRenderReturnValueOfInvocationCount=_didRenderReturnValueOfInvocationCount;
 @synthesize nilReturnValueCount=_nilReturnValueCount;
-@synthesize booleanReturnValueCount=_booleanReturnValueCount;
+@synthesize lastUsedValue=_lastUsedValue;
 @synthesize lastUsedKey=_lastUsedKey;
 
 - (void)dealloc
 {
+    self.lastUsedValue = nil;
     self.lastUsedKey = nil;
     self.lastInvocation = nil;
     [super dealloc];
@@ -73,10 +74,9 @@
     self.lastInvocation = invocation;
     self.willRenderReturnValueOfInvocationCount += 1;
     self.lastUsedKey = invocation.key;
+    self.lastUsedValue = invocation.returnValue;
     if (invocation.returnValue) {
-        if ((void *)invocation.returnValue == (void *)kCFBooleanTrue || (void *)invocation.returnValue == (void *)kCFBooleanFalse) {
-            self.booleanReturnValueCount += 1;
-        } else if ([invocation.returnValue isKindOfClass:[NSString class]]) {
+        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [[invocation.returnValue description] uppercaseString];
         }
     } else {
@@ -212,30 +212,15 @@
     STAssertEquals(recorder.nilReturnValueCount, (NSUInteger)1, @"");
 }
 
-- (void)testDelegateCanReadInvocationReturnValueFromBooleanProperties
-{
-    GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#1}}{{BOOLProperty}}{{/1}}{{#2}}{{BOOLProperty}}{{/2}}" error:NULL];
-    template.delegate = recorder;
-    GRMustacheTemplateDelegateAssistant *assistant1 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    GRMustacheTemplateDelegateAssistant *assistant2 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    assistant1.BOOLProperty = YES;
-    assistant2.BOOLProperty = NO;
-    [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", assistant2, @"2", nil]];
-    STAssertEquals(recorder.booleanReturnValueCount, (NSUInteger)2, @"");
-}
-
 - (void)testDelegateCanReadInvocationReturnValueFromKeyPath
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{1.BOOLProperty}}{{2.BOOLProperty}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{1.stringProperty}}" error:NULL];
     template.delegate = recorder;
     GRMustacheTemplateDelegateAssistant *assistant1 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    GRMustacheTemplateDelegateAssistant *assistant2 = [[[GRMustacheTemplateDelegateAssistant alloc] init] autorelease];
-    assistant1.BOOLProperty = YES;
-    assistant2.BOOLProperty = NO;
-    [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", assistant2, @"2", nil]];
-    STAssertEquals(recorder.booleanReturnValueCount, (NSUInteger)2, @"");
+    assistant1.stringProperty = @"foo";
+    [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", nil]];
+    STAssertEqualObjects(recorder.lastUsedValue, @"foo", @"");
 }
 
 - (void)testDelegateCanReadInvocationKey
