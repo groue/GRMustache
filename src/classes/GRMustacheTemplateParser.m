@@ -242,9 +242,8 @@
 {
     NSString *content = token.content;
     NSUInteger length = content.length;
-    BOOL acceptDotIdentifier = YES;
     BOOL acceptIdentifier = YES;
-    BOOL acceptSeparator = NO;
+    BOOL acceptSeparator = YES;
     NSMutableArray *keys = [NSMutableArray array];
     unichar c;
     NSUInteger identifierStart = 0;
@@ -252,15 +251,15 @@
         c = [content characterAtIndex:i];
         switch (c) {
             case '.':
-                if (acceptDotIdentifier) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i+1-identifierStart)]];
-                    acceptDotIdentifier = NO;
-                    acceptIdentifier = NO;
-                    acceptSeparator = NO;
-                } else if (acceptSeparator) {
-                    [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
+                if (acceptSeparator) {
+                    if (i==0) {
+                        // leading dot: "." or ".foo…"
+                        [keys addObject:@"."];
+                    } else {
+                        // dot in the middle: "foo.bar…"
+                        [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, i-identifierStart)]];
+                    }
                     identifierStart = i + 1;
-                    acceptDotIdentifier = NO;
                     acceptIdentifier = YES;
                     acceptSeparator = NO;
                 } else {
@@ -273,7 +272,6 @@
                 
             default:
                 if (acceptIdentifier) {
-                    acceptDotIdentifier = NO;
                     acceptIdentifier = YES;
                     acceptSeparator = YES;
                 } else {
@@ -287,7 +285,8 @@
     }
     if (acceptSeparator) {
         [keys addObject:[content substringWithRange:NSMakeRange(identifierStart, length - identifierStart)]];
-    } else if (acceptIdentifier) {
+    } else if (acceptIdentifier && length > 1) {
+        // dot at the end: "…foo."
         if (outError != NULL) {
             *outError = [self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid identifier: %@", content]];
         }

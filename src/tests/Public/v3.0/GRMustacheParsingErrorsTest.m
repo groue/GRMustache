@@ -62,12 +62,6 @@
 - (void)testParsingReportsBadlyFormattedVariableTag
 {
     NSError *error;
-    
-    // ".a" could mean anchored access to "self.a".
-    // But it doesn't mean anything, actually.
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{.a}}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    
     STAssertNil([GRMustacheTemplate templateFromString:@"{{a.}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
     STAssertNil([GRMustacheTemplate templateFromString:@"{{..}}" error:&error], nil);

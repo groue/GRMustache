@@ -29,6 +29,48 @@
       "data": { "person": { } },
       "template": "{{person.name}}",
       "expected": ""
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "b": "b", "a": { } },
+      "template": "-{{#a}}{{b}}{{/a}}-{{a.b}}-",
+      "expected": "-b--"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "c": "c", "b": { "c" : "cb" } },
+      "template": "-{{a.b.c}}-",
+      "expected": "--"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "c": "c", "b": { "c" : "cb" }, "a": { } },
+      "template": "-{{a.b.c}}-",
+      "expected": "--"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "c": "c", "b": { "c" : "cb" }, "a": { "b": { } } },
+      "template": "-{{a.b.c}}-",
+      "expected": "--"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "c": "c", "b": { "c" : "cb" }, "a": { "b": { "c": "ca" } } },
+      "template": "-{{a.b.c}}-",
+      "expected": "-ca-"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "b": "b", "a": { } },
+      "template": "-{{#a}}{{b}}{{/a}}-{{#a}}{{.b}}{{/a}}-{{a.b}}-",
+      "expected": "-b---"
+    },
+    {
+      "name": "key lookup is anchored",
+      "data": { "b": "b", "a": { "b": "ba"} },
+      "template": "-{{#a}}{{b}}{{/a}}-{{#a}}{{.b}}{{/a}}-{{a.b}}-",
+      "expected": "-ba-ba-ba-"
     }
   ]
 }
