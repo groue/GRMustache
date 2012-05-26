@@ -76,7 +76,7 @@ Here is the rendering code:
 
 The people will provide the `name` key needed by the template. But we haven't told yet how the `index`, `first` and `even` keys will be implemented.
 
-We'll actually rewrite arrays elements before they are rendered by GRMustache. We'll replace them with proxy objects which will forward to the original array elements all keys, such as `name`. but the `index`, `first` and `even` keys.
+We'll actually rewrite arrays elements before they are rendered by GRMustache. We'll replace them with proxy objects which will forward to the original array elements all keys, such as `name`, but the `index`, `first` and `even` keys.
 
 Let's first declare our proxy class, we'll implement it later:
 
@@ -110,17 +110,18 @@ Now let's pose as a template delegate, and replace array elements with proxies:
          */
         
         NSArray *array = invocation.returnValue;
-        NSMutableArray *proxyArray = [NSMutableArray arrayWithCapacity:array.count];
+        NSMutableArray *proxiesArray = [NSMutableArray arrayWithCapacity:array.count];
         [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [proxyArray addObject:[[ArrayElementProxy alloc] initWithObjectAtIndex:idx inArray:array]];
+            ArrayElementProxy *proxy = [[ArrayElementProxy alloc] initWithObjectAtIndex:idx inArray:array];
+            [proxiesArray addObject:proxy];
         }];
         
         /**
-         Now set the invocation's returnValue to the proxy array: it will be
-         rendered instead.
+         Now set the invocation's returnValue to the array of proxies: it will
+         be rendered instead.
          */
         
-        invocation.returnValue = proxyArray;
+        invocation.returnValue = proxiesArray;
     }
 }
 
@@ -129,7 +130,7 @@ Now let's pose as a template delegate, and replace array elements with proxies:
 
 We're soon done.
 
-The implementation of ArrayElementProxy is straightforward, as long as one remembers that GRMustache fetches values with the [standard](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method, and renders values returned by the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method. See [Guides/runtime.md](../runtime.md) for more information.
+The implementation of ArrayElementProxy is straightforward, as long as one remembers that GRMustache fetches values with the `valueForKey:` method, and renders values returned by the `description` method. See [Guides/runtime.md](../runtime.md) for more information.
 
 ```objc
 @interface ArrayElementProxy()
@@ -151,7 +152,8 @@ The implementation of ArrayElementProxy is straightforward, as long as one remem
     return self;
 }
 
-// support for `{{.}}`
+// Support for `{{.}}`, not used in our sample template, but a honest proxy
+// should implement it.
 - (NSString *)description
 {
     id originalObject = [self.array objectAtIndex:self.index];
