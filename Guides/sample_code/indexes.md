@@ -12,13 +12,9 @@ For instance, instead of `[ { name:'Alice' }, { name:'Bob' } ]`, you would provi
 GRMustache solution: proxy objects
 ----------------------------------
 
-GRMustache can help you extend the mustache language, and implement special keys such as `index`, `first`, `even`, etc, without any need to prepare your data.
+The [GRMustacheTemplateDelegate](../delegate.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
-The technique involves the [GRMustacheTemplateDelegate](../delegate.md) protocol. **It thus may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
-
-So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
-
-We'll render the following template:
+Below we'll implement the special keys `index`, `first`, and `even`. We'll render the following template:
 
     <ul>
     {{#people}}
@@ -76,7 +72,7 @@ Here is the rendering code:
 
 The people will provide the `name` key needed by the template. But we haven't told yet how the `index`, `first` and `even` keys will be implemented.
 
-We'll actually rewrite arrays elements before they are rendered by GRMustache. We'll replace them with proxy objects which will forward to the original array elements all keys, such as `name`, but the `index`, `first` and `even` keys.
+Here is the trick: we'll actually intercept arrays before they are rendered by GRMustache. We'll replace them with arrays of proxy objects which will forward to the original elements all keys, such as `name`, but the `index`, `first` and `even` keys.
 
 Let's first declare our proxy class, we'll implement it later:
 
@@ -86,7 +82,9 @@ Let's first declare our proxy class, we'll implement it later:
 @end
 ```
 
-Now let's pose as a template delegate, and replace array elements with proxies:
+We don't need to declare more: this is enough for us to create proxies and make sure they have all the information they need to perform their job.
+
+Now let's replace array elements with proxies before they are rendered:
 
 ```objc
 @interface Document() <GRMustacheTemplateDelegate>
