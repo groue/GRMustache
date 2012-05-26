@@ -11,9 +11,9 @@ GRMustache now considers all `NSNumber` instances whose `boolValue` is `NO` as f
 
 Previously, GRMustache used to consider only `[NSNumber numberWithBool:NO]` as false.
 
-This change lets you control sections rendering with proxy objects (objects that delegate some keys to other objects) in GRMustache rendering.
+This change lets you extend the mustache language with proxy objects (objects that implement language extensions, and forward other keys to some other object) in GRMustache rendering.
 
-See issue #18 for a discussion on proxy objects.
+See [Guides/indexes.md](Guides/indexes.md) for a discussion on proxy objects.
 
 **Total NSUndefinedException swallowing**
 
@@ -21,9 +21,9 @@ Whenever GRMustache performs some key lookup and `valueForKey:` raises a NSUndef
 
 Previously, GRMustache used to swallow only exceptions that explicitely came from the inquired object, and for the inquired key.
 
-The old behavior helped you spot bugs in the implementation of keys invoked by GRMustache. The new behavior is a regression from this point of view. However, you are now able to inject proxy objects (objects that delegate some keys to other objects) in GRMustache rendering.
+This change lets you extend the mustache language with proxy objects (objects that implement language extensions, and forward other keys to some other object) in GRMustache rendering.
 
-See issue #18 for a discussion on proxy objects.
+See [Guides/indexes.md](Guides/indexes.md) for a discussion on proxy objects.
 
 **Support for `.name` keys**
 
@@ -31,7 +31,7 @@ Keys prefixed by a dot prevent GRMustache to look up the context stack.
 
 Beware this feature is not in the mustache specification. If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this syntax.
 
-See issue #19 and https://github.com/mustache/spec/issues/10.
+See [issue #19](https://github.com/groue/GRMustache/issues/19) and https://github.com/mustache/spec/issues/10.
 
 ## v3.0.1
 
