@@ -74,7 +74,7 @@
     if ([key isEqualToString:@"NonNSUndefinedKeyException"]) {
         NSAssert(NO, @"");
     }
-    if ([key isEqualToString:@"OtherNSUndefinedKeyException"]) {
+    if ([key isEqualToString:@"NonSelfNSUndefinedKeyException"]) {
         return [@"" valueForKey:@"foo"];
     }
     return [super valueForKey:key];
@@ -214,11 +214,12 @@
     STAssertThrows([context contextForKey:@"NonNSUndefinedKeyException" scoped:NO], nil);
 }
 
-- (void)testContextRethrowsOtherNSUndefinedKeyException
+- (void)testContextSwallowsNonSelfNSUndefinedKeyException
 {
+    // This test makes sure users can implement proxy objects
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertThrows([context contextForKey:@"OtherNSUndefinedKeyException" scoped:NO], nil);
+    STAssertNoThrow([context contextForKey:@"NonSelfNSUndefinedKeyException" scoped:NO], nil);
 }
 
 - (void)testContextSwallowsSelfNSUndefinedKeyException

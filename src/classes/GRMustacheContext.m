@@ -95,27 +95,33 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 {
     id value = nil;
     
-    if (_object) {
-        @try {
-            if (preventingNSUndefinedKeyExceptionAttack) {
+    if (_object)
+    {
+        @try
+        {
+            if (preventingNSUndefinedKeyExceptionAttack)
+            {
                 value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:_object];
-            } else {
+            }
+            else
+            {
                 value = [_object valueForKey:key];
             }
         }
-        @catch (NSException *exception) {
-#if !defined(NS_BLOCK_ASSERTIONS)
-            // For testing purpose
-            GRMustacheContextDidCatchNSUndefinedKeyException = YES;
-#endif
-            
-            if (![[exception name] isEqualToString:NSUndefinedKeyException] ||
-                [[exception userInfo] objectForKey:@"NSTargetObjectUserInfoKey"] != _object ||
-                ![[[exception userInfo] objectForKey:@"NSUnknownUserInfoKey"] isEqualToString:key])
+        @catch (NSException *exception)
+        {
+            // swallow all NSUndefinedKeyException, reraise other exceptions
+            if (![[exception name] isEqualToString:NSUndefinedKeyException])
             {
-                // that's some exception we are not related to
                 [exception raise];
             }
+#if !defined(NS_BLOCK_ASSERTIONS)
+            else
+            {
+                // For testing purpose
+                GRMustacheContextDidCatchNSUndefinedKeyException = YES;
+            }
+#endif
         }
     }
     
