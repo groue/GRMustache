@@ -13,7 +13,7 @@ Previously, GRMustache used to consider only `[NSNumber numberWithBool:NO]` as f
 
 This change lets you extend the mustache language with proxy objects (objects that implement language extensions, and forward other keys to some other object) in GRMustache rendering.
 
-See [Guides/indexes.md](Guides/indexes.md) for a discussion on proxy objects.
+See [Guides/sample_code/indexes.md](Guides/sample_code/indexes.md) for a discussion on proxy objects.
 
 **Total NSUndefinedException swallowing**
 
@@ -23,7 +23,7 @@ Previously, GRMustache used to swallow only exceptions that explicitely came fro
 
 This change lets you extend the mustache language with proxy objects (objects that implement language extensions, and forward other keys to some other object) in GRMustache rendering.
 
-See [Guides/indexes.md](Guides/indexes.md) for a discussion on proxy objects.
+See [Guides/sample_code/indexes.md](Guides/sample_code/indexes.md) for a discussion on proxy objects.
 
 **Support for `.name` keys**
 
