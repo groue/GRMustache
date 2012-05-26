@@ -7,8 +7,8 @@ Sample code
 
     How to format numbers.
 
-- [counters.md](sample_code/counters.md)
+- [indexes.md](sample_code/indexes.md)
     
-    How to have GRMustache render numbers in sequence.
+    How to have GRMustache render array indexes, render sections for the first or the last element, for odd or even elements, etc.
 
 [up](../../../../GRMustache), [next](sample_code/number_formatting.md)

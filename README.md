@@ -54,7 +54,7 @@ FAQ
 
 - **Q: How do I render array indices?**
     
-    A: Check [Guides/sample_code/counters.md](GRMustache/blob/master/Guides/sample_code/counters.md) and [issue #18](https://github.com/groue/GRMustache/issues/18)
+    A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
 - **Q: How do I render default values for missing keys?**
 
