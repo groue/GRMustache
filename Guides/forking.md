@@ -8,7 +8,7 @@ You'll find below some useful information on each of those topics.
 
 ## Change GRMustache
 
-Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache3-MacOS` and `GRMustache3-iOS` targets of the `src/GRMustache.xcodeproj` project.
+Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache4-MacOS` and `GRMustache4-iOS` targets of the `src/GRMustache.xcodeproj` project.
 
 Headers are splitted in two categories:
 
@@ -38,7 +38,7 @@ There are two kinds of tests, all stored in the `src/tests` folder.
 - tests of private APIs
 - tests of public APIs
 
-When a file is added or removed from the `src/tests` folder, both `GRMustache3-MacOSTests` and `GRMustache3-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
+When a file is added or removed from the `src/tests` folder, both `GRMustache4-MacOSTests` and `GRMustache4-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
 
 ### Tests of private APIs
 
@@ -48,7 +48,7 @@ The implementation files of those tests must not include any public header.
 
 ### Tests of public APIS
 
-Tests of public GRMustache API are versionned: the `src/tests/Public/v2.0` folder contains tests for features introduced in the version 2.0 of the library. `src/tests/Public/v2.1` contains tests for the version 2.1, etc.
+Tests of public GRMustache API are versionned: the `src/tests/Public/v4.0` folder contains tests for features introduced in the version 4.0 of the library. `src/tests/Public/v4.1` contains tests for the version 4.1, etc.
 
 Those tests are all subclasses of `GRMustachePublicAPITest`. Their implementation files must not include any private header.
 
@@ -58,12 +58,12 @@ You will use the macros defined in `Classes/GRMustacheAvailabilityMacros.h`. The
 - emit deprecation warning when they use deprecated GRMustache APIs,
 - help GRMustache achieve full backward compatibility.
 
-For instance, all header files for public API tests in `src/tests/Public/v2.1` would begin with:
+For instance, all header files for public API tests in `src/tests/Public/v4.1` would begin with:
 
-    #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_2_1
+    #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_1
     #import "GRMustachePublicAPITest.h"
 
-When you add a test for a public API, make sure you place it in the folder that introduced the API (check the release notes), and NOT in the version that will include the new code. For instance, if version 2.6 introduces a fix for an API that was introduced in version 2.2, the version 2.6 will then ship with new tests in the src/tests/Public/v2.2 folder.
+When you add a test for a public API, make sure you place it in the folder that introduced the API (check the release notes), and NOT in the version that will include the new code. For instance, if version 4.6 introduces a fix for an API that was introduced in version 4.2, the version 4.6 will then ship with new tests in the src/tests/Public/v4.2 folder.
 
 ## Building
 

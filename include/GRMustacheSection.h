@@ -47,7 +47,7 @@
  
  @since v2.0
  */
-@property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+@property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 
@@ -61,7 +61,7 @@
  
  @since v2.0
  */
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +75,6 @@
  
  @since v2.0
  */
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 @end

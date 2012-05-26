@@ -3,6 +3,36 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v4.0.0
+
+**Zero numbers are false**
+
+GRMustache now considers all `NSNumber` instances whose `boolValue` is `NO` as false, when considering whether a section should render or not.
+
+Previously, GRMustache used to consider only `[NSNumber numberWithBool:NO]` as false.
+
+This change lets you control sections rendering with proxy objects (objects that delegate some keys to other objects) in GRMustache rendering.
+
+See issue #18 for a discussion on proxy objects.
+
+**Total NSUndefinedException swallowing**
+
+Whenever GRMustache performs some key lookup and `valueForKey:` raises a NSUndefinedException, GRMustache swallows it and keep on looking for the key up the context stack.
+
+Previously, GRMustache used to swallow only exceptions that explicitely came from the inquired object, and for the inquired key.
+
+The old behavior helped you spot bugs in the implementation of keys invoked by GRMustache. The new behavior is a regression from this point of view. However, you are now able to inject proxy objects (objects that delegate some keys to other objects) in GRMustache rendering.
+
+See issue #18 for a discussion on proxy objects.
+
+**Support for `.name` keys**
+
+Keys prefixed by a dot prevent GRMustache to look up the context stack.
+
+Beware this feature is not in the mustache specification. If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this syntax.
+
+See issue #19 and https://github.com/mustache/spec/issues/10.
+
 ## v3.0.1
 
 Restored intended architectures: armv6+armv7+i386 for libGRMustache3-iOS, i386+x86_64 for libGRMustache3-MacOS.

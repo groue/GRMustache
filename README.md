@@ -15,8 +15,8 @@ How To
 
     $ git clone https://github.com/groue/GRMustache.git
 
-- For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache3-MacOS.a` to your project.
-- For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache3-iOS.a` to your project.
+- For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache4-MacOS.a` to your project.
+- For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache4-iOS.a` to your project.
 
 Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `dependency 'GRMustache'` to your Podfile. In its current version, CocoaPods exposes private headers that you should not rely on, because future versions of GRMustache may change them, without notice, in an incompatible fashion. Make sure you only import `GRMustache.h`.
 
@@ -63,10 +63,6 @@ FAQ
 - **Q: I have a bunch of template partials that live in memory, not in the file system. How do I include them?**
     
     A: Check [Guides/template_repositories.md](GRMustache/blob/master/Guides/template_repositories.md).
-
-- **Q: I provide false (zero) to a `{{#section}}` but it renders anyway?**
-    
-    A: That's because zero (the number) is not considered false by GRMustache. Consider providing an actual boolean, and checking the list of "false" values at [Guides/runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md).
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 

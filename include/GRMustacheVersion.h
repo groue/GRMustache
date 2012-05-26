@@ -26,7 +26,7 @@
  
  @since v1.0
  */
-#define GRMUSTACHE_MAJOR_VERSION 3
+#define GRMUSTACHE_MAJOR_VERSION 4
 
 /**
  The minor component of GRMustache version
@@ -40,5 +40,5 @@
  
  @since v1.0
  */
-#define GRMUSTACHE_PATCH_VERSION 1
+#define GRMUSTACHE_PATCH_VERSION 0
 

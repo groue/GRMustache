@@ -51,14 +51,15 @@ The `{{#title}}` section renders only if the title is not empty. In the section,
 Sections vs. Key paths
 ----------------------
 
-You should be aware that these two template snippets are quite similar, but not stricly equivalent:
+You should be aware that these three template snippets are quite similar, but not stricly equivalent:
 
 - `...{{#foo}}{{bar}}{{/foo}}...`
+- `...{{#foo}}{{.bar}}{{/foo}}...`
 - `...{{foo.bar}}...`
 
 The first will look for `bar` anywhere in the context stack, starting with the `foo` object.
 
-The latter ensures the `bar` key comes from the `foo` object.
+The two others are identical: they ensure the `bar` key comes from the `foo` object.
 
 
 Missing keys in detail: NSUndefinedKeyException
@@ -68,7 +69,7 @@ Missing keys in detail: NSUndefinedKeyException
 
 NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` invokes `valueForUndefinedKey:` when asked for an unknown key. `valueForUndefinedKey:`, in turn, raises an `NSUndefinedKeyException` in its default implementation.
 
-*GRMustache catches those exceptions*. Precisely, it catches `NSUndefinedKeyException` exceptions that come from the very objects that are sent the `valueForKey:` message. All other exceptions raise out of GRMustache, which does not aim at being a black hole.
+*GRMustache catches those exceptions*.
 
 For instance, if the pet above has to `name` property, it will raise an `NSUndefinedKeyException` that will be caught by GRMustache so that the key lookup can continue with the `person` object.
 
