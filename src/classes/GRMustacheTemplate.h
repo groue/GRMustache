@@ -36,7 +36,7 @@
     id<GRMustacheTemplateDelegate> _delegate;
 }
 
-@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@
  @see [GRMustache defaultTemplateOptions]
  @since v1.11
  */
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (id)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  Renders a context object from a template string.
@@ -66,7 +66,7 @@
  
  @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@
  
  @since v1.11
  */
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
@@ -99,7 +99,7 @@
  
  @since v1.11
  */
-+ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
@@ -115,7 +115,7 @@
  
  @since v1.4
  */
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
@@ -132,7 +132,7 @@
  
  @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
@@ -155,7 +155,7 @@
  
  @since v1.11
  */
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  Parses a bundle resource template, and returns a compiled template.
@@ -172,7 +172,7 @@
  
  @since v1.11
  */
-+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 /**
@@ -190,7 +190,7 @@
  
  @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  Renders a context object from a bundle resource template.
@@ -208,7 +208,7 @@
  
  @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@
  
  @since v1.0
  */
-- (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+- (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  Renders a template with context objects.
@@ -233,7 +233,7 @@
  
  @since v1.5
  */
-- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  Renders a template without any context object for interpreting Mustache tags.
@@ -242,6 +242,6 @@
  
  @since v1.0
  */
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_3_0_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 @end

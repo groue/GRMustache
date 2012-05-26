@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-MAJOR_VERSION = 3
+MAJOR_VERSION = 4
 MAX_MINOR_VERSION = 0
 
 puts <<-LICENSE

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		560CE88F1526EEF4004F935E /* GRBooleanTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 560CE88D1526EEF4004F935E /* GRBooleanTest.h */; };
 		560CE8911526F672004F935E /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRBooleanTest.m */; };
 		560CE8921526F673004F935E /* GRBooleanTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560CE88E1526EEF4004F935E /* GRBooleanTest.m */; };
 		5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
@@ -104,10 +103,10 @@
 		56A8D4971527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */; };
 		56DEC256152631040031E8DC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1C915262FF70031E8DC /* SenTestingKit.framework */; };
 		56DEC257152631040031E8DC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1F4152630710031E8DC /* Cocoa.framework */; };
-		56DEC25A152631040031E8DC /* libGRMustache3-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC248152631040031E8DC /* libGRMustache3-MacOS.a */; };
+		56DEC25A152631040031E8DC /* libGRMustache4-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */; };
 		56DEC27C1526311C0031E8DC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1C915262FF70031E8DC /* SenTestingKit.framework */; };
 		56DEC27D1526311C0031E8DC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1CB15262FF70031E8DC /* UIKit.framework */; };
-		56DEC2811526311C0031E8DC /* libGRMustache3-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC26E1526311B0031E8DC /* libGRMustache3-iOS.a */; };
+		56DEC2811526311C0031E8DC /* libGRMustache4-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC26E1526311B0031E8DC /* libGRMustache4-iOS.a */; };
 		56DEC2BC152631300031E8DC /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC292152631300031E8DC /* GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2BD152631300031E8DC /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC292152631300031E8DC /* GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2BE152631300031E8DC /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC293152631300031E8DC /* GRMustache.m */; };
@@ -204,14 +203,14 @@
 			containerPortal = 56DEC19C15262FC80031E8DC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 56DEC247152631040031E8DC;
-			remoteInfo = "GRMustache3-MacOS";
+			remoteInfo = "GRMustache4-MacOS";
 		};
 		56DEC27F1526311C0031E8DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 56DEC19C15262FC80031E8DC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 56DEC26D1526311B0031E8DC;
-			remoteInfo = "GRMustache3-iOS";
+			remoteInfo = "GRMustache4-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -223,7 +222,7 @@
 		5623B794152731B600DF16A6 /* GRMustacheParsingErrorsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheParsingErrorsTest.h; sourceTree = "<group>"; };
 		5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParsingErrorsTest.m; sourceTree = "<group>"; };
 		56353F8B1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel; sourceTree = "<group>"; };
-		563D66CE152641F7008628C5 /* GRMustache3Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache3Tests-Info.plist"; sourceTree = "<group>"; };
+		563D66CE152641F7008628C5 /* GRMustache4Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache4Tests-Info.plist"; sourceTree = "<group>"; };
 		563D66D115264739008628C5 /* comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comments.json; sourceTree = "<group>"; };
 		563D66D215264739008628C5 /* delimiters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delimiters.json; sourceTree = "<group>"; };
 		563D66D315264739008628C5 /* interpolation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = interpolation.json; sourceTree = "<group>"; };
@@ -283,10 +282,10 @@
 		56DEC1C915262FF70031E8DC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1CB15262FF70031E8DC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1F4152630710031E8DC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		56DEC248152631040031E8DC /* libGRMustache3-MacOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache3-MacOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		56DEC255152631040031E8DC /* GRMustache3-MacOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache3-MacOSTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		56DEC26E1526311B0031E8DC /* libGRMustache3-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache3-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		56DEC27B1526311C0031E8DC /* GRMustache3-iOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache3-iOSTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache4-MacOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56DEC255152631040031E8DC /* GRMustache4-MacOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache4-MacOSTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56DEC26E1526311B0031E8DC /* libGRMustache4-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache4-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56DEC27B1526311C0031E8DC /* GRMustache4-iOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache4-iOSTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56DEC292152631300031E8DC /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache.h; sourceTree = "<group>"; };
 		56DEC293152631300031E8DC /* GRMustache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustache.m; sourceTree = "<group>"; };
 		56DEC294152631300031E8DC /* GRMustache_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustache_private.h; sourceTree = "<group>"; };
@@ -353,7 +352,7 @@
 			files = (
 				56DEC256152631040031E8DC /* SenTestingKit.framework in Frameworks */,
 				56DEC257152631040031E8DC /* Cocoa.framework in Frameworks */,
-				56DEC25A152631040031E8DC /* libGRMustache3-MacOS.a in Frameworks */,
+				56DEC25A152631040031E8DC /* libGRMustache4-MacOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +372,7 @@
 				5682B4C31528E0B300ADD123 /* Foundation.framework in Frameworks */,
 				56DEC27C1526311C0031E8DC /* SenTestingKit.framework in Frameworks */,
 				56DEC27D1526311C0031E8DC /* UIKit.framework in Frameworks */,
-				56DEC2811526311C0031E8DC /* libGRMustache3-iOS.a in Frameworks */,
+				56DEC2811526311C0031E8DC /* libGRMustache4-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,10 +573,10 @@
 		56DEC1A615262FC90031E8DC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				56DEC248152631040031E8DC /* libGRMustache3-MacOS.a */,
-				56DEC255152631040031E8DC /* GRMustache3-MacOSTests.octest */,
-				56DEC26E1526311B0031E8DC /* libGRMustache3-iOS.a */,
-				56DEC27B1526311C0031E8DC /* GRMustache3-iOSTests.octest */,
+				56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */,
+				56DEC255152631040031E8DC /* GRMustache4-MacOSTests.octest */,
+				56DEC26E1526311B0031E8DC /* libGRMustache4-iOS.a */,
+				56DEC27B1526311C0031E8DC /* GRMustache4-iOSTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -682,7 +681,7 @@
 		56DEC3AE152638CD0031E8DC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				563D66CE152641F7008628C5 /* GRMustache3Tests-Info.plist */,
+				563D66CE152641F7008628C5 /* GRMustache4Tests-Info.plist */,
 				56DEC3B3152638E20031E8DC /* GRMustacheTestBase.h */,
 				56DEC3B4152638E20031E8DC /* GRMustacheTestBase.m */,
 				56DEC3BB152638FB0031E8DC /* Private */,
@@ -715,12 +714,12 @@
 			children = (
 				56DEC3B1152638E20031E8DC /* GRMustachePublicAPITest.h */,
 				56DEC3B2152638E20031E8DC /* GRMustachePublicAPITest.m */,
-				56DEC3BD152639420031E8DC /* v3.0 */,
+				56DEC3BD152639420031E8DC /* v4.0 */,
 			);
 			path = Public;
 			sourceTree = "<group>";
 		};
-		56DEC3BD152639420031E8DC /* v3.0 */ = {
+		56DEC3BD152639420031E8DC /* v4.0 */ = {
 			isa = PBXGroup;
 			children = (
 				560CE88D1526EEF4004F935E /* GRBooleanTest.h */,
@@ -736,7 +735,7 @@
 				5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */,
 				5682B47F1528399100ADD123 /* mustache/spec */,
 			);
-			path = v3.0;
+			path = v4.0;
 			sourceTree = "<group>";
 		};
 		56DEC3C215263AC80031E8DC /* JSONKit */ = {
@@ -781,7 +780,6 @@
 				56DEC30C152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */,
 				56DEC30E152631300031E8DC /* GRMustacheVersion.h in Headers */,
 				563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */,
-				560CE88F1526EEF4004F935E /* GRBooleanTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,9 +819,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		56DEC247152631040031E8DC /* GRMustache3-MacOS */ = {
+		56DEC247152631040031E8DC /* GRMustache4-MacOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56DEC264152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-MacOS" */;
+			buildConfigurationList = 56DEC264152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-MacOS" */;
 			buildPhases = (
 				56DEC244152631040031E8DC /* Sources */,
 				56DEC245152631040031E8DC /* Frameworks */,
@@ -833,14 +831,14 @@
 			);
 			dependencies = (
 			);
-			name = "GRMustache3-MacOS";
-			productName = "GRMustache3-MacOS";
-			productReference = 56DEC248152631040031E8DC /* libGRMustache3-MacOS.a */;
+			name = "GRMustache4-MacOS";
+			productName = "GRMustache4-MacOS";
+			productReference = 56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		56DEC254152631040031E8DC /* GRMustache3-MacOSTests */ = {
+		56DEC254152631040031E8DC /* GRMustache4-MacOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56DEC267152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-MacOSTests" */;
+			buildConfigurationList = 56DEC267152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-MacOSTests" */;
 			buildPhases = (
 				56DEC250152631040031E8DC /* Sources */,
 				56DEC251152631040031E8DC /* Frameworks */,
@@ -852,14 +850,14 @@
 			dependencies = (
 				56DEC259152631040031E8DC /* PBXTargetDependency */,
 			);
-			name = "GRMustache3-MacOSTests";
-			productName = "GRMustache3-MacOSTests";
-			productReference = 56DEC255152631040031E8DC /* GRMustache3-MacOSTests.octest */;
+			name = "GRMustache4-MacOSTests";
+			productName = "GRMustache4-MacOSTests";
+			productReference = 56DEC255152631040031E8DC /* GRMustache4-MacOSTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
-		56DEC26D1526311B0031E8DC /* GRMustache3-iOS */ = {
+		56DEC26D1526311B0031E8DC /* GRMustache4-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56DEC28B1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-iOS" */;
+			buildConfigurationList = 56DEC28B1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-iOS" */;
 			buildPhases = (
 				56DEC26A1526311B0031E8DC /* Sources */,
 				56DEC26B1526311B0031E8DC /* Frameworks */,
@@ -869,14 +867,14 @@
 			);
 			dependencies = (
 			);
-			name = "GRMustache3-iOS";
-			productName = "GRMustache3-iOS";
-			productReference = 56DEC26E1526311B0031E8DC /* libGRMustache3-iOS.a */;
+			name = "GRMustache4-iOS";
+			productName = "GRMustache4-iOS";
+			productReference = 56DEC26E1526311B0031E8DC /* libGRMustache4-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		56DEC27A1526311C0031E8DC /* GRMustache3-iOSTests */ = {
+		56DEC27A1526311C0031E8DC /* GRMustache4-iOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 56DEC28E1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-iOSTests" */;
+			buildConfigurationList = 56DEC28E1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-iOSTests" */;
 			buildPhases = (
 				56DEC2761526311C0031E8DC /* Sources */,
 				56DEC2771526311C0031E8DC /* Frameworks */,
@@ -888,9 +886,9 @@
 			dependencies = (
 				56DEC2801526311C0031E8DC /* PBXTargetDependency */,
 			);
-			name = "GRMustache3-iOSTests";
-			productName = "GRMustache3-iOSTests";
-			productReference = 56DEC27B1526311C0031E8DC /* GRMustache3-iOSTests.octest */;
+			name = "GRMustache4-iOSTests";
+			productName = "GRMustache4-iOSTests";
+			productReference = 56DEC27B1526311C0031E8DC /* GRMustache4-iOSTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -913,10 +911,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				56DEC247152631040031E8DC /* GRMustache3-MacOS */,
-				56DEC254152631040031E8DC /* GRMustache3-MacOSTests */,
-				56DEC26D1526311B0031E8DC /* GRMustache3-iOS */,
-				56DEC27A1526311C0031E8DC /* GRMustache3-iOSTests */,
+				56DEC247152631040031E8DC /* GRMustache4-MacOS */,
+				56DEC254152631040031E8DC /* GRMustache4-MacOSTests */,
+				56DEC26D1526311B0031E8DC /* GRMustache4-iOS */,
+				56DEC27A1526311C0031E8DC /* GRMustache4-iOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1127,12 +1125,12 @@
 /* Begin PBXTargetDependency section */
 		56DEC259152631040031E8DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 56DEC247152631040031E8DC /* GRMustache3-MacOS */;
+			target = 56DEC247152631040031E8DC /* GRMustache4-MacOS */;
 			targetProxy = 56DEC258152631040031E8DC /* PBXContainerItemProxy */;
 		};
 		56DEC2801526311C0031E8DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 56DEC26D1526311B0031E8DC /* GRMustache3-iOS */;
+			target = 56DEC26D1526311B0031E8DC /* GRMustache4-iOS */;
 			targetProxy = 56DEC27F1526311C0031E8DC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1209,7 +1207,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "tests/GRMustache3Tests-Info.plist";
+				INFOPLIST_FILE = "tests/GRMustache4Tests-Info.plist";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
@@ -1221,7 +1219,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "tests/GRMustache3Tests-Info.plist";
+				INFOPLIST_FILE = "tests/GRMustache4Tests-Info.plist";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
@@ -1235,7 +1233,7 @@
 					armv6,
 					armv7,
 				);
-				DSTROOT = /tmp/GRMustache3_iOS.dst;
+				DSTROOT = /tmp/GRMustache4_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_THUMB_SUPPORT = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -1254,7 +1252,7 @@
 					armv6,
 					armv7,
 				);
-				DSTROOT = /tmp/GRMustache3_iOS.dst;
+				DSTROOT = /tmp/GRMustache4_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_THUMB_SUPPORT = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -1279,7 +1277,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "tests/GRMustache3Tests-Info.plist";
+				INFOPLIST_FILE = "tests/GRMustache4Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1297,7 +1295,7 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "tests/GRMustache3Tests-Info.plist";
+				INFOPLIST_FILE = "tests/GRMustache4Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1319,7 +1317,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56DEC264152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-MacOS" */ = {
+		56DEC264152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-MacOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56DEC265152631040031E8DC /* Debug */,
@@ -1328,7 +1326,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56DEC267152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-MacOSTests" */ = {
+		56DEC267152631040031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-MacOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56DEC268152631040031E8DC /* Debug */,
@@ -1337,7 +1335,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56DEC28B1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-iOS" */ = {
+		56DEC28B1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56DEC28C1526311C0031E8DC /* Debug */,
@@ -1346,7 +1344,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		56DEC28E1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache3-iOSTests" */ = {
+		56DEC28E1526311C0031E8DC /* Build configuration list for PBXNativeTarget "GRMustache4-iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56DEC28F1526311C0031E8DC /* Debug */,
