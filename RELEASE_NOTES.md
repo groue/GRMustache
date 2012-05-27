@@ -5,6 +5,8 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v4.0.0
 
+**Performance improvements**
+
 **Zero numbers are false**
 
 GRMustache now considers all `NSNumber` instances whose `boolValue` is `NO` as false, when considering whether a section should render or not.
