@@ -139,7 +139,7 @@ NSString *rendering = [template renderObjects:helpers, data, nil];
 
 The strings returned by GRMustache helpers are directly inserted in the final rendering, without any further processing.
 
-However, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/~lambdas.yml#L27) that lambdas return a *template string* that is automatically rendered (read, processed as a Mustache template, and rendered in the current context).
+However, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/%7Elambdas.yml#L90) that "Lambdas used for sections should have their results parsed" (read, processed as a Mustache template, and rendered in the current context).
 
 GRMustache helpers allow you to comply with the genuine Mustache behavior:
 
