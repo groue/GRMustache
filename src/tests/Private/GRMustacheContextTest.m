@@ -121,7 +121,7 @@
 {
     GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:recorder];
-    [context contextForKey:@"foo" scoped:NO];
+    [context valueForKey:@"foo" scoped:NO];
     STAssertEqualObjects(recorder.lastAccessedKey, @"foo", nil);
 }
 
@@ -131,7 +131,7 @@
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context contextForKey:@"top" scoped:NO].object, @"top", nil);
+    STAssertEqualObjects([context valueForKey:@"top" scoped:NO], @"top", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
     STAssertNil(rootRecorder.lastAccessedKey, nil);
 }
@@ -142,7 +142,7 @@
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context contextForKey:@"root" scoped:NO].object, @"root", nil);
+    STAssertEqualObjects([context valueForKey:@"root" scoped:NO], @"root", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
 }
@@ -153,7 +153,7 @@
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertNil([context contextForKey:@"foo" scoped:NO], nil);
+    STAssertNil([context valueForKey:@"foo" scoped:NO], nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
 }
@@ -164,7 +164,7 @@
     GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
     dictionary = [NSDictionary dictionary];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextForKey:@"key" scoped:NO].object, @"foo", nil);
+    STAssertEqualObjects([context valueForKey:@"key" scoped:NO], @"foo", nil);
 }
 
 - (void)testNSNullDoesStopExploration
@@ -173,7 +173,7 @@
     GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextForKey:@"key" scoped:NO].object, [NSNull null], nil);
+    STAssertEqualObjects([context valueForKey:@"key" scoped:NO], [NSNull null], nil);
 }
 
 - (void)testNSNumberWithBoolNODoesStopExploration
@@ -182,7 +182,7 @@
     GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextForKey:@"key" scoped:NO].object, [NSNumber numberWithBool:NO], nil);
+    STAssertEqualObjects([context valueForKey:@"key" scoped:NO], [NSNumber numberWithBool:NO], nil);
 }
 
 - (void)testOneDepthContextTemplate
@@ -211,7 +211,7 @@
 {
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertThrows([context contextForKey:@"NonNSUndefinedKeyException" scoped:NO], nil);
+    STAssertThrows([context valueForKey:@"NonNSUndefinedKeyException" scoped:NO], nil);
 }
 
 - (void)testContextSwallowsNonSelfNSUndefinedKeyException
@@ -219,14 +219,14 @@
     // This test makes sure users can implement proxy objects
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertNoThrow([context contextForKey:@"NonSelfNSUndefinedKeyException" scoped:NO], nil);
+    STAssertNoThrow([context valueForKey:@"NonSelfNSUndefinedKeyException" scoped:NO], nil);
 }
 
 - (void)testContextSwallowsSelfNSUndefinedKeyException
 {
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertNoThrow([context contextForKey:@"SelfNSUndefinedKeyException" scoped:NO], nil);
+    STAssertNoThrow([context valueForKey:@"SelfNSUndefinedKeyException" scoped:NO], nil);
 }
 
 @end

@@ -79,18 +79,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return [[[GRMustacheContext alloc] initWithObject:object parent:self] autorelease];
 }
 
-- (GRMustacheContext *)contextForKey:(NSString *)key scoped:(BOOL)scoped
-{
-    id value = [self valueForKey:key scoped:scoped];
-    if (!value) {
-        return nil;
-    }
-    if (scoped) {
-        return [GRMustacheContext contextWithObject:value];
-    }
-    return [self contextByAddingObject:value];
-}
-
 - (id)valueForKey:(NSString *)key scoped:(BOOL)scoped
 {
     id value = nil;

@@ -152,8 +152,9 @@ static void invokeImplicitIteratorKeyPath(NSString *key, BOOL *inOutScoped, GRMu
 }
 
 static void invokeOtherKeyPath(NSString *key, BOOL *inOutScoped, GRMustacheContext **inOutContext) {
-    *inOutContext = [*inOutContext contextForKey:key scoped:*inOutScoped];
+    id value = [*inOutContext valueForKey:key scoped:*inOutScoped];
     *inOutScoped = YES;
+    *inOutContext = [GRMustacheContext contextWithObject:value];
 }
 
 @implementation GRMustacheInvocationKeyPath
