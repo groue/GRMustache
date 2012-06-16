@@ -29,7 +29,7 @@ See [Guides/sample_code/indexes.md](Guides/sample_code/indexes.md) for a discuss
 
 **Support for `.name` keys**
 
-Keys prefixed by a dot prevent GRMustache to look up the context stack.
+Keys prefixed by a dot prevent GRMustache to look up the [context stack](Guides/runtime/context_stack.md).
 
 Beware this feature is not in the mustache specification. If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), don't use this syntax.
 
