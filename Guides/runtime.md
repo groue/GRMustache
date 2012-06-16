@@ -5,9 +5,7 @@ GRMustache runtime
 
 ## Overview
 
-`valueForKey:`, `description`, `<NSFastEnumeration>`.
-  
-Those are the only interfaces that you have to care about when providing data to GRMustache.
+There are only three methods that you have to care about when providing data to GRMustache:
 
 - `valueForKey:` is the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) method, that GRMustache invokes when looking for the data that will be rendered. Basically, for a `{{name}}` tag to be rendered, all you need to provide is an NSDictionary with the `@"name"` key, or an object declaring the `name` property.
 
@@ -18,14 +16,14 @@ Those are the only interfaces that you have to care about when providing data to
 For instance, let's consider the following code:
 
 ```obcj
-NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"Arthur" forKey:@"name"];
-NSString *templateString = @"Hello {{name}}!";
+NSDictionary *dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:2] forKey:@"name"];
+NSString *templateString = @"I have {{count}} arms.";
 NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:templateString error:NULL];
 ```
 
-1. When GRMustache renders the `{{name}}` tag, it invokes `valueForKey:` with the key `@"name"` on the dictionary. It gets `@"Arthur"` as a result.
-2. The `description` method of NSString returns the string itself: `@"Arthur"`.
-3. Hence we'll get the expected rendering: `@"Hello Arthur!"`.
+1. When GRMustache renders the `{{count}}` tag, it invokes `valueForKey:` with the key `@"count"` on the dictionary. It gets `[NSNumber numberWithInt:2]` as a result.
+2. The `description` method of the NSNumber returns a string: `@"2"`.
+3. This string is inserted into the rendering: `@"I have 2 arms"`.
 
 
 ## In Detail
