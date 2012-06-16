@@ -43,7 +43,7 @@ Documentation
 
 GRMustache online documentation is provided as guides and sample code:
 
-- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to parse and render templates
+- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources
 - [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
 - [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
 - [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
