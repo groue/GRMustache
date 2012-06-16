@@ -56,6 +56,10 @@ FAQ
     
     A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
+- **Q: How do I implement filters, format numbers, dates, etc?**
+    
+    A: Check documentation of [Mustache lambda sections](GRMustache/blob/master/Guides/runtime/helpers.md) first. If it would not help, read [number formatting sample code](GRMustache/blob/master/Guides/sample_code/number_formatting.md). If you are still stuck after those, go and look for a [closed issue](GRMustache/issues?state=closed) that covers your need. Finally, open a new issue :-)
+
 - **Q: How do I render default values for missing keys?**
 
     A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
