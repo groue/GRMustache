@@ -52,7 +52,7 @@ GRMustache online documentation is provided as guides and sample code:
 FAQ
 ---
 
-- **Q: How do I render array indices?**
+- **Q: How do I render array indexes?**
     
     A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
