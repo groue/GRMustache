@@ -229,9 +229,9 @@
 {
     NSString *localizedDescription;
     if (token.templateID) {
-        localizedDescription = [NSString stringWithFormat:@"Parse error at line %d of template %@: %@", token.line, description, token.templateID];
+        localizedDescription = [NSString stringWithFormat:@"Parse error at line %ld of template %@: %@", token.line, token.templateID, description];
     } else {
-        localizedDescription = [NSString stringWithFormat:@"Parse error at line %d: %@", token.line, description];
+        localizedDescription = [NSString stringWithFormat:@"Parse error at line %ld: %@", token.line, description];
     }
     return [NSError errorWithDomain:GRMustacheErrorDomain
                                code:GRMustacheErrorCodeParseError
