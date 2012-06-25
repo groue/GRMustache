@@ -37,6 +37,7 @@ typedef enum {
 } GRMustacheTokenType;
 
 @interface GRMustacheToken : NSObject {
+@private
     GRMustacheTokenType _type;
     NSString *_content;
     NSString *_templateString;
