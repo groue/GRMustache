@@ -31,7 +31,7 @@
     GRMustacheInvocation *_invocation;
     GRMustacheTemplate *_rootTemplate;
     NSString *_templateString;
-    NSRange _range;
+    NSRange _innerRange;
     BOOL _inverted;
     NSArray *_elems;
     id _renderingContext;

@@ -30,23 +30,23 @@
 @interface GRMustacheSection()
 @property (nonatomic, retain) GRMustacheInvocation *invocation;
 @property (nonatomic, retain) NSString *templateString;
-@property (nonatomic) NSRange range;
+@property (nonatomic) NSRange innerRange;
 @property (nonatomic) BOOL inverted;
 @property (nonatomic, retain) NSArray *elems;
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSection
 @synthesize templateString=_templateString;
-@synthesize range=_range;
+@synthesize innerRange=_innerRange;
 @synthesize invocation=_invocation;
 @synthesize inverted=_inverted;
 @synthesize elems=_elems;
 
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
-    return [[[self alloc] initWithInvocation:invocation templateString:templateString range:range inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithInvocation:invocation templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
 }
 
 - (void)dealloc
@@ -59,7 +59,7 @@
 
 - (NSString *)innerTemplateString
 {
-    return [_templateString substringWithRange:_range];
+    return [_templateString substringWithRange:_innerRange];
 }
 
 - (id)renderingContext
@@ -184,13 +184,13 @@
 
 #pragma mark Private
 
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
         self.invocation = invocation;
         self.templateString = templateString;
-        self.range = range;
+        self.innerRange = innerRange;
         self.inverted = inverted;
         self.elems = elems;
     }

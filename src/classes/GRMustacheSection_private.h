@@ -31,7 +31,7 @@
     GRMustacheInvocation *_invocation;
     GRMustacheTemplate *_rootTemplate;
     NSString *_templateString;
-    NSRange _range;
+    NSRange _innerRange;
     BOOL _inverted;
     NSArray *_elems;
     id _renderingContext;
@@ -39,7 +39,7 @@
 
 @property (nonatomic, readonly) id renderingContext GRMUSTACHE_API_PUBLIC;
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString range:(NSRange)range inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 - (NSString *)render;
 
 @end
