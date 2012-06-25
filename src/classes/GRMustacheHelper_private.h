@@ -24,7 +24,6 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheSection;
-@class GRMustacheContext;
 
 // =============================================================================
 #pragma mark - <GRMustacheHelper>

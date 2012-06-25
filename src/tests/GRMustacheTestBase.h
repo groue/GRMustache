@@ -22,8 +22,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@class GRMustacheTemplate;
-
 @interface GRMustacheTestBase: SenTestCase
 @property (nonatomic, readonly) NSBundle *testBundle;
 @end
