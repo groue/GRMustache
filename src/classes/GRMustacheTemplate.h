@@ -46,12 +46,9 @@
 /**
  Parses a template string, and returns a compiled template.
  
- The behavior of the returned template is determined by [GRMustache defaultTemplateOptions].
- 
  @return A GRMustacheTemplate instance
  @param templateString The template string
  @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
- @see [GRMustache defaultTemplateOptions]
  @since v1.11
  */
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
