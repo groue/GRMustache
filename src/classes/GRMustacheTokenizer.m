@@ -226,9 +226,9 @@
     if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
         NSString *localizedDescription;
         if (templateID) {
-            localizedDescription = [NSString stringWithFormat:@"Parse error at line %ld of template %@: %@", line, templateID, description];
+            localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu of template %@: %@", (unsigned long)line, templateID, description];
         } else {
-            localizedDescription = [NSString stringWithFormat:@"Parse error at line %ld: %@", line, description];
+            localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu: %@", (unsigned long)line, description];
         }
         [_delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
                                                                        code:GRMustacheErrorCodeParseError

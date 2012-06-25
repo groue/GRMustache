@@ -92,9 +92,9 @@ typedef void (*GRMustacheInvocationKeyPathFunction)(NSString *key, BOOL *inOutSc
 - (NSString *)description
 {
     if (_token.templateID) {
-        return [NSString stringWithFormat:@"%@ at line %ld of template %@", [_token.templateString substringWithRange:_token.range], _token.line, _token.templateID];
+        return [NSString stringWithFormat:@"%@ at line %lu of template %@", [_token.templateString substringWithRange:_token.range], (unsigned long)_token.line, _token.templateID];
     } else {
-        return [NSString stringWithFormat:@"%@ at line %ld", [_token.templateString substringWithRange:_token.range], _token.line];
+        return [NSString stringWithFormat:@"%@ at line %lu", [_token.templateString substringWithRange:_token.range], (unsigned long)_token.line];
     }
 }
 
