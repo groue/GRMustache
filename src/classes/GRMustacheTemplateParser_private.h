@@ -101,7 +101,7 @@
  GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
  tokenizer.delegate = parser;
  [tokenizer parseTemplateString:... templateID:...];
- NSArray *renderingElements = [[parser renderingElementsReturningError:outError] retain];
+ NSArray *renderingElements = [parser renderingElementsReturningError:NULL];
  @endcode
 
  @return An NSArray containing <GRMustacheRenderingElement> instances
