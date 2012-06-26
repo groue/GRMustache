@@ -69,12 +69,12 @@
 /**
  The GRMustacheTemplateParser interprets GRMustacheTokens provided by a
  GRMustacheTokenizer, and outputs an array of objects conforming to the
- GRMustacheRenderingElement protocol, the rendering elements of a Mustache
- template.
+ GRMustacheRenderingElement protocol, the rendering elements that make a
+ Mustache template.
  */
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
-    NSError *_error;
+    NSError *_fatalError;
     NSMutableArray *_elementsStack;
     NSMutableArray *_sectionOpeningTokenStack;
     NSMutableArray *_currentElements;

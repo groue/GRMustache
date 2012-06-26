@@ -31,11 +31,11 @@
 @interface GRMustacheTemplateParser()
 
 /**
- The error that would be returned by the public method renderingElementsReturningError:.
+ The fatal error that should be returned by the public method renderingElementsReturningError:.
  
  @see currentElements
  */
-@property (nonatomic, retain) NSError *error;
+@property (nonatomic, retain) NSError *fatalError;
 
 /**
  After a section opening token has been found, such as {{#foo}} or {{^bar}},
@@ -58,7 +58,7 @@
  This object is always identical to [self.elementsStack lastObject].
  
  @see elementsStack
- @see error
+ @see fatalError
 */
 @property (nonatomic, retain) NSMutableArray *currentElements;
 
@@ -82,9 +82,9 @@
 /**
  This method is called whenever an error has occurred beyond any repair hope.
  
- @param error The fatal error
+ @param fatalError The fatal error
  */
-- (void)finishWithFatalError:(NSError *)error;
+- (void)finishWithFatalError:(NSError *)fatalError;
 
 /**
  Builds and returns an NSError of domain GRMustacheErrorDomain, code GRMustacheErrorCodeParseError,
@@ -110,7 +110,7 @@
 @end
 
 @implementation GRMustacheTemplateParser
-@synthesize error=_error;
+@synthesize fatalError=_fatalError;
 @synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
 @synthesize dataSource=_dataSource;
 @synthesize currentElements=_currentElements;
@@ -133,9 +133,9 @@
 {
     // Has a fatal error occurred?
     if (_currentElements == nil) {
-        NSAssert(_error, @"We should have an error when _currentElements is nil");
+        NSAssert(_fatalError, @"We should have an error when _currentElements is nil");
         if (outError != NULL) {
-            *outError = [[_error retain] autorelease];
+            *outError = [[_fatalError retain] autorelease];
         }
         return nil;
     }
@@ -154,7 +154,7 @@
 
 - (void)dealloc
 {
-    [_error release];
+    [_fatalError release];
     [_currentSectionOpeningToken release];
     [_currentElements release];
     [_elementsStack release];
@@ -296,10 +296,10 @@
 
 #pragma mark Private
 
-- (void)finishWithFatalError:(NSError *)error
+- (void)finishWithFatalError:(NSError *)fatalError
 {
     // Make sure renderingElementsReturningError: returns correct results:
-    self.error = error;
+    self.fatalError = fatalError;
     self.currentElements = nil;
     
     // All those objects are useless, now
