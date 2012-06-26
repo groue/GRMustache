@@ -87,8 +87,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark - GRMustacheTemplateRepository
 
 @interface GRMustacheTemplateRepository()<GRMustacheTemplateParserDataSource>
-- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)templateID error:(NSError **)outError;
-- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
+- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
+- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)baseTemplateID error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateRepository
@@ -214,9 +214,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [renderingElements autorelease];
 }
 
-- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)templateID error:(NSError **)outError
+- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError
 {
-    templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:templateID];
+    id templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
     if (templateID == nil) {
         if (outError != NULL) {
             *outError = [NSError errorWithDomain:GRMustacheErrorDomain
@@ -309,14 +309,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
-    if (templateID) {
-        NSAssert([templateID isKindOfClass:[NSURL class]], @"");
+    if (baseTemplateID) {
+        NSAssert([baseTemplateID isKindOfClass:[NSURL class]], @"");
         if (_templateExtension.length == 0) {
-            return [[NSURL URLWithString:name relativeToURL:(NSURL *)templateID] URLByStandardizingPath];
+            return [[NSURL URLWithString:name relativeToURL:(NSURL *)baseTemplateID] URLByStandardizingPath];
         }
-        return [[NSURL URLWithString:[name stringByAppendingPathExtension:_templateExtension] relativeToURL:(NSURL *)templateID] URLByStandardizingPath];
+        return [[NSURL URLWithString:[name stringByAppendingPathExtension:_templateExtension] relativeToURL:(NSURL *)baseTemplateID] URLByStandardizingPath];
     }
     if (_templateExtension.length == 0) {
         return [[_baseURL URLByAppendingPathComponent:name] URLByStandardizingPath];
@@ -364,11 +364,11 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
-    if (templateID) {
-        NSAssert([templateID isKindOfClass:[NSString class]], @"");
-        NSString *basePath = [(NSString *)templateID stringByDeletingLastPathComponent];
+    if (baseTemplateID) {
+        NSAssert([baseTemplateID isKindOfClass:[NSString class]], @"");
+        NSString *basePath = [(NSString *)baseTemplateID stringByDeletingLastPathComponent];
         if (_templateExtension.length == 0) {
             return [[basePath stringByAppendingPathComponent:name] stringByStandardizingPath];
         }
@@ -421,7 +421,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     return [_bundle pathForResource:name ofType:_templateExtension];
 }
@@ -461,7 +461,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     return name;
 }

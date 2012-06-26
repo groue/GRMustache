@@ -31,7 +31,7 @@
 @synthesize templateIDForNameCount=_templateIDForNameCount;
 @synthesize templateStringForTemplateIDCount=_templateStringForTemplateIDCount;
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     _templateIDForNameCount++;
     return name;

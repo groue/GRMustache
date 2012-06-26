@@ -28,8 +28,8 @@
 @class GRMustacheTemplateRepository;
 
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID;
-- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError;
+- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID GRMUSTACHE_API_PUBLIC;
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 @end
 
 @interface GRMustacheTemplateRepository : NSObject {
