@@ -262,7 +262,7 @@
             
         case GRMustacheTokenTypePartial: {
             // Validate token in order to fullfill the templateParser:renderingElementForPartialName:error: contract:
-            // Non nil, non empty, non blank partial name.
+            // Non nil, non empty, white-space stripped partial name.
             // The token content has already been stripped of white spaces, so we just have to test for its length.
             if (token.content.length == 0) {
                 [self finishWithFatalError:[self parseErrorAtToken:token description:@"Empty partial tag"]];

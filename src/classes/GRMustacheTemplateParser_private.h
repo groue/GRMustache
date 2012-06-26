@@ -49,8 +49,8 @@
  Provided with a partial name, returns an object conforming to the
  GRMustacheRenderingElement protocol.
  
- The implementation can assume that the partial name is not nil, non empty, and non
- blank (not only made of white space characters).
+ The implementation can assume that the partial name is not nil, non empty, and
+ stripped of white-space characters.
  
  @return A <GRMustacheRenderingElement> instance
  @param templateParser The template parser asking for a rendering element
