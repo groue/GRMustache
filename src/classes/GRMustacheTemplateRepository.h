@@ -31,6 +31,8 @@
  The protocol for a GRMustacheTemplateRepository's dataSource.
  
  The dataSource's responsability is to provide Mustache template strings for template and partial names.
+ 
+ @see GRMustacheTemplateRepository
  */
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
 @required
@@ -93,6 +95,9 @@
  
  You may provide your own template string data source. However common cases such as loading templates
  from URLs, files, bundle resources, and dictionaries, are already implemented.
+ 
+ @see GRMustacheTemplate
+ @see GRMustacheTemplateRepositoryDataSource
  */
 @interface GRMustacheTemplateRepository : NSObject {
 @private

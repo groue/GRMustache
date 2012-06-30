@@ -26,7 +26,37 @@
 @class GRMustacheContext;
 @class GRMustacheTemplate;
 
+/**
+ The protocol for "rendering elements".
+ 
+ When parsing a Mustache template, GRMustacheTemplateParser builds a syntax tree
+ of objects representing raw text and various mustache tags.
+ 
+ This syntax tree is made of objects conforming to the GRMustacheRenderingElement.
+ 
+ Their responsability is to render the data provided by the library user. This data
+ is encapsulated into GRMustacheContext objects, which represent a context stack
+ that grows when entering a Mustache {{#section}}, and shrinks when leaving that
+ same {{/section}}.
+ 
+ For instance, the template string "hello {{name}}!" would give four rendering elements:
+ - a GRMustacheTextElement that renders "hello ".
+ - a GRMustacheVariableElement that renders the `name` key in a context.
+ - a GRMustacheTextElement that renders "!".
+ - a GRMustacheTemplate that would contain the three previous elements, and render the concatenation of their renderings.
+ 
+ @see GRMustacheTemplateParser
+ @see GRMustacheContext
+ */
 @protocol GRMustacheRenderingElement<NSObject>
 @required
+
+/**
+ Renders a context stack.
+ 
+ @return the rendering of _context_.
+ @param context A context stack.
+ @param rootTemplate A template whose delegate methods should be called whenever relevant.
+ */
 - (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
 @end

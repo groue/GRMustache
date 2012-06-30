@@ -41,6 +41,7 @@
  such as {{>name}}.
  
  @see GRMustacheTemplateRepository
+ @see GRMustacheRenderingElement
  */
 @protocol GRMustacheTemplateParserDataSource <NSObject>
 @required
@@ -58,7 +59,9 @@
  @param name The partial name
  @param outError If there is an error loading or parsing the partial, upon return
  contains an NSError object that describes the problem.
+ 
  @see [GRMustacheTemplateRepository templateParser:renderingElementForPartialName:error:]
+ @see GRMustacheRenderingElement
  */
 - (id<GRMustacheRenderingElement>)templateParser:(GRMustacheTemplateParser *)templateParser renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
@@ -72,7 +75,11 @@
  GRMustacheTokenizer, and outputs an array of objects conforming to the
  GRMustacheRenderingElement protocol, the rendering elements that make a
  Mustache template.
- */
+
+ @see GRMustacheRenderingElement
+ @see GRMustacheToken
+ @see GRMustacheTokenizer
+*/
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
     NSError *_fatalError;
@@ -111,6 +118,8 @@
  @return An NSArray containing <GRMustacheRenderingElement> instances
  @param outError If there is an error building rendering elements, upon return contains
  an NSError object that describes the problem.
+ 
+ @see GRMustacheRenderingElement
 */
 - (NSArray *)renderingElementsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

@@ -121,6 +121,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  @param templateString A Mustache template string.
  @param templateID The template ID of the template, or nil if the template string is not tied to any identified template.
  @param outError If there is an error, upon return contains an NSError object that describes the problem.
+ 
+ @see GRMustacheTemplateRepository
  */
 - (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
 @end

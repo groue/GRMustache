@@ -47,6 +47,8 @@
  @return YES if the tokenizer should continue producing tokens; otherwise, NO.
  @param tokenizer The tokenizer that did find a token.
  @param token The token
+ 
+ @see GRMustacheToken
  */
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
@@ -67,6 +69,9 @@
  The GRMustacheTokenizer consumes a Mustache template string, and produces tokens.
  
  Those tokens are consumed by the tokenizer's delegate.
+ 
+ @see GRMustacheToken
+ @see GRMustacheTokenizerDelegate
  */
 @interface GRMustacheTokenizer : NSObject {
 @private
