@@ -26,6 +26,9 @@
 @class GRMustacheInvocation;
 @class GRMustacheTemplate;
 
+/**
+ A GRMustacheSection represents a Mustache section such as `{{#name}}...{{/name}}`.
+ */
 @interface GRMustacheSection: NSObject {
 @private
     GRMustacheInvocation *_invocation;
@@ -44,8 +47,6 @@
 
 /**
  Returns the current rendering context.
- 
- @since v2.0
  */
 @property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -58,8 +59,6 @@
 
 /**
  Returns the literal inner content of the section, with unprocessed mustache `{{tags}}`.
- 
- @since v2.0
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -72,8 +71,6 @@
  Renders the inner content of the receiver with the current context
  
  @return A string containing the rendered inner content.
- 
- @since v2.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
