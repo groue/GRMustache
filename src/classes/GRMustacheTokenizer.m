@@ -27,8 +27,7 @@
 @property (nonatomic, copy) NSString *otag;
 @property (nonatomic, copy) NSString *ctag;
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-- (void)didFinish;
-- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID;
+- (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID;
 - (NSRange)rangeOfString:(NSString *)string inTemplateString:(NSString *)templateString startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 @end
 
@@ -87,16 +86,13 @@
         // otag was not found
         if (orange.location == NSNotFound) {
             if (p < templateString.length) {
-                if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                                  content:[templateString substringFromIndex:p]
-                                                                           templateString:templateString
-                                                                               templateID:templateID
-                                                                                     line:line
-                                                                                    range:NSMakeRange(p, templateString.length-p)]]) {
-                    return;
-                }
+                [self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
+                                                                             content:[templateString substringFromIndex:p]
+                                                                      templateString:templateString
+                                                                          templateID:templateID
+                                                                                line:line
+                                                                               range:NSMakeRange(p, templateString.length-p)]];
             }
-            [self didFinish];
             return;
         }
         
@@ -125,7 +121,7 @@
         
         // ctag was not found
         if (crange.location == NSNotFound) {
-            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
             return;
         }
         
@@ -134,13 +130,13 @@
         
         // empty tag is not allowed
         if (tag.length == 0) {
-            [self didFinishWithParseErrorAtLine:line description:@"Empty tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Empty tag" templateID:templateID];
             return;
         }
         
         // tag must not contain otag
         if ([tag rangeOfString:_otag].location != NSNotFound) {
-            [self didFinishWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
             return;
         }
         
@@ -164,7 +160,7 @@
                 
             case GRMustacheTokenTypeSetDelimiter:
                 if ([tag characterAtIndex:tag.length-1] != '=') {
-                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
+                    [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
                 tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
@@ -179,7 +175,7 @@
                     self.otag = [nonBlankNewTags objectAtIndex:0];
                     self.ctag = [nonBlankNewTags objectAtIndex:1];
                 } else {
-                    [self didFinishWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
+                    [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
                 break;
@@ -214,14 +210,7 @@
     return YES;
 }
 
-- (void)didFinish
-{
-    if ([_delegate respondsToSelector:@selector(tokenizerDidFinish:)]) {
-        [_delegate tokenizerDidFinish:self];
-    }
-}
-
-- (void)didFinishWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
+- (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
 {
     if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
         NSString *localizedDescription;

@@ -46,10 +46,11 @@
 @required
 
 /**
- Provided with a partial name, returns an object conforming to the
- GRMustacheRenderingElement protocol.
+ Sent when a parser has found a partial tag such as `{{> name}}`.
  
- The implementation can assume that the partial name is not nil, non empty, and
+ This method should return a rendering element that represents the partial.
+ 
+ The _name_ parameter is guaranteed to be not nil, non empty, and
  stripped of white-space characters.
  
  @return A <GRMustacheRenderingElement> instance
@@ -83,8 +84,11 @@
 }
 
 /**
- The parser's dataSource, whose responsability is to provide rendering elements
- for partial tokens such as {{>name}}.
+ The parser's dataSource.
+ 
+ The data source is sent messages as the parser finds partial tags such as `{{> name}}`.
+ 
+ @see GRMustacheTemplateParserDataSource
  */
 @property (nonatomic, assign) id<GRMustacheTemplateParserDataSource> dataSource GRMUSTACHE_API_INTERNAL;
 

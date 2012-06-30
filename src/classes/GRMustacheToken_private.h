@@ -115,7 +115,7 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *templateString GRMUSTACHE_API_INTERNAL;
 
 /**
- The template ID of the template this token comes from.
+ The template ID of the template this token comes from (see GRMustacheTemplateRepository).
  */
 @property (nonatomic, readonly, retain) id templateID GRMUSTACHE_API_INTERNAL;
 

@@ -84,7 +84,7 @@
  
  @param fatalError The fatal error
  */
-- (void)finishWithFatalError:(NSError *)fatalError;
+- (void)failWithFatalError:(NSError *)fatalError;
 
 /**
  Builds and returns an NSError of domain GRMustacheErrorDomain, code GRMustacheErrorCodeParseError,
@@ -190,7 +190,7 @@
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
             if (invocation == nil) {
-                [self finishWithFatalError:invocationError];
+                [self failWithFatalError:invocationError];
                 return NO;
             }
             
@@ -204,7 +204,7 @@
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:token error:&invocationError];
             if (invocation == nil) {
-                [self finishWithFatalError:invocationError];
+                [self failWithFatalError:invocationError];
                 return NO;
             }
             
@@ -226,7 +226,7 @@
         case GRMustacheTokenTypeSectionClosing: {
             // Validate token: section ending should match section opening
             if (![token.content isEqualToString:_currentSectionOpeningToken.content]) {
-                [self finishWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected `%@` section closing tag", token.content]]];
                 return NO;
             }
 
@@ -234,7 +234,7 @@
             NSError *invocationError;
             GRMustacheInvocation *invocation = [self invocationWithToken:_currentSectionOpeningToken error:&invocationError];
             if (invocation == nil) {
-                [self finishWithFatalError:invocationError];
+                [self failWithFatalError:invocationError];
                 return NO;
             }
             
@@ -265,7 +265,7 @@
             // Non nil, non empty, white-space stripped partial name.
             // The token content has already been stripped of white spaces, so we just have to test for its length.
             if (token.content.length == 0) {
-                [self finishWithFatalError:[self parseErrorAtToken:token description:@"Empty partial tag"]];
+                [self failWithFatalError:[self parseErrorAtToken:token description:@"Empty partial tag"]];
                 return NO;
             }
             
@@ -273,7 +273,7 @@
             NSError *partialError;
             id<GRMustacheRenderingElement> partial = [_dataSource templateParser:self renderingElementForPartialName:token.content error:&partialError];
             if (partial == nil) {
-                [self finishWithFatalError:partialError];
+                [self failWithFatalError:partialError];
                 return NO;
             }
             
@@ -291,12 +291,12 @@
 
 - (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error
 {
-    [self finishWithFatalError:error];
+    [self failWithFatalError:error];
 }
 
 #pragma mark Private
 
-- (void)finishWithFatalError:(NSError *)fatalError
+- (void)failWithFatalError:(NSError *)fatalError
 {
     // Make sure renderingElementsReturningError: returns correct results:
     self.fatalError = fatalError;
