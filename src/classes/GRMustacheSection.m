@@ -114,7 +114,11 @@
         // invoke
         
         [_invocation invokeWithContext:context];
-        if ([rootTemplate.delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+        if ([rootTemplate.delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [rootTemplate.delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
+        } else if ([rootTemplate.delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
             [rootTemplate.delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
         }
         id value = _invocation.returnValue;
@@ -197,7 +201,11 @@
         
         // finish
         
-        if ([rootTemplate.delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+        if ([rootTemplate.delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [rootTemplate.delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
+        } else if ([rootTemplate.delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
             [rootTemplate.delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
         }
     }
