@@ -32,11 +32,13 @@ Deprecated APIs:
 @end
 ```
 
-The new APIs are documented in [Guides/delegate.md](Guides/delegate.md).
+GRMustacheDelegate is documented in [Guides/delegate.md](Guides/delegate.md).
 
 ### GRMustacheTemplateRepositoryDataSource protocol
 
 The return type of `-[GRMustacheTemplateRepositoryDataSource templateRepository:templateIDForName:relativeToTemplateID:]` as changed from `id` to `id<NSCopying>`.
+
+GRMustacheTemplateRepositoryDataSource is documented in [Guides/template_repositories.md](Guides/template_repositories.md).
 
 ### Errors
 
