@@ -34,6 +34,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
+/**
+ Private subclass of GRMustacheTemplateRepository that is its own data source,
+ and loads templates from a base URL.
+ */
 @interface GRMustacheTemplateRepositoryBaseURL : GRMustacheTemplateRepository {
 @private
     NSURL *_baseURL;
@@ -49,6 +53,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryDirectory
 
+/**
+ Private subclass of GRMustacheTemplateRepository that is its own data source,
+ and loads templates from a directory identified by its path.
+ */
 @interface GRMustacheTemplateRepositoryDirectory : GRMustacheTemplateRepository {
 @private
     NSString *_directoryPath;
@@ -62,6 +70,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryBundle
 
+/**
+ Private subclass of GRMustacheTemplateRepository that is its own data source,
+ and loads templates from a bundle.
+ */
 @interface GRMustacheTemplateRepositoryBundle : GRMustacheTemplateRepository {
 @private
     NSBundle *_bundle;
@@ -75,6 +87,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryPartialsDictionary
 
+/**
+ Private subclass of GRMustacheTemplateRepository that is its own data source,
+ and loads templates from a dictionary.
+ */
 @interface GRMustacheTemplateRepositoryPartialsDictionary : GRMustacheTemplateRepository {
 @private
     NSDictionary *_partialsDictionary;
@@ -87,8 +103,26 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark - GRMustacheTemplateRepository
 
 @interface GRMustacheTemplateRepository()<GRMustacheTemplateParserDataSource>
+
+/**
+ Returns a template or a partial template, given its name.
+ 
+ @return a template
+ @param name The name of the template
+ @param baseTemplateID The template ID of the enclosing template, or nil.
+ @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ */
 - (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
-- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)baseTemplateID error:(NSError **)outError;
+
+/**
+ Parses templateString and returns rendering elements.
+ 
+ @return an array of objects conforming to the GRMustacheRenderingElement protocol.
+ @param templateString A Mustache template string.
+ @param templateID The template ID of the template, or nil if the template string is not tied to any identified template.
+ @param outError If there is an error, upon return contains an NSError object that describes the problem.
+ */
+- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
 @end
 
 @implementation GRMustacheTemplateRepository
@@ -309,7 +343,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     if (baseTemplateID) {
         NSAssert([baseTemplateID isKindOfClass:[NSURL class]], @"");
@@ -364,7 +398,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     if (baseTemplateID) {
         NSAssert([baseTemplateID isKindOfClass:[NSString class]], @"");
@@ -421,7 +455,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     return [_bundle pathForResource:name ofType:_templateExtension];
 }
@@ -461,7 +495,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark GRMustacheTemplateRepositoryDataSource
 
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
     return name;
 }
