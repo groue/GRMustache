@@ -123,19 +123,62 @@ GRMustacheTemplateRepositoryDataSource protocol
 Finally, you may implement the GRMustacheTemplateRepositoryDataSource protocol in order to load templates for unimagined sources.
 
 ```objc
+/**
+ The protocol for a GRMustacheTemplateRepository's dataSource.
+ 
+ The dataSource's responsability is to provide Mustache template strings for template and partial names.
+ */
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
 @required
 
 /**
- Provided with a partial name that comes from a `{{>name}}` mustache tag,
- this method should return an object which uniquely identifies a template.
-*/
-- (id)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID;
+ Returns a template ID, that is to say an object that uniquely identifies a template or a template partial.
+ 
+ The class of this ID is opaque: your implementation of a GRMustacheTemplateRepositoryDataSource
+ would define, for itself, what kind of object would identity a template or a partial.
+ 
+ For instance, a file-based data source may use NSString objects containing paths to the templates.
+ 
+ You should try to choose "human-readable" template IDs. That is because template IDs are embedded in
+ the description of errors that may happen during a template processing, in order to help the library
+ user locate, and fix, the faulting template.
+ 
+ Whenever relevant, template and partial hierarchies are supported via the _baseTemplateID_ parameter: it contains
+ the template ID of the enclosing template, or nil when the data source is asked for a template ID for a partial
+ that is referred from a raw template string (see [GRMustacheTemplateRepository templateFromString:error:]).
+ 
+ Not all data sources have to implement hierarchies: they can simply ignore this parameter.
+ 
+ The returned value can be nil: the library user would then eventually get an NSError of domain
+ GRMustacheErrorDomain and code GRMustacheErrorCodeTemplateNotFound.
+ 
+ @return a template ID
+ @param templateRepository The GRMustacheTemplateRepository asking for a template ID.
+ @param name The name of the template or template partial.
+ @param baseTemplateID The template ID of the enclosing template, or nil.
+ */
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID;
 
 /**
- Provided with a template ID that comes from the previous method,
- Returns a template string.
-*/
+ Provided with a template ID that comes from templateRepository:templateIDForName:relativeToTemplateID:,
+ returns a Mustache template string.
+
+ For instance, a file-based data source may interpret the template ID as a NSString object
+ containing paths to the template, and return the file content.
+ 
+ A few words about the way your implementation of this method must handle errors:
+ 
+ As usually, whenever this method returns nil, the _outError_ parameter should point to
+ a valid NSError. This NSError would eventually reach the library user.
+ 
+ However, should you "forget" to set the _outError_ parameter, GRMustache would generate for you
+ an NSError of domain GRMustacheErrorDomain and code GRMustacheErrorCodeTemplateNotFound.
+
+ @return a Mustache template string
+ @param templateRepository The GRMustacheTemplateRepository asking for a Mustache template string.
+ @param templateID The template ID of the template
+ @param outError If there is an error returning a template string, upon return contains nil, or an NSError object that describes the problem.
+ */
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError;
 
 @end
