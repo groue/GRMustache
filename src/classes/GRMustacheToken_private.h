@@ -41,7 +41,7 @@ typedef enum {
     GRMustacheTokenTypeText,
     
     /**
-     The kind of tokens representing a comment tag such as `{{! comment }}`/
+     The kind of tokens representing a comment tag such as `{{! comment }}`.
      */
     GRMustacheTokenTypeComment,
     
