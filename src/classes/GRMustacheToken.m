@@ -24,7 +24,12 @@
 
 
 @interface GRMustacheToken()
+
+/**
+ @see +[GRMustacheToken tokenWithType:content:templateString:templateID:line:range:]
+ */
 - (id)initWithType:(GRMustacheTokenType)type content:(NSString *)content templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range;
+
 @end
 
 @implementation GRMustacheToken
