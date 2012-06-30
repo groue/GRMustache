@@ -43,6 +43,10 @@
  
  For instance, a file-based data source may use NSString objects containing paths to the templates.
  
+ You should try to choose "human-readable" template IDs. That is because template IDs are embedded in
+ the description of errors that may happen during a template processing, in order to help the library
+ user locate, and fix, the faulting template.
+ 
  Whenever relevant, template and partial hierarchies are supported via the _baseTemplateID_ parameter: it contains
  the template ID of the enclosing template, or nil when the data source is asked for a template ID for a partial
  that is referred from a raw template string (see [GRMustacheTemplateRepository templateFromString:error:]).
