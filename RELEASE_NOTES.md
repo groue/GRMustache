@@ -3,6 +3,45 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v4.1.0
+
+### GRMustacheDelegate protocol
+
+A template's delegate is now able to know how a value will be interpreted by GRMustache.
+
+New APIs:
+
+```objc
+typedef enum {
+    GRMustacheInterpretationSection,
+    GRMustacheInterpretationVariable,
+} GRMustacheInterpretation;
+
+@protocol GRMustacheTemplateDelegate<NSObject>
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation;
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation;
+@end
+```
+
+Deprecated APIs:
+
+```objc
+@protocol GRMustacheTemplateDelegate<NSObject>
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+@end
+```
+
+The new APIs are documented in [Guides/delegate.md](Guides/delegate.md).
+
+### GRMustacheTemplateRepositoryDataSource protocol
+
+The return type of `-[GRMustacheTemplateRepositoryDataSource templateRepository:templateIDForName:relativeToTemplateID:]` as changed from `id` to `id<NSCopying>`.
+
+### Errors
+
+GRMustache used to output badly formatted errors. They are now easier to read.
+
 ## v4.0.0
 
 **Performance improvements**

@@ -95,7 +95,7 @@ Now let's replace array elements with proxies before they are rendered:
 /**
  This method is called when the template is about to render a tag.
  */
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
      The invocation object tells us which object is about to be rendered.

@@ -171,7 +171,7 @@ And then implement the delegate methods:
      
      Each time we'll enter a section that is attached to a NSNumberFormatter,
      we'll enqueue this NSNumberFormatter in the stack. This is done in
-     [template:willRenderReturnValueOfInvocation:]
+     [template:willInterpretReturnValueOfInvocation:as:]
      */
     self.templateNumberFormatterStack = [NSMutableArray array];
 }
@@ -179,7 +179,7 @@ And then implement the delegate methods:
 /**
  This method is called when the template is about to render a tag.
  */
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
      The invocation object tells us which object is about to be rendered.
@@ -188,17 +188,42 @@ And then implement the delegate methods:
     {
         /**
          If it is a NSNumberFormatter, enqueue it in
-         templateNumberFormatterStack.
+         templateNumberFormatterStack, and return.
          */
         [self.templateNumberFormatterStack addObject:invocation.returnValue];
+        return;
     }
-    else if (self.templateNumberFormatterStack.count > 0 && [invocation.returnValue isKindOfClass:[NSNumber class]])
+    
+    if (interpretation == GRMustacheInterpretationSection)
     {
         /**
-         If it is a NSNumber, and if our templateNumberFormatterStack is not
-         empty, use the top NSNumberFormatter to format the number.
+         We actually only format numbers for variable tags such as `{{name}}`.
+         We must carefully avoid messing with sections: they as well can be
+         provided with numbers, that they interpret as booleans. We surely
+         do not want to convert booleans to strings...
          
-         Set the invocation's returnValue: this is the object that will be
+         So let's ignore sections, and return.
+         */
+        return;
+    }
+    
+    if (self.templateNumberFormatterStack.count == 0)
+    {
+        /**
+         If our number formatter stack is empty, we can not format anything:
+         let's return.
+         */
+        return;
+    }
+    
+    if ([invocation.returnValue isKindOfClass:[NSNumber class]])
+    {
+        /**
+         There we are: invocation's return value is a NSNumber, and our
+         templateNumberFormatterStack is not empty.
+         
+         Let's use the top NSNumberFormatter to format this number, and set
+         the invocation's returnValue: this is the object that will be
          rendered.
          */
         NSNumberFormatter *numberFormatter = self.templateNumberFormatterStack.lastObject;
@@ -210,7 +235,7 @@ And then implement the delegate methods:
 /**
  This method is called right after the template has rendered a tag.
  */
-- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
      Make sure we dequeue NSNumberFormatters when we leave their scope.
