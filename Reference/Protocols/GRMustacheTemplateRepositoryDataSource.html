@@ -1,0 +1,484 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GRMustacheTemplateRepositoryDataSource Protocol Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<a id="developerHome" href="../index.html">Gwendal Roué</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GRMustacheTemplateRepositoryDataSource Protocol Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/templateRepository:templateIDForName:relativeToTemplateID:">&nbsp;&nbsp;&nbsp;&nbsp;- templateRepository:templateIDForName:relativeToTemplateID:</option>
+	
+	<option value="//api/name/templateRepository:templateStringForTemplateID:error:">&nbsp;&nbsp;&nbsp;&nbsp;- templateRepository:templateStringForTemplateID:error:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Building Template IDs from Template Names">Building Template IDs from Template Names</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Providing Template Strings from Template IDs">Providing Template Strings from Template IDs</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateRepository:templateIDForName:relativeToTemplateID:">templateRepository:templateIDForName:relativeToTemplateID:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateRepository:templateStringForTemplateID:error:">templateRepository:templateStringForTemplateID:error:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GRMustacheTemplateRepositoryDataSource Protocol Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GRMustacheTemplateRepositoryDataSource Protocol Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GRMustacheTemplateRepository.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The protocol for a GRMustacheTemplateRepository&rsquo;s dataSource.</p>
+
+<p>The dataSource&rsquo;s responsability is to provide Mustache template strings for
+template and partial names.</p>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/template_repositories.md">https://github.com/groue/GRMustache/blob/master/Guides/template_repositories.md</a></p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Building Template IDs from Template Names" name="task_Building Template IDs from Template Names"></a>
+						<h3 class="subsubtitle task-title">Building Template IDs from Template Names</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/templateRepository:templateIDForName:relativeToTemplateID:">&ndash;&nbsp;templateRepository:templateIDForName:relativeToTemplateID:</a></code>
+		<span class="tooltip"><p>Returns a template ID, that is to say an object that uniquely identifies a
+template or a template partial.</p></span>
+	</span>
+	
+	<span class="task-item-suffix">required method</span>
+</li>
+						</ul>
+						
+						
+						<a title="Providing Template Strings from Template IDs" name="task_Providing Template Strings from Template IDs"></a>
+						<h3 class="subsubtitle task-title">Providing Template Strings from Template IDs</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/templateRepository:templateStringForTemplateID:error:">&ndash;&nbsp;templateRepository:templateStringForTemplateID:error:</a></code>
+		<span class="tooltip"><p>Provided with a template ID that comes from
+<a href="#//api/name/templateRepository:templateIDForName:relativeToTemplateID:">templateRepository:templateIDForName:relativeToTemplateID:</a>,
+returns a Mustache template string.</p></span>
+	</span>
+	
+	<span class="task-item-suffix">required method</span>
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/templateRepository:templateIDForName:relativeToTemplateID:" title="templateRepository:templateIDForName:relativeToTemplateID:"></a>
+	<h3 class="subsubtitle method-title">templateRepository:templateIDForName:relativeToTemplateID:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a template ID, that is to say an object that uniquely identifies a
+template or a template partial.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id&lt;NSCopying&gt;)templateRepository:(GRMustacheTemplateRepository *)<em>templateRepository</em> templateIDForName:(NSString *)<em>name</em> relativeToTemplateID:(id)<em>baseTemplateID</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>templateRepository</em></dt>
+			<dd><p>The <a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> asking for a</p>
+
+<pre><code>                       template ID.
+</code></pre></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>name</em></dt>
+			<dd><p>The name of the template or template partial.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>baseTemplateID</em></dt>
+			<dd><p>The template ID of the enclosing template, or nil.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>a template ID</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v1.13</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The class of this ID is opaque: your implementation of a
+<a href="GRMustacheTemplateRepositoryDataSource.html">GRMustacheTemplateRepositoryDataSource</a> would define, for itself, what kind of
+object would identity a template or a partial.</p>
+
+<p>For instance, a file-based data source may use NSString objects containing
+paths to the templates.</p>
+
+<p>You should try to choose &ldquo;human-readable&rdquo; template IDs. That is because
+template IDs are embedded in the description of errors that may happen during
+a template processing, in order to help the library user locate, and fix, the
+faulting template.</p>
+
+<p>Whenever relevant, template and partial hierarchies are supported via the
+<em>baseTemplateID</em> parameter: it contains the template ID of the enclosing
+template, or nil when the data source is asked for a template ID for a
+partial that is referred from a raw template string (see
+<a href="../Classes/GRMustacheTemplateRepository.html#//api/name/templateFromString:error:">[GRMustacheTemplateRepository templateFromString:error:]</a>).</p>
+
+<p>Not all data sources have to implement hierarchies: they can simply ignore
+this parameter.</p>
+
+<p>The returned value can be nil: the library user would then eventually get an
+NSError of domain GRMustacheErrorDomain and code
+GRMustacheErrorCodeTemplateNotFound.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplateRepository.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/templateRepository:templateStringForTemplateID:error:" title="templateRepository:templateStringForTemplateID:error:"></a>
+	<h3 class="subsubtitle method-title">templateRepository:templateStringForTemplateID:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Provided with a template ID that comes from
+<a href="#//api/name/templateRepository:templateIDForName:relativeToTemplateID:">templateRepository:templateIDForName:relativeToTemplateID:</a>,
+returns a Mustache template string.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)templateRepository:(GRMustacheTemplateRepository *)<em>templateRepository</em> templateStringForTemplateID:(id)<em>templateID</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>templateRepository</em></dt>
+			<dd><p>The <a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> asking for a</p>
+
+<pre><code>                       Mustache template string.
+</code></pre></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>templateID</em></dt>
+			<dd><p>The template ID of the template</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error returning a template string,</p>
+
+<pre><code>                       upon return contains nil, or an NSError object
+                       that describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>a Mustache template string</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v1.13</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>For instance, a file-based data source may interpret the template ID as a
+NSString object containing paths to the template, and return the file
+content.</p>
+
+<p>As usually, whenever this method returns nil, the <em>outError</em> parameter should
+point to a valid NSError. This NSError would eventually reach the library
+user.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplateRepository.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-07-01)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
