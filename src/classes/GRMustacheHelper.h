@@ -29,8 +29,26 @@
 // =============================================================================
 #pragma mark - <GRMustacheHelper>
 
+/**
+ * The protocol for implementing Mustache "lambda" sections.
+ *
+ * The responsability of a GRMustacheHelper is to render a Mustache section such
+ * as `{{#bold}}...{{/bold}}`.
+ *
+ * When the data given to a Mustache section is a GRMustacheHelper, GRMustache
+ * invokes the `renderSection:` method of the helper, and inserts the raw return
+ * value in the template rendering.
+ */
 @protocol GRMustacheHelper<NSObject>
 @required
+
+/**
+ * Returns the rendering of a Mustache section.
+ *
+ * @param section   The section to render
+ *
+ * @return The rendering of the section
+ */
 - (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end
 
@@ -40,7 +58,20 @@
 
 #if NS_BLOCKS_AVAILABLE
 
+/**
+ * The GRMustacheHelper class helps building mustache helpers without writing a
+ * custom class that conforms to the GRMustacheHelper protocol.
+ */ 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
+
+/**
+ * Returns a GRMustacheHelper object that executes the provided block when
+ * rendering a section.
+ *
+ * @param block   The block that renders a section.
+ *
+ * @return a GRMustacheHelper object.
+ */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end
 

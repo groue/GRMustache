@@ -29,6 +29,9 @@
 
 #if NS_BLOCKS_AVAILABLE
 
+/**
+ * Private subclass of GRMustacheHelper that render sections by calling a block.
+ */
 @interface GRMustacheBlockHelper: GRMustacheHelper {
 @private
     NSString *(^_block)(GRMustacheSection* section);
@@ -91,10 +94,12 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *result = _block(section);
-    if (result == nil) {
-        return @"";
+    NSString *result = nil;
+    
+    if (_block) {
+        result = _block(section);
     }
+    
     return result;
 }
 

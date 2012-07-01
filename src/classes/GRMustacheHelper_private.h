@@ -28,8 +28,11 @@
 // =============================================================================
 #pragma mark - <GRMustacheHelper>
 
+// Documented in GRMustacheHelper.h
 @protocol GRMustacheHelper<NSObject>
 @required
+
+// Documented in GRMustacheHelper.h
 - (NSString *)renderSection:(GRMustacheSection *)section GRMUSTACHE_API_PUBLIC;
 @end
 
@@ -37,10 +40,12 @@
 // =============================================================================
 #pragma mark - GRMustacheHelper
 
+// Documented in GRMustacheHelper.h
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
 
 #if NS_BLOCKS_AVAILABLE
 
+// Documented in GRMustacheHelper.h
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block GRMUSTACHE_API_PUBLIC;
 
 #endif /* if NS_BLOCKS_AVAILABLE */
