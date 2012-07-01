@@ -37,6 +37,12 @@
     id<GRMustacheTemplateDelegate> _delegate;
 }
 
+/**
+ * The template's delegate.
+ *
+ * @see GRMustacheTemplateDelegate
+ */
+ 
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
