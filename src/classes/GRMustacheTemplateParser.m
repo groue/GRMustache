@@ -62,7 +62,7 @@
  * 
  * @see elementsStack
  * @see fatalError
-*/
+ */
 @property (nonatomic, retain) NSMutableArray *currentElements;
 
 /**

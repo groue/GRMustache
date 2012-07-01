@@ -81,7 +81,7 @@
  * @see GRMustacheRenderingElement
  * @see GRMustacheToken
  * @see GRMustacheTokenizer
-*/
+ */
 @interface GRMustacheTemplateParser : NSObject<GRMustacheTokenizerDelegate> {
 @private
     NSError *_fatalError;
@@ -126,6 +126,6 @@
  * @return An NSArray containing <GRMustacheRenderingElement> instances
  * 
  * @see GRMustacheRenderingElement
-*/
+ */
 - (NSArray *)renderingElementsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
