@@ -55,6 +55,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 /**
  * Triggers the trick for avoiding most NSUndefinedException to be raised
  * by the invocation of `valueForKey:` method on user's objects.
+ *
+ * @see GRMustacheNSUndefinedKeyExceptionGuard
  */
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
 
