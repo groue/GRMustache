@@ -27,7 +27,6 @@
 #import "GRMustacheTemplate_private.h"
 
 #if !defined(NS_BLOCK_ASSERTIONS)
-// For testing purpose
 BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
 
