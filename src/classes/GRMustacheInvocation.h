@@ -24,14 +24,14 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- * 
  * The GRMustacheInvocation class gives you information about the values that
- * GRMustache finds in the context stack when rendering tags such as `{{name}}`.
+ * are found in the context stack when rendering tags such as `{{name}}`.
  *
- * You'll be given GRMustacheInvocation instances when providing a delegate to
- * your templates.
+ * You'll be given GRMustacheInvocation instances when providing a
+ * GRMustacheTemplateDelegate to your templates.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * @see GRMustacheTemplateDelegate
  *
  * @since v1.12

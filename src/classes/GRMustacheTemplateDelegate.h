@@ -27,12 +27,12 @@
 @class GRMustacheInvocation;
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- * 
  * The various ways GRMustache can interpret a value.
  *
- * @see GRMustacheTemplateDelegate
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
+ * @see GRMustacheTemplateDelegate
+ * 
  * @since v4.1
  */
 typedef enum {
@@ -56,16 +56,20 @@ typedef enum {
 } GRMustacheInterpretation;
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- * 
  * The protocol for a GRMustacheTemplate's delegate.
  *
  * The delegate's can observe, and alter, the rendering of a template.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * @since v1.12
  */
 @protocol GRMustacheTemplateDelegate<NSObject>
 @optional
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Observing the Full Template Rendering
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Sent right before a template starts rendering.
@@ -84,6 +88,11 @@ typedef enum {
  * @since v1.12
  */
 - (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Observing the Rendering of individual Mustache tags
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Sent right before GRMustache interprets and renders a value (Deprecated in

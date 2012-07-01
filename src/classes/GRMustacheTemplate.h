@@ -26,10 +26,10 @@
 #import "GRMustache.h"
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/templates.md
- * 
  * The GRMustacheTemplate class provides with Mustache template rendering
  * services.
+ * 
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/templates.md
  * 
  * @since v1.0
  */
@@ -39,13 +39,17 @@
     id<GRMustacheTemplateDelegate> _delegate;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/// @name Setting the Delegate
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- * 
  * The template's delegate.
  *
- * @see GRMustacheTemplateDelegate
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
+ * @see GRMustacheTemplateDelegate
+ * 
  * @since v1.12
  */
  
@@ -285,7 +289,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Renders a template with a context object.
+ * Renders a template with a context stack initialized with a single object.
  * 
  * @param object  A context object used for interpreting Mustache tags
  *
@@ -296,10 +300,10 @@
 - (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
- * Renders a template with context objects.
+ * Renders a template with a context stack initialized with several objects.
  * 
- * @param object, ...   A comma-separated list of objects used for interpreting
- *                      Mustache tags, ending with nil.
+ * @param object  The bottom object in the context stack.
+ * @param ...     The other objects in the context stack.
  *
  * @return A string containing the rendered template
  *

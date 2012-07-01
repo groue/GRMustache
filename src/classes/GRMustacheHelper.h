@@ -30,8 +30,6 @@
 #pragma mark - <GRMustacheHelper>
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
- * 
  * The protocol for implementing Mustache "lambda" sections.
  *
  * The responsability of a GRMustacheHelper is to render a Mustache section such
@@ -41,10 +39,16 @@
  * invokes the `renderSection:` method of the helper, and inserts the raw return
  * value in the template rendering.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ *
  * @since v1.9
  */
 @protocol GRMustacheHelper<NSObject>
 @required
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering Sections
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Returns the rendering of a Mustache section.
@@ -68,9 +72,17 @@
  * The GRMustacheHelper class helps building mustache helpers without writing a
  * custom class that conforms to the GRMustacheHelper protocol.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ *
+ * @see GRMustacheHelper protocol
+ *
  * @since v2.0
  */ 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating helper objects
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Returns a GRMustacheHelper object that executes the provided block when

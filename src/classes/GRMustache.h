@@ -55,14 +55,11 @@ typedef struct {
 + (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Preventing NSUndefinedKeyException when using GRMustache in
-/// Development configuration
+/// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md
- * 
- * Have GRMustache raise much less `NSUndefinedKeyExceptions` when rendering
+ * Have GRMustache avoid most `NSUndefinedKeyExceptions` when rendering
  * templates.
  * 
  * The rendering of a GRMustache template can lead to many
@@ -81,11 +78,11 @@ typedef struct {
  * your development configuration, and to wrap the
  * `preventNSUndefinedKeyExceptionAttack` method call in a #if block, like:
  * 
- * @code
- * #ifdef DEBUG
- * [GRMustache preventNSUndefinedKeyExceptionAttack];
- * #endif
- * @endcode
+ *     #ifdef DEBUG
+ *     [GRMustache preventNSUndefinedKeyExceptionAttack];
+ *     #endif
+ * 
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md
  * 
  * @since v1.7
  */

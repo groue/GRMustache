@@ -111,13 +111,11 @@
  * 
  * For instance:
  * 
- * @code
- * GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] init] autorelease];
- * GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
- * tokenizer.delegate = parser;
- * [tokenizer parseTemplateString:... templateID:...];
- * NSArray *renderingElements = [parser renderingElementsReturningError:NULL];
- * @endcode
+ *     GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] init] autorelease];
+ *     GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
+ *     tokenizer.delegate = parser;
+ *     [tokenizer parseTemplateString:... templateID:...];
+ *     NSArray *renderingElements = [parser renderingElementsReturningError:NULL];
  * 
  * @param outError  If there is an error building rendering elements, upon
  *                  return contains an NSError object that describes the

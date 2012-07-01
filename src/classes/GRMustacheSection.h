@@ -27,14 +27,14 @@
 @class GRMustacheTemplate;
 
 /**
- * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
- * 
  * A GRMustacheSection represents a Mustache section such as 
  * `{{#name}}...{{/name}}`.
  *
  * You will be provided with GRMustacheSection objects when implementing
  * mustache lambda sections with objects conforming to the GRMustacheHelper
  * protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
  *
  * @see GRMustacheHelper
  *
