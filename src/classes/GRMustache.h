@@ -80,9 +80,11 @@ typedef struct {
  * your development configuration, and to wrap the
  * `preventNSUndefinedKeyExceptionAttack` method call in a #if block, like:
  * 
- *    #ifdef DEBUG
- *    [GRMustache preventNSUndefinedKeyExceptionAttack];
- *    #endif
+ * @code
+ * #ifdef DEBUG
+ * [GRMustache preventNSUndefinedKeyExceptionAttack];
+ * #endif
+ * @endcode
  * 
  * @since v1.7
  */

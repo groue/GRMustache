@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+// Documented in GRMustache.h
 typedef struct {
     int major;
     int minor;
@@ -31,7 +32,10 @@ typedef struct {
 
 @interface GRMustache: NSObject
 
+// Documented in GRMustache.h
 + (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
 
 @end
