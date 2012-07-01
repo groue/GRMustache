@@ -32,31 +32,33 @@
 #pragma mark - <GRMustacheTokenizerDelegate>
 
 /**
- The protocol for the delegate of a GRMustacheTokenizer.
- 
- The delegate's responsability is to consume tokens and handle tokenizer errors.
- 
- @see GRMustacheTemplateParser
+ * The protocol for the delegate of a GRMustacheTokenizer.
+ * 
+ * The delegate's responsability is to consume tokens and handle tokenizer
+ * errors.
+ * 
+ * @see GRMustacheTemplateParser
  */
 @protocol GRMustacheTokenizerDelegate<NSObject>
 @optional
 
 /**
- Sent after the tokenizer has parsed a token.
- 
- @return YES if the tokenizer should continue producing tokens; otherwise, NO.
- @param tokenizer The tokenizer that did find a token.
- @param token The token
- 
- @see GRMustacheToken
+ * Sent after the tokenizer has parsed a token.
+ * 
+ * @param tokenizer   The tokenizer that did find a token.
+ * @param token       The token
+ *
+ * @return YES if the tokenizer should continue producing tokens; otherwise, NO.
+ * 
+ * @see GRMustacheToken
  */
 - (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
 /**
- Sent after the token has failed.
- 
- @param tokenizer The tokenizer that failed to producing tokens.
- @param error The error that occurred.
+ * Sent after the token has failed.
+ * 
+ * @param tokenizer   The tokenizer that failed to producing tokens.
+ * @param error       The error that occurred.
  */
 - (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
 @end
@@ -66,12 +68,13 @@
 #pragma mark - GRMustacheTokenizer
 
 /**
- The GRMustacheTokenizer consumes a Mustache template string, and produces tokens.
- 
- Those tokens are consumed by the tokenizer's delegate.
- 
- @see GRMustacheToken
- @see GRMustacheTokenizerDelegate
+ * The GRMustacheTokenizer consumes a Mustache template string, and produces
+ * tokens.
+ * 
+ * Those tokens are consumed by the tokenizer's delegate.
+ * 
+ * @see GRMustacheToken
+ * @see GRMustacheTokenizerDelegate
  */
 @interface GRMustacheTokenizer : NSObject {
 @private
@@ -81,19 +84,21 @@
 }
 
 /**
- The tokenizer's delegate.
- 
- The delegate is sent messages as the tokenizer interprets a Mustache template string.
- 
- @see GRMustacheTokenizerDelegate
+ * The tokenizer's delegate.
+ * 
+ * The delegate is sent messages as the tokenizer interprets a Mustache template
+ * string.
+ * 
+ * @see GRMustacheTokenizerDelegate
  */
 @property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
- The tokenizer will invoke its delegate as it builds tokens from the template string.
- 
- @param templateString A Mustache template string
- @param templateID A template ID (see GRMustacheTemplateRepository)
+ * The tokenizer will invoke its delegate as it builds tokens from the template
+ * string.
+ * 
+ * @param templateString  A Mustache template string
+ * @param templateID      A template ID (see GRMustacheTemplateRepository)
  */
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID GRMUSTACHE_API_INTERNAL;
 @end

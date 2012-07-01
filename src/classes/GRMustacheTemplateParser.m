@@ -31,80 +31,92 @@
 @interface GRMustacheTemplateParser()
 
 /**
- The fatal error that should be returned by the public method renderingElementsReturningError:.
- 
- @see currentElements
+ * The fatal error that should be returned by the public method
+ * renderingElementsReturningError:.
+ * 
+ * @see currentElements
  */
 @property (nonatomic, retain) NSError *fatalError;
 
 /**
- After a section opening token has been found, such as {{#foo}} or {{^bar}},
- contains this token.
- 
- This object is always identical to [self.sectionOpeningTokenStack lastObject].
- 
- @see sectionOpeningTokenStack
+ * After a section opening token has been found, such as {{#foo}} or {{^bar}},
+ * contains this token.
+ * 
+ * This object is always identical to
+ * [self.sectionOpeningTokenStack lastObject].
+ * 
+ * @see sectionOpeningTokenStack
  */
 @property (nonatomic, retain) GRMustacheToken *currentSectionOpeningToken;
 
 /**
- An array where rendering elements are appended as tokens are yielded
- by a tokenizer.
- 
- This array is also the one that would be returned by the public method renderingElementsReturningError:.
- 
- As such, it is nil whenever an error occurs.
-
- This object is always identical to [self.elementsStack lastObject].
- 
- @see elementsStack
- @see fatalError
+ * An array where rendering elements are appended as tokens are yielded
+ * by a tokenizer.
+ * 
+ * This array is also the one that would be returned by the public method
+ * renderingElementsReturningError:.
+ * 
+ * As such, it is nil whenever an error occurs.
+ * 
+ * This object is always identical to [self.elementsStack lastObject].
+ * 
+ * @see elementsStack
+ * @see fatalError
 */
 @property (nonatomic, retain) NSMutableArray *currentElements;
 
 /**
- The stack of arrays where rendering elements should be appended as tokens are yielded
- by a tokenizer.
- 
- This stack grows with section opening tokens, and shrinks with section closing tokens.
- 
- @see currentElements
+ * The stack of arrays where rendering elements should be appended as tokens are
+ * yielded by a tokenizer.
+ * 
+ * This stack grows with section opening tokens, and shrinks with section
+ * closing tokens.
+ * 
+ * @see currentElements
  */
 @property (nonatomic, retain) NSMutableArray *elementsStack;
 
 /**
- This stack grows with section opening tokens, and shrinks with section closing tokens.
- 
- @see currentSectionOpeningToken
+ * This stack grows with section opening tokens, and shrinks with section
+ * closing tokens.
+ * 
+ * @see currentSectionOpeningToken
  */
 @property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
 
 /**
- This method is called whenever an error has occurred beyond any repair hope.
- 
- @param fatalError The fatal error
+ * This method is called whenever an error has occurred beyond any repair hope.
+ * 
+ * @param fatalError  The fatal error
  */
 - (void)failWithFatalError:(NSError *)fatalError;
 
 /**
- Builds and returns an NSError of domain GRMustacheErrorDomain, code GRMustacheErrorCodeParseError,
- related to a specific location in a template, represented by the token argument.
- 
- @return An NSError
- @param token The GRMustacheToken where the parse error has been found.
- @param description A NSString that fills the NSLocalizedDescriptionKey key of the error's userInfo.
+ * Builds and returns an NSError of domain GRMustacheErrorDomain, code
+ * GRMustacheErrorCodeParseError, related to a specific location in a template,
+ * represented by the token argument.
+ * 
+ * @param token         The GRMustacheToken where the parse error has been
+ *                      found.
+ * @param description   A NSString that fills the NSLocalizedDescriptionKey key
+ *                      of the error's userInfo.
+ *
+ * @return An NSError
  */
 - (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description;
 
 /**
- Returns a GRMustacheInvocation instance out of a GRMustacheToken.
- 
- For instance, the token {{foo.bar}} would yield an invocation that would invoke `foo` then `bar`.
- 
- @returns A GRMustacheInvocation
- @param token A GRMustacheToken
- @param outError If there is an error building the invocation, such as a parsing error, upon return
- contains an NSError object that describes the problem.
+ * Returns a GRMustacheInvocation instance out of a GRMustacheToken.
+ * 
+ * For instance, the token {{foo.bar}} would yield an invocation that would
+ * invoke `foo` then `bar`.
+ * 
+ * @param token     A GRMustacheToken
+ * @param outError  If there is an error building the invocation, such as a
+ *                  parsing error, upon return contains an NSError object that
+ *                  describes the problem.
+ *
+ * @returns A GRMustacheInvocation
  */
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError;
 @end

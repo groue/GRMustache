@@ -34,7 +34,7 @@ NSString *rendering = [template renderObject:dictionary];
 
 ### Custom data objects
 
-Often, data comes from your model objects, not from an hand-crafted NSDictionary.
+Often, data comes from your model objects, not from a hand-crafted NSDictionary.
 
 In this case, the best option is to declare a category on your model object, and implement a specific key that will output the formatted number:
 
@@ -96,17 +96,17 @@ Here is the rendering code:
 - (NSString *)render
 {
     /**
-     So, our goal is to format all numbers in the `{{#PERCENT_FORMAT}}` and
-     `{{#DECIMAL_FORMAT}}` sections of template.mustache.
-     
-     First, we attach a NSNumberFormatter instance to those sections. This is
-     done by setting NSNumberFormatter instances to corresponding keys in the
-     data object that we will render. We'll use a NSDictionary for storing
-     the data, but you can use any other KVC-compliant container.
-     
-     The NSNumberFormatter instances will never be rendered: GRMustache
-     considers them as "true" objects that will trigger the rendering of the
-     sections they are attached to. We use them as plain sentinels.
+     * So, our goal is to format all numbers in the `{{#PERCENT_FORMAT}}` and
+     * `{{#DECIMAL_FORMAT}}` sections of template.mustache.
+     * 
+     * First, we attach a NSNumberFormatter instance to those sections. This is
+     * done by setting NSNumberFormatter instances to corresponding keys in the
+     * data object that we will render. We'll use a NSDictionary for storing
+     * the data, but you can use any other KVC-compliant container.
+     * 
+     * The NSNumberFormatter instances will never be rendered: GRMustache
+     * considers them as "true" objects that will trigger the rendering of the
+     * sections they are attached to. We use them as plain sentinels.
      */
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
@@ -123,8 +123,8 @@ Here is the rendering code:
     
     
     /**
-     Now we need a float to be rendered as the {{float}} tags of our
-     template.
+     * Now we need a float to be rendered as the {{float}} tags of our
+     * template.
      */
     
     // Attach a float to the "float" key
@@ -132,8 +132,8 @@ Here is the rendering code:
     
     
     /**
-     Render. The formatting of numbers will happen in the
-     GRMustacheTemplateDelegate methods, hereafter.
+     * Render. The formatting of numbers will happen in the
+     * GRMustacheTemplateDelegate methods, hereafter.
      */
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"template" bundle:nil error:NULL];
@@ -162,70 +162,68 @@ And then implement the delegate methods:
 @synthesize templateNumberFormatterStack;
 
 /**
- This method is called right before the template start rendering.
+ * This method is called right before the template start rendering.
  */
 - (void)templateWillRender:(GRMustacheTemplate *)template
 {
     /**
-     Prepare a stack of NSNumberFormatter objects.
-     
-     Each time we'll enter a section that is attached to a NSNumberFormatter,
-     we'll enqueue this NSNumberFormatter in the stack. This is done in
-     [template:willInterpretReturnValueOfInvocation:as:]
+     * Prepare a stack of NSNumberFormatter objects.
+     * 
+     * Each time we'll enter a section that is attached to a NSNumberFormatter,
+     * we'll enqueue this NSNumberFormatter in the stack. This is done in
+     * [template:willInterpretReturnValueOfInvocation:as:]
      */
     self.templateNumberFormatterStack = [NSMutableArray array];
 }
 
 /**
- This method is called when the template is about to render a tag.
+ * This method is called when the template is about to render a tag.
  */
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
-     The invocation object tells us which object is about to be rendered.
+     * The invocation object tells us which object is about to be rendered.
+     *
+     * If it is a NSNumberFormatter, enqueue it in templateNumberFormatterStack,
+     * and return.
      */
     if ([invocation.returnValue isKindOfClass:[NSNumberFormatter class]])
     {
-        /**
-         If it is a NSNumberFormatter, enqueue it in
-         templateNumberFormatterStack, and return.
-         */
         [self.templateNumberFormatterStack addObject:invocation.returnValue];
         return;
     }
     
+    /**
+     * We actually only format numbers for variable tags such as `{{name}}`. We
+     * must carefully avoid messing with sections: they as well can be provided
+     * with numbers, that they interpret as booleans. We surely do not want to
+     * convert NO to the truthy @"0%" string...
+     * 
+     * So let's ignore sections, and return.
+     */
     if (interpretation == GRMustacheInterpretationSection)
     {
-        /**
-         We actually only format numbers for variable tags such as `{{name}}`.
-         We must carefully avoid messing with sections: they as well can be
-         provided with numbers, that they interpret as booleans. We surely
-         do not want to convert booleans to strings...
-         
-         So let's ignore sections, and return.
-         */
         return;
     }
     
+    /**
+     * If our number formatter stack is empty, we can not format anything: let's
+     * return.
+     */
     if (self.templateNumberFormatterStack.count == 0)
     {
-        /**
-         If our number formatter stack is empty, we can not format anything:
-         let's return.
-         */
         return;
     }
     
+    /**
+     * There we are: invocation's return value is a NSNumber, and our
+     * templateNumberFormatterStack is not empty.
+     * 
+     * Let's use the top NSNumberFormatter to format this number, and set the
+     * invocation's returnValue: this is the object that will be rendered.
+     */
     if ([invocation.returnValue isKindOfClass:[NSNumber class]])
     {
-        /**
-         There we are: invocation's return value is a NSNumber, and our
-         templateNumberFormatterStack is not empty.
-         
-         Let's use the top NSNumberFormatter to format this number, and set
-         the invocation's returnValue: this is the object that will be
-         rendered.
-         */
         NSNumberFormatter *numberFormatter = self.templateNumberFormatterStack.lastObject;
         NSNumber *number = invocation.returnValue;
         invocation.returnValue = [numberFormatter stringFromNumber:number];
@@ -233,12 +231,12 @@ And then implement the delegate methods:
 }
 
 /**
- This method is called right after the template has rendered a tag.
+ * This method is called right after the template has rendered a tag.
  */
 - (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
-     Make sure we dequeue NSNumberFormatters when we leave their scope.
+     * Make sure we dequeue NSNumberFormatters when we leave their scope.
      */
     if ([invocation.returnValue isKindOfClass:[NSNumberFormatter class]])
     {
@@ -247,12 +245,12 @@ And then implement the delegate methods:
 }
 
 /**
- This method is called right after the template has finished rendering.
+ * This method is called right after the template has finished rendering.
  */
 - (void)templateDidRender:(GRMustacheTemplate *)template
 {
     /**
-     Final cleanup: release the stack created in templateWillRender:
+     * Final cleanup: release the stack created in templateWillRender:
      */
     self.templateNumberFormatterStack = nil;
 }

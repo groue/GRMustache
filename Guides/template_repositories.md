@@ -16,38 +16,47 @@ It ships with the following class methods:
 ```objc
 @interface GRMustacheTemplateRepository : NSObject
 
-// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
+// Loads templates and partials from a directory, with "mustache" extension,
+// encoded in UTF8 (from MacOS 10.6 and iOS 4.0).
 + (id)templateRepositoryWithBaseURL:(NSURL *)url;
 
-// Loads templates and partials from a directory, with provided extension, encoded in UTF8 (from MacOS 10.6 and iOS 4.0)
+// Loads templates and partials from a directory, with provided extension,
+// encoded in UTF8 (from MacOS 10.6 and iOS 4.0).
 + (id)templateRepositoryWithBaseURL:(NSURL *)url
                   templateExtension:(NSString *)ext;
 
-// Loads templates and partials from a directory, with provided extension, encoded in provided encoding (from MacOS 10.6 and iOS 4.0)
+// Loads templates and partials from a directory, with provided extension,
+// encoded in provided encoding (from MacOS 10.6 and iOS 4.0).
 + (id)templateRepositoryWithBaseURL:(NSURL *)url
                   templateExtension:(NSString *)ext
                            encoding:(NSStringEncoding)encoding;
 
-// Loads templates and partials from a directory, with "mustache" extension, encoded in UTF8
+// Loads templates and partials from a directory, with "mustache" extension,
+// encoded in UTF8.
 + (id)templateRepositoryWithDirectory:(NSString *)path;
 
-// Loads templates and partials from a directory, with provided extension, encoded in UTF8
+// Loads templates and partials from a directory, with provided extension,
+// encoded in UTF8.
 + (id)templateRepositoryWithDirectory:(NSString *)path
                     templateExtension:(NSString *)ext;
 
-// Loads templates and partials from a directory, with provided extension, encoded in provided encoding
+// Loads templates and partials from a directory, with provided extension,
+// encoded in provided encoding.
 + (id)templateRepositoryWithDirectory:(NSString *)path
                     templateExtension:(NSString *)ext
                              encoding:(NSStringEncoding)encoding;
 
-// Loads templates and partials from a bundle, with "mustache" extension, encoded in UTF8
+// Loads templates and partials from a bundle, with "mustache" extension,
+// encoded in UTF8.
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle;  // nil stands for the main bundle
 
-// Loads templates and partials from a bundle, with provided extension, encoded in UTF8
+// Loads templates and partials from a bundle, with provided extension, encoded
+// in UTF8.
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle   // nil stands for the main bundle
                  templateExtension:(NSString *)ext;
 
-// Loads templates and partials from a bundle, with provided extension, encoded in provided encoding
+// Loads templates and partials from a bundle, with provided extension, encoded
+// in provided encoding.
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle   // nil stands for the main bundle
                  templateExtension:(NSString *)ext
                           encoding:(NSStringEncoding)encoding;
@@ -89,7 +98,8 @@ Use the following GRMustacheTemplateRepository class method:
 ```objc
 @interface GRMustacheTemplateRepository : NSObject
 
-// _partialsDictionary_ is a dictionary whose keys are partial names, and values template strings.
+// _partialsDictionary_ is a dictionary whose keys are partial names, and values
+// template strings.
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary;
 
 @end
@@ -124,63 +134,77 @@ Finally, you may implement the GRMustacheTemplateRepositoryDataSource protocol i
 
 ```objc
 /**
- The protocol for a GRMustacheTemplateRepository's dataSource.
- 
- The dataSource's responsability is to provide Mustache template strings for template and partial names.
+ * The protocol for a GRMustacheTemplateRepository's dataSource.
+ * 
+ * The dataSource's responsability is to provide Mustache template strings for
+ * template and partial names.
+ * 
+ * @see GRMustacheTemplateRepository
  */
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
 @required
 
 /**
- Returns a template ID, that is to say an object that uniquely identifies a template or a template partial.
- 
- The class of this ID is opaque: your implementation of a GRMustacheTemplateRepositoryDataSource
- would define, for itself, what kind of object would identity a template or a partial.
- 
- For instance, a file-based data source may use NSString objects containing paths to the templates.
- 
- You should try to choose "human-readable" template IDs. That is because template IDs are embedded in
- the description of errors that may happen during a template processing, in order to help the library
- user locate, and fix, the faulting template.
- 
- Whenever relevant, template and partial hierarchies are supported via the _baseTemplateID_ parameter: it contains
- the template ID of the enclosing template, or nil when the data source is asked for a template ID for a partial
- that is referred from a raw template string (see [GRMustacheTemplateRepository templateFromString:error:]).
- 
- Not all data sources have to implement hierarchies: they can simply ignore this parameter.
- 
- The returned value can be nil: the library user would then eventually get an NSError of domain
- GRMustacheErrorDomain and code GRMustacheErrorCodeTemplateNotFound.
- 
- @return a template ID
- @param templateRepository The GRMustacheTemplateRepository asking for a template ID.
- @param name The name of the template or template partial.
- @param baseTemplateID The template ID of the enclosing template, or nil.
+ * Returns a template ID, that is to say an object that uniquely identifies a
+ * template or a template partial.
+ * 
+ * The class of this ID is opaque: your implementation of a
+ * GRMustacheTemplateRepositoryDataSource would define, for itself, what kind of
+ * object would identity a template or a partial.
+ * 
+ * For instance, a file-based data source may use NSString objects containing
+ * paths to the templates.
+ * 
+ * You should try to choose "human-readable" template IDs. That is because
+ * template IDs are embedded in the description of errors that may happen during
+ * a template processing, in order to help the library user locate, and fix, the
+ * faulting template.
+ * 
+ * Whenever relevant, template and partial hierarchies are supported via the
+ * _baseTemplateID_ parameter: it contains the template ID of the enclosing
+ * template, or nil when the data source is asked for a template ID for a
+ * partial that is referred from a raw template string (see
+ * [GRMustacheTemplateRepository templateFromString:error:]).
+ * 
+ * Not all data sources have to implement hierarchies: they can simply ignore
+ * this parameter.
+ * 
+ * The returned value can be nil: the library user would then eventually get an
+ * NSError of domain GRMustacheErrorDomain and code
+ * GRMustacheErrorCodeTemplateNotFound.
+ * 
+ * @param templateRepository  The GRMustacheTemplateRepository asking for a
+ *                            template ID.
+ * @param name                The name of the template or template partial.
+ * @param baseTemplateID      The template ID of the enclosing template, or nil.
+ *
+ * @return a template ID
  */
-- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)templateID;
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID;
 
 /**
- Provided with a template ID that comes from templateRepository:templateIDForName:relativeToTemplateID:,
- returns a Mustache template string.
-
- For instance, a file-based data source may interpret the template ID as a NSString object
- containing paths to the template, and return the file content.
- 
- A few words about the way your implementation of this method must handle errors:
- 
- As usually, whenever this method returns nil, the _outError_ parameter should point to
- a valid NSError. This NSError would eventually reach the library user.
- 
- However, should you "forget" to set the _outError_ parameter, GRMustache would generate for you
- an NSError of domain GRMustacheErrorDomain and code GRMustacheErrorCodeTemplateNotFound.
-
- @return a Mustache template string
- @param templateRepository The GRMustacheTemplateRepository asking for a Mustache template string.
- @param templateID The template ID of the template
- @param outError If there is an error returning a template string, upon return contains nil, or an NSError object that describes the problem.
+ * Provided with a template ID that comes from
+ * templateRepository:templateIDForName:relativeToTemplateID:,
+ * returns a Mustache template string.
+ * 
+ * For instance, a file-based data source may interpret the template ID as a
+ * NSString object containing paths to the template, and return the file
+ * content.
+ * 
+ * As usually, whenever this method returns nil, the _outError_ parameter should
+ * point to a valid NSError. This NSError would eventually reach the library
+ * user.
+ * 
+ * @param templateRepository  The GRMustacheTemplateRepository asking for a
+ *                            Mustache template string.
+ * @param templateID          The template ID of the template
+ * @param outError            If there is an error returning a template string,
+ *                            upon return contains nil, or an NSError object
+ *                            that describes the problem.
+ *
+ * @return a Mustache template string
  */
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError;
-
 @end
 ```
 

@@ -35,8 +35,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 
 /**
- Private subclass of GRMustacheTemplateRepository that is its own data source,
- and loads templates from a base URL.
+ * Private subclass of GRMustacheTemplateRepository that is its own data source,
+ * and loads templates from a base URL.
  */
 @interface GRMustacheTemplateRepositoryBaseURL : GRMustacheTemplateRepository {
 @private
@@ -54,8 +54,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryDirectory
 
 /**
- Private subclass of GRMustacheTemplateRepository that is its own data source,
- and loads templates from a directory identified by its path.
+ * Private subclass of GRMustacheTemplateRepository that is its own data source,
+ * and loads templates from a directory identified by its path.
  */
 @interface GRMustacheTemplateRepositoryDirectory : GRMustacheTemplateRepository {
 @private
@@ -71,8 +71,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryBundle
 
 /**
- Private subclass of GRMustacheTemplateRepository that is its own data source,
- and loads templates from a bundle.
+ * Private subclass of GRMustacheTemplateRepository that is its own data source,
+ * and loads templates from a bundle.
  */
 @interface GRMustacheTemplateRepositoryBundle : GRMustacheTemplateRepository {
 @private
@@ -88,8 +88,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 #pragma mark - Private concrete class GRMustacheTemplateRepositoryPartialsDictionary
 
 /**
- Private subclass of GRMustacheTemplateRepository that is its own data source,
- and loads templates from a dictionary.
+ * Private subclass of GRMustacheTemplateRepository that is its own data source,
+ * and loads templates from a dictionary.
  */
 @interface GRMustacheTemplateRepositoryPartialsDictionary : GRMustacheTemplateRepository {
 @private
@@ -105,24 +105,30 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepository()<GRMustacheTemplateParserDataSource>
 
 /**
- Returns a template or a partial template, given its name.
- 
- @return a template
- @param name The name of the template
- @param baseTemplateID The template ID of the enclosing template, or nil.
- @param outError If there is an error loading or parsing template and partials, upon return contains an NSError object that describes the problem.
+ * Returns a template or a partial template, given its name.
+ * 
+ * @param name            The name of the template
+ * @param baseTemplateID  The template ID of the enclosing template, or nil.
+ * @param outError        If there is an error loading or parsing template and
+ *                        partials, upon return contains an NSError object that
+ *                        describes the problem.
+ *
+ * @return a template
  */
 - (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
 
 /**
- Parses templateString and returns rendering elements.
- 
- @return an array of objects conforming to the GRMustacheRenderingElement protocol.
- @param templateString A Mustache template string.
- @param templateID The template ID of the template, or nil if the template string is not tied to any identified template.
- @param outError If there is an error, upon return contains an NSError object that describes the problem.
- 
- @see GRMustacheTemplateRepository
+ * Parses templateString and returns rendering elements.
+ * 
+ * @param templateString  A Mustache template string.
+ * @param templateID      The template ID of the template, or nil if the
+ *                        template string is not tied to any identified template.
+ * @param outError        If there is an error, upon return contains an NSError
+ *                        object that describes the problem.
+ *
+ * @return an array of objects conforming to the GRMustacheRenderingElement protocol.
+ * 
+ * @see GRMustacheTemplateRepository
  */
 - (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
 @end

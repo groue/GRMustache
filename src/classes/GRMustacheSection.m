@@ -30,34 +30,34 @@
 @interface GRMustacheSection()
 
 /**
- The rendering of Mustache sections depend on the value they are attached to, whether they
- are truthy, falsey, enumerable, or helpers. The value is fetched by applying this invocation
- to a rendering context.
+ * The rendering of Mustache sections depend on the value they are attached to,
+ * whether they are truthy, falsey, enumerable, or helpers. The value is fetched
+ * by applying this invocation to a rendering context.
  */
 @property (nonatomic, retain) GRMustacheInvocation *invocation;
 
 /**
- The template string containing the inner template string of the section.
+ * The template string containing the inner template string of the section.
  */
 @property (nonatomic, retain) NSString *templateString;
 
 /**
- The range of the inner template string of the section in `templateString`.
+ * The range of the inner template string of the section in `templateString`.
  */
 @property (nonatomic) NSRange innerRange;
 
 /**
- YES if the section is {{^inverted}}; otherwise, NO.
+ * YES if the section is {{^inverted}}; otherwise, NO.
  */
 @property (nonatomic) BOOL inverted;
 
 /**
- The GRMustacheRenderingElement objects that make the section.
+ * The GRMustacheRenderingElement objects that make the section.
  */
 @property (nonatomic, retain) NSArray *elems;
 
 /**
- @see +[GRMustacheSection sectionElementWithInvocation:templateString:innerRange:inverted:elements:]
+ * @see +[GRMustacheSection sectionElementWithInvocation:templateString:innerRange:inverted:elements:]
  */
 - (id)initWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end

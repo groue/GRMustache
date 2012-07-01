@@ -26,37 +26,44 @@
 @interface GRMustacheTokenizer()
 
 /**
- The Mustache tag opening delimiter. Initialized with @"{{", it may change with "change delimiter tags" such as `{{=< >=}}`.
+ * The Mustache tag opening delimiter. Initialized with @"{{", it may change
+ * with "change delimiter" tags such as `{{=< >=}}`.
  */
 @property (nonatomic, copy) NSString *otag;
 
 /**
- The Mustache tag opening delimiter. Initialized with @"}}", it may change with "change delimiter tags" such as `{{=< >=}}`.
+ * The Mustache tag opening delimiter. Initialized with @"}}", it may change
+ * with "change delimiter" tags such as `{{=< >=}}`.
  */
 @property (nonatomic, copy) NSString *ctag;
 
 /**
- Wrapper around the delegate's `tokenizer:shouldContinueAfterParsingToken:` method.
+ * Wrapper around the delegate's `tokenizer:shouldContinueAfterParsingToken:`
+ * method.
  */
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 
 /**
- Wrapper around the delegate's `tokenizer:didFailWithError:` method.
- 
- @param line The line at which the error occurred.
- @param description A human-readable error message
- @param templateID A template ID (see GRMustacheTemplateRepository)
+ * Wrapper around the delegate's `tokenizer:didFailWithError:` method.
+ * 
+ * @param line          The line at which the error occurred.
+ * @param description   A human-readable error message
+ * @param templateID    A template ID (see GRMustacheTemplateRepository)
  */
 - (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID;
 
 /**
- String lookup method.
- 
- @return The range of needle in haystack. If the location of range is NSNotFound, the needle was not found in the haystack.
- @param needle The string to look for.
- @param haystack The string to look into.
- @param p The index from which the search should begin
- @param outLines A pointer to an integer. Upon return contains the number of '\n' characters between _p_ and the location of the returned range.
+ * String lookup method.
+ * 
+ * @param needle    The string to look for.
+ * @param haystack  The string to look into.
+ * @param p         The index from which the search should begin
+ * @param outLines  A pointer to an integer. Upon return contains the number of
+ *                  '\n' characters between _p_ and the location of the returned
+ *                  range.
+ *
+ * @return  The range of needle in haystack. If the location of range is
+ *          NSNotFound, the needle was not found in the haystack.
  */
 - (NSRange)rangeOfString:(NSString *)needle inTemplateString:(NSString *)haystack startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 @end

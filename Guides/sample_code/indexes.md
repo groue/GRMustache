@@ -46,11 +46,11 @@ Here is the rendering code:
 - (NSString *)render
 {
     /**
-     First, let's attach an array of people to the `people` key, so that they
-     are sequentially rendered by the `{{#people}}...{{/people}}` sections.
-     
-     We'll use a NSDictionary for storing the data, but you can use any other
-     KVC-compliant container.
+     * First, let's attach an array of people to the `people` key, so that they
+     * are sequentially rendered by the `{{#people}}...{{/people}}` sections.
+     * 
+     * We'll use a NSDictionary for storing the data, but you can use any other
+     * KVC-compliant container.
      */
     
     Person *alice = [Person personWithName:@"Alice"];
@@ -93,18 +93,18 @@ Now let's replace array elements with proxies before they are rendered:
 @implementation Document()
 
 /**
- This method is called when the template is about to render a tag.
+ * This method is called when the template is about to render a tag.
  */
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
-     The invocation object tells us which object is about to be rendered.
+     * The invocation object tells us which object is about to be rendered.
      */
     
     if ([invocation.returnValue isKindOfClass:[NSArray class]]) {
         
         /**
-         If it is an NSArray, create a new array containing proxies.
+         * If it is an NSArray, create a new array containing proxies.
          */
         
         NSArray *array = invocation.returnValue;
@@ -115,8 +115,8 @@ Now let's replace array elements with proxies before they are rendered:
         }];
         
         /**
-         Now set the invocation's returnValue to the array of proxies: it will
-         be rendered instead.
+         * Now set the invocation's returnValue to the array of proxies: it will
+         * be rendered instead.
          */
         
         invocation.returnValue = proxiesArray;

@@ -76,7 +76,8 @@ You may, for instance, locate keys that could not find any data:
 You'll get something like:
 
 ```
-GRMustache missing key: `items` for <GRMustacheInvocation: {{#items}} at line 23 in template /path/to/template.mustache>
+GRMustache missing key: `items` for <GRMustacheInvocation: {{#items}} at line 23
+in template /path/to/template.mustache>
 ```
 
 Alter the template rendering

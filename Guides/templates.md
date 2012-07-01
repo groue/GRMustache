@@ -81,13 +81,13 @@ It's efficient to parse a template once, and then render it as often as needed:
 
 // Loads and parses the template from a bundle resource of extension "mustache".
 + (id)templateFromResource:(NSString *)name
-                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                    bundle:(NSBundle *)bundle  // nil stands for the main bundle
                      error:(NSError **)outError;
 
 // Loads and parses the template from a bundle resource of provided extension.
 + (id)templateFromResource:(NSString *)name
              withExtension:(NSString *)ext
-                    bundle:(NSBundle *)bundle   // nil stands for the main bundle
+                    bundle:(NSBundle *)bundle  // nil stands for the main bundle
                      error:(NSError **)outError;
 ```
 
