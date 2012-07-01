@@ -40,7 +40,7 @@ Reference: include/GRMustache.h
 	done
 	# Generate documentation
 	mkdir Reference
-	appledoc --output Reference AppledocSettings.plist /tmp/GRMustache_include
+	appledoc --output Reference AppledocSettings.plist /tmp/GRMustache_include || true
 	# Cleanup
 	rm -Rf /tmp/GRMustache_include
 
