@@ -25,29 +25,29 @@
 
 
 /**
- The domain of a GRMustache-generated NSError
- 
- @since v1.0
+ * The domain of a GRMustache-generated NSError
+ * 
+ * @since v1.0
  */
 extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
- The codes of a GRMustache-generated NSError
- 
- @since v1.0
+ * The codes of a GRMustache-generated NSError
+ * 
+ * @since v1.0
  */
 typedef enum {
     /**
-     The error code for parse errors.
-     
-     @since v1.0
+     * The error code for parse errors.
+     * 
+     * @since v1.0
      */
     GRMustacheErrorCodeParseError,
     
     /**
-     The error code for not found templates and partials.
-     
-     @since v1.0
+     * The error code for not found templates and partials.
+     * 
+     * @since v1.0
      */
     GRMustacheErrorCodeTemplateNotFound,
 } GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;

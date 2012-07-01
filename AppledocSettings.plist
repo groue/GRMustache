@@ -5,7 +5,7 @@
 	<key>--project-name</key>
 	<string>GRMustache</string>
 	<key>--project-version</key>
-	<string>4.1</string>
+	<string>4.1.1</string>
 	<key>--project-company</key>
 	<string>Gwendal Roué</string>
 	<key>--create-html</key>

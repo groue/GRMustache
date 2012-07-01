@@ -27,7 +27,18 @@
 @class GRMustacheTemplate;
 
 /**
- A GRMustacheSection represents a Mustache section such as `{{#name}}...{{/name}}`.
+ * A GRMustacheSection represents a Mustache section such as 
+ * `{{#name}}...{{/name}}`.
+ *
+ * You will be provided with GRMustacheSection objects when implementing
+ * mustache lambda sections with objects conforming to the GRMustacheHelper
+ * protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ *
+ * @see GRMustacheHelper
+ *
+ * @since v1.3
  */
 @interface GRMustacheSection: NSObject {
 @private
@@ -46,7 +57,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- Returns the current rendering context.
+ * The current rendering context.
+ *
+ * @since v2.0
  */
 @property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -58,7 +71,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- Returns the literal inner content of the section, with unprocessed mustache `{{tags}}`.
+ * The literal inner content of the section, with unprocessed Mustache
+ * `{{tags}}`.
+ *
+ * @since v2.0
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -68,9 +84,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- Renders the inner content of the receiver with the current context
- 
- @return A string containing the rendered inner content.
+ * Renders the inner content of the receiver with the current context
+ * 
+ * @return A string containing the rendered inner content.
+ *
+ * @since v2.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
