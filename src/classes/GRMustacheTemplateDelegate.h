@@ -26,17 +26,98 @@
 @class GRMustacheTemplate;
 @class GRMustacheInvocation;
 
+/**
+ * The various ways GRMustache can interpret a value.
+ *
+ * @see GRMustacheTemplateDelegate
+ */
 typedef enum {
+    /**
+     * The value is interpreted for section rendering: whether it is a NSNumber,
+     * an object conforming to the NSFastEnumeration protocol, an object
+     * conforming to the GRMustacheHelper protocol, or any other value, the
+     * section will render differently.
+     */
     GRMustacheInterpretationSection,
+    
+    /**
+     * The value is interpreted for variable substitution, for tags such as
+     * `{{name}}`.
+     */
     GRMustacheInterpretationVariable,
 } GRMustacheInterpretation;
 
+/**
+ * The protocol for a GRMustacheTemplate's delegate.
+ *
+ * The delegate's can observe, and alter, the rendering of a template.
+ */
 @protocol GRMustacheTemplateDelegate<NSObject>
 @optional
+
+/**
+ * Sent right before a template starts rendering.
+ *
+ * @param template  The template that is about to render.
+ */
 - (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+
+/**
+ * Sent right after a template has finished rendering.
+ *
+ * @param template  The template that did render.
+ */
 - (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+
+/**
+ * Sent right before GRMustache interprets and renders a value (Deprecated in
+ * GRMustache 4.1).
+ *
+ * @param template    The template that is about to interpret a value.
+ * @param invocation  The invocation object providing information about the
+ *                    value.
+ *
+ * @see GRMustacheInvocation
+ * @deprecated v4.1
+ */
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
+
+/**
+ * Sent right after GRMustache has interpreted and rendered a value (Deprecated
+ * in GRMustache 4.1).
+ *
+ * @param template    The template that has rendered a value.
+ * @param invocation  The invocation object providing information about the
+ *                    value.
+ *
+ * @see GRMustacheInvocation
+ * @deprecated v4.1
+ */
 - (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
+
+/**
+ * Sent right before GRMustache interprets and renders a value.
+ *
+ * @param template        The template that is about to interpret a value.
+ * @param invocation      The invocation object providing information about the
+ *                        value.
+ * @param interpretation  The way GRMustache will interpret the value.
+ *
+ * @see GRMustacheInvocation
+ * @since v4.1
+ */
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
+
+/**
+ * Sent right after GRMustache has interpreted and rendered a value.
+ *
+ * @param template        The template that has rendered a value.
+ * @param invocation      The invocation object providing information about the
+ *                        value.
+ * @param interpretation  The way GRMustache has interpreted the value.
+ *
+ * @see GRMustacheInvocation
+ * @since v4.1
+ */
 - (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
 @end
