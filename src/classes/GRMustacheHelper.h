@@ -30,6 +30,8 @@
 #pragma mark - <GRMustacheHelper>
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ * 
  * The protocol for implementing Mustache "lambda" sections.
  *
  * The responsability of a GRMustacheHelper is to render a Mustache section such

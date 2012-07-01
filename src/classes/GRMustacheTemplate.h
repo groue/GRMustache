@@ -26,6 +26,8 @@
 #import "GRMustache.h"
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/templates.md
+ * 
  * The GRMustacheTemplate class provides with Mustache template rendering
  * services.
  * 
@@ -38,6 +40,8 @@
 }
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * The template's delegate.
  *
  * @see GRMustacheTemplateDelegate

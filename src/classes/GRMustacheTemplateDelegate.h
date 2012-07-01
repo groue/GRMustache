@@ -27,6 +27,8 @@
 @class GRMustacheInvocation;
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * The various ways GRMustache can interpret a value.
  *
  * @see GRMustacheTemplateDelegate
@@ -48,6 +50,8 @@ typedef enum {
 } GRMustacheInterpretation;
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * The protocol for a GRMustacheTemplate's delegate.
  *
  * The delegate's can observe, and alter, the rendering of a template.

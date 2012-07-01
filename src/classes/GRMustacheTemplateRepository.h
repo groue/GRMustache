@@ -28,6 +28,8 @@
 @class GRMustacheTemplateRepository;
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/template_repositories.md
+ * 
  * The protocol for a GRMustacheTemplateRepository's dataSource.
  * 
  * The dataSource's responsability is to provide Mustache template strings for
@@ -103,6 +105,8 @@
 
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/template_repositories.md
+ * 
  * Given a data source that provides Mustache template strings, a
  * GRMustacheTemplateRepository's responsability is to provide
  * GRMustacheTemplate instances.

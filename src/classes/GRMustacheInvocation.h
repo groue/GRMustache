@@ -24,6 +24,8 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
  * The GRMustacheInvocation class gives you information about the values that
  * GRMustache finds in the context stack when rendering tags such as `{{name}}`.
  *

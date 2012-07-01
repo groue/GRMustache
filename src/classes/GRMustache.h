@@ -61,6 +61,8 @@ typedef struct {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Companion guide: https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md
+ * 
  * Have GRMustache raise much less `NSUndefinedKeyExceptions` when rendering
  * templates.
  * 
