@@ -42,6 +42,7 @@
  * 
  * For instance, the template string "hello {{name}}!" would give four rendering
  * elements:
+ *
  * - a GRMustacheTextElement that renders "hello ".
  * - a GRMustacheVariableElement that renders the `name` key in a context.
  * - a GRMustacheTextElement that renders "!".

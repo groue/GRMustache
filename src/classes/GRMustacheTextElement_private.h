@@ -23,11 +23,29 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
 
+/**
+ * A GRMustacheTextElement is a rendering element that renders raw template
+ * text.
+ *
+ * For instance, the template string "hello {{name}}!" would give two
+ * GRMustacheTextElement instances:
+ *
+ * - a GRMustacheTextElement that renders "hello ".
+ * - a GRMustacheTextElement that renders "!".
+ *
+ * @see GRMustacheRenderingElement
+ */
 @interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement> {
 @private
     NSString *_text;
 }
 
+/**
+ * Builds and returns a GRMustacheTextElement.
+ *
+ * @param string  The string that should be rendered.
+ * @return a GRMustacheTextElement
+ */
 + (id)textElementWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
 
 @end
