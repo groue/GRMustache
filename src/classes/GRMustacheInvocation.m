@@ -28,6 +28,10 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheInvocationKey
 
+/**
+ * Private subclass of GRMustacheInvocation that deals with single-key
+ * invocations, for tags such as `{{name}}`.
+ */
 @interface GRMustacheInvocationKey:GRMustacheInvocation {
 @private
     BOOL _implicitIterator;
@@ -40,6 +44,10 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheInvocationKeyPath
 
+/**
+ * Private subclass of GRMustacheInvocation that deals with compound keys
+ * invocations, for tags such as `{{person.name}}`.
+ */
 @interface GRMustacheInvocationKeyPath:GRMustacheInvocation {
 @private
     BOOL *_actualKey;
