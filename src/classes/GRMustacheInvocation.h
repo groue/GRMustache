@@ -33,6 +33,8 @@
  * your templates.
  *
  * @see GRMustacheTemplateDelegate
+ *
+ * @since v1.12
  */
 @interface GRMustacheInvocation : NSObject {
 @private
@@ -52,6 +54,8 @@
  * @"person" otherwise.
  *
  * @see returnValue
+ *
+ * @since v1.12
  */
 @property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -70,6 +74,8 @@
  *
  * @see key
  * @see GRMustacheTemplateDelegate
+ *
+ * @since v1.12
  */
 @property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end

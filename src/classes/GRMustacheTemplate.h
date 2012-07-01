@@ -45,6 +45,8 @@
  * The template's delegate.
  *
  * @see GRMustacheTemplateDelegate
+ *
+ * @since v1.12
  */
  
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -78,7 +80,7 @@
  *                        describes the problem.
  *
  * @return A string containing the rendered template
- * 
+ *
  * @since v1.0
  */
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -102,6 +104,7 @@
  * @return A GRMustacheTemplate instance
  *
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.11
  */
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -122,6 +125,7 @@
  * @return A GRMustacheTemplate instance
  * 
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.11
  */
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -143,7 +147,8 @@
  * @return A string containing the rendered template
  * 
  * @see GRMustacheTemplateRepository
- * @since v1.4
+ *
+ * @since v1.4.0
  */
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -165,6 +170,7 @@
  * @return A string containing the rendered template
  * 
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.0
  */
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -194,6 +200,7 @@
  * @return A GRMustacheTemplate instance
  *
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.11
  */
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -217,6 +224,7 @@
  * @return A GRMustacheTemplate instance
  * 
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.11
  */
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -241,6 +249,7 @@
  * @return A string containing the rendered template
  * 
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -265,6 +274,7 @@
  * @return A string containing the rendered template
  * 
  * @see GRMustacheTemplateRepository
+ *
  * @since v1.0
  */
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -280,7 +290,7 @@
  * @param object  A context object used for interpreting Mustache tags
  *
  * @return A string containing the rendered template
- * 
+ *
  * @since v1.0
  */
 - (NSString *)renderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -292,7 +302,7 @@
  *                      Mustache tags, ending with nil.
  *
  * @return A string containing the rendered template
- * 
+ *
  * @since v1.5
  */
 - (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
@@ -301,7 +311,7 @@
  * Renders a template without any context object for interpreting Mustache tags.
  * 
  * @return A string containing the rendered template
- * 
+ *
  * @since v1.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;

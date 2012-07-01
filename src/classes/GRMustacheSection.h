@@ -37,6 +37,8 @@
  * protocol.
  *
  * @see GRMustacheHelper
+ *
+ * @since v1.3
  */
 @interface GRMustacheSection: NSObject {
 @private
@@ -56,6 +58,8 @@
 
 /**
  * The current rendering context.
+ *
+ * @since v2.0
  */
 @property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -69,6 +73,8 @@
 /**
  * The literal inner content of the section, with unprocessed Mustache
  * `{{tags}}`.
+ *
+ * @since v2.0
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -81,6 +87,8 @@
  * Renders the inner content of the receiver with the current context
  * 
  * @return A string containing the rendered inner content.
+ *
+ * @since v2.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 

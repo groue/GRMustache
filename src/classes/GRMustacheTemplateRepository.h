@@ -36,6 +36,8 @@
  * template and partial names.
  * 
  * @see GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
 @required
@@ -75,6 +77,8 @@
  * @param baseTemplateID      The template ID of the enclosing template, or nil.
  *
  * @return a template ID
+ *
+ * @since v1.13
  */
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -99,6 +103,8 @@
  *                            that describes the problem.
  *
  * @return a Mustache template string
+ *
+ * @since v1.13
  */
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end
@@ -117,6 +123,8 @@
  * 
  * @see GRMustacheTemplate
  * @see GRMustacheTemplateRepositoryDataSource
+ *
+ * @since v1.13
  */
 @interface GRMustacheTemplateRepository : NSObject {
 @private
@@ -127,6 +135,8 @@
 
 /**
  * The repository's data source.
+ *
+ * @since v1.13
  */
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -169,6 +179,8 @@
  * @param URL   the base URL where to look templates from.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -211,6 +223,8 @@
  * @param ext   The extension of template files.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -255,6 +269,8 @@
  * @param encoding  The encoding of template files.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
@@ -295,6 +311,8 @@
  * @param path  The path of the directory that stores templates.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -336,6 +354,8 @@
  * @param ext   The extension of template files.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -379,6 +399,8 @@
  * @param encoding  The encoding of template files.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -406,6 +428,8 @@
  * @param bundle  The bundle that stores templates as resources.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -436,6 +460,8 @@
  * @param ext     The extension of template files.
  * 
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -468,6 +494,8 @@
  * @param encoding  The encoding of template files.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -490,6 +518,8 @@
  *                            values Mustache template strings.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -531,6 +561,8 @@
  * @endcode
  * 
  * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
  */
 + (id)templateRepository AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -547,6 +579,8 @@
  *                  describes the problem.
  * 
  * @return a GRMustacheTemplate
+ *
+ * @since v1.13
  */
 - (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -563,6 +597,8 @@
  *                        describes the problem.
  * 
  * @return a GRMustacheTemplate
+ *
+ * @since v1.13
  */
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end

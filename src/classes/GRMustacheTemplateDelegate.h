@@ -32,6 +32,8 @@
  * The various ways GRMustache can interpret a value.
  *
  * @see GRMustacheTemplateDelegate
+ *
+ * @since v4.1
  */
 typedef enum {
     /**
@@ -39,12 +41,16 @@ typedef enum {
      * an object conforming to the NSFastEnumeration protocol, an object
      * conforming to the GRMustacheHelper protocol, or any other value, the
      * section will render differently.
+     *
+     * @since v4.1
      */
     GRMustacheInterpretationSection,
     
     /**
      * The value is interpreted for variable substitution, for tags such as
      * `{{name}}`.
+     *
+     * @since v4.1
      */
     GRMustacheInterpretationVariable,
 } GRMustacheInterpretation;
@@ -55,6 +61,8 @@ typedef enum {
  * The protocol for a GRMustacheTemplate's delegate.
  *
  * The delegate's can observe, and alter, the rendering of a template.
+ *
+ * @since v1.12
  */
 @protocol GRMustacheTemplateDelegate<NSObject>
 @optional
@@ -63,6 +71,8 @@ typedef enum {
  * Sent right before a template starts rendering.
  *
  * @param template  The template that is about to render.
+ *
+ * @since v1.12
  */
 - (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -70,6 +80,8 @@ typedef enum {
  * Sent right after a template has finished rendering.
  *
  * @param template  The template that did render.
+ *
+ * @since v1.12
  */
 - (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
@@ -82,6 +94,8 @@ typedef enum {
  *                    value.
  *
  * @see GRMustacheInvocation
+ *
+ * @since v1.12
  * @deprecated v4.1
  */
 - (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
@@ -95,6 +109,8 @@ typedef enum {
  *                    value.
  *
  * @see GRMustacheInvocation
+ *
+ * @since v1.12
  * @deprecated v4.1
  */
 - (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;

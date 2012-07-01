@@ -40,6 +40,8 @@
  * When the data given to a Mustache section is a GRMustacheHelper, GRMustache
  * invokes the `renderSection:` method of the helper, and inserts the raw return
  * value in the template rendering.
+ *
+ * @since v1.9
  */
 @protocol GRMustacheHelper<NSObject>
 @required
@@ -50,6 +52,8 @@
  * @param section   The section to render
  *
  * @return The rendering of the section
+ *
+ * @since v2.0
  */
 - (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end
@@ -63,6 +67,8 @@
 /**
  * The GRMustacheHelper class helps building mustache helpers without writing a
  * custom class that conforms to the GRMustacheHelper protocol.
+ *
+ * @since v2.0
  */ 
 @interface GRMustacheHelper: NSObject<GRMustacheHelper>
 
@@ -73,6 +79,8 @@
  * @param block   The block that renders a section.
  *
  * @return a GRMustacheHelper object.
+ *
+ * @since v2.0
  */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end

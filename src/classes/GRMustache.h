@@ -48,9 +48,8 @@ typedef struct {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns the version of GRMustache as a GRMustacheVersion struct.
- * 
  * @return The version of GRMustache as a GRMustacheVersion struct.
+ *
  * @since v1.0
  */
 + (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
