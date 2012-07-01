@@ -7,19 +7,20 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/groue.css">
     <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <meta name="description" content="GRMustache - Production-ready implementation of the {{ Mustache }} template engine In Objective-C, for both MacOS Cocoa and iOS." />
+    <meta name="description" content="GRMustache - Production-ready {{ Mustache }} template engine for MacOS Cocoa and iOS." />
   </head>
   <body>
     <div class="wrapper">
       <header>
         <h1>GRMustache</h1>
-        <p>Production-ready implementation of the {{&nbsp;Mustache&nbsp;}} template engine In Objective-C, for both MacOS Cocoa and iOS.</p>
+        <p>Production-ready {{&nbsp;Mustache&nbsp;}} templates<br>for MacOS Cocoa and iOS.</p>
         <p class="view"><a href="https://github.com/groue/GRMustache">View the Project on GitHub <small>groue/GRMustache</small></a></p>
         <ul>
           <li><a href="https://github.com/groue/GRMustache">View On <strong>GitHub</strong></a></li>
@@ -27,8 +28,18 @@
         </ul>
       </header>
       <section>
-        <p>GRMustache is an Objective-C implementation of the <a href="http://mustache.github.com/">Mustache</a> logic-less template language.</p>
 
+<div class="news">
+  <p>
+    June 30, 2012: GRMustache 4.1 is out.
+  </p>
+  <p>
+    Check out the <a href="https://github.com/groue/GRMustache/blob/master/RELEASE_NOTES.md">release notes</a>.
+  </p>
+</div>
+
+        <p><strong>GRMustache is an Objective-C implementation of the <a href="http://mustache.github.com/">Mustache</a> logic-less template language.
+</strong></p>
 <h2>How To</h2>
 
 <h3>1. Download and add to your Xcode project</h3>
@@ -47,15 +58,15 @@
 <pre><span class="cp">#import "GRMustache.h"</span>
 
 <span class="c1">// Renders "Hello Arthur!"</span>
-<span class="n">NSString</span> <span class="o">*</span><span class="n">rendering</span> <span class="o">=</span> <span class="p">[</span><span class="n">GRMustacheTemplate</span> <span class="nl">renderObject:</span><span class="p">[</span><span class="n">Person</span> <span class="nl">personWithName:</span><span class="s">@"Arthur"</span><span class="p">]</span>
-                                            <span class="nl">fromString:</span><span class="s">@"Hello {{name}}!"</span>
-                                                 <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
+<span class="n">rendering</span> <span class="o">=</span> <span class="p">[</span><span class="n">GRMustacheTemplate</span> <span class="nl">renderObject:</span><span class="p">[</span><span class="n">Person</span> <span class="nl">personWithName:</span><span class="s">@"Arthur"</span><span class="p">]</span>
+                                  <span class="nl">fromString:</span><span class="s">@"Hello {{name}}!"</span>
+                                       <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
 
 <span class="c1">// Renders from a resource</span>
-<span class="n">NSString</span> <span class="o">*</span><span class="n">rendering</span> <span class="o">=</span> <span class="p">[</span><span class="n">GRMustacheTemplate</span> <span class="nl">renderObject:</span><span class="p">[</span><span class="n">Person</span> <span class="nl">personWithName:</span><span class="s">@"Arthur"</span><span class="p">]</span>
-                                          <span class="nl">fromResource:</span><span class="s">@"Profile"</span>  <span class="c1">// loads `Profile.mustache`</span>
-                                                <span class="nl">bundle:</span><span class="nb">nil</span>
-                                                 <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
+<span class="n">rendering</span> <span class="o">=</span> <span class="p">[</span><span class="n">GRMustacheTemplate</span> <span class="nl">renderObject:</span><span class="p">[</span><span class="n">Person</span> <span class="nl">personWithName:</span><span class="s">@"Arthur"</span><span class="p">]</span>
+                                <span class="nl">fromResource:</span><span class="s">@"Profile"</span>  <span class="c1">// loads `Profile.mustache`</span>
+                                      <span class="nl">bundle:</span><span class="nb">nil</span>
+                                       <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
 </pre>
 </div>
 

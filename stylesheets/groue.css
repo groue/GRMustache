@@ -1,0 +1,17 @@
+.news {
+  text-align: center;
+  font-weight: 700;
+  color: #222;
+  margin: 0 -20px 20px;
+  padding: 10px 20px 5px;
+  background: #B6D7E6;
+  border-bottom: 1px solid #A2BFCC;
+}
+
+.news p {
+  margin: 0 0 5px;
+}
+
+section {
+  padding: 0 20px 15px;
+}
