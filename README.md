@@ -1,10 +1,6 @@
-GRMustache
-==========
-
-GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template language.
+**July 1st, 2012: GRMustache 4.1.1 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Breaking news on Twitter: http://twitter.com/GRMustache
-
 
 How To
 ------
