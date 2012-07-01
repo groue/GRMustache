@@ -3,6 +3,14 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v4.1.1
+
+**Total inline documentation**
+
+Headers contain documentation for every exposed API.
+
+An online reference, automatically generated from inline documentation by appledoc can be read at http://groue.github.com/GRMustache/Reference/.
+
 ## v4.1.0
 
 ### GRMustacheDelegate protocol
