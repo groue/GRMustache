@@ -25,12 +25,35 @@
 
 @class GRMustacheInvocation;
 
+/**
+ * A GRMustacheVariableElement is a rendering element that renders variable
+ * substitution tags such as `{{name}}` and `{{{name}}}`.
+ *
+ * For instance, the template string "{{name}} is {{age}} years old." would give
+ * two GRMustacheVariableElement instances:
+ *
+ * - a GRMustacheVariableElement that renders the `name` key in a context.
+ * - a GRMustacheVariableElement that renders the `age` key in a context.
+ *
+ * @see GRMustacheRenderingElement
+ */
 @interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
 @private
     GRMustacheInvocation *_invocation;
     BOOL _raw;
 }
 
+/**
+ * Builds and returns a GRMustacheVariableElement.
+ *
+ * @param invocation  The invocation that would extract values from a context
+ *                    stack.
+ * @param raw         NO if the value should be rendered HTML-escaped.
+ *
+ * @return a GRMustacheVariableElement
+ *
+ * @see GRMustacheInvocation
+ */
 + (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
 
 @end
