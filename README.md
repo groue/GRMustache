@@ -3,8 +3,6 @@ GRMustache
 
 GRMustache is an Objective-C implementation of the [Mustache](http://mustache.github.com/) logic-less template language.
 
-The Mustache syntax: http://mustache.github.com/mustache.5.html.
-
 Breaking news on Twitter: http://twitter.com/GRMustache
 
 
@@ -41,12 +39,23 @@ NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"
 Documentation
 -------------
 
-GRMustache online documentation is provided as guides and sample code:
+### Mustache syntax
+
+- http://mustache.github.com/mustache.5.html
+
+### Guides
 
 - [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources
 - [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
 - [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
+
+### Sample code
+
 - [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
+
+### Reference
+
+- [Reference](http://groue.github.com/GRMustache/Reference/): The GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
 
 
 FAQ
