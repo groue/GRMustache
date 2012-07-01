@@ -53,6 +53,8 @@
 
 /**
  * The GRMustacheRenderingElement objects that make the section.
+ * 
+ * @see GRMustacheRenderingElement
  */
 @property (nonatomic, retain) NSArray *elems;
 
