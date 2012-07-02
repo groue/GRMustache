@@ -64,6 +64,8 @@ NSString *rendering = [template renderObject:model];
 In the GRMustache way
 ---------------------
 
+**Download the code from https://github.com/groue/GRMustacheSampleCode/tree/master/GRMustacheNumberFormatting**
+
 You may ask yourself, is it worth declaring dozens of stub properties just for formatting numbers?
 
 Before you answer "Of course not, I'm a lazy bastard, just gimme the code", beware that we will use below the [GRMustacheTemplateDelegate](../delegate.md) protocol. **It thus may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**

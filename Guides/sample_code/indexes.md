@@ -12,6 +12,8 @@ For instance, instead of `[ { name:'Alice' }, { name:'Bob' } ]`, you would provi
 GRMustache solution: proxy objects
 ----------------------------------
 
+**Download the code from https://github.com/groue/GRMustacheSampleCode/tree/master/GRMustacheIndexes**
+
 The [GRMustacheTemplateDelegate](../delegate.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
 Below we'll implement the special keys `index`, `first`, and `even`. We'll render the following template:
