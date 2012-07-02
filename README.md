@@ -46,17 +46,18 @@ Documentation
 
 ### Guides
 
-- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources
-- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
-- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering
+- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
+- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
+- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
 ### Sample code
 
 - [Guides/sample_code.md](GRMustache/blob/master/Guides/sample_code.md): because some tasks are easier to do with some guidelines.
+- https://github.com/groue/GRMustacheSampleCode: a repository containing sample Xcode projects.
 
 ### Reference
 
-- [Reference](http://groue.github.com/GRMustache/Reference/): The GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
+- [Reference](http://groue.github.com/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
 
 
 FAQ
