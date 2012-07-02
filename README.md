@@ -14,8 +14,10 @@ How To
 
     $ git clone https://github.com/groue/GRMustache.git
 
-- For MacOS 10.6+ development, add `include/GRMustache.h` and `lib/libGRMustache4-MacOS.a` to your project.
-- For iOS3+ development, add `include/GRMustache.h` and `lib/libGRMustache4-iOS.a` to your project.
+- For OS X development, add `include/GRMustache.h` and `lib/libGRMustache4-MacOS.a` to your project.
+- For iOS development, add `include/GRMustache.h` and `lib/libGRMustache4-iOS.a` to your project.
+
+GRMustache can target OS X down to 10.6 Snow Leopard, and iOS down to version 3. However, APIs based on Objective-C blocks and NSURL are only available from iOS4.
 
 Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `dependency 'GRMustache'` to your Podfile. In its current version, CocoaPods exposes private headers that you should not rely on, because future versions of GRMustache may change them, without notice, in an incompatible fashion. Make sure you only import `GRMustache.h`.
 
