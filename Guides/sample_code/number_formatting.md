@@ -1,4 +1,4 @@
-[up](../sample_code.md), [next](indexes.md)
+[up](README.md), [next](indexes.md)
 
 Number formatting
 =================
@@ -261,4 +261,4 @@ And then implement the delegate methods:
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
-[up](../sample_code.md), [next](indexes.md)
+[up](README.md), [next](indexes.md)
