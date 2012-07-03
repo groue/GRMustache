@@ -54,8 +54,7 @@ Documentation
 
 ### Sample code
 
-- [Guides/sample_code/](GRMustache/blob/master/Guides/sample_code/README.md): because some tasks are easier to do with some guidelines.
-- [groue/GRMustacheSampleCode](https://github.com/groue/GRMustacheSampleCode): a repository containing sample Xcode projects.
+- [Guides/sample_code/](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
 
 ### Reference
 
