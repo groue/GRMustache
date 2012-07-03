@@ -1,4 +1,4 @@
-[up](..), [next](../forking.md)
+[up](../sample_code), [next](../forking.md)
 
 Indexes
 =======
@@ -187,4 +187,4 @@ The implementation of ArrayElementProxy is straightforward, as long as one remem
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-[up](..), [next](../forking.md)
+[up](../sample_code), [next](../forking.md)
