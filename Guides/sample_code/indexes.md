@@ -12,7 +12,7 @@ For instance, instead of `[ { name:'Alice' }, { name:'Bob' } ]`, you would provi
 GRMustache solution: proxy objects
 ----------------------------------
 
-**Download the code from https://github.com/groue/GRMustacheSampleCode/tree/master/GRMustacheIndexes**
+**[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
 The [GRMustacheTemplateDelegate](../delegate.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
