@@ -64,7 +64,7 @@ NSString *rendering = [template renderObject:model];
 In the GRMustache way
 ---------------------
 
-**Download the code from https://github.com/groue/GRMustacheSampleCode/tree/master/GRMustacheNumberFormatting**
+**[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
 You may ask yourself, is it worth declaring dozens of stub properties just for formatting numbers?
 
@@ -258,5 +258,7 @@ And then implement the delegate methods:
 }
 @end
 ```
+
+**[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
 [up](../sample_code.md), [next](indexes.md)

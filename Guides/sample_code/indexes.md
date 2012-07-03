@@ -185,4 +185,6 @@ The implementation of ArrayElementProxy is straightforward, as long as one remem
 @end
 ```
 
+**[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
+
 [up](../sample_code.md), [next](../forking.md)
