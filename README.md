@@ -54,7 +54,7 @@ Documentation
 
 ### Sample code
 
-- [Guides/sample_code/](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
+- [Guides/sample_code](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
 
 ### Reference
 
