@@ -38,7 +38,7 @@
  * 
  * Instances are created by GRMustacheCompiler, and stored by rendering
  * elements that query the user data: GRMustacheVariableElement and
- * GRMustacheSection.
+ * GRMustacheSectionElement.
  *
  * A rendering element would send the `invokeWithContext:` message to its
  * invocation. The invocation would perform the key lookup in the context stack,
@@ -50,7 +50,7 @@
  *
  * @see GRMustacheCompiler
  * @see GRMustacheVariableElement
- * @see GRMustacheSection
+ * @see GRMustacheSectionElement
  * @see GRMustacheTemplateDelegate
  */
 @interface GRMustacheInvocation : NSObject {

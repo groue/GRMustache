@@ -20,64 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheRenderingElement_private.h"
 
-@class GRMustacheInvocation;
+@class GRMustacheSectionElement;
+@class GRMustacheContext;
 @class GRMustacheTemplate;
 
 // Documented in GRMustacheSection.h
-@interface GRMustacheSection: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheSection: NSObject {
 @private
-    GRMustacheInvocation *_invocation;
+    GRMustacheSectionElement *_sectionElement;
+    GRMustacheContext *_renderingContext;
     GRMustacheTemplate *_rootTemplate;
-    NSString *_templateString;
-    NSRange _innerRange;
-    BOOL _inverted;
-    NSArray *_elems;
-    id _renderingContext;
 }
 
 // Documented in GRMustacheSection.h
-@property (nonatomic, readonly) id renderingContext GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSection.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
-/**
- * Builds a GRMustacheSection.
- * 
- * The rendering of Mustache sections depend on the value they are attached to,
- * whether they are truthy, falsey, enumerable, or helpers. The value is fetched
- * by applying the _invocation_ parameter to a rendering context.
- * 
- * Boolean values are interpreted in their relation to the _inverted_ parameter.
- * 
- * Helpers (GRMustacheHelper) may call the `innerTemplateString` template string
- * method. This inner template string is built from the _templateString_ and
- * _innerRange_ parameters.
- * 
- * The _elems_ array contains the GRMustacheRenderingElement objects that make
- * the section (texts, variables, other sections, etc.)
- * 
- * @param invocation      The invocation that should be applied to a rendering
- *                        context in order to fetch the data to render
- * @param templateString  A Mustache template string
- * @param innerRange      The range of the inner template string of the section
- *                        in _templateString_.
- * @param inverted        YES if the section is {{^inverted}}; otherwise, NO.
- * @param elems           An array of GRMustacheRenderingElement that make the
- *                        section.
- *
- * @return A GRMustacheSection
- * 
- * @see GRMustacheInvocation
- * @see GRMustacheContext
- * @see GRMustacheHelper
- */
-+ (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
-
 // Documented in GRMustacheSection.h
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
 
+/**
+ * Builds and returns a section suitable for GRMustacheHelper.
+ *
+ * @param sectionElement    The underlying sectionElement
+ * @param renderingContext  The rendering context exposed to the library user
+ * @param rootTemplate      A template whose delegate methods should be called whenever relevant.
+ *
+ * @return A section.
+ *
+ * @see GRMustacheHelper
+ */
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
 @end

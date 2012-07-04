@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheHelper_private.h"
-#import "GRMustacheSection_private.h"
 
 
 // =============================================================================

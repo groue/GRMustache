@@ -24,7 +24,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheSection_private.h"
+#import "GRMustacheSectionElement_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 
@@ -251,24 +251,24 @@
             }
             
             // Nothing prevents tokens to come from different template strings.
-            // We, however, do not support this case, because GRMustacheSection
+            // We, however, do not support this case, because GRMustacheSectionElement
             // builds from a single template string and a single innerRange.
             NSAssert(_currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
             
-            // Success: append GRMustacheSection and shrink stacks
+            // Success: append GRMustacheSectionElement and shrink stacks
             NSRange openingTokenRange = _currentSectionOpeningToken.range;
             NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-            GRMustacheSection *section = [GRMustacheSection sectionElementWithInvocation:invocation
-                                                                          templateString:token.templateString
-                                                                              innerRange:innerRange
-                                                                                inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                                elements:_currentElements];
+            GRMustacheSectionElement *sectionElement = [GRMustacheSectionElement sectionElementWithInvocation:invocation
+                                                                                               templateString:token.templateString
+                                                                                                   innerRange:innerRange
+                                                                                                     inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                                                     elements:_currentElements];
             
             [_sectionOpeningTokenStack removeLastObject];
             [_elementsStack removeLastObject];
             self.currentSectionOpeningToken = [_sectionOpeningTokenStack lastObject];
             self.currentElements = [_elementsStack lastObject];
-            [_currentElements addObject:section];
+            [_currentElements addObject:sectionElement];
         } break;
             
             

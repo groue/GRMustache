@@ -42,13 +42,9 @@
  */
 @interface GRMustacheSection: NSObject {
 @private
-    GRMustacheInvocation *_invocation;
-    GRMustacheTemplate *_rootTemplate;
-    NSString *_templateString;
-    NSRange _innerRange;
-    BOOL _inverted;
-    NSArray *_elems;
+    id _sectionElement;
     id _renderingContext;
+    id _rootTemplate;
 }
 
 
@@ -61,7 +57,7 @@
  *
  * @since v2.0
  */
-@property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 
 
