@@ -25,76 +25,76 @@
 #import "GRMustacheToken_private.h"
 
 
-@class GRMustacheTokenizer;
+@class GRMustacheParser;
 
 
 // =============================================================================
-#pragma mark - <GRMustacheTokenizerDelegate>
+#pragma mark - <GRMustacheParserDelegate>
 
 /**
- * The protocol for the delegate of a GRMustacheTokenizer.
+ * The protocol for the delegate of a GRMustacheParser.
  * 
- * The delegate's responsability is to consume tokens and handle tokenizer
+ * The delegate's responsability is to consume tokens and handle parser
  * errors.
  * 
- * @see GRMustacheTemplateParser
+ * @see GRMustacheCompiler
  */
-@protocol GRMustacheTokenizerDelegate<NSObject>
+@protocol GRMustacheParserDelegate<NSObject>
 @optional
 
 /**
- * Sent after the tokenizer has parsed a token.
+ * Sent after the parser has parsed a token.
  * 
- * @param tokenizer   The tokenizer that did find a token.
+ * @param parser   The parser that did find a token.
  * @param token       The token
  *
- * @return YES if the tokenizer should continue producing tokens; otherwise, NO.
+ * @return YES if the parser should continue producing tokens; otherwise, NO.
  * 
  * @see GRMustacheToken
  */
-- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
+- (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
 /**
  * Sent after the token has failed.
  * 
- * @param tokenizer   The tokenizer that failed to producing tokens.
+ * @param parser   The parser that failed to producing tokens.
  * @param error       The error that occurred.
  */
-- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
+- (void)parser:(GRMustacheParser *)parser didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheTokenizer
+#pragma mark - GRMustacheParser
 
 /**
- * The GRMustacheTokenizer consumes a Mustache template string, and produces
+ * The GRMustacheParser consumes a Mustache template string, and produces
  * tokens.
  * 
- * Those tokens are consumed by the tokenizer's delegate.
+ * Those tokens are consumed by the parser's delegate.
  * 
  * @see GRMustacheToken
- * @see GRMustacheTokenizerDelegate
+ * @see GRMustacheParserDelegate
  */
-@interface GRMustacheTokenizer : NSObject {
+@interface GRMustacheParser : NSObject {
 @private
-    id<GRMustacheTokenizerDelegate> _delegate;
+    id<GRMustacheParserDelegate> _delegate;
     NSString *_otag;
     NSString *_ctag;
 }
 
 /**
- * The tokenizer's delegate.
+ * The parser's delegate.
  * 
- * The delegate is sent messages as the tokenizer interprets a Mustache template
+ * The delegate is sent messages as the parser interprets a Mustache template
  * string.
  * 
- * @see GRMustacheTokenizerDelegate
+ * @see GRMustacheParserDelegate
  */
-@property (nonatomic, assign) id<GRMustacheTokenizerDelegate> delegate GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign) id<GRMustacheParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
- * The tokenizer will invoke its delegate as it builds tokens from the template
+ * The parser will invoke its delegate as it builds tokens from the template
  * string.
  * 
  * @param templateString  A Mustache template string

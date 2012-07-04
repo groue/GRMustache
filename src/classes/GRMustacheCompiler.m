@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateParser_private.h"
+#import "GRMustacheCompiler_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
@@ -28,7 +28,7 @@
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 
-@interface GRMustacheTemplateParser()
+@interface GRMustacheCompiler()
 
 /**
  * The fatal error that should be returned by the public method
@@ -51,7 +51,7 @@
 
 /**
  * An array where rendering elements are appended as tokens are yielded
- * by a tokenizer.
+ * by a parser.
  * 
  * This array is also the one that would be returned by the public method
  * renderingElementsReturningError:.
@@ -67,7 +67,7 @@
 
 /**
  * The stack of arrays where rendering elements should be appended as tokens are
- * yielded by a tokenizer.
+ * yielded by a parser.
  * 
  * This stack grows with section opening tokens, and shrinks with section
  * closing tokens.
@@ -121,7 +121,7 @@
 - (GRMustacheInvocation *)invocationWithToken:(GRMustacheToken *)token error:(NSError **)outError;
 @end
 
-@implementation GRMustacheTemplateParser
+@implementation GRMustacheCompiler
 @synthesize fatalError=_fatalError;
 @synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
 @synthesize dataSource=_dataSource;
@@ -175,9 +175,9 @@
 }
 
 
-#pragma mark GRMustacheTokenizerDelegate
+#pragma mark GRMustacheParserDelegate
 
-- (BOOL)tokenizer:(GRMustacheTokenizer *)tokenizer shouldContinueAfterParsingToken:(GRMustacheToken *)token
+- (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
     // Refuse tokens after a fatal error has occurred.
     if (_currentElements == nil) {
@@ -273,7 +273,7 @@
             
             
         case GRMustacheTokenTypePartial: {
-            // Validate token in order to fullfill the templateParser:renderingElementForPartialName:error: contract:
+            // Validate token in order to fullfill the compiler:renderingElementForPartialName:error: contract:
             // Non nil, non empty, white-space stripped partial name.
             // The token content has already been stripped of white spaces, so we just have to test for its length.
             if (token.content.length == 0) {
@@ -283,7 +283,7 @@
             
             // Ask dataSource for rendering element
             NSError *partialError;
-            id<GRMustacheRenderingElement> partial = [_dataSource templateParser:self renderingElementForPartialName:token.content error:&partialError];
+            id<GRMustacheRenderingElement> partial = [_dataSource compiler:self renderingElementForPartialName:token.content error:&partialError];
             if (partial == nil) {
                 [self failWithFatalError:partialError];
                 return NO;
@@ -301,7 +301,7 @@
     return YES;
 }
 
-- (void)tokenizer:(GRMustacheTokenizer *)tokenizer didFailWithError:(NSError *)error
+- (void)parser:(GRMustacheParser *)parser didFailWithError:(NSError *)error
 {
     [self failWithFatalError:error];
 }

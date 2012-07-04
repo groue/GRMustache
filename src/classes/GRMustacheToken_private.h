@@ -31,7 +31,7 @@ typedef enum {
     /**
      * The kind of tokens representing escaped variable tags such as `{{name}}`.
      * 
-     * The implementation of GRMustacheTokenizer depends on the fact that
+     * The implementation of GRMustacheParser depends on the fact that
      * GRMustacheTokenTypeEscapedVariable is 0.
      */
     GRMustacheTokenTypeEscapedVariable = 0,
@@ -80,7 +80,7 @@ typedef enum {
 } GRMustacheTokenType;
 
 /**
- * A GRMustacheToken is the product of GRMustacheTokenizer. It represents a
+ * A GRMustacheToken is the product of GRMustacheParser. It represents a
  * {{Mustache}} tag, or raw text between tags.
  * 
  * For instance, the template string "hello {{name}}!" would be represented by

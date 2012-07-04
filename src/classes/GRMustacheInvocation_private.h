@@ -36,7 +36,7 @@
  *
  * The GRMustacheInvocation encapsulates this whole process.
  * 
- * Instances are created by GRMustacheTemplateParser, and stored by rendering
+ * Instances are created by GRMustacheCompiler, and stored by rendering
  * elements that query the user data: GRMustacheVariableElement and
  * GRMustacheSection.
  *
@@ -48,7 +48,7 @@
  * Invocations are exposed to the template's delegate: library users can modify
  * the return value of invocations, and alter the template rendering.
  *
- * @see GRMustacheTemplateParser
+ * @see GRMustacheCompiler
  * @see GRMustacheVariableElement
  * @see GRMustacheSection
  * @see GRMustacheTemplateDelegate

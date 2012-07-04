@@ -22,7 +22,7 @@
 
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheTemplateParser_private.h"
+#import "GRMustacheCompiler_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 
@@ -102,7 +102,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - GRMustacheTemplateRepository
 
-@interface GRMustacheTemplateRepository()<GRMustacheTemplateParserDataSource>
+@interface GRMustacheTemplateRepository()<GRMustacheCompilerDataSource>
 
 /**
  * Returns a template or a partial template, given its name.
@@ -224,9 +224,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [GRMustacheTemplate templateWithElements:renderingElements];
 }
 
-#pragma mark GRMustacheTemplateParserDataSource
+#pragma mark GRMustacheCompilerDataSource
 
-- (id<GRMustacheRenderingElement>)templateParser:(GRMustacheTemplateParser *)templateParser renderingElementForPartialName:(NSString *)name error:(NSError **)outError
+- (id<GRMustacheRenderingElement>)compiler:(GRMustacheCompiler *)compiler renderingElementForPartialName:(NSString *)name error:(NSError **)outError
 {
     return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
@@ -237,17 +237,17 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     NSArray *renderingElements = nil;
     @autoreleasepool {
-        // setup parser
-        GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] init] autorelease];
-        parser.dataSource = self;
+        // setup compiler
+        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+        compiler.dataSource = self;
         
         // tokenize
-        GRMustacheTokenizer *tokenizer = [[[GRMustacheTokenizer alloc] init] autorelease];
-        tokenizer.delegate = parser;
-        [tokenizer parseTemplateString:templateString templateID:templateID];
+        GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
+        parser.delegate = compiler;
+        [parser parseTemplateString:templateString templateID:templateID];
         
         // extract rendering elements
-        renderingElements = [[parser renderingElementsReturningError:outError] retain];
+        renderingElements = [[compiler renderingElementsReturningError:outError] retain];
         
         // make sure outError is not released by autoreleasepool
         if (!renderingElements && outError != NULL) [*outError retain];
@@ -295,7 +295,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         template = [GRMustacheTemplate templateWithElements:nil];
         [_templateForTemplateID setObject:template forKey:templateID];
         
-        // prepare for GRMustacheTemplateParserDataSource methods
+        // prepare for GRMustacheCompilerDataSource methods
         id previousParsedTemplateID = _currentlyParsedTemplateID;
         _currentlyParsedTemplateID = templateID;
         

@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTokenizer_private.h"
+#import "GRMustacheParser_private.h"
 #import "GRMustacheError.h"
 
-@interface GRMustacheTokenizer()
+@interface GRMustacheParser()
 
 /**
  * The Mustache tag opening delimiter. Initialized with @"{{", it may change
@@ -38,13 +38,13 @@
 @property (nonatomic, copy) NSString *ctag;
 
 /**
- * Wrapper around the delegate's `tokenizer:shouldContinueAfterParsingToken:`
+ * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
  * method.
  */
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
 
 /**
- * Wrapper around the delegate's `tokenizer:didFailWithError:` method.
+ * Wrapper around the delegate's `parser:didFailWithError:` method.
  * 
  * @param line          The line at which the error occurred.
  * @param description   A human-readable error message
@@ -68,7 +68,7 @@
 - (NSRange)rangeOfString:(NSString *)needle inTemplateString:(NSString *)haystack startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 @end
 
-@implementation GRMustacheTokenizer
+@implementation GRMustacheParser
 @synthesize delegate=_delegate;
 @synthesize otag=_otag;
 @synthesize ctag=_ctag;
@@ -241,22 +241,22 @@
 
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
-    if ([_delegate respondsToSelector:@selector(tokenizer:shouldContinueAfterParsingToken:)]) {
-        return [_delegate tokenizer:self shouldContinueAfterParsingToken:token];
+    if ([_delegate respondsToSelector:@selector(parser:shouldContinueAfterParsingToken:)]) {
+        return [_delegate parser:self shouldContinueAfterParsingToken:token];
     }
     return YES;
 }
 
 - (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
 {
-    if ([_delegate respondsToSelector:@selector(tokenizer:didFailWithError:)]) {
+    if ([_delegate respondsToSelector:@selector(parser:didFailWithError:)]) {
         NSString *localizedDescription;
         if (templateID) {
             localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu of template %@: %@", (unsigned long)line, templateID, description];
         } else {
             localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu: %@", (unsigned long)line, description];
         }
-        [_delegate tokenizer:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+        [_delegate parser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
                                                                        code:GRMustacheErrorCodeParseError
                                                                    userInfo:[NSDictionary dictionaryWithObject:localizedDescription
                                                                                                         forKey:NSLocalizedDescriptionKey]]];

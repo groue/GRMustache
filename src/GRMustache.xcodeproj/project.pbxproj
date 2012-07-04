@@ -31,8 +31,8 @@
 		563D66EA1526497E008628C5 /* GRMustacheSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */; };
 		563D66EF152649DF008628C5 /* GRMustacheContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EC152649DF008628C5 /* GRMustacheContextTest.m */; };
 		563D66F0152649DF008628C5 /* GRMustacheContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EC152649DF008628C5 /* GRMustacheContextTest.m */; };
-		563D66F1152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheTokenizerTest.m */; };
-		563D66F2152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheTokenizerTest.m */; };
+		563D66F1152649DF008628C5 /* GRMustacheParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheParserTest.m */; };
+		563D66F2152649DF008628C5 /* GRMustacheParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheParserTest.m */; };
 		563D66F415264B40008628C5 /* GRMustacheSuites in Resources */ = {isa = PBXBuildFile; fileRef = 563D66F315264B40008628C5 /* GRMustacheSuites */; };
 		563D66F515264B40008628C5 /* GRMustacheSuites in Resources */ = {isa = PBXBuildFile; fileRef = 563D66F315264B40008628C5 /* GRMustacheSuites */; };
 		563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 563D670115264EDA008628C5 /* JRSwizzle.h */; };
@@ -83,14 +83,14 @@
 		5682B4AA15284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4A815284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial */; };
 		5682B4AC15284ABD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4AB15284ABC00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text */; };
 		5682B4AD15284ABD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4AB15284ABC00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text */; };
-		5682B4B21528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache */; };
-		5682B4B31528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache */; };
-		5682B4B41528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache */; };
-		5682B4B51528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache */; };
-		5682B4B81528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */; };
-		5682B4B91528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */; };
-		5682B4BA1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */; };
-		5682B4BB1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */; };
+		5682B4B21528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */; };
+		5682B4B31528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */; };
+		5682B4B41528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */; };
+		5682B4B51528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */; };
+		5682B4B81528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache */; };
+		5682B4B91528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache */; };
+		5682B4BA1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache */; };
+		5682B4BB1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache */; };
 		5682B4BE1528DF3F00ADD123 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4BD1528DF3D00ADD123 /* Foundation.framework */; };
 		5682B4C01528DF4A00ADD123 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4BF1528DF4900ADD123 /* Foundation.framework */; };
 		5682B4C31528E0B300ADD123 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4BF1528DF4900ADD123 /* Foundation.framework */; };
@@ -159,10 +159,10 @@
 		56DEC2F1152631300031E8DC /* GRMustacheTemplate_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AC152631300031E8DC /* GRMustacheTemplate_private.h */; settings = {ATTRIBUTES = (); }; };
 		56DEC2F2152631300031E8DC /* GRMustacheTemplateDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2F3152631300031E8DC /* GRMustacheTemplateDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56DEC2F4152631300031E8DC /* GRMustacheTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2AE152631300031E8DC /* GRMustacheTemplateParser.m */; };
-		56DEC2F5152631300031E8DC /* GRMustacheTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2AE152631300031E8DC /* GRMustacheTemplateParser.m */; };
-		56DEC2F6152631300031E8DC /* GRMustacheTemplateParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AF152631300031E8DC /* GRMustacheTemplateParser_private.h */; settings = {ATTRIBUTES = (); }; };
-		56DEC2F7152631300031E8DC /* GRMustacheTemplateParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AF152631300031E8DC /* GRMustacheTemplateParser_private.h */; settings = {ATTRIBUTES = (); }; };
+		56DEC2F4152631300031E8DC /* GRMustacheCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2AE152631300031E8DC /* GRMustacheCompiler.m */; };
+		56DEC2F5152631300031E8DC /* GRMustacheCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2AE152631300031E8DC /* GRMustacheCompiler.m */; };
+		56DEC2F6152631300031E8DC /* GRMustacheCompiler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AF152631300031E8DC /* GRMustacheCompiler_private.h */; settings = {ATTRIBUTES = (); }; };
+		56DEC2F7152631300031E8DC /* GRMustacheCompiler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2AF152631300031E8DC /* GRMustacheCompiler_private.h */; settings = {ATTRIBUTES = (); }; };
 		56DEC2F8152631300031E8DC /* GRMustacheTemplateRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2F9152631300031E8DC /* GRMustacheTemplateRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2FA152631300031E8DC /* GRMustacheTemplateRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B1152631300031E8DC /* GRMustacheTemplateRepository.m */; };
@@ -177,10 +177,10 @@
 		56DEC303152631300031E8DC /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B5152631300031E8DC /* GRMustacheToken.m */; };
 		56DEC304152631300031E8DC /* GRMustacheToken_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B6152631300031E8DC /* GRMustacheToken_private.h */; settings = {ATTRIBUTES = (); }; };
 		56DEC305152631300031E8DC /* GRMustacheToken_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B6152631300031E8DC /* GRMustacheToken_private.h */; settings = {ATTRIBUTES = (); }; };
-		56DEC306152631300031E8DC /* GRMustacheTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B7152631300031E8DC /* GRMustacheTokenizer.m */; };
-		56DEC307152631300031E8DC /* GRMustacheTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B7152631300031E8DC /* GRMustacheTokenizer.m */; };
-		56DEC308152631300031E8DC /* GRMustacheTokenizer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B8152631300031E8DC /* GRMustacheTokenizer_private.h */; settings = {ATTRIBUTES = (); }; };
-		56DEC309152631300031E8DC /* GRMustacheTokenizer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B8152631300031E8DC /* GRMustacheTokenizer_private.h */; settings = {ATTRIBUTES = (); }; };
+		56DEC306152631300031E8DC /* GRMustacheParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B7152631300031E8DC /* GRMustacheParser.m */; };
+		56DEC307152631300031E8DC /* GRMustacheParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B7152631300031E8DC /* GRMustacheParser.m */; };
+		56DEC308152631300031E8DC /* GRMustacheParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B8152631300031E8DC /* GRMustacheParser_private.h */; settings = {ATTRIBUTES = (); }; };
+		56DEC309152631300031E8DC /* GRMustacheParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2B8152631300031E8DC /* GRMustacheParser_private.h */; settings = {ATTRIBUTES = (); }; };
 		56DEC30A152631300031E8DC /* GRMustacheVariableElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B9152631300031E8DC /* GRMustacheVariableElement.m */; };
 		56DEC30B152631300031E8DC /* GRMustacheVariableElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2B9152631300031E8DC /* GRMustacheVariableElement.m */; };
 		56DEC30C152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2BA152631300031E8DC /* GRMustacheVariableElement_private.h */; settings = {ATTRIBUTES = (); }; };
@@ -235,8 +235,8 @@
 		563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSuitesTest.m; sourceTree = "<group>"; };
 		563D66EB152649DF008628C5 /* GRMustacheContextTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheContextTest.h; sourceTree = "<group>"; };
 		563D66EC152649DF008628C5 /* GRMustacheContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextTest.m; sourceTree = "<group>"; };
-		563D66ED152649DF008628C5 /* GRMustacheTokenizerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTokenizerTest.h; sourceTree = "<group>"; };
-		563D66EE152649DF008628C5 /* GRMustacheTokenizerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTokenizerTest.m; sourceTree = "<group>"; };
+		563D66ED152649DF008628C5 /* GRMustacheParserTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheParserTest.h; sourceTree = "<group>"; };
+		563D66EE152649DF008628C5 /* GRMustacheParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParserTest.m; sourceTree = "<group>"; };
 		563D66F315264B40008628C5 /* GRMustacheSuites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheSuites; sourceTree = "<group>"; };
 		563D670115264EDA008628C5 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		563D670215264EDA008628C5 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
@@ -271,10 +271,10 @@
 		5682B4A315284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRepositoryWithBundleTest.text; sourceTree = "<group>"; };
 		5682B4A815284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRepositoryWithBundleTest_partial; sourceTree = "<group>"; };
 		5682B4AB15284ABC00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRepositoryWithBundleTest_partial.text; sourceTree = "<group>"; };
-		5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_tokenizerError.mustache; sourceTree = "<group>"; };
-		5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache; sourceTree = "<group>"; };
-		5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_parserError.mustache; sourceTree = "<group>"; };
-		5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache; sourceTree = "<group>"; };
+		5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_parserError.mustache; sourceTree = "<group>"; };
+		5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache; sourceTree = "<group>"; };
+		5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_compilerError.mustache; sourceTree = "<group>"; };
+		5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache; sourceTree = "<group>"; };
 		5682B4BD1528DF3D00ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5682B4BF1528DF4900ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5682B4C41528E0C500ADD123 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
@@ -316,8 +316,8 @@
 		56DEC2AB152631300031E8DC /* GRMustacheTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplate.m; sourceTree = "<group>"; };
 		56DEC2AC152631300031E8DC /* GRMustacheTemplate_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplate_private.h; sourceTree = "<group>"; };
 		56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateDelegate.h; sourceTree = "<group>"; };
-		56DEC2AE152631300031E8DC /* GRMustacheTemplateParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateParser.m; sourceTree = "<group>"; };
-		56DEC2AF152631300031E8DC /* GRMustacheTemplateParser_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateParser_private.h; sourceTree = "<group>"; };
+		56DEC2AE152631300031E8DC /* GRMustacheCompiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheCompiler.m; sourceTree = "<group>"; };
+		56DEC2AF152631300031E8DC /* GRMustacheCompiler_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheCompiler_private.h; sourceTree = "<group>"; };
 		56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateRepository.h; sourceTree = "<group>"; };
 		56DEC2B1152631300031E8DC /* GRMustacheTemplateRepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepository.m; sourceTree = "<group>"; };
 		56DEC2B2152631300031E8DC /* GRMustacheTemplateRepository_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateRepository_private.h; sourceTree = "<group>"; };
@@ -325,8 +325,8 @@
 		56DEC2B4152631300031E8DC /* GRMustacheTextElement_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTextElement_private.h; sourceTree = "<group>"; };
 		56DEC2B5152631300031E8DC /* GRMustacheToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheToken.m; sourceTree = "<group>"; };
 		56DEC2B6152631300031E8DC /* GRMustacheToken_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheToken_private.h; sourceTree = "<group>"; };
-		56DEC2B7152631300031E8DC /* GRMustacheTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTokenizer.m; sourceTree = "<group>"; };
-		56DEC2B8152631300031E8DC /* GRMustacheTokenizer_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTokenizer_private.h; sourceTree = "<group>"; };
+		56DEC2B7152631300031E8DC /* GRMustacheParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParser.m; sourceTree = "<group>"; };
+		56DEC2B8152631300031E8DC /* GRMustacheParser_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheParser_private.h; sourceTree = "<group>"; };
 		56DEC2B9152631300031E8DC /* GRMustacheVariableElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheVariableElement.m; sourceTree = "<group>"; };
 		56DEC2BA152631300031E8DC /* GRMustacheVariableElement_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheVariableElement_private.h; sourceTree = "<group>"; };
 		56DEC2BB152631300031E8DC /* GRMustacheVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheVersion.h; sourceTree = "<group>"; };
@@ -477,10 +477,10 @@
 				5682B46E1528370E00ADD123 /* GRMustacheTemplateFromMethodsTest */,
 				5682B4671528324800ADD123 /* GRMustacheTemplateFromMethodsTest.json */,
 				5682B46415282BC900ADD123 /* GRMustacheTemplateFromMethodsTest.mustache */,
-				5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */,
-				5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */,
-				5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache */,
-				5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache */,
+				5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache */,
+				5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache */,
+				5682B4B01528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache */,
+				5682B4B11528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache */,
 			);
 			name = GRMustacheTemplateFromMethodsTest;
 			sourceTree = "<group>";
@@ -611,21 +611,25 @@
 			isa = PBXGroup;
 			children = (
 				56DEC311152631A30031E8DC /* Parsing */,
-				56DEC310152631830031E8DC /* SyntaxTree */,
+				56DEC310152631830031E8DC /* Compiling */,
 				56DEC312152631DE0031E8DC /* Runtime */,
 				56DEC292152631300031E8DC /* GRMustache.h */,
 				56DEC294152631300031E8DC /* GRMustache_private.h */,
 				56DEC293152631300031E8DC /* GRMustache.m */,
 				56DEC295152631300031E8DC /* GRMustacheAvailabilityMacros.h */,
 				56DEC296152631300031E8DC /* GRMustacheAvailabilityMacros_private.h */,
+				56DEC29A152631300031E8DC /* GRMustacheError.h */,
+				56DEC29B152631300031E8DC /* GRMustacheError.m */,
 				56DEC2BB152631300031E8DC /* GRMustacheVersion.h */,
 			);
 			path = classes;
 			sourceTree = "<group>";
 		};
-		56DEC310152631830031E8DC /* SyntaxTree */ = {
+		56DEC310152631830031E8DC /* Compiling */ = {
 			isa = PBXGroup;
 			children = (
+				56DEC2AF152631300031E8DC /* GRMustacheCompiler_private.h */,
+				56DEC2AE152631300031E8DC /* GRMustacheCompiler.m */,
 				56DEC2A6152631300031E8DC /* GRMustacheRenderingElement_private.h */,
 				56DEC2A7152631300031E8DC /* GRMustacheSection.h */,
 				56DEC2A9152631300031E8DC /* GRMustacheSection_private.h */,
@@ -633,29 +637,24 @@
 				56DEC2AA152631300031E8DC /* GRMustacheTemplate.h */,
 				56DEC2AC152631300031E8DC /* GRMustacheTemplate_private.h */,
 				56DEC2AB152631300031E8DC /* GRMustacheTemplate.m */,
-				56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */,
 				56DEC2B4152631300031E8DC /* GRMustacheTextElement_private.h */,
 				56DEC2B3152631300031E8DC /* GRMustacheTextElement.m */,
 				56DEC2BA152631300031E8DC /* GRMustacheVariableElement_private.h */,
 				56DEC2B9152631300031E8DC /* GRMustacheVariableElement.m */,
 			);
-			name = SyntaxTree;
+			name = Compiling;
 			sourceTree = "<group>";
 		};
 		56DEC311152631A30031E8DC /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
-				56DEC29A152631300031E8DC /* GRMustacheError.h */,
-				56DEC29B152631300031E8DC /* GRMustacheError.m */,
-				56DEC2AF152631300031E8DC /* GRMustacheTemplateParser_private.h */,
-				56DEC2AE152631300031E8DC /* GRMustacheTemplateParser.m */,
 				56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */,
 				56DEC2B2152631300031E8DC /* GRMustacheTemplateRepository_private.h */,
 				56DEC2B1152631300031E8DC /* GRMustacheTemplateRepository.m */,
 				56DEC2B6152631300031E8DC /* GRMustacheToken_private.h */,
 				56DEC2B5152631300031E8DC /* GRMustacheToken.m */,
-				56DEC2B8152631300031E8DC /* GRMustacheTokenizer_private.h */,
-				56DEC2B7152631300031E8DC /* GRMustacheTokenizer.m */,
+				56DEC2B8152631300031E8DC /* GRMustacheParser_private.h */,
+				56DEC2B7152631300031E8DC /* GRMustacheParser.m */,
 			);
 			name = Parsing;
 			sourceTree = "<group>";
@@ -673,6 +672,7 @@
 				56DEC29D152631300031E8DC /* GRMustacheInvocation.m */,
 				56DEC2A3152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h */,
 				56DEC2A2152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m */,
+				56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -718,8 +718,8 @@
 				56DEC3B0152638E20031E8DC /* GRMustachePrivateAPITest.m */,
 				563D66EB152649DF008628C5 /* GRMustacheContextTest.h */,
 				563D66EC152649DF008628C5 /* GRMustacheContextTest.m */,
-				563D66ED152649DF008628C5 /* GRMustacheTokenizerTest.h */,
-				563D66EE152649DF008628C5 /* GRMustacheTokenizerTest.m */,
+				563D66ED152649DF008628C5 /* GRMustacheParserTest.h */,
+				563D66EE152649DF008628C5 /* GRMustacheParserTest.m */,
 			);
 			path = Private;
 			sourceTree = "<group>";
@@ -787,12 +787,12 @@
 				56DEC2EC152631300031E8DC /* GRMustacheTemplate.h in Headers */,
 				56DEC2F0152631300031E8DC /* GRMustacheTemplate_private.h in Headers */,
 				56DEC2F2152631300031E8DC /* GRMustacheTemplateDelegate.h in Headers */,
-				56DEC2F6152631300031E8DC /* GRMustacheTemplateParser_private.h in Headers */,
+				56DEC2F6152631300031E8DC /* GRMustacheCompiler_private.h in Headers */,
 				56DEC2F8152631300031E8DC /* GRMustacheTemplateRepository.h in Headers */,
 				56DEC2FC152631300031E8DC /* GRMustacheTemplateRepository_private.h in Headers */,
 				56DEC300152631300031E8DC /* GRMustacheTextElement_private.h in Headers */,
 				56DEC304152631300031E8DC /* GRMustacheToken_private.h in Headers */,
-				56DEC308152631300031E8DC /* GRMustacheTokenizer_private.h in Headers */,
+				56DEC308152631300031E8DC /* GRMustacheParser_private.h in Headers */,
 				56DEC30C152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */,
 				56DEC30E152631300031E8DC /* GRMustacheVersion.h in Headers */,
 				563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */,
@@ -820,12 +820,12 @@
 				56DEC2ED152631300031E8DC /* GRMustacheTemplate.h in Headers */,
 				56DEC2F1152631300031E8DC /* GRMustacheTemplate_private.h in Headers */,
 				56DEC2F3152631300031E8DC /* GRMustacheTemplateDelegate.h in Headers */,
-				56DEC2F7152631300031E8DC /* GRMustacheTemplateParser_private.h in Headers */,
+				56DEC2F7152631300031E8DC /* GRMustacheCompiler_private.h in Headers */,
 				56DEC2F9152631300031E8DC /* GRMustacheTemplateRepository.h in Headers */,
 				56DEC2FD152631300031E8DC /* GRMustacheTemplateRepository_private.h in Headers */,
 				56DEC301152631300031E8DC /* GRMustacheTextElement_private.h in Headers */,
 				56DEC305152631300031E8DC /* GRMustacheToken_private.h in Headers */,
-				56DEC309152631300031E8DC /* GRMustacheTokenizer_private.h in Headers */,
+				56DEC309152631300031E8DC /* GRMustacheParser_private.h in Headers */,
 				56DEC30D152631300031E8DC /* GRMustacheVariableElement_private.h in Headers */,
 				56DEC30F152631300031E8DC /* GRMustacheVersion.h in Headers */,
 				563D672015264EDA008628C5 /* JRSwizzle.h in Headers */,
@@ -963,10 +963,10 @@
 				5682B4A615284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text in Resources */,
 				5682B4A915284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial in Resources */,
 				5682B4AC15284ABD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text in Resources */,
-				5682B4B21528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache in Resources */,
-				5682B4B41528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache in Resources */,
-				5682B4B81528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */,
-				5682B4BA1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */,
+				5682B4B21528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */,
+				5682B4B41528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */,
+				5682B4B81528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */,
+				5682B4BA1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -997,10 +997,10 @@
 				5682B4A715284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text in Resources */,
 				5682B4AA15284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial in Resources */,
 				5682B4AD15284ABD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.text in Resources */,
-				5682B4B31528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerError.mustache in Resources */,
-				5682B4B51528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_tokenizerErrorWrapper.mustache in Resources */,
-				5682B4B91528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */,
-				5682B4BB1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */,
+				5682B4B31528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserError.mustache in Resources */,
+				5682B4B51528C69C00ADD123 /* GRMustacheTemplateFromMethodsTest_parserErrorWrapper.mustache in Resources */,
+				5682B4B91528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */,
+				5682B4BB1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,11 +1048,11 @@
 				56DEC2DC152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */,
 				56DEC2E8152631300031E8DC /* GRMustacheSection.m in Sources */,
 				56DEC2EE152631300031E8DC /* GRMustacheTemplate.m in Sources */,
-				56DEC2F4152631300031E8DC /* GRMustacheTemplateParser.m in Sources */,
+				56DEC2F4152631300031E8DC /* GRMustacheCompiler.m in Sources */,
 				56DEC2FA152631300031E8DC /* GRMustacheTemplateRepository.m in Sources */,
 				56DEC2FE152631300031E8DC /* GRMustacheTextElement.m in Sources */,
 				56DEC302152631300031E8DC /* GRMustacheToken.m in Sources */,
-				56DEC306152631300031E8DC /* GRMustacheTokenizer.m in Sources */,
+				56DEC306152631300031E8DC /* GRMustacheParser.m in Sources */,
 				56DEC30A152631300031E8DC /* GRMustacheVariableElement.m in Sources */,
 				563D672215264EDA008628C5 /* JRSwizzle.m in Sources */,
 			);
@@ -1069,7 +1069,7 @@
 				56DEC3C915263AC80031E8DC /* JSONKit.m in Sources */,
 				563D66E91526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66EF152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
-				563D66F1152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
+				563D66F1152649DF008628C5 /* GRMustacheParserTest.m in Sources */,
 				560CE8921526F673004F935E /* GRBooleanTest.m in Sources */,
 				5623B7911527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 				5623B796152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */,
@@ -1099,11 +1099,11 @@
 				56DEC2DD152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */,
 				56DEC2E9152631300031E8DC /* GRMustacheSection.m in Sources */,
 				56DEC2EF152631300031E8DC /* GRMustacheTemplate.m in Sources */,
-				56DEC2F5152631300031E8DC /* GRMustacheTemplateParser.m in Sources */,
+				56DEC2F5152631300031E8DC /* GRMustacheCompiler.m in Sources */,
 				56DEC2FB152631300031E8DC /* GRMustacheTemplateRepository.m in Sources */,
 				56DEC2FF152631300031E8DC /* GRMustacheTextElement.m in Sources */,
 				56DEC303152631300031E8DC /* GRMustacheToken.m in Sources */,
-				56DEC307152631300031E8DC /* GRMustacheTokenizer.m in Sources */,
+				56DEC307152631300031E8DC /* GRMustacheParser.m in Sources */,
 				56DEC30B152631300031E8DC /* GRMustacheVariableElement.m in Sources */,
 				563D672315264EDA008628C5 /* JRSwizzle.m in Sources */,
 			);
@@ -1120,7 +1120,7 @@
 				56DEC3CA15263AC80031E8DC /* JSONKit.m in Sources */,
 				563D66EA1526497E008628C5 /* GRMustacheSuitesTest.m in Sources */,
 				563D66F0152649DF008628C5 /* GRMustacheContextTest.m in Sources */,
-				563D66F2152649DF008628C5 /* GRMustacheTokenizerTest.m in Sources */,
+				563D66F2152649DF008628C5 /* GRMustacheParserTest.m in Sources */,
 				560CE8911526F672004F935E /* GRBooleanTest.m in Sources */,
 				5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */,
 				5623B797152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */,

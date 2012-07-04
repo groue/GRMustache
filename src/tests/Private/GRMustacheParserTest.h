@@ -21,13 +21,13 @@
 // THE SOFTWARE.
 
 #import "GRMustachePrivateAPITest.h"
-#import "GRMustacheTokenizer_private.h"
+#import "GRMustacheParser_private.h"
 
 
 @class GRMustacheTokenRecorder;
 
-@interface GRMustacheTokenizerTest : GRMustachePrivateAPITest {
-	GRMustacheTokenizer *tokenizer;
+@interface GRMustacheParserTest : GRMustachePrivateAPITest {
+	GRMustacheParser *parser;
 	GRMustacheTokenRecorder *tokenRecorder;
 }
 @end

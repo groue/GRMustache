@@ -29,7 +29,7 @@
 /**
  * The protocol for "rendering elements".
  * 
- * When parsing a Mustache template, GRMustacheTemplateParser builds a syntax
+ * When parsing a Mustache template, GRMustacheCompiler builds a syntax
  * tree of objects representing raw text and various mustache tags.
  * 
  * This syntax tree is made of objects conforming to the
@@ -49,7 +49,7 @@
  * - a GRMustacheTemplate that would contain the three previous elements, and
  *   render the concatenation of their renderings.
  * 
- * @see GRMustacheTemplateParser
+ * @see GRMustacheCompiler
  * @see GRMustacheContext
  */
 @protocol GRMustacheRenderingElement<NSObject>
