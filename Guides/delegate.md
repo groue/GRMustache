@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](sample_code/README.md)
+[up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)
 
 GRMustacheTemplateDelegate protocol
 ===================================
@@ -100,4 +100,4 @@ The `returnValue` property of the *invocation* parameter can be written. If you 
 }
 ```
 
-[up](../../../../GRMustache), [next](sample_code/README.md)
+[up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)
