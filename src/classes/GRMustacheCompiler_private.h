@@ -111,12 +111,25 @@
  * 
  * For instance:
  * 
+ *     // Create a Mustache compiler
  *     GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+ *     
+ *     // Some GRMustacheCompilerDataSource tells the compiler where are the
+ *     // partials.
+ *     compiler.dataSource = ...;
+ *     
+ *     // Create a Mustache parser
  *     GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
+ *     
+ *     // The parser feeds the compiler
  *     parser.delegate = compiler;
+ *     
+ *     // Parse some string
  *     [parser parseTemplateString:... templateID:...];
- *     NSArray *renderingElements = [compiler renderingElementsReturningError:NULL];
- * 
+ *     
+ *     // Extract rendering elements from the compiler
+ *     NSArray *renderingElements = [compiler renderingElementsReturningError:...];
+ *
  * @param outError  If there is an error building rendering elements, upon
  *                  return contains an NSError object that describes the
  *                  problem.

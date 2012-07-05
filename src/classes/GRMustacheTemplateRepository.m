@@ -237,16 +237,22 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     NSArray *renderingElements = nil;
     @autoreleasepool {
-        // setup compiler
+        // Create a Mustache compiler
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+        
+        // We tell the compiler where are the partials
         compiler.dataSource = self;
         
-        // tokenize
+        // Create a Mustache parser
         GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
+        
+        // The parser feeds the compiler
         parser.delegate = compiler;
+        
+        // Parse
         [parser parseTemplateString:templateString templateID:templateID];
         
-        // extract rendering elements
+        // Extract rendering elements from the compiler
         renderingElements = [[compiler renderingElementsReturningError:outError] retain];
         
         // make sure outError is not released by autoreleasepool

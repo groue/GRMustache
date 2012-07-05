@@ -49,7 +49,8 @@
  *
  * @param sectionElement    The underlying sectionElement
  * @param renderingContext  The rendering context exposed to the library user
- * @param rootTemplate      A template whose delegate methods should be called whenever relevant.
+ * @param rootTemplate      A template whose delegate methods should be called
+ *                          whenever relevant.
  *
  * @return A section.
  *
