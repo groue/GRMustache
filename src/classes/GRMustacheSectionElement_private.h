@@ -28,7 +28,10 @@
 @class GRMustacheSection;
 
 /**
- * TODO
+ * A GRMustacheSectionElement is a rendering element that renders sections
+ * such as `{{#name}}...{{/name}}`.
+ *
+ * @see GRMustacheRenderingElement
  */
 @interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement> {
 @private
@@ -80,8 +83,15 @@
 + (id)sectionElementWithInvocation:(GRMustacheInvocation *)invocation templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns the rendering of inner rendering elements for the provided context,
+ * without any invocation nor interpretation.
+ *
+ * @param context       A context stack for rendering inner elements.
+ * @param rootTemplate  A template whose delegate methods should be called
+ *                      whenever relevant.
+ *
+ * @return The rendering of the section.
  */
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate;
+- (NSString *)renderElementsWithContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
 
 @end
