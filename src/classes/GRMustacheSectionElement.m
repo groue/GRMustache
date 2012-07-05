@@ -131,10 +131,7 @@
         {
             // False value
             if (_inverted) {
-                result = [[NSMutableString string] retain];
-                for (id<GRMustacheRenderingElement> elem in _elems) {
-                    [(NSMutableString *)result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
-                }
+                result = [[self renderElementsWithContext:context inRootTemplate:rootTemplate] retain];
             }
         }
         else if ([value isKindOfClass:[NSDictionary class]])
@@ -142,10 +139,7 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:value];
-                result = [[NSMutableString string] retain];
-                for (id<GRMustacheRenderingElement> elem in _elems) {
-                    [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
-                }
+                result = [[self renderElementsWithContext:innerContext inRootTemplate:rootTemplate] retain];
             }
         }
         else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -158,18 +152,14 @@
                     break;
                 }
                 if (empty) {
-                    result = [[NSMutableString string] retain];
-                    for (id<GRMustacheRenderingElement> elem in _elems) {
-                        [(NSMutableString *)result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
-                    }
+                    result = [[self renderElementsWithContext:context inRootTemplate:rootTemplate] retain];
                 }
             } else {
                 result = [[NSMutableString string] retain];
                 for (id object in value) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:object];
-                    for (id<GRMustacheRenderingElement> elem in _elems) {
-                        [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
-                    }
+                    NSString *itemRendering = [self renderElementsWithContext:innerContext inRootTemplate:rootTemplate];
+                    [(NSMutableString *)result appendString:itemRendering];
                 }
             }
         }
@@ -186,10 +176,7 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:value];
-                result = [[NSMutableString string] retain];
-                for (id<GRMustacheRenderingElement> elem in _elems) {
-                    [(NSMutableString *)result appendString:[elem renderContext:innerContext inRootTemplate:rootTemplate]];
-                }
+                result = [[self renderElementsWithContext:innerContext inRootTemplate:rootTemplate] retain];
             }
         }
         
