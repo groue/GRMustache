@@ -9,7 +9,9 @@ The GRMustacheTemplateRepository class allows you to load template strings and p
 Loading templates and partials from the file system
 ---------------------------------------------------
 
-The GRMustacheTemplate class itself provides [convenient methods](templates.md) for loading UTF8-encoded templates from the file system. GRMustacheTemplateRepository fills the remaining less-common needs.
+The GRMustacheTemplate class itself provides [convenient methods](templates.md) for loading UTF8-encoded templates from bundles and from the file system.
+
+GRMustacheTemplateRepository fills the remaining less-common needs.
 
 It ships with the following class methods:
 
