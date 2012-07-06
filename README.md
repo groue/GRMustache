@@ -80,7 +80,7 @@ FAQ
 
     A: This can be done by providing your template a delegate: check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
 
-- **Q: I have a bunch of template partials that live in memory, not in the file system. How do I include them?**
+- **Q: I have a bunch of template and partials that live in memory / a database / the cloud / wherever.**
     
     A: Check [Guides/template_repositories.md](GRMustache/blob/master/Guides/template_repositories.md).
 
