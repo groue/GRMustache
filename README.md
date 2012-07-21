@@ -72,7 +72,7 @@ FAQ
     
     A: Check documentation of [Mustache lambda sections](GRMustache/blob/master/Guides/runtime/helpers.md) first. If it would not help, maybe you'll get some inspiration from the [number formatting sample code](GRMustache/blob/master/Guides/sample_code/number_formatting.md). If you are still stuck after those, go and look for a [closed issue](GRMustache/issues?state=closed) that covers your need. Finally, open a new issue :-)
 
-- **Q: Does GRMustache provides any layout facility?**
+- **Q: Does GRMustache provide any layout facility?**
     
     A: No. But there is a [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout) that demonstrates how to do that.
 
