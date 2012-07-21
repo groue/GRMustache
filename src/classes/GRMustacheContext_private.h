@@ -83,7 +83,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 /**
  * Returns a new context stack by adding an object at the top.
  *
- * @param object  The top object of the retured context stack.
+ * @param object  The top object of the returned context stack.
  *
  * @return A new context stack.
  */
