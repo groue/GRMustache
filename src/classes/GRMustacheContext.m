@@ -128,6 +128,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent
 {
+    NSAssert(object, @"");
     self = [self init];
     if (self) {
         _object = [object retain];
