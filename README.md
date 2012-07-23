@@ -88,6 +88,10 @@ FAQ
 
     A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
 
+- **Q: Why does GRMustache need JRSwizzle?**
+
+    A: GRMustache will [swizzle](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) the implementation of `valueForUndefinedKey:` in the NSObject and NSManagedObject classes when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md). The dreadful swizzling happens in [src/classes/GRMustacheNSUndefinedKeyExceptionGuard.m](GRMustache/blob/master/src/classes/GRMustacheNSUndefinedKeyExceptionGuard.m).
+
 
 Contribution wish-list
 ----------------------
