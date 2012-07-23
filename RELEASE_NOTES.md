@@ -54,8 +54,6 @@ GRMustache used to output badly formatted errors. They are now easier to read.
 
 ## v4.0.0
 
-**Performance improvements**
-
 **Zero numbers are false**
 
 GRMustache now considers all `NSNumber` instances whose `boolValue` is `NO` as false, when considering whether a section should render or not.
@@ -132,7 +130,7 @@ typedef NSUInteger GRMustacheTemplateOptions;
 
 ## v2.0.0
 
-**Performance improvements and API simplification**
+**API simplification**
 
 ### New APIs:
 
@@ -269,7 +267,7 @@ New protocol:
 
 ## v1.12.2
 
-Restore performances of v1.12.0
+Restore parsing performances of v1.12.0
 
 ## v1.12.1
 
@@ -346,15 +344,15 @@ Upgrade GRMustache, and get deprecation warnings when you use deprecated APIs. Y
 
 ## v1.10.2
 
-Performance improvements
+**Drastic rendering performance improvements**
 
 ## v1.10.1
 
-Performance improvements
+**Rendering performance improvements**
 
 ## v1.10
 
-**Improved Handlebars.js support and performance improvements**
+**Improved Handlebars.js support**
 
 Now `{{foo/bar}}` and `{{foo.bar}}` syntaxes are both supported.
 
@@ -629,7 +627,7 @@ Bug fixes
 
 ## v1.1.2
 
-**Template compiling performance improvement**
+**Parsing performance improvement**
 
 ## v1.1.1
 
