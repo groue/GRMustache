@@ -92,6 +92,6 @@
  *
  * @return The rendering of the section.
  */
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderElementsWithContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 
 @end

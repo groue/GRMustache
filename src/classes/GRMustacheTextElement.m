@@ -45,7 +45,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     return _text;
 }

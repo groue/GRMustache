@@ -29,19 +29,22 @@
 @property (nonatomic, retain) GRMustacheSectionElement *sectionElement;
 @property (nonatomic, retain) GRMustacheContext *renderingContext;
 @property (nonatomic, retain) GRMustacheTemplate *rootTemplate;
+@property (nonatomic, retain) NSArray *delegates;
 @end
 
 @implementation GRMustacheSection
 @synthesize sectionElement=_sectionElement;
 @synthesize renderingContext=_renderingContext;
 @synthesize rootTemplate=_rootTemplate;
+@synthesize delegates=_delegates;
 
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     GRMustacheSection *section = [[GRMustacheSection alloc] init];
     section.sectionElement = sectionElement;
     section.renderingContext = renderingContext;
     section.rootTemplate = rootTemplate;
+    section.delegates = delegates;
     return [section autorelease];
 }
 
@@ -50,12 +53,13 @@
     self.sectionElement = nil;
     self.renderingContext = nil;
     self.rootTemplate = nil;
+    self.delegates = nil;
     [super dealloc];
 }
 
 - (NSString *)render
 {
-    return [_sectionElement renderElementsWithContext:_renderingContext inRootTemplate:_rootTemplate];
+    return [_sectionElement renderElementsWithContext:_renderingContext forTemplate:_rootTemplate delegates:_delegates];
 }
 
 - (NSString *)innerTemplateString

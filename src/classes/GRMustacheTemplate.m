@@ -165,7 +165,7 @@
 
 - (NSString *)renderObject:(id)object
 {
-    return [self renderContext:[GRMustacheContext contextWithObject:object] inRootTemplate:self];
+    return [self renderContext:[GRMustacheContext contextWithObject:object] forTemplate:self delegates:nil];
 }
 
 - (NSString *)renderObjects:(id)object, ...
@@ -176,7 +176,7 @@
         va_start(objectList, object);
         GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
         va_end(objectList);
-        result = [[self renderContext:context inRootTemplate:self] retain];
+        result = [[self renderContext:context forTemplate:self delegates:nil] retain];
     }
     return [result autorelease];
 }
@@ -184,16 +184,28 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
         if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
             [_delegate templateWillRender:self];
         }
-        for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
+        
+        // initialize the delegate stack
+        NSArray *innerDelegates = delegates;
+        if (_delegate) {
+            if (delegates) {
+                innerDelegates = [[NSArray arrayWithObject:_delegate] arrayByAddingObjectsFromArray:delegates];
+            } else {
+                innerDelegates = [NSArray arrayWithObject:_delegate];
+            }
         }
+        
+        for (id<GRMustacheRenderingElement> elem in _elems) {
+            [result appendString:[elem renderContext:context forTemplate:rootTemplate delegates:innerDelegates]];
+        }
+        
         if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
             [_delegate templateDidRender:self];
         }

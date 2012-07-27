@@ -33,6 +33,7 @@
     GRMustacheSectionElement *_sectionElement;
     GRMustacheContext *_renderingContext;
     GRMustacheTemplate *_rootTemplate;
+    NSArray *_delegates;
 }
 
 // Documented in GRMustacheSection.h
@@ -56,5 +57,5 @@
  *
  * @see GRMustacheHelper
  */
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 @end

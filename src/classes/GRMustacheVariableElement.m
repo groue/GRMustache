@@ -50,18 +50,22 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     // invoke
     
     [_invocation invokeWithContext:context];
-    if ([rootTemplate.delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-        // 4.1 API
-        [rootTemplate.delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
-    } else if ([rootTemplate.delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
-        // 4.0 API
-        [rootTemplate.delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
+    
+    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
+        } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
+            [delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
+        }
     }
+    
     id value = _invocation.returnValue;
     
     
@@ -78,12 +82,14 @@
     
     // finish
     
-    if ([rootTemplate.delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-        // 4.1 API
-        [rootTemplate.delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
-    } else if ([rootTemplate.delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
-        // 4.0 API
-        [rootTemplate.delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
+    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
+        } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
+            [delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
+        }
     }
     
     if (!result) {

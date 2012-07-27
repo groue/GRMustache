@@ -91,12 +91,12 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderElementsWithContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     NSMutableString *result = [NSMutableString string];
     @autoreleasepool {
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context inRootTemplate:rootTemplate]];
+            [result appendString:[elem renderContext:context forTemplate:rootTemplate delegates:delegates]];
         }
     }
     return result;
@@ -104,7 +104,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context inRootTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
 {
     NSString *result = nil;
     @autoreleasepool {
@@ -112,14 +112,33 @@
         // invoke
         
         [_invocation invokeWithContext:context];
-        if ([rootTemplate.delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [rootTemplate.delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
-        } else if ([rootTemplate.delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [rootTemplate.delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
+        
+        
+        // callback delegates in the delegate stack
+        
+        for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+                // 4.1 API
+                [delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
+            } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+                // 4.0 API
+                [delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
+            }
         }
+        
         id value = _invocation.returnValue;
+        
+        
+        // extend the delegate stack if value is a GRMustacheTemplateDelegate
+        
+        NSArray *innerDelegates = delegates;
+        if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+            if (delegates) {
+                innerDelegates = [[NSArray arrayWithObject:value] arrayByAddingObjectsFromArray:delegates];
+            } else {
+                innerDelegates = [NSArray arrayWithObject:value];
+            }
+        }
         
         
         // interpret
@@ -131,7 +150,7 @@
         {
             // False value
             if (_inverted) {
-                result = [[self renderElementsWithContext:context inRootTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:context forTemplate:rootTemplate delegates:innerDelegates] retain];
             }
         }
         else if ([value isKindOfClass:[NSDictionary class]])
@@ -139,7 +158,7 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:value];
-                result = [[self renderElementsWithContext:innerContext inRootTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:innerContext forTemplate:rootTemplate delegates:innerDelegates] retain];
             }
         }
         else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -152,13 +171,13 @@
                     break;
                 }
                 if (empty) {
-                    result = [[self renderElementsWithContext:context inRootTemplate:rootTemplate] retain];
+                    result = [[self renderElementsWithContext:context forTemplate:rootTemplate delegates:innerDelegates] retain];
                 }
             } else {
                 result = [[NSMutableString string] retain];
                 for (id object in value) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:object];
-                    NSString *itemRendering = [self renderElementsWithContext:innerContext inRootTemplate:rootTemplate];
+                    NSString *itemRendering = [self renderElementsWithContext:innerContext forTemplate:rootTemplate delegates:innerDelegates];
                     [(NSMutableString *)result appendString:itemRendering];
                 }
             }
@@ -167,7 +186,7 @@
         {
             // Helper
             if (!_inverted) {
-                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self renderingContext:context rootTemplate:rootTemplate];
+                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self renderingContext:context rootTemplate:rootTemplate delegates:delegates];
                 result = [[(id<GRMustacheHelper>)value renderSection:section] retain];
             }
         }
@@ -176,19 +195,21 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:value];
-                result = [[self renderElementsWithContext:innerContext inRootTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:innerContext forTemplate:rootTemplate delegates:innerDelegates] retain];
             }
         }
         
         
         // finish
         
-        if ([rootTemplate.delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [rootTemplate.delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
-        } else if ([rootTemplate.delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [rootTemplate.delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
+        for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+            if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+                // 4.1 API
+                [delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationSection];
+            } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+                // 4.0 API
+                [delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
+            }
         }
     }
     if (!result) {
