@@ -159,6 +159,7 @@ Let's first have NSNumberFormatter conform to the GRMustacheTemplateDelegate pro
 
 Now let's format numbers when GRMustache is about to render them:
 
+```objc
 @implementation NSNumberFormatter(GRMustache)
 
 /**
