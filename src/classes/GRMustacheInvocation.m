@@ -37,7 +37,7 @@
     BOOL _implicitIterator;
     NSString *_key;
 }
-- (id)initWithToken:(GRMustacheToken *)token key:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token;
 @end
 
 
@@ -54,7 +54,7 @@
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
-- (id)initWithToken:(GRMustacheToken *)token keys:(NSArray *)keys;
+- (id)initWithToken:(GRMustacheToken *)token;
 @end
 
 
@@ -69,12 +69,16 @@
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
-+ (id)invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys
++ (id)invocationWithToken:(GRMustacheToken *)token
 {
-    if (keys.count > 1) {
-        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token keys:keys] autorelease];
+    // Token validation
+    NSAssert([token.value.keys isKindOfClass:[NSArray class]], @"WTF");
+    NSAssert(token.value.keys.count > 0, @"WTF");
+    
+    if (token.value.keys.count > 1) {
+        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token] autorelease];
     } else {
-        return [[[GRMustacheInvocationKey alloc] initWithToken:token key:[keys objectAtIndex:0]] autorelease];
+        return [[[GRMustacheInvocationKey alloc] initWithToken:token] autorelease];
     }
 }
 
@@ -97,9 +101,9 @@
 - (NSString *)description
 {
     if (_token.templateID) {
-        return [NSString stringWithFormat:@"%@ at line %lu of template %@", [_token.templateString substringWithRange:_token.range], (unsigned long)_token.line, _token.templateID];
+        return [NSString stringWithFormat:@"%@ at line %lu of template %@", _token.templateSubstring, (unsigned long)_token.line, _token.templateID];
     } else {
-        return [NSString stringWithFormat:@"%@ at line %lu", [_token.templateString substringWithRange:_token.range], (unsigned long)_token.line];
+        return [NSString stringWithFormat:@"%@ at line %lu", _token.templateSubstring, (unsigned long)_token.line];
     }
 }
 
@@ -122,12 +126,12 @@
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token key:(NSString *)key
+- (id)initWithToken:(GRMustacheToken *)token
 {
-    self = [self initWithToken:token];
+    self = [super initWithToken:token];
     if (self) {
-        _key = [key retain];
-        _implicitIterator = [key isEqualToString:@"."];
+        _key = [[token.value.keys lastObject] retain];
+        _implicitIterator = [_key isEqualToString:@"."];
     }
     return self;
 }
@@ -161,12 +165,12 @@
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token keys:(NSArray *)keys
+- (id)initWithToken:(GRMustacheToken *)token
 {
-    self = [self initWithToken:token];
+    self = [super initWithToken:token];
     if (self) {
-        _keys = [keys retain];
-        BOOL *actualKey = _actualKey = malloc(keys.count*sizeof(BOOL));
+        _keys = [token.value.keys retain];
+        BOOL *actualKey = _actualKey = malloc(_keys.count*sizeof(BOOL));
         for (NSString *key in _keys) {
             *(actualKey++) = ![key isEqualToString:@"."];
         }

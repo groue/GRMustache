@@ -66,6 +66,24 @@
  *          NSNotFound, the needle was not found in the haystack.
  */
 - (NSRange)rangeOfString:(NSString *)needle inTemplateString:(NSString *)haystack startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
+
+/**
+ * Returns an array of keys from the inner string of a tag.
+ *
+ * @param innerTagString  the inner string of a tag.
+ *
+ * @return an Array of keys, or nil if the parsing fails.
+ */
+- (NSArray *)parseKeyPath:(NSString *)innerTagString;
+
+/**
+ * Returns a partial name from the inner string of a tag.
+ *
+ * @param innerTagString  the inner string of a tag.
+ *
+ * @return a partial name, or nil if the string is not an identifier.
+ */
+- (NSString *)parsePartialName:(NSString *)innerTagString;
 @end
 
 @implementation GRMustacheParser
@@ -100,7 +118,6 @@
     NSString *tag;
     unichar character;
     NSCharacterSet *whitespaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *tokenContent;
     GRMustacheTokenType tokenType;
     NSRange tokenRange;
     static const GRMustacheTokenType tokenTypeForCharacter[] = {    // tokenTypeForCharacter[unspecified character] = 0 = GRMustacheTokenTypeEscapedVariable
@@ -124,7 +141,7 @@
         if (orange.location == NSNotFound) {
             if (p < templateString.length) {
                 [self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                             content:[templateString substringFromIndex:p]
+                                                                               value:(GRMustacheTokenValue){ .text = [templateString substringFromIndex:p] }
                                                                       templateString:templateString
                                                                           templateID:templateID
                                                                                 line:line
@@ -136,7 +153,7 @@
         if (orange.location > p) {
             NSRange range = NSMakeRange(p, orange.location-p);
             if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                              content:[templateString substringWithRange:range]
+                                                                                value:(GRMustacheTokenValue){ .text = [templateString substringWithRange:range] }
                                                                        templateString:templateString
                                                                            templateID:templateID
                                                                                  line:line
@@ -181,26 +198,68 @@
         character = [tag characterAtIndex: 0];
         tokenType = (character < tokenTypeForCharacterLength) ? tokenTypeForCharacter[character] : GRMustacheTokenTypeEscapedVariable;
         tokenRange = NSMakeRange(orange.location, crange.location + crange.length - orange.location);
+        GRMustacheToken *token = nil;
         switch (tokenType) {
-            case GRMustacheTokenTypeEscapedVariable:    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
-                tokenContent = [tag stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+            case GRMustacheTokenTypeComment:
+                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
+                                                 value:(GRMustacheTokenValue){ .text = [tag substringFromIndex:1] }   // strip initial '!'
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
                 break;
                 
-            case GRMustacheTokenTypeComment:
+            case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
+                NSArray *keys = [self parseKeyPath:tag];
+                if (!keys) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid identifier" templateID:templateID];
+                    return;
+                }
+                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
+                                                 value:(GRMustacheTokenValue){ .keys = keys }
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
+            } break;
+                
             case GRMustacheTokenTypeSectionOpening:
             case GRMustacheTokenTypeInvertedSectionOpening:
             case GRMustacheTokenTypeSectionClosing:
-            case GRMustacheTokenTypePartial:
-            case GRMustacheTokenTypeUnescapedVariable:
-                tokenContent = [[tag substringFromIndex:1] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
-                break;
+            case GRMustacheTokenTypeUnescapedVariable: {
+                NSArray *keys = [self parseKeyPath:[tag substringFromIndex:1]];   // strip initial '#', '^' etc.
+                if (!keys) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid identifier" templateID:templateID];
+                    return;
+                }
+                token = [GRMustacheToken tokenWithType:tokenType
+                                                 value:(GRMustacheTokenValue){ .keys = keys }
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
+            } break;
+                
+            case GRMustacheTokenTypePartial: {
+                NSString *partialName = [self parsePartialName:[tag substringFromIndex:1]];   // strip initial '>'
+                if (partialName == nil) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid partial name" templateID:templateID];
+                    return;
+                }
+                token = [GRMustacheToken tokenWithType:tokenType
+                                                 value:(GRMustacheTokenValue){ .partialName = partialName }
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
+            } break;
                 
             case GRMustacheTokenTypeSetDelimiter:
                 if ([tag characterAtIndex:tag.length-1] != '=') {
                     [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
-                tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
+                NSString *tokenContent = [[tag substringWithRange:NSMakeRange(1, tag.length-2)] stringByTrimmingCharactersInSet:whitespaceCharacterSet];
                 NSArray *newTags = [tokenContent componentsSeparatedByCharactersInSet:whitespaceCharacterSet];
                 NSMutableArray *nonBlankNewTags = [NSMutableArray array];
                 for (NSString *newTag in newTags) {
@@ -215,6 +274,12 @@
                     [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
                 }
+                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
+                                                 value:(GRMustacheTokenValue){ .object = nil }
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
                 break;
                 
             case GRMustacheTokenTypeText:
@@ -222,12 +287,8 @@
                 break;
         }
 
-        if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:tokenType
-                                                                          content:tokenContent
-                                                                   templateString:templateString
-                                                                       templateID:templateID
-                                                                             line:line
-                                                                            range:tokenRange]]) {
+        NSAssert(token, @"WTF");
+        if (![self shouldContinueAfterParsingToken:token]) {
             return;
         }
 
@@ -284,6 +345,185 @@
     }
     
     return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSArray *)parseKeyPath:(NSString *)innerTagString
+{
+    NSMutableArray *keys = [NSMutableArray array];
+    
+    enum {
+        stateInitial,
+        stateLeadingDot,
+        stateIdentifier,
+        stateWaitingForIdentifier,
+        stateWhiteSpaceSuffix,
+        stateError,
+        stateValid
+    } state = stateInitial;
+    
+//    stateInitial -> ' ' -> stateInitial
+//    stateInitial -> '.' -> stateLeadingDot
+//    stateInitial -> 'a' -> stateIdentifier
+//    stateInitial -> EOF -> stateError
+//    stateLeadingDot -> 'a' -> stateIdentifier
+//    stateLeadingDot -> EOF -> stateValid
+//    stateIdentifier -> 'a' -> stateIdentifier
+//    stateIdentifier -> '.' -> stateWaitingForIdentifier
+//    stateIdentifier -> ' ' -> stateWhiteSpaceSuffix
+//    stateIdentifier -> EOF -> stateValid
+//    stateWaitingForIdentifier -> 'a' -> stateIdentifier
+//    stateWaitingForIdentifier -> EOF -> stateError
+//    stateWhiteSpaceSuffix -> ' ' -> stateWhiteSpaceSuffix
+//    stateWhiteSpaceSuffix -> EOF -> stateValid
+    
+    NSUInteger identifierStart = NSNotFound;
+    NSUInteger length = innerTagString.length;
+    for (NSUInteger i = 0; i < length; ++i) {
+        unichar c = [innerTagString characterAtIndex:i];
+        switch (state) {
+            case stateInitial:
+                switch (c) {
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                        break;
+                        
+                    case '.':
+                        [keys addObject:@"."];
+                        state = stateLeadingDot;
+                        break;
+                        
+                    default:
+                        identifierStart = i;
+                        state = stateIdentifier;
+                        break;
+                }
+                break;
+            
+            case stateLeadingDot:
+                switch (c) {
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                        return nil;
+                        
+                    case '.':
+                        return nil;
+                        
+                    default:
+                        identifierStart = i;
+                        state = stateIdentifier;
+                        break;
+                }
+                break;
+                
+            case stateIdentifier:
+                switch (c) {
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                        [keys addObject:[innerTagString substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
+                        state = stateWhiteSpaceSuffix;
+                        break;
+                        
+                    case '.':
+                        [keys addObject:[innerTagString substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
+                        state = stateWaitingForIdentifier;
+                        break;
+                        
+                    default:
+                        break;
+                }
+                break;
+                
+            case stateWaitingForIdentifier:
+                switch (c) {
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                        return nil;
+                        
+                    case '.':
+                        return nil;
+                        
+                    default:
+                        identifierStart = i;
+                        state = stateIdentifier;
+                        break;
+                }
+                break;
+                
+            case stateWhiteSpaceSuffix:
+                switch (c) {
+                    case ' ':
+                    case '\n':
+                    case '\t':
+                        break;
+                        
+                    case '.':
+                        return nil;
+                        
+                    default:
+                        return nil;
+                        break;
+                }
+                break;
+                
+            default:
+                NSAssert(NO, @"WTF");
+                break;
+        }
+    }
+    
+    
+    // EOF
+    
+    switch (state) {
+        case stateInitial:
+        case stateWaitingForIdentifier:
+            state = stateError;
+            break;
+            
+        case stateLeadingDot:
+        case stateWhiteSpaceSuffix:
+            state = stateValid;
+            break;
+            
+        case stateIdentifier:
+            [keys addObject:[innerTagString substringFromIndex:identifierStart]];
+            state = stateValid;
+            break;
+            
+        default:
+            NSAssert(NO, @"WTF");
+            break;
+    }
+    
+    
+    // End
+
+    switch (state) {
+        case stateError:
+            return nil;
+            
+        case stateValid:
+            return keys;
+            
+        default:
+            NSAssert(NO, @"WTF");
+            break;
+    }
+    
+    return nil;
+}
+
+- (NSString *)parsePartialName:(NSString *)innerTagString
+{
+    NSString *partialName = [innerTagString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (partialName.length == 0) {
+        return nil;
+    }
+    return partialName;
 }
 
 @end

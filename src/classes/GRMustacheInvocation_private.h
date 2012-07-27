@@ -66,25 +66,9 @@
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
 /**
- * Builds an invocation from a token and an array of keys.
- *
- * For a token content @"foo", the keys would contain a single @"foo" string.
- *
- * For a token content @"foo.bar", the keys would contain @"foo" and "bar".
- *
- * For a token content @".", the keys would contain a single @"." string.
- *
- * For a token content @".foo", the keys would contain @"." and "foo".
- *
- * The _keys_ parameter fully determines the behavior of the
- * `invokeWithContext:` method.
- *
- * The _token_ argument is solely used by the `description` method of the
- * invocation, so that the library user can easily locate the source of an
- * invocation in his template delegate methods.
+ * Builds an invocation from a token.
  *
  * @param token   A token
- * @param keys    An array of keys
  *
  * @return an invocation
  *
@@ -92,7 +76,7 @@
  * @see GRMustacheToken
  * @see GRMustacheTemplateDelegate
  */
-+ (id)invocationWithToken:(GRMustacheToken *)token keys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
++ (id)invocationWithToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs key lookup in the context stack, and sets the return value.
