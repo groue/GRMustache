@@ -6,6 +6,21 @@ GRMustacheTemplateDelegate protocol
 This protocol lets you observe, and possibly alter the rendering of a template.
 
 
+Template delegate and section delegates
+---------------------------------------
+
+While rendering a template, several objects may get messages from GRMustache:
+
+- The template's delegate itself, which you set via the `delegate` property of the GRMustacheTemplate class.
+- Objects attached to sections, as long as they conform to the GRMustacheTemplateDelegate protocol.
+
+The template's delegate can observe the full template rendering. However, sections delegates can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
+
+Template delegates are illustrated in the [indexes sample code](sample_code/indexes.md), where NSArray instances are caught before their rendering, in order to let GRMustache render indexes and other collection-related information.
+
+Section delegates are used in the [number formatting sample code](sample_code/number_formatting.md), where the NSNumberFormatter class is given the opportunity to render formatted numbers.
+
+
 Observe the template rendering
 ------------------------------
 
@@ -17,6 +32,8 @@ The following methods are called before, and after the whole template rendering:
 - (void)templateWillRender:(GRMustacheTemplate *)template;
 - (void)templateDidRender:(GRMustacheTemplate *)template;
 ```
+
+Section delegates are not sent these messages. Only template delegates are.
 
 ### Tag rendering
 
@@ -59,7 +76,7 @@ You will find an actual use of this *interpretation* parameter in the [number fo
 
 ### A practical use: debugging templates
 
-You may, for instance, locate keys that could not find any data:
+You may, for instance, give your templates a delegate that locate missing keys:
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
