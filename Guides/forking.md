@@ -63,8 +63,8 @@ The library features are described in the guides. This section describes the cla
     Finally, template repositories are responsible for providing the compiler with template partials.
 
 - **Misc**
-    - GRMustache
-    - GRMustacheNSUndefinedKeyExceptionGuard
+    - `GRMustache`
+    - `GRMustacheNSUndefinedKeyExceptionGuard`
     
     *GRMustache* provides with library configuration.
     
