@@ -105,6 +105,8 @@
 		56A8D4941527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */; };
 		56A8D4961527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */; };
 		56A8D4971527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */; };
+		56C518A615C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C518A515C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m */; };
+		56C518A715C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C518A515C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m */; };
 		56DEC256152631040031E8DC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1C915262FF70031E8DC /* SenTestingKit.framework */; };
 		56DEC257152631040031E8DC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1F4152630710031E8DC /* Cocoa.framework */; };
 		56DEC25A152631040031E8DC /* libGRMustache4-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */; };
@@ -275,6 +277,7 @@
 		56A8D48B15279F8A00D9C718 /* GRMustacheTemplateDelegateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateDelegateTest.m; sourceTree = "<group>"; };
 		56A8D4921527A23900D9C718 /* GRMustacheTemplateDelegateTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateDelegateTest.mustache; sourceTree = "<group>"; };
 		56A8D4951527A3CE00D9C718 /* GRMustacheTemplateDelegateTest_wrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateDelegateTest_wrapper.mustache; sourceTree = "<group>"; };
+		56C518A515C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParsingErrors_v4_2_Test.m; sourceTree = "<group>"; };
 		56DEC1C915262FF70031E8DC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1CB15262FF70031E8DC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1F4152630710031E8DC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -552,6 +555,7 @@
 			isa = PBXGroup;
 			children = (
 				568E852A15C2A863004DE82D /* GRMustacheTemplateDelegate_v4_2_Test.m */,
+				56C518A515C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m */,
 			);
 			path = v4.2;
 			sourceTree = "<group>";
@@ -1074,6 +1078,7 @@
 				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
 				568FB8E9159F7CA900241D9A /* GRMustacheTemplateDelegate_v4_1_Test.m in Sources */,
 				568E852B15C2A863004DE82D /* GRMustacheTemplateDelegate_v4_2_Test.m in Sources */,
+				56C518A615C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1127,6 +1132,7 @@
 				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
 				568FB8EA159F7CA900241D9A /* GRMustacheTemplateDelegate_v4_1_Test.m in Sources */,
 				568E852C15C2A863004DE82D /* GRMustacheTemplateDelegate_v4_2_Test.m in Sources */,
+				56C518A715C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
