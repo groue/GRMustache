@@ -20,9 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheParserTest.h"
+#import "GRMustachePrivateAPITest.h"
+#import "GRMustacheParser_private.h"
 #import "GRMustacheError.h"
 
+
+@class GRMustacheTokenRecorder;
+
+@interface GRMustacheParserTest : GRMustachePrivateAPITest {
+	GRMustacheParser *parser;
+	GRMustacheTokenRecorder *tokenRecorder;
+}
+@end
 
 @interface GRMustacheTokenRecorder : NSObject<GRMustacheParserDelegate> {
     NSError *_error;

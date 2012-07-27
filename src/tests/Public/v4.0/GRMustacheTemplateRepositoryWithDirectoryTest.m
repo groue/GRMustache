@@ -20,7 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateRepositoryWithDirectoryTest.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_0
+#import "GRMustachePublicAPITest.h"
+
+@interface GRMustacheTemplateRepositoryWithDirectoryTest : GRMustachePublicAPITest
+@end
 
 @implementation GRMustacheTemplateRepositoryWithDirectoryTest
 

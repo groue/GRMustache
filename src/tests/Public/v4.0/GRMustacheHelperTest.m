@@ -20,7 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHelperTest.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_0
+#import "GRMustachePublicAPITest.h"
+
+@interface GRMustacheHelperTest : GRMustachePublicAPITest
+@end
 
 @interface GRMustacheStringHelper : NSObject<GRMustacheHelper>
 @property (nonatomic, copy) NSString *string;

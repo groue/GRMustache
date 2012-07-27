@@ -20,9 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheContextTest.h"
+#import "GRMustachePrivateAPITest.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
+
+@interface GRMustacheContextTest : GRMustachePrivateAPITest
+@end
 
 
 @interface GRKVCRecorder: NSObject {

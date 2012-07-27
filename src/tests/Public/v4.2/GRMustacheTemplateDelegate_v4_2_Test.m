@@ -20,7 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateDelegate_v4_2_Test.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_2
+#import "GRMustachePublicAPITest.h"
+
+@interface GRMustacheTemplateDelegate_v4_2_Test : GRMustachePublicAPITest
+@end
 
 @interface GRMustacheTemplatePrefixDelegate : NSObject<GRMustacheTemplateDelegate>
 @end
