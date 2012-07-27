@@ -33,8 +33,8 @@
 - (NSString *)render
 {
     /**
-     * So, our goal is to format all numbers in the `{{#PERCENT_FORMAT}}` and
-     * `{{#DECIMAL_FORMAT}}` sections of template.mustache.
+     * So, our goal is to format all numbers in the `{{#formatPercent}}` and
+     * `{{#formatDecimal}}` sections of template.mustache.
      * 
      * First, we attach a NSNumberFormatter instance to those sections. This is
      * done by setting NSNumberFormatter instances to corresponding keys in the
@@ -48,15 +48,15 @@
     
     NSMutableDictionary *data = [NSMutableDictionary dictionary];
     
-    // Attach a percent NSNumberFormatter to the "PERCENT_FORMAT" key
+    // Attach a percent NSNumberFormatter to the "formatPercent" key
     NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
     percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-    [data setObject:percentNumberFormatter forKey:@"PERCENT_FORMAT"];
+    [data setObject:percentNumberFormatter forKey:@"formatPercent"];
     
-    // Attach a decimal NSNumberFormatter to the "DECIMAL_FORMAT" key
+    // Attach a decimal NSNumberFormatter to the "formatDecimal" key
     NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
     decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
-    [data setObject:decimalNumberFormatter forKey:@"DECIMAL_FORMAT"];
+    [data setObject:decimalNumberFormatter forKey:@"formatDecimal"];
     
     
     /**
@@ -64,22 +64,20 @@
      * template.
      */
     
-    // Attach a float to the "float" key
     [data setObject:[NSNumber numberWithFloat:0.5] forKey:@"float"];
     
     
     /**
-     * Render. The formatting of numbers will happen in the
-     * GRMustacheTemplateDelegate methods, hereafter.
+     * Render.
      */
     
     NSString *templateString = @"raw: {{float}}\n"
-                               @"{{#PERCENT_FORMAT}}"
+                               @"{{#formatPercent}}"
                                @"percent: {{float}}\n"
-                               @"{{/PERCENT_FORMAT}}"
-                               @"{{#DECIMAL_FORMAT}}"
+                               @"{{/formatPercent}}"
+                               @"{{#formatDecimal}}"
                                @"decimal: {{float}}\n"
-                               @"{{/DECIMAL_FORMAT}}";
+                               @"{{/formatDecimal}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     return [template renderObject:data];
 }
@@ -87,6 +85,11 @@
 @end
 
 
+/**
+ * By conforming to the GRMustacheTemplateDelegate protocol,
+ * NSNumberFormatter instances will be able to observe and alter
+ * the rendering of templates.
+ */
 @interface NSNumberFormatter(GRMustache)<GRMustacheTemplateDelegate>
 @end
 

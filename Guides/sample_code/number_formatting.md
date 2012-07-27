@@ -129,7 +129,6 @@ Here is the rendering code:
      * template.
      */
     
-    // Attach a float to the "float" key
     [data setObject:[NSNumber numberWithFloat:0.5] forKey:@"float"];
     
     
@@ -146,9 +145,9 @@ But we haven't told yet how those number formatters will be used for rendering t
 
 We'll have the NSNumberFormatter class conform to the GRMustacheTemplateDelegate protocol.
 
-As a consequence, GRMustache will give formatters that are attached to Mustache sections the opportunity to hook in the template rendering while rendering those sections.
+As a consequence, GRMustache will give formatters that are attached to Mustache sections the opportunity to hook in the template rendering while rendering those sections. This behavior is described in the [GRMustacheTemplateDelegate](../delegate.md) guide.
 
-We'll implement the `template:willInterpretReturnValueOfInvocation:as:` callback, that is able to tell GRMustache which object it should render: NSNumberFormatter instances will tell GRMustache to render formatted numbers instead of plain numbers.
+We just have to implement the `template:willInterpretReturnValueOfInvocation:as:` callback, that is able to tell GRMustache which object it should render. NSNumberFormatter instances will tell GRMustache to render formatted numbers instead of plain numbers.
 
 Let's first have NSNumberFormatter conform to the GRMustacheTemplateDelegate protocol:
 
