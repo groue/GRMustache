@@ -3,6 +3,16 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v4.2.0
+
+**Section delegates**
+
+When an object that is attached to a Mustache section conforms to the [GRMustacheDelegate protocol](Guides/delegate.md), it can observe and alter the rendering of the inner content of the section, just like the template's delegate.
+
+This provides you with a better way to encapsulate behaviors that, with previous versions of GRMustache, would bloat the one and only delegate of a template.
+
+Section delegates are used in the [number formatting sample code](sample_code/number_formatting.md), where the NSNumberFormatter class is given the opportunity to render formatted numbers.
+
 ## v4.1.1
 
 **Total inline documentation**
