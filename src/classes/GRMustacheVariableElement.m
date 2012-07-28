@@ -21,59 +21,48 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
+#import "GRMustacheValue_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheVariableElement()
-@property (nonatomic, retain) GRMustacheInvocation *invocation;
+@property (nonatomic, retain) id<GRMustacheValue> value;
 @property (nonatomic) BOOL raw;
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw;
+- (id)initWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
-@synthesize invocation=_invocation;
+@synthesize value=_value;
 @synthesize raw=_raw;
 
-+ (id)variableElementWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw
++ (id)variableElementWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw
 {
-    return [[[self alloc] initWithInvocation:invocation raw:raw] autorelease];
+    return [[[self alloc] initWithValue:value raw:raw] autorelease];
 }
 
 - (void)dealloc
 {
-    [_invocation release];
+    [_value release];
     [super dealloc];
 }
 
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
 {
-    // invoke
+    // evaluate
     
-    [_invocation invokeWithContext:context];
-    
-    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [delegate template:rootTemplate willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
-        } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [delegate template:rootTemplate willRenderReturnValueOfInvocation:_invocation];
-        }
-    }
-    
-    id value = _invocation.returnValue;
+    id object = [_value objectForContext:context template:rootTemplate];
     
     
     // interpret
     
     NSString *result = nil;
-    if (value && (value != [NSNull null])) {
-        result = [value description];
+    if (object && (object != [NSNull null])) {
+        result = [object description];
         if (!_raw) {
             result = [self htmlEscape:result];
         }
@@ -81,16 +70,6 @@
     
     
     // finish
-    
-    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [delegate template:rootTemplate didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationVariable];
-        } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [delegate template:rootTemplate didRenderReturnValueOfInvocation:_invocation];
-        }
-    }
     
     if (!result) {
         return @"";
@@ -101,11 +80,11 @@
 
 #pragma mark Private
 
-- (id)initWithInvocation:(GRMustacheInvocation *)invocation raw:(BOOL)raw
+- (id)initWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw
 {
     self = [self init];
     if (self) {
-        self.invocation = invocation;
+        self.value = value;
         self.raw = raw;
     }
     return self;

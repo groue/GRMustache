@@ -22,6 +22,7 @@
 
 #import "GRMustachePrivateAPITest.h"
 #import "GRMustacheParser_private.h"
+#import "GRMustacheExpression_private.h"
 #import "GRMustacheError.h"
 
 
@@ -142,7 +143,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleEscapedVariableTokenWithCompoundKey
@@ -152,7 +154,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleEscapedVariableTokenWithSingleKey
@@ -162,7 +165,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleEscapedVariableTokenWithCompoundKey
@@ -172,7 +176,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleUnescapedVariableTokenWithThreeMustacheWithSingleKey
@@ -182,7 +187,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleUnescapedVariableTokenWithThreeMustacheWithCompoundKey
@@ -192,7 +198,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleUnescapedVariableTokenWithThreeMustacheWithSingleKey
@@ -202,7 +209,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleUnescapedVariableTokenWithThreeMustacheWithCompoundKey
@@ -212,7 +220,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleUnescapedVariableTokenWithAmpersandWithSingleKey
@@ -222,7 +231,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleUnescapedVariableTokenWithAmpersandWithCompoundKey
@@ -232,7 +242,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleUnescapedVariableTokenWithAmpersandWithSingleKey
@@ -242,7 +253,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleUnescapedVariableTokenWithAmpersandWithCompoundKey
@@ -252,7 +264,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleSectionOpeningTokenWithSingleKey
@@ -262,7 +275,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleSectionOpeningTokenWithCompoundKey
@@ -272,7 +286,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleSectionOpeningTokenWithSingleKey
@@ -282,7 +297,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleSectionOpeningTokenWithCompoundKey
@@ -292,7 +308,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleInvertedSectionOpeningTokenWithSingleKey
@@ -302,7 +319,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleInvertedSectionOpeningTokenWithCompoundKey
@@ -312,7 +330,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleInvertedSectionOpeningTokenWithSingleKey
@@ -322,7 +341,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleInvertedSectionOpeningTokenWithCompoundKey
@@ -332,7 +352,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleSectionClosingTokenWithSingleKey
@@ -342,7 +363,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSingleSectionClosingTokenWithCompoundKey
@@ -352,7 +374,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleSectionClosingTokenWithSingleKey
@@ -362,7 +385,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"name"] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]], nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"name"]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSingleSectionClosingTokenWithCompoundKey
@@ -372,7 +396,8 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
-    STAssertTrue(([[NSArray arrayWithObjects:@"foo", @"bar", nil] isEqualToArray:[tokenRecorder tokenValueAtIndex:0]]), nil);
+    GRMustacheKeyPathExpression *expression = [GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObjects:@"foo", @"bar", nil]];
+    STAssertEqualObjects(expression, [tokenRecorder tokenValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSinglePartialTokenWithoutExtension
@@ -448,22 +473,22 @@
     STAssertEqualObjects(@"comment", [tokenRecorder tokenValueAtIndex:1], nil);
     
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:2], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"escaped_variable"] isEqualToArray:[tokenRecorder tokenValueAtIndex:2]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"escaped_variable"]], [tokenRecorder tokenValueAtIndex:2], nil);
     
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:3], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"unescaped_variable_1"] isEqualToArray:[tokenRecorder tokenValueAtIndex:3]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"unescaped_variable_1"]], [tokenRecorder tokenValueAtIndex:3], nil);
     
     STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:4], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"unescaped_variable_2"] isEqualToArray:[tokenRecorder tokenValueAtIndex:4]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"unescaped_variable_2"]], [tokenRecorder tokenValueAtIndex:4], nil);
     
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:5], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"section_opening"] isEqualToArray:[tokenRecorder tokenValueAtIndex:5]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"section_opening"]], [tokenRecorder tokenValueAtIndex:5], nil);
     
     STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:6], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"inverted_section_opening"] isEqualToArray:[tokenRecorder tokenValueAtIndex:6]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"inverted_section_opening"]], [tokenRecorder tokenValueAtIndex:6], nil);
     
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:7], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"section_closing"] isEqualToArray:[tokenRecorder tokenValueAtIndex:7]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"section_closing"]], [tokenRecorder tokenValueAtIndex:7], nil);
     
     STAssertEquals(GRMustacheTokenTypePragma, [tokenRecorder tokenTypeAtIndex:8], nil);
     STAssertEqualObjects(@"pragma", [tokenRecorder tokenValueAtIndex:8], nil);
@@ -487,23 +512,23 @@
     STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:1], nil);
     
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:2], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"start"] isEqualToArray:[tokenRecorder tokenValueAtIndex:2]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"start"]], [tokenRecorder tokenValueAtIndex:2], nil);
     
     STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:3], nil);
     
     STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:4], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"middle"] isEqualToArray:[tokenRecorder tokenValueAtIndex:4]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"middle"]], [tokenRecorder tokenValueAtIndex:4], nil);
     
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:5], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"item"] isEqualToArray:[tokenRecorder tokenValueAtIndex:5]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"item"]], [tokenRecorder tokenValueAtIndex:5], nil);
     
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:6], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"middle"] isEqualToArray:[tokenRecorder tokenValueAtIndex:6]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"middle"]], [tokenRecorder tokenValueAtIndex:6], nil);
     
     STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:7], nil);
     
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:8], nil);
-    STAssertTrue([[NSArray arrayWithObject:@"final"] isEqualToArray:[tokenRecorder tokenValueAtIndex:8]], nil);
+    STAssertEqualObjects([GRMustacheKeyPathExpression expressionWithKeys:[NSArray arrayWithObject:@"final"]], [tokenRecorder tokenValueAtIndex:8], nil);
     
     STAssertEquals(GRMustacheTokenTypeText, [tokenRecorder tokenTypeAtIndex:9], nil);
     STAssertEqualObjects(@">", [tokenRecorder tokenValueAtIndex:9], nil);

@@ -20,45 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTextElement_private.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_2
+#import "GRMustachePublicAPITest.h"
 
-
-@interface GRMustacheTextElement()
-@property (nonatomic, retain) NSString *text;
-- (id)initWithString:(NSString *)text;
+@interface GRMustacheFilterTest : GRMustachePublicAPITest
 @end
 
+@implementation GRMustacheFilterTest
 
-@implementation GRMustacheTextElement
-@synthesize text=_text;
-
-+ (id)textElementWithString:(NSString *)text
+- (void)testFilter
 {
-    return [[[self alloc] initWithString:text] autorelease];
-}
-
-- (void)dealloc
-{
-    [_text release];
-    [super dealloc];
-}
-
-#pragma mark <GRMustacheRenderingElement>
-
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
-{
-    return _text;
-}
-
-#pragma mark Private
-
-- (id)initWithString:(NSString *)text
-{
-    self = [self init];
-    if (self) {
-        self.text = text;
-    }
-    return self;
+    id<GRMustacheFilter> uppercaseFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [[value description] uppercaseString];
+    }];
+    id<GRMustacheFilter> prefixFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [NSString stringWithFormat:@"prefix%@", [value description]];
+    }];
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          uppercaseFilter, @"uppercase",
+                          prefixFilter, @"prefix",
+                          @"Name", @"name",
+                          nil];
+    
+    NSString *templateString = @"{{%FILTERS}}{{name}} {{name|prefix}} {{name|uppercase}} {{name|uppercase|prefix}} {{name|prefix|uppercase}}";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"Name prefixName NAME prefixNAME PREFIXNAME", nil);
 }
 
 @end

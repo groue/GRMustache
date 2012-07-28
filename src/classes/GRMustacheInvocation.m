@@ -37,7 +37,7 @@
     BOOL _implicitIterator;
     NSString *_key;
 }
-- (id)initWithToken:(GRMustacheToken *)token;
+- (id)initWithKey:(NSString *)key token:(GRMustacheToken *)token;
 @end
 
 
@@ -54,7 +54,7 @@
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
-- (id)initWithToken:(GRMustacheToken *)token;
+- (id)initWithKeys:(NSArray *)keys token:(GRMustacheToken *)token;
 @end
 
 
@@ -69,16 +69,12 @@
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
-+ (id)invocationWithToken:(GRMustacheToken *)token
++ (id)invocationWithKeys:(NSArray *)keys token:(GRMustacheToken *)token
 {
-    // Token validation
-    NSAssert([token.value.keys isKindOfClass:[NSArray class]], @"WTF");
-    NSAssert(token.value.keys.count > 0, @"WTF");
-    
-    if (token.value.keys.count > 1) {
-        return [[[GRMustacheInvocationKeyPath alloc] initWithToken:token] autorelease];
+    if (keys.count > 1) {
+        return [[[GRMustacheInvocationKeyPath alloc] initWithKeys:keys token:token] autorelease];
     } else {
-        return [[[GRMustacheInvocationKey alloc] initWithToken:token] autorelease];
+        return [[[GRMustacheInvocationKey alloc] initWithKey:[keys lastObject] token:token] autorelease];
     }
 }
 
@@ -126,11 +122,11 @@
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token
+- (id)initWithKey:(NSString *)key token:(GRMustacheToken *)token
 {
     self = [super initWithToken:token];
     if (self) {
-        _key = [[token.value.keys lastObject] retain];
+        _key = [key retain];
         _implicitIterator = [_key isEqualToString:@"."];
     }
     return self;
@@ -165,11 +161,11 @@
     [super dealloc];
 }
 
-- (id)initWithToken:(GRMustacheToken *)token
+- (id)initWithKeys:(NSArray *)keys token:(GRMustacheToken *)token
 {
     self = [super initWithToken:token];
     if (self) {
-        _keys = [token.value.keys retain];
+        _keys = [keys retain];
         BOOL *actualKey = _actualKey = malloc(_keys.count*sizeof(BOOL));
         for (NSString *key in _keys) {
             *(actualKey++) = ![key isEqualToString:@"."];

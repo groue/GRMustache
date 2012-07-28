@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+@protocol GRMustacheExpression;
 
 /**
  * The kinds of tokens
@@ -87,7 +88,7 @@ typedef enum {
 typedef union {
     id object;
     NSString *text;
-    NSArray *keys;
+    id<GRMustacheExpression> expression;
     NSString *partialName;
     NSString *pragma;
 } GRMustacheTokenValue;
@@ -131,11 +132,10 @@ typedef union {
  * For tokens whose type is
  * GRMustacheTokenTypeEscapedVariable, GRMustacheTokenTypeUnescapedVariable,
  * GRMustacheTokenTypeSectionOpening, GRMustacheTokenTypeInvertedSectionOpening,
- * GRMustacheTokenTypeSectionClosing, value.keys is an array of identifier
- * strings.
+ * GRMustacheTokenTypeSectionClosing, value.expression is an expression.
  *
  * For instance, a token of type GRMustacheTokenTypeEscapedVariable and
- * invocation keys ['foo', 'bar'] represents a `{{ foo.bar }}` tag.
+ * expression 'foo' represents a `{{ foo }}` tag.
  *
  * For tokens of type GRMustacheTokenTypePartial, the value.partialName is the
  * name of a partial template.

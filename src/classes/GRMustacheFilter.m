@@ -20,44 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHelper_private.h"
+#import "GRMustacheFilter.h"
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockHelper
+#pragma mark - Private concrete class GRMustacheBlockFilter
 
 #if NS_BLOCKS_AVAILABLE
 
 /**
- * Private subclass of GRMustacheHelper that render sections by calling a block.
+ * Private subclass of GRMustacheFilter that filter values by calling a block.
  */
-@interface GRMustacheBlockHelper: GRMustacheHelper {
+@interface GRMustacheBlockFilter: GRMustacheFilter {
 @private
-    NSString *(^_block)(GRMustacheSection* section);
+    id(^_block)(id value);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block;
+- (id)initWithBlock:(id(^)(id value))block;
 @end
 
 #endif /* if NS_BLOCKS_AVAILABLE */
 
 
 // =============================================================================
-#pragma mark - GRMustacheHelper
+#pragma mark - GRMustacheFilter
 
-@implementation GRMustacheHelper
+@implementation GRMustacheFilter
 
 #if NS_BLOCKS_AVAILABLE
 
-+ (id<GRMustacheHelper>)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
++ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block
 {
-    return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheBlockFilter alloc] initWithBlock:block] autorelease];
 }
 
 #endif /* if NS_BLOCKS_AVAILABLE */
 
-#pragma mark <GRMustacheHelper>
+#pragma mark <GRMustacheFilter>
 
-- (NSString *)renderSection:(GRMustacheSection *)section
+- (id)transformedValue:(id)value
 {
     NSAssert(NO, @"abstract method");
     return nil;
@@ -67,13 +67,13 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockHelper
+#pragma mark - Private concrete class GRMustacheBlockFilter
 
 #if NS_BLOCKS_AVAILABLE
 
-@implementation GRMustacheBlockHelper
+@implementation GRMustacheBlockFilter
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block
+- (id)initWithBlock:(id(^)(id value))block
 {
     self = [self init];
     if (self) {
@@ -89,14 +89,14 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheHelper>
+#pragma mark <GRMustacheFilter>
 
-- (NSString *)renderSection:(GRMustacheSection *)section
+- (id)transformedValue:(id)value
 {
-    NSString *result = nil;
+    id result = nil;
     
     if (_block) {
-        result = _block(section);
+        result = _block(value);
     }
     
     return result;

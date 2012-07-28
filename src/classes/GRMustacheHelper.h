@@ -94,7 +94,7 @@
  *
  * @since v2.0
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
++ (id<GRMustacheHelper>)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end
 
 #endif /* if NS_BLOCKS_AVAILABLE */

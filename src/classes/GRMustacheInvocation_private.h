@@ -66,9 +66,10 @@
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
 /**
- * Builds an invocation from a token.
+ * Builds an invocation from a key path and a token.
  *
- * @param token   A token
+ * @param keys  A key path
+ * @param token       A token
  *
  * @return an invocation
  *
@@ -76,7 +77,7 @@
  * @see GRMustacheToken
  * @see GRMustacheTemplateDelegate
  */
-+ (id)invocationWithToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
++ (id)invocationWithKeys:(NSArray *)keys token:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs key lookup in the context stack, and sets the return value.

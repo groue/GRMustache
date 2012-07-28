@@ -45,7 +45,6 @@
     id _sectionElement;
     id _renderingContext;
     id _rootTemplate;
-    id _delegates;
 }
 
 

@@ -23,38 +23,18 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheSectionElement;
 @class GRMustacheContext;
-@class GRMustacheTemplate;
+@class GRMustacheValue;
 
-// Documented in GRMustacheSection.h
-@interface GRMustacheSection: NSObject {
-@private
-    GRMustacheSectionElement *_sectionElement;
-    GRMustacheContext *_renderingContext;
-    GRMustacheTemplate *_rootTemplate;
-}
+@protocol GRMustacheExpression <NSObject>
+@end
 
-// Documented in GRMustacheSection.h
-@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext GRMUSTACHE_API_PUBLIC;
+@interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression>
+@property (nonatomic, retain, readonly) NSArray *keys GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
+@end
 
-// Documented in GRMustacheSection.h
-@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheSection.h
-- (NSString *)render GRMUSTACHE_API_PUBLIC;
-
-/**
- * Builds and returns a section suitable for GRMustacheHelper.
- *
- * @param sectionElement    The underlying sectionElement
- * @param renderingContext  The rendering context exposed to the library user
- * @param rootTemplate      A template whose delegate methods should be called
- *                          whenever relevant.
- *
- * @return A section.
- *
- * @see GRMustacheHelper
- */
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
+@interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
+@property (nonatomic, retain, readonly) NSArray *expressions GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithExpressions:(NSArray *)expressions GRMUSTACHE_API_INTERNAL;
 @end

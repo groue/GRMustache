@@ -61,9 +61,8 @@
  * @param context       A context stack.
  * @param rootTemplate  A template whose delegate methods should be called
  *                      whenever relevant.
- * @param delegates     An array of delegates that should be invoked
  *
  * @return The rendering of _context_.
  */
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
 @end

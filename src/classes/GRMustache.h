@@ -95,6 +95,7 @@ typedef struct {
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateRepository.h"
+#import "GRMustacheFilter.h"
 #import "GRMustacheHelper.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"

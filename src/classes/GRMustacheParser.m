@@ -22,6 +22,7 @@
 
 #import "GRMustacheParser_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheExpression_private.h"
 
 @interface GRMustacheParser()
 
@@ -36,6 +37,11 @@
  * with "change delimiter" tags such as `{{=< >=}}`.
  */
 @property (nonatomic, copy) NSString *ctag;
+
+/**
+ * TODO
+ */
+@property (nonatomic) BOOL pragmaFilter;
 
 /**
  * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
@@ -68,13 +74,13 @@
 - (NSRange)rangeOfString:(NSString *)needle inTemplateString:(NSString *)haystack startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 
 /**
- * Returns an array of keys from the inner string of a tag.
+ * Returns an expression from the inner string of a tag.
  *
  * @param innerTagString  the inner string of a tag.
  *
- * @return an Array of keys, or nil if the parsing fails.
+ * @return an expression, or nil if the parsing fails.
  */
-- (NSArray *)parseKeyPath:(NSString *)innerTagString;
+- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString;
 
 /**
  * Returns a partial name from the inner string of a tag.
@@ -99,6 +105,7 @@
 @synthesize delegate=_delegate;
 @synthesize otag=_otag;
 @synthesize ctag=_ctag;
+@synthesize pragmaFilter=_pragmaFilter;
 
 - (id)init
 {
@@ -220,13 +227,13 @@
                 break;
                 
             case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
-                NSArray *keys = [self parseKeyPath:tag];
-                if (!keys) {
-                    [self failWithParseErrorAtLine:line description:@"Invalid identifier" templateID:templateID];
+                id<GRMustacheExpression> expression = [self parseExpression:tag];
+                if (!expression) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
                     return;
                 }
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-                                                 value:(GRMustacheTokenValue){ .keys = keys }
+                                                 value:(GRMustacheTokenValue){ .expression = expression }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
@@ -237,13 +244,13 @@
             case GRMustacheTokenTypeInvertedSectionOpening:
             case GRMustacheTokenTypeSectionClosing:
             case GRMustacheTokenTypeUnescapedVariable: {
-                NSArray *keys = [self parseKeyPath:[tag substringFromIndex:1]];   // strip initial '#', '^' etc.
-                if (!keys) {
-                    [self failWithParseErrorAtLine:line description:@"Invalid identifier" templateID:templateID];
+                id<GRMustacheExpression> expression = [self parseExpression:[tag substringFromIndex:1]];   // strip initial '#', '^' etc.
+                if (!expression) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
                     return;
                 }
                 token = [GRMustacheToken tokenWithType:tokenType
-                                                 value:(GRMustacheTokenValue){ .keys = keys }
+                                                 value:(GRMustacheTokenValue){ .expression = expression }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
@@ -297,6 +304,9 @@
                 if (pragma == nil) {
                     [self failWithParseErrorAtLine:line description:@"Invalid pragma" templateID:templateID];
                     return;
+                }
+                if ([pragma isEqualToString:@"FILTERS"]) {
+                    self.pragmaFilter = YES;
                 }
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePragma
                                                  value:(GRMustacheTokenValue){ .pragma = pragma }
@@ -371,8 +381,24 @@
     return NSMakeRange(NSNotFound, 0);
 }
 
-- (NSArray *)parseKeyPath:(NSString *)innerTagString
+- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString
 {
+    if (self.pragmaFilter) {
+        // split "a|b" into "a" and "b"
+        NSArray *chunks = [innerTagString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"|"]];
+        if (chunks.count > 1) {
+            NSMutableArray *expressions = [NSMutableArray arrayWithCapacity:chunks.count];
+            for (NSString *chunk in chunks) {
+                id<GRMustacheExpression> expression = [self parseExpression:chunk];
+                if (expression == nil) {
+                    return nil;
+                }
+                [expressions addObject:expression];
+            }
+            return [GRMustacheFilterChainExpression expressionWithExpressions:expressions];
+        }
+    }
+    
     NSMutableArray *keys = [NSMutableArray array];
     
     enum {
@@ -531,7 +557,7 @@
             return nil;
             
         case stateValid:
-            return keys;
+            return [GRMustacheKeyPathExpression expressionWithKeys:keys];
             
         default:
             NSAssert(NO, @"WTF");
