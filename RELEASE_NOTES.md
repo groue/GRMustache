@@ -11,7 +11,7 @@ When an object that is attached to a Mustache section conforms to the [GRMustach
 
 This provides you with a better way to encapsulate behaviors that, with previous versions of GRMustache, would bloat the one and only delegate of a template.
 
-Section delegates are used in the [number formatting sample code](sample_code/number_formatting.md), where the NSNumberFormatter class is given the opportunity to render formatted numbers.
+Section delegates are used in the [number formatting sample code](Guides/sample_code/number_formatting.md), where the NSNumberFormatter class is given the opportunity to render formatted numbers.
 
 ## v4.1.1
 
