@@ -414,12 +414,32 @@
     STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:0], nil);
 }
 
-- (void)testParserParsesTokenSuite
+- (void)testParserParsesSinglePragmaToken
 {
-    NSString *templateString = @"<{{!comment}}{{escaped_variable}}{{{unescaped_variable_1}}}{{&unescaped_variable_2}}{{#section_opening}}{{^inverted_section_opening}}{{/section_closing}}{{=< >=}}>";
+    NSString *templateString = @"{{%name}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)10, tokenRecorder.tokenCount, nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypePragma, [tokenRecorder tokenTypeAtIndex:0], nil);
+    STAssertEqualObjects(@"name", [tokenRecorder tokenValueAtIndex:0], nil);
+}
+
+- (void)testParserTrimsSinglePragmaToken
+{
+    NSString *templateString = @"{{% \n\tname \n\t}}";
+    [parser parseTemplateString:templateString templateID:nil];
+    STAssertNil(tokenRecorder.error, nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypePragma, [tokenRecorder tokenTypeAtIndex:0], nil);
+    STAssertEqualObjects(@"name", [tokenRecorder tokenValueAtIndex:0], nil);
+}
+
+- (void)testParserParsesTokenSuite
+{
+    NSString *templateString = @"<{{!comment}}{{escaped_variable}}{{{unescaped_variable_1}}}{{&unescaped_variable_2}}{{#section_opening}}{{^inverted_section_opening}}{{/section_closing}}{{%pragma}}{{=< >=}}>";
+    [parser parseTemplateString:templateString templateID:nil];
+    STAssertNil(tokenRecorder.error, nil);
+    STAssertEquals((NSUInteger)11, tokenRecorder.tokenCount, nil);
     
     STAssertEquals(GRMustacheTokenTypeText, [tokenRecorder tokenTypeAtIndex:0], nil);
     STAssertEqualObjects(@"<", [tokenRecorder tokenValueAtIndex:0], nil);
@@ -445,10 +465,13 @@
     STAssertEquals(GRMustacheTokenTypeSectionClosing, [tokenRecorder tokenTypeAtIndex:7], nil);
     STAssertTrue([[NSArray arrayWithObject:@"section_closing"] isEqualToArray:[tokenRecorder tokenValueAtIndex:7]], nil);
     
-    STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:8], nil);
+    STAssertEquals(GRMustacheTokenTypePragma, [tokenRecorder tokenTypeAtIndex:8], nil);
+    STAssertEqualObjects(@"pragma", [tokenRecorder tokenValueAtIndex:8], nil);
+    
+    STAssertEquals(GRMustacheTokenTypeSetDelimiter, [tokenRecorder tokenTypeAtIndex:9], nil);
 
-    STAssertEquals(GRMustacheTokenTypeText, [tokenRecorder tokenTypeAtIndex:9], nil);
-    STAssertEqualObjects(@">", [tokenRecorder tokenValueAtIndex:9], nil);
+    STAssertEquals(GRMustacheTokenTypeText, [tokenRecorder tokenTypeAtIndex:10], nil);
+    STAssertEqualObjects(@">", [tokenRecorder tokenValueAtIndex:10], nil);
 }
 
 - (void)testSetDelimiterTokensChain

@@ -77,6 +77,11 @@ typedef enum {
      * The kind of tokens representing delimiters tags such as `{{=< >=}}`.
      */
     GRMustacheTokenTypeSetDelimiter,
+    
+    /**
+     * The kind of tokens representing pragma tags such as `{{%FILTERS}}`.
+     */
+    GRMustacheTokenTypePragma,
 } GRMustacheTokenType;
 
 typedef union {
@@ -84,6 +89,7 @@ typedef union {
     NSString *text;
     NSArray *keys;
     NSString *partialName;
+    NSString *pragma;
 } GRMustacheTokenValue;
 
 /**
@@ -136,6 +142,12 @@ typedef union {
  *
  * For instance, a token of type GRMustacheTokenTypePartial and partial name
  * 'profile' represents a `{{> profile }}` tag.
+ *
+ * For tokens of type GRMustacheTokenTypePragma, the value.pragma is the
+ * name of the pragma.
+ *
+ * For instance, a token of type GRMustacheTokenTypePragma and partial name
+ * 'FILTER' represents a `{{% FILTER }}` tag.
  *
  * Tokens of type GRMustacheTokenTypeSetDelimiter do not have any value.
  */

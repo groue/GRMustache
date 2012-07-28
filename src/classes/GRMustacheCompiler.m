@@ -176,6 +176,9 @@
             // Ignore
             break;
             
+        case GRMustacheTokenTypePragma:
+            // Ignore
+            break;
             
         case GRMustacheTokenTypeText:
             // Parser validation

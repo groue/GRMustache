@@ -81,9 +81,18 @@
  *
  * @param innerTagString  the inner string of a tag.
  *
- * @return a partial name, or nil if the string is not an identifier.
+ * @return a partial name, or nil if the string is not a partial name.
  */
 - (NSString *)parsePartialName:(NSString *)innerTagString;
+
+/**
+ * Returns a pragma from the inner string of a tag.
+ *
+ * @param innerTagString  the inner string of a tag.
+ *
+ * @return a pragma, or nil if the string is not a pragma.
+ */
+- (NSString *)parsePragma:(NSString *)innerTagString;
 @end
 
 @implementation GRMustacheParser
@@ -129,6 +138,7 @@
         ['='] = GRMustacheTokenTypeSetDelimiter,
         ['{'] = GRMustacheTokenTypeUnescapedVariable,
         ['&'] = GRMustacheTokenTypeUnescapedVariable,
+        ['%'] = GRMustacheTokenTypePragma,
     };
     static const int tokenTypeForCharacterLength = sizeof(tokenTypeForCharacter) / sizeof(GRMustacheTokenType);
     
@@ -246,7 +256,7 @@
                     [self failWithParseErrorAtLine:line description:@"Invalid partial name" templateID:templateID];
                     return;
                 }
-                token = [GRMustacheToken tokenWithType:tokenType
+                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
                                                  value:(GRMustacheTokenValue){ .partialName = partialName }
                                         templateString:templateString
                                             templateID:templateID
@@ -254,7 +264,7 @@
                                                  range:tokenRange];
             } break;
                 
-            case GRMustacheTokenTypeSetDelimiter:
+            case GRMustacheTokenTypeSetDelimiter: {
                 if ([tag characterAtIndex:tag.length-1] != '=') {
                     [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;
@@ -280,7 +290,21 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange];
-                break;
+            } break;
+                
+            case GRMustacheTokenTypePragma: {
+                NSString *pragma = [self parsePragma:[tag substringFromIndex:1]];   // strip initial '>'
+                if (pragma == nil) {
+                    [self failWithParseErrorAtLine:line description:@"Invalid pragma" templateID:templateID];
+                    return;
+                }
+                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePragma
+                                                 value:(GRMustacheTokenValue){ .pragma = pragma }
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange];
+            } break;
                 
             case GRMustacheTokenTypeText:
                 NSAssert(NO, @"");
@@ -524,6 +548,15 @@
         return nil;
     }
     return partialName;
+}
+
+- (NSString *)parsePragma:(NSString *)innerTagString
+{
+    NSString *pragma = [innerTagString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (pragma.length == 0) {
+        return nil;
+    }
+    return pragma;
 }
 
 @end
