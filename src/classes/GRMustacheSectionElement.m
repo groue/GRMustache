@@ -24,7 +24,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheValue_private.h"
-#import "GRMustacheHelper_private.h"
+#import "GRMustacheHelper.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheSection_private.h"
@@ -113,7 +113,8 @@
         
         // evaluate
         
-        id object = [_value objectForContext:context template:rootTemplate];
+        [_value prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+        id object = _value.invocation.returnValue;
         
         
         // interpret
@@ -173,6 +174,12 @@
                 result = [[self renderElementsWithContext:innerContext forTemplate:rootTemplate] retain];
             }
         }
+        
+        
+        // Finish
+        
+        [_value finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+
     }
     if (!result) {
         return @"";

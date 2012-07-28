@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilter.h"
+#import "GRMustacheInvocation.h"
 
 
 // =============================================================================
@@ -31,7 +32,7 @@
 /**
  * Private subclass of GRMustacheFilter that filter values by calling a block.
  */
-@interface GRMustacheBlockFilter: GRMustacheFilter {
+@interface GRMustacheBlockFilter: GRMustacheFilter<GRMustacheTemplateDelegate> {
 @private
     id(^_block)(id value);
 }
@@ -48,20 +49,12 @@
 
 #if NS_BLOCKS_AVAILABLE
 
-+ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block
++ (id)filterWithBlock:(id(^)(id value))block
 {
     return [[[GRMustacheBlockFilter alloc] initWithBlock:block] autorelease];
 }
 
 #endif /* if NS_BLOCKS_AVAILABLE */
-
-#pragma mark <GRMustacheFilter>
-
-- (id)transformedValue:(id)value
-{
-    NSAssert(NO, @"abstract method");
-    return nil;
-}
 
 @end
 
@@ -89,17 +82,13 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheFilter>
+#pragma mark <GRMustacheTemplateDelegate>
 
-- (id)transformedValue:(id)value
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
-    id result = nil;
-    
     if (_block) {
-        result = _block(value);
+        invocation.returnValue = _block(invocation.returnValue);
     }
-    
-    return result;
 }
 
 @end

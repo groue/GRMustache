@@ -55,7 +55,8 @@
 {
     // evaluate
     
-    id object = [_value objectForContext:context template:rootTemplate];
+    [_value prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
+    id object = _value.invocation.returnValue;
     
     
     // interpret
@@ -70,6 +71,8 @@
     
     
     // finish
+    
+    [_value finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
     
     if (!result) {
         return @"";

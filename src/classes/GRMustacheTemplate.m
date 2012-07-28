@@ -22,7 +22,6 @@
 
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheHelper_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheTemplate()
@@ -179,6 +178,28 @@
         result = [[self renderContext:context forTemplate:self] retain];
     }
     return [result autorelease];
+}
+
+- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+{
+    if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+        // 4.1 API
+        [delegate template:self willInterpretReturnValueOfInvocation:invocation as:interpretation];
+    } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+        // 4.0 API
+        [delegate template:self willRenderReturnValueOfInvocation:invocation];
+    }
+}
+
+- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+{
+    if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+        // 4.1 API
+        [delegate template:self didInterpretReturnValueOfInvocation:invocation as:interpretation];
+    } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+        // 4.0 API
+        [delegate template:self didRenderReturnValueOfInvocation:invocation];
+    }
 }
 
 

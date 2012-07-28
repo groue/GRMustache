@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHelper_private.h"
+#import "GRMustacheHelper.h"
 
 
 // =============================================================================
@@ -48,7 +48,7 @@
 
 #if NS_BLOCKS_AVAILABLE
 
-+ (id<GRMustacheHelper>)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
     return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
 }

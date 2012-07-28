@@ -30,10 +30,10 @@
 
 - (void)testFilter
 {
-    id<GRMustacheFilter> uppercaseFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+    id uppercaseFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
         return [[value description] uppercaseString];
     }];
-    id<GRMustacheFilter> prefixFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+    id prefixFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
         return [NSString stringWithFormat:@"prefix%@", [value description]];
     }];
     

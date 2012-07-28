@@ -155,8 +155,6 @@
 		56DEC2D7152631300031E8DC /* GRMustacheHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC29F152631300031E8DC /* GRMustacheHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC2D8152631300031E8DC /* GRMustacheHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2A0152631300031E8DC /* GRMustacheHelper.m */; };
 		56DEC2D9152631300031E8DC /* GRMustacheHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2A0152631300031E8DC /* GRMustacheHelper.m */; };
-		56DEC2DA152631300031E8DC /* GRMustacheHelper_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2A1152631300031E8DC /* GRMustacheHelper_private.h */; settings = {ATTRIBUTES = (); }; };
-		56DEC2DB152631300031E8DC /* GRMustacheHelper_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2A1152631300031E8DC /* GRMustacheHelper_private.h */; settings = {ATTRIBUTES = (); }; };
 		56DEC2DC152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2A2152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m */; };
 		56DEC2DD152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DEC2A2152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m */; };
 		56DEC2DE152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DEC2A3152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h */; settings = {ATTRIBUTES = (); }; };
@@ -320,7 +318,6 @@
 		56DEC29E152631300031E8DC /* GRMustacheInvocation_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInvocation_private.h; sourceTree = "<group>"; };
 		56DEC29F152631300031E8DC /* GRMustacheHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelper.h; sourceTree = "<group>"; };
 		56DEC2A0152631300031E8DC /* GRMustacheHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelper.m; sourceTree = "<group>"; };
-		56DEC2A1152631300031E8DC /* GRMustacheHelper_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheHelper_private.h; sourceTree = "<group>"; };
 		56DEC2A2152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheNSUndefinedKeyExceptionGuard.m; sourceTree = "<group>"; };
 		56DEC2A3152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheNSUndefinedKeyExceptionGuard_private.h; sourceTree = "<group>"; };
 		56DEC2A6152631300031E8DC /* GRMustacheRenderingElement_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRenderingElement_private.h; sourceTree = "<group>"; };
@@ -692,7 +689,6 @@
 				567C1A1615C41F420044C91F /* GRMustacheFilter.h */,
 				567C1A1715C41F420044C91F /* GRMustacheFilter.m */,
 				56DEC29F152631300031E8DC /* GRMustacheHelper.h */,
-				56DEC2A1152631300031E8DC /* GRMustacheHelper_private.h */,
 				56DEC2A0152631300031E8DC /* GRMustacheHelper.m */,
 				56DEC29C152631300031E8DC /* GRMustacheInvocation.h */,
 				56DEC29E152631300031E8DC /* GRMustacheInvocation_private.h */,
@@ -805,7 +801,6 @@
 				56DEC2D0152631300031E8DC /* GRMustacheInvocation.h in Headers */,
 				56DEC2D4152631300031E8DC /* GRMustacheInvocation_private.h in Headers */,
 				56DEC2D6152631300031E8DC /* GRMustacheHelper.h in Headers */,
-				56DEC2DA152631300031E8DC /* GRMustacheHelper_private.h in Headers */,
 				56DEC2DE152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */,
 				56DEC2E4152631300031E8DC /* GRMustacheRenderingElement_private.h in Headers */,
 				56DEC2EA152631300031E8DC /* GRMustacheSectionElement_private.h in Headers */,
@@ -842,7 +837,6 @@
 				56DEC2D1152631300031E8DC /* GRMustacheInvocation.h in Headers */,
 				56DEC2D5152631300031E8DC /* GRMustacheInvocation_private.h in Headers */,
 				56DEC2D7152631300031E8DC /* GRMustacheHelper.h in Headers */,
-				56DEC2DB152631300031E8DC /* GRMustacheHelper_private.h in Headers */,
 				56DEC2DF152631300031E8DC /* GRMustacheNSUndefinedKeyExceptionGuard_private.h in Headers */,
 				56DEC2E5152631300031E8DC /* GRMustacheRenderingElement_private.h in Headers */,
 				56DEC2EB152631300031E8DC /* GRMustacheSectionElement_private.h in Headers */,

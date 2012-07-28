@@ -22,7 +22,6 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheHelper_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheTemplate_private.h"
 

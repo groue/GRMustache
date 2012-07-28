@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheContext;
 @class GRMustacheTemplate;
@@ -30,7 +31,9 @@
 
 @protocol GRMustacheValue <NSObject>
 @required
-- (id)objectForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheInvocation *invocation GRMUSTACHE_API_INTERNAL;
+- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 @end
 
 @interface GRMustacheKeyPathValue : NSObject<GRMustacheValue>

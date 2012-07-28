@@ -22,7 +22,8 @@
 
 #import "GRMustacheValue_private.h"
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheFilter.h"
+#import "GRMustacheTemplate_private.h"
+#import "GRMustacheTemplateDelegate.h"
 
 
 // =============================================================================
@@ -63,10 +64,16 @@
 
 #pragma mark GRMustacheValue
 
-- (id)objectForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate;
+- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
     [_invocation invokeWithContext:context];
-    return [[_invocation.returnValue retain] autorelease];
+    [rootTemplate invokeDelegate:rootTemplate.delegate willInterpretReturnValueOfInvocation:_invocation as:interpretation];
+}
+
+- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+{
+    [rootTemplate invokeDelegate:rootTemplate.delegate didInterpretReturnValueOfInvocation:_invocation as:interpretation];
+    _invocation.returnValue = nil;
 }
 
 @end
@@ -79,6 +86,7 @@
 @property (nonatomic, retain) id<GRMustacheValue> filteredValue;
 @property (nonatomic, retain) NSArray *filterValues;
 @property (nonatomic, retain) GRMustacheToken *token;
+@property (nonatomic, retain) GRMustacheInvocation *invocation;
 - (id)initWithToken:(GRMustacheToken *)token filteredValue:(id<GRMustacheValue>)filteredValue filterValues:(NSArray *)filterValues;
 @end
 
@@ -86,6 +94,7 @@
 @synthesize filteredValue = _filteredValue;
 @synthesize filterValues = _filterValues;
 @synthesize token = _token;
+@synthesize invocation = _invocation;
 
 + (id)valueWithToken:(GRMustacheToken *)token filteredValue:(id<GRMustacheValue>)filteredValue filterValues:(NSArray *)filterValues
 {
@@ -97,6 +106,7 @@
     [_token release];
     [_filteredValue release];
     [_filterValues release];
+    [_invocation release];
     [super dealloc];
 }
 
@@ -114,16 +124,31 @@
 
 #pragma mark GRMustacheValue
 
-- (id)objectForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate;
+- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
-    id object = [_filteredValue objectForContext:context template:rootTemplate];
+    [_filteredValue prepareForContext:context template:rootTemplate interpretation:interpretation];
+    self.invocation = _filteredValue.invocation;
     
     for (id<GRMustacheValue> filterValue in _filterValues) {
-        id<GRMustacheFilter> filter = [filterValue objectForContext:context template:rootTemplate];
-        object = [filter transformedValue:object];
+        [filterValue prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
+        GRMustacheInvocation *filterInvocation = filterValue.invocation;
+        id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
+        [rootTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+    }
+}
+
+- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+{
+    for (id<GRMustacheValue> filterValue in _filterValues) {
+        GRMustacheInvocation *filterInvocation = filterValue.invocation;
+        id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
+        [rootTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+        [filterValue finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
     }
     
-    return [[object retain] autorelease];
+    [_filteredValue finishForContext:context template:rootTemplate interpretation:interpretation];
+    self.invocation = nil;
 }
+
 
 @end

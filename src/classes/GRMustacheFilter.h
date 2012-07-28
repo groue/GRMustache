@@ -22,30 +22,18 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-
-
-// =============================================================================
-#pragma mark - <GRMustacheFilter>
-
-@protocol GRMustacheFilter <NSObject>
-- (id)transformedValue:(id)value;
-@end
-
-
-// =============================================================================
-#pragma mark - NSValueTransformer(GRMustache)
-
-@interface NSValueTransformer(GRMustache)<GRMustacheFilter>
-@end
+#import "GRMustacheTemplateDelegate.h"
 
 
 // =============================================================================
 #pragma mark - GRMustacheFilter
 
+@interface GRMustacheFilter : NSObject<GRMustacheTemplateDelegate>
+
 #if NS_BLOCKS_AVAILABLE
 
-@interface GRMustacheFilter : NSObject<GRMustacheFilter>
-+ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block;
-@end
++ (id)filterWithBlock:(id(^)(id value))block;
 
 #endif /* if NS_BLOCKS_AVAILABLE */
+
+@end

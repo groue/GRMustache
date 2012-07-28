@@ -66,8 +66,6 @@
 // =============================================================================
 #pragma mark - GRMustacheHelper
 
-#if NS_BLOCKS_AVAILABLE
-
 /**
  * The GRMustacheHelper class helps building mustache helpers without writing a
  * custom class that conforms to the GRMustacheHelper protocol.
@@ -84,6 +82,8 @@
 /// @name Creating helper objects
 ////////////////////////////////////////////////////////////////////////////////
 
+#if NS_BLOCKS_AVAILABLE
+
 /**
  * Returns a GRMustacheHelper object that executes the provided block when
  * rendering a section.
@@ -94,7 +94,8 @@
  *
  * @since v2.0
  */
-+ (id<GRMustacheHelper>)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
-@end
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 #endif /* if NS_BLOCKS_AVAILABLE */
+
+@end
