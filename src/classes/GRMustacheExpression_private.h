@@ -35,6 +35,7 @@
 @end
 
 @interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
-@property (nonatomic, retain, readonly) NSArray *expressions GRMUSTACHE_API_INTERNAL;
-+ (id)expressionWithExpressions:(NSArray *)expressions GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) id<GRMustacheExpression> filteredExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSArray *filterExpressions GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions GRMUSTACHE_API_INTERNAL;
 @end

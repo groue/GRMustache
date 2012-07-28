@@ -69,29 +69,32 @@
 #pragma mark - GRMustacheFilterChainExpression
 
 @interface GRMustacheFilterChainExpression()
-- (id)initWithExpressions:(NSArray *)expressions;
+- (id)initWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions;
 @end
 
 @implementation GRMustacheFilterChainExpression
-@synthesize expressions = _expressions;
+@synthesize filteredExpression = _filteredExpression;
+@synthesize filterExpressions = _filterExpressions;
 
-+ (id)expressionWithExpressions:(NSArray *)expressions
++ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions
 {
-    return [[[self alloc] initWithExpressions:expressions] autorelease];
+    return [[[self alloc] initWithFilteredExpression:filteredExpression filterExpressions:filterExpressions] autorelease];
 }
 
-- (id)initWithExpressions:(NSArray *)expressions
+- (id)initWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions
 {
     self = [super init];
     if (self) {
-        _expressions = [expressions retain];
+        _filteredExpression = [filteredExpression retain];
+        _filterExpressions = [filterExpressions retain];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_expressions release];
+    [_filteredExpression release];
+    [_filterExpressions release];
     [super dealloc];
 }
 
@@ -100,8 +103,10 @@
     if (![expression isKindOfClass:[GRMustacheFilterChainExpression class]]) {
         return NO;
     }
-    
-    return [_expressions isEqualToArray:((GRMustacheFilterChainExpression *)expression).expressions];
+    if (![_filteredExpression isEqual:((GRMustacheFilterChainExpression *)expression).filteredExpression]) {
+        return NO;
+    }
+    return [_filterExpressions isEqualToArray:((GRMustacheFilterChainExpression *)expression).filterExpressions];
 }
 
 @end

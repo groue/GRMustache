@@ -334,16 +334,12 @@
     if ([expression isKindOfClass:[GRMustacheFilterChainExpression class]]) {
         GRMustacheFilterChainExpression *filterChainExpression = (GRMustacheFilterChainExpression *)expression;
         
-        id<GRMustacheValue> filteredValue = nil;
-        NSMutableArray *filterValues = [NSMutableArray arrayWithCapacity:filterChainExpression.expressions.count];
+        id<GRMustacheValue> filteredValue = [self valueWithToken:token expression:filterChainExpression.filteredExpression];
+        NSMutableArray *filterValues = [NSMutableArray arrayWithCapacity:filterChainExpression.filterExpressions.count];
         
-        for (id<GRMustacheExpression> expression in filterChainExpression.expressions) {
-            id<GRMustacheValue> value = [self valueWithToken:token expression:expression];
-            if (filteredValue == nil) {
-                filteredValue = value;
-            } else {
-                [filterValues addObject:value];
-            }
+        for (id<GRMustacheExpression> filterExpression in filterChainExpression.filterExpressions) {
+            id<GRMustacheValue> value = [self valueWithToken:token expression:filterExpression];
+            [filterValues addObject:value];
         }
         return [GRMustacheFilterChainValue valueWithToken:token filteredValue:filteredValue filterValues:filterValues];
     }

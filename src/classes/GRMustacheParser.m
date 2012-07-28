@@ -387,15 +387,20 @@
         // split "a|b" into "a" and "b"
         NSArray *chunks = [innerTagString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"|"]];
         if (chunks.count > 1) {
-            NSMutableArray *expressions = [NSMutableArray arrayWithCapacity:chunks.count];
+            id<GRMustacheExpression> filteredExpression = nil;
+            NSMutableArray *filterExpressions = [NSMutableArray arrayWithCapacity:chunks.count - 1];
             for (NSString *chunk in chunks) {
                 id<GRMustacheExpression> expression = [self parseExpression:chunk];
                 if (expression == nil) {
                     return nil;
                 }
-                [expressions addObject:expression];
+                if (filteredExpression == nil) {
+                    filteredExpression = expression;
+                } else {
+                    [filterExpressions addObject:expression];
+                }
             }
-            return [GRMustacheFilterChainExpression expressionWithExpressions:expressions];
+            return [GRMustacheFilterChainExpression expressionWithFilteredExpression:filteredExpression filterExpressions:filterExpressions];
         }
     }
     
