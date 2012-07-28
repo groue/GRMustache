@@ -23,7 +23,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
 
-@protocol GRMustacheValue;
+@protocol GRMustacheExpression;
 @class GRMustacheTemplate;
 @class GRMustacheSection;
 
@@ -35,7 +35,7 @@
  */
 @interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement> {
 @private
-    id<GRMustacheValue>_value;
+    id<GRMustacheExpression>_expression;
     NSString *_templateString;
     NSRange _innerRange;
     BOOL _inverted;
@@ -54,7 +54,7 @@
  * 
  * The rendering of Mustache sections depend on the value they are attached to,
  * whether they are truthy, falsey, enumerable, or helpers. The value is fetched
- * by evaluating the _value_ parameter against a rendering context.
+ * by evaluating the _expression_ parameter against a rendering context.
  * 
  * Boolean values are interpreted in their relation to the _inverted_ parameter.
  * 
@@ -65,7 +65,8 @@
  * The _elems_ array contains the GRMustacheRenderingElement objects that make
  * the section (texts, variables, other sections, etc.)
  * 
- * @param value           The value that would evaluate against a context stack.
+ * @param expression      The expression that would evaluate against a context
+ *                        stack.
  * @param templateString  A Mustache template string
  * @param innerRange      The range of the inner template string of the section
  *                        in _templateString_.
@@ -75,11 +76,11 @@
  *
  * @return A GRMustacheSectionElement
  * 
- * @see GRMustacheValue
+ * @see GRMustacheExpression
  * @see GRMustacheContext
  * @see GRMustacheHelper
  */
-+ (id)sectionElementWithValue:(id<GRMustacheValue>)value templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns the rendering of inner rendering elements for the provided context,

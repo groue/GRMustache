@@ -238,6 +238,7 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange];
+                expression.token = token;
             } break;
                 
             case GRMustacheTokenTypeSectionOpening:
@@ -255,6 +256,7 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange];
+                expression.token = token;
             } break;
                 
             case GRMustacheTokenTypePartial: {

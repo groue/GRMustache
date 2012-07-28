@@ -22,20 +22,24 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheContext;
-@class GRMustacheValue;
+@class GRMustacheInvocation;
+@class GRMustacheToken;
 
 @protocol GRMustacheExpression <NSObject>
+@required
+@property (nonatomic, retain, readonly) GRMustacheInvocation *invocation GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
+- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 @end
 
 @interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression>
-@property (nonatomic, retain, readonly) NSArray *keys GRMUSTACHE_API_INTERNAL;
 + (id)expressionWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
 @end
 
 @interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
-@property (nonatomic, retain, readonly) id<GRMustacheExpression> filteredExpression GRMUSTACHE_API_INTERNAL;
-@property (nonatomic, retain, readonly) NSArray *filterExpressions GRMUSTACHE_API_INTERNAL;
 + (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions GRMUSTACHE_API_INTERNAL;
 @end

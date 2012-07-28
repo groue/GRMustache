@@ -21,30 +21,30 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheValue_private.h"
+#import "GRMustacheExpression_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheVariableElement()
-@property (nonatomic, retain) id<GRMustacheValue> value;
+@property (nonatomic, retain) id<GRMustacheExpression> expression;
 @property (nonatomic) BOOL raw;
-- (id)initWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw;
+- (id)initWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
-@synthesize value=_value;
+@synthesize expression=_expression;
 @synthesize raw=_raw;
 
-+ (id)variableElementWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw
++ (id)variableElementWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw
 {
-    return [[[self alloc] initWithValue:value raw:raw] autorelease];
+    return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
 }
 
 - (void)dealloc
 {
-    [_value release];
+    [_expression release];
     [super dealloc];
 }
 
@@ -55,8 +55,8 @@
 {
     // evaluate
     
-    [_value prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
-    id object = _value.invocation.returnValue;
+    [_expression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
+    id object = _expression.invocation.returnValue;
     
     
     // interpret
@@ -72,7 +72,7 @@
     
     // finish
     
-    [_value finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
+    [_expression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
     
     if (!result) {
         return @"";
@@ -83,11 +83,11 @@
 
 #pragma mark Private
 
-- (id)initWithValue:(id<GRMustacheValue>)value raw:(BOOL)raw
+- (id)initWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw
 {
     self = [self init];
     if (self) {
-        self.value = value;
+        self.expression = expression;
         self.raw = raw;
     }
     return self;

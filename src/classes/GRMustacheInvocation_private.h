@@ -59,25 +59,33 @@
     GRMustacheToken *_token;
 }
 
+/**
+ * TODO
+ */
+@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
+
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
+
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) NSArray *keys GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
 /**
- * Builds an invocation from a key path and a token.
+ * Builds an invocation from a key path.
  *
  * @param keys  A key path
- * @param token       A token
  *
  * @return an invocation
  *
  * @see invokeWithContext:
- * @see GRMustacheToken
  * @see GRMustacheTemplateDelegate
  */
-+ (id)invocationWithKeys:(NSArray *)keys token:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
++ (id)invocationWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs key lookup in the context stack, and sets the return value.

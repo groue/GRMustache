@@ -29,7 +29,6 @@
 #import "GRMustacheError.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
-#import "GRMustacheValue_private.h"
 
 @interface GRMustacheCompiler()
 
@@ -107,11 +106,6 @@
  * @return An NSError
  */
 - (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description;
-
-/**
- * TODO
- */
-- (id<GRMustacheValue>)valueWithToken:(GRMustacheToken *)token expression:(id<GRMustacheExpression>)expression;
 
 @end
 
@@ -203,8 +197,7 @@
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
-            id<GRMustacheValue> value = [self valueWithToken:token expression:token.value.expression];
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithValue:value raw:NO]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:NO]];
         } break;
             
             
@@ -213,8 +206,7 @@
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
-            id<GRMustacheValue> value = [self valueWithToken:token expression:token.value.expression];
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithValue:value raw:YES]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:YES]];
         } break;
             
             
@@ -249,12 +241,11 @@
             // Success: append GRMustacheSectionElement and shrink stacks
             NSRange openingTokenRange = _currentSectionOpeningToken.range;
             NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-            id<GRMustacheValue> value = [self valueWithToken:_currentSectionOpeningToken expression:_currentSectionOpeningToken.value.expression];
-            GRMustacheSectionElement *sectionElement = [GRMustacheSectionElement sectionElementWithValue:value
-                                                                                          templateString:token.templateString
-                                                                                              innerRange:innerRange
-                                                                                                inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                                                elements:_currentElements];
+            GRMustacheSectionElement *sectionElement = [GRMustacheSectionElement sectionElementWithExpression:_currentSectionOpeningToken.value.expression
+                                                                                               templateString:token.templateString
+                                                                                                   innerRange:innerRange
+                                                                                                     inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                                                     elements:_currentElements];
             
             [_sectionOpeningTokenStack removeLastObject];
             [_elementsStack removeLastObject];
@@ -322,30 +313,6 @@
     return [NSError errorWithDomain:GRMustacheErrorDomain
                                code:GRMustacheErrorCodeParseError
                            userInfo:[NSDictionary dictionaryWithObject:localizedDescription forKey:NSLocalizedDescriptionKey]];
-}
-
-- (id<GRMustacheValue>)valueWithToken:(GRMustacheToken *)token expression:(id<GRMustacheExpression>)expression
-{
-    if ([expression isKindOfClass:[GRMustacheKeyPathExpression class]]) {
-        GRMustacheKeyPathExpression *keyPathExpression = (GRMustacheKeyPathExpression *)expression;
-        return [GRMustacheKeyPathValue valueWithToken:token keys:keyPathExpression.keys];
-    }
-
-    if ([expression isKindOfClass:[GRMustacheFilterChainExpression class]]) {
-        GRMustacheFilterChainExpression *filterChainExpression = (GRMustacheFilterChainExpression *)expression;
-        
-        id<GRMustacheValue> filteredValue = [self valueWithToken:token expression:filterChainExpression.filteredExpression];
-        NSMutableArray *filterValues = [NSMutableArray arrayWithCapacity:filterChainExpression.filterExpressions.count];
-        
-        for (id<GRMustacheExpression> filterExpression in filterChainExpression.filterExpressions) {
-            id<GRMustacheValue> value = [self valueWithToken:token expression:filterExpression];
-            [filterValues addObject:value];
-        }
-        return [GRMustacheFilterChainValue valueWithToken:token filteredValue:filteredValue filterValues:filterValues];
-    }
-    
-    NSAssert(NO, @"WTF");
-    return nil;
 }
 
 @end

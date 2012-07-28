@@ -23,7 +23,7 @@
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheValue_private.h"
+#import "GRMustacheExpression_private.h"
 #import "GRMustacheHelper.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
@@ -35,9 +35,9 @@
 /**
  * The rendering of Mustache sections depend on the object they are attached to,
  * whether they are truthy, falsey, enumerable, or helpers. The object is
- * fetched by applying this value to a rendering context.
+ * fetched by applying this expression to a rendering context.
  */
-@property (nonatomic, retain) id<GRMustacheValue> value;
+@property (nonatomic, retain) id<GRMustacheExpression> expression;
 
 /**
  * The template string containing the inner template string of the section.
@@ -62,27 +62,27 @@
 @property (nonatomic, retain) NSArray *elems;
 
 /**
- * @see +[GRMustacheSectionElement sectionElementWithValue:templateString:innerRange:inverted:elements:]
+ * @see +[GRMustacheSectionElement sectionElementWithExpression:templateString:innerRange:inverted:elements:]
  */
-- (id)initWithValue:(id<GRMustacheValue>)value templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSectionElement
 @synthesize templateString=_templateString;
 @synthesize innerRange=_innerRange;
-@synthesize value=_value;
+@synthesize expression=_expression;
 @synthesize inverted=_inverted;
 @synthesize elems=_elems;
 
-+ (id)sectionElementWithValue:(id<GRMustacheValue>)value templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
-    return [[[self alloc] initWithValue:value templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
 }
 
 - (void)dealloc
 {
-    [_value release];
+    [_expression release];
     [_templateString release];
     [_elems release];
     [super dealloc];
@@ -113,8 +113,8 @@
         
         // evaluate
         
-        [_value prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
-        id object = _value.invocation.returnValue;
+        [_expression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+        id object = _expression.invocation.returnValue;
         
         
         // interpret
@@ -178,7 +178,7 @@
         
         // Finish
         
-        [_value finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+        [_expression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
 
     }
     if (!result) {
@@ -190,11 +190,11 @@
 
 #pragma mark Private
 
-- (id)initWithValue:(id<GRMustacheValue>)value templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
-        self.value = value;
+        self.expression = expression;
         self.templateString = templateString;
         self.innerRange = innerRange;
         self.inverted = inverted;
