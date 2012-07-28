@@ -167,7 +167,13 @@
         [filterExpression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
-        [rootTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+        if (filter) {
+            [rootTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+        } else {
+            // filter chain broken
+            _invocation.returnValue = nil;
+            break;
+        }
     }
 }
 
@@ -176,8 +182,13 @@
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
-        [rootTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
-        [filterExpression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
+        if (filter) {
+            [rootTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+            [filterExpression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
+        } else {
+            // filter chain broken
+            break;
+        }
     }
     
     [_filteredExpression finishForContext:context template:rootTemplate interpretation:interpretation];
