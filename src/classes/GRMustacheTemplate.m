@@ -164,7 +164,7 @@
 
 - (NSString *)renderObject:(id)object
 {
-    return [self renderContext:[GRMustacheContext contextWithObject:object] forTemplate:self];
+    return [self renderContext:[GRMustacheContext contextWithObject:object] delegatingTemplate:self];
 }
 
 - (NSString *)renderObjects:(id)object, ...
@@ -175,7 +175,7 @@
         va_start(objectList, object);
         GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
         va_end(objectList);
-        result = [[self renderContext:context forTemplate:self] retain];
+        result = [[self renderContext:context delegatingTemplate:self] retain];
     }
     return [result autorelease];
 }
@@ -205,7 +205,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
 {
     NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
@@ -214,7 +214,7 @@
         }
         
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context forTemplate:rootTemplate]];
+            [result appendString:[elem renderContext:context delegatingTemplate:delegatingTemplate]];
         }
         
         if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {

@@ -93,12 +93,12 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderElementsWithContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
 {
     NSMutableString *result = [NSMutableString string];
     @autoreleasepool {
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context forTemplate:rootTemplate]];
+            [result appendString:[elem renderContext:context delegatingTemplate:delegatingTemplate]];
         }
     }
     return result;
@@ -106,14 +106,14 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
 {
     NSString *result = nil;
     @autoreleasepool {
         
         // evaluate
         
-        [_expression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+        [_expression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationSection];
         id object = _expression.invocation.returnValue;
         
         
@@ -126,7 +126,7 @@
         {
             // False value
             if (_inverted) {
-                result = [[self renderElementsWithContext:context forTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:context delegatingTemplate:delegatingTemplate] retain];
             }
         }
         else if ([object isKindOfClass:[NSDictionary class]])
@@ -134,7 +134,7 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:object];
-                result = [[self renderElementsWithContext:innerContext forTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:innerContext delegatingTemplate:delegatingTemplate] retain];
             }
         }
         else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -147,13 +147,13 @@
                     break;
                 }
                 if (empty) {
-                    result = [[self renderElementsWithContext:context forTemplate:rootTemplate] retain];
+                    result = [[self renderElementsWithContext:context delegatingTemplate:delegatingTemplate] retain];
                 }
             } else {
                 result = [[NSMutableString string] retain];
                 for (id object2 in object) {
                     GRMustacheContext *innerContext = [context contextByAddingObject:object2];
-                    NSString *itemRendering = [self renderElementsWithContext:innerContext forTemplate:rootTemplate];
+                    NSString *itemRendering = [self renderElementsWithContext:innerContext delegatingTemplate:delegatingTemplate];
                     [(NSMutableString *)result appendString:itemRendering];
                 }
             }
@@ -162,7 +162,7 @@
         {
             // Helper
             if (!_inverted) {
-                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self renderingContext:context rootTemplate:rootTemplate];
+                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self renderingContext:context delegatingTemplate:delegatingTemplate];
                 result = [[(id<GRMustacheHelper>)object renderSection:section] retain];
             }
         }
@@ -171,14 +171,14 @@
             // True object value
             if (!_inverted) {
                 GRMustacheContext *innerContext = [context contextByAddingObject:object];
-                result = [[self renderElementsWithContext:innerContext forTemplate:rootTemplate] retain];
+                result = [[self renderElementsWithContext:innerContext delegatingTemplate:delegatingTemplate] retain];
             }
         }
         
         
         // Finish
         
-        [_expression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationSection];
+        [_expression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationSection];
 
     }
     if (!result) {

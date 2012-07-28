@@ -32,7 +32,7 @@
 @private
     GRMustacheSectionElement *_sectionElement;
     GRMustacheContext *_renderingContext;
-    GRMustacheTemplate *_rootTemplate;
+    GRMustacheTemplate *_delegatingTemplate;
 }
 
 // Documented in GRMustacheSection.h
@@ -49,12 +49,12 @@
  *
  * @param sectionElement    The underlying sectionElement
  * @param renderingContext  The rendering context exposed to the library user
- * @param rootTemplate      A template whose delegate methods should be called
+ * @param delegatingTemplate      A template whose delegate methods should be called
  *                          whenever relevant.
  *
  * @return A section.
  *
  * @see GRMustacheHelper
  */
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate GRMUSTACHE_API_INTERNAL;
 @end

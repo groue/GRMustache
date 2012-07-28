@@ -68,25 +68,25 @@
 
 #pragma mark GRMustacheExpression
 
-- (GRMustacheToken *)token
+- (GRMustacheToken *)debuggingToken
 {
-    return _invocation.token;
+    return _invocation.debuggingToken;
 }
 
-- (void)setToken:(GRMustacheToken *)token
+- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
 {
-    _invocation.token = token;
+    _invocation.debuggingToken = debuggingToken;
 }
 
-- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
     [_invocation invokeWithContext:context];
-    [rootTemplate invokeDelegate:rootTemplate.delegate willInterpretReturnValueOfInvocation:_invocation as:interpretation];
+    [delegatingTemplate invokeDelegate:delegatingTemplate.delegate willInterpretReturnValueOfInvocation:_invocation as:interpretation];
 }
 
-- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
-    [rootTemplate invokeDelegate:rootTemplate.delegate didInterpretReturnValueOfInvocation:_invocation as:interpretation];
+    [delegatingTemplate invokeDelegate:delegatingTemplate.delegate didInterpretReturnValueOfInvocation:_invocation as:interpretation];
     _invocation.returnValue = nil;
 }
 
@@ -145,30 +145,30 @@
 
 #pragma mark GRMustacheExpression
 
-- (GRMustacheToken *)token
+- (GRMustacheToken *)debuggingToken
 {
-    return _filteredExpression.token;
+    return _filteredExpression.debuggingToken;
 }
 
-- (void)setToken:(GRMustacheToken *)token
+- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
 {
-    _filteredExpression.token = token;
+    _filteredExpression.debuggingToken = debuggingToken;
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        filterExpression.token = token;
+        filterExpression.debuggingToken = debuggingToken;
     }
 }
 
-- (void)prepareForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
-    [_filteredExpression prepareForContext:context template:rootTemplate interpretation:interpretation];
+    [_filteredExpression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:interpretation];
     self.invocation = _filteredExpression.invocation;
     
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
+        [filterExpression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationFilter];
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
         if (filter) {
-            [rootTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+            [delegatingTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
         } else {
             // filter chain broken
             _invocation.returnValue = nil;
@@ -177,21 +177,21 @@
     }
 }
 
-- (void)finishForContext:(GRMustacheContext *)context template:(GRMustacheTemplate *)rootTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
 {
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
         if (filter) {
-            [rootTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
-            [filterExpression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationFilter];
+            [delegatingTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+            [filterExpression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationFilter];
         } else {
             // filter chain broken
             break;
         }
     }
     
-    [_filteredExpression finishForContext:context template:rootTemplate interpretation:interpretation];
+    [_filteredExpression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:interpretation];
     self.invocation = nil;
 }
 

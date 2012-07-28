@@ -56,13 +56,13 @@
 @interface GRMustacheInvocation : NSObject {
 @private
     id _returnValue;
-    GRMustacheToken *_token;
+    GRMustacheToken *_debuggingToken;
 }
 
 /**
  * TODO
  */
-@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;

@@ -62,7 +62,7 @@
 #pragma mark - GRMustacheInvocation
 
 @implementation GRMustacheInvocation
-@synthesize token=_token;
+@synthesize debuggingToken=_debuggingToken;
 @synthesize returnValue=_returnValue;
 @dynamic key;
 
@@ -77,18 +77,18 @@
 
 - (void)dealloc
 {
-    [_token release];
+    [_debuggingToken release];
     [_returnValue release];
     [super dealloc];
 }
 
 - (NSString *)description
 {
-    NSAssert(_token, @"Token not set");
-    if (_token.templateID) {
-        return [NSString stringWithFormat:@"%@ at line %lu of template %@", _token.templateSubstring, (unsigned long)_token.line, _token.templateID];
+    NSAssert(_debuggingToken, @"debuggingToken not set");
+    if (_debuggingToken.templateID) {
+        return [NSString stringWithFormat:@"%@ at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
     } else {
-        return [NSString stringWithFormat:@"%@ at line %lu", _token.templateSubstring, (unsigned long)_token.line];
+        return [NSString stringWithFormat:@"%@ at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
     }
 }
 

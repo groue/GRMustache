@@ -28,20 +28,20 @@
 @interface GRMustacheSection()
 @property (nonatomic, retain) GRMustacheSectionElement *sectionElement;
 @property (nonatomic, retain) GRMustacheContext *renderingContext;
-@property (nonatomic, retain) GRMustacheTemplate *rootTemplate;
+@property (nonatomic, retain) GRMustacheTemplate *delegatingTemplate;
 @end
 
 @implementation GRMustacheSection
 @synthesize sectionElement=_sectionElement;
 @synthesize renderingContext=_renderingContext;
-@synthesize rootTemplate=_rootTemplate;
+@synthesize delegatingTemplate=_delegatingTemplate;
 
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext rootTemplate:(GRMustacheTemplate *)rootTemplate
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
 {
     GRMustacheSection *section = [[GRMustacheSection alloc] init];
     section.sectionElement = sectionElement;
     section.renderingContext = renderingContext;
-    section.rootTemplate = rootTemplate;
+    section.delegatingTemplate = delegatingTemplate;
     return [section autorelease];
 }
 
@@ -49,13 +49,13 @@
 {
     self.sectionElement = nil;
     self.renderingContext = nil;
-    self.rootTemplate = nil;
+    self.delegatingTemplate = nil;
     [super dealloc];
 }
 
 - (NSString *)render
 {
-    return [_sectionElement renderElementsWithContext:_renderingContext forTemplate:_rootTemplate];
+    return [_sectionElement renderElementsWithContext:_renderingContext delegatingTemplate:_delegatingTemplate];
 }
 
 - (NSString *)innerTemplateString

@@ -51,11 +51,11 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
 {
     // evaluate
     
-    [_expression prepareForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
+    [_expression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationVariable];
     id object = _expression.invocation.returnValue;
     
     
@@ -72,7 +72,7 @@
     
     // finish
     
-    [_expression finishForContext:context template:rootTemplate interpretation:GRMustacheInterpretationVariable];
+    [_expression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationVariable];
     
     if (!result) {
         return @"";

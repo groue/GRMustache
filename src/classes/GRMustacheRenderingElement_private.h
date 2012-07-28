@@ -59,10 +59,10 @@
  * Renders a context stack.
  * 
  * @param context       A context stack.
- * @param rootTemplate  A template whose delegate methods should be called
+ * @param delegatingTemplate  A template whose delegate methods should be called
  *                      whenever relevant.
  *
  * @return The rendering of _context_.
  */
-- (NSString *)renderContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate GRMUSTACHE_API_INTERNAL;
 @end

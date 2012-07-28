@@ -87,11 +87,11 @@
  * without any invocation nor interpretation.
  *
  * @param context       A context stack for rendering inner elements.
- * @param rootTemplate  A template whose delegate methods should be called
+ * @param delegatingTemplate  A template whose delegate methods should be called
  *                      whenever relevant.
  *
  * @return The rendering of the section.
  */
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context forTemplate:(GRMustacheTemplate *)rootTemplate GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderElementsWithContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate GRMUSTACHE_API_INTERNAL;
 
 @end
