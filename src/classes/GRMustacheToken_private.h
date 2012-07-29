@@ -85,6 +85,9 @@ typedef enum {
     GRMustacheTokenTypePragma,
 } GRMustacheTokenType;
 
+/**
+ * TODO
+ */
 typedef union {
     id object;
     NSString *text;
@@ -184,7 +187,7 @@ typedef union {
 /**
  * The substring of the template represented by this token.
  */
-@property (nonatomic, readonly) NSString *templateSubstring;
+@property (nonatomic, readonly) NSString *templateSubstring GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds and return a token.

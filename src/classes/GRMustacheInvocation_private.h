@@ -94,5 +94,5 @@
 /**
  * TODO
  */
-- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation;
+- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation GRMUSTACHE_API_INTERNAL;
 @end

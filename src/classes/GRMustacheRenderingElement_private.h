@@ -58,9 +58,10 @@
 /**
  * Renders a context stack.
  * 
- * @param context       A context stack.
+ * @param context             A context stack.
  * @param delegatingTemplate  A template whose delegate methods should be called
- *                      whenever relevant.
+ *                            whenever relevant.
+ * @param delegates           TODO
  *
  * @return The rendering of _context_.
  */

@@ -47,10 +47,11 @@
 /**
  * Builds and returns a section suitable for GRMustacheHelper.
  *
- * @param sectionElement    The underlying sectionElement
- * @param renderingContext  The rendering context exposed to the library user
- * @param delegatingTemplate      A template whose delegate methods should be called
- *                          whenever relevant.
+ * @param sectionElement      The underlying sectionElement
+ * @param renderingContext    The rendering context exposed to the library user
+ * @param delegatingTemplate  A template whose delegate methods should be called
+ *                            whenever relevant.
+ * @param delegates           TODO
  *
  * @return A section.
  *

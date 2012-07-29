@@ -41,7 +41,7 @@ extern NSString * const GRMustacheFilterException;
 /**
  * TODO
  */
-- (id)transformedValue:(id)object;
+- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 @end
 
@@ -60,7 +60,7 @@ extern NSString * const GRMustacheFilterException;
 /**
  * TODO
  */
-+ (id)filterWithBlock:(id(^)(id value))block;
++ (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 #endif /* if NS_BLOCKS_AVAILABLE */
 

@@ -86,9 +86,10 @@
  * Returns the rendering of inner rendering elements for the provided context,
  * without any invocation nor interpretation.
  *
- * @param context       A context stack for rendering inner elements.
+ * @param context             A context stack for rendering inner elements.
  * @param delegatingTemplate  A template whose delegate methods should be called
- *                      whenever relevant.
+ *                            whenever relevant.
+ * @param delegates           TODO
  *
  * @return The rendering of the section.
  */

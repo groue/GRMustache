@@ -96,7 +96,7 @@
 /**
  * TODO
  */
-@property (nonatomic, strong, readonly) NSMutableSet *pragmas;
+@property (nonatomic, strong, readonly) NSMutableSet *pragmas GRMUSTACHE_API_INTERNAL;
 
 /**
  * The parser will invoke its delegate as it builds tokens from the template
