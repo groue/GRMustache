@@ -45,7 +45,7 @@
 
 @implementation GRMustacheFilterTest
 
-- (void)testFilter
+- (void)testFilterChain
 {
     id uppercaseFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
         return [[value description] uppercaseString];
@@ -63,6 +63,13 @@
     NSString *templateString = @"{{%FILTERS}}<{{name}}> <{{name|prefix}}> <{{name|uppercase}}> <{{name|uppercase|prefix}}> <{{name|prefix|uppercase}}>";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
     STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
+}
+
+- (void)testFilteredSectionClosingTagCanHaveDifferentWhiteSpaceThanSectionOpeningTag
+{
+    NSString *templateString = @"{{%FILTERS}}{{#a|b}}{{/ \t\na \t\n| \t\nb \t\n}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    STAssertNotNil(template, nil);
 }
 
 - (void)testBrokenFilterChainRaisesGRMustacheFilterException

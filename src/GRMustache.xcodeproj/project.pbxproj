@@ -123,6 +123,8 @@
 		56CD619215C5536F0067E2E7 /* GRMustacheFilterChainExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD618E15C5536F0067E2E7 /* GRMustacheFilterChainExpression.m */; };
 		56CD619515C564C30067E2E7 /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */; };
 		56CD619615C564C30067E2E7 /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */; };
+		56CD619815C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */; };
+		56CD619915C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */; };
 		56DEC256152631040031E8DC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1C915262FF70031E8DC /* SenTestingKit.framework */; };
 		56DEC257152631040031E8DC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1F4152630710031E8DC /* Cocoa.framework */; };
 		56DEC25A152631040031E8DC /* libGRMustache4-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC248152631040031E8DC /* libGRMustache4-MacOS.a */; };
@@ -300,6 +302,7 @@
 		56CD618D15C5536F0067E2E7 /* GRMustacheFilterChainExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilterChainExpression_private.h; sourceTree = "<group>"; };
 		56CD618E15C5536F0067E2E7 /* GRMustacheFilterChainExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilterChainExpression.m; sourceTree = "<group>"; };
 		56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilterTest.m; sourceTree = "<group>"; };
+		56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParsingErrors_v4_3_Test.m; sourceTree = "<group>"; };
 		56DEC1C915262FF70031E8DC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1CB15262FF70031E8DC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1F4152630710031E8DC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -593,6 +596,7 @@
 			isa = PBXGroup;
 			children = (
 				56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */,
+				56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */,
 			);
 			path = v4.3;
 			sourceTree = "<group>";
@@ -1125,6 +1129,7 @@
 				568E852B15C2A863004DE82D /* GRMustacheTemplateDelegate_v4_2_Test.m in Sources */,
 				56C518A615C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */,
 				56CD619515C564C30067E2E7 /* GRMustacheFilterTest.m in Sources */,
+				56CD619815C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1183,6 +1188,7 @@
 				568E852C15C2A863004DE82D /* GRMustacheTemplateDelegate_v4_2_Test.m in Sources */,
 				56C518A715C33AA5002999EF /* GRMustacheParsingErrors_v4_2_Test.m in Sources */,
 				56CD619615C564C30067E2E7 /* GRMustacheFilterTest.m in Sources */,
+				56CD619915C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
