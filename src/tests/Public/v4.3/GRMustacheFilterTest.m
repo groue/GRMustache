@@ -23,6 +23,23 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_3
 #import "GRMustachePublicAPITest.h"
 
+@interface GRMustacheFilterTestSupport: NSObject<GRMustacheFilter>
+@end
+
+@implementation GRMustacheFilterTestSupport
+
+- (id)transformedValue:(id)object
+{
+    return object;
+}
+
+- (NSString *)test
+{
+    return @"fail";
+}
+
+@end
+
 @interface GRMustacheFilterTest : GRMustachePublicAPITest
 @end
 
@@ -73,6 +90,64 @@
     
     NSString *templateString = @"{{%FILTERS}}<{{name|name}}>";
     STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:templateString error:NULL], NSException, GRMustacheFilterException, nil);
+}
+
+- (void)testFilteredValuesCanNotOverrideFilters
+{
+    id successFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return @"success";
+    }];
+    id failFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return @"fail";
+    }];
+    id filtered = [NSDictionary dictionaryWithObject:failFilter forKey:@"filter"];
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          filtered, @"filtered",
+                          successFilter, @"filter",
+                          nil];
+    NSString *templateString = @"{{%FILTERS}}<{{filtered|filter}}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<success>", nil);
+}
+
+- (void)testFiltersCanNotOverrideFilteredValue
+{
+    id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"success", @"test",
+                          filter, @"filter",
+                          nil];
+    NSString *templateString = @"{{%FILTERS}}<{{test|filter}}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<success>", nil);
+}
+
+- (void)testFilteredValuesDoNotEnterSectionContextStack
+{
+    id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return @"filter";
+    }];
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSDictionary dictionaryWithObject:@"fail" forKey:@"test"], @"filtered",
+                          filter, @"filter",
+                          @"success", @"test",
+                          nil];
+    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}}>{{/filtered|filter}}";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<success>", nil);
+}
+
+- (void)testFiltersDoNotEnterSectionContextStack
+{
+    id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"filtered", @"filtered",
+                          filter, @"filter",
+                          @"success", @"test",
+                          nil];
+    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}}>{{/filtered|filter}}";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<success>", nil);
 }
 
 @end
