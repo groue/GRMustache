@@ -193,6 +193,12 @@
             
             
         case GRMustacheTokenTypeEscapedVariable: {
+            // Expression validation
+            if (token.value.expression == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                return NO;
+            }
+            
             // Parser validation
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
@@ -202,6 +208,12 @@
             
             
         case GRMustacheTokenTypeUnescapedVariable: {
+            // Expression validation
+            if (token.value.expression == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                return NO;
+            }
+            
             // Parser validation
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
@@ -212,6 +224,12 @@
             
         case GRMustacheTokenTypeSectionOpening:
         case GRMustacheTokenTypeInvertedSectionOpening: {
+            // Expression validation
+            if (token.value.expression == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                return NO;
+            }
+            
             // Parser validation
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
@@ -224,6 +242,12 @@
             
             
         case GRMustacheTokenTypeSectionClosing: {
+            // Expression validation
+            if (token.value.expression == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                return NO;
+            }
+            
             // Parser validation
             NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
             
@@ -256,6 +280,12 @@
             
             
         case GRMustacheTokenTypePartial: {
+            // Partial name validation
+            if (token.value.partialName == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing partial name"]]];
+                return NO;
+            }
+            
             // Parser validation
             NSAssert([token.value.partialName isKindOfClass:[NSString class]], @"WTF parser?");
             

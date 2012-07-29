@@ -78,10 +78,11 @@
  * Returns an expression from the inner string of a tag.
  *
  * @param innerTagString  the inner string of a tag.
+ * @param outEmpty        TODO
  *
  * @return an expression, or nil if the parsing fails.
  */
-- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString;
+- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString empty:(BOOL *)outEmpty;
 
 /**
  * Returns a partial name from the inner string of a tag.
@@ -228,10 +229,10 @@
                 break;
                 
             case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
-                id<GRMustacheExpression> expression = [self parseExpression:tag];
-                if (!expression) {
+                BOOL empty;
+                id<GRMustacheExpression> expression = [self parseExpression:tag empty:&empty];
+                if (expression == nil && !empty) {
                     [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
-                    return;
                 }
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
                                                  value:(GRMustacheTokenValue){ .expression = expression }
@@ -246,10 +247,10 @@
             case GRMustacheTokenTypeInvertedSectionOpening:
             case GRMustacheTokenTypeSectionClosing:
             case GRMustacheTokenTypeUnescapedVariable: {
-                id<GRMustacheExpression> expression = [self parseExpression:[tag substringFromIndex:1]];   // strip initial '#', '^' etc.
-                if (!expression) {
+                BOOL empty;
+                id<GRMustacheExpression> expression = [self parseExpression:[tag substringFromIndex:1] empty:&empty];   // strip initial '#', '^' etc.
+                if (expression == nil && !empty) {
                     [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
-                    return;
                 }
                 token = [GRMustacheToken tokenWithType:tokenType
                                                  value:(GRMustacheTokenValue){ .expression = expression }
@@ -262,10 +263,6 @@
                 
             case GRMustacheTokenTypePartial: {
                 NSString *partialName = [self parsePartialName:[tag substringFromIndex:1]];   // strip initial '>'
-                if (partialName == nil) {
-                    [self failWithParseErrorAtLine:line description:@"Invalid partial name" templateID:templateID];
-                    return;
-                }
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
                                                  value:(GRMustacheTokenValue){ .partialName = partialName }
                                         templateString:templateString
@@ -384,7 +381,7 @@
     return NSMakeRange(NSNotFound, 0);
 }
 
-- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString
+- (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString empty:(BOOL *)outEmpty
 {
     if (self.pragmaFilter) {
         // split "a|b" into "a" and "b"
@@ -393,8 +390,9 @@
             id<GRMustacheExpression> filteredExpression = nil;
             NSMutableArray *filterExpressions = [NSMutableArray arrayWithCapacity:chunks.count - 1];
             for (NSString *chunk in chunks) {
-                id<GRMustacheExpression> expression = [self parseExpression:chunk];
+                id<GRMustacheExpression> expression = [self parseExpression:chunk empty:outEmpty];
                 if (expression == nil) {
+                    *outEmpty = NO;
                     return nil;
                 }
                 if (filteredExpression == nil) {
@@ -415,6 +413,7 @@
         stateIdentifier,
         stateWaitingForIdentifier,
         stateWhiteSpaceSuffix,
+        stateEmpty,
         stateError,
         stateValid
     } state = stateInitial;
@@ -422,21 +421,31 @@
 //    stateInitial -> ' ' -> stateInitial
 //    stateInitial -> '.' -> stateLeadingDot
 //    stateInitial -> 'a' -> stateIdentifier
-//    stateInitial -> EOF -> stateError
+//    stateInitial -> EOF -> stateEmpty
+//    stateLeadingDot -> ' ' -> stateError
+//    stateLeadingDot -> '.' -> stateError
 //    stateLeadingDot -> 'a' -> stateIdentifier
 //    stateLeadingDot -> EOF -> stateValid
 //    stateIdentifier -> 'a' -> stateIdentifier
 //    stateIdentifier -> '.' -> stateWaitingForIdentifier
 //    stateIdentifier -> ' ' -> stateWhiteSpaceSuffix
 //    stateIdentifier -> EOF -> stateValid
+//    stateWaitingForIdentifier -> ' ' -> stateError
+//    stateWaitingForIdentifier -> '.' -> stateError
 //    stateWaitingForIdentifier -> 'a' -> stateIdentifier
 //    stateWaitingForIdentifier -> EOF -> stateError
 //    stateWhiteSpaceSuffix -> ' ' -> stateWhiteSpaceSuffix
+//    stateWhiteSpaceSuffix -> '.' -> stateError
+//    stateWhiteSpaceSuffix -> 'a' -> stateError
 //    stateWhiteSpaceSuffix -> EOF -> stateValid
+//    stateError -> ' ' -> stateError
+//    stateError -> '.' -> stateError
+//    stateError -> 'a' -> stateError
+//    stateError -> EOF -> stateError
     
     NSUInteger identifierStart = NSNotFound;
     NSUInteger length = innerTagString.length;
-    for (NSUInteger i = 0; i < length; ++i) {
+    for (NSUInteger i = 0; i < length && state != stateError; ++i) {
         unichar c = [innerTagString characterAtIndex:i];
         switch (state) {
             case stateInitial:
@@ -463,10 +472,12 @@
                     case ' ':
                     case '\n':
                     case '\t':
-                        return nil;
+                        state = stateError;
+                        break;
                         
                     case '.':
-                        return nil;
+                        state = stateError;
+                        break;
                         
                     default:
                         identifierStart = i;
@@ -499,10 +510,12 @@
                     case ' ':
                     case '\n':
                     case '\t':
-                        return nil;
+                        state = stateError;
+                        break;
                         
                     case '.':
-                        return nil;
+                        state = stateError;
+                        break;
                         
                     default:
                         identifierStart = i;
@@ -519,10 +532,11 @@
                         break;
                         
                     case '.':
-                        return nil;
+                        state = stateError;
+                        break;
                         
                     default:
-                        return nil;
+                        state = stateError;
                         break;
                 }
                 break;
@@ -537,7 +551,13 @@
     // EOF
     
     switch (state) {
+        case stateError:
+            break;
+            
         case stateInitial:
+            state = stateEmpty;
+            break;
+            
         case stateWaitingForIdentifier:
             state = stateError;
             break;
@@ -561,7 +581,12 @@
     // End
 
     switch (state) {
+        case stateEmpty:
+            *outEmpty = YES;
+            return nil;
+            
         case stateError:
+            *outEmpty = NO;
             return nil;
             
         case stateValid:
