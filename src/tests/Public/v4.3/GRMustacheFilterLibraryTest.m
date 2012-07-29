@@ -30,9 +30,9 @@
 
 - (void)testCapitalizeFilter
 {
-    id data = @"name";
+    id data = @"EDGAR allan poE";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|capitalized}}" error:NULL];
-    STAssertEqualObjects(rendering, @"Name", nil);
+    STAssertEqualObjects(rendering, @"Edgar Allan Poe", nil);
 }
 
 - (void)testLowercaseFilter
