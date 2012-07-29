@@ -59,11 +59,12 @@
  * Renders a context stack.
  * 
  * @param context             A context stack.
+ * @param filters             TODO
  * @param delegatingTemplate  A template whose delegate methods should be called
  *                            whenever relevant.
  * @param delegates           TODO
  *
  * @return The rendering of _context_.
  */
-- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 @end

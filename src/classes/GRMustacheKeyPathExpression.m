@@ -74,13 +74,13 @@
     _invocation.debuggingToken = debuggingToken;
 }
 
-- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
+- (void)prepareForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     [_invocation invokeWithContext:context];
     [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:_invocation as:interpretation];
 }
 
-- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
+- (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:_invocation as:interpretation];
     _invocation.returnValue = nil;

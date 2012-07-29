@@ -87,12 +87,13 @@
  * without any invocation nor interpretation.
  *
  * @param context             A context stack for rendering inner elements.
+ * @param filterContext       TODO
  * @param delegatingTemplate  A template whose delegate methods should be called
  *                            whenever relevant.
  * @param delegates           TODO
  *
  * @return The rendering of the section.
  */
-- (NSString *)renderElementsWithContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderElementsWithRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 
 @end

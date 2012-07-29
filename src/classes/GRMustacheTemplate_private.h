@@ -69,6 +69,9 @@
 // Documented in GRMustacheTemplate.h
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheTemplate.h
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
 #pragma mark File template
 
 // Documented in GRMustacheTemplate.h
@@ -76,6 +79,9 @@
 
 // Documented in GRMustacheTemplate.h
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 #pragma mark Resource template
 
@@ -89,7 +95,13 @@
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 #pragma mark URL template
 
@@ -101,6 +113,9 @@
 // Documented in GRMustacheTemplate.h
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheTemplate.h
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
 #endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 #pragma mark Rendering
@@ -109,7 +124,16 @@
 - (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObject:(id)object withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
+- (NSString *)renderObjectsInArray:(NSArray *)objects GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
+- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplate.h
+- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustacheTemplate.h
 - (NSString *)render GRMUSTACHE_API_PUBLIC;

@@ -44,7 +44,9 @@
 @private
     id _sectionElement;
     id _renderingContext;
+    id _filterContext;
     id _delegatingTemplate;
+    id _delegates;
 }
 
 

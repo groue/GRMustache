@@ -54,14 +54,14 @@
         return [NSString stringWithFormat:@"prefix%@", [value description]];
     }];
     
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          uppercaseFilter, @"uppercase",
-                          prefixFilter, @"prefix",
-                          @"Name", @"name",
-                          nil];
+    NSDictionary *data = [NSDictionary dictionaryWithObject:@"Name" forKey:@"name"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObjectsAndKeys:
+                             uppercaseFilter, @"uppercase",
+                             prefixFilter, @"prefix",
+                             nil];
     
     NSString *templateString = @"{{%FILTERS}}<{{name}}> <{{name|prefix}}> <{{name|uppercase}}> <{{name|uppercase|prefix}}> <{{name|prefix|uppercase}}>";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:templateString error:NULL];
     STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
 }
 
@@ -72,61 +72,50 @@
     STAssertNotNil(template, nil);
 }
 
-- (void)testBrokenFilterChainRaisesGRMustacheFilterException
+- (void)testMissingFilterChainRaisesGRMustacheFilterException
 {
     id replaceFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
         return @"replace";
     }];
     
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          replaceFilter, @"replace",
-                          @"Name", @"name",
-                          nil];
+    NSDictionary *data = [NSDictionary dictionaryWithObject:@"Name" forKey:@"name"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:replaceFilter forKey:@"replace"];
     
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{missing|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|missing|replace}}>" error:NULL], NSException, GRMustacheFilterException, nil);
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|replace|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{%FILTERS}}<{{missing|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{%FILTERS}}<{{name|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{%FILTERS}}<{{name|missing|replace}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{%FILTERS}}<{{name|replace|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
 }
 
 - (void)testNotAFilterRaisesGRMustacheFilterException
 {
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"Name", @"name",
-                          nil];
+    NSDictionary *data = [NSDictionary dictionaryWithObject:@"Name" forKey:@"name"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:@"filter" forKey:@"filter"];
     
-    NSString *templateString = @"{{%FILTERS}}<{{name|name}}>";
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:templateString error:NULL], NSException, GRMustacheFilterException, nil);
+    NSString *templateString = @"{{%FILTERS}}<{{name|filter}}>";
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:templateString error:NULL], NSException, GRMustacheFilterException, nil);
 }
 
-- (void)testFilteredValuesCanNotOverrideFilters
-{
-    id successFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
-        return @"success";
-    }];
-    id failFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
-        return @"failure";
-    }];
-    id filtered = [NSDictionary dictionaryWithObject:failFilter forKey:@"filter"];
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          filtered, @"filtered",
-                          successFilter, @"filter",
-                          nil];
-    NSString *templateString = @"{{%FILTERS}}<{{filtered|filter}} instead of {{filtered|filtered.filter}}>";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
-}
-
-- (void)testFiltersCanNotOverrideFilteredValue
+- (void)testFiltersAreNotLoadedFromContextStack
 {
     id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"success", @"test",
+                          @"Name", @"name",
                           filter, @"filter",
                           nil];
-    NSString *templateString = @"{{%FILTERS}}<{{test|filter}} instead of {{filter.test|filter}}>";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
+    NSDictionary *filters = [NSDictionary dictionary];
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{%FILTERS}}<{{name|filter}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+}
+
+- (void)testFiltersDoNotEnterContextStack
+{
+    id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
+    NSDictionary *data = [NSDictionary dictionaryWithObject:@"success" forKey:@"test"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:filter forKey:@"filter"];
+    STAssertEqualObjects([filter valueForKey:@"test"], @"failure", nil);
+    NSString *templateString = @"{{%FILTERS}}<{{#filter}}failure{{/filter}}{{^filter}}success{{/filter}}><{{filter.test}}><{{test|filter}}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<success><><success>", nil);
 }
 
 - (void)testFilteredValuesDoNotEnterSectionContextStack
@@ -136,24 +125,11 @@
     }];
     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSDictionary dictionaryWithObject:@"failure" forKey:@"test"], @"filtered",
-                          filter, @"filter",
                           @"success", @"test",
                           nil];
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:filter forKey:@"filter"];
     NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}} instead of {{#filtered}}{{test}}{{/filtered}}>{{/filtered|filter}}";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
-}
-
-- (void)testFiltersDoNotEnterSectionContextStack
-{
-    id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"filtered", @"filtered",
-                          filter, @"filter",
-                          @"success", @"test",
-                          nil];
-    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}} instead of {{#filter}}{{test}}{{/filter}}>{{/filtered|filter}}";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:templateString error:NULL];
     STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
