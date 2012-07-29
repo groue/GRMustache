@@ -94,6 +94,11 @@
 @property (nonatomic, assign) id<GRMustacheParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
+ */
+@property (nonatomic, strong, readonly) NSMutableSet *pragmas;
+
+/**
  * The parser will invoke its delegate as it builds tokens from the template
  * string.
  * 

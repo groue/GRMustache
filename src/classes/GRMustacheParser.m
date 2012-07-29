@@ -42,7 +42,7 @@
 /**
  * TODO
  */
-@property (nonatomic) BOOL pragmaFilter;
+@property (nonatomic, strong) NSMutableSet *pragmas;
 
 /**
  * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
@@ -85,6 +85,16 @@
 - (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString empty:(BOOL *)outEmpty;
 
 /**
+ * Returns a key path expression from a string
+ *
+ * @param string    a string
+ * @param outEmpty  TODO
+ *
+ * @return an key path expression, or nil if the parsing fails.
+ */
+- (GRMustacheKeyPathExpression *)parseKeyPathExpression:(NSString *)string empty:(BOOL *)outEmpty;
+
+/**
  * Returns a partial name from the inner string of a tag.
  *
  * @param innerTagString  the inner string of a tag.
@@ -107,7 +117,7 @@
 @synthesize delegate=_delegate;
 @synthesize otag=_otag;
 @synthesize ctag=_ctag;
-@synthesize pragmaFilter=_pragmaFilter;
+@synthesize pragmas=_pragmas;
 
 - (id)init
 {
@@ -123,6 +133,7 @@
 {
     [_otag release];
     [_ctag release];
+    [_pragmas release];
     [super dealloc];
 }
 
@@ -305,9 +316,10 @@
                     [self failWithParseErrorAtLine:line description:@"Invalid pragma" templateID:templateID];
                     return;
                 }
-                if ([pragma isEqualToString:@"FILTERS"]) {
-                    self.pragmaFilter = YES;
+                if (_pragmas == nil) {
+                    self.pragmas = [NSMutableSet set];
                 }
+                [self.pragmas addObject:pragma];
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePragma
                                                  value:(GRMustacheTokenValue){ .pragma = pragma }
                                         templateString:templateString
@@ -383,8 +395,8 @@
 
 - (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString empty:(BOOL *)outEmpty
 {
-    if (self.pragmaFilter) {
-        // split "a|b" into "a" and "b"
+    if ([self.pragmas containsObject:@"FILTERS"]) {
+        // Split "a|b" into "a" and "b"
         NSArray *chunks = [innerTagString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"|"]];
         if (chunks.count > 1) {
             id<GRMustacheExpression> filteredExpression = nil;
@@ -405,6 +417,11 @@
         }
     }
     
+    return [self parseKeyPathExpression:innerTagString empty:outEmpty];
+}
+
+- (GRMustacheKeyPathExpression *)parseKeyPathExpression:(NSString *)string empty:(BOOL *)outEmpty
+{
     NSMutableArray *keys = [NSMutableArray array];
     
     enum {
@@ -418,35 +435,35 @@
         stateValid
     } state = stateInitial;
     
-//    stateInitial -> ' ' -> stateInitial
-//    stateInitial -> '.' -> stateLeadingDot
-//    stateInitial -> 'a' -> stateIdentifier
-//    stateInitial -> EOF -> stateEmpty
-//    stateLeadingDot -> ' ' -> stateError
-//    stateLeadingDot -> '.' -> stateError
-//    stateLeadingDot -> 'a' -> stateIdentifier
-//    stateLeadingDot -> EOF -> stateValid
-//    stateIdentifier -> 'a' -> stateIdentifier
-//    stateIdentifier -> '.' -> stateWaitingForIdentifier
-//    stateIdentifier -> ' ' -> stateWhiteSpaceSuffix
-//    stateIdentifier -> EOF -> stateValid
-//    stateWaitingForIdentifier -> ' ' -> stateError
-//    stateWaitingForIdentifier -> '.' -> stateError
-//    stateWaitingForIdentifier -> 'a' -> stateIdentifier
-//    stateWaitingForIdentifier -> EOF -> stateError
-//    stateWhiteSpaceSuffix -> ' ' -> stateWhiteSpaceSuffix
-//    stateWhiteSpaceSuffix -> '.' -> stateError
-//    stateWhiteSpaceSuffix -> 'a' -> stateError
-//    stateWhiteSpaceSuffix -> EOF -> stateValid
-//    stateError -> ' ' -> stateError
-//    stateError -> '.' -> stateError
-//    stateError -> 'a' -> stateError
-//    stateError -> EOF -> stateError
+    //    stateInitial -> ' ' -> stateInitial
+    //    stateInitial -> '.' -> stateLeadingDot
+    //    stateInitial -> 'a' -> stateIdentifier
+    //    stateInitial -> EOF -> stateEmpty
+    //    stateLeadingDot -> ' ' -> stateError
+    //    stateLeadingDot -> '.' -> stateError
+    //    stateLeadingDot -> 'a' -> stateIdentifier
+    //    stateLeadingDot -> EOF -> stateValid
+    //    stateIdentifier -> 'a' -> stateIdentifier
+    //    stateIdentifier -> '.' -> stateWaitingForIdentifier
+    //    stateIdentifier -> ' ' -> stateWhiteSpaceSuffix
+    //    stateIdentifier -> EOF -> stateValid
+    //    stateWaitingForIdentifier -> ' ' -> stateError
+    //    stateWaitingForIdentifier -> '.' -> stateError
+    //    stateWaitingForIdentifier -> 'a' -> stateIdentifier
+    //    stateWaitingForIdentifier -> EOF -> stateError
+    //    stateWhiteSpaceSuffix -> ' ' -> stateWhiteSpaceSuffix
+    //    stateWhiteSpaceSuffix -> '.' -> stateError
+    //    stateWhiteSpaceSuffix -> 'a' -> stateError
+    //    stateWhiteSpaceSuffix -> EOF -> stateValid
+    //    stateError -> ' ' -> stateError
+    //    stateError -> '.' -> stateError
+    //    stateError -> 'a' -> stateError
+    //    stateError -> EOF -> stateError
     
     NSUInteger identifierStart = NSNotFound;
-    NSUInteger length = innerTagString.length;
+    NSUInteger length = string.length;
     for (NSUInteger i = 0; i < length && state != stateError; ++i) {
-        unichar c = [innerTagString characterAtIndex:i];
+        unichar c = [string characterAtIndex:i];
         switch (state) {
             case stateInitial:
                 switch (c) {
@@ -466,7 +483,7 @@
                         break;
                 }
                 break;
-            
+                
             case stateLeadingDot:
                 switch (c) {
                     case ' ':
@@ -491,12 +508,12 @@
                     case ' ':
                     case '\n':
                     case '\t':
-                        [keys addObject:[innerTagString substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
+                        [keys addObject:[string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
                         state = stateWhiteSpaceSuffix;
                         break;
                         
                     case '.':
-                        [keys addObject:[innerTagString substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
+                        [keys addObject:[string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }]];
                         state = stateWaitingForIdentifier;
                         break;
                         
@@ -568,7 +585,7 @@
             break;
             
         case stateIdentifier:
-            [keys addObject:[innerTagString substringFromIndex:identifierStart]];
+            [keys addObject:[string substringFromIndex:identifierStart]];
             state = stateValid;
             break;
             
@@ -579,7 +596,7 @@
     
     
     // End
-
+    
     switch (state) {
         case stateEmpty:
             *outEmpty = YES;
