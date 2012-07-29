@@ -23,6 +23,7 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheFilter.h"
 
 
 // =============================================================================
@@ -166,13 +167,14 @@
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
         [filterExpression prepareForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
-        id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
+        id<GRMustacheFilter> filter = filterInvocation.returnValue;
+        
+        if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
+            [NSException raise:GRMustacheFilterException format:@"Object for key `%@` in tag %@ does not conform to GRMustacheFilter protocol: %@", filterInvocation.key, filterInvocation.description, filter];
+        }
+        
         if (filter) {
-            [delegatingTemplate invokeDelegates:[NSArray arrayWithObject:filter] willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
-        } else {
-            // filter chain broken
-            _invocation.returnValue = nil;
-            break;
+            _invocation.returnValue = [filter transformedValue:_invocation.returnValue];
         }
     }
 }
@@ -180,18 +182,11 @@
 - (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        GRMustacheInvocation *filterInvocation = filterExpression.invocation;
-        id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
-        if (filter) {
-            [delegatingTemplate invokeDelegates:[NSArray arrayWithObject:filter] didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
-            [filterExpression finishForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
-        } else {
-            // filter chain broken
-            break;
-        }
+        [filterExpression finishForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
     }
     
     [_filteredExpression finishForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
+    
     self.invocation = nil;
 }
 

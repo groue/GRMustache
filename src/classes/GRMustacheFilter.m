@@ -23,6 +23,7 @@
 #import "GRMustacheFilter.h"
 #import "GRMustacheInvocation.h"
 
+NSString * const GRMustacheFilterException = @"GRMustacheFilterException";
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
@@ -32,7 +33,7 @@
 /**
  * Private subclass of GRMustacheFilter that filter values by calling a block.
  */
-@interface GRMustacheBlockFilter: GRMustacheFilter<GRMustacheTemplateDelegate> {
+@interface GRMustacheBlockFilter: GRMustacheFilter {
 @private
     id(^_block)(id value);
 }
@@ -55,6 +56,11 @@
 }
 
 #endif /* if NS_BLOCKS_AVAILABLE */
+
+- (id)transformedValue:(id)object
+{
+    return object;
+}
 
 @end
 
@@ -82,13 +88,15 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheTemplateDelegate>
+#pragma mark <GRMustacheFilter>
 
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+- (id)transformedValue:(id)object
 {
     if (_block) {
-        invocation.returnValue = _block(invocation.returnValue);
+        return _block(object);
     }
+    
+    return nil;
 }
 
 @end

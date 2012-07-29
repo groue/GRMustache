@@ -43,9 +43,36 @@
                           @"Name", @"name",
                           nil];
     
-    NSString *templateString = @"{{%FILTERS}}{{name}} {{name|prefix}} {{name|uppercase}} {{name|uppercase|prefix}} {{name|prefix|uppercase}}";
+    NSString *templateString = @"{{%FILTERS}}<{{name}}> <{{name|prefix}}> <{{name|uppercase}}> <{{name|uppercase|prefix}}> <{{name|prefix|uppercase}}>";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"Name prefixName NAME prefixNAME PREFIXNAME", nil);
+    STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
+}
+
+- (void)testBrokenFilterChainRaisesGRMustacheFilterException
+{
+    id replaceFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return @"replace";
+    }];
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          replaceFilter, @"replace",
+                          @"Name", @"name",
+                          nil];
+    
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{missing|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|missing|replace}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}<{{name|replace|missing}}>" error:NULL], NSException, GRMustacheFilterException, nil);
+}
+
+- (void)testNotAFilterRaisesGRMustacheFilterException
+{
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"Name", @"name",
+                          nil];
+    
+    NSString *templateString = @"{{%FILTERS}}<{{name|name}}>";
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:data fromString:templateString error:NULL], NSException, GRMustacheFilterException, nil);
 }
 
 @end

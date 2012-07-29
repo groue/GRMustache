@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheHelper.h"
+#import "GRMustacheSection.h"
 
 
 // =============================================================================
@@ -59,8 +60,7 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSAssert(NO, @"abstract method");
-    return nil;
+    return [section render];
 }
 
 @end

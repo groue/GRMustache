@@ -22,13 +22,26 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTemplateDelegate.h"
+
+
+// =============================================================================
+#pragma mark - <GRMustacheFilter>
+
+extern NSString * const GRMustacheFilterException;
+
+@protocol GRMustacheFilter <NSObject>
+@required
+
+- (id)transformedValue:(id)object;
+
+@end
+
 
 
 // =============================================================================
 #pragma mark - GRMustacheFilter
 
-@interface GRMustacheFilter : NSObject<GRMustacheTemplateDelegate>
+@interface GRMustacheFilter : NSObject<GRMustacheFilter>
 
 #if NS_BLOCKS_AVAILABLE
 
