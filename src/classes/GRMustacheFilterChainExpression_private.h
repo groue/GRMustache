@@ -20,48 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
-
-
-// =============================================================================
-#pragma mark - <GRMustacheFilter>
+#import "GRMustacheExpression_private.h"
 
 /**
  * TODO
  */
-extern NSString * const GRMustacheFilterException;
+@interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
 
 /**
  * TODO
  */
-@protocol GRMustacheFilter <NSObject>
-@required
-
-/**
- * TODO
- */
-- (id)transformedValue:(id)object;
-
-@end
-
-
-
-// =============================================================================
-#pragma mark - GRMustacheFilter
-
-/**
- * TODO
- */
-@interface GRMustacheFilter : NSObject<GRMustacheFilter>
-
-#if NS_BLOCKS_AVAILABLE
-
-/**
- * TODO
- */
-+ (id)filterWithBlock:(id(^)(id value))block;
-
-#endif /* if NS_BLOCKS_AVAILABLE */
-
++ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions GRMUSTACHE_API_INTERNAL;
 @end

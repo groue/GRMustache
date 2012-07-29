@@ -22,7 +22,7 @@
 
 #import "GRMustachePrivateAPITest.h"
 #import "GRMustacheParser_private.h"
-#import "GRMustacheExpression_private.h"
+#import "GRMustacheKeyPathExpression_private.h"
 #import "GRMustacheError.h"
 
 

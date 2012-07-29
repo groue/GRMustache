@@ -20,82 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheExpression_private.h"
+#import "GRMustacheFilterChainExpression_private.h"
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheTemplate_private.h"
 #import "GRMustacheFilter.h"
-
-
-// =============================================================================
-#pragma mark - GRMustacheKeyPathExpression
-
-@interface GRMustacheKeyPathExpression()
-@property (nonatomic, retain) GRMustacheInvocation *invocation;
-- (id)initWithKeys:(NSArray *)keys;
-@end
-
-@implementation GRMustacheKeyPathExpression
-@synthesize invocation = _invocation;
-
-+ (id)expressionWithKeys:(NSArray *)keys 
-{
-    return [[[self alloc] initWithKeys:keys] autorelease];
-}
-
-- (id)initWithKeys:(NSArray *)keys
-{
-    self = [super init];
-    if (self) {
-        _invocation = [[GRMustacheInvocation invocationWithKeys:keys] retain];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_invocation release];
-    [super dealloc];
-}
-
-- (BOOL)isEqual:(id<GRMustacheExpression>)expression
-{
-    if (![expression isKindOfClass:[GRMustacheKeyPathExpression class]]) {
-        return NO;
-    }
-    
-    return [_invocation.keys isEqualToArray:((GRMustacheKeyPathExpression *)expression).invocation.keys];
-}
-
-
-#pragma mark GRMustacheExpression
-
-- (GRMustacheToken *)debuggingToken
-{
-    return _invocation.debuggingToken;
-}
-
-- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
-{
-    _invocation.debuggingToken = debuggingToken;
-}
-
-- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
-{
-    [_invocation invokeWithContext:context];
-    [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:_invocation as:interpretation];
-}
-
-- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
-{
-    [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:_invocation as:interpretation];
-    _invocation.returnValue = nil;
-}
-
-@end
-
-
-// =============================================================================
-#pragma mark - GRMustacheFilterChainExpression
 
 @interface GRMustacheFilterChainExpression()
 @property (nonatomic, retain) GRMustacheInvocation *invocation;

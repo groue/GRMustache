@@ -28,18 +28,30 @@
 @class GRMustacheInvocation;
 @class GRMustacheToken;
 
+/**
+ * TODO
+ */
 @protocol GRMustacheExpression <NSObject>
 @required
+
+/**
+ * TODO
+ */
 @property (nonatomic, retain, readonly) GRMustacheInvocation *invocation GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
 @property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
 - (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
 - (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
-@end
 
-@interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression>
-+ (id)expressionWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
-@end
-
-@interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
-+ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions GRMUSTACHE_API_INTERNAL;
 @end

@@ -67,11 +67,6 @@
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
 
-/**
- * TODO
- */
-@property (nonatomic, retain, readonly) NSArray *keys GRMUSTACHE_API_INTERNAL;
-
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
@@ -95,4 +90,9 @@
  * @see GRMustacheContext
  */
 - (void)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation;
 @end

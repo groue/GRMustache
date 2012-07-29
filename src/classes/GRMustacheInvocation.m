@@ -54,6 +54,7 @@
     NSArray *_keys;
     NSString *_lastUsedKey;
 }
+@property (nonatomic, retain, readonly) NSArray *keys;
 - (id)initWithKeys:(NSArray *)keys;
 @end
 
@@ -92,15 +93,15 @@
     }
 }
 
-- (NSArray *)keys
-{
-    NSAssert(NO, @"abstract method");
-    return nil;
-}
-
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
     NSAssert(NO, @"abstract method");
+}
+
+- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation
+{
+    NSAssert(NO, @"abstract method");
+    return NO;
 }
 
 @end
@@ -132,11 +133,6 @@
     return [[_key retain] autorelease];
 }
 
-- (NSArray *)keys
-{
-    return [NSArray arrayWithObject:_key];
-}
-
 - (void)invokeWithContext:(GRMustacheContext *)context
 {
     if (_implicitIterator) {
@@ -144,6 +140,14 @@
     } else {
         self.returnValue = [context valueForKey:_key scoped:NO];
     }
+}
+
+- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation
+{
+    if (![invocation isKindOfClass:[GRMustacheInvocationKey class]]) {
+        return NO;
+    }
+    return [_key isEqualToString:((GRMustacheInvocationKey *)invocation).key];
 }
 
 @end
@@ -195,6 +199,14 @@
         scoped = YES;
     }
     self.returnValue = context.object;
+}
+
+- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation
+{
+    if (![invocation isKindOfClass:[GRMustacheInvocationKeyPath class]]) {
+        return NO;
+    }
+    return [_keys isEqualToArray:((GRMustacheInvocationKeyPath *)invocation).keys];
 }
 
 @end
