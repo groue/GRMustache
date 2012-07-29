@@ -23,6 +23,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
+#import "GRMustacheFilterLibrary_private.h"
 
 @interface GRMustacheTemplate()
 - (id)initWithElements:(NSArray *)elems;
@@ -198,7 +199,7 @@
     @autoreleasepool {
         NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
         GRMustacheContext *renderingContext = [GRMustacheContext contextWithObject:object];
-        GRMustacheContext *filterContext = [GRMustacheContext contextWithObject:filters];
+        GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
         result = [[self renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:self delegates:delegates] retain];
     }
     return [result autorelease];
@@ -217,7 +218,7 @@
         for (id object in objects) {
             renderingContext = renderingContext ? [renderingContext contextByAddingObject:object] : [GRMustacheContext contextWithObject:object];
         }
-        GRMustacheContext *filterContext = [GRMustacheContext contextWithObject:filters];
+        GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
         NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
         result = [[self renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:self delegates:delegates] retain];
     }
