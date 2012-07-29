@@ -35,7 +35,7 @@
 
 - (NSString *)test
 {
-    return @"fail";
+    return @"failure";
 }
 
 @end
@@ -98,16 +98,16 @@
         return @"success";
     }];
     id failFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
-        return @"fail";
+        return @"failure";
     }];
     id filtered = [NSDictionary dictionaryWithObject:failFilter forKey:@"filter"];
     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                           filtered, @"filtered",
                           successFilter, @"filter",
                           nil];
-    NSString *templateString = @"{{%FILTERS}}<{{filtered|filter}}>";
+    NSString *templateString = @"{{%FILTERS}}<{{filtered|filter}} instead of {{filtered|filtered.filter}}>";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success>", nil);
+    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
 - (void)testFiltersCanNotOverrideFilteredValue
@@ -117,9 +117,9 @@
                           @"success", @"test",
                           filter, @"filter",
                           nil];
-    NSString *templateString = @"{{%FILTERS}}<{{test|filter}}>";
+    NSString *templateString = @"{{%FILTERS}}<{{test|filter}} instead of {{filter.test|filter}}>";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success>", nil);
+    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
 - (void)testFilteredValuesDoNotEnterSectionContextStack
@@ -128,13 +128,13 @@
         return @"filter";
     }];
     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSDictionary dictionaryWithObject:@"fail" forKey:@"test"], @"filtered",
+                          [NSDictionary dictionaryWithObject:@"failure" forKey:@"test"], @"filtered",
                           filter, @"filter",
                           @"success", @"test",
                           nil];
-    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}}>{{/filtered|filter}}";
+    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}} instead of {{#filtered}}{{test}}{{/filtered}}>{{/filtered|filter}}";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success>", nil);
+    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
 - (void)testFiltersDoNotEnterSectionContextStack
@@ -145,9 +145,9 @@
                           filter, @"filter",
                           @"success", @"test",
                           nil];
-    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}}>{{/filtered|filter}}";
+    NSString *templateString = @"{{%FILTERS}}{{#filtered|filter}}<{{test}} instead of {{#filter}}{{test}}{{/filter}}>{{/filtered|filter}}";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<success>", nil);
+    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
 @end
