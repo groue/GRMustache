@@ -26,12 +26,12 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheStandardCapitalizeFilter
+#pragma mark - Private concrete class GRMustacheCapitalizedFilter
 
-@interface GRMustacheStandardCapitalizeFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheCapitalizedFilter: NSObject<GRMustacheFilter>
 @end
 
-@implementation GRMustacheStandardCapitalizeFilter
+@implementation GRMustacheCapitalizedFilter
 
 - (id)transformedValue:(id)object
 {
@@ -42,12 +42,12 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheStandardLowercaseFilter
+#pragma mark - Private concrete class GRMustacheLowercaseFilter
 
-@interface GRMustacheStandardLowercaseFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheLowercaseFilter: NSObject<GRMustacheFilter>
 @end
 
-@implementation GRMustacheStandardLowercaseFilter
+@implementation GRMustacheLowercaseFilter
 
 - (id)transformedValue:(id)object
 {
@@ -58,12 +58,12 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheStandardUppercaseFilter
+#pragma mark - Private concrete class GRMustacheUppercaseFilter
 
-@interface GRMustacheStandardUppercaseFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheUppercaseFilter: NSObject<GRMustacheFilter>
 @end
 
-@implementation GRMustacheStandardUppercaseFilter
+@implementation GRMustacheUppercaseFilter
 
 - (id)transformedValue:(id)object
 {
@@ -74,12 +74,12 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheStandardFirstFilter
+#pragma mark - Private concrete class GRMustacheFirstFilter
 
-@interface GRMustacheStandardFirstFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheFirstFilter: NSObject<GRMustacheFilter>
 @end
 
-@implementation GRMustacheStandardFirstFilter
+@implementation GRMustacheFirstFilter
 
 - (id)transformedValue:(id)object
 {
@@ -90,16 +90,72 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheStandardLastFilter
+#pragma mark - Private concrete class GRMustacheLastFilter
 
-@interface GRMustacheStandardLastFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheLastFilter: NSObject<GRMustacheFilter>
 @end
 
-@implementation GRMustacheStandardLastFilter
+@implementation GRMustacheLastFilter
 
 - (id)transformedValue:(id)object
 {
     return [(NSArray *)object lastObject];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheBlankFilter
+
+@interface GRMustacheBlankFilter: NSObject<GRMustacheFilter>
+@end
+
+@implementation GRMustacheBlankFilter
+
+- (id)transformedValue:(id)object
+{
+    if (object == nil) {
+        return [NSNumber numberWithBool:YES];
+    }
+    
+    if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+        for (id _ in object) {
+            return [NSNumber numberWithBool:NO];
+        }
+        return [NSNumber numberWithBool:YES];
+    }
+    
+    NSString *trimmedDescription = [[object description] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return [NSNumber numberWithBool:trimmedDescription.length == 0];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheEmptyFilter
+
+@interface GRMustacheEmptyFilter: NSObject<GRMustacheFilter>
+@end
+
+@implementation GRMustacheEmptyFilter
+
+- (id)transformedValue:(id)object
+{
+    if (object == nil) {
+        return [NSNumber numberWithBool:YES];
+    }
+    
+    if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+        for (id _ in object) {
+            return [NSNumber numberWithBool:NO];
+        }
+        return [NSNumber numberWithBool:YES];
+    }
+    
+    NSString *description = [object description];
+    return [NSNumber numberWithBool:description.length == 0];
 }
 
 @end
@@ -112,18 +168,20 @@
 
 + (GRMustacheContext *)filterContextWithFilters:(id)filters
 {
-    static NSDictionary *standardLibrary = nil;
-    if (standardLibrary == nil) {
-        standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
-                            [[[GRMustacheStandardCapitalizeFilter alloc] init] autorelease], @"capitalize",
-                            [[[GRMustacheStandardLowercaseFilter alloc] init] autorelease], @"lowercase",
-                            [[[GRMustacheStandardUppercaseFilter alloc] init] autorelease], @"uppercase",
-                            [[[GRMustacheStandardFirstFilter alloc] init] autorelease], @"first",
-                            [[[GRMustacheStandardLastFilter alloc] init] autorelease], @"last",
-                            nil] retain];
+    static NSDictionary *GRMustacheLibrary = nil;
+    if (GRMustacheLibrary == nil) {
+        GRMustacheLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                              [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+                              [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                              [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                              [[[GRMustacheFirstFilter alloc] init] autorelease], @"first",
+                              [[[GRMustacheLastFilter alloc] init] autorelease], @"last",
+                              [[[GRMustacheBlankFilter alloc] init] autorelease], @"blank?",
+                              [[[GRMustacheEmptyFilter alloc] init] autorelease], @"empty?",
+                              nil] retain];
     }
     
-    GRMustacheContext *filterContext = [GRMustacheContext contextWithObject:standardLibrary];
+    GRMustacheContext *filterContext = [GRMustacheContext contextWithObject:GRMustacheLibrary];
     if (filters == nil) {
         return filterContext;
     }

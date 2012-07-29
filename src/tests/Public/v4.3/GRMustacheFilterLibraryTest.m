@@ -28,39 +28,160 @@
 
 @implementation GRMustacheFilterLibraryTest
 
-- (void)testStandardCapitalizeFilter
+- (void)testCapitalizeFilter
 {
     id data = @"name";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|capitalize}}" error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|capitalized}}" error:NULL];
     STAssertEqualObjects(rendering, @"Name", nil);
 }
 
-- (void)testStandardLowercaseFilter
+- (void)testLowercaseFilter
 {
     id data = @"NAME";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|lowercase}}" error:NULL];
     STAssertEqualObjects(rendering, @"name", nil);
 }
-- (void)testStandardUppercaseFilter
+- (void)testUppercaseFilter
 {
     id data = @"name";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|uppercase}}" error:NULL];
     STAssertEqualObjects(rendering, @"NAME", nil);
 }
 
-- (void)testStandardFirstFilter
+- (void)testFirstFilter
 {
     id data = [NSArray arrayWithObjects:@"1", @"2", nil];
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|first}}" error:NULL];
     STAssertEqualObjects(rendering, @"1", nil);
 }
 
-- (void)testStandardLastFilter
+- (void)testLastFilter
 {
     id data = [NSArray arrayWithObjects:@"1", @"2", nil];
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{.|last}}" error:NULL];
     STAssertEqualObjects(rendering, @"2", nil);
 }
 
+- (void)testBlankFilter
+{
+    NSString *templateString = @"{{%FILTERS}}{{#.|blank?}}YES{{/.|blank?}}{{^.|blank?}}NO{{/.|blank?}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    {
+        NSString *rendering = [template renderObject:nil];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@""];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@" \t\n"];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@"hello"];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSArray array]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSArray arrayWithObject:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSDictionary dictionary]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSDictionary dictionaryWithObject:@"" forKey:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSSet set]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSSet setWithObject:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[[[NSObject alloc] init] autorelease]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+}
+
+- (void)testEmptyFilter
+{
+    NSString *templateString = @"{{%FILTERS}}{{#.|empty?}}YES{{/.|empty?}}{{^.|empty?}}NO{{/.|empty?}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    {
+        NSString *rendering = [template renderObject:nil];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@""];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@" \t\n"];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:@"hello"];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSArray array]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSArray arrayWithObject:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSDictionary dictionary]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSDictionary dictionaryWithObject:@"" forKey:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSSet set]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSSet setWithObject:@""]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[[[NSObject alloc] init] autorelease]];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+}
 
 @end
