@@ -604,9 +604,9 @@
 		56CD619315C564C20067E2E7 /* v4.3 */ = {
 			isa = PBXGroup;
 			children = (
+				56CD61A115C5D92A0067E2E7 /* GRMustacheFilterLibraryTest.m */,
 				56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */,
 				56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */,
-				56CD61A115C5D92A0067E2E7 /* GRMustacheFilterLibraryTest.m */,
 			);
 			path = v4.3;
 			sourceTree = "<group>";

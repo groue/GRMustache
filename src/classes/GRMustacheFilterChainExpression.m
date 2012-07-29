@@ -92,7 +92,7 @@
     self.invocation = _filteredExpression.invocation;
     
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:nil delegates:nil interpretation:0];
+        [filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheFilter> filter = filterInvocation.returnValue;
         
@@ -113,7 +113,7 @@
 - (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:nil delegates:nil interpretation:0];
+        [filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
     }
     
     [_filteredExpression finishForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
