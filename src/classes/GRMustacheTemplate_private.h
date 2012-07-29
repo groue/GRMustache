@@ -119,11 +119,11 @@
 /**
  * TODO
  */
-- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+- (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+- (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 
 @end

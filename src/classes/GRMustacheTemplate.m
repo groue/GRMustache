@@ -164,7 +164,8 @@
 
 - (NSString *)renderObject:(id)object
 {
-    return [self renderContext:[GRMustacheContext contextWithObject:object] delegatingTemplate:self];
+    NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
+    return [self renderContext:[GRMustacheContext contextWithObject:object] delegatingTemplate:self delegates:delegates];
 }
 
 - (NSString *)renderObjects:(id)object, ...
@@ -175,37 +176,42 @@
         va_start(objectList, object);
         GRMustacheContext *context = [GRMustacheContext contextWithObject:object andObjectList:objectList];
         va_end(objectList);
-        result = [[self renderContext:context delegatingTemplate:self] retain];
+        NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
+        result = [[self renderContext:context delegatingTemplate:self delegates:delegates] retain];
     }
     return [result autorelease];
 }
 
-- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+- (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
-    if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-        // 4.1 API
-        [delegate template:self willInterpretReturnValueOfInvocation:invocation as:interpretation];
-    } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
-        // 4.0 API
-        [delegate template:self willRenderReturnValueOfInvocation:invocation];
+    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [delegate template:self willInterpretReturnValueOfInvocation:invocation as:interpretation];
+        } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
+            [delegate template:self willRenderReturnValueOfInvocation:invocation];
+        }
     }
 }
 
-- (void)invokeDelegate:(id<GRMustacheTemplateDelegate>)delegate didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+- (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
-    if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-        // 4.1 API
-        [delegate template:self didInterpretReturnValueOfInvocation:invocation as:interpretation];
-    } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
-        // 4.0 API
-        [delegate template:self didRenderReturnValueOfInvocation:invocation];
+    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
+        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+            // 4.1 API
+            [delegate template:self didInterpretReturnValueOfInvocation:invocation as:interpretation];
+        } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
+            // 4.0 API
+            [delegate template:self didRenderReturnValueOfInvocation:invocation];
+        }
     }
 }
 
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate
+- (NSString *)renderContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
 {
     NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
@@ -214,7 +220,7 @@
         }
         
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderContext:context delegatingTemplate:delegatingTemplate]];
+            [result appendString:[elem renderContext:context delegatingTemplate:delegatingTemplate delegates:delegates]];
         }
         
         if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {

@@ -78,15 +78,15 @@
     _invocation.debuggingToken = debuggingToken;
 }
 
-- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     [_invocation invokeWithContext:context];
-    [delegatingTemplate invokeDelegate:delegatingTemplate.delegate willInterpretReturnValueOfInvocation:_invocation as:interpretation];
+    [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:_invocation as:interpretation];
 }
 
-- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
-    [delegatingTemplate invokeDelegate:delegatingTemplate.delegate didInterpretReturnValueOfInvocation:_invocation as:interpretation];
+    [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:_invocation as:interpretation];
     _invocation.returnValue = nil;
 }
 
@@ -158,17 +158,17 @@
     }
 }
 
-- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)prepareForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
-    [_filteredExpression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:interpretation];
+    [_filteredExpression prepareForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
     self.invocation = _filteredExpression.invocation;
     
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression prepareForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationFilter];
+        [filterExpression prepareForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
         if (filter) {
-            [delegatingTemplate invokeDelegate:filter willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+            [delegatingTemplate invokeDelegates:[NSArray arrayWithObject:filter] willInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
         } else {
             // filter chain broken
             _invocation.returnValue = nil;
@@ -177,21 +177,21 @@
     }
 }
 
-- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate interpretation:(GRMustacheInterpretation)interpretation
+- (void)finishForContext:(GRMustacheContext *)context delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
     for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
         GRMustacheInvocation *filterInvocation = filterExpression.invocation;
         id<GRMustacheTemplateDelegate> filter = filterInvocation.returnValue;
         if (filter) {
-            [delegatingTemplate invokeDelegate:filter didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
-            [filterExpression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:GRMustacheInterpretationFilter];
+            [delegatingTemplate invokeDelegates:[NSArray arrayWithObject:filter] didInterpretReturnValueOfInvocation:_invocation as:GRMustacheInterpretationFilteredValue];
+            [filterExpression finishForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
         } else {
             // filter chain broken
             break;
         }
     }
     
-    [_filteredExpression finishForContext:context delegatingTemplate:delegatingTemplate interpretation:interpretation];
+    [_filteredExpression finishForContext:context delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
     self.invocation = nil;
 }
 
