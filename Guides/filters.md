@@ -5,11 +5,11 @@ GRMustache allow you to filter values before they are rendered.
 
 **Filters are not yet part of the Mustache specification**, and you need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
 
-You apply filter by adding a pipe character `|` after the value.
+You apply a filter by prepending its name before a value.
 
-For instance, `{{%FILTERS}}My name is {{ name | uppercase }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
+For instance, `{{%FILTERS}}My name is {{ uppercase name }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
 
-Filters can chain: `{{ name | reversed | uppercase }}` would render `RUHTRA`.
+Filters can chain: `{{ uppercase reversed name }}` would render `RUHTRA`.
 
 ## Standard library
 
@@ -79,4 +79,14 @@ id percentFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
 Now, let's have GRMustache know about your custom filter, and use it:
 
 ```objc
+float gain = 0.5;
+NSDictionary *data = @{ @"gain": @(gain) };
+NSDictionary *filters = @{ @"percent": percentFilter };
+NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent gain }} productivity bump!";
+
+// returns @"Enjoy your 50% productivity bump!"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                           withFilters:filters
+                                            fromString:templateString
+                                                 error:NULL];
 ```
