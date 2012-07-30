@@ -396,24 +396,25 @@
 - (id<GRMustacheExpression>)parseExpression:(NSString *)innerTagString empty:(BOOL *)outEmpty
 {
     if ([self.pragmas containsObject:@"FILTERS"]) {
-        // Split "a|b" into "a" and "b"
-        NSArray *chunks = [innerTagString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"|"]];
-        if (chunks.count > 1) {
-            id<GRMustacheExpression> filteredExpression = nil;
-            NSMutableArray *filterExpressions = [NSMutableArray arrayWithCapacity:chunks.count - 1];
-            for (NSString *chunk in chunks) {
+        // Split "a b" into "a" and "b"
+        NSArray *chunks = [innerTagString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSMutableArray *nonEmptyChunks = [NSMutableArray arrayWithCapacity:chunks.count];
+        for (NSString *chunk in chunks) {
+            if (chunk.length > 0) {
+                [nonEmptyChunks addObject:chunk];
+            }
+        }
+        if (nonEmptyChunks.count > 1) {
+            NSMutableArray *expressions = [NSMutableArray arrayWithCapacity:nonEmptyChunks.count - 1];
+            for (NSString *chunk in nonEmptyChunks) {
                 id<GRMustacheExpression> expression = [self parseExpression:chunk empty:outEmpty];
                 if (expression == nil) {
                     *outEmpty = NO;
                     return nil;
                 }
-                if (filteredExpression == nil) {
-                    filteredExpression = expression;
-                } else {
-                    [filterExpressions addObject:expression];
-                }
+                [expressions addObject:expression];
             }
-            return [GRMustacheFilterChainExpression expressionWithFilteredExpression:filteredExpression filterExpressions:filterExpressions];
+            return [GRMustacheFilterChainExpression expressionWithExpressions:expressions];
         }
     }
     

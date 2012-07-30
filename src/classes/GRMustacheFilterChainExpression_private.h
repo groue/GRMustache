@@ -30,5 +30,5 @@
 /**
  * TODO
  */
-+ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithExpressions:(NSArray *)expressions GRMUSTACHE_API_INTERNAL;
 @end

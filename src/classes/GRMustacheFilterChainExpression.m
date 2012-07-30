@@ -26,27 +26,24 @@
 
 @interface GRMustacheFilterChainExpression()
 @property (nonatomic, retain) GRMustacheInvocation *invocation;
-@property (nonatomic, retain) id<GRMustacheExpression> filteredExpression;
-@property (nonatomic, retain) NSArray *filterExpressions;
-- (id)initWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions;
+@property (nonatomic, retain) NSArray *expressions;
+- (id)initWithExpressions:(NSArray *)expressions;
 @end
 
 @implementation GRMustacheFilterChainExpression
 @synthesize invocation = _invocation;
-@synthesize filteredExpression = _filteredExpression;
-@synthesize filterExpressions = _filterExpressions;
+@synthesize expressions = _expressions;
 
-+ (id)expressionWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions
++ (id)expressionWithExpressions:(NSArray *)expressions
 {
-    return [[[self alloc] initWithFilteredExpression:filteredExpression filterExpressions:filterExpressions] autorelease];
+    return [[[self alloc] initWithExpressions:expressions] autorelease];
 }
 
-- (id)initWithFilteredExpression:(id<GRMustacheExpression>)filteredExpression filterExpressions:(NSArray *)filterExpressions
+- (id)initWithExpressions:(NSArray *)expressions
 {
     self = [super init];
     if (self) {
-        _filteredExpression = [filteredExpression retain];
-        _filterExpressions = [filterExpressions retain];
+        _expressions = [expressions retain];
     }
     return self;
 }
@@ -54,8 +51,7 @@
 - (void)dealloc
 {
     [_invocation release];
-    [_filteredExpression release];
-    [_filterExpressions release];
+    [_expressions release];
     [super dealloc];
 }
 
@@ -64,10 +60,7 @@
     if (![expression isKindOfClass:[GRMustacheFilterChainExpression class]]) {
         return NO;
     }
-    if (![_filteredExpression isEqual:((GRMustacheFilterChainExpression *)expression).filteredExpression]) {
-        return NO;
-    }
-    return [_filterExpressions isEqualToArray:((GRMustacheFilterChainExpression *)expression).filterExpressions];
+    return [_expressions isEqualToArray:((GRMustacheFilterChainExpression *)expression).expressions];
 }
 
 
@@ -75,48 +68,64 @@
 
 - (GRMustacheToken *)debuggingToken
 {
-    return _filteredExpression.debuggingToken;
+    return ((id<GRMustacheExpression>)[_expressions objectAtIndex:0]).debuggingToken;
 }
 
 - (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
 {
-    _filteredExpression.debuggingToken = debuggingToken;
-    for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        filterExpression.debuggingToken = debuggingToken;
+    for (id<GRMustacheExpression> expression in _expressions) {
+        expression.debuggingToken = debuggingToken;
     }
 }
 
 - (void)prepareForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
-    [_filteredExpression prepareForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
-    self.invocation = _filteredExpression.invocation;
+    id<GRMustacheExpression> filteredExpression = [_expressions lastObject];
+    [filteredExpression prepareForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
+    self.invocation = filteredExpression.invocation;
     
-    for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
-        GRMustacheInvocation *filterInvocation = filterExpression.invocation;
-        id<GRMustacheFilter> filter = filterInvocation.returnValue;
-        
-        if (filter == nil) {
-            [NSException raise:GRMustacheFilterException format:@"Missing filter for key `%@` in tag %@", filterInvocation.key, filterInvocation.description];
-        }
-        
-        if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
-            [NSException raise:GRMustacheFilterException format:@"Object for key `%@` in tag %@ does not conform to GRMustacheFilter protocol: %@", filterInvocation.key, filterInvocation.description, filter];
-        }
-        
-        if (filter) {
-            _invocation.returnValue = [filter transformedValue:_invocation.returnValue];
+    NSUInteger count = _expressions.count;
+    if (count > 1) {
+        for (NSUInteger i = count - 2;; --i) {
+            id<GRMustacheExpression> filterExpression = [_expressions objectAtIndex:i];
+            [filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
+            GRMustacheInvocation *filterInvocation = filterExpression.invocation;
+            id<GRMustacheFilter> filter = filterInvocation.returnValue;
+            
+            if (filter == nil) {
+                [NSException raise:GRMustacheFilterException format:@"Missing filter for key `%@` in tag %@", filterInvocation.key, filterInvocation.description];
+            }
+            
+            if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
+                [NSException raise:GRMustacheFilterException format:@"Object for key `%@` in tag %@ does not conform to GRMustacheFilter protocol: %@", filterInvocation.key, filterInvocation.description, filter];
+            }
+            
+            if (filter) {
+                _invocation.returnValue = [filter transformedValue:_invocation.returnValue];
+            }
+            
+            if (i == 0) {
+                break;
+            }
         }
     }
 }
 
 - (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
-    for (id<GRMustacheExpression> filterExpression in _filterExpressions) {
-        [filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
+    NSUInteger count = _expressions.count;
+    if (count > 1) {
+        for (NSUInteger i = count - 2;; --i) {
+            id<GRMustacheExpression> filterExpression = [_expressions objectAtIndex:i];
+            [filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
+            if (i == 0) {
+                break;
+            }
+        }
     }
     
-    [_filteredExpression finishForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
+    id<GRMustacheExpression> filteredExpression = [_expressions lastObject];
+    [filteredExpression finishForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
     
     self.invocation = nil;
 }
