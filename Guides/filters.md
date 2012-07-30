@@ -83,12 +83,15 @@ id percentFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
 Now, let's have GRMustache know about your custom filter, and use it:
 
 ```objc
+// Prepare the data
 float gain = 0.5;
-NSDictionary *data = @{ @"gain": @(gain) };
-NSDictionary *filters = @{ @"percent": percentFilter };
-NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent gain }} productivity bump!";
+NSDictionary *data = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:gain] forKey:@"gain"];
 
-// returns @"Enjoy your 50% productivity bump!"
+// Prepare the filters
+NSDictionary *filters = [NSDictionary dictionaryWithObject:percentFilter forKey:@"percent"];
+
+// Renders @"Enjoy your 50% productivity bump!"
+NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent gain }} productivity bump!";
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                            withFilters:filters
                                             fromString:templateString
