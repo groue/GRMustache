@@ -13,6 +13,8 @@ Filters can chain: `{{ uppercase reversed name }}` would render `RUHTRA`.
 
 Filters can apply to compound key paths: `{{ uppercase person.name }}` would render as expected.
 
+You can filter sections as wel : `{{^ empty? people }}...` render if the people collection is not empty.
+
 ## Standard library
 
 GRMustache ships with a bunch of filters already implemented:
