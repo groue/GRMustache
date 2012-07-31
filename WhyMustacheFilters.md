@@ -72,3 +72,19 @@ The only argument so far I've read against filtered sections is: "I see no compe
 
 This argument fails for two reasons. First it only shows the lack of imagination of the one expressing it. Second, it artificially limits the empowerment of the library user, who deserves more respect. If Mustache allows the library user to inject code, there is no point nannying him and preventing him from injecting his code where he thinks it is relevant. This only makes Mustache painful to use, without any benefit for anybody.
 
+Here is a nice section filter, for the unimaginative ones:
+
+```js
+with_index = function(array) {
+    for (i=0; i<array.length; ++i) {
+        var object = array[i];
+        object.index = i;
+        object.even = (i % 2 == 0);
+        object.first = (i == 0);
+        object.last = (i == array.length - 1);
+    }
+    return array;
+};
+```
+
+Yes, this filters allows to render collections with the `index`, `even`, `first`, and `last` keys usable in the template.
