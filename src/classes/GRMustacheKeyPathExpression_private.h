@@ -25,7 +25,10 @@
 /**
  * TODO
  */
-@interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression>
+@interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression> {
+@private
+    GRMustacheInvocation *_invocation;
+}
 
 /**
  * TODO

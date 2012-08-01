@@ -25,7 +25,12 @@
 /**
  * TODO
  */
-@interface GRMustacheFilterInvocationExpression : NSObject<GRMustacheExpression>
+@interface GRMustacheFilterInvocationExpression : NSObject<GRMustacheExpression> {
+@private
+    GRMustacheInvocation *_invocation;
+    id<GRMustacheExpression> _filterExpression;
+    id<GRMustacheExpression> _parameterExpression;
+}
 
 /**
  * TODO

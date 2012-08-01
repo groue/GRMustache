@@ -81,6 +81,7 @@
     id<GRMustacheParserDelegate> _delegate;
     NSString *_otag;
     NSString *_ctag;
+    NSMutableSet *_pragmas;
 }
 
 /**
