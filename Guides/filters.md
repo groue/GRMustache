@@ -5,15 +5,17 @@ GRMustache allow you to filter values before they are rendered.
 
 **Filters are not yet part of the Mustache specification**, and you need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
 
-You apply a filter by prepending its name before a value, just like calling a function but without any parentheses.
+You apply a filter just like calling a function, with parentheses.
 
-For instance, `{{%FILTERS}}My name is {{ uppercase name }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
+For instance, `{{%FILTERS}}My name is {{ uppercase(name) }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
 
-Filters can chain: `{{ uppercase reversed name }}` would render `RUHTRA`.
+Filters can chain: `{{ uppercase(reversed(name)) }}` would render `RUHTRA`.
 
-Filters can apply to compound key paths: `{{ uppercase person.name }}` would render as expected.
+Filters can apply to compound key paths: `{{ uppercase(person.name) }}`.
 
-You can filter sections as wel : `{{^ empty? people }}...` renders if the people collection is not empty.
+You can extract values from filtered values: `{{ last(persons).name }}`.
+
+You can filter sections as well : `{{^ isEmpty(people) }}...` renders if the people collection is not empty.
 
 ## Standard library
 
@@ -31,13 +33,13 @@ GRMustache ships with a bunch of filters already implemented:
     
     Given "johannes KEPLER", it returns "JOHANNES KEPLER".
 
-- `empty?`
+- `isEmpty`
     
-    Returns YES if the input is an empty enumerable object, or an empty string. Returns NO otherwise.
+    Returns YES if the input is nil, or an empty enumerable object, or an empty string. Returns NO otherwise.
 
-- `blank?`
+- `isBlank`
     
-    Returns YES if the input is an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
+    Returns YES if the input is nil, or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
 
 ## Defining your own filters
 
@@ -91,7 +93,7 @@ NSDictionary *data = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloa
 NSDictionary *filters = [NSDictionary dictionaryWithObject:percentFilter forKey:@"percent"];
 
 // Renders @"Enjoy your 50% productivity bump!"
-NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent gain }} productivity bump!";
+NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent(gain) }} productivity bump!";
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                            withFilters:filters
                                             fromString:templateString
