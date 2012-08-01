@@ -421,7 +421,8 @@
         stateError,
         stateValid
     } state = stateInitial;
-    BOOL canFilter = YES;
+    BOOL canFilter = NO;
+    BOOL hasFilterSupport = [self.pragmas containsObject:@"FILTERS"];
     NSMutableArray *keys = [NSMutableArray array];
     NSUInteger identifierStart = NSNotFound;
     NSMutableArray *filterExpressionStack = [NSMutableArray array];
@@ -466,7 +467,7 @@
                         break;
                         
                     default:
-                        canFilter = [self.pragmas containsObject:@"FILTERS"];
+                        canFilter = hasFilterSupport;
                         state = stateIdentifier;
                         
                         // enter stateIdentifier
