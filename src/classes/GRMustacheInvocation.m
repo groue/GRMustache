@@ -87,9 +87,9 @@
 {
     NSAssert(_debuggingToken, @"debuggingToken not set");
     if (_debuggingToken.templateID) {
-        return [NSString stringWithFormat:@"%@ at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
+        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
     } else {
-        return [NSString stringWithFormat:@"%@ at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
+        return [NSString stringWithFormat:@"`%@` at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
     }
 }
 
