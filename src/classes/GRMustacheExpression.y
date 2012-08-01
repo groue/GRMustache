@@ -1,21 +1,56 @@
 %{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yyparse(void);
+int yylex(void);  
+int yywrap();
+void yyerror(const char *str);
 %}
 
-%token WS ID
+%token ID
+%token WS
+%token IMPLICIT_ENUMERATOR
 
-[ \r\n\t]* { return WS; }
-[_a-zA-Z0-9]+ { return ID; }
+%start	input 
+
+%%
+
+input : expression { exit(0); };
+
+expression : scopableExpression { printf("expression\n"); }
+           | nonScopableExpression { printf("expression\n"); };
+
+nonScopableExpression : implicitEnumeratorExpression { printf("nonScopableExpression\n"); };
+
+scopableExpression : identifierExpression { printf("scopableExpression\n"); }
+                   | scopedExpression { printf("scopableExpression\n"); }
+                   | filterExpression { printf("scopableExpression\n"); };
+
+implicitEnumeratorExpression : IMPLICIT_ENUMERATOR { printf("implicitEnumeratorExpression\n"); };
+
+identifierExpression : ID { printf("identifierExpression\n"); };
+
+scopedExpression : '.' ID { printf("scopedExpression\n"); }
+                 | scopableExpression '.' ID { printf("scopedExpression\n"); };
+
+filterExpression : expression '(' expression ')' { printf("filterExpression\n"); };
 
 %%
 
-input : expression;
+void yyerror(const char *str)
+{
+        fprintf(stderr,"error: %s\n",str);
+}
 
-expression : WS* (identifierExpression | scopedExpression | filterExpression) WS*;
+int yywrap()
+{
+        return 1;
+}
 
-identifierExpression : ID;
+int main()
+{
+    yyparse();
+    return 0;
+}
 
-scopedExpression : ('.' | '.' ID | expression '.' ID);
-
-filterExpression : expression '(' expression ')';
-
-%%
