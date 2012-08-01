@@ -89,7 +89,10 @@
     [_parameterExpression prepareForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
     self.invocation = _parameterExpression.invocation;
     
-    [_filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
+    // There is no delegate callbacks for filters, in order not to have library
+    // users change their pre-4.3 delegates that do not check the interpretation
+    // before replacing the value.
+    [_filterExpression prepareForContext:filterContext filterContext:filterContext delegatingTemplate:nil delegates:nil interpretation:0];
     GRMustacheInvocation *filterInvocation = _filterExpression.invocation;
     id<GRMustacheFilter> filter = filterInvocation.returnValue;
     
@@ -108,7 +111,9 @@
 
 - (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation
 {
-    [_filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationFilter];
+    // There is no delegate callbacks for filters
+    // (see prepareForContext:filterContext:delegatingTemplate:delegates:interpretation:)
+    [_filterExpression finishForContext:filterContext filterContext:filterContext delegatingTemplate:nil delegates:nil interpretation:0];  // no delegate callbacks for filters
     
     [_parameterExpression finishForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:interpretation];
     

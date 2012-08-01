@@ -53,11 +53,6 @@ typedef enum {
      * @since v4.1
      */
     GRMustacheInterpretationVariable,
-    
-    /**
-     * TODO
-     */
-    GRMustacheInterpretationFilter,
 } GRMustacheInterpretation;
 
 /**
