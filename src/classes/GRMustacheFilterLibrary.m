@@ -176,8 +176,8 @@
                               [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
                               [[[GRMustacheFirstFilter alloc] init] autorelease], @"first",
                               [[[GRMustacheLastFilter alloc] init] autorelease], @"last",
-                              [[[GRMustacheBlankFilter alloc] init] autorelease], @"blank?",
-                              [[[GRMustacheEmptyFilter alloc] init] autorelease], @"empty?",
+                              [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                              [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
                               nil] retain];
     }
     

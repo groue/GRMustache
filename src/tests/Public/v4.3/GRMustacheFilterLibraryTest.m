@@ -64,7 +64,7 @@
 
 - (void)testBlankFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{#blank?(.)}}YES{{/blank?(.)}}{{^blank?(.)}}NO{{/blank?(.)}}";
+    NSString *templateString = @"{{%FILTERS}}{{#isBlank(.)}}YES{{/isBlank(.)}}{{^isBlank(.)}}NO{{/isBlank(.)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     
     {
@@ -125,7 +125,7 @@
 
 - (void)testEmptyFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{#empty?(.)}}YES{{/empty?(.)}}{{^empty?(.)}}NO{{/empty?(.)}}";
+    NSString *templateString = @"{{%FILTERS}}{{#isEmpty(.)}}YES{{/isEmpty(.)}}{{^isEmpty(.)}}NO{{/isEmpty(.)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     
     {
