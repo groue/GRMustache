@@ -47,4 +47,20 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
+- (void)testParsingErrorReportsImplicitIteratorAsFilter
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{.(a)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{.f(a)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
+- (void)testParsingErrorReportsFilteredValueAsFilter
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{f(a)(b)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
 @end

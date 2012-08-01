@@ -25,10 +25,10 @@
 /**
  * TODO
  */
-@interface GRMustacheFilterChainExpression : NSObject<GRMustacheExpression>
+@interface GRMustacheFilterInvocationExpression : NSObject<GRMustacheExpression>
 
 /**
  * TODO
  */
-+ (id)expressionWithExpressions:(NSArray *)expressions GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression GRMUSTACHE_API_INTERNAL;
 @end
