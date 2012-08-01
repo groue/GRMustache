@@ -106,6 +106,6 @@ Should a filter be misspelled, missing, or should the matching object not confor
 
 GRMustache helps you debugging by providing the exact place where the error occurs:
 
-    Missing filter for key `f` in tag `{{ f(foo) }}` at line 13.
+    Missing filter for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/teplate.
     
-    Object for key `f` in tag `{{ f(foo) }}` at line 13 does not conform to GRMustacheFilter protocol: "blah"
+    Object for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/template does not conform to GRMustacheFilter protocol: "blah"
