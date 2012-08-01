@@ -126,7 +126,7 @@ NSDictionary *filters = [NSDictionary dictionaryWithObject:mathFilters forKey:@"
                      withFilters:filters    // filters are fetched here
                       fromString:@"{{%FILTERS}}{{math.abs(x)}}"
                            error:NULL];
-                           ```
+```
 
 ## Missing filters
 
