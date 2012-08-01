@@ -73,6 +73,11 @@
     }
     
     {
+        NSString *rendering = [template renderObject:[NSNull null]];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
         NSString *rendering = [template renderObject:@""];
         STAssertEqualObjects(rendering, @"YES", nil);
     }
@@ -130,6 +135,11 @@
     
     {
         NSString *rendering = [template renderObject:nil];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    
+    {
+        NSString *rendering = [template renderObject:[NSNull null]];
         STAssertEqualObjects(rendering, @"YES", nil);
     }
     
