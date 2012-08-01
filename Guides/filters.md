@@ -100,6 +100,34 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
+## Filters namespaces
+
+When rendering the tag `{{ f(x) }}`, GRMustache extracts the value of `x` by performing a key lookup described in the [Context Stack Guide](runtime/context_stack.md).
+
+The mechanism for extracting the filter for `f` is the same, but it applies to the `filters` argument of the rendering method, not its `object` argument:
+
+```objc
+[GRMustacheTemplate renderObject:data       // values are fetched here
+                     withFilters:filters    // filters are fetched here
+                      fromString:templateString
+                           error:NULL];
+```
+
+You can thus provide an object hierarchy just as you do for values. For instance, you can "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`
+
+```objc
+id absFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
+    return [NSNumber numberWithInt: abs([object intValue])];
+}];
+NSDictionary *mathFilters = [NSDictionary dictionaryWithObject:absFilter forKey:@"abs"];
+NSDictionary *filters = [NSDictionary dictionaryWithObject:mathFilters forKey:@"math"];
+
+[GRMustacheTemplate renderObject:...
+                     withFilters:filters    // filters are fetched here
+                      fromString:@"{{%FILTERS}}{{math.abs(x)}}"
+                           error:NULL];
+                           ```
+
 ## Missing filters
 
 Should a filter be misspelled, missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception.
