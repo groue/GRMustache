@@ -113,7 +113,7 @@ The mechanism for extracting the filter for `f` is the same, but it applies to t
                            error:NULL];
 ```
 
-You can thus provide an object hierarchy just as you do for values. For instance, you can "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`
+You can thus provide an object hierarchy just as you do for values. For instance, you can "namespace" your filters. Let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`:
 
 ```objc
 id absFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
