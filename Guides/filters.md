@@ -99,3 +99,13 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
                                                  error:NULL];
 ```
+
+## Missing filters
+
+Should a filter be misspelled, missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception.
+
+GRMustache helps you debugging by providing the exact place where the error occurs:
+
+    Missing filter for key `f` in tag `{{ f(foo) }}` at line 13.
+    
+    Object for key `f` in tag `{{ f(foo) }}` at line 13 does not conform to GRMustacheFilter protocol: "blah"
