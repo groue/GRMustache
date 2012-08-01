@@ -115,7 +115,7 @@
 
 - (id)transformedValue:(id)object
 {
-    if (object == nil) {
+    if (object == nil || object == [NSNull null]) {
         return [NSNumber numberWithBool:YES];
     }
     
@@ -143,7 +143,7 @@
 
 - (id)transformedValue:(id)object
 {
-    if (object == nil) {
+    if (object == nil || object == [NSNull null]) {
         return [NSNumber numberWithBool:YES];
     }
     

@@ -35,11 +35,11 @@ GRMustache ships with a bunch of filters already implemented:
 
 - `isEmpty`
     
-    Returns YES if the input is nil, or an empty enumerable object, or an empty string. Returns NO otherwise.
+    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or an empty string. Returns NO otherwise.
 
 - `isBlank`
     
-    Returns YES if the input is nil, or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
+    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
 
 ## Defining your own filters
 
