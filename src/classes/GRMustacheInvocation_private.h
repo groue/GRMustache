@@ -28,41 +28,10 @@
 @class GRMustacheToken;
 
 /**
- * The GRMustacheInvocation class is the NSInvocation of GRMustache.
- *
- * Whenever Mustache has to render, say, a tag such as `{{foo.bar}}`, it has
- * to invoke the `foo` key in the current context stack, then the `bar` key, and
- * render the returned value.
- *
- * The GRMustacheInvocation encapsulates this whole process.
- * 
- * Instances are created by GRMustacheCompiler, and stored by rendering
- * elements that query the user data: GRMustacheVariableElement and
- * GRMustacheSectionElement.
- *
- * A rendering element would send the `invokeWithContext:` message to its
- * invocation. The invocation would perform the key lookup in the context stack,
- * and set its return value. The rendering element would the process this return
- * value.
- *
- * Invocations are exposed to the template's delegate: library users can modify
- * the return value of invocations, and alter the template rendering.
- *
- * @see GRMustacheCompiler
- * @see GRMustacheVariableElement
- * @see GRMustacheSectionElement
- * @see GRMustacheTemplateDelegate
- */
-@interface GRMustacheInvocation : NSObject {
-@private
-    id _returnValue;
-    GRMustacheToken *_debuggingToken;
-}
-
-/**
  * TODO
  */
-@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
+@interface GRMustacheInvocation : NSObject {
+}
 
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, readonly) NSString *key GRMUSTACHE_API_PUBLIC;
@@ -70,29 +39,4 @@
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
-/**
- * Builds an invocation from a key path.
- *
- * @param keys  A key path
- *
- * @return an invocation
- *
- * @see invokeWithContext:
- * @see GRMustacheTemplateDelegate
- */
-+ (id)invocationWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
-
-/**
- * Performs key lookup in the context stack, and sets the return value.
- *
- * @param context   The context stack where invocation keys should be looked up.
- *
- * @see GRMustacheContext
- */
-- (void)invokeWithContext:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
-- (BOOL)isEquivalentToInvocation:(GRMustacheInvocation *)invocation GRMUSTACHE_API_INTERNAL;
 @end

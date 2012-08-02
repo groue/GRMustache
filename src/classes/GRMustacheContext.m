@@ -72,26 +72,21 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingObject:(id)object
-{
-    return [[[GRMustacheContext alloc] initWithObject:object parent:self] autorelease];
-}
-
-- (id)valueForKey:(NSString *)key scoped:(BOOL)scoped
++ (id)valueForKey:(NSString *)key inObject:(id)object
 {
     id value = nil;
     
-    if (_object)
+    if (object)
     {
         @try
         {
             if (preventingNSUndefinedKeyExceptionAttack)
             {
-                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:_object];
+                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:object];
             }
             else
             {
-                value = [_object valueForKey:key];
+                value = [object valueForKey:key];
             }
         }
         @catch (NSException *exception)
@@ -111,9 +106,20 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
     }
     
+    return value;
+}
+
+- (GRMustacheContext *)contextByAddingObject:(id)object
+{
+    return [[[GRMustacheContext alloc] initWithObject:object parent:self] autorelease];
+}
+
+- (id)valueForKey:(NSString *)key
+{
+    id value = [GRMustacheContext valueForKey:key inObject:_object];
     if (value != nil) { return value; }
-    if (scoped || _parent == nil) { return nil; }
-    return [_parent valueForKey:key scoped:NO];
+    if (_parent == nil) { return nil; }
+    return [_parent valueForKey:key];
 }
 
 - (void)dealloc

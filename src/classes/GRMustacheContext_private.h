@@ -41,6 +41,12 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 }
 
 /**
+ * TODO
+ */
+
++ (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
+
+/**
  * The top object is the context stack.
  *
  * This object is never nil.
@@ -88,21 +94,5 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @return A new context stack.
  */
 - (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL;
-
-/**
- * Looks for an object in the context stack that returns a non-nil value when
- * sent the `valueForKey:` message with the provided key, and return this value.
- *
- * If scoped is YES, only the top object is tested.
- *
- * If scoped is NO, all objects in the stack are tested, starting with the
- * top object.
- *
- * @param key     The searched key
- * @param scoped  YES if the lookup should test all objects in the stack.
- *
- * @return The found value
- */
-- (id)valueForKey:(NSString *)key scoped:(BOOL)scoped GRMUSTACHE_API_INTERNAL;
 
 @end

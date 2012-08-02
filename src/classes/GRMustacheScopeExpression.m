@@ -73,8 +73,7 @@
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
 {
     id value = [_scopedExpression valueForContext:context filterContext:filterContext];
-    GRMustacheContext *scopedContext = [GRMustacheContext contextWithObject:value];
-    return [scopedContext valueForKey:_identifier scoped:YES];
+    return [GRMustacheContext valueForKey:_identifier inObject:value];
 }
 
 @end

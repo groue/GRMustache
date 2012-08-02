@@ -65,7 +65,7 @@
 
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
 {
-    return [context valueForKey:_identifier scoped:NO];
+    return [context valueForKey:_identifier];
 }
 
 @end

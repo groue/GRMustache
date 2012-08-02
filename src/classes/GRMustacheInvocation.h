@@ -37,9 +37,6 @@
  * @since v1.12
  */
 @interface GRMustacheInvocation : NSObject {
-@private
-    id _returnValue;
-    id _debuggingToken;
 }
 
 /**
