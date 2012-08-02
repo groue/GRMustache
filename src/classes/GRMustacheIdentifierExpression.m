@@ -20,19 +20,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheExpression_private.h"
+#import "GRMustacheIdentifierExpression_private.h"
+#import "GRMustacheContext_private.h"
 
-/**
- * TODO
- */
-@interface GRMustacheKeyPathExpression : NSObject<GRMustacheExpression> {
-@private
-    GRMustacheInvocation *_invocation;
-}
+@interface GRMustacheIdentifierExpression()
+@property (nonatomic, copy) NSString *identifier;
 
-/**
- * TODO
- */
-+ (id)expressionWithKeys:(NSArray *)keys GRMUSTACHE_API_INTERNAL;
+- (id)initWithIdentifier:(NSString *)identifier;
 @end
 
+@implementation GRMustacheIdentifierExpression
+@synthesize identifier=_identifier;
+
++ (id)expressionWithIdentifier:(NSString *)identifier
+{
+    return [[[self alloc] initWithIdentifier:identifier] autorelease];
+}
+
+- (id)initWithIdentifier:(NSString *)identifier
+{
+    self = [super init];
+    if (self) {
+        self.identifier = identifier;
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    self.identifier = nil;
+    [super dealloc];
+}
+
+- (BOOL)isEqual:(id<GRMustacheExpression>)expression
+{
+    if (![expression isKindOfClass:[GRMustacheIdentifierExpression class]]) {
+        return NO;
+    }
+    return [_identifier isEqual:((GRMustacheIdentifierExpression *)expression).identifier];
+}
+
+
+#pragma mark - GRMustacheExpression
+
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
+{
+    return [context valueForKey:_identifier scoped:NO];
+}
+
+@end

@@ -20,41 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateDelegate.h"
-
-@class GRMustacheContext;
+#import "GRMustacheExpression_private.h"
 
 /**
  * TODO
  */
-@protocol GRMustacheExpression <NSObject>
-@required
+@interface GRMustacheScopeExpression : NSObject<GRMustacheExpression> {
+@private
+    id<GRMustacheExpression> _scopedExpression;
+    NSString *_identifier;
+}
 
 /**
  * TODO
  */
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext;
-
-///**
-// * TODO
-// */
-//@property (nonatomic, retain, readonly) GRMustacheInvocation *invocation GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//- (void)prepareForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//- (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
-
++ (id)expressionWithScopedExpression:(id<GRMustacheExpression>)scopedExpression identifier:(NSString *)identifier;
 @end

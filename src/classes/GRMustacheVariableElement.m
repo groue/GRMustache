@@ -55,8 +55,7 @@
 {
     // evaluate
     
-    [_expression prepareForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationVariable];
-    id object = _expression.invocation.returnValue;
+    id object = [_expression valueForContext:renderingContext filterContext:filterContext];
     
     
     // interpret
@@ -71,9 +70,7 @@
     
     
     // finish
-    
-    [_expression finishForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationVariable];
-    
+        
     if (!result) {
         return @"";
     }

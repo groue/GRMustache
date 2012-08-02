@@ -65,7 +65,7 @@
     STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
 }
 
-- (void)canExtractScopedValueOutOfAFilterExpression
+- (void)testScopedValueAreExtractedOutOfAFilterExpression
 {
     NSString *templateString = @"{{%FILTERS}}<{{f(object).name}}> {{#f(object)}}<{{name}}>{{/f(object)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
@@ -103,7 +103,7 @@
             return [NSDictionary dictionary];
         }];
         NSString *rendering = [template renderObject:data withFilters:[NSDictionary dictionaryWithObject:filter forKey:@"f"]];
-        STAssertEqualObjects(rendering, @"<> <filterName>", nil);
+        STAssertEqualObjects(rendering, @"<> <rootName>", nil);
     }
 }
 

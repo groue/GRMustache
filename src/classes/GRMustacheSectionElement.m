@@ -113,8 +113,7 @@
         
         // evaluate
         
-        [_expression prepareForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationSection];
-        id object = _expression.invocation.returnValue;
+        id object = [_expression valueForContext:renderingContext filterContext:filterContext];
         
         
         // augment delegates if necessary
@@ -184,12 +183,6 @@
                 result = [[self renderElementsWithRenderingContext:innerContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
             }
         }
-        
-        
-        // Finish
-        
-        [_expression finishForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates interpretation:GRMustacheInterpretationSection];
-
     }
     if (!result) {
         return @"";
