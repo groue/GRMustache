@@ -42,7 +42,7 @@ NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
 decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
 NSString *decimal = [numberFormatter stringFromNumber:value];
 
-// Render
+// Render "raw: 0.5, percent: 50 %, decimal: 0,5"
 NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                             value, @"value",
                             percent, @"percent",
@@ -87,7 +87,7 @@ In this case, the best option is to declare a category on your model object, and
 You would then render normally:
 
 ```objc
-// Render "50%"
+// Render "raw: 0.5, percent: 50 %, decimal: 0,5"
 Model *model = ...
 model.value = 0.5;
 NSString *rendering = [template renderObject:model];
@@ -179,11 +179,17 @@ After we have told GRMustache how the `percent` and `decimal` filters should pro
     
     
     /**
-     * Render.
+     * Prepare our data
      */
     
     Model *model = ...;
     model.value = 0.5;
+    
+    
+    /**
+     * Render "raw: 0.5, percent: 50 %, decimal: 0,5"
+     */
+     
     return [template renderObject:model withFilters:filters];
 }
 ```
