@@ -30,10 +30,10 @@ Let's render the simple template:
 It's quite easy to put numbers and formatted numbers in a dictionary:
 
 ```objc
-// The number to render
+// The raw number
 NSNumber *value = [NSNumber numberWithFloat: 0.5]:
 
-// An NSNumberFormatter knows how to format numbers
+// NSNumberFormatter objects knows how to format numbers
 NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
 percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
 NSString *percent = [numberFormatter stringFromNumber:value];
@@ -42,7 +42,7 @@ NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
 decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
 NSString *decimal = [numberFormatter stringFromNumber:value];
 
-// Render "50%"
+// Render
 NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                             value, @"value",
                             percent, @"percent",
