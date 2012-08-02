@@ -3,9 +3,7 @@
 Number formatting
 =================
 
-For the purpose of demonstration, we'll see various ways to have GRMustache render a numeric value formatted in different ways.
-
-We'll render the value 0.5 as a *raw* number, as a percentage, and as a *decimal*. For instance, on a French system, we'll get the following output:
+For the purpose of demonstration, we'll render the value 0.5 as a *raw* number, as a percentage, and as a *decimal*. For instance, on a French system, we'll get the following output:
 
     raw: 0.5
     percent: 50 %
