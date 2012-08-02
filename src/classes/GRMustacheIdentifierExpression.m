@@ -22,6 +22,7 @@
 
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheIdentifierExpression()
 @property (nonatomic, copy) NSString *identifier;
@@ -63,9 +64,18 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
 {
-    return [context valueForKey:_identifier];
+    id value = [context valueForKey:_identifier];
+    
+    if (delegatingTemplate) {
+        NSAssert(outInvocation, @"WTF");
+        *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+        (*outInvocation).returnValue = value;
+        (*outInvocation).key = _identifier;
+    }
+    
+    return value;
 }
 
 @end

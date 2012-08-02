@@ -24,6 +24,8 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
+@class GRMustacheTemplate;
+@class GRMustacheInvocation;
 
 /**
  * TODO
@@ -34,6 +36,6 @@
 /**
  * TODO
  */
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext;
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation;
 
 @end

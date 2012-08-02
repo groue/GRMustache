@@ -25,8 +25,15 @@
 #import "GRMustacheToken_private.h"
 
 @implementation GRMustacheInvocation
-@dynamic returnValue;
-@dynamic key;
+@synthesize returnValue=_returnValue;
+@synthesize key=_key;
+
+- (void)dealloc
+{
+    [_returnValue release];
+    [_key release];
+    [super dealloc];
+}
 
 - (NSString *)description
 {
@@ -39,19 +46,14 @@
     return nil;
 }
 
-- (NSString *)key
+- (BOOL)isScopable
 {
-    return nil;
+    return !_nonScopable;
 }
 
-- (id)returnValue
+- (void)setScopable:(BOOL)scopable
 {
-    return nil;
-}
-
-- (void)setReturnValue:(id)returnValue
-{
-    return;
+    _nonScopable = !scopable;
 }
 
 @end

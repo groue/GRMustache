@@ -113,7 +113,12 @@
         
         // evaluate
         
-        id object = [_expression valueForContext:renderingContext filterContext:filterContext];
+        GRMustacheInvocation *invocation = nil;
+        id object = [_expression valueForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
+        if (invocation) {
+            [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationSection];
+            object = invocation.returnValue;
+        }
         
         
         // augment delegates if necessary
@@ -183,6 +188,13 @@
                 result = [[self renderElementsWithRenderingContext:innerContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
             }
         }
+        
+        // finish
+        
+        if (invocation) {
+            [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationSection];
+        }
+
     }
     if (!result) {
         return @"";

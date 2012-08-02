@@ -22,6 +22,7 @@
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @implementation GRMustacheImplicitIteratorExpression
 
@@ -35,10 +36,18 @@
     return [expression isKindOfClass:[GRMustacheImplicitIteratorExpression class]];
 }
 
+
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
 {
+    if (delegatingTemplate) {
+        NSAssert(outInvocation, @"WTF");
+        *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+        (*outInvocation).returnValue = context.object;
+        (*outInvocation).key = @".";
+    }
+    
     return context.object;
 }
 

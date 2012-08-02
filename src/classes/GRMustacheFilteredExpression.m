@@ -22,6 +22,8 @@
 
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheFilter.h"
+#import "GRMustacheTemplate_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheFilteredExpression()
 @property (nonatomic, retain) id<GRMustacheExpression> filterExpression;
@@ -69,10 +71,22 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
 {
-    id parameter = [_parameterExpression valueForContext:context filterContext:filterContext];
-    id<GRMustacheFilter> filter = [_filterExpression valueForContext:filterContext filterContext:nil];
+    id parameter = nil;
+    GRMustacheInvocation *invocation = nil;
+    if (delegatingTemplate) {
+        parameter = [_parameterExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
+        if (invocation) {
+            [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationFilterArgument];
+            parameter = invocation.returnValue;
+            [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationFilterArgument];
+        }
+    } else {
+        parameter = [_parameterExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:NULL];
+    }
+    
+    id<GRMustacheFilter> filter = [_filterExpression valueForContext:filterContext filterContext:nil delegatingTemplate:nil delegates:nil invocation:NULL];
     
     if (filter == nil) {
         [NSException raise:GRMustacheFilterException format:@"Missing filter"];
@@ -80,6 +94,12 @@
     
     if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
         [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
+    }
+    
+    if (delegatingTemplate) {
+        // no invocation to return
+        NSAssert(outInvocation, @"WTF");
+        *outInvocation = nil;
     }
     
     return [filter transformedValue:parameter];

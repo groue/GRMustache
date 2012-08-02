@@ -22,6 +22,7 @@
 
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) id<GRMustacheExpression> baseExpression;
@@ -70,10 +71,22 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
 {
-    id value = [_baseExpression valueForContext:context filterContext:filterContext];
-    return [GRMustacheContext valueForKey:_scopeIdentifier inObject:value];
+    id value = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:outInvocation];
+    value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:value];
+    if (delegatingTemplate) {
+        NSAssert(outInvocation, @"WTF");
+        if (*outInvocation == nil) {
+            *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+        }
+        if (value || (*outInvocation).isScopable) {
+            (*outInvocation).scopable = (value != nil);
+            (*outInvocation).returnValue = value;
+            (*outInvocation).key = _scopeIdentifier;
+        }
+    }
+    return value;
 }
 
 @end

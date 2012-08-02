@@ -37,6 +37,10 @@
  * @since v1.12
  */
 @interface GRMustacheInvocation : NSObject {
+@private
+    NSString *_key;
+    id _returnValue;
+    BOOL _nonScopable;
 }
 
 /**
