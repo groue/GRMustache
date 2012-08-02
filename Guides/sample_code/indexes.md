@@ -62,18 +62,9 @@ Let's first assume that the class PositionFilter is already written. Here is its
 @end
 ```
 
-Well, it looks quite a good fit for our task: let's see what happens it we set the `withPosition` to be an instance of PositionFilter:
+Well, it looks quite a good fit for our task: if we provide to this filter an array of people, it will return an array of objects that will be able to tell a template their position, and for all other keys, will give the original person's value. 
 
-When GRMustache renders `{{# withPosition(people) }}...{{/ withPosition(people) }}`:
-
-1. It looks for the `people` key, and finds an array of people.
-2. It gives this array to the filter associated with the `withPosition` key, which is a PositionFilter instance.
-3. The filter states very clearly its return value: "another array made of objects that forward all keys to the original array items, but the following: position, isOdd, isFirst.".
-4. This new array is rendered by a Mustache section tag, and the inner content of the section is rendered as many times as there are items in the array.
-
-Right. Let's focus on the `{{ position }}:{{ name }}` portion of this inner content. GRMustache will render this portion for each item in the filtered array. As stated by PositionFilter, the `position` key will be directly provided by the item. The `name` key, however, will be forwarded to the original object, which is a person, and fortunately knows its own name.
-
-Perfect. We have everything we need to render our template:
+We have everything we need to render our template:
 
 ```objc
 - (NSString *)render
