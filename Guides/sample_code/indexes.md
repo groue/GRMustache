@@ -9,50 +9,128 @@ If your goal is to design your templates so that they are compatible with [other
 
 For instance, instead of `[ { name:'Alice' }, { name:'Bob' } ]`, you would provide: `[ { name:'Alice', index:0, first:true, last:false, even:false }, { name:'Bob', index:1, first:false, last:true, even:true } ]`.
 
-GRMustache solution: proxy objects
-----------------------------------
+
+GRMustache solution: filters
+----------------------------
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-The [GRMustacheTemplateDelegate](../delegate.md) protocol can help you extend the mustache language, and avoid preparing your data.
+The [GRMustacheFilter](../filter.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
-Below we'll implement the special keys `index`, `first`, and `even`. We'll render the following template:
+Below we'll implement the special keys `position`, `isFirst`, and `isOdd`. We'll render the following template:
 
+    {{% FILTERS}}
     <ul>
-    {{#people}}
-        <li class="{{#even}}even{{/even}} {{#first}}first{{/first}}">
-            {{index}}:{{name}}
-        </li>
-    {{/people}}
+    {{# withPosition(people) }}
+      <li class="{{#isOdd}}odd{{/isOdd}} {{#isFirst}}first{{/isFirst}}">
+        {{ position }}:{{ name }}
+      </li>
+    {{/ withPosition(people) }}
     </ul>
 
 We expect, on output, the following rendering:
 
     <ul>
-        <li class="even first">
-            0: Alice
-        </li>
-        <li class="">
-            1: Bob
-        </li>
-        <li class="even">
-            2: Craig
-        </li>
+      <li class="odd first">
+        1:Alice
+      </li>
+      <li class=" ">
+        2:Bob
+      </li>
+      <li class="odd ">
+        3:Craig
+      </li>
     </ul>
+    
 
-Here is the rendering code:
+Our people array will be a plain array filled with plain people who don't know anything but their name. The support for the special positional keys will be entirely done by a filter object.
+
+We can thus focus on the two subjects separately.
+
+Let's first assume that the class PositionFilter is already written. Here is its documentation:
 
 ```objc
-@implementation Document
+/**
+ * A GRMustache filter that, given an array, returns another array made of
+ * objects that forward all keys to the original array items, but the following:
+ *
+ * - position: returns the 1-based index of the item
+ * - isOdd: returns YES if the position of the item is odd
+ * - isFirst: returns YES if the item is at position 1
+ */
+@interface PositionFilter : NSObject<GRMustacheFilter>
+@end
+```
 
+Well, it looks quite a good fit for our task: let's see what happens it we set the `withPosition` to be an instance of PositionFilter:
+
+When GRMustache renders `{{# withPosition(people) }}...{{/ withPosition(people) }}`:
+
+1. It looks for the `people` key, and finds an array of people.
+2. It gives this array to the filter associated with the `withPosition` key, which is a PositionFilter instance.
+3. The filter states very clearly its return value: "another array made of objects that forward all keys to the original array items, but the following: position, isOdd, isFirst.".
+4. This new array is rendered by a Mustache section tag, and the inner content of the section is rendered as many times as there are items in the array.
+
+Right. Let's focus on the `{{ position }}:{{ name }}` portion of this inner content. GRMustache will render this portion for each item in the filtered array. As stated by PositionFilter, the `position` key will be directly provided by the item. The `name` key, however, will be forwarded to the original object, which is a person, and fortunately knows its own name.
+
+Perfect. We have everything we need to render our template:
+
+```objc
 - (NSString *)render
 {
     /**
-     * First, let's attach an array of people to the `people` key, so that they
-     * are sequentially rendered by the `{{#people}}...{{/people}}` sections.
+     * Our template want to render the `people` array with support for various
+     * positional information on top of regular keys fetched from each person
+     * of the array:
+     *
+     * - position: the 1-based index of the person
+     * - isOdd: YES if the position of the person is odd
+     * - isFirst: YES if the person is the first of the people array.
+     *
+     * This is typically a job for filters: we'll define the `withPosition`
+     * filters to be an instance of the PositionFilter class. That class has
+     * been implemented so that it provides us with the extra keys for free.
+     *
+     * For now, we just declare our template. The initial {{%FILTERS}} pragma
+     * tag tells GRMustache to trigger support for filters, which are an
+     * extension to the Mustache specification.
+     */
+    NSString *templateString = @"{{% FILTERS}}"
+                               @"<ul>\n"
+                               @"{{# withPosition(people) }}"
+                               @"  <li class=\"{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}\">\n"
+                               @"    {{ position }}:{{ name }}\n"
+                               @"  </li>\n"
+                               @"{{/ withPosition(people) }}"
+                               @"</ul>";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    
+    /**
+     * Now we have to define this filter. The PositionFilter class is already
+     * there, ready to be instanciated:
+     */
+    
+    PositionFilter *positionFilter = [[PositionFilter alloc] init];
+    
+    
+    /**
+     * GRMustache does not load filters from the rendered data, but from a
+     * specific filters container.
+     *
+     * We'll use a NSDictionary for attaching positionFilter to the
+     * "withPosition" key, but you can use any other KVC-compliant container.
+     */
+    
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:positionFilter forKey:@"withPosition"];
+    
+    
+    /**
+     * Now we need an array of people that will be sequentially rendered by the
+     * `{{# withPosition(people) }}...{{/ withPosition(people) }}` section.
      * 
-     * We'll use a NSDictionary for storing the data, but you can use any other
-     * KVC-compliant container.
+     * We'll use a NSDictionary for storing the array, but as always you can use
+     * any other KVC-compliant container.
      */
     
     Person *alice = [Person personWithName:@"Alice"];
@@ -61,129 +139,19 @@ Here is the rendering code:
     NSArray *people = [NSArray arrayWithObjects: alice, bob, craig, nil];
     NSDictionary *data = [NSDictionary dictionaryWithObject:people forKey:@"people"];
     
+    
     /**
-     Render. The rendering of indices will happen in the
-     GRMustacheTemplateDelegate methods, hereafter.
+     * Render.
      */
     
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"template" bundle:nil error:NULL];
-    template.delegate = self;
-    return [template renderObject:data];
+    return [template renderObject:data withFilters:filters];
 }
 ```
 
-The people will provide the `name` key needed by the template. But we haven't told yet how the `index`, `first` and `even` keys will be implemented.
+Now it's time to implement this nifty filter.
 
-Here is the trick: we'll actually intercept arrays before they are rendered by GRMustache. We'll replace them with arrays of proxy objects which will forward to the original elements all keys, such as `name`, but the `index`, `first` and `even` keys.
 
-Let's first declare our proxy class, we'll implement it later:
 
-```objc
-@interface ArrayElementProxy : NSObject
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array;
-@end
-```
-
-We don't need to declare more: this is enough for us to create proxies and make sure they have all the information they need to perform their job.
-
-Now let's replace array elements with proxies before they are rendered:
-
-```objc
-@interface Document() <GRMustacheTemplateDelegate>
-@end
-
-@implementation Document()
-
-/**
- * This method is called when the template is about to render a tag.
- */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    /**
-     * The invocation object tells us which object is about to be rendered.
-     */
-    
-    if ([invocation.returnValue isKindOfClass:[NSArray class]]) {
-        
-        /**
-         * If it is an NSArray, create a new array containing proxies.
-         */
-        
-        NSArray *array = invocation.returnValue;
-        NSMutableArray *proxiesArray = [NSMutableArray arrayWithCapacity:array.count];
-        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            ArrayElementProxy *proxy = [[ArrayElementProxy alloc] initWithObjectAtIndex:idx inArray:array];
-            [proxiesArray addObject:proxy];
-        }];
-        
-        /**
-         * Now set the invocation's returnValue to the array of proxies: it will
-         * be rendered instead.
-         */
-        
-        invocation.returnValue = proxiesArray;
-    }
-}
-
-@end
-```
-
-We're soon done.
-
-The implementation of ArrayElementProxy is straightforward, as long as one remembers that GRMustache fetches values with the `valueForKey:` method, and renders values returned by the `description` method. See [Guides/runtime.md](../runtime.md) for more information.
-
-```objc
-@interface ArrayElementProxy()
-@property (nonatomic) NSUInteger index;
-@property (nonatomic, strong) NSArray *array;
-@end
-
-@implementation ArrayElementProxy
-@synthesize index=_index;
-@synthesize array=_array;
-
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array
-{
-    self = [super init];
-    if (self) {
-        self.index = index;
-        self.array = array;
-    }
-    return self;
-}
-
-// Support for `{{.}}`, not used in our sample template, but a honest proxy
-// should implement it.
-- (NSString *)description
-{
-    id originalObject = [self.array objectAtIndex:self.index];
-    return [originalObject description];
-}
-
-- (id)valueForKey:(NSString *)key
-{
-    // support for `{{index}}`
-    if ([key isEqualToString:@"index"]) {
-        return [NSNumber numberWithUnsignedInteger:self.index];
-    }
-
-    // support for `{{#first}}` and `{{^first}}`
-    if ([key isEqualToString:@"first"]) {
-        return [NSNumber numberWithBool:(self.index == 0)];
-    }
-
-    // support for `{{#even}}` and `{{^even}}`
-    if ([key isEqualToString:@"even"]) {
-        return [NSNumber numberWithBool:((self.index % 2) == 0)];
-    }
-
-    // for all other keys, forward to original array element
-    id originalObject = [self.array objectAtIndex:self.index];
-    return [originalObject valueForKey:key];
-}
-
-@end
-```
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
