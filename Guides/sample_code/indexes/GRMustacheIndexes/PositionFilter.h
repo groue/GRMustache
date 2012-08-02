@@ -21,7 +21,16 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustache.h"
 
-@interface ArrayElementProxy : NSObject
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array;
+/**
+ * A GRMustache filter that, given an array, returns another array made of
+ * objects that forward all keys to the original array items, but the following:
+ *
+ * - position: returns the 1-based index of the item
+ * - isOdd: returns YES if the position of the item is odd
+ * - isFirst: returns YES if the item is at position 1
+ */
+@interface PositionFilter : NSObject<GRMustacheFilter>
 @end
+

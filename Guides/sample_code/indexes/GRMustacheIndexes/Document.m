@@ -20,25 +20,68 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import "GRMustache.h"
 #import "Document.h"
 #import "Person.h"
-#import "ArrayElementProxy.h"
-#import "GRMustache.h"
-
-@interface Document() <GRMustacheTemplateDelegate>
-
-@end
+#import "PositionFilter.h"
 
 @implementation Document
 
 - (NSString *)render
 {
     /**
-     * First, let's attach an array of people to the `people` key, so that they
-     * are sequentially rendered by the `{{#people}}...{{/people}}` sections.
+     * Our template want to render the `people` array with support for various
+     * positional information on top of regular keys fetched from each person
+     * of the array:
+     *
+     * - position: the 1-based index of the person
+     * - isOdd: YES if the position of the person is odd
+     * - isFirst: YES if the person is the first of the people array.
+     *
+     * This is typically a job for filters: we'll define the `withPosition`
+     * filters to be an instance of the PositionFilter class. That class has
+     * been implemented so that it provides us with the extra keys for free.
+     *
+     * For now, we just declare our template. The initial {{%FILTERS}} pragma
+     * tag tells GRMustache to trigger support for filters, which are an
+     * extension to the Mustache specification.
+     */
+    NSString *templateString = @"{{% FILTERS}}"
+                               @"<ul>\n"
+                               @"{{# withPosition(people) }}"
+                               @"  <li class=\"{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}\">\n"
+                               @"    {{ position }}:{{ name }}\n"
+                               @"  </li>\n"
+                               @"{{/ withPosition(people) }}"
+                               @"</ul>";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    
+    /**
+     * Now we have to define this filter. The PositionFilter class is already
+     * there, ready to be instanciated:
+     */
+    
+    PositionFilter *positionFilter = [[PositionFilter alloc] init];
+    
+    
+    /**
+     * GRMustache does not load filters from the rendered data, but from a
+     * specific filters container.
+     *
+     * We'll use a NSDictionary for attaching positionFilter to the
+     * "withPosition" key, but you can use any other KVC-compliant container.
+     */
+    
+    NSDictionary *filters = [NSDictionary dictionaryWithObject:positionFilter forKey:@"withPosition"];
+    
+    
+    /**
+     * Now we need an array of people that will be sequentially rendered by the
+     * `{{# withPosition(people) }}...{{/ withPosition(people) }}` section.
      * 
-     * We'll use a NSDictionary for storing the data, but you can use any other
-     * KVC-compliant container.
+     * We'll use a NSDictionary for storing the array, but as always you can use
+     * any other KVC-compliant container.
      */
     
     Person *alice = [Person personWithName:@"Alice"];
@@ -47,54 +90,12 @@
     NSArray *people = [NSArray arrayWithObjects: alice, bob, craig, nil];
     NSDictionary *data = [NSDictionary dictionaryWithObject:people forKey:@"people"];
     
+    
     /**
-     Render. The rendering of indices will happen in the
-     GRMustacheTemplateDelegate methods, hereafter.
+     * Render.
      */
     
-    NSString *templateString = @"<ul>\n"
-                               @"{{#people}}"
-                               @"<li class=\"{{#even}}even{{/even}} {{#first}}first{{/first}}\">\n"
-                               @"{{index}}:{{name}}\n"
-                               @"</li>\n"
-                               @"{{/people}}"
-                               @"</ul>";
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.delegate = self;
-    return [template renderObject:data];
-}
-
-#pragma mark GRMustacheTemplateDelegate
-
-/**
- * This method is called when the template is about to render a tag.
- */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    /**
-     * The invocation object tells us which object is about to be rendered.
-     */
-    
-    if ([invocation.returnValue isKindOfClass:[NSArray class]]) {
-        
-        /**
-         * If it is an NSArray, create a new array containing proxies.
-         */
-        
-        NSArray *array = invocation.returnValue;
-        NSMutableArray *proxiesArray = [NSMutableArray arrayWithCapacity:array.count];
-        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            ArrayElementProxy *proxy = [[ArrayElementProxy alloc] initWithObjectAtIndex:idx inArray:array];
-            [proxiesArray addObject:proxy];
-        }];
-        
-        /**
-         * Now set the invocation's returnValue to the array of proxies: it will
-         * be rendered instead.
-         */
-        
-        invocation.returnValue = proxiesArray;
-    }
+    return [template renderObject:data withFilters:filters];
 }
 
 @end

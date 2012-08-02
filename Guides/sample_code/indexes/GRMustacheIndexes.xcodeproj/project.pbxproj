@@ -11,7 +11,7 @@
 		562952A515A1663B0061A6B1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952A415A1663B0061A6B1 /* main.m */; };
 		562952B915A167710061A6B1 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952B815A167710061A6B1 /* Document.m */; };
 		562952BC15A167E90061A6B1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952BB15A167E90061A6B1 /* Person.m */; };
-		562952BF15A168550061A6B1 /* ArrayElementProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952BE15A168550061A6B1 /* ArrayElementProxy.m */; };
+		562952BF15A168550061A6B1 /* PositionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952BE15A168550061A6B1 /* PositionFilter.m */; };
 		56F9D2CF15A30E47003026DD /* libGRMustache4-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F9D2CE15A30E47003026DD /* libGRMustache4-MacOS.a */; };
 /* End PBXBuildFile section */
 
@@ -37,8 +37,8 @@
 		562952B815A167710061A6B1 /* Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
 		562952BA15A167E90061A6B1 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		562952BB15A167E90061A6B1 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
-		562952BD15A168550061A6B1 /* ArrayElementProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayElementProxy.h; sourceTree = "<group>"; };
-		562952BE15A168550061A6B1 /* ArrayElementProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrayElementProxy.m; sourceTree = "<group>"; };
+		562952BD15A168550061A6B1 /* PositionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionFilter.h; sourceTree = "<group>"; };
+		562952BE15A168550061A6B1 /* PositionFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionFilter.m; sourceTree = "<group>"; };
 		56F9D2CE15A30E47003026DD /* libGRMustache4-MacOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache4-MacOS.a"; path = "lib/libGRMustache4-MacOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,8 +106,8 @@
 				562952B815A167710061A6B1 /* Document.m */,
 				562952BA15A167E90061A6B1 /* Person.h */,
 				562952BB15A167E90061A6B1 /* Person.m */,
-				562952BD15A168550061A6B1 /* ArrayElementProxy.h */,
-				562952BE15A168550061A6B1 /* ArrayElementProxy.m */,
+				562952BD15A168550061A6B1 /* PositionFilter.h */,
+				562952BE15A168550061A6B1 /* PositionFilter.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -175,7 +175,7 @@
 				562952A515A1663B0061A6B1 /* main.m in Sources */,
 				562952B915A167710061A6B1 /* Document.m in Sources */,
 				562952BC15A167E90061A6B1 /* Person.m in Sources */,
-				562952BF15A168550061A6B1 /* ArrayElementProxy.m in Sources */,
+				562952BF15A168550061A6B1 /* PositionFilter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
