@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheContext;
 
@@ -36,25 +35,5 @@
  * TODO
  */
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext;
-
-///**
-// * TODO
-// */
-//@property (nonatomic, retain, readonly) GRMustacheInvocation *invocation GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//- (void)prepareForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
-//
-///**
-// * TODO
-// */
-//- (void)finishForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates interpretation:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 
 @end
