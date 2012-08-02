@@ -25,7 +25,7 @@
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheScopeExpression_private.h"
+#import "GRMustacheScopedExpression_private.h"
 
 @interface GRMustacheParser()
 
@@ -522,7 +522,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopeExpression expressionWithScopedExpression:currentExpression identifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -534,7 +534,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopeExpression expressionWithScopedExpression:currentExpression identifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -546,7 +546,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopeExpression expressionWithScopedExpression:currentExpression identifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -565,7 +565,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopeExpression expressionWithScopedExpression:currentExpression identifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -725,7 +725,7 @@
             // leave stateIdentifier
             NSString *identifier = [string substringFromIndex:identifierStart];
             if (currentExpression) {
-                currentExpression = [GRMustacheScopeExpression expressionWithScopedExpression:currentExpression identifier:identifier];
+                currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
             } else {
                 currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
             }

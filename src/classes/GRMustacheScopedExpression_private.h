@@ -25,14 +25,14 @@
 /**
  * TODO
  */
-@interface GRMustacheScopeExpression : NSObject<GRMustacheExpression> {
+@interface GRMustacheScopedExpression : NSObject<GRMustacheExpression> {
 @private
-    id<GRMustacheExpression> _scopedExpression;
-    NSString *_identifier;
+    id<GRMustacheExpression> _baseExpression;
+    NSString *_scopeIdentifier;
 }
 
 /**
  * TODO
  */
-+ (id)expressionWithScopedExpression:(id<GRMustacheExpression>)scopedExpression identifier:(NSString *)identifier;
++ (id)expressionWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
 @end

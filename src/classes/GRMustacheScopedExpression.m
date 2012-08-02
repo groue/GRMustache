@@ -20,51 +20,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheScopeExpression_private.h"
+#import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheContext_private.h"
 
-@interface GRMustacheScopeExpression()
-@property (nonatomic, retain) id<GRMustacheExpression> scopedExpression;
-@property (nonatomic, copy) NSString *identifier;
+@interface GRMustacheScopedExpression()
+@property (nonatomic, retain) id<GRMustacheExpression> baseExpression;
+@property (nonatomic, copy) NSString *scopeIdentifier;
 
-- (id)initWithScopedExpression:(id<GRMustacheExpression>)scopedExpression identifier:(NSString *)identifier;
+- (id)initWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
 @end
 
-@implementation GRMustacheScopeExpression
-@synthesize scopedExpression=_scopedExpression;
-@synthesize identifier=_identifier;
+@implementation GRMustacheScopedExpression
+@synthesize baseExpression=_baseExpression;
+@synthesize scopeIdentifier=_scopeIdentifier;
 
-+ (id)expressionWithScopedExpression:(id<GRMustacheExpression>)scopedExpression identifier:(NSString *)identifier
++ (id)expressionWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
 {
-    return [[[self alloc] initWithScopedExpression:scopedExpression identifier:identifier] autorelease];
+    return [[[self alloc] initWithBaseExpression:baseExpression scopeIdentifier:scopeIdentifier] autorelease];
 }
 
-- (id)initWithScopedExpression:(id<GRMustacheExpression>)scopedExpression identifier:(NSString *)identifier
+- (id)initWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
 {
     self = [super init];
     if (self) {
-        self.scopedExpression = scopedExpression;
-        self.identifier = identifier;
+        self.baseExpression = baseExpression;
+        self.scopeIdentifier = scopeIdentifier;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_scopedExpression release];
-    [_identifier release];
+    [_baseExpression release];
+    [_scopeIdentifier release];
     [super dealloc];
 }
 
 - (BOOL)isEqual:(id<GRMustacheExpression>)expression
 {
-    if (![expression isKindOfClass:[GRMustacheScopeExpression class]]) {
+    if (![expression isKindOfClass:[GRMustacheScopedExpression class]]) {
         return NO;
     }
-    if (![_scopedExpression isEqual:((GRMustacheScopeExpression *)expression).scopedExpression]) {
+    if (![_baseExpression isEqual:((GRMustacheScopedExpression *)expression).baseExpression]) {
         return NO;
     }
-    return [_identifier isEqual:((GRMustacheScopeExpression *)expression).identifier];
+    return [_scopeIdentifier isEqual:((GRMustacheScopedExpression *)expression).scopeIdentifier];
 }
 
 
@@ -72,8 +72,8 @@
 
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext
 {
-    id value = [_scopedExpression valueForContext:context filterContext:filterContext];
-    return [GRMustacheContext valueForKey:_identifier inObject:value];
+    id value = [_baseExpression valueForContext:context filterContext:filterContext];
+    return [GRMustacheContext valueForKey:_scopeIdentifier inObject:value];
 }
 
 @end
