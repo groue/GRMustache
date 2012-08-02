@@ -23,110 +23,85 @@
 #import "Document.h"
 #import "GRMustache.h"
 
-@interface Document()
-@property (nonatomic, strong) NSMutableArray *templateNumberFormatterStack;
-@end
-
 @implementation Document
-@synthesize templateNumberFormatterStack=_templateNumberFormatterStack;
 
 - (NSString *)render
 {
     /**
-     * So, our goal is to format all numbers in the `{{#formatPercent}}` and
-     * `{{#formatDecimal}}` sections of template.mustache.
-     * 
-     * First, we attach a NSNumberFormatter instance to those sections. This is
-     * done by setting NSNumberFormatter instances to corresponding keys in the
-     * data object that we will render. We'll use a NSDictionary for storing
-     * the data, but you can use any other KVC-compliant container.
-     * 
-     * The NSNumberFormatter instances will never be rendered: GRMustache
-     * considers them as "true" objects that will trigger the rendering of the
-     * sections they are attached to. We use them as plain sentinels.
+     * Our template wants to render floats in various formats: raw, or formatted
+     * as percentage, or formatted as decimal.
+     *
+     * This is typically a job for filters: we'll define the `percent` and
+     * `decimal` filters.
+     *
+     * For now, we just have our template use them. The initial {{%FILTERS}}
+     * pragma tag tells GRMustache to trigger support for filters, which are an
+     * extension to the Mustache specification.
+     */
+     
+    NSString *templateString = @"{{%FILTERS}}"
+                               @"raw: {{value}}\n"
+                               @"percent: {{percent(value)}}\n"
+                               @"decimal: {{decimal(value)}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    /**
+     * Now we have to define those filters.
+     *
+     * Filters have to be objects that conform to the GRMustacheFilter protocol.
+     * The easiest way to build one is to use the
+     * [GRMustacheFilter filterWithBlock:] method.
+     *
+     * The formatting itself is done by our friend NSNumberFormatter.
      */
     
-    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    // Build our formatters
     
-    // Attach a percent NSNumberFormatter to the "formatPercent" key
     NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
     percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-    [data setObject:percentNumberFormatter forKey:@"formatPercent"];
-    
-    // Attach a decimal NSNumberFormatter to the "formatDecimal" key
+
     NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
     decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
-    [data setObject:decimalNumberFormatter forKey:@"formatDecimal"];
+    
+    
+    // Build our filters
+    
+    id percentFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [percentNumberFormatter stringFromNumber:value];
+    }];
+    
+    id decimalFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [decimalNumberFormatter stringFromNumber:value];
+    }];
     
     
     /**
-     * Now we need a float to be rendered as the {{float}} tags of our
-     * template.
+     * GRMustache does not load filters from the rendered data, but from a
+     * specific filters container.
+     *
+     * We'll use a NSDictionary for storing the filters, but you can use any
+     * other KVC-compliant container.
      */
     
-    [data setObject:[NSNumber numberWithFloat:0.5] forKey:@"float"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObjectsAndKeys:
+                             percentFilter, @"percent",
+                             decimalFilter, @"decimal",
+                             nil];
+    
+    
+    /**
+     * Now we need a float to be rendered as `value` in our template:
+     */
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.5] forKey:@"value"];
     
     
     /**
      * Render.
      */
     
-    NSString *templateString = @"raw: {{float}}\n"
-                               @"{{#formatPercent}}"
-                               @"percent: {{float}}\n"
-                               @"{{/formatPercent}}"
-                               @"{{#formatDecimal}}"
-                               @"decimal: {{float}}\n"
-                               @"{{/formatDecimal}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    return [template renderObject:data];
+    return [template renderObject:data withFilters:filters];
 }
 
 @end
 
-
-/**
- * By conforming to the GRMustacheTemplateDelegate protocol,
- * NSNumberFormatter instances will be able to observe and alter
- * the rendering of templates.
- */
-@interface NSNumberFormatter(GRMustache)<GRMustacheTemplateDelegate>
-@end
-
-@implementation NSNumberFormatter(GRMustache)
-
-
-/**
- * This method is called when the template is about to render a tag.
- */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    /**
-     * We actually only format numbers for variable tags such as `{{name}}`. We
-     * must carefully avoid messing with sections: they as well can be provided
-     * with numbers, that they interpret as booleans. We surely do not want to
-     * convert NO to the truthy @"0%" string...
-     * 
-     * So let's ignore sections, and return.
-     */
-    if (interpretation == GRMustacheInterpretationSection)
-    {
-        return;
-    }
-    
-    /**
-     * There we are: invocation's return value is a NSNumber, and our
-     * templateNumberFormatterStack is not empty.
-     * 
-     * Let's use the top NSNumberFormatter to format this number, and set the
-     * invocation's returnValue: this is the object that will be rendered.
-     */
-    if ([invocation.returnValue isKindOfClass:[NSNumber class]])
-    {
-        NSNumber *number = invocation.returnValue;
-        invocation.returnValue = [self stringFromNumber:number];
-    }
-}
-
-
-@end

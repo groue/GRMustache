@@ -3,6 +3,15 @@
 Number formatting
 =================
 
+For the purpose of demonstration, we'll see various ways to have GRMustache render a numeric value formatted in different ways.
+
+We'll render the value 0.5 as a *raw* number, as a percentage, and as a *decimal*. For instance, on a French system, we'll get the following output:
+
+    raw: 0.5
+    percent: 50 %
+    decimal: 0,5
+
+
 In a genuine Mustache way
 -------------------------
 
@@ -10,45 +19,67 @@ Mustache is a simple template language. This is why there are so many [other Mus
 
 If your goal is to design your templates so that they are compatible with those, the best way to format numbers is to have your data objects provide those formatted numbers.
 
-### NSDictionary data objects
+### 1st technique: NSDictionary
 
 Let's render the simple template:
 
-    {(percent)}
+    raw: {{ value }}
+    percent: {{ percent }}
+    decimal: {{ decimal }}
 
-It's quite easy to put formatted numbers in a dictionary:
+It's quite easy to put numbers and formatted numbers in a dictionary:
 
 ```objc
 // The number to render
-NSNumber *number = [NSNumber numberWithFloat: 0.5]:
+NSNumber *value = [NSNumber numberWithFloat: 0.5]:
 
 // An NSNumberFormatter knows how to format numbers
 NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
 percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-NSString *formattedNumber = [numberFormatter stringFromNumber:number];
+NSString *percent = [numberFormatter stringFromNumber:value];
+
+NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
+decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
+NSString *decimal = [numberFormatter stringFromNumber:value];
 
 // Render "50%"
-NSDictionary *dictionary = [NSDictionary dictionaryWithObject:formattedNumber forKey:"percent"];
+NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                            value, @"value",
+                            percent, @"percent",
+                            decimal, @"decimal",
+                            nil];
 NSString *rendering = [template renderObject:dictionary];
 ```
 
-### Custom data objects
+### 2nd technique: GRMustache-targetted properties
 
 Often, data comes from your model objects, not from a hand-crafted NSDictionary.
 
-In this case, the best option is to declare a category on your model object, and implement a specific key that will output the formatted number:
+In this case, the best option is to declare a category on your model object, and implement specific keys that will output the formatted numbers:
 
 ```objc
-@interface MYModel(GRMustache)
-@property (readonly) NSString *percent;
+@interface Model
+@property float value;   // the original property provided by the model
 @end
 
-@implementation MYModel(GRMustache)
+@interface Model(GRMustache)
+@property (readonly) NSString *percent;
+@property (readonly) NSString *decimal;
+@end
+
+@implementation Model(GRMustache)
 - (NSString *)percent
 {
-    NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
-    percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-    return [numberFormatter stringFromNumber:self.number];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
+    return [numberFormatter stringFromNumber:[NSNumber numberWithFloat:self.value]];
+}
+
+- (NSString *)decimal
+{
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
+    return [numberFormatter stringFromNumber:[NSNumber numberWithFloat:self.value]];
 }
 @end
 ```
@@ -57,141 +88,104 @@ You would then render normally:
 
 ```objc
 // Render "50%"
-MYModel *model = [MYModel modelWithNumber:0.5];
+Model *model = ...
+model.value = 0.5;
 NSString *rendering = [template renderObject:model];
 ```
 
-In the GRMustache way
----------------------
+GRMustache filters
+------------------
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
 You may ask yourself, is it worth declaring dozens of stub properties just for formatting numbers?
 
-Before you answer "Of course not, I'm a lazy bastard, just gimme the code", beware that we will use below the [GRMustacheTemplateDelegate](../delegate.md) protocol. **It thus may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
+[Filters](../filters.md) are quite helpful, here. However, **it may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
 
 So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
 
-The sample code below format all numbers in specific sections, without any cooperation from the data object. For instance, consider the following template, that uses a single `{{float}}` value:
+Let's first rewrite our template so that it uses filters:
 
-    raw: {{float}}
+    {{% FILTERS }}        # tell GRMustache to trigger support for filters
+    raw: {{ value }}
+    percent: {{ percent(value) }}
+    decimal: {{ decimal(value) }}
 
-    {{#formatPercent}}
-    percent: {{float}}
-    {{/formatPercent}}
-
-    {{#formatDecimal}}
-    decimal: {{float}}
-    {{/formatDecimal}}
-
-It will render, on a French system:
-
-    raw: 0.5
-    percent: 50 %
-    decimal: 0,5
-
-Here is the rendering code:
+After we have told GRMustache how the `percent` and `decimal` filters should process their input, we will be releived from the need to prepare our data before it is rendered: no more adding of specific keys in a dictionary, no more declaration of a category on our models.
 
 ```objc
-@implementation MYObject
-
 - (NSString *)render
 {
     /**
-     * So, our goal is to format all numbers in the `{{#formatPercent}}` and
-     * `{{#formatDecimal}}` sections of template.mustache.
-     * 
-     * First, we attach a NSNumberFormatter instance to those sections. This is
-     * done by setting NSNumberFormatter instances to corresponding keys in the
-     * data object that we will render. We'll use a NSDictionary for storing
-     * the data, but you can use any other KVC-compliant container.
-     * 
-     * The NSNumberFormatter instances will never be rendered: GRMustache
-     * considers them as "true" objects that will trigger the rendering of the
-     * sections they are attached to. We use them as plain sentinels.
+     * Our template wants to render floats in various formats: raw, or formatted
+     * as percentage, or formatted as decimal.
+     *
+     * This is typically a job for filters: we'll define the `percent` and
+     * `decimal` filters.
+     *
+     * For now, we just have our template use them. The initial {{ %FILTERS }}
+     * pragma tag tells GRMustache to trigger support for filters, which are an
+     * extension to the Mustache specification.
+     */
+     
+    NSString *templateString = @"{{% FILTERS }}"
+                               @"raw: {{ value }}\n"
+                               @"percent: {{ percent(value) }}\n"
+                               @"decimal: {{ decimal(value) }}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    
+    /**
+     * Now we have to define those filters.
+     *
+     * Filters have to be objects that conform to the GRMustacheFilter protocol.
+     * The easiest way to build one is to use the
+     * [GRMustacheFilter filterWithBlock:] method.
+     *
+     * The formatting itself is done by our friend NSNumberFormatter.
      */
     
-    NSMutableDictionary *data = [NSMutableDictionary dictionary];
+    // Build our formatters
     
-    // Attach a percent NSNumberFormatter to the "formatPercent" key
     NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
     percentNumberFormatter.numberStyle = kCFNumberFormatterPercentStyle;
-    [data setObject:percentNumberFormatter forKey:@"formatPercent"];
-    
-    // Attach a decimal NSNumberFormatter to the "formatDecimal" key
+
     NSNumberFormatter *decimalNumberFormatter = [[NSNumberFormatter alloc] init];
     decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
-    [data setObject:decimalNumberFormatter forKey:@"formatDecimal"];
+    
+    
+    // Build our filters
+    
+    id percentFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [percentNumberFormatter stringFromNumber:value];
+    }];
+    
+    id decimalFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [decimalNumberFormatter stringFromNumber:value];
+    }];
     
     
     /**
-     * Now we need a float to be rendered as the {{float}} tags of our
-     * template.
+     * GRMustache does not load filters from the rendered data, but from a
+     * specific filters container.
+     *
+     * We'll use a NSDictionary for storing the filters, but you can use any
+     * other KVC-compliant container.
      */
     
-    [data setObject:[NSNumber numberWithFloat:0.5] forKey:@"float"];
+    NSDictionary *filters = [NSDictionary dictionaryWithObjectsAndKeys:
+                             percentFilter, @"percent",
+                             decimalFilter, @"decimal",
+                             nil];
     
     
     /**
      * Render.
      */
     
-    return [GRMustacheTemplate renderObject:data fromResource:@"template" bundle:nil error:NULL]
+    Model *model = ...;
+    model.value = 0.5;
+    return [template renderObject:model withFilters:filters];
 }
-@end
-```
-
-But we haven't told yet how those number formatters will be used for rendering the `{{float}}` tags.
-
-We'll have the NSNumberFormatter class conform to the GRMustacheTemplateDelegate protocol.
-
-As a consequence, GRMustache will give formatters that are attached to Mustache sections the opportunity to hook in the template rendering while rendering those sections. This behavior is described in the [GRMustacheTemplateDelegate](../delegate.md) guide.
-
-We just have to implement the `template:willInterpretReturnValueOfInvocation:as:` callback, that is able to tell GRMustache which object it should render. NSNumberFormatter instances will tell GRMustache to render formatted numbers instead of plain numbers.
-
-Let's first have NSNumberFormatter conform to the GRMustacheTemplateDelegate protocol:
-
-```objc
-@interface NSNumberFormatter(GRMustache)<GRMustacheTemplateDelegate>
-@end
-```
-
-Now let's format numbers when GRMustache is about to render them:
-
-```objc
-@implementation NSNumberFormatter(GRMustache)
-
-/**
- * This method is called when the template is about to render a tag.
- */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    /**
-     * We actually only format numbers for variable tags such as `{{name}}`. We
-     * must carefully avoid messing with sections: they as well can be provided
-     * with numbers, that they interpret as booleans. We surely do not want to
-     * convert NO to the truthy @"0%" string...
-     * 
-     * So let's ignore sections, and return.
-     */
-    if (interpretation == GRMustacheInterpretationSection)
-    {
-        return;
-    }
-    
-    /**
-     * There we are: invocation's return value is a NSNumber.
-     * 
-     * Let's set the invocation's returnValue to a formatter number: this string
-     * is the object that will be rendered.
-     */
-    if ([invocation.returnValue isKindOfClass:[NSNumber class]])
-    {
-        NSNumber *number = invocation.returnValue;
-        invocation.returnValue = [self stringFromNumber:number];
-    }
-}
-@end
 ```
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
