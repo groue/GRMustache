@@ -78,8 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				562952DD15A16CA80061A6B1 /* main.m */,
-				56F9D2E615A30F9C003026DD /* GRMustache */,
 				562952EE15A16CF30061A6B1 /* Classes */,
+				56F9D2E615A30F9C003026DD /* GRMustache */,
 				562952DF15A16CA80061A6B1 /* Supporting Files */,
 			);
 			path = GRMustacheNumberFormatting;
