@@ -22,10 +22,10 @@
 
 #import "PositionFilter.h"
 
-#pragma mark - PositionFilterProxy
+#pragma mark - PositionFilterItem declaration
 
 /**
- * PositionFilterProxy's responsability is, given an array and an index, to
+ * PositionFilterItem's responsability is, given an array and an index, to
  * forward to the original item in the array all keys but:
  *
  * - position: returns the 1-based index of the item
@@ -34,59 +34,11 @@
  *
  * All other keys are forwared to the original item.
  */
-@interface PositionFilterProxy : NSObject {
-    NSUInteger _index;
-}
+@interface PositionFilterItem : NSObject
 @property (nonatomic, readonly) NSUInteger position;
-@property (nonatomic, strong) NSArray *array;
+@property (nonatomic, readonly) BOOL isFirst;
+@property (nonatomic, readonly) BOOL isOdd;
 - (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array;
-@end
-
-@implementation PositionFilterProxy
-@synthesize array=_array;
-
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array
-{
-    self = [super init];
-    if (self) {
-        _index = index;
-        self.array = array;
-    }
-    return self;
-}
-
-// Support for `{{.}}`: forward to original array element
-- (NSString *)description
-{
-    id originalObject = [self.array objectAtIndex:_index];
-    return [originalObject description];
-}
-
-// Support for `{{position}}`: return a 1-based index.
-- (NSUInteger)position
-{
-    return _index + 1;
-}
-
-// Support for `{{isFirst}}`: return YES if element is the first
-- (BOOL)isFirst
-{
-    return _index == 0;
-}
-
-// Support for `{{isOdd}}`: return YES if element's position is odd.
-- (BOOL)isOdd
-{
-    return (_index % 2) == 0;
-}
-
-// Support for other keys: forward to original array element
-- (id)valueForUndefinedKey:(NSString *)key
-{
-    id originalObject = [self.array objectAtIndex:_index];
-    return [originalObject valueForKey:key];
-}
-
 @end
 
 
@@ -109,17 +61,88 @@
     
     
     /**
-     * Let's return a new array made of PositionFilterProxy instances.
+     * Let's return a new array made of PositionFilterItem instances.
      * They will provide the `position`, `isOdd` and `isFirst` keys while
      * letting original array items provide the other keys.
      */
     
-    NSMutableArray *proxiesArray = [NSMutableArray arrayWithCapacity:array.count];
+    NSMutableArray *replacementArray = [NSMutableArray arrayWithCapacity:array.count];
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        PositionFilterProxy *proxy = [[PositionFilterProxy alloc] initWithObjectAtIndex:idx inArray:array];
-        [proxiesArray addObject:proxy];
+        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:idx inArray:array];
+        [replacementArray addObject:item];
     }];
-    return proxiesArray;
+    return replacementArray;
 }
 
 @end
+
+
+#pragma mark - PositionFilterItem implementation
+
+@implementation PositionFilterItem {
+    /**
+     * The original 0-based index and the array of original items are stored in
+     * ivars without any exposed property: we do not want GRMustache to render
+     * the unintended {{ index }} or {{ array }}.
+     */
+    NSUInteger _index;
+    NSArray *_array;
+}
+
+- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array
+{
+    self = [super init];
+    if (self) {
+        _index = index;
+        _array = array;
+    }
+    return self;
+}
+
+/**
+ * The implementation of `description` is required so that whenever GRMustache
+ * wants to render the original item itself (with a `{{ . }}` tag, for
+ * instance).
+ */
+- (NSString *)description
+{
+    id originalObject = [_array objectAtIndex:_index];
+    return [originalObject description];
+}
+
+/**
+ * Support for `{{position}}`: return a 1-based index.
+ */
+- (NSUInteger)position
+{
+    return _index + 1;
+}
+
+/**
+ * Support for `{{isFirst}}`: return YES if element is the first
+ */
+- (BOOL)isFirst
+{
+    return _index == 0;
+}
+
+/**
+ * Support for `{{isOdd}}`: return YES if element's position is odd.
+ */
+- (BOOL)isOdd
+{
+    return (_index % 2) == 0;
+}
+
+/**
+ * Support for other keys: forward to original array element
+ */
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    id originalObject = [_array objectAtIndex:_index];
+    return [originalObject valueForKey:key];
+}
+
+@end
+
+
