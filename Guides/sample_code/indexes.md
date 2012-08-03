@@ -24,6 +24,8 @@ The [GRMustacheFilter](../filter.md) protocol can help you extend the mustache l
 
 So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
 
+### The template
+
 Below we'll implement the special keys `position`, `isFirst`, and `isOdd`. We'll render the following template:
 
     {{% FILTERS}}
@@ -53,6 +55,8 @@ We expect, on output, the following rendering:
 Our people array will be a plain array filled with plain people who don't know anything but their name. The support for the special positional keys will be entirely done by a filter object.
 
 We can thus focus on the two subjects separately.
+
+### The rendering
 
 Let's first assume that the class PositionFilter is already written. Here is its documentation:
 
@@ -146,7 +150,9 @@ We have everything we need to render our template:
 }
 ```
 
-Now it's time to implement this nifty PositionFilter filter.
+### The filter implementation
+
+Now it's time to implement this nifty PositionFilter class.
 
 We have already seen above its declaration: it's simply a class that conforms to the GRMustacheFilter protocol:
 
