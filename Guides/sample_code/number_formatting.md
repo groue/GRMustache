@@ -17,7 +17,7 @@ Mustache is a simple template language. This is why there are so many [other Mus
 
 If your goal is to design your templates so that they are compatible with those, the best way to format numbers is to have your data objects provide those formatted numbers.
 
-### 1st technique: NSDictionary
+### 1st genuine Mustache technique: NSDictionary
 
 Let's render the simple template:
 
@@ -49,7 +49,7 @@ NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 NSString *rendering = [template renderObject:dictionary];
 ```
 
-### 2nd technique: GRMustache-targetted properties
+### 2nd genuine Mustache technique: specific properties
 
 Often, data comes from your model objects, not from a hand-crafted NSDictionary.
 
@@ -91,8 +91,8 @@ model.value = 0.5;
 NSString *rendering = [template renderObject:model];
 ```
 
-GRMustache filters
-------------------
+GRMustache solution: filters
+----------------------------
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
