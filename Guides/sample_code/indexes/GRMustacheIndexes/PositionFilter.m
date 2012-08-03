@@ -119,7 +119,7 @@
 }
 
 /**
- * Support for `{{isFirst}}`: return YES if element is the first
+ * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the first
  */
 - (BOOL)isFirst
 {
@@ -127,7 +127,8 @@
 }
 
 /**
- * Support for `{{isOdd}}`: return YES if element's position is odd.
+ * Support for `{{#isOdd}}...{{/isOdd}}`: return YES if element's position is
+ * odd.
  */
 - (BOOL)isOdd
 {
