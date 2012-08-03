@@ -43,9 +43,16 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 }
 
 /**
- * TODO
+ * Sends the `valueForKey:` message to _object_ with the provided _key_, and
+ * returns the result. Should `valueForKey:` raise an NSUndefinedKeyException,
+ * returns nil.
+ *
+ * @param key     The searched key
+ * @param object  The queried object
+ *
+ * @return `[object valueForKey:key]`, or nil should an NSUndefinedKeyException
+ *         be raised.
  */
-
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
