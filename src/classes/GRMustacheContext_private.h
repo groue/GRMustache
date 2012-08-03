@@ -33,6 +33,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 
 /**
  * The GRMustacheContext class implements a context stack as a linked list.
+ *
+ * Use the `valueForKey:` method in order to fetch values out of a context.
  */
 @interface GRMustacheContext: NSObject {
 @private
