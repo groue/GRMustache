@@ -20,6 +20,10 @@ GRMustache solution: filters
 
 The [GRMustacheFilter](../filter.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
+**However, it may be tedious or impossible for other Mustache implementations to produce the same rendering.**
+
+So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
+
 Below we'll implement the special keys `position`, `isFirst`, and `isOdd`. We'll render the following template:
 
     {{% FILTERS}}
