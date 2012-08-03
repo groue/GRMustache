@@ -25,10 +25,17 @@
 #import "GRMustacheInvocation_private.h"
 
 @implementation GRMustacheImplicitIteratorExpression
+@synthesize debuggingToken=_debuggingToken;
 
 + (id)expression
 {
     return [[[self alloc] init] autorelease];
+}
+
+- (void)dealloc
+{
+    [_debuggingToken release];
+    [super dealloc];
 }
 
 - (BOOL)isEqual:(id<GRMustacheExpression>)expression
@@ -44,6 +51,7 @@
     if (delegatingTemplate) {
         NSAssert(outInvocation, @"WTF");
         *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+        (*outInvocation).debuggingToken = _debuggingToken;
         (*outInvocation).returnValue = context.object;
         (*outInvocation).key = @".";
     }

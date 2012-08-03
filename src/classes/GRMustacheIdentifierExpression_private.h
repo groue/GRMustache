@@ -27,6 +27,7 @@
  */
 @interface GRMustacheIdentifierExpression : NSObject<GRMustacheExpression> {
 @private
+    GRMustacheToken *_debuggingToken;
     NSString *_identifier;
 }
 

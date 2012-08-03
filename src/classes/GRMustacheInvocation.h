@@ -40,7 +40,7 @@
 @private
     NSString *_key;
     id _returnValue;
-    BOOL _nonScopable;
+    id _debuggingToken;
 }
 
 /**

@@ -265,6 +265,7 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
+    STAssertNotNil(description, @"");
     range = [description rangeOfString:@"{{name}}"];
     STAssertTrue(range.location != NSNotFound, @"");
     
@@ -272,6 +273,7 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
+    STAssertNotNil(description, @"");
     range = [description rangeOfString:@"{{#name}}"];
     STAssertTrue(range.location != NSNotFound, @"");
     
@@ -279,6 +281,7 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
+    STAssertNotNil(description, @"");
     range = [description rangeOfString:@"{{   name\t}}"];
     STAssertTrue(range.location != NSNotFound, @"");
 }
@@ -294,13 +297,15 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:@"line 1"];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:@"line 1"];
     STAssertTrue(range.location != NSNotFound, @"");
     
     template = [GRMustacheTemplate templateFromString:@"\n {{name}}" error:NULL];
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
+    STAssertNotNil(description, @"");
     range = [description rangeOfString:@"line 2"];
     STAssertTrue(range.location != NSNotFound, @"");
     
@@ -308,6 +313,7 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
+    STAssertNotNil(description, @"");
     range = [description rangeOfString:@"line 3"];
     STAssertTrue(range.location != NSNotFound, @"");
 }
@@ -323,7 +329,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
@@ -331,7 +338,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 
@@ -346,7 +354,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
@@ -354,7 +363,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 
@@ -369,7 +379,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
@@ -377,7 +388,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 
@@ -392,7 +404,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
@@ -401,14 +414,16 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 
@@ -423,7 +438,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
@@ -432,14 +448,16 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 
@@ -454,7 +472,8 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
@@ -463,14 +482,16 @@
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
     
     template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
     template.delegate = recorder;
     [template render];
     description = recorder.lastInvocation.description;
-    range = [recorder.lastInvocation.description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+    STAssertNotNil(description, @"");
+    range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
     STAssertTrue(range.location != NSNotFound, @"");
 }
 

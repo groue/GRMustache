@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+@class GRMustacheToken;
+
 /**
  * TODO
  */
@@ -30,7 +32,7 @@
 @private
     NSString *_key;
     id _returnValue;
-    BOOL _nonScopable;
+    GRMustacheToken *_debuggingToken;
 }
 
 // Documented in GRMustacheInvocation.h
@@ -39,5 +41,9 @@
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
-@property (nonatomic, getter = isScopable) BOOL scopable GRMUSTACHE_API_INTERNAL;
+/**
+ * TODO
+ */
+@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
+
 @end

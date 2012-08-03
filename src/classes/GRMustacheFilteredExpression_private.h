@@ -27,6 +27,7 @@
  */
 @interface GRMustacheFilteredExpression : NSObject<GRMustacheExpression> {
 @private
+    GRMustacheToken *_debuggingToken;
     id<GRMustacheExpression> _filterExpression;
     id<GRMustacheExpression> _parameterExpression;
 }

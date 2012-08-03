@@ -25,7 +25,10 @@
 /**
  * TODO
  */
-@interface GRMustacheImplicitIteratorExpression : NSObject<GRMustacheExpression>
+@interface GRMustacheImplicitIteratorExpression : NSObject<GRMustacheExpression> {
+@private
+    GRMustacheToken *_debuggingToken;
+}
 
 /**
  * TODO

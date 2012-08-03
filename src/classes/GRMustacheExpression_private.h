@@ -26,12 +26,18 @@
 @class GRMustacheContext;
 @class GRMustacheTemplate;
 @class GRMustacheInvocation;
+@class GRMustacheToken;
 
 /**
  * TODO
  */
 @protocol GRMustacheExpression <NSObject>
 @required
+
+/**
+ * TODO
+ */
+@property (nonatomic, retain) GRMustacheToken *debuggingToken;
 
 /**
  * TODO

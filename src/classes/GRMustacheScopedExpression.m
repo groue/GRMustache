@@ -32,6 +32,7 @@
 @end
 
 @implementation GRMustacheScopedExpression
+@synthesize debuggingToken=_debuggingToken;
 @synthesize baseExpression=_baseExpression;
 @synthesize scopeIdentifier=_scopeIdentifier;
 
@@ -52,9 +53,19 @@
 
 - (void)dealloc
 {
+    [_debuggingToken release];
     [_baseExpression release];
     [_scopeIdentifier release];
     [super dealloc];
+}
+
+- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
+{
+    if (_debuggingToken != debuggingToken) {
+        [_debuggingToken release];
+        _debuggingToken = [debuggingToken retain];
+        _baseExpression.debuggingToken = _debuggingToken;
+    }
 }
 
 - (BOOL)isEqual:(id<GRMustacheExpression>)expression
@@ -73,20 +84,21 @@
 
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
 {
-    id value = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:outInvocation];
-    value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:value];
-    if (delegatingTemplate) {
-        NSAssert(outInvocation, @"WTF");
-        if (*outInvocation == nil) {
-            *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-        }
-        if (value || (*outInvocation).isScopable) {
-            (*outInvocation).scopable = (value != nil);
-            (*outInvocation).returnValue = value;
+    id returnValue = nil;
+    id scopedValue = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:outInvocation];
+    if (scopedValue) {
+        returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+        if (delegatingTemplate) {
+            NSAssert(outInvocation, @"WTF");
+            if (*outInvocation == nil) {
+                *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+                (*outInvocation).debuggingToken = _debuggingToken;
+            }
+            (*outInvocation).returnValue = returnValue;
             (*outInvocation).key = _scopeIdentifier;
         }
     }
-    return value;
+    return returnValue;
 }
 
 @end

@@ -27,33 +27,24 @@
 @implementation GRMustacheInvocation
 @synthesize returnValue=_returnValue;
 @synthesize key=_key;
+@synthesize debuggingToken=_debuggingToken;
 
 - (void)dealloc
 {
     [_returnValue release];
     [_key release];
+    [_debuggingToken release];
     [super dealloc];
 }
 
 - (NSString *)description
 {
-//    NSAssert(_debuggingToken, @"debuggingToken not set");
-//    if (_debuggingToken.templateID) {
-//        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
-//    } else {
-//        return [NSString stringWithFormat:@"`%@` at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
-//    }
-    return nil;
-}
-
-- (BOOL)isScopable
-{
-    return !_nonScopable;
-}
-
-- (void)setScopable:(BOOL)scopable
-{
-    _nonScopable = !scopable;
+    NSAssert(_debuggingToken, @"debuggingToken not set");
+    if (_debuggingToken.templateID) {
+        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
+    } else {
+        return [NSString stringWithFormat:@"`%@` at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
+    }
 }
 
 @end

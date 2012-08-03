@@ -32,8 +32,9 @@
 @end
 
 @implementation GRMustacheFilteredExpression
-@synthesize filterExpression = _filterExpression;
-@synthesize parameterExpression = _parameterExpression;
+@synthesize debuggingToken=_debuggingToken;
+@synthesize filterExpression=_filterExpression;
+@synthesize parameterExpression=_parameterExpression;
 
 + (id)expressionWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression
 {
@@ -52,9 +53,20 @@
 
 - (void)dealloc
 {
+    [_debuggingToken release];
     [_filterExpression release];
     [_parameterExpression release];
     [super dealloc];
+}
+
+- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
+{
+    if (_debuggingToken != debuggingToken) {
+        [_debuggingToken release];
+        _debuggingToken = [debuggingToken retain];
+        _filterExpression.debuggingToken = _debuggingToken;
+        _parameterExpression.debuggingToken = _debuggingToken;
+    }
 }
 
 - (BOOL)isEqual:(id<GRMustacheExpression>)expression
