@@ -94,7 +94,7 @@ You'll find below a grammar and a state machine that implement the parsing of th
 
 ### A syntax that does not fullfill those properties
 
-The only other implemented syntax that I'm aware of is the one of bobthecow's [mustache.php](https://github.com/bobthecow/mustache.php/pull/102):
+The only other syntax that I'm aware of is the one of bobthecow's [mustache.php](https://github.com/bobthecow/mustache.php/pull/102), which is not yet merged in the released branch of his library.
 
     {{ created_at | date.iso8601 }}
 
