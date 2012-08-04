@@ -114,6 +114,15 @@
     STAssertNotNil(template, nil);
 }
 
+- (void)testFilteredSectionClosingTagCanBeBlank
+{
+    NSString *templateString = @"{{%FILTERS}}<{{#uppercase(.)}}{{.}}{{/}}> <{{#uppercase(.)}}{{.}}{{/ }}>";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    STAssertNotNil(template, nil);
+    NSString *rendering = [template renderObject:@"foo"];
+    STAssertEqualObjects(rendering, @"<FOO> <FOO>", nil);
+}
+
 - (void)testMissingFilterChainRaisesGRMustacheFilterException
 {
     id replaceFilter = [GRMustacheFilter filterWithBlock:^id(id value) {

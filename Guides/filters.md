@@ -7,21 +7,23 @@ You can filter values before they are rendered.
 
 **Filters are not yet part of the Mustache specification**, while the topic is currently under [discussion](http://github.com/mustache/spec/issues/41). You thus need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
 
-You apply a filter just like calling a function, with parentheses.
+You apply a filter just like calling a function, with parentheses:
 
-For instance, `{{%FILTERS}}My name is {{ uppercase(name) }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
+- `{{%FILTERS}}My name is {{ uppercase(name) }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
 
-Filters can chain: `{{ uppercase(reversed(name)) }}` would render `RUHTRA`.
+- Filters can chain: `{{ uppercase(reversed(name)) }}` would render `RUHTRA`.
 
-Filters can apply to compound key paths: `{{ uppercase(person.name) }}`.
+- Filters can apply to compound key paths: `{{ uppercase(person.name) }}`.
 
-You can extract values from filtered values: `{{ last(persons).name }}`.
+- You can extract values from filtered values: `{{ last(persons).name }}`.
 
-You can filter sections as well : `{{^ isEmpty(people) }}...` renders if the people collection is not empty.
+- You can filter sections as well : `{{^ isEmpty(people) }}...{{/ isEmpty(people) }}` renders if the people collection is not empty.
+    
+    For brevity's sake, closing section tags can be empty: `{{^ isEmpty(people) }}...{{/}}` is valid.
 
 ## Standard library
 
-GRMustache ships with a bunch of filters already implemented:
+GRMustache ships with a bunch of already implemented filters:
 
 - `capitalized`
     
@@ -125,7 +127,7 @@ NSDictionary *mathFilters = [NSDictionary dictionaryWithObject:absFilter forKey:
 NSDictionary *filters = [NSDictionary dictionaryWithObject:mathFilters forKey:@"math"];
 
 [GRMustacheTemplate renderObject:...
-                     withFilters:filters    // filters are fetched here
+                     withFilters:filters
                       fromString:@"{{%FILTERS}}{{math.abs(x)}}"
                            error:NULL];
 ```

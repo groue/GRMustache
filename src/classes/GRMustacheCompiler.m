@@ -243,16 +243,19 @@
             
         case GRMustacheTokenTypeSectionClosing: {
             // Expression validation
-            if (token.value.expression == nil) {
+            // We need an expression, unless parser has the FILTERS pragma, in which case we accept `{{/}}` closing tags.
+            if (token.value.expression == nil && ![parser.pragmas containsObject:@"FILTERS"]) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
                 return NO;
             }
             
             // Parser validation
-            NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+            if (token.value.expression) {
+                NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+            }
             
             // Validate token: section ending should match section opening
-            if (![token.value.expression isEqual:_currentSectionOpeningToken.value.expression]) {
+            if (token.value.expression && ![token.value.expression isEqual:_currentSectionOpeningToken.value.expression]) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
                 return NO;
             }
