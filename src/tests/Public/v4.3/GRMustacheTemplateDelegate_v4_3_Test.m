@@ -38,6 +38,30 @@
 
 @end
 
+@interface GRMustacheTemplateDelegate_v4_3_AlteringDelegate : NSObject<GRMustacheTemplateDelegate>
+@end
+
+@implementation GRMustacheTemplateDelegate_v4_3_AlteringDelegate
+
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+{
+    switch (interpretation) {
+        case GRMustacheInterpretationSection:
+            invocation.returnValue = [NSNumber numberWithBool:NO];
+            break;
+            
+        case GRMustacheInterpretationVariable:
+            invocation.returnValue = @"variable";
+            break;
+            
+        case GRMustacheInterpretationFilterArgument:
+            invocation.returnValue = @"filtered";
+            break;
+    }
+}
+
+@end
+
 @implementation GRMustacheTemplateDelegate_v4_3_Test
 
 - (void)testNaiveDelegateDoesNotBreakFiltering
@@ -47,6 +71,70 @@
     STAssertNoThrow([template renderObject:@"foo"], nil);
     NSString *rendering = [template renderObject:@"foo"];
     STAssertEqualObjects(rendering, @"DELEGATE WAS HERE", nil);
+}
+
+- (void)testGRMustacheInterpretationSection
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#.}}YES{{/.}}{{^.}}NO{{/.}}" error:NULL];
+    id object = [NSNumber numberWithBool:YES];
+    
+    {
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"YES", nil);
+    }
+    {
+        template.delegate = [[[GRMustacheTemplateDelegate_v4_3_AlteringDelegate alloc] init] autorelease];
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"NO", nil);
+    }
+}
+
+- (void)testGRMustacheInterpretationRawVariable
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{.}}" error:NULL];
+    id object = @"foo";
+    
+    {
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"foo", nil);
+    }
+    {
+        template.delegate = [[[GRMustacheTemplateDelegate_v4_3_AlteringDelegate alloc] init] autorelease];
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"variable", nil);
+    }
+}
+
+- (void)testGRMustacheInterpretationScopedFilteredVariable
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{uppercase(.).length}}" error:NULL];
+    id object = @"foo";
+    
+    {
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"3", nil);
+    }
+    {
+        template.delegate = [[[GRMustacheTemplateDelegate_v4_3_AlteringDelegate alloc] init] autorelease];
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"variable", nil);
+    }
+}
+
+- (void)testGRMustacheInterpretationFilterArgument
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{uppercase(.)}}" error:NULL];
+    id object = @"foo";
+    
+    {
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"FOO", nil);
+    }
+    {
+        template.delegate = [[[GRMustacheTemplateDelegate_v4_3_AlteringDelegate alloc] init] autorelease];
+        NSString *rendering = [template renderObject:object];
+        STAssertEqualObjects(rendering, @"FILTERED", nil);
+    }
 }
 
 @end
