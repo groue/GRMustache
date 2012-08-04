@@ -464,15 +464,4 @@
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
-/**
- * Renders a template without any context object for interpreting Mustache tags.
- * 
- * @param filters  TODO
- *
- * @return A string containing the rendered template
- *
- * @since v4.3
- */
-- (NSString *)renderWithFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
-
 @end
