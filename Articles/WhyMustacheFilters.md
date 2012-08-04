@@ -77,7 +77,7 @@ GRMustache implements filters with a good old function call syntax: `f(x)`.
 Just like `x`, `f(x)` is an expression that has a value. The GRMustache expression syntax let the user write `f(*)` anywhere he can write `*`:
 
 - One can render `{{ f(x) }}` instead of `{{ x }}`.
-- One can render `{{ g(g(x)) }}` instead of `{{ g(x) }}`.
+- One can render `{{ f(g(x)) }}` instead of `{{ g(x) }}`.
 - One can render `{{ f(x.y) }}` instead of `{{ x.y }}`.
 
 This fits pretty well with the "scoped" Mustache expression: the regular Mustache syntax lets the user write `*.y` anywhere he can write `*`:
