@@ -13,6 +13,8 @@
 		5623B7921527224000DF16A6 /* GRMustacheHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */; };
 		5623B796152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */; };
 		5623B797152731B600DF16A6 /* GRMustacheParsingErrorsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */; };
+		562F342615CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562F342515CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m */; };
+		562F342715CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 562F342515CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m */; };
 		56353F8C1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 56353F8A1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld */; };
 		56353F8D1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 56353F8A1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld */; };
 		563D66D715264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
@@ -260,6 +262,7 @@
 		560CE88E1526EEF4004F935E /* GRBooleanTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRBooleanTest.m; sourceTree = "<group>"; };
 		5623B7901527224000DF16A6 /* GRMustacheHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelperTest.m; sourceTree = "<group>"; };
 		5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParsingErrorsTest.m; sourceTree = "<group>"; };
+		562F342515CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheHelper_v4_3_Test.m; sourceTree = "<group>"; };
 		56353F8B1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel; sourceTree = "<group>"; };
 		563D66CE152641F7008628C5 /* GRMustache4Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustache4Tests-Info.plist"; sourceTree = "<group>"; };
 		563D66D115264739008628C5 /* comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comments.json; sourceTree = "<group>"; };
@@ -636,6 +639,7 @@
 			children = (
 				56CD61A115C5D92A0067E2E7 /* GRMustacheFilterLibraryTest.m */,
 				56CD619415C564C30067E2E7 /* GRMustacheFilterTest.m */,
+				562F342515CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m */,
 				56CD619715C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m */,
 				56CB0E7F15C9C3FB00A95D83 /* GRMustacheTemplateDelegate_v4_3_Test.m */,
 			);
@@ -1181,6 +1185,7 @@
 				56CD619815C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */,
 				56CD61A215C5D92A0067E2E7 /* GRMustacheFilterLibraryTest.m in Sources */,
 				56CB0E8015C9C3FB00A95D83 /* GRMustacheTemplateDelegate_v4_3_Test.m in Sources */,
+				562F342615CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1245,6 +1250,7 @@
 				56CD619915C5A1B90067E2E7 /* GRMustacheParsingErrors_v4_3_Test.m in Sources */,
 				56CD61A315C5D92A0067E2E7 /* GRMustacheFilterLibraryTest.m in Sources */,
 				56CB0E8115C9C3FB00A95D83 /* GRMustacheTemplateDelegate_v4_3_Test.m in Sources */,
+				562F342715CD4D12005ECFA5 /* GRMustacheHelper_v4_3_Test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
