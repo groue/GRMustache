@@ -41,25 +41,12 @@
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{lowercase(.)}}" error:NULL];
     STAssertEqualObjects(rendering, @"name", nil);
 }
+
 - (void)testUppercaseFilter
 {
     id data = @"name";
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{uppercase(.)}}" error:NULL];
     STAssertEqualObjects(rendering, @"NAME", nil);
-}
-
-- (void)testFirstFilter
-{
-    id data = [NSArray arrayWithObjects:@"1", @"2", nil];
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{first(.)}}" error:NULL];
-    STAssertEqualObjects(rendering, @"1", nil);
-}
-
-- (void)testLastFilter
-{
-    id data = [NSArray arrayWithObjects:@"1", @"2", nil];
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{last(.)}}" error:NULL];
-    STAssertEqualObjects(rendering, @"2", nil);
 }
 
 - (void)testBlankFilter

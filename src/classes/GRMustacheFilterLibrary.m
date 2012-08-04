@@ -74,38 +74,6 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheFirstFilter
-
-@interface GRMustacheFirstFilter: NSObject<GRMustacheFilter>
-@end
-
-@implementation GRMustacheFirstFilter
-
-- (id)transformedValue:(id)object
-{
-    return [(NSArray *)object objectAtIndex:0];
-}
-
-@end
-
-
-// =============================================================================
-#pragma mark - Private concrete class GRMustacheLastFilter
-
-@interface GRMustacheLastFilter: NSObject<GRMustacheFilter>
-@end
-
-@implementation GRMustacheLastFilter
-
-- (id)transformedValue:(id)object
-{
-    return [(NSArray *)object lastObject];
-}
-
-@end
-
-
-// =============================================================================
 #pragma mark - Private concrete class GRMustacheBlankFilter
 
 @interface GRMustacheBlankFilter: NSObject<GRMustacheFilter>
@@ -174,8 +142,6 @@
                               [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
                               [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
                               [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
-                              [[[GRMustacheFirstFilter alloc] init] autorelease], @"first",
-                              [[[GRMustacheLastFilter alloc] init] autorelease], @"last",
                               [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
                               [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
                               nil] retain];
