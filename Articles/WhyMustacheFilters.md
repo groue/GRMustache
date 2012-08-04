@@ -45,7 +45,7 @@ This is why Mustache should provide a way to let the library user provide code t
 
 These code chunks would be called *filters*, because they are functions that take a mustache-interpretable value as an input, and return an other mustache-interpretable value. In the template itself, tags would contain *filtered expressions* that would tell the rendering engine which filters should be applied to the raw view model values.
 
-Since the role of filters is to relieve view models from providing "final" values, filters do not conceptually belong to them. They instead belong the template: for instance, a template would provide a filter for rendering uppercase values. Now all the view models are relieved from the burden of computing those. Another template would provide a filter for rendering array indexes. View models would then provide raw arrays, and the template would be able to render item indexes.
+Since the role of filters is to relieve view models from providing "final" values, filters do not conceptually belong to them. They instead belong the template: for instance, a template would provide a filter for rendering uppercase values. Now all the view models are relieved from the burden of computing those. Another template would provide a filter for rendering array indexes. View models would then provide raw arrays, and the template would be able to render item indexes. (For real examples, check [number formatting](../Guides/sample_code/number_formatting.md) and [indexes](../Guides/sample_code/indexes.md) sample code).
 
 Since filters belong to the templates, Mustache can provide a *standard library* of filters, that would be pre-baked into all Mustache templates.
 
