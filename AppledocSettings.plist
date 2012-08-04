@@ -13,7 +13,7 @@
 	<key>--create-docset</key>
 	<false/>
 	<key>--clean-output</key>
-	<true/>
+	<false/>
 	<key>--keep-intermediate-files</key>
 	<false/>
 	<key>--keep-undocumented-objects</key>
