@@ -28,18 +28,44 @@
 #pragma mark - <GRMustacheFilter>
 
 /**
- * TODO
+ * The name of exceptions raised by GRMustache whenever a filter is missing, or
+ * the object expected to conform to the <GRMustacheFilter> protocol does not.
+ *
+ * @see GRMustacheFilter protocol
+ *
+ * @since v4.3
  */
-extern NSString * const GRMustacheFilterException;
+extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+
 
 /**
- * TODO
+ * The protocol for implementing GRMustache filters.
+ *
+ * The responsability of a GRMustacheFilter is to transform a value into
+ * another.
+ *
+ * For instance, the tag `{{ uppercase(name) }}` uses a filter object that
+ * returns the uppercase version of its input.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md
+ *
+ * @since v4.3
  */
 @protocol GRMustacheFilter <NSObject>
 @required
 
+////////////////////////////////////////////////////////////////////////////////
+/// @name Transforming Values
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * TODO
+ * Applies some transformation to its input, and returns the transformed value.
+ *
+ * @param object  An object to be processed by the filter.
+ *
+ * @return A transformed value.
+ *
+ * @since v4.3
  */
 - (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
@@ -51,14 +77,32 @@ extern NSString * const GRMustacheFilterException;
 #pragma mark - GRMustacheFilter
 
 /**
- * TODO
- */
+ * The GRMustacheFilter class helps building mustache filters without writing a
+ * custom class that conforms to the GRMustacheFilter protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md
+ *
+ * @see GRMustacheFilter protocol
+ *
+ * @since v4.3
+ */ 
 @interface GRMustacheFilter : NSObject<GRMustacheFilter>
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Filters
+////////////////////////////////////////////////////////////////////////////////
 
 #if NS_BLOCKS_AVAILABLE
 
 /**
- * TODO
+ * Returns a GRMustacheFilter object that executes the provided block when
+ * tranforming a value.
+ *
+ * @param block   The block that transforms its input.
+ *
+ * @return a GRMustacheFilter object.
+ *
+ * @since v4.3
  */
 + (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
