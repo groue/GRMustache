@@ -3,9 +3,9 @@
 Filters
 =======
 
-GRMustache allow you to filter values before they are rendered.
+You can filter values before they are rendered.
 
-**Filters are not yet part of the Mustache specification**, and you need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
+**Filters are not yet part of the Mustache specification**, while the topic is currently under [discussion](http://github.com/mustache/spec/issues/41). You thus need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
 
 You apply a filter just like calling a function, with parentheses.
 
