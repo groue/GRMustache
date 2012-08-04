@@ -13,7 +13,7 @@ Filters allow you to process values before they are rendered, and supersede "sec
 
 **New APIs**:
 
-``objc
+```objc
 @interface GRMustacheSection: NSObject
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 @end
@@ -32,7 +32,7 @@ Filters allow you to process values before they are rendered, and supersede "sec
 
 **Deprecated APIs**:
 
-``objc
+```objc
 @interface GRMustacheSection: NSObject
 // Use renderTemplateString:error: instead.
 @property (nonatomic, retain, readonly) id renderingContext;
