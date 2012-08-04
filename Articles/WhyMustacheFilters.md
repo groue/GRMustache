@@ -1,8 +1,8 @@
 # Mustache support for "Filters"
 
-Here are a few arguments for the introduction of "filters" in Mustache, and a description of what they should be.
+Here are a few arguments for the introduction of "filters" in Mustache, and a description of what they should be, as a contribution to the [open discussion](http://github.com/mustache/spec/issues/41) on the mustache/spec repository.
 
-GRMustache provides an implementation of filters fully cover all the points described here.
+GRMustache provides an implementation of [filters](../Guides/filters.md) that fully cover all the points described here.
 
 1. Why filters are good for Mustache
 2. Why Mustache tags should contain expressions, not statements
@@ -69,7 +69,7 @@ Composition goes further: library users should be able to perform a "scoped" loo
 
 The latter point is important: there is no good reason to prevent the library user to perform a scoped lookup out of a filtered expression.
 
-### A syntax that fulfills those requirements
+### A syntax that fulfills those properties
 
 GRMustache implements filters with a good old function call syntax: `f(x)`.
 
@@ -89,17 +89,35 @@ A contrieved user could write `{{a.b(c.d(e.f).g.h).i.j}}`. Whether this is sane 
 
 Last point: white space is irrelevant. `f(x)` is the same as `f ( x )`.
 
-You'll find below a grammar and a state machine that implement the parsing of those expressions. But we need to dig into a tiny detail first.
+You'll find below a grammar and a state machine that implement the parsing of those expressions.
+
+### A syntax that does not fullfill those properties
+
+The only other implemented syntax that I'm aware of is the one of bobthecow's [mustache.php](https://github.com/bobthecow/mustache.php/pull/102):
+
+    {{ created_at | date.iso8601 }}
+
+Pipes have great ascendants (unix shell, Liquid filters), and a general relevance of the syntax.
+
+However, it fails on the composition part, since pipes build *statements*, not expressions.
+
+For instance, how would pipes handle cases like `f(x).y` without the introduction of parenthesis in a fashion that is not common to pipes?
+
+    {{ (x | f).y }}         vs.    {{ f(x).y }}
+    {{ (x | f).y | g }}     vs.    {{ g(f(x).y) }}
+
+The `f(x)` notation has here an advantage, which is its pervasiveness if many widely adopted languages that also use the dot as a property accessor.
 
 ### Filters can't load from the "implicit iterator"
 
-We've said above that filters should not come from the view model provided by the user, but instead be tied to a template. This allows a template to provide services, including a standard library of filters.
+We've said above that filters should not come from the view model provided by the user, but instead be tied to a template. This allows a template to provide filters as services, including a standard library of filters.
 
 As a consequence, the `.(x)` syntax is forbidden. In Mustache, `.` aka the "implicit iterator", represents the currently rendered object from the view model. It thus can not provide any filter. Identically, the `.a(x)` syntax is invalid as well (it would mean "perform a scoped lookup for `a` in the view model, and apply the result as a filter").
 
+
 ### Parsing GRMustache expressions
 
-Here is a formal grammar that describes the above syntax.
+Here is a formal grammar that describes the GRMustache syntax for expressions:
 
     [_a-zA-Z0-9]+[?!]?       return ID;
     [ \t\n\t]+               return WS;
@@ -125,7 +143,7 @@ Here is a formal grammar that describes the above syntax.
 
     filterExpression : expression WS? '(' WS? expression WS? ')'
 
-It contains left-recursive rules, and may thus be rejected by many parsers.
+My apologies: it contains left-recursive rules, and may thus be rejected by many parsers.
 
 The following state machine is much easier to implement. It reads one character
 after the other, until it reaches the *VALID*, *EMPTY*, or *INVALID* state:
