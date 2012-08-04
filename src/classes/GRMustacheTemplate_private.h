@@ -37,6 +37,17 @@
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
 
+/**
+ * TODO
+ */
+- (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
+
+
 #pragma mark Template elements
 
 /**
@@ -137,17 +148,5 @@
 
 // Documented in GRMustacheTemplate.h
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
-
-#pragma mark Delegate callbacks
-
-/**
- * TODO
- */
-- (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
-- (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 
 @end
