@@ -48,7 +48,7 @@
 
 - (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
 {
-    if (delegatingTemplate) {
+    if (delegates.count > 0) {
         NSAssert(ioInvocation, @"WTF");
         *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
         (*ioInvocation).debuggingToken = _debuggingToken;

@@ -88,9 +88,9 @@
     id scopedValue = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:ioInvocation];
     if (scopedValue) {
         returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
-        if (delegatingTemplate) {
+        if (delegates.count > 0) {
             NSAssert(ioInvocation, @"WTF");
-            if (*ioInvocation == nil) {
+            if (*ioInvocation == nil) { // it is nil if we are scoping the result of a filter: f(x).y
                 *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
                 (*ioInvocation).debuggingToken = _debuggingToken;
             }

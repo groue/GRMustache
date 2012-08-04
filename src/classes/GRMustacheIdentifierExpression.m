@@ -70,7 +70,7 @@
 {
     id value = [context valueForKey:_identifier];
     
-    if (delegatingTemplate) {
+    if (delegates.count > 0) {
         NSAssert(ioInvocation, @"WTF");
         *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
         (*ioInvocation).debuggingToken = _debuggingToken;

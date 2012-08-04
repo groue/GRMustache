@@ -87,7 +87,7 @@
 {
     id parameter = nil;
     GRMustacheInvocation *invocation = nil;
-    if (delegatingTemplate) {
+    if (delegates.count > 0) {
         parameter = [_parameterExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
         if (invocation) {
             [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationFilterArgument];
@@ -108,9 +108,8 @@
         [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
     }
     
-    if (delegatingTemplate) {
+    if (ioInvocation) {
         // no invocation to return
-        NSAssert(ioInvocation, @"WTF");
         *ioInvocation = nil;
     }
     
