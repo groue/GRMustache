@@ -34,7 +34,7 @@
  * mustache lambda sections with objects conforming to the GRMustacheHelper
  * protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
  * @see GRMustacheHelper
  *
@@ -58,8 +58,9 @@
  * The current rendering context.
  *
  * @since v2.0
+ * @deprecated v4.3
  */
-@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
 
 
 
@@ -89,5 +90,15 @@
  * @since v2.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering another template string
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO
+ */
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 
 @end

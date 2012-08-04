@@ -38,13 +38,16 @@
 }
 
 // Documented in GRMustacheSection.h
-@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustacheSection.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSection.h
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSection.h
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 
 /**
  * Builds and returns a section suitable for GRMustacheHelper.
