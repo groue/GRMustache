@@ -3,9 +3,12 @@
 Filters
 =======
 
-You can filter values before they are rendered.
+**Filters are not yet part of the Mustache specification**. You thus need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
 
-**Filters are not yet part of the Mustache specification**, while the topic is currently under [discussion](http://github.com/mustache/spec/issues/41). You thus need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
+> The topic of filters is currently under [discussion](http://github.com/mustache/spec/issues/41) with other implementors of Mustache. A detailed explanation of the ideas behind the filtering API described below is available at [WhyMustacheFilters.md](../Articles/WhyMustacheFilters.md).
+
+
+## Overview
 
 You apply a filter just like calling a function, with parentheses:
 
@@ -21,9 +24,18 @@ You apply a filter just like calling a function, with parentheses:
     
     For brevity's sake, closing section tags can be empty: `{{^ isEmpty(people) }}...{{/}}` is valid.
 
-## Standard library
+
+## Standard filters library
 
 GRMustache ships with a bunch of already implemented filters:
+
+- `isEmpty`
+    
+    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or an empty string. Returns NO otherwise.
+
+- `isBlank`
+    
+    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
 
 - `capitalized`
     
@@ -36,14 +48,6 @@ GRMustache ships with a bunch of already implemented filters:
 - `uppercase`
     
     Given "johannes KEPLER", it returns "JOHANNES KEPLER".
-
-- `isEmpty`
-    
-    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or an empty string. Returns NO otherwise.
-
-- `isBlank`
-    
-    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
 
 ## Defining your own filters
 
@@ -106,18 +110,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 ## Filters namespaces
 
-When rendering the tag `{{ f(x) }}`, GRMustache extracts the value of `x` by performing a key lookup described in the [Context Stack Guide](runtime/context_stack.md).
-
-The mechanism for extracting the filter for `f` is the same, but it applies to the `filters` argument of the rendering method, not its `object` argument:
-
-```objc
-[GRMustacheTemplate renderObject:data       // values are fetched here
-                     withFilters:filters    // filters are fetched here
-                      fromString:templateString
-                           error:NULL];
-```
-
-Just as you can provide an object hierarchy for values, and extract `foo.bar` from it, you can provide filters as an object hierarchy, and "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`:
+Just as you can provide an object hierarchy for rendered values, and extract `person.pet.name` from it, you can provide filters as an object hierarchy, and "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`:
 
 ```objc
 id absFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
@@ -132,14 +125,15 @@ NSDictionary *filters = [NSDictionary dictionaryWithObject:mathFilters forKey:@"
                            error:NULL];
 ```
 
-## Missing filters
+## Filters exceptions
 
-Should a filter be misspelled, missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception.
+Should a filter be missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception of name `GRMustacheFilterException`.
 
-GRMustache helps you debugging by providing the exact place where the error occurs:
+The message describes the exact place where the error occur has occurred:
 
-    Missing filter for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/teplate.
+    Missing filter for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/template.
     
     Object for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/template does not conform to GRMustacheFilter protocol: "blah"
+
 
 [up](../../../../GRMustache), [next](delegate.md)
