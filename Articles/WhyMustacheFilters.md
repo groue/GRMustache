@@ -97,7 +97,7 @@ The only other implemented syntax that I'm aware of is the one of bobthecow's [m
 
     {{ created_at | date.iso8601 }}
 
-Pipes have great ascendants (unix shell, Liquid filters), and a general relevance of the syntax.
+Pipes have great ascendants (unix shell, Liquid filters), and this syntax sports a genuine relevance for its purpose. Pipable unix commands such as sort, uniq, etc. have a great deal in common with template filters.
 
 However, it fails on the composition part, since pipes build *statements*, not expressions.
 
@@ -107,6 +107,7 @@ For instance, how would pipes handle cases like `f(x).y` without the introductio
     {{ (x | f).y | g }}     vs.    {{ g(f(x).y) }}
 
 The `f(x)` notation has here an advantage, which is its pervasiveness if many widely adopted languages that also use the dot as a property accessor.
+
 
 ### Filters can't load from the "implicit iterator"
 
