@@ -83,7 +83,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Renders the inner content of the receiver with the current context
+ * Renders the inner content of the receiver with the current rendering context.
  * 
  * @return A string containing the rendered inner content.
  *
@@ -97,8 +97,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns the rendering of the template string _string_ in the current
- * rendering context.
+ * Renders a template string with the current rendering context.
+ *
+ * @param string    A template string
+ * @param outError  If there is an error loading or parsing template and
+ *                  partials, upon return contains an NSError object that
+ *                  describes the problem.
+ *
+ * @return A string containing the rendering of the template string.
  *
  * @since v4.3
  */
