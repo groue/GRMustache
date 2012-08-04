@@ -95,7 +95,7 @@ Those methods return GRMustacheTemplate instances, which render objects with the
 
 ```objc
 - (NSString *)renderObject:(id)object;
-- (NSString *)renderObjects:(id)object, ...;    // nil-terminated list
+- (NSString *)renderObjectsInArray:(NSArray *)objects
 ```
 
 The latter method, which takes several arguments, is helpful when several objects should feed the template. It actually initializes the rendering [context stack](runtime/context_stack.md) with those objects.

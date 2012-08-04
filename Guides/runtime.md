@@ -41,10 +41,6 @@ Mustache does a little more than rendering plain `{{name}}` tags. Let's review M
 - [booleans.md](runtime/booleans.md)
 
     Control whether a Mustache section should render or not.
-    
-- [helpers.md](runtime/helpers.md)
-
-    Mustache has "lambda sections". These are sections that allow you to execute custom code, and implement nifty features like caching, filtering, whatever, on portions of your templates.
 
 
 [up](../../../../GRMustache), [next](runtime/context_stack.md)

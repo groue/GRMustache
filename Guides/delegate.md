@@ -16,10 +16,6 @@ While rendering a template, several objects may get messages from GRMustache:
 
 The template's delegate can observe the full template rendering. However, sections delegates can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
 
-Template delegates are illustrated in the [indexes sample code](sample_code/indexes.md), where NSArray instances are caught before their rendering, in order to let GRMustache render indexes and other collection-related information.
-
-Section delegates are used in the [number formatting sample code](sample_code/number_formatting.md), where the NSNumberFormatter class is given the opportunity to render formatted numbers.
-
 
 Observe the template rendering
 ------------------------------
@@ -64,6 +60,7 @@ The *interpretation* parameter tells you how the return value of the invocation 
 typedef enum {
     GRMustacheInterpretationSection,
     GRMustacheInterpretationVariable,
+    GRMustacheInterpretationFilterArgument,
 } GRMustacheInterpretation;
 ```
 
@@ -71,7 +68,7 @@ typedef enum {
 
 `GRMustacheInterpretationSection` tells you that the return value is used by a Mustache section such as `{{#name}}...{{/name}}`. Mustache sections are versatile: there are boolean sections, loop sections, and lambda sections, and this depends solely on the rendered value, that is to say: the return value of the invocation. Again, see [Guides/runtime.md](runtime.md) for more information.
 
-You will find an actual use of this *interpretation* parameter in the [number formatting sample code](sample_code/number_formatting.md).
+`GRMustacheInterpretationFilterArgument` tells you that the return value is about to be processed by a filter such as `{{ f(name) }}`. See [Guides/filters.md](filters.md) for more information.
 
 
 ### A practical use: debugging templates
@@ -112,9 +109,18 @@ The `returnValue` property of the *invocation* parameter can be written. If you 
 {
     // When returnValue is nil, GRMustache could not find any value to render.
     if (invocation.returnValue == nil) {
-        invocation.returnValue = @"[DEFAULT]";
+        invocation.returnValue = @"DEFAULT";
     }
 }
 ```
+
+### Relationship with filters and helpers
+
+Usually, [filters](filters.md) and [helpers](helpers.md) should do the trick when you want to alter a template's rendering.
+
+However, they both require to be explicited invoked from the template: `{{#helper}}...{{/helper}}`, and `{{ filter(...) }}`.
+
+GRMustacheTemplateDelegate will help you when you can not, or do not want, to embed your extra behaviors right into the template.
+
 
 [up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)

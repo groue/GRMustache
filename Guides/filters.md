@@ -1,3 +1,5 @@
+[up](../../../../GRMustache), [next](delegate.md)
+
 Filters
 =======
 
@@ -137,3 +139,5 @@ GRMustache helps you debugging by providing the exact place where the error occu
     Missing filter for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/teplate.
     
     Object for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/template does not conform to GRMustacheFilter protocol: "blah"
+
+[up](../../../../GRMustache), [next](delegate.md)

@@ -1,4 +1,4 @@
-[up](../runtime.md), [next](helpers.md)
+[up](../runtime.md), [next](../helpers.md)
 
 # Booleans
 
@@ -62,4 +62,4 @@ They all prevent Mustache sections `{{#name}}...{{/name}}` rendering.
 
 They all trigger inverted sections `{{^name}}...{{/name}}` rendering.
 
-[up](../runtime.md), [next](helpers.md)
+[up](../runtime.md), [next](../helpers.md)

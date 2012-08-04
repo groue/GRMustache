@@ -50,6 +50,8 @@ Documentation
 
 - [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
 - [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
+- [Guides/helpers.md](GRMustache/blob/master/Guides/helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
+- [Guides/filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
 ### Sample code
@@ -68,9 +70,9 @@ FAQ
     
     A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
-- **Q: How do I implement filters, format numbers, dates, etc?**
+- **Q: How do I format numbers and dates, or localize portions of templates, etc?**
     
-    A: Check documentation of [Mustache lambda sections](GRMustache/blob/master/Guides/runtime/helpers.md) first. If it would not help, maybe you'll get some inspiration from the [number formatting sample code](GRMustache/blob/master/Guides/sample_code/number_formatting.md). If you are still stuck after those, go and look for a [closed issue](GRMustache/issues?state=closed) that covers your need. Finally, open a new issue :-)
+    A: [Filters](GRMustache/blob/master/Guides/filters.md) and [Mustache lambda sections](GRMustache/blob/master/Guides/helpers.md) are your friends. *Filters* act on the data you provide to the template, and are typically a good match for formatting values. *Lambda sections* act directly on the template canvas, and can help you process a full portion of a template.
 
 - **Q: Does GRMustache provide any layout facility?**
     

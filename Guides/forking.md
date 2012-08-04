@@ -10,7 +10,7 @@ You'll find below some useful information on each of those topics.
 
 ### Classes in a glance
 
-The library features are described in the guides. This section describes the classes that implement those features. They are organized in a few big domains:
+The library features are described in the [guides](templates.md). This section describes the classes that implement those features. They are organized in a few big domains:
 
 - **Parsing**
     - `GRMustacheParser`
