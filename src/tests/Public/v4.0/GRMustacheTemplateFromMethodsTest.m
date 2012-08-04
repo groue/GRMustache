@@ -27,12 +27,14 @@
 @interface GRMustacheTemplateFromMethodsTest : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheTemplateFromMethodsTestSupport: NSObject
+@interface GRMustacheTemplateFromMethodsTestSupport: NSObject {
+    NSString *_stringProperty;
+}
 @property (nonatomic, retain) NSString *stringProperty;
 @end
 
 @implementation GRMustacheTemplateFromMethodsTestSupport
-@synthesize stringProperty;
+@synthesize stringProperty=_stringProperty;
 @end
 
 @interface GRMustacheTemplateFromMethodsTest()

@@ -26,7 +26,11 @@
 #import "GRMustacheContext_private.h"
 #import <CoreData/CoreData.h>
 
-@interface GRPreventNSUndefinedKeyExceptionAttackTest : GRMustachePrivateAPITest
+@interface GRPreventNSUndefinedKeyExceptionAttackTest : GRMustachePrivateAPITest {
+    NSManagedObjectModel *_managedObjectModel;
+    NSPersistentStoreCoordinator *_persistentStoreCoordinator;
+    NSManagedObjectContext *_managedObjectContext;
+}
 @end
 
 @interface GRPreventNSUndefinedKeyExceptionAttackTest()

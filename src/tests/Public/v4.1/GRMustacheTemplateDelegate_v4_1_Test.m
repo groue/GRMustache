@@ -26,7 +26,13 @@
 @interface GRMustacheTemplateDelegate_v4_1_Test : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheTemplateRecorder_v4_1 : NSObject<GRMustacheTemplateDelegate>
+@interface GRMustacheTemplateRecorder_v4_1 : NSObject<GRMustacheTemplateDelegate> {
+    NSUInteger _willRenderReturnValueOfInvocationCount;
+    NSUInteger _didRenderReturnValueOfInvocationCount;
+    NSUInteger _willInterpretReturnValueOfInvocationAsCount;
+    NSUInteger _didInterpretReturnValueOfInvocationAsCount;
+    GRMustacheInterpretation _lastInterpretation;
+}
 @property (nonatomic) NSUInteger willRenderReturnValueOfInvocationCount;
 @property (nonatomic) NSUInteger didRenderReturnValueOfInvocationCount;
 @property (nonatomic) NSUInteger willInterpretReturnValueOfInvocationAsCount;

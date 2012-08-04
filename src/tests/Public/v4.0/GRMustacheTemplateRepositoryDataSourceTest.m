@@ -26,7 +26,10 @@
 @interface GRMustacheTemplateRepositoryDataSourceTest : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheTemplateRepositoryTestDataSource : NSObject<GRMustacheTemplateRepositoryDataSource>
+@interface GRMustacheTemplateRepositoryTestDataSource : NSObject<GRMustacheTemplateRepositoryDataSource> {
+    NSUInteger _templateIDForNameCount;
+    NSUInteger _templateStringForTemplateIDCount;
+}
 @property (nonatomic) NSUInteger templateIDForNameCount;
 @property (nonatomic) NSUInteger templateStringForTemplateIDCount;
 @end

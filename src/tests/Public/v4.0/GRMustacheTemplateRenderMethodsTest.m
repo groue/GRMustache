@@ -27,14 +27,17 @@
 @interface GRMustacheTemplateRenderMethodsTest : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheTemplateRenderMethodsTestSupport: NSObject
+@interface GRMustacheTemplateRenderMethodsTestSupport: NSObject {
+    NSString *_stringProperty;
+    BOOL _BOOLProperty;
+}
 @property (nonatomic, retain) NSString *stringProperty;
 @property (nonatomic) BOOL BOOLProperty;
 @end
 
 @implementation GRMustacheTemplateRenderMethodsTestSupport
-@synthesize stringProperty;
-@synthesize BOOLProperty;
+@synthesize stringProperty=_stringProperty;
+@synthesize BOOLProperty=_BOOLProperty;
 @end
 
 @interface GRMustacheTemplateRenderMethodsTest()

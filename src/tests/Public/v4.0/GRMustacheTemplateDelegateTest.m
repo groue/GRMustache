@@ -26,15 +26,26 @@
 @interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheTemplateDelegateAssistant : NSObject
+@interface GRMustacheTemplateDelegateAssistant : NSObject {
+    NSString *_stringProperty;
+}
 @property (nonatomic, retain) NSString *stringProperty;
 @end
 
 @implementation GRMustacheTemplateDelegateAssistant
-@synthesize stringProperty;
+@synthesize stringProperty=_stringProperty;
 @end
 
-@interface GRMustacheTemplateRecorder : NSObject<GRMustacheTemplateDelegate>
+@interface GRMustacheTemplateRecorder : NSObject<GRMustacheTemplateDelegate> {
+    GRMustacheInvocation *_lastInvocation;
+    NSUInteger _templateWillRenderCount;
+    NSUInteger _templateDidRenderCount;
+    NSUInteger _willRenderReturnValueOfInvocationCount;
+    NSUInteger _didRenderReturnValueOfInvocationCount;
+    NSUInteger _nilReturnValueCount;
+    NSString *_lastUsedValue;
+    NSString *_lastUsedKey;
+}
 @property (nonatomic, retain) GRMustacheInvocation *lastInvocation;
 @property (nonatomic) NSUInteger templateWillRenderCount;
 @property (nonatomic) NSUInteger templateDidRenderCount;
