@@ -97,7 +97,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * TODO
+ * Returns the rendering of the template string _string_ in the current
+ * rendering context.
+ *
+ * @since v4.3
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 

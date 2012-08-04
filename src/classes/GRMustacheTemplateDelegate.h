@@ -55,7 +55,10 @@ typedef enum {
     GRMustacheInterpretationVariable,
     
     /**
-     * TODO
+     * The value is interpreted as a filter parameter, for tags such as
+     * `{{uppercase(name)}}`.
+     *
+     * @since v4.3
      */
     GRMustacheInterpretationFilterArgument,
 } GRMustacheInterpretation;
