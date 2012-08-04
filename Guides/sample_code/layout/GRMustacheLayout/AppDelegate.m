@@ -87,13 +87,13 @@
      * - article:       so that the layout can render the article's properties.
      *
      * There are so few occasions to use the little know
-     * -[GRMustacheTemplate renderObjects:] method, the one with a final s.
-     * This brings tears to my eyes.
+     * -[GRMustacheTemplate renderObjectsInArray:] method :-)
      */
     
     GRMustacheTemplate *layoutTemplate = [GRMustacheTemplate templateFromResource:@"layout" bundle:nil error:NULL];
     NSDictionary *layoutContext = [NSDictionary dictionaryWithObject:embeddedContent forKey:@"embeddedContent"];
-    NSString *rendering = [layoutTemplate renderObjects:layoutContext, article, nil];
+    NSArray *renderedObjects = [NSArray arrayWithObjects:layoutContext, article, nil];
+    NSString *rendering = [layoutTemplate renderObjectsInArray:renderedObjects];
     
     
     // 4. Success!
