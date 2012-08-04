@@ -57,6 +57,16 @@
 	
 	<option value="//api/name/renderObject:fromString:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:fromString:error:</option>
 	
+	<option value="//api/name/renderObject:withFilters:fromContentsOfFile:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:withFilters:fromContentsOfFile:error:</option>
+	
+	<option value="//api/name/renderObject:withFilters:fromContentsOfURL:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:withFilters:fromContentsOfURL:error:</option>
+	
+	<option value="//api/name/renderObject:withFilters:fromResource:bundle:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:withFilters:fromResource:bundle:error:</option>
+	
+	<option value="//api/name/renderObject:withFilters:fromResource:withExtension:bundle:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:withFilters:fromResource:withExtension:bundle:error:</option>
+	
+	<option value="//api/name/renderObject:withFilters:fromString:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderObject:withFilters:fromString:error:</option>
+	
 	<option value="//api/name/templateFromContentsOfFile:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ templateFromContentsOfFile:error:</option>
 	
 	<option value="//api/name/templateFromContentsOfURL:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ templateFromContentsOfURL:error:</option>
@@ -76,7 +86,13 @@
 	
 	<option value="//api/name/renderObject:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObject:</option>
 	
+	<option value="//api/name/renderObject:withFilters:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObject:withFilters:</option>
+	
 	<option value="//api/name/renderObjects:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjects:</option>
+	
+	<option value="//api/name/renderObjectsInArray:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjectsInArray:</option>
+	
+	<option value="//api/name/renderObjectsInArray:withFilters:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjectsInArray:withFilters:</option>
 	
 	
 	
@@ -130,6 +146,16 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:fromString:error:">renderObject:fromString:error:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:fromContentsOfFile:error:">renderObject:withFilters:fromContentsOfFile:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:fromContentsOfURL:error:">renderObject:withFilters:fromContentsOfURL:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:fromResource:bundle:error:">renderObject:withFilters:fromResource:bundle:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:fromResource:withExtension:bundle:error:">renderObject:withFilters:fromResource:withExtension:bundle:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:fromString:error:">renderObject:withFilters:fromString:error:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateFromContentsOfFile:error:">templateFromContentsOfFile:error:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateFromContentsOfURL:error:">templateFromContentsOfURL:error:</a></span></li>
@@ -150,7 +176,13 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:">renderObject:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:">renderObject:withFilters:</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjects:">renderObjects:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjectsInArray:">renderObjectsInArray:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjectsInArray:withFilters:">renderObjectsInArray:withFilters:</a></span></li>
 	
 </ul></li>
 
@@ -233,7 +265,14 @@ services.</p>
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:fromString:error:">+&nbsp;renderObject:fromString:error:</a></code>
-		<span class="tooltip"><p>Renders a context object from a template string.</p></span>
+		<span class="tooltip"><p>Renders an object from a template string.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:fromString:error:">+&nbsp;renderObject:withFilters:fromString:error:</a></code>
+		<span class="tooltip"><p>Renders an object from a template string.</p></span>
 	</span>
 	
 	
@@ -262,14 +301,28 @@ services.</p>
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:fromContentsOfFile:error:">+&nbsp;renderObject:fromContentsOfFile:error:</a></code>
-		<span class="tooltip"><p>Renders a context object from a file template.</p></span>
+		<span class="tooltip"><p>Renders an object from a file template.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:fromContentsOfFile:error:">+&nbsp;renderObject:withFilters:fromContentsOfFile:error:</a></code>
+		<span class="tooltip"><p>Renders an object from a file template.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:fromContentsOfURL:error:">+&nbsp;renderObject:fromContentsOfURL:error:</a></code>
-		<span class="tooltip"><p>Renders a context object from a file template.</p></span>
+		<span class="tooltip"><p>Renders an object from a file template.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:fromContentsOfURL:error:">+&nbsp;renderObject:withFilters:fromContentsOfURL:error:</a></code>
+		<span class="tooltip"><p>Renders an object from a file template.</p></span>
 	</span>
 	
 	
@@ -298,14 +351,28 @@ services.</p>
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:fromResource:bundle:error:">+&nbsp;renderObject:fromResource:bundle:error:</a></code>
-		<span class="tooltip"><p>Renders a context object from a bundle resource template.</p></span>
+		<span class="tooltip"><p>Renders an object from a bundle resource template.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:fromResource:bundle:error:">+&nbsp;renderObject:withFilters:fromResource:bundle:error:</a></code>
+		<span class="tooltip"><p>Renders an object from a bundle resource template.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:fromResource:withExtension:bundle:error:">+&nbsp;renderObject:fromResource:withExtension:bundle:error:</a></code>
-		<span class="tooltip"><p>Renders a context object from a bundle resource template.</p></span>
+		<span class="tooltip"><p>Renders an object from a bundle resource template.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:fromResource:withExtension:bundle:error:">+&nbsp;renderObject:withFilters:fromResource:withExtension:bundle:error:</a></code>
+		<span class="tooltip"><p>Renders an object from a bundle resource template.</p></span>
 	</span>
 	
 	
@@ -321,6 +388,27 @@ services.</p>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObject:">&ndash;&nbsp;renderObject:</a></code>
 		<span class="tooltip"><p>Renders a template with a context stack initialized with a single object.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObject:withFilters:">&ndash;&nbsp;renderObject:withFilters:</a></code>
+		<span class="tooltip"><p>Renders a template with a context stack initialized with a single object.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObjectsInArray:">&ndash;&nbsp;renderObjectsInArray:</a></code>
+		<span class="tooltip"><p>Renders a template with a context stack initialized with an array of objects.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObjectsInArray:withFilters:">&ndash;&nbsp;renderObjectsInArray:withFilters:</a></code>
+		<span class="tooltip"><p>Renders a template with a context stack initialized with an array of objects.</p></span>
 	</span>
 	
 	
@@ -421,7 +509,7 @@ services.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a context object from a file template.</p>
+		<p>Renders an object from a file template.</p>
 	</div>		
 	
     
@@ -435,12 +523,12 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>path</em></dt>
-			<dd><p>The path of the template</p></dd>
+			<dd><p>The path of the template.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -458,7 +546,7 @@ services.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -506,7 +594,7 @@ services.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a context object from a file template.</p>
+		<p>Renders an object from a file template.</p>
 	</div>		
 	
     
@@ -520,12 +608,12 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>url</em></dt>
-			<dd><p>The URL of the template</p></dd>
+			<dd><p>The URL of the template.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -543,7 +631,7 @@ services.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -591,7 +679,7 @@ services.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a context object from a bundle resource template.</p>
+		<p>Renders an object from a bundle resource template.</p>
 	</div>		
 	
     
@@ -605,17 +693,17 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>name</em></dt>
-			<dd><p>The name of a bundle resource of extension &ldquo;mustache&rdquo;</p></dd>
+			<dd><p>The name of a bundle resource of extension &ldquo;mustache&rdquo;.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>bundle</em></dt>
-			<dd><p>The bundle where to look for the template resource</p></dd>
+			<dd><p>The bundle where to look for the template resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -633,7 +721,7 @@ services.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -684,7 +772,7 @@ bundle.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a context object from a bundle resource template.</p>
+		<p>Renders an object from a bundle resource template.</p>
 	</div>		
 	
     
@@ -698,17 +786,17 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>name</em></dt>
-			<dd><p>The name of a bundle resource</p></dd>
+			<dd><p>The name of a bundle resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>ext</em></dt>
-			<dd><p>The extension of the bundle resource</p></dd>
+			<dd><p>The extension of the bundle resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -731,7 +819,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -782,7 +870,7 @@ bundle.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a context object from a template string.</p>
+		<p>Renders an object from a template string.</p>
 	</div>		
 	
     
@@ -796,12 +884,12 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>templateString</em></dt>
-			<dd><p>The template string</p></dd>
+			<dd><p>The template string.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -819,7 +907,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -827,6 +915,462 @@ bundle.</p>
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
 		<p>v1.0</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:fromContentsOfFile:error:" title="renderObject:withFilters:fromContentsOfFile:error:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:fromContentsOfFile:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders an object from a file template.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em> fromContentsOfFile:(NSString *)<em>path</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>path</em></dt>
+			<dd><p>The path of the template.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The template at path must be encoded in UTF8. See the
+<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> class for more encoding options.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:fromContentsOfURL:error:" title="renderObject:withFilters:fromContentsOfURL:error:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:fromContentsOfURL:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders an object from a file template.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em> fromContentsOfURL:(NSURL *)<em>url</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>url</em></dt>
+			<dd><p>The URL of the template.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The template at url must be encoded in UTF8. See the
+<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> class for more encoding options.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:fromResource:bundle:error:" title="renderObject:withFilters:fromResource:bundle:error:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:fromResource:bundle:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders an object from a bundle resource template.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em> fromResource:(NSString *)<em>name</em> bundle:(NSBundle *)<em>bundle</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>name</em></dt>
+			<dd><p>The name of a bundle resource of extension &ldquo;mustache&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bundle</em></dt>
+			<dd><p>The bundle where to look for the template resource</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If you provide nil as a bundle, the resource will be looked in the main
+bundle.</p>
+
+<p>The template resource must be encoded in UTF8. See the
+<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> class for more encoding options.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:fromResource:withExtension:bundle:error:" title="renderObject:withFilters:fromResource:withExtension:bundle:error:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:fromResource:withExtension:bundle:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders an object from a bundle resource template.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em> fromResource:(NSString *)<em>name</em> withExtension:(NSString *)<em>ext</em> bundle:(NSBundle *)<em>bundle</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>name</em></dt>
+			<dd><p>The name of a bundle resource.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>ext</em></dt>
+			<dd><p>The extension of the bundle resource.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bundle</em></dt>
+			<dd><p>The bundle where to look for the template resource.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If you provide nil as a bundle, the resource will be looked in the main
+bundle.</p>
+
+<p>The template resource must be encoded in UTF8. See the
+<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> class for more encoding options.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:fromString:error:" title="renderObject:withFilters:fromString:error:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:fromString:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders an object from a template string.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em> fromString:(NSString *)<em>templateString</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>templateString</em></dt>
+			<dd><p>The template string.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>                   partials, upon return contains an NSError object that
+                   describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
 	</div>
 	
 	
@@ -866,7 +1410,7 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>path</em></dt>
-			<dd><p>The path of the template</p></dd>
+			<dd><p>The path of the template.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -884,7 +1428,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A GRMustacheTemplate instance</p>
+		<p>A GRMustacheTemplate instance.</p>
 	</div>
 	
 	
@@ -946,7 +1490,7 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>url</em></dt>
-			<dd><p>The URL of the template</p></dd>
+			<dd><p>The URL of the template.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -964,7 +1508,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A GRMustacheTemplate instance</p>
+		<p>A GRMustacheTemplate instance.</p>
 	</div>
 	
 	
@@ -1026,12 +1570,12 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>name</em></dt>
-			<dd><p>The name of a bundle resource of extension &ldquo;mustache&rdquo;</p></dd>
+			<dd><p>The name of a bundle resource of extension &ldquo;mustache&rdquo;.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>bundle</em></dt>
-			<dd><p>The bundle where to look for the template resource</p></dd>
+			<dd><p>The bundle where to look for the template resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -1049,7 +1593,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A GRMustacheTemplate instance</p>
+		<p>A GRMustacheTemplate instance.</p>
 	</div>
 	
 	
@@ -1114,17 +1658,17 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>name</em></dt>
-			<dd><p>The name of a bundle resource</p></dd>
+			<dd><p>The name of a bundle resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>ext</em></dt>
-			<dd><p>The extension of the bundle resource</p></dd>
+			<dd><p>The extension of the bundle resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>bundle</em></dt>
-			<dd><p>The bundle where to look for the template resource</p></dd>
+			<dd><p>The bundle where to look for the template resource.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -1142,7 +1686,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A GRMustacheTemplate instance</p>
+		<p>A GRMustacheTemplate instance.</p>
 	</div>
 	
 	
@@ -1207,7 +1751,7 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>templateString</em></dt>
-			<dd><p>The template string</p></dd>
+			<dd><p>The template string.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -1225,7 +1769,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A GRMustacheTemplate instance</p>
+		<p>A GRMustacheTemplate instance.</p>
 	</div>
 	
 	
@@ -1279,7 +1823,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -1326,7 +1870,7 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>A context object used for interpreting Mustache tags</p></dd>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 	</div>
@@ -1335,7 +1879,7 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
@@ -1343,6 +1887,67 @@ bundle.</p>
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
 		<p>v1.0</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObject:withFilters:" title="renderObject:withFilters:"></a>
+	<h3 class="subsubtitle method-title">renderObject:withFilters:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template with a context stack initialized with a single object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderObject:(id)<em>object</em> withFilters:(id)<em>filters</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object used for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
 	</div>
 	
 	
@@ -1396,14 +2001,132 @@ bundle.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A string containing the rendered template</p>
+		<p>A string containing the rendered template.</p>
 	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.5</p>
+		<p>v1.5
+@deprecated v4.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObjectsInArray:" title="renderObjectsInArray:"></a>
+	<h3 class="subsubtitle method-title">renderObjectsInArray:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderObjectsInArray:(NSArray *)<em>objects</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>objects</em></dt>
+			<dd><p>An array of context objects for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObjectsInArray:withFilters:" title="renderObjectsInArray:withFilters:"></a>
+	<h3 class="subsubtitle method-title">renderObjectsInArray:withFilters:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderObjectsInArray:(NSArray *)<em>objects</em> withFilters:(id)<em>filters</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>objects</em></dt>
+			<dd><p>An array of context objects for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
 	</div>
 	
 	
@@ -1435,7 +2158,7 @@ bundle.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-07-01)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
 						

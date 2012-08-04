@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>GRMustacheInvocation Class Reference</title>
+		<title>GRMustacheFilter Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
@@ -17,7 +17,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">GRMustacheInvocation Class Reference</h1>
+				<h1 class="hideInXcode">GRMustacheFilter Class Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -38,13 +38,11 @@
 	
 	
 	
-	<option value="properties">Properties</option>
-	
-	<option value="//api/name/key">&nbsp;&nbsp;&nbsp;&nbsp;key</option>
-	
-	<option value="//api/name/returnValue">&nbsp;&nbsp;&nbsp;&nbsp;returnValue</option>
 	
 	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/filterWithBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ filterWithBlock:</option>
 	
 	
 	
@@ -70,15 +68,13 @@
 
 
 
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/key">key</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/returnValue">returnValue</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/filterWithBlock:">filterWithBlock:</a></span></li>
 	
 </ul></li>
-
-
 
 
 
@@ -87,7 +83,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="GRMustacheInvocation Class Reference" name="top"></a>
+				<a title="GRMustacheFilter Class Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -96,7 +92,7 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">GRMustacheInvocation Class Reference</h1>
+						<h1 class="title title-header">GRMustacheFilter Class Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
@@ -106,8 +102,11 @@
 	<td class="specification-title">Inherits from</td>
 	<td class="specification-value">NSObject</td>
 </tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value"><a href="../Protocols/GRMustacheFilter.html">GRMustacheFilter</a></td>
+</tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">GRMustacheInvocation.h</td>
+	<td class="specification-value">GRMustacheFilter.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -117,13 +116,10 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The GRMustacheInvocation class gives you information about the values that
-are found in the context stack when rendering tags such as <code>{{name}}</code>.</p>
+						<p>The GRMustacheFilter class helps building mustache filters without writing a
+custom class that conforms to the GRMustacheFilter protocol.</p>
 
-<p>You&rsquo;ll be given GRMustacheInvocation instances when providing a
-<a href="../Protocols/GRMustacheTemplateDelegate.html">GRMustacheTemplateDelegate</a> to your templates.</p>
-
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md</a></p>
 					</div>
 					
 					
@@ -141,17 +137,11 @@ are found in the context stack when rendering tags such as <code>{{name}}</code>
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/key">&nbsp;&nbsp;key</a></code>
-		<span class="tooltip"><p>The key that did provide the return value of the invocation.</p></span>
+		<code><a href="#//api/name/filterWithBlock:">+&nbsp;filterWithBlock:</a></code>
+		<span class="tooltip"><p>Returns a GRMustacheFilter object that executes the provided block when
+tranforming a value.</p></span>
 	</span>
-	<span class="task-item-suffix">property</span>
 	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/returnValue">&nbsp;&nbsp;returnValue</a></code>
-		<span class="tooltip"><p>The return value of the invocation.</p></span>
-	</span>
-	<span class="task-item-suffix">property</span>
 	
 </li>
 						</ul>
@@ -162,139 +152,70 @@ are found in the context stack when rendering tags such as <code>{{name}}</code>
 					
 					
 					
+					
+					
 					<div class="section section-methods">
-						<a title="Properties" name="properties"></a>
-						<h2 class="subtitle subtitle-methods">Properties</h2>
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/key" title="key"></a>
-	<h3 class="subsubtitle method-title">key</h3>
+	<a name="//api/name/filterWithBlock:" title="filterWithBlock:"></a>
+	<h3 class="subsubtitle method-title">filterWithBlock:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The key that did provide the return value of the invocation.</p>
+		<p>Returns a GRMustacheFilter object that executes the provided block when
+tranforming a value.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *key</code></div>
+	<div class="method-subsection method-declaration"><code>+ (id)filterWithBlock:(id ( ^ ) ( id value ))<em>block</em></code></div>
 
     
 	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>block</em></dt>
+			<dd><p>The block that transforms its input.</p></dd>
+		</dl>
+		
+	</div>
 	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>a GRMustacheFilter object.</p>
+	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.12</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>For instance, the invocation that you would get for a <code>{{name}}</code> tag would
-have @&ldquo;name&rdquo; in its <code>key</code> property, and the name in the <a href="#//api/name/returnValue"><code>returnValue</code></a>
-property.</p>
-
-<p>For tags with compound keys, such as <code>{{person.name}}</code>, the key will be
-@&ldquo;name&rdquo; if the person could be found in the context stack. It would be
-@&ldquo;person&rdquo; otherwise.</p>
+		<p>v4.3</p>
 	</div>
 	
 	
 	
 	
 	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/returnValue">@property returnValue</a></p></code></li>
-			
-		</ul>
-	</div>
+	
 	
 	
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheInvocation.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/returnValue" title="returnValue"></a>
-	<h3 class="subsubtitle method-title">returnValue</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>The return value of the invocation.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) id returnValue</code></div>
-
-    
-	
-	
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.12</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>For instance, the invocation that you would get for a <code>{{name}}</code> tag would
-have the name in the <code>returnValue</code> property.</p>
-
-<p>For tags with compound keys, such as <code>{{person.name}}</code>, the value will be
-the person&rsquo;s name, if the person could be found in the context stack.
-It would be nil otherwise.</p>
-
-<p>In a template&rsquo;s delegate methods, you can set the returnValue of an
-invocation, and alter a template rendering.</p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/key">@property key</a></p></code></li>
-			
-			<li><code><p><a href="../Protocols/GRMustacheTemplateDelegate.html">GRMustacheTemplateDelegate</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheInvocation.h</code><br />
+		<code class="declared-in-ref">GRMustacheFilter.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 					</div>
-					
-					
 					
 					
 					
