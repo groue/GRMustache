@@ -108,6 +108,6 @@
  *
  * @since v4.3
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 @end
