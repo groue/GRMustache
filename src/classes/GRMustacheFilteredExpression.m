@@ -83,7 +83,7 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
 {
     id parameter = nil;
     GRMustacheInvocation *invocation = nil;
@@ -110,8 +110,8 @@
     
     if (delegatingTemplate) {
         // no invocation to return
-        NSAssert(outInvocation, @"WTF");
-        *outInvocation = nil;
+        NSAssert(ioInvocation, @"WTF");
+        *ioInvocation = nil;
     }
     
     return [filter transformedValue:parameter];

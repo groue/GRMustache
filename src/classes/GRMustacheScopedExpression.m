@@ -82,20 +82,20 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
 {
     id returnValue = nil;
-    id scopedValue = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:outInvocation];
+    id scopedValue = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:ioInvocation];
     if (scopedValue) {
         returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
         if (delegatingTemplate) {
-            NSAssert(outInvocation, @"WTF");
-            if (*outInvocation == nil) {
-                *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-                (*outInvocation).debuggingToken = _debuggingToken;
+            NSAssert(ioInvocation, @"WTF");
+            if (*ioInvocation == nil) {
+                *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+                (*ioInvocation).debuggingToken = _debuggingToken;
             }
-            (*outInvocation).returnValue = returnValue;
-            (*outInvocation).key = _scopeIdentifier;
+            (*ioInvocation).returnValue = returnValue;
+            (*ioInvocation).key = _scopeIdentifier;
         }
     }
     return returnValue;

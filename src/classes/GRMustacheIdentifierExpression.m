@@ -66,16 +66,16 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)outInvocation
+- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
 {
     id value = [context valueForKey:_identifier];
     
     if (delegatingTemplate) {
-        NSAssert(outInvocation, @"WTF");
-        *outInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-        (*outInvocation).debuggingToken = _debuggingToken;
-        (*outInvocation).returnValue = value;
-        (*outInvocation).key = _identifier;
+        NSAssert(ioInvocation, @"WTF");
+        *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
+        (*ioInvocation).debuggingToken = _debuggingToken;
+        (*ioInvocation).returnValue = value;
+        (*ioInvocation).key = _identifier;
     }
     
     return value;
