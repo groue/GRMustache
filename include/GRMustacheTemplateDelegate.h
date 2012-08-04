@@ -53,6 +53,14 @@ typedef enum {
      * @since v4.1
      */
     GRMustacheInterpretationVariable,
+    
+    /**
+     * The value is interpreted as a filter parameter, for tags such as
+     * `{{uppercase(name)}}`.
+     *
+     * @since v4.3
+     */
+    GRMustacheInterpretationFilterArgument,
 } GRMustacheInterpretation;
 
 /**

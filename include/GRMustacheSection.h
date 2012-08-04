@@ -34,7 +34,7 @@
  * mustache lambda sections with objects conforming to the GRMustacheHelper
  * protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
  * @see GRMustacheHelper
  *
@@ -44,7 +44,8 @@
 @private
     id _sectionElement;
     id _renderingContext;
-    id _rootTemplate;
+    id _filterContext;
+    id _delegatingTemplate;
     id _delegates;
 }
 
@@ -57,8 +58,9 @@
  * The current rendering context.
  *
  * @since v2.0
+ * @deprecated v4.3
  */
-@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
 
 
 
@@ -81,12 +83,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Renders the inner content of the receiver with the current context
+ * Renders the inner content of the receiver with the current rendering context.
  * 
  * @return A string containing the rendered inner content.
  *
  * @since v2.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering another template string
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Renders a template string with the current rendering context.
+ *
+ * @param string    A template string
+ * @param outError  If there is an error loading or parsing template and
+ *                  partials, upon return contains an NSError object that
+ *                  describes the problem.
+ *
+ * @return A string containing the rendering of the template string.
+ *
+ * @since v4.3
+ */
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 @end

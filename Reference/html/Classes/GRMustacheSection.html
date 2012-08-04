@@ -53,6 +53,8 @@
 	
 	<option value="//api/name/render">&nbsp;&nbsp;&nbsp;&nbsp;- render</option>
 	
+	<option value="//api/name/renderTemplateString:error:">&nbsp;&nbsp;&nbsp;&nbsp;- renderTemplateString:error:</option>
+	
 	
 	
 </select>
@@ -75,6 +77,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering the inner content">Rendering the inner content</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering another template string">Rendering another template string</a></span></li>
+	
 </ul></li>
 
 
@@ -96,6 +100,8 @@
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/render">render</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderTemplateString:error:">renderTemplateString:error:</a></span></li>
 	
 </ul></li>
 
@@ -141,7 +147,7 @@
 mustache lambda sections with objects conforming to the <a href="../Classes/GRMustacheHelper.html">GRMustacheHelper</a>
 protocol.</p>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime/helpers.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/helpers.md">https://github.com/groue/GRMustache/blob/master/Guides/helpers.md</a></p>
 					</div>
 					
 					
@@ -191,7 +197,22 @@ protocol.</p>
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/render">&ndash;&nbsp;render</a></code>
-		<span class="tooltip"><p>Renders the inner content of the receiver with the current context</p></span>
+		<span class="tooltip"><p>Renders the inner content of the receiver with the current rendering context.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Rendering another template string" name="task_Rendering another template string"></a>
+						<h3 class="subsubtitle task-title">Rendering another template string</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderTemplateString:error:">&ndash;&nbsp;renderTemplateString:error:</a></code>
+		<span class="tooltip"><p>Renders a template string with the current rendering context.</p></span>
 	</span>
 	
 	
@@ -262,7 +283,7 @@ protocol.</p>
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) id renderingContext</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) id renderingContext</code></div>
 
     
 	
@@ -272,7 +293,8 @@ protocol.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v2.0</p>
+		<p>v2.0
+@deprecated v4.3</p>
 	</div>
 	
 	
@@ -308,7 +330,7 @@ protocol.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders the inner content of the receiver with the current context</p>
+		<p>Renders the inner content of the receiver with the current rendering context.</p>
 	</div>		
 	
     
@@ -347,6 +369,71 @@ protocol.</p>
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/renderTemplateString:error:" title="renderTemplateString:error:"></a>
+	<h3 class="subsubtitle method-title">renderTemplateString:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template string with the current rendering context.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderTemplateString:(NSString *)<em>string</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>string</em></dt>
+			<dd><p>A template string</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendering of the template string.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v4.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheSection.h</code><br />
+	</div>				
+	
+	
+</div>
+						
 					</div>
 					
 					
@@ -360,7 +447,7 @@ protocol.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-07-01)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
 						

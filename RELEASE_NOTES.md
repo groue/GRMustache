@@ -3,6 +3,47 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v4.3.0
+
+**Filters**
+
+[Filters](Guides/filters.md) are an extension to the [Mustache specification](https://github.com/mustache/spec) that is currently under active [discussion](http://github.com/mustache/spec/issues/41).
+
+Filters allow you to process values before they are rendered, and supersede "section delegates" as the preferred way to filter values. The [number formatting](Guides/sample_code/number_formatting.md) and [array indexes.md](Guides/sample_code/indexes.md) sample codes have been updated accordingly.
+
+**New APIs**:
+
+``objc
+@interface GRMustacheSection: NSObject
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+@end
+
+@interface GRMustacheTemplate: NSObject
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError;
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfFile:(NSString *)path error:(NSError **)outError;
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfURL:(NSURL *)url error:(NSError **)outError;
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError;
++ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError;
+- (NSString *)renderObject:(id)object withFilters:(id)filters;
+- (NSString *)renderObjectsInArray:(NSArray *)objects;
+- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters;
+@end
+```
+
+**Deprecated APIs**:
+
+``objc
+@interface GRMustacheSection: NSObject
+// Use renderTemplateString:error: instead.
+@property (nonatomic, retain, readonly) id renderingContext;
+@end
+
+@interface GRMustacheTemplate: NSObject
+// Use renderObjectsInArray: instead.
+- (NSString *)renderObjects:(id)object, ...;
+@end
+```
+
 ## v4.2.0
 
 **Section delegates**

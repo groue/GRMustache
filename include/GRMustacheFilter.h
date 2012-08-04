@@ -23,78 +23,88 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@class GRMustacheSection;
-
 
 // =============================================================================
-#pragma mark - <GRMustacheHelper>
+#pragma mark - <GRMustacheFilter>
 
 /**
- * The protocol for implementing Mustache "lambda" sections.
+ * The name of exceptions raised by GRMustache whenever a filter is missing, or
+ * the object expected to conform to the <GRMustacheFilter> protocol does not.
  *
- * The responsability of a GRMustacheHelper is to render a Mustache section such
- * as `{{#bold}}...{{/bold}}`.
+ * @see GRMustacheFilter protocol
  *
- * When the data given to a Mustache section is a GRMustacheHelper, GRMustache
- * invokes the `renderSection:` method of the helper, and inserts the raw return
- * value in the template rendering.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
- *
- * @since v1.9
+ * @since v4.3
  */
-@protocol GRMustacheHelper<NSObject>
+extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+
+
+/**
+ * The protocol for implementing GRMustache filters.
+ *
+ * The responsability of a GRMustacheFilter is to transform a value into
+ * another.
+ *
+ * For instance, the tag `{{ uppercase(name) }}` uses a filter object that
+ * returns the uppercase version of its input.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md
+ *
+ * @since v4.3
+ */
+@protocol GRMustacheFilter <NSObject>
 @required
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Rendering Sections
+/// @name Transforming Values
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns the rendering of a Mustache section.
+ * Applies some transformation to its input, and returns the transformed value.
  *
- * @param section   The section to render
+ * @param object  An object to be processed by the filter.
  *
- * @return The rendering of the section
+ * @return A transformed value.
  *
- * @since v2.0
+ * @since v4.3
  */
-- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+
 @end
 
 
+
 // =============================================================================
-#pragma mark - GRMustacheHelper
+#pragma mark - GRMustacheFilter
 
 /**
- * The GRMustacheHelper class helps building mustache helpers without writing a
- * custom class that conforms to the GRMustacheHelper protocol.
+ * The GRMustacheFilter class helps building mustache filters without writing a
+ * custom class that conforms to the GRMustacheFilter protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md
  *
- * @see GRMustacheHelper protocol
+ * @see GRMustacheFilter protocol
  *
- * @since v2.0
+ * @since v4.3
  */ 
-@interface GRMustacheHelper: NSObject<GRMustacheHelper>
+@interface GRMustacheFilter : NSObject<GRMustacheFilter>
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Creating Helpers
+/// @name Creating Filters
 ////////////////////////////////////////////////////////////////////////////////
 
 #if NS_BLOCKS_AVAILABLE
 
 /**
- * Returns a GRMustacheHelper object that executes the provided block when
- * rendering a section.
+ * Returns a GRMustacheFilter object that executes the provided block when
+ * tranforming a value.
  *
- * @param block   The block that renders a section.
+ * @param block   The block that transforms its input.
  *
- * @return a GRMustacheHelper object.
+ * @return a GRMustacheFilter object.
  *
- * @since v2.0
+ * @since v4.3
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
++ (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 #endif /* if NS_BLOCKS_AVAILABLE */
 

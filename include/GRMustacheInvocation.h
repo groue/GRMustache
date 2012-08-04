@@ -38,8 +38,9 @@
  */
 @interface GRMustacheInvocation : NSObject {
 @private
+    NSString *_key;
     id _returnValue;
-    id _token;
+    id _debuggingToken;
 }
 
 /**
