@@ -74,17 +74,17 @@ The latter point is important: there is no good reason to prevent the library us
 
 GRMustache implements filters with a good old function call syntax: `f(x)`.
 
-Just like `x`, `f(x)` is an expression that has a value. The GRMustache expression syntax let the user write `f(X)` anywhere he can write `X`:
+Just like `x`, `f(x)` is an expression that has a value. The GRMustache expression syntax let the user write `f(*)` anywhere he can write `*`:
 
 - One can render `{{ f(x) }}` instead of `{{ x }}`.
-- One can render `{{ g(f(x)) }}` instead of `{{ g(x) }}`.
-- One can render `{{ f(x).y }}` instead of `{{ x.y }}`.
+- One can render `{{ g(g(x)) }}` instead of `{{ g(x) }}`.
+- One can render `{{ f(x.y) }}` instead of `{{ x.y }}`.
 
-This fits pretty well with the "scoped" Mustache expression: the regular Mustache syntax lets the user write `X.y` anywhere he can write `X`:
+This fits pretty well with the "scoped" Mustache expression: the regular Mustache syntax lets the user write `*.y` anywhere he can write `*`:
 
 - One can render `{{ x.y }}` instead of `{{ x }}`.
 - One can render `{{ f(x).y }}` instead of `{{ f(x) }}`.
-- One can render `{{ f(x.y) }}` instead of `{{ x.y }}`.
+- One can render `{{ f.g(x) }}` instead of `{{ f(x) }}`.
 
 A contrieved user could write `{{a.b(c.d(e.f).g.h).i.j}}`. Whether this is sane or not is not the business of a library that embraces userland code.
 
