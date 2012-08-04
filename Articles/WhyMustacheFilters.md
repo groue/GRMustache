@@ -6,6 +6,7 @@ GRMustache provides an implementation of [filters](../Guides/filters.md) that fu
 
 1. Why filters are good for Mustache
 2. Why Mustache tags should contain expressions, not statements
+3. Parsing GRMustache expressions
 4. The details
 
 ## 1. Why filters are good for Mustache
@@ -116,7 +117,7 @@ We've said above that filters should not come from the view model provided by th
 As a consequence, the `.(x)` syntax is forbidden. In Mustache, `.` aka the "implicit iterator", represents the currently rendered object from the view model. It thus can not provide any filter. Identically, the `.a(x)` syntax is invalid as well (it would mean "perform a scoped lookup for `a` in the view model, and apply the result as a filter").
 
 
-### Parsing GRMustache expressions
+## 3. Parsing GRMustache expressions
 
 Here is a formal grammar that describes the GRMustache syntax for expressions:
 
