@@ -25,9 +25,7 @@
 
 @class GRMustacheToken;
 
-/**
- * TODO
- */
+// Documented in GRMustacheInvocation.h
 @interface GRMustacheInvocation : NSObject {
 @private
     NSString *_key;
@@ -38,11 +36,18 @@
 // Documented in GRMustacheInvocation.h
 @property (nonatomic, retain) NSString *key GRMUSTACHE_API_PUBLIC;
 
-// Documented in GRMustacheInvocation.h
+/**
+ * The getter of this property is documented in GRMustacheInvocation.h.
+ *
+ * The setter allow GRMustacheExpression objects to prepare invocations.
+ *
+ * @see GRMustacheExpression
+ */
 @property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * The debugging token of an invocation allows an invocation to build a
+ * meaningful description like "`{{ foo }}` at line 12 of /path/to/template".
  */
 @property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
 
