@@ -47,16 +47,17 @@
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSection.h
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
  * Builds and returns a section suitable for GRMustacheHelper.
  *
- * @param sectionElement      The underlying sectionElement
- * @param renderingContext    The rendering context exposed to the library user
- * @param delegatingTemplate  A template whose delegate methods should be called
- *                            whenever relevant.
- * @param delegates           TODO
+ * @param sectionElement      The underlying sectionElement.
+ * @param renderingContext    The current rendering context.
+ * @param delegatingTemplate  A template.
+ * @param delegates           An array of GRMustacheTemplateDelegate objects
+ *                            whose callbacks should be called whenever
+ *                            relevant, with _delegatingTemplate_ as a template.
  *
  * @return A section.
  *
