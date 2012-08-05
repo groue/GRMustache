@@ -3,13 +3,17 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+
+## v4.3.1
+
+Bugfix: this release restores the delegate callbacks while rendering alternate template strings in [helpers](Guides/helpers.md).
+
+
 ## v4.3.0
 
-**Filters**
+### Filters
 
-[Filters](Guides/filters.md) are an extension to the [Mustache specification](https://github.com/mustache/spec) that is currently under active [discussion](http://github.com/mustache/spec/issues/41).
-
-Filters allow you to process values before they are rendered, and supersede "section delegates" as the preferred way to filter values. The [number formatting](Guides/sample_code/number_formatting.md) and [array indexes.md](Guides/sample_code/indexes.md) sample codes have been updated accordingly.
+[Filters](Guides/filters.md) allow you to process values before they are rendered, and supersede "section delegates" as the preferred way to filter values. The [number formatting](Guides/sample_code/number_formatting.md) and [array indexes.md](Guides/sample_code/indexes.md) sample codes have been updated accordingly.
 
 **New APIs**:
 
@@ -46,7 +50,7 @@ Filters allow you to process values before they are rendered, and supersede "sec
 
 ## v4.2.0
 
-**Section delegates**
+### Section delegates
 
 When an object that is attached to a Mustache section conforms to the [GRMustacheDelegate protocol](Guides/delegate.md), it can observe and alter the rendering of the inner content of the section, just like the template's delegate.
 
@@ -56,7 +60,7 @@ Section delegates are used in the [number formatting sample code](Guides/sample_
 
 ## v4.1.1
 
-**Total inline documentation**
+### Total inline documentation
 
 Headers contain documentation for every exposed API.
 
@@ -105,7 +109,7 @@ GRMustache used to output badly formatted errors. They are now easier to read.
 
 ## v4.0.0
 
-**Zero numbers are false**
+### Zero numbers are false
 
 GRMustache now considers all `NSNumber` instances whose `boolValue` is `NO` as false, when considering whether a section should render or not.
 
@@ -115,7 +119,7 @@ This change lets you extend the mustache language with proxy objects (objects th
 
 See [Guides/sample_code/indexes.md](Guides/sample_code/indexes.md) for a discussion on proxy objects.
 
-**Total NSUndefinedException swallowing**
+### Total NSUndefinedException swallowing
 
 Whenever GRMustache performs some key lookup and `valueForKey:` raises a NSUndefinedException, GRMustache swallows it and keep on looking for the key up the context stack.
 
@@ -125,7 +129,7 @@ This change lets you extend the mustache language with proxy objects (objects th
 
 See [Guides/sample_code/indexes.md](Guides/sample_code/indexes.md) for a discussion on proxy objects.
 
-**Support for `.name` keys**
+### Support for `.name` keys
 
 Keys prefixed by a dot prevent GRMustache to look up the [context stack](Guides/runtime/context_stack.md).
 
@@ -139,7 +143,7 @@ Restored intended architectures: armv6+armv7+i386 for libGRMustache3-iOS, i386+x
 
 ## v3.0.0
 
-**There is no option**
+### There is no option
 
 Removed APIs:
 
@@ -181,9 +185,9 @@ typedef NSUInteger GRMustacheTemplateOptions;
 
 ## v2.0.0
 
-**API simplification**
+### API simplification
 
-### New APIs:
+**New APIs**
 
 ```objc
 enum {
@@ -210,7 +214,7 @@ enum {
 @end
 ```
 
-### Removed APIs and behaviors
+**Removed APIs and behaviors**
 
 ```objc
 enum {
