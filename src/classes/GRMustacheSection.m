@@ -75,7 +75,11 @@
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
 {
-    return [GRMustacheTemplate renderObject:_renderingContext fromString:string error:outError];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:string error:outError];
+    if (!template) {
+        return nil;
+    }
+    return [template renderRenderingContext:_renderingContext filterContext:_filterContext delegatingTemplate:_delegatingTemplate delegates:_delegates];
 }
 
 - (NSString *)innerTemplateString
