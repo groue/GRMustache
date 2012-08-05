@@ -86,7 +86,9 @@ typedef enum {
 } GRMustacheTokenType;
 
 /**
- * TODO
+ * The type of a GRMustacheToken's value.
+ *
+ * @see GRMustacheToken.value
  */
 typedef union {
     id object;

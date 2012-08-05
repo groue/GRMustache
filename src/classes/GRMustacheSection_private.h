@@ -53,7 +53,8 @@
  * Builds and returns a section suitable for GRMustacheHelper.
  *
  * @param sectionElement      The underlying sectionElement.
- * @param renderingContext    The current rendering context.
+ * @param renderingContext    A rendering context stack.
+ * @param filterContext       A filters context stack.
  * @param delegatingTemplate  A template.
  * @param delegates           An array of GRMustacheTemplateDelegate objects
  *                            whose callbacks should be called whenever

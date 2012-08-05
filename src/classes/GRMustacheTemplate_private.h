@@ -38,12 +38,12 @@
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * Convenience method for invoking several delegate callbacks in a single method call.
  */
 - (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Convenience method for invoking several delegate callbacks in a single method call.
  */
 - (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation GRMUSTACHE_API_INTERNAL;
 

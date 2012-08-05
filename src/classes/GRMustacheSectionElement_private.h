@@ -83,16 +83,16 @@
 + (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns the rendering of inner rendering elements for the provided context,
- * without any invocation nor interpretation.
+ * Returns the rendering of inner elements.
  *
- * @param context             A context stack for rendering inner elements.
- * @param filterContext       TODO
- * @param delegatingTemplate  A template whose delegate methods should be called
- *                            whenever relevant.
- * @param delegates           TODO
+ * @param renderingContext    A rendering context stack.
+ * @param filterContext       A filters context stack.
+ * @param delegatingTemplate  A template.
+ * @param delegates           An array of GRMustacheTemplateDelegate objects
+ *                            whose callbacks should be called whenever
+ *                            relevant, with _delegatingTemplate_ as a template.
  *
- * @return The rendering of the section.
+ * @return The rendering of inner elements.
  */
 - (NSString *)renderElementsWithRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 
