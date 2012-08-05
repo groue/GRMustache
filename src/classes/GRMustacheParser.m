@@ -41,9 +41,7 @@
  */
 @property (nonatomic, copy) NSString *ctag;
 
-/**
- * TODO
- */
+// Documented in GRMustacheParser_private.h
 @property (nonatomic, strong) NSMutableSet *pragmas;
 
 /**
@@ -77,12 +75,14 @@
 - (NSRange)rangeOfString:(NSString *)needle inTemplateString:(NSString *)haystack startingAtIndex:(NSUInteger)p consumedNewLines:(NSUInteger *)outLines;
 
 /**
- * Returns an expression from a string
+ * Returns an expression from a string.
  *
- * @param string    a string
- * @param outEmpty  TODO
+ * @param string    A string.
+ * @param outEmpty  If the string contains an empty expression, upon return
+ *                  contains YES.
  *
- * @return an expression, or nil if the parsing fails.
+ * @return An expression, or nil if the parsing fails or if the expression is
+ * empty.
  */
 - (id<GRMustacheExpression>)parseExpression:(NSString *)string empty:(BOOL *)outEmpty;
 

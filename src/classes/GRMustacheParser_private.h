@@ -95,7 +95,8 @@
 @property (nonatomic, assign) id<GRMustacheParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * A set of all pragmas found while parsing. Pragmas are defined via pragma tags
+ * such as `{{% FILTERS }}`.
  */
 @property (nonatomic, strong, readonly) NSMutableSet *pragmas GRMUSTACHE_API_INTERNAL;
 
