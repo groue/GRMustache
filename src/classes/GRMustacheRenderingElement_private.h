@@ -56,15 +56,16 @@
 @required
 
 /**
- * Renders a context stack.
+ * Renders.
  * 
- * @param context             A context stack.
- * @param filters             TODO
- * @param delegatingTemplate  A template whose delegate methods should be called
- *                            whenever relevant.
- * @param delegates           TODO
+ * @param context             A rendering context stack.
+ * @param filters             A filters context stack.
+ * @param delegatingTemplate  A template.
+ * @param delegates           An array of GRMustacheTemplateDelegate objects
+ *                            whose callbacks should be called whenever
+ *                            relevant, with _delegatingTemplate_ as a template.
  *
- * @return The rendering of _context_.
+ * @return The rendering.
  */
 - (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
 @end
