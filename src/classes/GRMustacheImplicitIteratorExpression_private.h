@@ -23,7 +23,10 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * TODO
+ * The GRMustacheImplicitIteratorExpression is able to return the value of the
+ * top object of a context stack.
+ *
+ * @see GRMustacheExpression
  */
 @interface GRMustacheImplicitIteratorExpression : NSObject<GRMustacheExpression> {
 @private
@@ -31,7 +34,12 @@
 }
 
 /**
- * TODO
+ * Returns an "implicit iterator" expression.
+ *
+ * For instance, the Mustache tag `{{ . }}` contains an implicit iterator
+ * expression.
+ *
+ * @return A GRMustacheImplicitIteratorExpression.
  */
 + (id)expression;
 @end

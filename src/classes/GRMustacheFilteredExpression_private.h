@@ -23,7 +23,11 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * TODO
+ * The GRMustacheFilteredExpression is able to apply a filter to a value, and
+ * to return the result.
+ *
+ * @see GRMustacheExpression
+ * @see GRMustacheFilter
  */
 @interface GRMustacheFilteredExpression : NSObject<GRMustacheExpression> {
 @private
@@ -33,7 +37,20 @@
 }
 
 /**
- * TODO
+ * Returns a filtered expression, given an expression that returns a filter, and
+ * an expression that return the filter parameter.
+ *
+ * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
+ * whose filterExpression is a GRMustacheIdentifierExpression (for the
+ * identifier `f`), and whose parameterExpression is a
+ * GRMustacheIdentifierExpression (for the identifier `x`).
+ *
+ * @param filterExpression     An expression whose value is an object conforming
+ *                             to the <GRMustacheFilter> protocol.
+ * @param parameterExpression  An expression whose value is the parameter of the
+ *                             filter.
+ *
+ * @return A GRMustacheFilteredExpression.
  */
 + (id)expressionWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression GRMUSTACHE_API_INTERNAL;
 @end

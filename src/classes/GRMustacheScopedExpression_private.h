@@ -23,7 +23,9 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * TODO
+ * The GRMustacheScopedExpression extracts a key out of a value.
+ *
+ * @see GRMustacheExpression
  */
 @interface GRMustacheScopedExpression : NSObject<GRMustacheExpression> {
 @private
@@ -33,7 +35,17 @@
 }
 
 /**
- * TODO
+ * Returns a scoped expression, given an expression that returns a value, and
+ * an identifier.
+ *
+ * For instance, the Mustache tag `{{ person.name }}` contains a scoped
+ * expression, whose baseExpression is a GRMustacheIdentifierExpression (for the
+ * identifier `person`), and whose identifier is `name`.
+ *
+ * @param baseExpression   An expression.
+ * @param scopeIdentifier  An identifier.
+ *
+ * @return A GRMustacheScopedExpression.
  */
 + (id)expressionWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
 @end

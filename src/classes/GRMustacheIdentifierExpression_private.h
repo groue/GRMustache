@@ -23,7 +23,10 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * TODO
+ * The GRMustacheIdentifierExpression is able to perform the deep lookup of an
+ * identifier in a context stack.
+ *
+ * @see GRMustacheExpression
  */
 @interface GRMustacheIdentifierExpression : NSObject<GRMustacheExpression> {
 @private
@@ -32,7 +35,14 @@
 }
 
 /**
- * TODO
+ * Returns an identifier expression, given an identifier.
+ *
+ * For instance, the Mustache tag `{{ name }}` contains an identifier
+ * expression, whose identifier is `name`.
+ *
+ * @param identifier  An identifier
+ *
+ * @return A GRMustacheIdentifierExpression.
  */
 + (id)expressionWithIdentifier:(NSString *)identifier;
 @end
