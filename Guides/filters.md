@@ -108,6 +108,10 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
+### Sample code
+
+Custom filters are the core tool used by the [formatted numbers](sample_code/number_formatting.md) and [collection indexes](sample_code/indexes.md) sample codes. Go check inspiration there.
+
 ## Filters namespaces
 
 Just as you can provide an object hierarchy for rendered values, and extract `person.pet.name` from it, you can provide filters as an object hierarchy, and "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`:
