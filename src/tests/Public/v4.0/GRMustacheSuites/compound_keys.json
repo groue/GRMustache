@@ -75,7 +75,7 @@
     {
       "name": "anchored key should not extract properties inside an array",
       "data": { "persons": [ { "name": "Alice" }, { "name": "Bob" } ] },
-      "template": "-{{#persons}}{{name}},{{/persons}}-{{#persons.name}}{{.}},{{/persons.name}}",
+      "template": "-{{#persons}}{{name}},{{/persons}}-{{#persons.name}}{{.}},{{/persons.name}}-",
       "expected":"-Alice,Bob,--"
     }
   ]
