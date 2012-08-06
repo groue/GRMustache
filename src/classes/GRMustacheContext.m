@@ -20,6 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#if (TARGET_OS_IPHONE)
+#import <objc/runtime.h>
+#import <objc/message.h>
+#else
+#import <objc/objc-class.h>
+#endif
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
@@ -35,6 +41,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @property (nonatomic, retain) id object;
 @property (nonatomic, retain) GRMustacheContext *parent;
 - (id)initWithObject:(id)object parent:(GRMustacheContext *)parent;
+
++ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 @end
 
 
@@ -78,6 +86,14 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     
     if (object)
     {
+        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
+            // Specific case here: we don't want to return another collection.
+            // See issue #21 and "anchored key should not extract properties
+            // inside an array" test in
+            // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+            return nil;
+        }
+        
         @try
         {
             if (preventingNSUndefinedKeyExceptionAttack)
@@ -118,7 +134,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 {
     id value = [GRMustacheContext valueForKey:key inObject:_object];
     if (value != nil) { return value; }
-    if (_parent == nil) { return nil; }
     return [_parent valueForKey:key];
 }
 
@@ -140,6 +155,55 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         _parent = [parent retain];
     }
     return self;
+}
+
++ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
+{
+    static SEL selector = nil;
+    static IMP NSObjectIMPL = nil;
+    static IMP NSDictionaryIMPL = nil;
+    static BOOL NSManagedObjectIMPLComputed = NO;
+    static IMP NSManagedObjectIMPL = nil;
+    
+    if (selector == nil) {
+        selector = @selector(valueForKey:);
+    }
+    
+    if (NSObjectIMPL == nil) {
+        NSObjectIMPL = class_getMethodImplementation([NSObject class], selector);
+    }
+    
+    if (NSDictionaryIMPL == nil) {
+        NSDictionaryIMPL = class_getMethodImplementation([NSDictionary class], selector);
+    }
+    
+    if (NSManagedObjectIMPLComputed == NO) {
+        Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+        if (NSManagedObjectClass) {
+            NSManagedObjectIMPL = class_getMethodImplementation(NSManagedObjectClass, selector);
+        }
+        NSManagedObjectIMPLComputed = YES;
+    }
+    
+    IMP objectIMPL = class_getMethodImplementation([object class], selector);
+    
+    if (objectIMPL == NSObjectIMPL) {
+        return NO;
+    }
+    
+    if (objectIMPL == NSDictionaryIMPL) {
+        return NO;
+    }
+    
+    if (objectIMPL == NSManagedObjectIMPL) {
+        return NO;
+    }
+    
+    if ([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSSet class]] || [object isKindOfClass:[NSOrderedSet class]]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end
