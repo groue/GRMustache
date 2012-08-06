@@ -4,6 +4,11 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v4.3.2
+
+Bugfix: Avoid the default `valueForKey:` implementation of Fundation collection classes like NSArray, NSSet and NSOrderedSet, which would return another collection. Fixes [issue #21](https://github.com/groue/GRMustache/issues/21).
+
+
 ## v4.3.1
 
 Bugfix: this release restores the delegate callbacks while rendering alternate template strings in [helpers](Guides/helpers.md).
