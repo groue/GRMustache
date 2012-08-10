@@ -17,9 +17,9 @@ How To
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache4-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache4-iOS.a` to your project.
 
-GRMustache can target MacOS down to 10.6 Snow Leopard, and iOS down to version 3. However, APIs based on Objective-C blocks and NSURL are only available from iOS4.
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `dependency 'GRMustache'` to your Podfile.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `dependency 'GRMustache'` to your Podfile. In its current version, CocoaPods exposes private headers that you should not rely on, because future versions of GRMustache may change them, without notice, in an incompatible fashion. Make sure you only import `GRMustache.h`.
+GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 3, and only depends on the Foundation framework.
 
 ### 2. Import "GRMustache.h" and start rendering templates
 
@@ -48,15 +48,20 @@ Documentation
 
 ### Guides
 
-- [Guides/templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
-- [Guides/runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
-- [Guides/helpers.md](GRMustache/blob/master/Guides/helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
-- [Guides/filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
-- [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
+The basics:
+
+- [templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
+- [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
+
+Advanced Mustache:
+
+- [helpers.md](GRMustache/blob/master/Guides/helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
+- [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
+- [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
 ### Sample code
 
-- [Guides/sample_code](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
+- [sample_code](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
 
 ### Reference
 
