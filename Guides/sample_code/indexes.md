@@ -18,7 +18,7 @@ GRMustache solution: filters
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-The [GRMustacheFilter](../filter.md) protocol can help you extend the mustache language, and avoid preparing your data.
+The [GRMustacheFilter](../filters.md) protocol can help you extend the mustache language, and avoid preparing your data.
 
 **However, it may be tedious or impossible for other Mustache implementations to produce the same rendering.**
 
