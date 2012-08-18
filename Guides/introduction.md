@@ -49,39 +49,39 @@ You'll generally gather a template string and a data object that will fill the "
 
 The shortest way to render a template is to mix a literal template string and a dictionary:
 
-    ```objc
-    #import "GRMustache.h"
+```objc
+#import "GRMustache.h"
 
-    // Render "Hello Arthur!"
-    
-    NSDictionary *person = @{ @"name": @"Arthur" };
-    NSString *templateString = @"Hello {{name}}!";
-    NSString *rendering = [GRMustacheTemplate renderObject:person fromString:templateString error:NULL];
-    ```
+// Render "Hello Arthur!"
+
+NSDictionary *person = @{ @"name": @"Arthur" };
+NSString *templateString = @"Hello {{name}}!";
+NSString *rendering = [GRMustacheTemplate renderObject:person fromString:templateString error:NULL];
+```
 
 However, generally speaking, your templates will be stored as *resources* in your application bundle, and your data will come from your *model objects*. It turns out the following code should be more common:
 
-    ```objc
-    #import "GRMustache.h"
+```objc
+#import "GRMustache.h"
 
-    // Render a profile document from the `Profile.mustache` resource
-    
-    Person *person = [Person personWithName:@"Arthur"];
-    NSString *profile = [GRMustacheTemplate renderObject:person fromResource:@"Profile" bundle:nil error:NULL];
-    ```
+// Render a profile document from the `Profile.mustache` resource
+
+Person *person = [Person personWithName:@"Arthur"];
+NSString *profile = [GRMustacheTemplate renderObject:person fromResource:@"Profile" bundle:nil error:NULL];
+```
 
 Finally, should you render a single template several times, you will spare CPU cycles by using a single GRMustacheTemplate instance:
 
-    ```objc
-    #import "GRMustache.h"
+```objc
+#import "GRMustache.h"
 
-    // Initialize a template from the `Profile.mustache` resource:
-    GRMustacheTemplate *profileTemplate = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
+// Initialize a template from the `Profile.mustache` resource:
+GRMustacheTemplate *profileTemplate = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
 
-    // Render two profile documents
-    NSString *arthurProfile = [profileTemplate renderObject:arthur];
-    NSString *barbieProfile = [profileTemplate renderObject:barbie];
-    ```
+// Render two profile documents
+NSString *arthurProfile = [profileTemplate renderObject:arthur];
+NSString *barbieProfile = [profileTemplate renderObject:barbie];
+```
 
 If the library makes it handy to render templates stored as resources, you may have other needs. Check [Guides/templates.md](templates.md) for a thorough documentation.
 
@@ -92,29 +92,31 @@ Advanced Mustache
 
 Mustache "lambda sections" allow you to inject your code and process a portion of a template.
 
-A very simple example could be writing a lambda section that renders its content wrapped in a `<strong>` HTML tag:
+A very simple example could be writing a lambda section that wraps its content:
 
-Given the template:
+Template:
 
-    <p>{{#strong}}Is that clear?{{/strong}}</p>
+    {{#wrapped}}
+      {{name}} is awesome.
+    {{/wrapped}}
 
-You would implement the strong helper:
+Data:
 
-    ```objc
-    id strongHelper = [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
-        NSString *rawRendering = [section render];
-        return [NSString stringWithFormat=@"<strong>%@</strong>", rawRendering];
-    }];
-    ```
+```objc
+NSDictionary *data = @{
+    @"name": @"Arthur",
+    @"wrapped": [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
+                    NSString *rawRendering = [section render];
+                    return [NSString stringWithFormat=@"<b>%@</b>", rawRendering];
+                }]};
+```
 
-And render:
+Render:
 
-    ```objc
-    Person *person = ...;                          // The rendered object
-    id helpers = @{ @"strong": strongHelper };     // A dictionary that binds the helper to the `strong` key
-    NSArray *renderedObjects = @[helpers, person]; // We render both
-    NSString *rendering = [template renderObjectsInArray:renderedObjects];
-    ```
+```objc
+// @"<b>Arthur is awesome.</b>"
+NSString *rendering = [template renderObject:data];
+```
 
 Lambda sections are fully documented in [Guides/helpers.md](helpers.md).
 
@@ -129,10 +131,10 @@ Let's use one of the built-in filters: `uppercase`. Given the template:
 
 Rendering "Hello ARTHUR" is as simple as:
 
-    ```objc
-    Person *arthur = [Person personWithName:@"Arthur"];
-    NSString *rendering = [template renderObject:arthur];
-    ```
+```objc
+Person *arthur = [Person personWithName:@"Arthur"];
+NSString *rendering = [template renderObject:arthur];
+```
 
 Filters are fully documented in [Guides/filters.md](filters.md).
 
