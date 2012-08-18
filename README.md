@@ -48,7 +48,11 @@ Documentation
 
 ### Guides
 
-The basics:
+Starting point:
+
+- [introduction.md](GRMustache/blob/master/Guides/introduction.md): the library in a glance
+
+Basic Mustache:
 
 - [templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
 - [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
@@ -59,7 +63,7 @@ Advanced Mustache:
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
-### Sample code
+Sample code:
 
 - [sample_code](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
 
