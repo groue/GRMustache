@@ -23,7 +23,7 @@
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
 
-@interface LocalizatingHelper : NSObject<GRMustacheHelper, GRMustacheTemplateDelegate>
+@interface LocalizatingHelper : NSObject<GRMustacheHelper>
 @end
 
 @implementation GRAppDelegate
@@ -74,7 +74,7 @@
 @end
 
 
-@interface LocalizatingHelper()
+@interface LocalizatingHelper()<GRMustacheTemplateDelegate>
 @property (nonatomic, strong) NSMutableArray *values;
 @end
 
@@ -82,34 +82,96 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
+    /**
+     * Let's perform a rendering of the section first, invoking
+     * [section render].
+     *
+     * This method returns the rendering of the section
+     * ("Hello {{name1}}! Do you know {{name2}}?" in our specific example).
+     *
+     * Normally, it would return "Hello Arthur! Do you know Barbara?", which
+     * we could not localize.
+     *
+     * But we are also a GRMustacheTemplateDelegate, and as such, GRMustache
+     * will tell us when it is about to render a value.
+     *
+     * In the template:willInterpretReturnValueOfInvocation:as: delegate method,
+     * we'll tell GRMustache to render "%@" instead of the actual values
+     * "Arthur" and "Barbara".
+     *
+     * The rendering of the section will thus be "Hello %@! Do you know %@?",
+     * which is a string that is suitable for localization.
+     *
+     * We'll assume that the localized version of this string is another similar
+     * string that is suitable for [NSString stringWithFormat:].
+     *
+     * We still need the values to fill the format: "Arthur", and "Barbara".
+     *
+     * They also be gathered in the delegate method, that will fill the
+     * self.values array.
+     */
+    
     self.values = [NSMutableArray array];
     NSString *localizableFormat = [section render];
+    
+    
+    /**
+     * Now localize the format.
+     */
+    
     NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
-    NSString *result = nil;
+    
+    
+    /**
+     * Render!
+     *
+     * [NSString stringWithFormat:] unfortunately does not accept an array of
+     * values to fill the format. Let's support 0,1,2 and 3 arguments:
+     */
+    
+    NSString *rendering = nil;
     switch (self.values.count) {
         case 0:
-            result = localizedFormat;
+            rendering = localizedFormat;
             break;
         
         case 1:
-            result = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0]];
+            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0]];
             break;
             
         case 2:
-            result = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1]];
+            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1]];
             break;
             
         case 3:
-            result = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1], [self.values objectAtIndex:2]];
+            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1], [self.values objectAtIndex:2]];
             break;
     }
+    
+    
+    /**
+     * Cleanup and return the rendering
+     */
+    
     self.values = nil;
-    return result;
+    return rendering;
 }
 
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
+    /**
+     * invocation.returnValue is "Arthur" or "Barbara".
+     *
+     * Fill self.values so that we have arguments for [NSString stringWithFormat:].
+     */
+    
     [self.values addObject:invocation.returnValue];
+    
+    
+    /**
+     * Render "%@" instead of the value.
+     */
+    
     invocation.returnValue = @"%@";
 }
 
