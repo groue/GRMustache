@@ -23,7 +23,7 @@
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
 
-@interface LocalizatingHelper : NSObject<GRMustacheHelper>
+@interface LocalizatingHelper : NSObject<GRMustacheHelper, GRMustacheTemplateDelegate>
 @end
 
 @implementation GRAppDelegate
@@ -74,8 +74,8 @@
 @end
 
 
-@interface LocalizatingHelper()<GRMustacheTemplateDelegate>
-@property (nonatomic, strong) NSMutableArray *values;
+@interface LocalizatingHelper()
+@property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizatingHelper
@@ -83,7 +83,7 @@
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
     /**
-     * Let's perform a rendering of the section first, invoking
+     * Let's perform a first rendering of the section, invoking
      * [section render].
      *
      * This method returns the rendering of the section
@@ -102,17 +102,15 @@
      * The rendering of the section will thus be "Hello %@! Do you know %@?",
      * which is a string that is suitable for localization.
      *
-     * We'll assume that the localized version of this string is another similar
-     * string that is suitable for [NSString stringWithFormat:].
-     *
-     * We still need the values to fill the format: "Arthur", and "Barbara".
+     * We still need the format arguments to fill the format: "Arthur", and
+     * "Barbara".
      *
      * They also be gathered in the delegate method, that will fill the
-     * self.values array.
+     * self.formatArguments array, here initialized as an empty array.
      */
     
-    self.values = [NSMutableArray array];
-    NSString *localizableFormat = [section render];
+    self.formatArguments = [NSMutableArray array];
+    NSString *localizableFormat = [section render]; // triggers delegate callbacks
     
     
     /**
@@ -126,25 +124,34 @@
      * Render!
      *
      * [NSString stringWithFormat:] unfortunately does not accept an array of
-     * values to fill the format. Let's support 0,1,2 and 3 arguments:
+     * formatArguments to fill the format. Let's support up to 3 arguments:
      */
     
     NSString *rendering = nil;
-    switch (self.values.count) {
+    switch (self.formatArguments.count) {
         case 0:
             rendering = localizedFormat;
             break;
         
         case 1:
-            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0]];
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0]];
             break;
             
         case 2:
-            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1]];
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0],
+                         [self.formatArguments objectAtIndex:1]];
             break;
             
         case 3:
-            rendering = [NSString stringWithFormat:localizedFormat, [self.values objectAtIndex:0], [self.values objectAtIndex:1], [self.values objectAtIndex:2]];
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0],
+                         [self.formatArguments objectAtIndex:1],
+                         [self.formatArguments objectAtIndex:2]];
             break;
     }
     
@@ -153,7 +160,7 @@
      * Cleanup and return the rendering
      */
     
-    self.values = nil;
+    self.formatArguments = nil;
     return rendering;
 }
 
@@ -162,10 +169,11 @@
     /**
      * invocation.returnValue is "Arthur" or "Barbara".
      *
-     * Fill self.values so that we have arguments for [NSString stringWithFormat:].
+     * Fill self.formatArguments so that we have arguments for
+     * [NSString stringWithFormat:].
      */
     
-    [self.values addObject:invocation.returnValue];
+    [self.formatArguments addObject:invocation.returnValue];
     
     
     /**
