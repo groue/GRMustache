@@ -224,19 +224,32 @@ Now the convenient `[GRMustacheHelper helperWithBlock:]` method is not enough. L
      * [NSString stringWithFormat:] unfortunately does not accept an array of
      * formatArguments to fill the format. Let's support up to 3 arguments:
      */
-
+    
     NSString *rendering = nil;
     switch (self.formatArguments.count) {
         case 0:
             rendering = localizedFormat;
             break;
-
+        
         case 1:
-            rendering = [NSString stringWithFormat:localizedFormat, [self.formatArguments objectAtIndex:0]];
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0]];
             break;
-
+            
         case 2:
-            rendering = [NSString stringWithFormat:localizedFormat, [self.formatArguments objectAtIndex:0], [self.formatArguments objectAtIndex:1]];
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0],
+                         [self.formatArguments objectAtIndex:1]];
+            break;
+            
+        case 3:
+            rendering = [NSString stringWithFormat:
+                         localizedFormat,
+                         [self.formatArguments objectAtIndex:0],
+                         [self.formatArguments objectAtIndex:1],
+                         [self.formatArguments objectAtIndex:2]];
             break;
     }
 
