@@ -165,7 +165,7 @@ This looks like a nice way to build our format arguments and the localizable for
 
 We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate side, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
 
-Now the `[GRMustacheHelper helperWithBlock:]` is not enough. Let's write a full class:
+Now the convenient `[GRMustacheHelper helperWithBlock:]` method is not enough. Let's go for a full class:
 
 ```objc
 @interface LocalizatingHelper : NSObject<GRMustacheHelper, GRMustacheTemplateDelegate>
