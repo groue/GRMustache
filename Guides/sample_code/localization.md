@@ -20,7 +20,7 @@ Into the various renderings below, depending on the current locale:
     Bonjour Arthur, est-ce que tu connais Barbara ?
     Hola Arthur, sabes Barbara?
 
-Yet this will be quite a smartish sample code, and it's better starting with more simple cases. We'll see how to localize:
+Yet this will be quite a smartish sample code, and it's better starting with simpler cases. We'll see how to localize:
 
 1. a section of a template
     
