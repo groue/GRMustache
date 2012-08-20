@@ -141,21 +141,18 @@ Before diving in the sample code, let's first describe out strategy:
 
 1. We'll build the following string, the *localizable format string*:
 
-    `@"Hello %@, do you know %@?"`
+    `Hello %@, do you know %@?`
 
 2. We'll gather the *format arguments*:
-    
     - `@"Arthur"`
     - `@"Barbara"`
     
 3. We'll localize the localizable format string with `NSLocalizedString`, that will give us the *localized format string*:
-
     - `@"Hello %@, do you know %@?"`
     - `@"Bonjour %@, est-ce que tu connais %@ ?"`
     - `@"Hola %@, sabes %@?"`
 
 4. We'll finally use `[NSString stringWithFormat:]`, with the localized format string, and format arguments:
-
     - `@"Hello Arthur, do you know Barbara?"`
     - `@"Bonjour Arthur, est-ce que tu connais Barbara ?"`
     - `@"Hola Arthur, sabes Barbara?"`
