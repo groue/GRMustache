@@ -6,7 +6,7 @@ Localization
 Overview
 --------
 
-Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localize its input.
+Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localizes its input.
 
 [Mustache lambda sections](../helpers.md) are our vector. We'll eventually render the following template:
 
