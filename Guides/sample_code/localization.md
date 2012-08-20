@@ -51,7 +51,7 @@ And render, depending on the current locale:
 
 We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheHelper` protocol.
 
-The shortest way to build a helper is the `[GRMustacheHelper helperWithBlock:]` method. Its block is given a `GRMustacheSection` object whose `innerTemplateString` property suits perfectly our needs:
+The shortest way to build a helper is the `[GRMustacheHelper helperWithBlock:]` method. Its block is given a `GRMustacheSection` object whose `innerTemplateString` property perfectly suits our needs:
 
     ```objc
     id data = @{
