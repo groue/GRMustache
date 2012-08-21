@@ -16,6 +16,8 @@ While rendering a template, several objects may get messages from GRMustache:
 
 The template's delegate can observe the full template rendering. However, sections delegates can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
 
+You'll find template delegate usages below. Section delegates are used in the [localization](sample_code/localization.md) sample code.
+
 
 Observe the template rendering
 ------------------------------
@@ -121,6 +123,12 @@ Usually, [filters](filters.md) and [helpers](helpers.md) should do the trick whe
 However, they both require to be explicited invoked from the template: `{{#helper}}...{{/helper}}`, and `{{ filter(...) }}`.
 
 GRMustacheTemplateDelegate will help you when you can not, or do not want, to embed your extra behaviors right into the template.
+
+
+Sample code
+-----------
+
+The [localization.md](sample_code/localization.md) sample code uses section delegates for localizing portions of template.
 
 
 [up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)

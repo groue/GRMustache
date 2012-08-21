@@ -1,4 +1,4 @@
-[up](../../../../tree/master/Guides/sample_code), [next](../forking.md)
+[up](../../../../tree/master/Guides/sample_code), [next](localization.md)
 
 Indexes
 =======
@@ -300,4 +300,4 @@ And finally, write the PositionFilterItem implementation:
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-[up](../../../../tree/master/Guides/sample_code), [next](../forking.md)
+[up](../../../../tree/master/Guides/sample_code), [next](localization.md)

@@ -42,34 +42,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"
 Documentation
 -------------
 
-### Mustache syntax
-
-- http://mustache.github.com/mustache.5.html
-
-### Guides
-
-Starting point:
-
-- [introduction.md](GRMustache/blob/master/Guides/introduction.md): the library in a glance
-
-Basic Mustache:
-
-- [templates.md](GRMustache/blob/master/Guides/templates.md): how to load, parse, and render templates from various sources.
-- [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates.
-
-Advanced Mustache:
-
-- [helpers.md](GRMustache/blob/master/Guides/helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
-- [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
-- [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
-
-Sample code:
-
-- [sample_code](GRMustache/tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
-
-### Reference
-
-- [Reference](http://groue.github.com/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
+Documentation starts here: [Guides/introduction.md](GRMustache/blob/master/Guides/introduction.md).
 
 
 FAQ
@@ -79,9 +52,13 @@ FAQ
     
     A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
-- **Q: How do I format numbers and dates, or localize portions of templates, etc?**
+- **Q: How do I format numbers and dates?**
     
-    A: [Filters](GRMustache/blob/master/Guides/filters.md) and [Mustache lambda sections](GRMustache/blob/master/Guides/helpers.md) are your friends. *Filters* act on the data you provide to the template, and are typically a good match for formatting values. *Lambda sections* act directly on the template canvas, and can help you process a full portion of a template.
+    A: Check [Guides/sample_code/number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+
+- **Q: How do I localize templates?**
+
+    A: Check [Guides/sample_code/localization.md](GRMustache/blob/master/Guides/sample_code/localization.md)
 
 - **Q: Does GRMustache provide any layout facility?**
     

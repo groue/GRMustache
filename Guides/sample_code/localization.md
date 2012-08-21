@@ -39,6 +39,8 @@ Of course, we'll always eventually use the standard `NSLocalizedString` function
 Localizing a template section
 -----------------------------
 
+**[Download the code](../../../../tree/master/Guides/sample_code/localization)**
+
 Let's localize the following template:
 
     {{#localize}}Hello{{/localize}}
@@ -73,6 +75,8 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 Localizing a value
 ------------------
+
+**[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
 Template:
 
@@ -117,6 +121,8 @@ You can see this as a "double-pass" rendering: the section is rendered once, in 
 
 Localizing a template section with arguments
 --------------------------------------------
+
+**[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
 Template:
 

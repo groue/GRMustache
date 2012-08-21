@@ -31,6 +31,10 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     {
+        /**
+         * Localizing a template section
+         */
+        
         id data = @{
             @"localize": [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 return NSLocalizedString(section.innerTemplateString, nil);
@@ -44,6 +48,10 @@
     }
     
     {
+        /**
+         * Localizing a value
+         */
+        
         id data = @{
             @"greeting": @"Hello",
             @"localize": [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
@@ -58,6 +66,10 @@
     }
     
     {
+        /**
+         * Localizing a template section with arguments
+         */
+        
         id data = @{
             @"name1": @"Arthur",
             @"name2": @"Barbara",
@@ -73,6 +85,10 @@
 
 @end
 
+
+/**
+ * LocalizatingHelper
+ */
 
 @interface LocalizatingHelper()
 @property (nonatomic, strong) NSMutableArray *formatArguments;

@@ -90,7 +90,7 @@ Advanced Mustache
 
 ### Lambda sections
 
-Mustache "lambda sections" allow you to inject your code and process a portion of a template.
+Mustache "lambda sections" allow you to let your own application code process and render a portion of a template.
 
 A very simple example could be writing a lambda section that wraps its content:
 
@@ -144,6 +144,7 @@ You may provide your templates a *delegate*. This object is able to observe and 
 
 Check [Guides/delegate.md](delegate.md) for documentation and sample code.
 
+
 More documentation
 ------------------
 
@@ -157,6 +158,9 @@ Basic Mustache:
 
 - [templates.md](templates.md): how to load, parse, and render templates from various sources.
 - [runtime.md](runtime.md): how to provide data to templates.
+    - [context_stack.md](runtime/context_stack.md): Mustache sections, context stack, key lookup
+    - [runtime/booleans.md](runtime/booleans.md): boolean sections
+    - [loops.md](runtime/loops.md): enumerable sections
 
 Advanced Mustache:
 
