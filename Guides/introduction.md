@@ -111,10 +111,9 @@ NSDictionary *data = @{
                 }]};
 ```
 
-Render:
+Render `<b>Arthur is awesome.</b>`:
 
 ```objc
-// @"<b>Arthur is awesome.</b>"
 NSString *rendering = [template renderObject:data];
 ```
 
@@ -126,7 +125,6 @@ GRMustache "filters" allow you to inject your code (again), but this time in ord
 
 Let's use one of the built-in filters: `uppercase`. Given the template:
 
-    {{%FILTERS}}{{! Filters are not in the specification yet, so we need to opt in with this special tag. }}
     Hello {{ uppercase(name) }}
 
 Rendering "Hello ARTHUR" is as simple as:
