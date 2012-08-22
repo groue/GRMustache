@@ -85,66 +85,50 @@ NSString *barbieProfile = [profileTemplate renderObject:barbie];
 
 If the library makes it handy to render templates stored as resources, you may have other needs. Check [Guides/templates.md](templates.md) for a thorough documentation.
 
-Advanced Mustache
+Advanced features
 -----------------
 
 ### Lambda sections
 
-Mustache "lambda sections" let your own application code process a portion of a template, and render it in a custom fashion.
+*Lambda sections* let your own application code process a portion of a template, and render it in a custom fashion.
 
-A very simple example could be writing a lambda section that wraps its content:
+A very simple example is a lambda section that wraps its content:
 
 Template:
 
-    {{#wrapped}}
+    {{#bold}}
       {{name}} is awesome.
-    {{/wrapped}}
+    {{/bold}}
 
-Data:
+Rendering:
 
-```objc
-NSDictionary *data = @{
-    @"name": @"Arthur",
-    @"wrapped": [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
-                    NSString *rawRendering = [section render];
-                    return [NSString stringWithFormat=@"<b>%@</b>", rawRendering];
-                }]};
-```
-
-Render `<b>Arthur is awesome.</b>`:
-
-```objc
-NSString *rendering = [template renderObject:data];
-```
-
-Lambda sections are fully documented in [Guides/helpers.md](helpers.md).
+    <b>Arthur is awesome.</b>
+    
+Lambda sections are fully documented in [Guides/helpers.md](helpers.md). They are the core feature behind the [localization.md](sample_code/localization.md) sample code.
 
 ### Filters
 
-GRMustache "filters" allow you to inject your code (again), but this time in order to process values.
+*Filters* allow you to inject your code (again), but this time in order to process values.
 
-Let's use one of the built-in filters: `uppercase`. Given the template:
+There are a few built-in filters as well. For instance:
 
-    Hello {{ uppercase(name) }}
+    {{ uppercase(name) }} is awesome.
 
-Rendering "Hello ARTHUR" is as simple as:
+Renders:
 
-```objc
-Person *arthur = [Person personWithName:@"Arthur"];
-NSString *rendering = [template renderObject:arthur];
-```
+    ARTHUR is awesome.
 
-Filters are fully documented in [Guides/filters.md](filters.md).
+Filters are fully documented in [Guides/filters.md](filters.md). They are demoed in the [numbers formatting](sample_code/number_formatting.md) and [array indexes](sample_code/indexes.md) sample codes.
 
-### Debugging templates and extending GRMustache
+### Template delegates
 
-You may provide your templates a *delegate*. This object is able to observe and alter a template rendering.
+All the nice Objective-C classes you know allow for observation and customization through delegates. GRMustache templates will not let you down.
 
 Check [Guides/delegate.md](delegate.md) for documentation and sample code.
 
 
-More documentation
-------------------
+Full documentation map
+----------------------
 
 ### Mustache syntax
 
@@ -156,9 +140,9 @@ Basic Mustache:
 
 - [templates.md](templates.md): how to load, parse, and render templates from various sources.
 - [runtime.md](runtime.md): how to provide data to templates.
-    - [context_stack.md](runtime/context_stack.md): Mustache sections, context stack, key lookup
+    - [runtime/context_stack.md](runtime/context_stack.md): Mustache sections, context stack, key lookup
     - [runtime/booleans.md](runtime/booleans.md): boolean sections
-    - [loops.md](runtime/loops.md): enumerable sections
+    - [runtime/loops.md](runtime/loops.md): enumerable sections
 
 Advanced Mustache:
 
@@ -168,7 +152,7 @@ Advanced Mustache:
 
 Sample code:
 
-- [sample_code](../../../tree/master/Guides/sample_code): because some tasks are easier to do with some guidelines.
+- [sample_code](../../../tree/master/Guides/sample_code): some common tasks, fully implemented.
 
 ### Reference
 
