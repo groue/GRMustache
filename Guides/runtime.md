@@ -21,7 +21,7 @@ NSString *templateString = @"I have {{count}} arms.";
 NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:templateString error:NULL];
 ```
 
-1. When GRMustache renders the `{{count}}` tag, it invokes `valueForKey:` with the key `@"count"` on the dictionary. It gets `[NSNumber numberWithInt:2]` as a result.
+1. When GRMustache renders the `{{count}}` tag, it invokes `valueForKey:` with the key `@"count"` on the dictionary. It gets an NSNumber of value 2 as a result.
 2. The `description` method of the NSNumber returns a string: `@"2"`.
 3. This string is inserted into the rendering: `@"I have 2 arms"`.
 

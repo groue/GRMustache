@@ -121,7 +121,7 @@ Just as you can provide an object hierarchy for rendered values, and extract `pe
 id filters = @{
     @"math": @{
         @"abs": [GRMustacheFilter filterWithBlock:^id(id object) {
-            return [NSNumber numberWithInt: abs([object intValue])];
+            return @(abs([object intValue]));
         }]
     }
 };

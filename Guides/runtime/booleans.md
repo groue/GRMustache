@@ -8,9 +8,9 @@ Mustache sections can be controlled by booleans. For instance, the following tem
 
 We'll first talk about some simple cases. We'll then discuss caveats.
 
-## Simple booleans: [NSNumber numberWithBool:]
+## Simple booleans
 
-The simplest way to provide booleans to GRMustache is to provide objects returned by the `[NSNumber numberWithBool:]` method:
+The simplest way to provide booleans to GRMustache is to provide `@YES` or `@NO`, that is to say objects returned by the `[NSNumber numberWithBool:]` method:
 
 ```objc
 NSString *templateString = @"{{#pretty}}whistle{{/pretty}}";
