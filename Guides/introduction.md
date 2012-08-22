@@ -90,7 +90,7 @@ Advanced Mustache
 
 ### Lambda sections
 
-Mustache "lambda sections" allow you to let your own application code process and render a portion of a template.
+Mustache "lambda sections" let your own application code process a portion of a template, and render it in a custom fashion.
 
 A very simple example could be writing a lambda section that wraps its content:
 
