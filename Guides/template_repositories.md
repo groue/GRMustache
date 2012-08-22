@@ -110,7 +110,7 @@ Use the following GRMustacheTemplateRepository class method:
 Now we may instanciate one:
     
 ```objc
-NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works!" forKey:@"partial"];
+NSDictionary *templates = @{ @"partial": @"It works!" }
 GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:templates];
 ```
 

@@ -98,11 +98,10 @@ Now, let's have GRMustache know about your custom filter, and use it:
 
 ```objc
 // Prepare the data
-float gain = 0.5;
-NSDictionary *data = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:gain] forKey:@"gain"];
+id data = @{ @"gain": @0.5 };
 
 // Prepare the filters
-NSDictionary *filters = [NSDictionary dictionaryWithObject:percentFilter forKey:@"percent"];
+id filters = @{ @percent: percentFilter };
 
 // Renders @"Enjoy your 50% productivity bump!"
 NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent(gain) }} productivity bump!";
@@ -119,11 +118,13 @@ Filters namespaces
 Just as you can provide an object hierarchy for rendered values, and extract `person.pet.name` from it, you can provide filters as an object hierarchy, and "namespace" your filters. For instance, let's declare the `math.abs` filter, and render `{{ math.abs(x) }}`:
 
 ```objc
-id absFilter = [GRMustacheFilter filterWithBlock:^id(id object) {
-    return [NSNumber numberWithInt: abs([object intValue])];
-}];
-NSDictionary *mathFilters = [NSDictionary dictionaryWithObject:absFilter forKey:@"abs"];
-NSDictionary *filters = [NSDictionary dictionaryWithObject:mathFilters forKey:@"math"];
+id filters = @{
+    @"math": @{
+        @"abs": [GRMustacheFilter filterWithBlock:^id(id object) {
+            return [NSNumber numberWithInt: abs([object intValue])];
+        }]
+    }
+};
 
 [GRMustacheTemplate renderObject:...
                      withFilters:filters

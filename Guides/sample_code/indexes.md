@@ -124,7 +124,7 @@ We have everything we need to render our template:
      * "withPosition" key, but you can use any other KVC-compliant container.
      */
     
-    NSDictionary *filters = [NSDictionary dictionaryWithObject:positionFilter forKey:@"withPosition"];
+    NSDictionary *filters = @{ @"withPosition": positionFilter };
     
     
     /**
@@ -138,8 +138,7 @@ We have everything we need to render our template:
     Person *alice = [Person personWithName:@"Alice"];
     Person *bob = [Person personWithName:@"Bob"];
     Person *craig = [Person personWithName:@"Craig"];
-    NSArray *people = [NSArray arrayWithObjects: alice, bob, craig, nil];
-    NSDictionary *data = [NSDictionary dictionaryWithObject:people forKey:@"people"];
+    NSDictionary *data = @{ @"people": @[alice, bob, craig] };
     
     
     /**

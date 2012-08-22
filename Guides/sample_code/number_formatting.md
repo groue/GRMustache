@@ -29,7 +29,7 @@ It's quite easy to put numbers and formatted numbers in a dictionary:
 
 ```objc
 // The raw number
-NSNumber *value = [NSNumber numberWithFloat: 0.5]:
+NSNumber *value = @0.5:
 
 // NSNumberFormatter objects knows how to format numbers
 NSNumberFormatter *percentNumberFormatter = [[NSNumberFormatter alloc] init];
@@ -41,11 +41,11 @@ decimalNumberFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
 NSString *decimal = [numberFormatter stringFromNumber:value];
 
 // Render "raw: 0.5, percent: 50 %, decimal: 0,5"
-NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                            value, @"value",
-                            percent, @"percent",
-                            decimal, @"decimal",
-                            nil];
+NSDictionary *dictionary = @{
+    @"value": value,
+    @"percent": percent,
+    @"decimal": decimal
+};
 NSString *rendering = [template renderObject:dictionary];
 ```
 
@@ -170,10 +170,10 @@ After we have told GRMustache how the `percent` and `decimal` filters should pro
      * other KVC-compliant container.
      */
     
-    NSDictionary *filters = [NSDictionary dictionaryWithObjectsAndKeys:
-                             percentFilter, @"percent",
-                             decimalFilter, @"decimal",
-                             nil];
+    NSDictionary *filters = @{
+        @"percent": percentFilter,
+        @"decimal": decimalFilter
+    };
     
     
     /**

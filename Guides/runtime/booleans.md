@@ -17,11 +17,9 @@ NSString *templateString = @"{{#pretty}}whistle{{/pretty}}";
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
 
 // @"whistle"
-[template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
-                                                   forKey:@"pretty"]];
+[template renderObject:@{ @"pretty": @YES }];
 // @""
-[template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                   forKey:@"pretty"]];
+[template renderObject:@{ @"pretty": @NO }];
 ```
 
 ## BOOL properties

@@ -16,7 +16,7 @@ There are only three methods that you have to care about when providing data to 
 For instance, let's consider the following code:
 
 ```obcj
-NSDictionary *dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:2] forKey:@"count"];
+NSDictionary *dictionary = @{ @"count": @2 };
 NSString *templateString = @"I have {{count}} arms.";
 NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:templateString error:NULL];
 ```
