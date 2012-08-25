@@ -20,14 +20,14 @@ Features
 
 Those features are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
-- **key paths**, as `{{ person.pet.name }}`
-- "**implicit iterator**", as `{{.}}`, that you may use when rendering each string in an array, for instance.
+- **key paths**, as `{{ person.name }}`, for direct access to an object's property.
+- "**implicit iterator**", aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
 
-### GRMustache extensions
+### Language extensions
 
-Genuine Mustache falls short on a few topics. GRMustache implements features that are not yet in the specification:
+Genuine Mustache falls short on a few topics. GRMustache implements features that are not in the specification:
 
-- "**anchored key paths**", as `{{ .name }}`, which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
+- "**anchored key paths**", as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
     If you are not familiar with the "context stack" and the key lookup mechanism, check [Guides/runtime/context_stack.md](runtime/context_stack.md).
     
@@ -37,9 +37,9 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
     
     This extension is backed on the discussion at [mustache/spec#41](https://github.com/mustache/spec/issues/41)
 
-### GRMustache tools
+### Template delegate
 
-- **hooks** and **template debugging**: the library helps you observe a template rendering, in order to catch rendering bugs or to extend the raw Mustache features.
+All the nice Objective-C classes you know allow for observation and customization through delegates. GRMustache will not let you down.
 
 
 Getting started
