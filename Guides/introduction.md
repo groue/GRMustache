@@ -95,7 +95,9 @@ NSString *barbieProfile = [profileTemplate renderObject:barbie];
 
 `+[GRMustacheTemplate templateFromResource:bundle:error:]` and `-[GRMustacheTemplate renderObject:]` are documented in [Guides/templates.md](templates.md).
 
-GRMustache can load templates from resources, and many other locations. Check [Guides/templates.md](templates.md) and [Guides/templates_repositories.md](templates_repositories.md) for a thorough documentation.
+### Other use cases
+
+Examples above are common use cases for MacOS and iOS applications. The library does much more:
 
 
 Full documentation map
@@ -107,17 +109,20 @@ Full documentation map
 
 ### Guides
 
-Basic Mustache:
+Loading templates:
 
-- [templates.md](templates.md): how to load, parse, and render templates.
+- [templates.md](templates.md): how to load templates from common sources.
+- [templates_repositories.md](templates_repositories.md): how to load templates from uncommon sources.
+
+Rendering templates:
+
 - [runtime.md](runtime.md): how to provide data to templates.
-    - [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail
-    - [runtime/booleans.md](runtime/booleans.md): boolean sections
-    - [runtime/loops.md](runtime/loops.md): enumerable sections
+    - [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail.
+    - [runtime/booleans.md](runtime/booleans.md): boolean sections.
+    - [runtime/loops.md](runtime/loops.md): enumerable sections.
 
 Advanced Mustache:
 
-- [templates_repositories.md](templates_repositories.md): how to load templates from uncommon sources.
 - [helpers.md](helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
 - [filters.md](filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](delegate.md): how to hook into template rendering.
