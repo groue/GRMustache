@@ -45,6 +45,8 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 Getting started
 ---------------
 
+### Rendering dictionaries from template strings
+
 You'll generally gather a template string and a data object that will fill the "holes" in the template.
 
 The shortest way to render a template is to mix a literal template string and a dictionary:
@@ -59,6 +61,10 @@ NSString *templateString = @"Hello {{name}}!";
 NSString *rendering = [GRMustacheTemplate renderObject:person fromString:templateString error:NULL];
 ```
 
+`+[GRMustacheTemplate renderObject:fromString:error:]` is documented in [Guides/templates.md](templates.md).
+
+### Rendering model objects from template resources
+
 However, generally speaking, your templates will be stored as *resources* in your application bundle, and your data will come from your *model objects*. It turns out the following code should be more common:
 
 ```objc
@@ -69,6 +75,10 @@ However, generally speaking, your templates will be stored as *resources* in you
 Person *person = [Person personWithName:@"Arthur"];
 NSString *profile = [GRMustacheTemplate renderObject:person fromResource:@"Profile" bundle:nil error:NULL];
 ```
+
+`+[GRMustacheTemplate renderObject:fromString:error:]` is documented in [Guides/templates.md](templates.md).
+
+### Reusing templates
 
 Finally, should you render a single template several times, you will spare CPU cycles by using a single GRMustacheTemplate instance:
 
@@ -83,48 +93,9 @@ NSString *arthurProfile = [profileTemplate renderObject:arthur];
 NSString *barbieProfile = [profileTemplate renderObject:barbie];
 ```
 
-If the library makes it handy to render templates stored as resources, you may have other needs. Check [Guides/templates.md](templates.md) for a thorough documentation.
+`+[GRMustacheTemplate templateFromResource:bundle:error:]` and `-[GRMustacheTemplate renderObject:]` are documented in [Guides/templates.md](templates.md).
 
-Advanced features
------------------
-
-### Lambda sections
-
-*Lambda sections* let your own application code process a portion of a template, and render it in a custom fashion.
-
-A very simple example is a lambda section that wraps its content:
-
-Template:
-
-    {{#bold}}
-      {{name}} is awesome.
-    {{/bold}}
-
-Rendering:
-
-    <b>Arthur is awesome.</b>
-    
-Lambda sections are fully documented in [Guides/helpers.md](helpers.md). They are the core feature behind the [localization.md](sample_code/localization.md) sample code.
-
-### Filters
-
-*Filters* allow you to inject your code (again), but this time in order to process values.
-
-There are a few built-in filters as well. For instance:
-
-    {{ uppercase(name) }} is awesome.
-
-Renders:
-
-    ARTHUR is awesome.
-
-Filters are fully documented in [Guides/filters.md](filters.md). They are demoed in the [numbers formatting](sample_code/number_formatting.md) and [array indexes](sample_code/indexes.md) sample codes.
-
-### Template delegates
-
-All the nice Objective-C classes you know allow for observation and customization through delegates. GRMustache templates will not let you down.
-
-Check [Guides/delegate.md](delegate.md) for documentation and sample code.
+GRMustache can load templates from resources, and many other locations. Check [Guides/templates.md](templates.md) and [Guides/templates_repositories.md](templates_repositories.md) for a thorough documentation.
 
 
 Full documentation map
@@ -138,14 +109,15 @@ Full documentation map
 
 Basic Mustache:
 
-- [templates.md](templates.md): how to load, parse, and render templates from various sources.
+- [templates.md](templates.md): how to load, parse, and render templates.
 - [runtime.md](runtime.md): how to provide data to templates.
-    - [runtime/context_stack.md](runtime/context_stack.md): Mustache sections, context stack, key lookup
+    - [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail
     - [runtime/booleans.md](runtime/booleans.md): boolean sections
     - [runtime/loops.md](runtime/loops.md): enumerable sections
 
 Advanced Mustache:
 
+- [templates_repositories.md](templates_repositories.md): how to load templates from uncommon sources.
 - [helpers.md](helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
 - [filters.md](filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](delegate.md): how to hook into template rendering.
