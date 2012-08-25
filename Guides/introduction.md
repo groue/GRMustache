@@ -116,10 +116,10 @@ Loading templates:
 
 Rendering templates:
 
-- [runtime.md](runtime.md): how to provide data to templates.
-    - [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail.
-    - [runtime/booleans.md](runtime/booleans.md): boolean sections.
-    - [runtime/loops.md](runtime/loops.md): enumerable sections.
+- [runtime.md](runtime.md): how to provide data to templates: an overview
+- [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail.
+- [runtime/booleans.md](runtime/booleans.md): boolean sections.
+- [runtime/loops.md](runtime/loops.md): enumerable sections.
 
 Advanced Mustache:
 
