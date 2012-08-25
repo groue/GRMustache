@@ -21,6 +21,8 @@ typedef enum {
 } GRMustacheErrorCode;
 ```
 
+That means that the only errors you'll ever get from GRMustache are parse errors and missing templates errors. There is no such thing as a rendering error.
+
 On-the-fly rendering methods
 ----------------------------
 
@@ -58,6 +60,10 @@ There are methods for rendering from strings, files, and bundle resources:
                      error:(NSError **)outError;
 ```
 
+Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
+
+> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
+
 
 Parse-once-and-render-many-times methods
 ----------------------------------------
@@ -91,17 +97,21 @@ It's efficient to parse a template once, and then render it as often as needed:
                      error:(NSError **)outError;
 ```
 
-Those methods return GRMustacheTemplate instances, which render objects with the following methods:
+Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
+
+> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
+
+On success, those methods return GRMustacheTemplate instances, which render objects with the following methods:
 
 ```objc
 - (NSString *)renderObject:(id)object;
 - (NSString *)renderObjectsInArray:(NSArray *)objects
 ```
 
-The latter method, which takes several arguments, is helpful when several objects should feed the template. It actually initializes the rendering [context stack](runtime/context_stack.md) with those objects.
+The latter method, which takes several arguments, is helpful when several objects should feed the template.
 
-Partials
---------
+Partial template inclusion
+--------------------------
 
 When a `{{>name}}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
 
