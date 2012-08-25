@@ -129,7 +129,6 @@ Advanced Mustache:
 
 Sample code:
 
-- [sample_code](../../../tree/master/Guides/sample_code): some common tasks, fully implemented.
 - [sample_code/layout](../../../tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
 - [sample_code/number_formatting.md](sample_code/number_formatting.md): how to format numbers
 - [sample_code/indexes.md](sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
