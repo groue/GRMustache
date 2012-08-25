@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](filters.md)
+[up](introduction.md), [next](filters.md)
 
 Helpers
 =======
@@ -182,4 +182,4 @@ Sample code
 The [localization.md](sample_code/localization.md) sample code uses helpers for localizing portions of template.
 
 
-[up](../../../../GRMustache), [next](filters.md)
+[up](introduction.md), [next](filters.md)

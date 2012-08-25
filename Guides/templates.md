@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](template_repositories.md)
+[up](introduction.md), [next](template_repositories.md)
 
 Templates
 =========
@@ -140,4 +140,4 @@ More loading options
 
 All methods above load UTF8-encoded templates and partials from disk. If this does not fulfill your needs, check [Guides/template_repositories.md](template_repositories.md)
 
-[up](../../../../GRMustache), [next](template_repositories.md)
+[up](introduction.md), [next](template_repositories.md)

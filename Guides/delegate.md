@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)
+[up](introduction.md), [next](../../../tree/master/Guides/sample_code)
 
 GRMustacheTemplateDelegate protocol
 ===================================
@@ -131,4 +131,4 @@ Sample code
 The [localization.md](sample_code/localization.md) sample code uses section delegates for localizing portions of template.
 
 
-[up](../../../../GRMustache), [next](../../../tree/master/Guides/sample_code)
+[up](introduction.md), [next](../../../tree/master/Guides/sample_code)

@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](delegate.md)
+[up](introduction.md), [next](delegate.md)
 
 Filters
 =======
@@ -151,4 +151,4 @@ Sample code
 Custom filters are the core tool used by the [formatted numbers](sample_code/number_formatting.md) and [collection indexes](sample_code/indexes.md) sample codes. Go check inspiration there.
 
 
-[up](../../../../GRMustache), [next](delegate.md)
+[up](introduction.md), [next](delegate.md)

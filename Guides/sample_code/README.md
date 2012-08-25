@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](../../../blob/master/Guides/sample_code/number_formatting.md)
+[up](../../../blob/master/Guides/introduction.md), [next](../../../blob/master/Guides/sample_code/number_formatting.md)
 
 Sample code
 ===========
@@ -19,5 +19,5 @@ Sample code
     
     How to have GRMustache localize portions of your templates: *discussion, downloadable Xcode project*.
 
-[up](../../../../GRMustache), [next](../../../blob/master/Guides/sample_code/number_formatting.md)
+[up](../../../blob/master/Guides/introduction.md), [next](../../../blob/master/Guides/sample_code/number_formatting.md)
 
