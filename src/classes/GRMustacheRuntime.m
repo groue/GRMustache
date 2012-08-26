@@ -87,7 +87,7 @@
     return [_renderingContext valueForKey:key];
 }
 
-- (id)filtervalueForKey:(NSString *)key
+- (id)filterValueForKey:(NSString *)key
 {
     return [_filterContext valueForKey:key];
 }

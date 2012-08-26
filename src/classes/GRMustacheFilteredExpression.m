@@ -86,7 +86,7 @@
 - (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
 {
     id parameter = [_parameterExpression contextValueInRuntime:runtime];
-    id<GRMustacheFilter> filter = [_filterExpression filterValueInRuntime:runtime];
+    id filter = [_filterExpression filterValueInRuntime:runtime];
     
     if (filter == nil) {
         [NSException raise:GRMustacheFilterException format:@"Missing filter"];
@@ -96,13 +96,12 @@
         [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
     }
     
-    return [filter transformedValue:parameter];
+    return [(id<GRMustacheFilter>)filter transformedValue:parameter];
 }
 
 - (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    NSAssert(NO, @"WTF");
-    return nil;
+    return [self contextValueInRuntime:runtime];
 }
 
 @end

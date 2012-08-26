@@ -240,32 +240,6 @@
     return [result autorelease];
 }
 
-- (void)invokeDelegates:(NSArray *)delegates willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [delegate template:self willInterpretReturnValueOfInvocation:invocation as:interpretation];
-        } else if ([delegate respondsToSelector:@selector(template:willRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [delegate template:self willRenderReturnValueOfInvocation:invocation];
-        }
-    }
-}
-
-- (void)invokeDelegates:(NSArray *)delegates didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    for (id<GRMustacheTemplateDelegate> delegate in delegates) {
-        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-            // 4.1 API
-            [delegate template:self didInterpretReturnValueOfInvocation:invocation as:interpretation];
-        } else if ([delegate respondsToSelector:@selector(template:didRenderReturnValueOfInvocation:)]) {
-            // 4.0 API
-            [delegate template:self didRenderReturnValueOfInvocation:invocation];
-        }
-    }
-}
-
 
 #pragma mark <GRMustacheRenderingElement>
 
@@ -287,25 +261,6 @@
     }
     return result;
 }
-
-//- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
-//{
-//    NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
-//    @autoreleasepool {
-//        if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
-//            [_delegate templateWillRender:self];
-//        }
-//        
-//        for (id<GRMustacheRenderingElement> elem in _elems) {
-//            [result appendString:[elem renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates]];
-//        }
-//        
-//        if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
-//            [_delegate templateDidRender:self];
-//        }
-//    }
-//    return result;
-//}
 
 
 #pragma mark Private

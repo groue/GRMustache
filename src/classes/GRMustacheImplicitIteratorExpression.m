@@ -53,7 +53,6 @@
 
 - (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    NSAssert(NO, @"WTF");
     return nil;
 }
 

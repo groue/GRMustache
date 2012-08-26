@@ -25,7 +25,6 @@
 @class GRMustacheTemplate;
 @class GRMustacheContext;
 @protocol GRMustacheTemplateDelegate;
-@protocol GRMustacheFilter;
 
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_delegatingTemplate;
@@ -38,6 +37,6 @@
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)object;
 
 - (id)contextValueForKey:(NSString *)key;
-- (id)filtervalueForKey:(NSString *)key;
+- (id)filterValueForKey:(NSString *)key;
 - (id)contextValue;
 @end

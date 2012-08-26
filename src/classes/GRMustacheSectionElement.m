@@ -104,17 +104,6 @@
     return result;
 }
 
-//- (NSString *)renderElementsWithRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
-//{
-//    NSMutableString *result = [NSMutableString string];
-//    @autoreleasepool {
-//        for (id<GRMustacheRenderingElement> elem in _elems) {
-//            [result appendString:[elem renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates]];
-//        }
-//    }
-//    return result;
-//}
-
 #pragma mark <GRMustacheRenderingElement>
 
 - (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
@@ -126,11 +115,14 @@
         
         id object = [_expression contextValueInRuntime:runtime];
         
+        
         // augment delegates if necessary
+        
         GRMustacheRuntime *sectionRuntime = runtime;
         if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
             sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)object];
         }
+        
         
         // interpret
         
@@ -157,7 +149,7 @@
             // Enumerable
             if (_inverted) {
                 BOOL empty = YES;
-                for (id object2 in object) {
+                for (id item in object) {
                     empty = NO;
                     break;
                 }
@@ -189,115 +181,12 @@
                 result = [[self renderElementsInRuntime:sectionRuntime] retain];
             }
         }
-        
-        // finish
-        
-//        if (invocation) {
-//            [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationSection];
-//        }
-        
     }
     if (!result) {
         return @"";
     }
     return [result autorelease];
 }
-
-//- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
-//{
-//    NSString *result = nil;
-//    @autoreleasepool {
-//        
-//        // evaluate
-//        
-//        GRMustacheInvocation *invocation = nil;
-//        id object = [_expression valueForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
-//        if (invocation) {
-//            [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationSection];
-//            object = invocation.returnValue;
-//        }
-//        
-//        
-//        // augment delegates if necessary
-//        NSArray *innerDelegates = delegates;
-//        if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-//            if (innerDelegates) {
-//                innerDelegates = [[NSArray arrayWithObject:object] arrayByAddingObjectsFromArray:innerDelegates];
-//            } else {
-//                innerDelegates = [NSArray arrayWithObject:object];
-//            }
-//        }
-//        
-//        // interpret
-//        
-//        if (object == nil ||
-//            object == [NSNull null] ||
-//            ([object isKindOfClass:[NSNumber class]] && [((NSNumber*)object) boolValue] == NO) ||
-//            ([object isKindOfClass:[NSString class]] && [((NSString*)object) length] == 0))
-//        {
-//            // False value
-//            if (_inverted) {
-//                result = [[self renderElementsWithRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
-//            }
-//        }
-//        else if ([object isKindOfClass:[NSDictionary class]])
-//        {
-//            // True object value
-//            if (!_inverted) {
-//                GRMustacheContext *innerContext = [renderingContext contextByAddingObject:object];
-//                result = [[self renderElementsWithRenderingContext:innerContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
-//            }
-//        }
-//        else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
-//        {
-//            // Enumerable
-//            if (_inverted) {
-//                BOOL empty = YES;
-//                for (id object2 in object) {
-//                    empty = NO;
-//                    break;
-//                }
-//                if (empty) {
-//                    result = [[self renderElementsWithRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
-//                }
-//            } else {
-//                result = [[NSMutableString string] retain];
-//                for (id object2 in object) {
-//                    GRMustacheContext *innerContext = [renderingContext contextByAddingObject:object2];
-//                    NSString *itemRendering = [self renderElementsWithRenderingContext:innerContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates];
-//                    [(NSMutableString *)result appendString:itemRendering];
-//                }
-//            }
-//        }
-//        else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
-//        {
-//            // Helper
-//            if (!_inverted) {
-//                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self renderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates];
-//                result = [[(id<GRMustacheHelper>)object renderSection:section] retain];
-//            }
-//        }
-//        else
-//        {
-//            // True object value
-//            if (!_inverted) {
-//                GRMustacheContext *innerContext = [renderingContext contextByAddingObject:object];
-//                result = [[self renderElementsWithRenderingContext:innerContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:innerDelegates] retain];
-//            }
-//        }
-//        
-//        // finish
-//        
-//        if (invocation) {
-//            [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationSection];
-//        }
-//
-//    }
-//    if (!result) {
-//        return @"";
-//    }
-//    return [result autorelease];
-//}
 
 
 #pragma mark Private

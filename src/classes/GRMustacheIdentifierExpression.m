@@ -73,7 +73,7 @@
 
 - (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    return [runtime filtervalueForKey:_identifier];
+    return [runtime filterValueForKey:_identifier];
 }
 
 @end
