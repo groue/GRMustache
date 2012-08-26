@@ -24,7 +24,6 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheInvocation;
-@class GRMustacheTemplate;
 
 /**
  * A GRMustacheSection represents a Mustache section such as 
@@ -43,10 +42,7 @@
 @interface GRMustacheSection: NSObject {
 @private
     id _sectionElement;
-    id _renderingContext;
-    id _filterContext;
-    id _delegatingTemplate;
-    id _delegates;
+    id _runtime;
 }
 
 
@@ -60,7 +56,7 @@
  * @since v2.0
  * @deprecated v4.3
  */
-@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
+@property (nonatomic, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
 
 
 

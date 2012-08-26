@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheIdentifierExpression()
@@ -66,19 +66,14 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
+- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    id value = [context valueForKey:_identifier];
-    
-    if (delegates.count > 0) {
-        NSAssert(ioInvocation, @"WTF");
-        *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-        (*ioInvocation).debuggingToken = _debuggingToken;
-        (*ioInvocation).returnValue = value;
-        (*ioInvocation).key = _identifier;
-    }
-    
-    return value;
+    return [runtime contextValueForKey:_identifier];
+}
+
+- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
+{
+    return [runtime filtervalueForKey:_identifier];
 }
 
 @end

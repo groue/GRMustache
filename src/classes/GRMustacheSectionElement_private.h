@@ -24,8 +24,6 @@
 #import "GRMustacheRenderingElement_private.h"
 
 @protocol GRMustacheExpression;
-@class GRMustacheTemplate;
-@class GRMustacheSection;
 
 /**
  * A GRMustacheSectionElement is a rendering element that renders sections
@@ -83,6 +81,7 @@
 + (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
  * Returns the rendering of inner elements.
  *
  * @param renderingContext    A rendering context stack.
@@ -94,6 +93,6 @@
  *
  * @return The rendering of inner elements.
  */
-- (NSString *)renderElementsWithRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderElementsInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 
 @end

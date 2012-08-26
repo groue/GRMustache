@@ -22,6 +22,7 @@
 
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheFilterLibrary_private.h"
 
@@ -197,10 +198,10 @@
 {
     NSString *result;
     @autoreleasepool {
-        NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
         GRMustacheContext *renderingContext = [GRMustacheContext contextWithObject:object];
         GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
-        result = [[self renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:self delegates:delegates] retain];
+        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithDelegatingTemplate:self renderingContext:renderingContext filterContext:filterContext];
+        result = [[self renderInRuntime:runtime] retain];
     }
     return [result autorelease];
 }
@@ -219,8 +220,8 @@
             renderingContext = renderingContext ? [renderingContext contextByAddingObject:object] : [GRMustacheContext contextWithObject:object];
         }
         GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
-        NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
-        result = [[self renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:self delegates:delegates] retain];
+        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithDelegatingTemplate:self renderingContext:renderingContext filterContext:filterContext];
+        result = [[self renderInRuntime:runtime] retain];
     }
     return [result autorelease];
 }
@@ -233,8 +234,8 @@
         va_start(objectList, object);
         GRMustacheContext *renderingContext = [GRMustacheContext contextWithObject:object andObjectList:objectList];
         va_end(objectList);
-        NSArray *delegates = _delegate ? [NSArray arrayWithObject:_delegate] : nil;
-        result = [[self renderRenderingContext:renderingContext filterContext:nil delegatingTemplate:self delegates:delegates] retain];
+        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithDelegatingTemplate:self renderingContext:renderingContext filterContext:nil];
+        result = [[self renderInRuntime:runtime] retain];
     }
     return [result autorelease];
 }
@@ -268,7 +269,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
     NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
@@ -277,7 +278,7 @@
         }
         
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates]];
+            [result appendString:[elem renderInRuntime:runtime]];
         }
         
         if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
@@ -286,6 +287,25 @@
     }
     return result;
 }
+
+//- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
+//{
+//    NSMutableString *result = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
+//    @autoreleasepool {
+//        if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
+//            [_delegate templateWillRender:self];
+//        }
+//        
+//        for (id<GRMustacheRenderingElement> elem in _elems) {
+//            [result appendString:[elem renderRenderingContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates]];
+//        }
+//        
+//        if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
+//            [_delegate templateDidRender:self];
+//        }
+//    }
+//    return result;
+//}
 
 
 #pragma mark Private

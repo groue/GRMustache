@@ -24,21 +24,17 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheSectionElement;
-@class GRMustacheContext;
-@class GRMustacheTemplate;
+@class GRMustacheRuntime;
 
 // Documented in GRMustacheSection.h
 @interface GRMustacheSection: NSObject {
 @private
     GRMustacheSectionElement *_sectionElement;
-    GRMustacheContext *_renderingContext;
-    id _filterContext;
-    GRMustacheTemplate *_delegatingTemplate;
-    NSArray *_delegates;
+    GRMustacheRuntime *_runtime;
 }
 
 // Documented in GRMustacheSection.h
-@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
+@property (nonatomic, readonly) id renderingContext GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustacheSection.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
@@ -50,6 +46,7 @@
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
+ * TODO
  * Builds and returns a section suitable for GRMustacheHelper.
  *
  * @param sectionElement      The underlying sectionElement.
@@ -64,5 +61,5 @@
  *
  * @see GRMustacheHelper
  */
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
++ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

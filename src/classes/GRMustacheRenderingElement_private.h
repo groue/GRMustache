@@ -23,10 +23,11 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheContext;
-@class GRMustacheTemplate;
+@class GRMustacheRuntime;
 
 /**
+ * TODO
+ *
  * The protocol for "rendering elements".
  * 
  * When parsing a Mustache template, GRMustacheCompiler builds a syntax
@@ -56,6 +57,7 @@
 @required
 
 /**
+ * TODO
  * Renders.
  * 
  * @param renderingContext    A rendering context stack.
@@ -67,5 +69,5 @@
  *
  * @return The rendering.
  */
-- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

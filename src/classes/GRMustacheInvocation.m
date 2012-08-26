@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheContext_private.h"
 #import "GRMustacheToken_private.h"
 
 @implementation GRMustacheInvocation

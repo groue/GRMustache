@@ -51,17 +51,10 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
     // evaluate
-    
-    GRMustacheInvocation *invocation = nil;
-    id object = [_expression valueForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
-    if (invocation) {
-        [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationVariable];
-        object = invocation.returnValue;
-    }
-    
+    id object = [_expression contextValueInRuntime:runtime];
     
     // interpret
     
@@ -76,15 +69,46 @@
     
     // finish
     
-    if (invocation) {
-        [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationVariable];
-    }
-    
     if (!result) {
         return @"";
     }
     return result;
 }
+
+//- (NSString *)renderRenderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates
+//{
+//    // evaluate
+//    
+//    GRMustacheInvocation *invocation = nil;
+//    id object = [_expression valueForContext:renderingContext filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
+//    if (invocation) {
+//        [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationVariable];
+//        object = invocation.returnValue;
+//    }
+//    
+//    
+//    // interpret
+//    
+//    NSString *result = nil;
+//    if (object && (object != [NSNull null])) {
+//        result = [object description];
+//        if (!_raw) {
+//            result = [self htmlEscape:result];
+//        }
+//    }
+//    
+//    
+//    // finish
+//    
+//    if (invocation) {
+//        [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationVariable];
+//    }
+//    
+//    if (!result) {
+//        return @"";
+//    }
+//    return result;
+//}
 
 
 #pragma mark Private

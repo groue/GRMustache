@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheInvocation_private.h"
 
 @implementation GRMustacheImplicitIteratorExpression
@@ -46,17 +46,15 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
+- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    if (delegates.count > 0) {
-        NSAssert(ioInvocation, @"WTF");
-        *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-        (*ioInvocation).debuggingToken = _debuggingToken;
-        (*ioInvocation).returnValue = context.object;
-        (*ioInvocation).key = @".";
-    }
-    
-    return context.object;
+    return [runtime contextValue];
+}
+
+- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
+{
+    NSAssert(NO, @"WTF");
+    return nil;
 }
 
 @end

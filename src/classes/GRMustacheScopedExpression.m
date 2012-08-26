@@ -82,21 +82,22 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
+- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
 {
     id returnValue = nil;
-    id scopedValue = [_baseExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:ioInvocation];
+    id scopedValue = [_baseExpression contextValueInRuntime:runtime];
     if (scopedValue) {
         returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
-        if (delegates.count > 0) {
-            NSAssert(ioInvocation, @"WTF");
-            if (*ioInvocation == nil) { // it is nil if we are scoping the result of a filter: f(x).y
-                *ioInvocation = [[[GRMustacheInvocation alloc] init] autorelease];
-                (*ioInvocation).debuggingToken = _debuggingToken;
-            }
-            (*ioInvocation).returnValue = returnValue;
-            (*ioInvocation).key = _scopeIdentifier;
-        }
+    }
+    return returnValue;
+}
+
+- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
+{
+    id returnValue = nil;
+    id scopedValue = [_baseExpression filterValueInRuntime:runtime];
+    if (scopedValue) {
+        returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
     }
     return returnValue;
 }

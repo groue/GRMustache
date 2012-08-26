@@ -83,22 +83,10 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)valueForContext:(GRMustacheContext *)context filterContext:(GRMustacheContext *)filterContext delegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates invocation:(GRMustacheInvocation **)ioInvocation
+- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
 {
-    id parameter = nil;
-    GRMustacheInvocation *invocation = nil;
-    if (delegates.count > 0) {
-        parameter = [_parameterExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:&invocation];
-        if (invocation) {
-            [delegatingTemplate invokeDelegates:delegates willInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationFilterArgument];
-            parameter = invocation.returnValue;
-            [delegatingTemplate invokeDelegates:delegates didInterpretReturnValueOfInvocation:invocation as:GRMustacheInterpretationFilterArgument];
-        }
-    } else {
-        parameter = [_parameterExpression valueForContext:context filterContext:filterContext delegatingTemplate:delegatingTemplate delegates:delegates invocation:NULL];
-    }
-    
-    id<GRMustacheFilter> filter = [_filterExpression valueForContext:filterContext filterContext:nil delegatingTemplate:nil delegates:nil invocation:NULL];
+    id parameter = [_parameterExpression contextValueInRuntime:runtime];
+    id<GRMustacheFilter> filter = [_filterExpression filterValueInRuntime:runtime];
     
     if (filter == nil) {
         [NSException raise:GRMustacheFilterException format:@"Missing filter"];
@@ -108,12 +96,13 @@
         [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
     }
     
-    if (ioInvocation) {
-        // no invocation to return
-        *ioInvocation = nil;
-    }
-    
     return [filter transformedValue:parameter];
+}
+
+- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
+{
+    NSAssert(NO, @"WTF");
+    return nil;
 }
 
 @end
