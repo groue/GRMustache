@@ -23,8 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@class GRMustacheInvocation;
-
 /**
  * A GRMustacheSection represents a Mustache section such as 
  * `{{#name}}...{{/name}}`.

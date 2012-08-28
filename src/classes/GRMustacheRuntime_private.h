@@ -21,10 +21,10 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheTemplate;
 @class GRMustacheContext;
-@protocol GRMustacheTemplateDelegate;
 
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_delegatingTemplate;
@@ -39,4 +39,7 @@
 - (id)contextValueForKey:(NSString *)key;
 - (id)filterValueForKey:(NSString *)key;
 - (id)contextValue;
+
+- (id)delegateTemplateWillInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
+- (void)delegateTemplateDidInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
 @end

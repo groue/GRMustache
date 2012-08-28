@@ -91,7 +91,6 @@ typedef struct {
 @end
 
 #import "GRMustacheSection.h"
-#import "GRMustacheInvocation.h"
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateRepository.h"

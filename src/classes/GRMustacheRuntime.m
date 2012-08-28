@@ -97,5 +97,38 @@
     return _renderingContext.object;
 }
 
+- (id)delegateTemplateWillInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation
+{
+    if (_delegatingTemplate == nil) {
+        return value;
+    }
+    
+    for (id<GRMustacheTemplateDelegate> delegate in _delegates) {
+        if ([delegate respondsToSelector:@selector(template:value:as:)]) {
+            value = [delegate template:_delegatingTemplate value:value as:interpretation];
+        }
+        if ([delegate respondsToSelector:@selector(template:willInterpretValue:as:)]) {
+            [delegate template:_delegatingTemplate willInterpretValue:value as:interpretation];
+        }
+    }
+    
+    return value;
+}
+
+- (void)delegateTemplateDidInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
+{
+    if (_delegatingTemplate == nil) {
+        return;
+    }
+    
+    for (id<GRMustacheTemplateDelegate> delegate in _delegates) {
+        if ([delegate respondsToSelector:@selector(template:value:as:)]) {
+            value = [delegate template:_delegatingTemplate value:value as:interpretation];
+        }
+        if ([delegate respondsToSelector:@selector(template:didInterpretValue:as:)]) {
+            [delegate template:_delegatingTemplate didInterpretValue:value as:interpretation];
+        }
+    }
+}
 
 @end

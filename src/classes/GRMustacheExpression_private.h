@@ -22,10 +22,10 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheRuntime;
 @class GRMustacheToken;
-@protocol GRMustacheFilter;
 
 /**
  * The GRMustacheExpression is the protocol for objects that can provide values
@@ -53,11 +53,6 @@
 /**
  * TODO
  */
-- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime;
-
-/**
- * TODO
- */
-- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime;
+- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block;
 
 @end

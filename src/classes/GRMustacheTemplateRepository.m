@@ -23,7 +23,6 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheCompiler_private.h"
-#import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";

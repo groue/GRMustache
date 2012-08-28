@@ -25,7 +25,6 @@
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheSectionElement_private.h"
-#import "GRMustacheInvocation_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"

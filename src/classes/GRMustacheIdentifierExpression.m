@@ -22,7 +22,6 @@
 
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheIdentifierExpression()
 @property (nonatomic, copy) NSString *identifier;
@@ -66,14 +65,22 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
+- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
-    return [runtime contextValueForKey:_identifier];
-}
-
-- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
-{
-    return [runtime filterValueForKey:_identifier];
+    id value = nil;
+    if (interpretation & GRMustacheInterpretationContextValue) {
+        value = [runtime contextValueForKey:_identifier];
+    } else if (interpretation & GRMustacheInterpretationFilterValue) {
+        value = [runtime filterValueForKey:_identifier];
+    } else {
+        NSAssert(NO, @"WTF");
+    }
+    
+    value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
+    
+    block(value);
+    
+    [runtime delegateTemplateDidInterpretValue:value as:interpretation];
 }
 
 @end

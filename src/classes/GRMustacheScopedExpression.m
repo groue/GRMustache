@@ -22,7 +22,7 @@
 
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheInvocation_private.h"
+#import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) id<GRMustacheExpression> baseExpression;
@@ -82,24 +82,22 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
+- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
-    id returnValue = nil;
-    id scopedValue = [_baseExpression contextValueInRuntime:runtime];
-    if (scopedValue) {
-        returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
-    }
-    return returnValue;
+    GRMustacheInterpretation baseInterpretation = interpretation & ~GRMustacheInterpretationSectionRendering & ~GRMustacheInterpretationVariableRendering;
+    
+    [_baseExpression evaluateInRuntime:runtime forInterpretation:baseInterpretation usingBlock:^(id scopedValue) {
+        id value = nil;
+        
+        if (scopedValue) {
+            value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+        }
+        
+        value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
+        
+        block(value);
+        
+        [runtime delegateTemplateDidInterpretValue:value as:interpretation];
+    }];
 }
-
-- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
-{
-    id returnValue = nil;
-    id scopedValue = [_baseExpression filterValueInRuntime:runtime];
-    if (scopedValue) {
-        returnValue = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
-    }
-    return returnValue;
-}
-
 @end

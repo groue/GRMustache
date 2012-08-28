@@ -24,44 +24,15 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheTemplate;
-@class GRMustacheInvocation;
 
-/**
- * The various ways GRMustache can interpret a value.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- *
- * @see GRMustacheTemplateDelegate
- * 
- * @since v4.1
- */
-typedef enum {
-    /**
-     * The value is interpreted for section rendering: whether it is a NSNumber,
-     * an object conforming to the NSFastEnumeration protocol, an object
-     * conforming to the GRMustacheHelper protocol, or any other value, the
-     * section will render differently.
-     *
-     * @since v4.1
-     */
-    GRMustacheInterpretationSection,
-    
-    /**
-     * The value is interpreted for variable substitution, for tags such as
-     * `{{name}}`.
-     *
-     * @since v4.1
-     */
-    GRMustacheInterpretationVariable,
-    
-    /**
-     * The value is interpreted as a filter parameter, for tags such as
-     * `{{uppercase(name)}}`.
-     *
-     * @since v4.3
-     */
-    GRMustacheInterpretationFilterArgument,
-} GRMustacheInterpretation;
+enum {
+    GRMustacheInterpretationFilterValue = 1 << 0,
+    GRMustacheInterpretationContextValue = 1 << 1,
+    GRMustacheInterpretationVariableRendering = 1 << 2,
+    GRMustacheInterpretationSectionRendering = 1 << 3,
+};
+
+typedef NSUInteger GRMustacheInterpretation;
 
 /**
  * The protocol for a GRMustacheTemplate's delegate.
@@ -102,59 +73,7 @@ typedef enum {
 /// @name Observing the Rendering of individual Mustache tags
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Sent right before GRMustache interprets and renders a value (Deprecated in
- * GRMustache 4.1).
- *
- * @param template    The template that is about to interpret a value.
- * @param invocation  The invocation object providing information about the
- *                    value.
- *
- * @see GRMustacheInvocation
- *
- * @since v1.12
- * @deprecated v4.1
- */
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
-
-/**
- * Sent right after GRMustache has interpreted and rendered a value (Deprecated
- * in GRMustache 4.1).
- *
- * @param template    The template that has rendered a value.
- * @param invocation  The invocation object providing information about the
- *                    value.
- *
- * @see GRMustacheInvocation
- *
- * @since v1.12
- * @deprecated v4.1
- */
-- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
-
-/**
- * Sent right before GRMustache interprets and renders a value.
- *
- * @param template        The template that is about to interpret a value.
- * @param invocation      The invocation object providing information about the
- *                        value.
- * @param interpretation  The way GRMustache will interpret the value.
- *
- * @see GRMustacheInvocation
- * @since v4.1
- */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
-
-/**
- * Sent right after GRMustache has interpreted and rendered a value.
- *
- * @param template        The template that has rendered a value.
- * @param invocation      The invocation object providing information about the
- *                        value.
- * @param interpretation  The way GRMustache has interpreted the value.
- *
- * @see GRMustacheInvocation
- * @since v4.1
- */
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
+- (id)template:(GRMustacheTemplate *)template value:(id)value as:(GRMustacheInterpretation)interpretation;
+- (void)template:(GRMustacheTemplate *)template willInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
+- (void)template:(GRMustacheTemplate *)template didInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
 @end

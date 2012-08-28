@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilter.h"
-#import "GRMustacheInvocation.h"
 
 NSString * const GRMustacheFilterException = @"GRMustacheFilterException";
 

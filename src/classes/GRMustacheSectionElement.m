@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSectionElement_private.h"
-#import "GRMustacheInvocation_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheHelper.h"
 #import "GRMustacheRenderingElement_private.h"
@@ -108,79 +107,80 @@
 
 - (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
-    NSString *result = nil;
+    __block NSString *result = nil;
     @autoreleasepool {
         
         // evaluate
         
-        id object = [_expression contextValueInRuntime:runtime];
-        
-        
-        // augment delegates if necessary
-        
-        GRMustacheRuntime *sectionRuntime = runtime;
-        if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-            sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)object];
-        }
-        
-        
-        // interpret
-        
-        if (object == nil ||
-            object == [NSNull null] ||
-            ([object isKindOfClass:[NSNumber class]] && [((NSNumber*)object) boolValue] == NO) ||
-            ([object isKindOfClass:[NSString class]] && [((NSString*)object) length] == 0))
-        {
-            // False value
-            if (_inverted) {
-                result = [[self renderElementsInRuntime:sectionRuntime] retain];
+        [_expression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue|GRMustacheInterpretationSectionRendering usingBlock:^(id object) {
+            
+            
+            // augment delegates if necessary
+            
+            GRMustacheRuntime *sectionRuntime = runtime;
+            if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)object];
             }
-        }
-        else if ([object isKindOfClass:[NSDictionary class]])
-        {
-            // True object value
-            if (!_inverted) {
-                sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
-                result = [[self renderElementsInRuntime:sectionRuntime] retain];
-            }
-        }
-        else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
-        {
-            // Enumerable
-            if (_inverted) {
-                BOOL empty = YES;
-                for (id item in object) {
-                    empty = NO;
-                    break;
-                }
-                if (empty) {
+            
+            
+            // interpret
+            
+            if (object == nil ||
+                object == [NSNull null] ||
+                ([object isKindOfClass:[NSNumber class]] && [((NSNumber*)object) boolValue] == NO) ||
+                ([object isKindOfClass:[NSString class]] && [((NSString*)object) length] == 0))
+            {
+                // False value
+                if (_inverted) {
                     result = [[self renderElementsInRuntime:sectionRuntime] retain];
                 }
-            } else {
-                result = [[NSMutableString string] retain];
-                for (id item in object) {
-                    GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
-                    NSString *itemRendering = [self renderElementsInRuntime:itemRuntime];
-                    [(NSMutableString *)result appendString:itemRendering];
+            }
+            else if ([object isKindOfClass:[NSDictionary class]])
+            {
+                // True object value
+                if (!_inverted) {
+                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
+                    result = [[self renderElementsInRuntime:sectionRuntime] retain];
                 }
             }
-        }
-        else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
-        {
-            // Helper
-            if (!_inverted) {
-                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                result = [[(id<GRMustacheHelper>)object renderSection:section] retain];
+            else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+            {
+                // Enumerable
+                if (_inverted) {
+                    BOOL empty = YES;
+                    for (id item in object) {
+                        empty = NO;
+                        break;
+                    }
+                    if (empty) {
+                        result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                    }
+                } else {
+                    result = [[NSMutableString string] retain];
+                    for (id item in object) {
+                        GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
+                        NSString *itemRendering = [self renderElementsInRuntime:itemRuntime];
+                        [(NSMutableString *)result appendString:itemRendering];
+                    }
+                }
             }
-        }
-        else
-        {
-            // True object value
-            if (!_inverted) {
-                sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
-                result = [[self renderElementsInRuntime:sectionRuntime] retain];
+            else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
+            {
+                // Helper
+                if (!_inverted) {
+                    GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
+                    result = [[(id<GRMustacheHelper>)object renderSection:section] retain];
+                }
             }
-        }
+            else
+            {
+                // True object value
+                if (!_inverted) {
+                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
+                    result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                }
+            }
+        }];
     }
     if (!result) {
         return @"";

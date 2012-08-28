@@ -22,7 +22,6 @@
 
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheInvocation_private.h"
 #import "GRMustacheTemplate_private.h"
 
 @interface GRMustacheVariableElement()
@@ -53,21 +52,21 @@
 
 - (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
+    __block NSString *result = nil;
+    
     // evaluate
     
-    id object = [_expression contextValueInRuntime:runtime];
-    
-    
-    // interpret
-    
-    NSString *result = nil;
-    if (object && (object != [NSNull null])) {
-        result = [object description];
-        if (!_raw) {
-            result = [self htmlEscape:result];
+    [_expression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue|GRMustacheInterpretationVariableRendering usingBlock:^(id object) {
+        
+        // interpret
+        
+        if (object && (object != [NSNull null])) {
+            result = [object description];
+            if (!_raw) {
+                result = [self htmlEscape:result];
+            }
         }
-    }
-    
+    }];
     
     // finish
     

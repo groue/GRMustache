@@ -22,7 +22,6 @@
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheInvocation_private.h"
 
 @implementation GRMustacheImplicitIteratorExpression
 @synthesize debuggingToken=_debuggingToken;
@@ -46,14 +45,22 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
+- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
-    return [runtime contextValue];
-}
-
-- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
-{
-    return nil;
+    id value = nil;
+    if (interpretation & GRMustacheInterpretationContextValue) {
+        value = [runtime contextValue];
+    } else if (interpretation & GRMustacheInterpretationFilterValue) {
+        value = nil;
+    } else {
+        NSAssert(NO, @"WTF");
+    }
+    
+    value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
+    
+    block(value);
+    
+    [runtime delegateTemplateDidInterpretValue:value as:interpretation];
 }
 
 @end

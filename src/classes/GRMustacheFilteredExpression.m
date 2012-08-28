@@ -23,7 +23,7 @@
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheFilter.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheInvocation_private.h"
+#import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheFilteredExpression()
 @property (nonatomic, retain) id<GRMustacheExpression> filterExpression;
@@ -83,25 +83,27 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)contextValueInRuntime:(GRMustacheRuntime *)runtime
+- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
-    id parameter = [_parameterExpression contextValueInRuntime:runtime];
-    id filter = [_filterExpression filterValueInRuntime:runtime];
-    
-    if (filter == nil) {
-        [NSException raise:GRMustacheFilterException format:@"Missing filter"];
-    }
-    
-    if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
-        [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
-    }
-    
-    return [(id<GRMustacheFilter>)filter transformedValue:parameter];
-}
-
-- (id)filterValueInRuntime:(GRMustacheRuntime *)runtime
-{
-    return [self contextValueInRuntime:runtime];
+    [_parameterExpression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue usingBlock:^(id parameter) {
+        [_filterExpression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationFilterValue usingBlock:^(id filter) {
+            if (filter == nil) {
+                [NSException raise:GRMustacheFilterException format:@"Missing filter"];
+            }
+            
+            if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
+                [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
+            }
+            
+            id value = [(id<GRMustacheFilter>)filter transformedValue:parameter];
+            
+            value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
+            
+            block(value);
+            
+            [runtime delegateTemplateDidInterpretValue:value as:interpretation];
+        }];
+    }];
 }
 
 @end
