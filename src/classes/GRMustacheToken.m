@@ -42,7 +42,7 @@
 
 - (void)dealloc
 {
-    [_value.object release];
+    NSLog(@"dealloc GRMustacheToken %d", _type);
     [_templateString release];
     [_templateID release];
     [super dealloc];
@@ -61,12 +61,13 @@
     self = [self init];
     if (self) {
         _type = type;
-        _value = value; [_value.object retain];
+        _value = value;
         _templateString = [templateString retain];
         _templateID = [templateID retain];
         _line = line;
         _range = range;
     }
+    NSLog(@"init GRMustacheToken %d", _type);
     return self;
 }
 
