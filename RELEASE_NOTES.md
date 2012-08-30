@@ -4,6 +4,11 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v4.3.3
+
+Fix a memory leak.
+
+
 ## v4.3.2
 
 Bugfix: Avoid the default `valueForKey:` implementation of Fundation collection classes like NSArray, NSSet and NSOrderedSet, which would return another collection. Fixes [issue #21](https://github.com/groue/GRMustache/issues/21).
