@@ -42,7 +42,6 @@
 
 - (void)dealloc
 {
-    NSLog(@"dealloc GRMustacheToken %d", _type);
     [_templateString release];
     [_templateID release];
     [super dealloc];
@@ -67,7 +66,6 @@
         _line = line;
         _range = range;
     }
-    NSLog(@"init GRMustacheToken %d", _type);
     return self;
 }
 
