@@ -42,7 +42,6 @@
 
 - (void)dealloc
 {
-    [_value.object release];
     [_templateString release];
     [_templateID release];
     [super dealloc];
@@ -61,7 +60,7 @@
     self = [self init];
     if (self) {
         _type = type;
-        _value = value; [_value.object retain];
+        _value = value;
         _templateString = [templateString retain];
         _templateID = [templateID retain];
         _line = line;
