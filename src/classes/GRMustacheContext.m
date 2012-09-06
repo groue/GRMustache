@@ -198,8 +198,10 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     if (objectIMPL == NSManagedObjectIMPL) {
         return NO;
     }
-    
-    if ([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSSet class]] || [object isKindOfClass:[NSOrderedSet class]]) {
+
+    // NSOrderedSet is iOS >= 5 or OSX >= 10.7. Don't name it directly. 
+    Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
+    if ([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSSet class]] || (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass])) {
         return YES;
     }
     
