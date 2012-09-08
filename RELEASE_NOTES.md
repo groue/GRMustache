@@ -4,6 +4,11 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v4.3.4
+
+Restored compatibility with iOS3 and OSX6 (thanks [@Bertrand](https://github.com/Bertrand)).
+
+
 ## v4.3.3
 
 Fix a memory leak.

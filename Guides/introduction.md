@@ -112,7 +112,7 @@ Full documentation map
 Loading templates:
 
 - [templates.md](templates.md): how to load templates from common sources.
-- [templates_repositories.md](templates_repositories.md): how to load templates from uncommon sources.
+- [templates_repositories.md](template_repositories.md): how to load templates from uncommon sources.
 
 Rendering templates:
 
