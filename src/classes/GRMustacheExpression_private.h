@@ -42,7 +42,7 @@
  */
 @interface GRMustacheExpression : NSObject {
 @private
-    GRMustacheToken *_debuggingToken;
+    GRMustacheToken *_token;
 }
 
 /**
@@ -51,7 +51,7 @@
  * debugging his templates, using the tokens' ability to output their location
  * (`{{ foo }} at line 23 of /path/to/template`).
  */
-@property (nonatomic, retain) GRMustacheToken *debuggingToken;
+@property (nonatomic, retain) GRMustacheToken *token;
 
 /**
  * TODO

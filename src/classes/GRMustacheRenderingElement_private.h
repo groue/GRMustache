@@ -62,10 +62,10 @@
  * 
  * @param renderingContext    A rendering context stack.
  * @param filterContext       A filters context stack.
- * @param delegatingTemplate  A template.
+ * @param template            A template.
  * @param delegates           An array of GRMustacheTemplateDelegate objects
  *                            whose callbacks should be called whenever
- *                            relevant, with _delegatingTemplate_ as a template.
+ *                            relevant, with _template_ as a template.
  *
  * @return The rendering.
  */

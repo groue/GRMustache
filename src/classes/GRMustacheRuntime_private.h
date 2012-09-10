@@ -25,15 +25,15 @@
 
 @protocol GRMustacheTemplateDelegate;
 @class GRMustacheTemplate;
-@class GRMustacheExpression;
+@class GRMustacheToken;
 @class GRMustacheContext;
 
 @interface GRMustacheRuntime : NSObject {
-    GRMustacheTemplate *_delegatingTemplate;
+    GRMustacheTemplate *_template;
     GRMustacheContext *_renderingContext;
     GRMustacheContext *_filterContext;
 }
-+ (id)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)delegatingTemplate renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)delegate;
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)object;
 
@@ -41,5 +41,5 @@
 - (id)filterValueForKey:(NSString *)key;
 - (id)currentContextValue;
 
-- (void)interpretExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id))block;
+- (NSString *)renderValue:(id)value fromToken:(GRMustacheToken *)token as:(GRMustacheInterpretation)interpretation usingBlock:(NSString *(^)(id value))block;
 @end

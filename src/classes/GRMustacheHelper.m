@@ -93,13 +93,13 @@
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
-    NSString *result = nil;
+    NSString *rendering = nil;
     
     if (_block) {
-        result = _block(section);
+        rendering = _block(section);
     }
     
-    return result;
+    return rendering;
 }
 
 @end

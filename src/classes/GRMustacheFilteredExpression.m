@@ -57,11 +57,11 @@
     [super dealloc];
 }
 
-- (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
+- (void)setToken:(GRMustacheToken *)token
 {
-    [super setDebuggingToken:debuggingToken];
-    _filterExpression.debuggingToken = debuggingToken;
-    _parameterExpression.debuggingToken = debuggingToken;
+    [super setToken:token];
+    _filterExpression.token = token;
+    _parameterExpression.token = token;
 }
 
 - (BOOL)isEqual:(id)expression

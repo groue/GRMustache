@@ -94,101 +94,97 @@
 
 - (NSString *)renderInnerElementsInRuntime:(GRMustacheRuntime *)runtime
 {
-    NSMutableString *result = [NSMutableString string];
+    NSMutableString *rendering = [NSMutableString string];
     @autoreleasepool {
         for (id<GRMustacheRenderingElement> elem in _elems) {
-            [result appendString:[elem renderInRuntime:runtime]];
+            [rendering appendString:[elem renderInRuntime:runtime]];
         }
     }
-    return result;
+    return rendering;
 }
 
-#pragma mark <GRMustacheRenderingElement>
+#pragma mark - <GRMustacheRenderingElement>
 
 - (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
-    __block NSString *result = nil;
-    @autoreleasepool {
+    id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
+    return [runtime renderValue:value fromToken:_expression.token as:GRMustacheInterpretationSection usingBlock:^NSString *(id value) {
         
-        [runtime interpretExpression:_expression as:GRMustacheInterpretationSection usingBlock:^(id value) {
-            
-            GRMustacheRuntime *sectionRuntime = runtime;
-            
-            // Values that conform to the GRMustacheTemplateDelegate protocol
-            // enter the section runtime.
-            
-            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-                sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+        GRMustacheRuntime *sectionRuntime = runtime;
+        
+        // Values that conform to the GRMustacheTemplateDelegate protocol
+        // enter the runtime.
+        
+        if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+            sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+        }
+        
+        
+        // Interpret value
+        
+        if (value == nil ||
+            value == [NSNull null] ||
+            ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
+            ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
+        {
+            // False value
+            if (_inverted) {
+                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
             }
-            
-            
-            // Interpret value
-            
-            if (value == nil ||
-                value == [NSNull null] ||
-                ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
-                ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
-            {
-                // False value
-                if (_inverted) {
-                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+        }
+        else if ([value isKindOfClass:[NSDictionary class]])
+        {
+            // True value
+            if (!_inverted) {
+                sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
+                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+            }
+        }
+        else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
+        {
+            // Enumerable
+            if (_inverted) {
+                BOOL empty = YES;
+                for (id item in value) {
+                    empty = NO;
+                    break;
                 }
-            }
-            else if ([value isKindOfClass:[NSDictionary class]])
-            {
-                // True value
-                if (!_inverted) {
-                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+                if (empty) {
+                    return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
                 }
-            }
-            else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
-            {
-                // Enumerable
-                if (_inverted) {
-                    BOOL empty = YES;
-                    for (id item in value) {
-                        empty = NO;
-                        break;
-                    }
-                    if (empty) {
-                        result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
-                    }
-                } else {
-                    result = [[NSMutableString string] retain];
-                    for (id item in value) {
-                        GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
-                        NSString *itemRendering = [self renderInnerElementsInRuntime:itemRuntime];
-                        [(NSMutableString *)result appendString:itemRendering];
-                    }
+            } else {
+                NSMutableString *rendering = [NSMutableString string];
+                for (id item in value) {
+                    GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
+                    NSString *itemRendering = [self renderInnerElementsInRuntime:itemRuntime];
+                    [rendering appendString:itemRendering];
                 }
+                return rendering;
             }
-            else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
-            {
-                // Helper
-                if (!_inverted) {
-                    GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                    result = [[(id<GRMustacheHelper>)value renderSection:section] retain];
-                }
+        }
+        else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
+        {
+            // Helper
+            if (!_inverted) {
+                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
+                return [[(id<GRMustacheHelper>)value renderSection:section] retain];
             }
-            else
-            {
-                // True value
-                if (!_inverted) {
-                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
-                }
+        }
+        else
+        {
+            // True value
+            if (!_inverted) {
+                sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
+                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
             }
-        }];
-    }
-    if (!result) {
-        return @"";
-    }
-    return [result autorelease];
+        }
+        
+        return nil;
+    }];
 }
 
 
-#pragma mark Private
+#pragma mark - Private
 
 - (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {

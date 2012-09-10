@@ -25,22 +25,22 @@
 
 @implementation GRMustacheInvocation
 @synthesize returnValue=_returnValue;
-@synthesize debuggingToken=_debuggingToken;
+@synthesize token=_token;
 
 - (void)dealloc
 {
     [_returnValue release];
-    [_debuggingToken release];
+    [_token release];
     [super dealloc];
 }
 
 - (NSString *)description
 {
-    NSAssert(_debuggingToken, @"debuggingToken not set");
-    if (_debuggingToken.templateID) {
-        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
+    NSAssert(_token, @"token not set");
+    if (_token.templateID) {
+        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _token.templateSubstring, (unsigned long)_token.line, _token.templateID];
     } else {
-        return [NSString stringWithFormat:@"`%@` at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
+        return [NSString stringWithFormat:@"`%@` at line %lu", _token.templateSubstring, (unsigned long)_token.line];
     }
 }
 

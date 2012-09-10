@@ -29,7 +29,7 @@
 @interface GRMustacheInvocation : NSObject {
 @private
     id _returnValue;
-    GRMustacheToken *_debuggingToken;
+    GRMustacheToken *_token;
 }
 
 /**
@@ -45,6 +45,6 @@
  * The debugging token of an invocation allows an invocation to build a
  * meaningful description like "`{{ foo }}` at line 12 of /path/to/template".
  */
-@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 
 @end

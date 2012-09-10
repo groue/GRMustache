@@ -27,11 +27,11 @@
 @end
 
 @implementation GRMustacheExpression
-@synthesize debuggingToken=_debuggingToken;
+@synthesize token=_token;
 
 - (void)dealloc
 {
-    [_debuggingToken release];
+    [_token release];
     [super dealloc];
 }
 

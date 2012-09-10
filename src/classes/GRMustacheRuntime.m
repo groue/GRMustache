@@ -23,46 +23,45 @@
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheExpression_private.h"
 #import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheRuntime()
-@property (nonatomic, retain) GRMustacheTemplate *delegatingTemplate;
+@property (nonatomic, retain) GRMustacheTemplate *template;
 @property (nonatomic, retain) NSArray *delegates;
 @property (nonatomic, retain) GRMustacheContext *renderingContext;
 @property (nonatomic, retain) GRMustacheContext *filterContext;
-- (id)initWithDelegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
+- (id)initWithTemplate:(GRMustacheTemplate *)template delegates:(NSArray *)delegates renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
 @end
 
 @implementation GRMustacheRuntime
-@synthesize delegatingTemplate=_delegatingTemplate;
+@synthesize template=_template;
 @synthesize delegates=_delegates;
 @synthesize renderingContext=_renderingContext;
 @synthesize filterContext=_filterContext;
 
-+ (id)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)delegatingTemplate renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext
 {
     NSArray *delegates = nil;
-    if (delegatingTemplate.delegate) {
-        delegates = [[NSArray arrayWithObject:delegatingTemplate.delegate] retain];
+    if (template.delegate) {
+        delegates = [NSArray arrayWithObject:template.delegate];
     }
-    return [[[GRMustacheRuntime alloc] initWithDelegatingTemplate:delegatingTemplate delegates:delegates renderingContext:renderingContext filterContext:filterContext] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:template delegates:delegates renderingContext:renderingContext filterContext:filterContext] autorelease];
 }
 
 - (void)dealloc
 {
-    [_delegatingTemplate release];
+    [_template release];
     [_delegates release];
     [_renderingContext release];
     [_filterContext release];
     [super dealloc];
 }
 
-- (id)initWithDelegatingTemplate:(GRMustacheTemplate *)delegatingTemplate delegates:(NSArray *)delegates renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext
+- (id)initWithTemplate:(GRMustacheTemplate *)template delegates:(NSArray *)delegates renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext
 {
     self = [super init];
     if (self) {
-        _delegatingTemplate = [delegatingTemplate retain];
+        _template = [template retain];
         _delegates = [delegates retain];
         _renderingContext = [renderingContext retain];
         _filterContext = [filterContext retain];
@@ -76,13 +75,13 @@
     if (_delegates) {
         delegates = [delegates arrayByAddingObjectsFromArray:_delegates];
     }
-    return [[[GRMustacheRuntime alloc] initWithDelegatingTemplate:_delegatingTemplate delegates:delegates renderingContext:_renderingContext filterContext:_filterContext] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template delegates:delegates renderingContext:_renderingContext filterContext:_filterContext] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)object
 {
     GRMustacheContext *renderingContext = [_renderingContext contextByAddingObject:object];
-    return [[[GRMustacheRuntime alloc] initWithDelegatingTemplate:_delegatingTemplate delegates:_delegates renderingContext:renderingContext filterContext:_filterContext] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template delegates:_delegates renderingContext:renderingContext filterContext:_filterContext] autorelease];
 }
 
 - (id)contextValueForKey:(NSString *)key
@@ -100,40 +99,51 @@
     return _renderingContext.object;
 }
 
-- (void)interpretExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id))block
+- (NSString *)renderValue:(id)value fromToken:(GRMustacheToken *)token as:(GRMustacheInterpretation)interpretation usingBlock:(NSString *(^)(id value))block
 {
-    id value = [expression evaluateInRuntime:self asFilterValue:NO];
+    NSString *rendering = nil;
     
-    if (_delegates.count == 0) {
-        block(value);
-    } else {
-        [self delegateInterpretValue:value fromExpression:expression as:interpretation withDelegateAtIndex:0 usingBlock:block];
+    @autoreleasepool {
+        if (_delegates.count == 0) {
+            rendering = block(value);
+        } else {
+            rendering = [self delegateRenderValue:value fromToken:token as:interpretation withDelegateAtIndex:0 usingBlock:block];
+        }
+        [rendering retain];
     }
+    
+    if (rendering == nil) {
+        return @"";
+    }
+    return [rendering autorelease];
 }
 
 #pragma mark - Private
 
-- (void)delegateInterpretValue:(id)value fromExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation withDelegateAtIndex:(NSUInteger)index usingBlock:(void(^)(id))block
+- (NSString *)delegateRenderValue:(id)value fromToken:(GRMustacheToken *)token as:(GRMustacheInterpretation)interpretation withDelegateAtIndex:(NSUInteger)index usingBlock:(NSString *(^)(id value))block
 {
     GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
-    invocation.debuggingToken = expression.debuggingToken;
+    invocation.token = token;
     invocation.returnValue = value;
     
     id<GRMustacheTemplateDelegate> delegate = [_delegates objectAtIndex:index];
     
     if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-        [delegate template:_delegatingTemplate willInterpretReturnValueOfInvocation:invocation as:interpretation];
+        [delegate template:_template willInterpretReturnValueOfInvocation:invocation as:interpretation];
     }
 
+    NSString *rendering = nil;
     if (index == _delegates.count - 1) {
-        block(invocation.returnValue);
+        rendering = block(invocation.returnValue);
     } else {
-        [self delegateInterpretValue:invocation.returnValue fromExpression:expression as:interpretation withDelegateAtIndex:index+1 usingBlock:block];
+        rendering = [self delegateRenderValue:invocation.returnValue fromToken:token as:interpretation withDelegateAtIndex:index+1 usingBlock:block];
     }
     
     if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-        [delegate template:_delegatingTemplate didInterpretReturnValueOfInvocation:invocation as:interpretation];
+        [delegate template:_template didInterpretReturnValueOfInvocation:invocation as:interpretation];
     }
+    
+    return rendering;
 }
 
 @end

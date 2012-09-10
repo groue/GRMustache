@@ -53,26 +53,20 @@
 
 - (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
 {
-    __block NSString *result = nil;
-    
-    [runtime interpretExpression:_expression as:GRMustacheInterpretationVariable usingBlock:^(id object) {
+    id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
+    return [runtime renderValue:value fromToken:_expression.token as:GRMustacheInterpretationVariable usingBlock:^NSString *(id value) {
         
-        // interpret
+        NSString *rendering = nil;
         
-        if (object && (object != [NSNull null])) {
-            result = [object description];
+        if (value && (value != [NSNull null])) {
+            rendering = [value description];
             if (!_raw) {
-                result = [self htmlEscape:result];
+                rendering = [self htmlEscape:rendering];
             }
         }
+        
+        return rendering;
     }];
-    
-    // finish
-    
-    if (!result) {
-        result = @"";
-    }
-    return result;
 }
 
 
