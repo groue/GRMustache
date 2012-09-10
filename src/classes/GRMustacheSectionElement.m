@@ -92,7 +92,7 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-- (NSString *)renderElementsInRuntime:(GRMustacheRuntime *)runtime
+- (NSString *)renderInnerElementsInRuntime:(GRMustacheRuntime *)runtime
 {
     NSMutableString *result = [NSMutableString string];
     @autoreleasepool {
@@ -131,7 +131,7 @@
             {
                 // False value
                 if (_inverted) {
-                    result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
                 }
             }
             else if ([value isKindOfClass:[NSDictionary class]])
@@ -139,7 +139,7 @@
                 // True value
                 if (!_inverted) {
                     sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                    result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
                 }
             }
             else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -152,13 +152,13 @@
                         break;
                     }
                     if (empty) {
-                        result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                        result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
                     }
                 } else {
                     result = [[NSMutableString string] retain];
                     for (id item in value) {
                         GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
-                        NSString *itemRendering = [self renderElementsInRuntime:itemRuntime];
+                        NSString *itemRendering = [self renderInnerElementsInRuntime:itemRuntime];
                         [(NSMutableString *)result appendString:itemRendering];
                     }
                 }
@@ -176,7 +176,7 @@
                 // True value
                 if (!_inverted) {
                     sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                    result = [[self renderElementsInRuntime:sectionRuntime] retain];
+                    result = [[self renderInnerElementsInRuntime:sectionRuntime] retain];
                 }
             }
         }];

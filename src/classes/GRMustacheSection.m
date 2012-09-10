@@ -55,7 +55,7 @@
 
 - (NSString *)render
 {
-    return [_sectionElement renderElementsInRuntime:_runtime];
+    return [_sectionElement renderInnerElementsInRuntime:_runtime];
 }
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
