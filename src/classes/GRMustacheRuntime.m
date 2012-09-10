@@ -52,6 +52,7 @@
 {
     [_delegatingTemplate release];
     [_delegates release];
+    [_renderingContext release];
     [_filterContext release];
     [super dealloc];
 }

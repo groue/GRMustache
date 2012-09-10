@@ -33,7 +33,6 @@
     GRMustacheContext *_renderingContext;
     GRMustacheContext *_filterContext;
 }
-@property (nonatomic, retain, readonly) GRMustacheContext *renderingContext;
 + (id)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)delegatingTemplate renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)delegate;
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)object;

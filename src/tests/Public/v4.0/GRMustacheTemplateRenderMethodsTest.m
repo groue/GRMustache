@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_0
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_3
 #import "GRMustachePublicAPITest.h"
 #import "JSONKit.h"
 
@@ -183,7 +183,7 @@
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
-- (void)testGRMustacheTemplate_renderObjects
+- (void)testGRMustacheTemplate_renderObjectsInArray
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
@@ -192,12 +192,12 @@
     NSDictionary *extraContext = [NSDictionary dictionaryWithObject:@"bar" forKey:@"stringProperty"];
     
     {
-        NSString *rendering = [template renderObjects:context, extraContext, nil];
+        NSString *rendering = [template renderObjectsInArray:@[context, extraContext]];
         STAssertEqualObjects(@"bar", [self valueForStringPropertyInRendering:rendering], nil);
         STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
     }
     {
-        NSString *rendering = [template renderObjects:extraContext, context, nil];
+        NSString *rendering = [template renderObjectsInArray:@[extraContext, context]];
         STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
     }
 }

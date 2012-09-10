@@ -134,9 +134,6 @@
 - (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheTemplate.h
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 @end

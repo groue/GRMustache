@@ -34,9 +34,6 @@
 }
 
 // Documented in GRMustacheSection.h
-@property (nonatomic, readonly) id renderingContext GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheSection.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSection.h

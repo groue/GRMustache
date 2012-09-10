@@ -226,20 +226,6 @@
     return [result autorelease];
 }
 
-- (NSString *)renderObjects:(id)object, ...
-{
-    NSString *result;
-    @autoreleasepool {
-        va_list objectList;
-        va_start(objectList, object);
-        GRMustacheContext *renderingContext = [GRMustacheContext contextWithObject:object andObjectList:objectList];
-        va_end(objectList);
-        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithDelegatingTemplate:self renderingContext:renderingContext filterContext:nil];
-        result = [[self renderInRuntime:runtime] retain];
-    }
-    return [result autorelease];
-}
-
 
 #pragma mark <GRMustacheRenderingElement>
 

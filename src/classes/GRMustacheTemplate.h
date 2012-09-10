@@ -443,19 +443,6 @@
 - (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
 
 /**
- * Renders a template with a context stack initialized with several objects.
- * 
- * @param object  The bottom object in the context stack.
- * @param ...     The other objects in the context stack.
- *
- * @return A string containing the rendered template.
- *
- * @since v1.5
- * @deprecated v4.3
- */
-- (NSString *)renderObjects:(id)object, ... __attribute__ ((sentinel)) AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
-
-/**
  * Renders a template without any context object for interpreting Mustache tags.
  * 
  * @return A string containing the rendered template.

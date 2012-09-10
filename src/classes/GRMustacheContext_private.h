@@ -86,16 +86,6 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 + (id)contextWithObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a context stack containing several objects.
- *
- * @param object      The bottom object in the context stack
- * @param objectList  A list of other objects
- *
- * @return nil if the object is nil; a new context stack otherwise.
- */
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList GRMUSTACHE_API_INTERNAL;
-
-/**
  * Returns a new context stack by adding an object at the top.
  *
  * @param object  The top object of the returned context stack.

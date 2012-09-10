@@ -67,11 +67,6 @@
     return [template renderInRuntime:_runtime];
 }
 
-- (id)renderingContext
-{
-    return _runtime.renderingContext;
-}
-
 - (NSString *)innerTemplateString
 {
     return _sectionElement.innerTemplateString;

@@ -66,20 +66,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return [[[self alloc] initWithObject:object parent:nil] autorelease];
 }
 
-+ (id)contextWithObject:(id)object andObjectList:(va_list)objectList
-{
-    GRMustacheContext *context = nil;
-    context = [GRMustacheContext contextWithObject:object];
-    id eachObject;
-    va_list objectListCopy;
-    va_copy(objectListCopy, objectList);
-    while ((eachObject = va_arg(objectListCopy, id))) {
-        context = [context contextByAddingObject:eachObject];
-    }
-    va_end(objectListCopy);
-    return context;
-}
-
 + (id)valueForKey:(NSString *)key inObject:(id)object
 {
     id value = nil;
