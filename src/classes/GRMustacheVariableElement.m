@@ -23,11 +23,12 @@
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheVariableElement()
-@property (nonatomic, retain) id<GRMustacheExpression> expression;
+@property (nonatomic, retain) GRMustacheExpression *expression;
 @property (nonatomic) BOOL raw;
-- (id)initWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw;
+- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
@@ -36,7 +37,7 @@
 @synthesize expression=_expression;
 @synthesize raw=_raw;
 
-+ (id)variableElementWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw
++ (id)variableElementWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
     return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
 }
@@ -54,9 +55,7 @@
 {
     __block NSString *result = nil;
     
-    // evaluate
-    
-    [_expression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue|GRMustacheInterpretationVariableRendering usingBlock:^(id object) {
+    [runtime interpretExpression:_expression as:GRMustacheInterpretationVariable usingBlock:^(id object) {
         
         // interpret
         
@@ -79,7 +78,7 @@
 
 #pragma mark Private
 
-- (id)initWithExpression:(id<GRMustacheExpression>)expression raw:(BOOL)raw
+- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
     self = [self init];
     if (self) {

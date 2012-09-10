@@ -23,7 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_3
 #import "GRMustachePublicAPITest.h"
 
-/*
 @interface GRMustacheTemplateDelegate_v4_3_Test : GRMustachePublicAPITest
 @end
 
@@ -54,10 +53,6 @@
         case GRMustacheInterpretationVariable:
             invocation.returnValue = @"variable";
             break;
-            
-        case GRMustacheInterpretationFilterArgument:
-            invocation.returnValue = @"filtered";
-            break;
     }
 }
 
@@ -71,7 +66,7 @@
     template.delegate = [[[GRMustacheTemplateDelegate_v4_3_NaiveDelegate alloc] init] autorelease];
     STAssertNoThrow([template renderObject:@"foo"], nil);
     NSString *rendering = [template renderObject:@"foo"];
-    STAssertEqualObjects(rendering, @"DELEGATE WAS HERE", nil);
+    STAssertEqualObjects(rendering, @"delegate was here", nil);
 }
 
 - (void)testGRMustacheInterpretationSection
@@ -134,9 +129,8 @@
     {
         template.delegate = [[[GRMustacheTemplateDelegate_v4_3_AlteringDelegate alloc] init] autorelease];
         NSString *rendering = [template renderObject:object];
-        STAssertEqualObjects(rendering, @"FILTERED", nil);
+        STAssertEqualObjects(rendering, @"variable", nil);
     }
 }
 
 @end
-*/

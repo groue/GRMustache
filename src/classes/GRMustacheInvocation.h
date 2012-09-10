@@ -21,41 +21,44 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
-
-@class GRMustacheRuntime;
-@class GRMustacheToken;
+#import "GRMustacheAvailabilityMacros.h"
 
 /**
- * TODO
+ * The GRMustacheInvocation class gives you information about the values that
+ * are found in the context stack when rendering tags such as `{{name}}`.
  *
- * The GRMustacheExpression is the protocol for objects that can provide values
- * out of the data provided by the library user.
+ * You'll be given GRMustacheInvocation instances when providing a
+ * GRMustacheTemplateDelegate to your templates.
  *
- * GRMustacheExpression instances are built by GRMustacheParser. For instance,
- * the `{{ name }}` tag would yield a GRMustacheIdentifierExpression.
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * 
+ * @see GRMustacheTemplateDelegate
  *
- * @see GRMustacheFilteredExpression
- * @see GRMustacheIdentifierExpression
- * @see GRMustacheImplicitIteratorExpression
- * @see GRMustacheScopedExpression
+ * @since v1.12
  */
-@interface GRMustacheExpression : NSObject {
+@interface GRMustacheInvocation : NSObject {
 @private
-    GRMustacheToken *_debuggingToken;
+    id _returnValue;
+    id _debuggingToken;
 }
 
 /**
  * TODO
- * This property stores a token whose sole purpose is to help the library user
- * debugging his templates, using the tokens' ability to output their location
- * (`{{ foo }} at line 23 of /path/to/template`).
+ * The return value of the invocation.
+ *
+ * For instance, the invocation that you would get for a `{{name}}` tag would
+ * have the name in the `returnValue` property.
+ *
+ * For tags with compound keys, such as `{{person.name}}`, the value will be
+ * the person's name, if the person could be found in the context stack.
+ * It would be nil otherwise.
+ *
+ * In a template's delegate methods, you can set the returnValue of an
+ * invocation, and alter a template rendering.
+ *
+ * @see GRMustacheTemplateDelegate
+ *
+ * @since v1.12
  */
-@property (nonatomic, retain) GRMustacheToken *debuggingToken;
-
-/**
- * TODO
- */
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue;
-
+@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 @end

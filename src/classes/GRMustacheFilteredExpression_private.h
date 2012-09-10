@@ -29,11 +29,10 @@
  * @see GRMustacheExpression
  * @see GRMustacheFilter
  */
-@interface GRMustacheFilteredExpression : NSObject<GRMustacheExpression> {
+@interface GRMustacheFilteredExpression : GRMustacheExpression {
 @private
-    GRMustacheToken *_debuggingToken;
-    id<GRMustacheExpression> _filterExpression;
-    id<GRMustacheExpression> _parameterExpression;
+    GRMustacheExpression *_filterExpression;
+    GRMustacheExpression *_parameterExpression;
 }
 
 /**
@@ -52,5 +51,5 @@
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (id)expressionWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression GRMUSTACHE_API_INTERNAL;
 @end

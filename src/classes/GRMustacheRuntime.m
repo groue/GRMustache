@@ -23,6 +23,7 @@
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheRuntime()
 @property (nonatomic, retain) GRMustacheTemplate *delegatingTemplate;
@@ -97,37 +98,39 @@
     return _renderingContext.object;
 }
 
-- (id)delegateTemplateWillInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation
+- (void)interpretExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id))block
 {
-    if (_delegatingTemplate == nil) {
-        return value;
-    }
+    id value = [expression evaluateInRuntime:self asFilterValue:NO];
     
-    for (id<GRMustacheTemplateDelegate> delegate in _delegates) {
-        if ([delegate respondsToSelector:@selector(template:value:as:)]) {
-            value = [delegate template:_delegatingTemplate value:value as:interpretation];
-        }
-        if ([delegate respondsToSelector:@selector(template:willInterpretValue:as:)]) {
-            [delegate template:_delegatingTemplate willInterpretValue:value as:interpretation];
-        }
+    if (_delegatingTemplate == nil || _delegates.count == 0) {
+        block(value);
+    } else {
+        [self delegateInterpretValue:value fromExpression:expression as:interpretation withDelegateAtIndex:0 usingBlock:block];
     }
-    
-    return value;
 }
 
-- (void)delegateTemplateDidInterpretValue:(id)value as:(GRMustacheInterpretation)interpretation;
+#pragma mark - Private
+
+- (void)delegateInterpretValue:(id)value fromExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation withDelegateAtIndex:(NSUInteger)index usingBlock:(void(^)(id))block
 {
-    if (_delegatingTemplate == nil) {
-        return;
+    GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
+    invocation.debuggingToken = expression.debuggingToken;
+    invocation.returnValue = value;
+    
+    id<GRMustacheTemplateDelegate> delegate = [_delegates objectAtIndex:index];
+    
+    if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
+        [delegate template:_delegatingTemplate willInterpretReturnValueOfInvocation:invocation as:interpretation];
+    }
+
+    if (index == _delegates.count - 1) {
+        block(invocation.returnValue);
+    } else {
+        [self delegateInterpretValue:invocation.returnValue fromExpression:expression as:interpretation withDelegateAtIndex:index+1 usingBlock:block];
     }
     
-    for (id<GRMustacheTemplateDelegate> delegate in _delegates) {
-        if ([delegate respondsToSelector:@selector(template:value:as:)]) {
-            value = [delegate template:_delegatingTemplate value:value as:interpretation];
-        }
-        if ([delegate respondsToSelector:@selector(template:didInterpretValue:as:)]) {
-            [delegate template:_delegatingTemplate didInterpretValue:value as:interpretation];
-        }
+    if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
+        [delegate template:_delegatingTemplate didInterpretReturnValueOfInvocation:invocation as:interpretation];
     }
 }
 

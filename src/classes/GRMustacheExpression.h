@@ -20,28 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheRuntime_private.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
-@implementation GRMustacheImplicitIteratorExpression
-
-+ (id)expression
-{
-    return [[[self alloc] init] autorelease];
-}
-
-- (BOOL)isEqual:(id)expression
-{
-    return [expression isKindOfClass:[GRMustacheImplicitIteratorExpression class]];
-}
-
-
-#pragma mark - GRMustacheExpression
-
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
-{
-    NSAssert(!filterValue, @"GRMustacheImplicitIteratorExpression invoked for a filter");
-    return [runtime contextValue];
+/**
+ * TODO
+ */
+@interface GRMustacheExpression : NSObject {
+@private
+    id _debuggingToken;
 }
 
 @end

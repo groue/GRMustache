@@ -84,7 +84,7 @@
  * @return An expression, or nil if the parsing fails or if the expression is
  * empty.
  */
-- (id<GRMustacheExpression>)parseExpression:(NSString *)string empty:(BOOL *)outEmpty;
+- (GRMustacheExpression *)parseExpression:(NSString *)string empty:(BOOL *)outEmpty;
 
 /**
  * Returns a partial name from the inner string of a tag.
@@ -233,7 +233,7 @@
                 
             case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
                 BOOL empty;
-                id<GRMustacheExpression> expression = [self parseExpression:tag empty:&empty];
+                GRMustacheExpression * expression = [self parseExpression:tag empty:&empty];
                 if (expression == nil && !empty) {
                     [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
                 }
@@ -251,7 +251,7 @@
             case GRMustacheTokenTypeSectionClosing:
             case GRMustacheTokenTypeUnescapedVariable: {
                 BOOL empty;
-                id<GRMustacheExpression> expression = [self parseExpression:[tag substringFromIndex:1] empty:&empty];   // strip initial '#', '^' etc.
+                GRMustacheExpression * expression = [self parseExpression:[tag substringFromIndex:1] empty:&empty];   // strip initial '#', '^' etc.
                 if (expression == nil && !empty) {
                     [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
                 }
@@ -385,7 +385,7 @@
     return NSMakeRange(NSNotFound, 0);
 }
 
-- (id<GRMustacheExpression>)parseExpression:(NSString *)string empty:(BOOL *)outEmpty
+- (GRMustacheExpression *)parseExpression:(NSString *)string empty:(BOOL *)outEmpty
 {
     //    -> ;;sm_parenLevel=0, canFilter=YES -> stateInitial
     //    stateInitial -> ' ' -> stateInitial
@@ -427,8 +427,8 @@
     BOOL hasFilterSupport = [self.pragmas containsObject:@"FILTERS"];
     NSUInteger identifierStart = NSNotFound;
     NSMutableArray *filterExpressionStack = [NSMutableArray array];
-    id<GRMustacheExpression> currentExpression=nil;
-    id<GRMustacheExpression> validExpression=nil;
+    GRMustacheExpression *currentExpression=nil;
+    GRMustacheExpression *validExpression=nil;
     
     NSUInteger length = string.length;
     for (NSUInteger i = 0; i < length; ++i) {
@@ -496,7 +496,7 @@
                             NSAssert(filterExpressionStack.count > 0, @"WTF");
                             
                             state = stateFilterDone;
-                            id<GRMustacheExpression> filterExpression = [filterExpressionStack lastObject];
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
                             currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression];
                         } else {
@@ -574,7 +574,7 @@
                             NSAssert(currentExpression, @"WTF");
                             NSAssert(filterExpressionStack.count > 0, @"WTF");
                             state = stateFilterDone;
-                            id<GRMustacheExpression> filterExpression = [filterExpressionStack lastObject];
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
                             currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression];
                         } else {
@@ -645,7 +645,7 @@
                             NSAssert(currentExpression, @"WTF");
                             NSAssert(filterExpressionStack.count > 0, @"WTF");
                             state = stateFilterDone;
-                            id<GRMustacheExpression> filterExpression = [filterExpressionStack lastObject];
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
                             currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression];
                         } else {
@@ -680,7 +680,7 @@
                             NSAssert(currentExpression, @"WTF");
                             NSAssert(filterExpressionStack.count > 0, @"WTF");
                             state = stateFilterDone;
-                            id<GRMustacheExpression> filterExpression = [filterExpressionStack lastObject];
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
                             currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression];
                         } else {

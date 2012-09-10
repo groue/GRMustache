@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@protocol GRMustacheExpression;
+@class GRMustacheExpression;
 
 /**
  * The kinds of tokens
@@ -93,7 +93,7 @@ typedef enum {
 typedef union {
     id object;
     NSString *text;
-    id<GRMustacheExpression> expression;
+    GRMustacheExpression *expression;
     NSString *partialName;
     NSString *pragma;
 } GRMustacheTokenValue;

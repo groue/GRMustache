@@ -20,28 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheRuntime_private.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
-@implementation GRMustacheImplicitIteratorExpression
+@class GRMustacheToken;
 
-+ (id)expression
-{
-    return [[[self alloc] init] autorelease];
+// Documented in GRMustacheInvocation.h
+@interface GRMustacheInvocation : NSObject {
+@private
+    id _returnValue;
+    GRMustacheToken *_debuggingToken;
 }
 
-- (BOOL)isEqual:(id)expression
-{
-    return [expression isKindOfClass:[GRMustacheImplicitIteratorExpression class]];
-}
+/**
+ * The getter of this property is documented in GRMustacheInvocation.h.
+ *
+ * The setter allow GRMustacheExpression objects to prepare invocations.
+ *
+ * @see GRMustacheExpression
+ */
+@property (nonatomic, retain) id returnValue GRMUSTACHE_API_PUBLIC;
 
-
-#pragma mark - GRMustacheExpression
-
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
-{
-    NSAssert(!filterValue, @"GRMustacheImplicitIteratorExpression invoked for a filter");
-    return [runtime contextValue];
-}
+/**
+ * The debugging token of an invocation allows an invocation to build a
+ * meaningful description like "`{{ foo }}` at line 12 of /path/to/template".
+ */
+@property (nonatomic, retain) GRMustacheToken *debuggingToken GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -23,7 +23,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
 
-@protocol GRMustacheExpression;
+@class GRMustacheExpression;
 
 /**
  * A GRMustacheSectionElement is a rendering element that renders sections
@@ -33,7 +33,7 @@
  */
 @interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement> {
 @private
-    id<GRMustacheExpression>_expression;
+    GRMustacheExpression *_expression;
     NSString *_templateString;
     NSRange _innerRange;
     BOOL _inverted;
@@ -78,7 +78,7 @@
  * @see GRMustacheContext
  * @see GRMustacheHelper
  */
-+ (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

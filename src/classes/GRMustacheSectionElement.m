@@ -36,7 +36,7 @@
  * whether they are truthy, falsey, enumerable, or helpers. The object is
  * fetched by applying this expression to a rendering context.
  */
-@property (nonatomic, retain) id<GRMustacheExpression> expression;
+@property (nonatomic, retain) GRMustacheExpression *expression;
 
 /**
  * The template string containing the inner template string of the section.
@@ -63,7 +63,7 @@
 /**
  * @see +[GRMustacheSectionElement sectionElementWithExpression:templateString:innerRange:inverted:elements:]
  */
-- (id)initWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
@@ -74,7 +74,7 @@
 @synthesize inverted=_inverted;
 @synthesize elems=_elems;
 
-+ (id)sectionElementWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
 }
@@ -110,10 +110,7 @@
     __block NSString *result = nil;
     @autoreleasepool {
         
-        // evaluate
-        
-        [_expression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue|GRMustacheInterpretationSectionRendering usingBlock:^(id object) {
-            
+        [runtime interpretExpression:_expression as:GRMustacheInterpretationSection usingBlock:^(id object) {
             
             // augment delegates if necessary
             
@@ -191,7 +188,7 @@
 
 #pragma mark Private
 
-- (id)initWithExpression:(id<GRMustacheExpression>)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {

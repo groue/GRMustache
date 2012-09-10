@@ -28,10 +28,7 @@
  *
  * @see GRMustacheExpression
  */
-@interface GRMustacheImplicitIteratorExpression : NSObject<GRMustacheExpression> {
-@private
-    GRMustacheToken *_debuggingToken;
-}
+@interface GRMustacheImplicitIteratorExpression : GRMustacheExpression
 
 /**
  * Returns an "implicit iterator" expression.

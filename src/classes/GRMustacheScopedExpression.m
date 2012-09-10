@@ -25,23 +25,22 @@
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheScopedExpression()
-@property (nonatomic, retain) id<GRMustacheExpression> baseExpression;
+@property (nonatomic, retain) GRMustacheExpression *baseExpression;
 @property (nonatomic, copy) NSString *scopeIdentifier;
 
-- (id)initWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
+- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
 @end
 
 @implementation GRMustacheScopedExpression
-@synthesize debuggingToken=_debuggingToken;
 @synthesize baseExpression=_baseExpression;
 @synthesize scopeIdentifier=_scopeIdentifier;
 
-+ (id)expressionWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
++ (id)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
 {
     return [[[self alloc] initWithBaseExpression:baseExpression scopeIdentifier:scopeIdentifier] autorelease];
 }
 
-- (id)initWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
+- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
 {
     self = [super init];
     if (self) {
@@ -53,7 +52,6 @@
 
 - (void)dealloc
 {
-    [_debuggingToken release];
     [_baseExpression release];
     [_scopeIdentifier release];
     [super dealloc];
@@ -61,14 +59,11 @@
 
 - (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
 {
-    if (_debuggingToken != debuggingToken) {
-        [_debuggingToken release];
-        _debuggingToken = [debuggingToken retain];
-        _baseExpression.debuggingToken = _debuggingToken;
-    }
+    [super setDebuggingToken:debuggingToken];
+    _baseExpression.debuggingToken = debuggingToken;
 }
 
-- (BOOL)isEqual:(id<GRMustacheExpression>)expression
+- (BOOL)isEqual:(id)expression
 {
     if (![expression isKindOfClass:[GRMustacheScopedExpression class]]) {
         return NO;
@@ -82,22 +77,10 @@
 
 #pragma mark - GRMustacheExpression
 
-- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
-    GRMustacheInterpretation baseInterpretation = interpretation & ~GRMustacheInterpretationSectionRendering & ~GRMustacheInterpretationVariableRendering;
-    
-    [_baseExpression evaluateInRuntime:runtime forInterpretation:baseInterpretation usingBlock:^(id scopedValue) {
-        id value = nil;
-        
-        if (scopedValue) {
-            value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
-        }
-        
-        value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
-        
-        block(value);
-        
-        [runtime delegateTemplateDidInterpretValue:value as:interpretation];
-    }];
+    id scopedValue = [_baseExpression evaluateInRuntime:runtime asFilterValue:filterValue];
+    return [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
 }
+
 @end

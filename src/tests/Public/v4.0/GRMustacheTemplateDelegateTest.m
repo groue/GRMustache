@@ -22,7 +22,7 @@
 
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_0
 #import "GRMustachePublicAPITest.h"
-/*
+
 @interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
 @end
 
@@ -40,36 +40,32 @@
     GRMustacheInvocation *_lastInvocation;
     NSUInteger _templateWillRenderCount;
     NSUInteger _templateDidRenderCount;
-    NSUInteger _willRenderReturnValueOfInvocationCount;
-    NSUInteger _didRenderReturnValueOfInvocationCount;
+    NSUInteger _willInterpretReturnValueOfInvocationCount;
+    NSUInteger _didInterpretReturnValueOfInvocationCount;
     NSUInteger _nilReturnValueCount;
     NSString *_lastUsedValue;
-    NSString *_lastUsedKey;
 }
 @property (nonatomic, retain) GRMustacheInvocation *lastInvocation;
 @property (nonatomic) NSUInteger templateWillRenderCount;
 @property (nonatomic) NSUInteger templateDidRenderCount;
-@property (nonatomic) NSUInteger willRenderReturnValueOfInvocationCount;
-@property (nonatomic) NSUInteger didRenderReturnValueOfInvocationCount;
+@property (nonatomic) NSUInteger willInterpretReturnValueOfInvocationCount;
+@property (nonatomic) NSUInteger didInterpretReturnValueOfInvocationCount;
 @property (nonatomic) NSUInteger nilReturnValueCount;
 @property (nonatomic, retain) NSString *lastUsedValue;
-@property (nonatomic, retain) NSString *lastUsedKey;
 @end
 
 @implementation GRMustacheTemplateRecorder
 @synthesize lastInvocation=_lastInvocation;
 @synthesize templateWillRenderCount=_templateWillRenderCount;
 @synthesize templateDidRenderCount=_templateDidRenderCount;
-@synthesize willRenderReturnValueOfInvocationCount=_willRenderReturnValueOfInvocationCount;
-@synthesize didRenderReturnValueOfInvocationCount=_didRenderReturnValueOfInvocationCount;
+@synthesize willInterpretReturnValueOfInvocationCount=_willInterpretReturnValueOfInvocationCount;
+@synthesize didInterpretReturnValueOfInvocationCount=_didInterpretReturnValueOfInvocationCount;
 @synthesize nilReturnValueCount=_nilReturnValueCount;
 @synthesize lastUsedValue=_lastUsedValue;
-@synthesize lastUsedKey=_lastUsedKey;
 
 - (void)dealloc
 {
     self.lastUsedValue = nil;
-    self.lastUsedKey = nil;
     self.lastInvocation = nil;
     [super dealloc];
 }
@@ -84,11 +80,10 @@
     self.templateDidRenderCount += 1;
 }
 
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     self.lastInvocation = invocation;
-    self.willRenderReturnValueOfInvocationCount += 1;
-    self.lastUsedKey = invocation.key;
+    self.willInterpretReturnValueOfInvocationCount += 1;
     self.lastUsedValue = invocation.returnValue;
     if (invocation.returnValue) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
@@ -99,9 +94,9 @@
     }
 }
 
-- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
-    self.didRenderReturnValueOfInvocationCount += 1;
+    self.didInterpretReturnValueOfInvocationCount += 1;
 }
 
 @end
@@ -146,76 +141,76 @@
     STAssertEquals(recorder.templateDidRenderCount, (NSUInteger)1, @"");
 }
 
-- (void)testWillRenderReturnValueOfInvocationWithText
+- (void)testWillInterpretReturnValueOfInvocationWithText
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.willRenderReturnValueOfInvocationCount, (NSUInteger)0, @"");
+    STAssertEquals(recorder.willInterpretReturnValueOfInvocationCount, (NSUInteger)0, @"");
 }
 
-- (void)testDidRenderReturnValueOfInvocationWithText
+- (void)testDidInterpretReturnValueOfInvocationWithText
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.didRenderReturnValueOfInvocationCount, (NSUInteger)0, @"");
+    STAssertEquals(recorder.didInterpretReturnValueOfInvocationCount, (NSUInteger)0, @"");
 }
 
-- (void)testWillRenderReturnValueOfInvocationWithVariable
+- (void)testWillInterpretReturnValueOfInvocationWithVariable
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}{{bar}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.willRenderReturnValueOfInvocationCount, (NSUInteger)2, @"");
+    STAssertEquals(recorder.willInterpretReturnValueOfInvocationCount, (NSUInteger)2, @"");
 }
 
-- (void)testDidRenderReturnValueOfInvocationWithVariable
+- (void)testDidInterpretReturnValueOfInvocationWithVariable
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}{{bar}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.didRenderReturnValueOfInvocationCount, (NSUInteger)2, @"");
+    STAssertEquals(recorder.didInterpretReturnValueOfInvocationCount, (NSUInteger)2, @"");
 }
 
-- (void)testWillRenderReturnValueOfInvocationWithUnrenderedSection
+- (void)testWillInterpretReturnValueOfInvocationWithUnrenderedSection
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#foo}}{{bar}}{{/foo}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.willRenderReturnValueOfInvocationCount, (NSUInteger)1, @"");
+    STAssertEquals(recorder.willInterpretReturnValueOfInvocationCount, (NSUInteger)1, @"");
 }
 
-- (void)testDidRenderReturnValueOfInvocationWithUnrenderedSection
+- (void)testDidInterpretReturnValueOfInvocationWithUnrenderedSection
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#foo}}{{bar}}{{/foo}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.didRenderReturnValueOfInvocationCount, (NSUInteger)1, @"");
+    STAssertEquals(recorder.didInterpretReturnValueOfInvocationCount, (NSUInteger)1, @"");
 }
 
-- (void)testWillRenderReturnValueOfInvocationWithRenderedSectionAndVariable
+- (void)testWillInterpretReturnValueOfInvocationWithRenderedSectionAndVariable
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{^foo}}{{bar}}{{/foo}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.willRenderReturnValueOfInvocationCount, (NSUInteger)2, @"");
+    STAssertEquals(recorder.willInterpretReturnValueOfInvocationCount, (NSUInteger)2, @"");
 }
 
-- (void)testDidRenderReturnValueOfInvocationWithRenderedSectionAndVariable
+- (void)testDidInterpretReturnValueOfInvocationWithRenderedSectionAndVariable
 {
     GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{^foo}}{{bar}}{{/foo}}" error:NULL];
     template.delegate = recorder;
     [template render];
-    STAssertEquals(recorder.didRenderReturnValueOfInvocationCount, (NSUInteger)2, @"");
+    STAssertEquals(recorder.didInterpretReturnValueOfInvocationCount, (NSUInteger)2, @"");
 }
 
 - (void)testDelegateCanReadInvocationReturnValue
@@ -236,24 +231,6 @@
     assistant1.stringProperty = @"foo";
     [template renderObject:[NSDictionary dictionaryWithObjectsAndKeys:assistant1, @"1", nil]];
     STAssertEqualObjects(recorder.lastUsedValue, @"foo", @"");
-}
-
-- (void)testDelegateCanReadInvocationKey
-{
-    GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-    template.delegate = recorder;
-    [template render];
-    STAssertEqualObjects(recorder.lastUsedKey, @"foo", @"");
-}
-
-- (void)testDelegateCanReadInvocationKeyFromKeyPath
-{
-    GRMustacheTemplateRecorder *recorder = [[[GRMustacheTemplateRecorder alloc] init] autorelease];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo.bar.baz}}" error:NULL];
-    template.delegate = recorder;
-    [template renderObject:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"foo"]];
-    STAssertEqualObjects(recorder.lastUsedKey, @"bar", @"");
 }
 
 - (void)testDelegateCanWriteInvocationReturnValue
@@ -507,4 +484,3 @@
 }
 
 @end
-*/

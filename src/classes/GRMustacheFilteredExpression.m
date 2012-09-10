@@ -26,22 +26,21 @@
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheFilteredExpression()
-@property (nonatomic, retain) id<GRMustacheExpression> filterExpression;
-@property (nonatomic, retain) id<GRMustacheExpression> parameterExpression;
-- (id)initWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression;
+@property (nonatomic, retain) GRMustacheExpression *filterExpression;
+@property (nonatomic, retain) GRMustacheExpression *parameterExpression;
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression;
 @end
 
 @implementation GRMustacheFilteredExpression
-@synthesize debuggingToken=_debuggingToken;
 @synthesize filterExpression=_filterExpression;
 @synthesize parameterExpression=_parameterExpression;
 
-+ (id)expressionWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression
 {
     return [[[self alloc] initWithFilterExpression:filterExpression parameterExpression:parameterExpression] autorelease];
 }
 
-- (id)initWithFilterExpression:(id<GRMustacheExpression>)filterExpression parameterExpression:(id<GRMustacheExpression>)parameterExpression
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression
 {
     self = [super init];
     if (self) {
@@ -53,7 +52,6 @@
 
 - (void)dealloc
 {
-    [_debuggingToken release];
     [_filterExpression release];
     [_parameterExpression release];
     [super dealloc];
@@ -61,15 +59,12 @@
 
 - (void)setDebuggingToken:(GRMustacheToken *)debuggingToken
 {
-    if (_debuggingToken != debuggingToken) {
-        [_debuggingToken release];
-        _debuggingToken = [debuggingToken retain];
-        _filterExpression.debuggingToken = _debuggingToken;
-        _parameterExpression.debuggingToken = _debuggingToken;
-    }
+    [super setDebuggingToken:debuggingToken];
+    _filterExpression.debuggingToken = debuggingToken;
+    _parameterExpression.debuggingToken = debuggingToken;
 }
 
-- (BOOL)isEqual:(id<GRMustacheExpression>)expression
+- (BOOL)isEqual:(id)expression
 {
     if (![expression isKindOfClass:[GRMustacheFilteredExpression class]]) {
         return NO;
@@ -83,27 +78,20 @@
 
 #pragma mark GRMustacheExpression
 
-- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
-    [_parameterExpression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationContextValue usingBlock:^(id parameter) {
-        [_filterExpression evaluateInRuntime:runtime forInterpretation:GRMustacheInterpretationFilterValue usingBlock:^(id filter) {
-            if (filter == nil) {
-                [NSException raise:GRMustacheFilterException format:@"Missing filter"];
-            }
-            
-            if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
-                [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
-            }
-            
-            id value = [(id<GRMustacheFilter>)filter transformedValue:parameter];
-            
-            value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
-            
-            block(value);
-            
-            [runtime delegateTemplateDidInterpretValue:value as:interpretation];
-        }];
-    }];
+    id parameter = [_parameterExpression evaluateInRuntime:runtime asFilterValue:NO];
+    id filter = [_filterExpression evaluateInRuntime:runtime asFilterValue:YES];
+
+    if (filter == nil) {
+        [NSException raise:GRMustacheFilterException format:@"Missing filter"];
+    }
+    
+    if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
+        [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
+    }
+    
+    return [(id<GRMustacheFilter>)filter transformedValue:parameter];
 }
 
 @end

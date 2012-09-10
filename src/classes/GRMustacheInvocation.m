@@ -20,28 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheInvocation_private.h"
+#import "GRMustacheToken_private.h"
 
-@implementation GRMustacheImplicitIteratorExpression
+@implementation GRMustacheInvocation
+@synthesize returnValue=_returnValue;
+@synthesize debuggingToken=_debuggingToken;
 
-+ (id)expression
+- (void)dealloc
 {
-    return [[[self alloc] init] autorelease];
+    [_returnValue release];
+    [_debuggingToken release];
+    [super dealloc];
 }
 
-- (BOOL)isEqual:(id)expression
+- (NSString *)description
 {
-    return [expression isKindOfClass:[GRMustacheImplicitIteratorExpression class]];
-}
-
-
-#pragma mark - GRMustacheExpression
-
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
-{
-    NSAssert(!filterValue, @"GRMustacheImplicitIteratorExpression invoked for a filter");
-    return [runtime contextValue];
+    NSAssert(_debuggingToken, @"debuggingToken not set");
+    if (_debuggingToken.templateID) {
+        return [NSString stringWithFormat:@"`%@` at line %lu of template %@", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line, _debuggingToken.templateID];
+    } else {
+        return [NSString stringWithFormat:@"`%@` at line %lu", _debuggingToken.templateSubstring, (unsigned long)_debuggingToken.line];
+    }
 }
 
 @end

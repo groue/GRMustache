@@ -30,7 +30,6 @@
 @end
 
 @implementation GRMustacheIdentifierExpression
-@synthesize debuggingToken=_debuggingToken;
 @synthesize identifier=_identifier;
 
 + (id)expressionWithIdentifier:(NSString *)identifier
@@ -49,12 +48,11 @@
 
 - (void)dealloc
 {
-    [_debuggingToken release];
     [_identifier release];
     [super dealloc];
 }
 
-- (BOOL)isEqual:(id<GRMustacheExpression>)expression
+- (BOOL)isEqual:(id)expression
 {
     if (![expression isKindOfClass:[GRMustacheIdentifierExpression class]]) {
         return NO;
@@ -65,22 +63,13 @@
 
 #pragma mark - GRMustacheExpression
 
-- (void)evaluateInRuntime:(GRMustacheRuntime *)runtime forInterpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
-    id value = nil;
-    if (interpretation & GRMustacheInterpretationContextValue) {
-        value = [runtime contextValueForKey:_identifier];
-    } else if (interpretation & GRMustacheInterpretationFilterValue) {
-        value = [runtime filterValueForKey:_identifier];
+    if (filterValue) {
+        return [runtime filterValueForKey:_identifier];
     } else {
-        NSAssert(NO, @"WTF");
+        return [runtime contextValueForKey:_identifier];
     }
-    
-    value = [runtime delegateTemplateWillInterpretValue:value as:interpretation];
-    
-    block(value);
-    
-    [runtime delegateTemplateDidInterpretValue:value as:interpretation];
 }
 
 @end

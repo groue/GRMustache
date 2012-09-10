@@ -199,7 +199,7 @@
             }
             
             // Parser validation
-            NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
             [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:NO]];
@@ -214,7 +214,7 @@
             }
             
             // Parser validation
-            NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
             [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:YES]];
@@ -230,7 +230,7 @@
             }
             
             // Parser validation
-            NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             
             // Expand stacks
             self.currentSectionOpeningToken = token;
@@ -250,7 +250,7 @@
             
             // Parser validation
             if (token.value.expression) {
-                NSAssert([token.value.expression conformsToProtocol:@protocol(GRMustacheExpression)], @"WTF parser?");
+                NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             }
             
             // Validate token: section ending should match section opening

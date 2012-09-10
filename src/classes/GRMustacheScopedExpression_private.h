@@ -27,10 +27,9 @@
  *
  * @see GRMustacheExpression
  */
-@interface GRMustacheScopedExpression : NSObject<GRMustacheExpression> {
+@interface GRMustacheScopedExpression : GRMustacheExpression {
 @private
-    GRMustacheToken *_debuggingToken;
-    id<GRMustacheExpression> _baseExpression;
+    GRMustacheExpression *_baseExpression;
     NSString *_scopeIdentifier;
 }
 
@@ -47,5 +46,5 @@
  *
  * @return A GRMustacheScopedExpression.
  */
-+ (id)expressionWithBaseExpression:(id<GRMustacheExpression>)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
++ (id)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
 @end

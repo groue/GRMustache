@@ -23,7 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_1
 #import "GRMustachePublicAPITest.h"
 
-/*
 @interface GRMustacheTemplateDelegate_v4_1_Test : GRMustachePublicAPITest
 @end
 
@@ -221,4 +220,3 @@
 }
 
 @end
-*/

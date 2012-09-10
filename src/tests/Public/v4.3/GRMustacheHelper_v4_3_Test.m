@@ -23,7 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_3
 #import "GRMustachePublicAPITest.h"
 
-/*
 @interface GRMustacheHelper_v4_3_Test : GRMustachePublicAPITest
 @end
 
@@ -169,4 +168,3 @@
 }
 
 @end
-*/

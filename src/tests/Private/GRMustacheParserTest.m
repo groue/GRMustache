@@ -215,18 +215,18 @@
     STAssertNil(tokenRecorder.error, nil);
     STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
     STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
-    id<GRMustacheExpression> expression_e = [GRMustacheIdentifierExpression expressionWithIdentifier:@"e"];
-    id<GRMustacheExpression> expression_ef = [GRMustacheScopedExpression expressionWithBaseExpression:expression_e scopeIdentifier:@"f"];
-    id<GRMustacheExpression> expression_c = [GRMustacheIdentifierExpression expressionWithIdentifier:@"c"];
-    id<GRMustacheExpression> expression_cd = [GRMustacheScopedExpression expressionWithBaseExpression:expression_c scopeIdentifier:@"d"];
-    id<GRMustacheExpression> expression_cdef = [GRMustacheFilteredExpression expressionWithFilterExpression:expression_cd parameterExpression:expression_ef];
-    id<GRMustacheExpression> expression_cdefg = [GRMustacheScopedExpression expressionWithBaseExpression:expression_cdef scopeIdentifier:@"g"];
-    id<GRMustacheExpression> expression_cdefgh = [GRMustacheScopedExpression expressionWithBaseExpression:expression_cdefg scopeIdentifier:@"h"];
-    id<GRMustacheExpression> expression_a = [GRMustacheIdentifierExpression expressionWithIdentifier:@"a"];
-    id<GRMustacheExpression> expression_ab = [GRMustacheScopedExpression expressionWithBaseExpression:expression_a scopeIdentifier:@"b"];
-    id<GRMustacheExpression> expression_abcdefgh = [GRMustacheFilteredExpression expressionWithFilterExpression:expression_ab parameterExpression:expression_cdefgh];
-    id<GRMustacheExpression> expression_abcdefghi = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefgh scopeIdentifier:@"i"];
-    id<GRMustacheExpression> expression_abcdefghij = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefghi scopeIdentifier:@"j"];
+    GRMustacheExpression *expression_e = [GRMustacheIdentifierExpression expressionWithIdentifier:@"e"];
+    GRMustacheExpression *expression_ef = [GRMustacheScopedExpression expressionWithBaseExpression:expression_e scopeIdentifier:@"f"];
+    GRMustacheExpression *expression_c = [GRMustacheIdentifierExpression expressionWithIdentifier:@"c"];
+    GRMustacheExpression *expression_cd = [GRMustacheScopedExpression expressionWithBaseExpression:expression_c scopeIdentifier:@"d"];
+    GRMustacheExpression *expression_cdef = [GRMustacheFilteredExpression expressionWithFilterExpression:expression_cd parameterExpression:expression_ef];
+    GRMustacheExpression *expression_cdefg = [GRMustacheScopedExpression expressionWithBaseExpression:expression_cdef scopeIdentifier:@"g"];
+    GRMustacheExpression *expression_cdefgh = [GRMustacheScopedExpression expressionWithBaseExpression:expression_cdefg scopeIdentifier:@"h"];
+    GRMustacheExpression *expression_a = [GRMustacheIdentifierExpression expressionWithIdentifier:@"a"];
+    GRMustacheExpression *expression_ab = [GRMustacheScopedExpression expressionWithBaseExpression:expression_a scopeIdentifier:@"b"];
+    GRMustacheExpression *expression_abcdefgh = [GRMustacheFilteredExpression expressionWithFilterExpression:expression_ab parameterExpression:expression_cdefgh];
+    GRMustacheExpression *expression_abcdefghi = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefgh scopeIdentifier:@"i"];
+    GRMustacheExpression *expression_abcdefghij = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefghi scopeIdentifier:@"j"];
     
     STAssertEqualObjects(expression_abcdefghij, [tokenRecorder tokenValueAtIndex:1], nil);
 }

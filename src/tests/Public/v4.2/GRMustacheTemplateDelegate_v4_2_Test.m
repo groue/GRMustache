@@ -23,7 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_4_2
 #import "GRMustachePublicAPITest.h"
 
-/*
 @interface GRMustacheTemplateDelegate_v4_2_Test : GRMustachePublicAPITest
 @end
 
@@ -31,7 +30,7 @@
 @end
 
 @implementation GRMustacheTemplatePrefixDelegate
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     if ([invocation.returnValue isKindOfClass:[NSString class]]) {
         invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
@@ -43,7 +42,7 @@
 @end
 
 @implementation GRMustacheTemplateUppercaseDelegate
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     if ([invocation.returnValue isKindOfClass:[NSString class]]) {
         invocation.returnValue = [[invocation.returnValue description] uppercaseString];
@@ -55,7 +54,7 @@
 @end
 
 @implementation GRMustacheTemplateSuffixDelegate
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     if ([invocation.returnValue isKindOfClass:[NSString class]]) {
         invocation.returnValue = [NSString stringWithFormat:@"%@suffix", invocation.returnValue];
@@ -137,6 +136,4 @@
     STAssertEqualObjects(rendering, @"prefixfoosuffix prefixFOOsuffix FOOsuffix PREFIXFOOsuffix", @"");
 }
 
-
 @end
-*/
