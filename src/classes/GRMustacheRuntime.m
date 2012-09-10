@@ -23,6 +23,7 @@
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheExpression_private.h"
 #import "GRMustacheInvocation_private.h"
 
 @interface GRMustacheRuntime()
@@ -94,7 +95,7 @@
     return [_filterContext valueForKey:key];
 }
 
-- (id)contextValue
+- (id)currentContextValue
 {
     return _renderingContext.object;
 }
@@ -103,7 +104,7 @@
 {
     id value = [expression evaluateInRuntime:self asFilterValue:NO];
     
-    if (_delegatingTemplate == nil || _delegates.count == 0) {
+    if (_delegates.count == 0) {
         block(value);
     } else {
         [self delegateInterpretValue:value fromExpression:expression as:interpretation withDelegateAtIndex:0 usingBlock:block];

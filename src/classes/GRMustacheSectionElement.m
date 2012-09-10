@@ -110,42 +110,44 @@
     __block NSString *result = nil;
     @autoreleasepool {
         
-        [runtime interpretExpression:_expression as:GRMustacheInterpretationSection usingBlock:^(id object) {
-            
-            // augment delegates if necessary
+        [runtime interpretExpression:_expression as:GRMustacheInterpretationSection usingBlock:^(id value) {
             
             GRMustacheRuntime *sectionRuntime = runtime;
-            if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-                sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)object];
+            
+            // Values that conform to the GRMustacheTemplateDelegate protocol
+            // enter the section runtime.
+            
+            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                sectionRuntime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
             }
             
             
-            // interpret
+            // Interpret value
             
-            if (object == nil ||
-                object == [NSNull null] ||
-                ([object isKindOfClass:[NSNumber class]] && [((NSNumber*)object) boolValue] == NO) ||
-                ([object isKindOfClass:[NSString class]] && [((NSString*)object) length] == 0))
+            if (value == nil ||
+                value == [NSNull null] ||
+                ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
+                ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
             {
                 // False value
                 if (_inverted) {
                     result = [[self renderElementsInRuntime:sectionRuntime] retain];
                 }
             }
-            else if ([object isKindOfClass:[NSDictionary class]])
+            else if ([value isKindOfClass:[NSDictionary class]])
             {
-                // True object value
+                // True value
                 if (!_inverted) {
-                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
+                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
                     result = [[self renderElementsInRuntime:sectionRuntime] retain];
                 }
             }
-            else if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+            else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
             {
                 // Enumerable
                 if (_inverted) {
                     BOOL empty = YES;
-                    for (id item in object) {
+                    for (id item in value) {
                         empty = NO;
                         break;
                     }
@@ -154,26 +156,26 @@
                     }
                 } else {
                     result = [[NSMutableString string] retain];
-                    for (id item in object) {
+                    for (id item in value) {
                         GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
                         NSString *itemRendering = [self renderElementsInRuntime:itemRuntime];
                         [(NSMutableString *)result appendString:itemRendering];
                     }
                 }
             }
-            else if ([object conformsToProtocol:@protocol(GRMustacheHelper)])
+            else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
             {
                 // Helper
                 if (!_inverted) {
                     GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                    result = [[(id<GRMustacheHelper>)object renderSection:section] retain];
+                    result = [[(id<GRMustacheHelper>)value renderSection:section] retain];
                 }
             }
             else
             {
-                // True object value
+                // True value
                 if (!_inverted) {
-                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:object];
+                    sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
                     result = [[self renderElementsInRuntime:sectionRuntime] retain];
                 }
             }

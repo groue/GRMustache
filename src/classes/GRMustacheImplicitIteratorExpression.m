@@ -41,7 +41,7 @@
 - (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
     NSAssert(!filterValue, @"GRMustacheImplicitIteratorExpression invoked for a filter");
-    return [runtime contextValue];
+    return [runtime currentContextValue];
 }
 
 @end

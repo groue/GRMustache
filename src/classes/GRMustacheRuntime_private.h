@@ -21,11 +21,11 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplateDelegate.h"
 
 @protocol GRMustacheTemplateDelegate;
 @class GRMustacheTemplate;
+@class GRMustacheExpression;
 @class GRMustacheContext;
 
 @interface GRMustacheRuntime : NSObject {
@@ -39,7 +39,7 @@
 
 - (id)contextValueForKey:(NSString *)key;
 - (id)filterValueForKey:(NSString *)key;
-- (id)contextValue;
+- (id)currentContextValue;
 
 - (void)interpretExpression:(GRMustacheExpression *)expression as:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id))block;
 @end
