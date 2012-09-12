@@ -278,6 +278,18 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
 {
+    // Returns YES if object is NSArray, NSSet, or NSOrderedSet.
+    //
+    // [NSObject isKindOfClass:] is slow.
+    //
+    // Our strategy: provide a fast path for objects whose implementation of
+    // valueForKey: is the same as NSObject, NSDictionary and NSManagedObject,
+    // by comparing implementations of valueForKey:. The slow path is for other
+    // objects, for which we check whether they are NSArray, NSSet, or
+    // NSOrderedSet with isKindOfClass:. We can not compare implementations for
+    // those classes, because they are class clusters and that we can't be sure
+    // they provide a single implementation of valueForKey:
+    
     static SEL selector = nil;
     static IMP NSObjectIMPL = nil;
     static IMP NSDictionaryIMPL = nil;
