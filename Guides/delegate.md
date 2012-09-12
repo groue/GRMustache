@@ -42,17 +42,16 @@ The following methods are called before, and after the rendering of substitution
 - (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation;
 ```
 
-Maybe verbose. But quite on target: as a matter of fact, in order to render a tag, GRMustache has to *invoke* the tag name on the rendered object, the one you've given to the template, and then to *interpret* it.
+Maybe verbose. But quite on target: as a matter of fact, in order to render a tag, GRMustache has to *invoke* the tag expression on the rendered object, the one you've given to the template, and then to *interpret* it.
 
 You can read the following properties of the *invocation* parameter:
 
 - `id returnValue`: the return value of the invocation.
-- `NSString *key`: the key that did provide this value.
 - `NSString *description`: a string that helps you locate the corresponding Mustache tag.
 
 Note that those methods do not allow you to build a complete "stack trace" of GRMustache rendering. They are not called for each accessed key. They are called for each tag rendering, which is quite different.
 
-For instance, a tag like `{{person.name}}` is rendered once. Thus `template:willInterpretReturnValueOfInvocation:as:` will be called once. If the person has been found, the invocation's key will be `@"name"`, and the return value the name of the person. If the person could not be found, the key will be `@"person"`, and the return value `nil`.
+For instance, a tag like `{{person.name}}` is rendered once. Thus `template:willInterpretReturnValueOfInvocation:as:` will be called once. If the person has been found, the return value will be the name of the person. If the person could not be found, the return value will be `nil`.
 
 Also: if a section tag `{{#name}}...{{/name}}` is provided with an NSArray, its content is rendered several times. However `template:willInterpretReturnValueOfInvocation:as:` will be called once, with the array stored in the return value of the invocation.
 
@@ -62,15 +61,12 @@ The *interpretation* parameter tells you how the return value of the invocation 
 typedef enum {
     GRMustacheInterpretationSection,
     GRMustacheInterpretationVariable,
-    GRMustacheInterpretationFilterArgument,
 } GRMustacheInterpretation;
 ```
 
 `GRMustacheInterpretationVariable` tells you that the return value is rendered by a Mustache variable tag such as `{{name}}`. Basically, GRMustache simply invokes its `description` method. See [Guides/runtime.md](runtime.md) for more information.
 
 `GRMustacheInterpretationSection` tells you that the return value is used by a Mustache section such as `{{#name}}...{{/name}}`. Mustache sections are versatile: there are boolean sections, loop sections, and lambda sections, and this depends solely on the rendered value, that is to say: the return value of the invocation. Again, see [Guides/runtime.md](runtime.md) for more information.
-
-`GRMustacheInterpretationFilterArgument` tells you that the return value is about to be processed by a filter such as `{{ f(name) }}`. See [Guides/filters.md](filters.md) for more information.
 
 
 ### A practical use: debugging templates
@@ -120,7 +116,7 @@ The `returnValue` property of the *invocation* parameter can be written. If you 
 
 Usually, [filters](filters.md) and [helpers](helpers.md) should do the trick when you want to alter a template's rendering.
 
-However, they both require to be explicited invoked from the template: `{{#helper}}...{{/helper}}`, and `{{ filter(...) }}`.
+However, they both require to be explicitly invoked from the template: `{{#helper}}...{{/helper}}`, and `{{ filter(...) }}`.
 
 GRMustacheTemplateDelegate will help you when you can not, or do not want, to embed your extra behaviors right into the template.
 

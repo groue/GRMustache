@@ -4,6 +4,45 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.0.0
+
+**[Performance improvements](https://github.com/groue/GRMustacheBenchmark), and fix for flaws in the GRMustacheDelegate API.**
+
+Besides the removal of already deprecated methods, the changes introduced in this version are very unlikely to introduce incompatibilities in your code:
+
+- Dropped support for iOS3.
+- Before v5.0.0, [template delegates](Guides/delegate.md) could know that the value `Arthur` was provided by the key `name` when the tag `{{name}}` is rendered. Delegates are now only provided with the value.
+- Before v5.0.0, a tag containing a filter expression like `{{uppercase(name)}}` would have a template delegate invoked with the raw `Arthur` value, not the filter result: `ARTHUR`. In v5.0.0, delegate callbacks are given always given the value GRMustache is about to render.
+
+Removed APIs:
+
+```objc
+@interface GRMustacheInvocation : NSObject
+// Removed without deprecation warning
+@property (nonatomic, readonly) NSString *key;
+@end
+
+@interface GRMustacheSection: NSObject
+// Deprecated in v4.3.0
+@property (nonatomic, retain, readonly) id renderingContext;
+@end
+
+@interface GRMustacheTemplate: NSObject
+// Deprecated in v4.3.0
+- (NSString *)renderObjects:(id)object, ...;
+@end
+
+// Removed without deprecation warning
+GRMustacheInterpretationFilterArgument // was part of the GRMustacheInterpretation enum.
+
+@protocol GRMustacheTemplateDelegate<NSObject>
+// Deprecated in v4.1.0
+- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation;
+@end
+```
+
+
 ## v4.3.4
 
 Restored compatibility with iOS3 and OSX6 (thanks [@Bertrand](https://github.com/Bertrand)).
@@ -414,11 +453,11 @@ Upgrade GRMustache, and get deprecation warnings when you use deprecated APIs. Y
 
 ## v1.10.2
 
-**Drastic rendering performance improvements**
+**[Performance improvements](https://github.com/groue/GRMustacheBenchmark)**
 
 ## v1.10.1
 
-**Rendering performance improvements**
+**[Performance improvements](https://github.com/groue/GRMustacheBenchmark)**
 
 ## v1.10
 

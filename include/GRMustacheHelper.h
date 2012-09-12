@@ -59,7 +59,7 @@
  *
  * @since v2.0
  */
-- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 @end
 
 
@@ -82,8 +82,6 @@
 /// @name Creating Helpers
 ////////////////////////////////////////////////////////////////////////////////
 
-#if NS_BLOCKS_AVAILABLE
-
 /**
  * Returns a GRMustacheHelper object that executes the provided block when
  * rendering a section.
@@ -94,8 +92,6 @@
  *
  * @since v2.0
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
-
-#endif /* if NS_BLOCKS_AVAILABLE */
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 @end

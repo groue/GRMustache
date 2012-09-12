@@ -29,7 +29,7 @@
  * 
  * @since v1.0
  */
-extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 /**
  * The codes of a GRMustache-generated NSError
@@ -50,6 +50,6 @@ typedef enum {
      * @since v1.0
      */
     GRMustacheErrorCodeTemplateNotFound,
-} GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+} GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 

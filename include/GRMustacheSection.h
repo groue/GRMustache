@@ -23,9 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@class GRMustacheInvocation;
-@class GRMustacheTemplate;
-
 /**
  * A GRMustacheSection represents a Mustache section such as 
  * `{{#name}}...{{/name}}`.
@@ -43,25 +40,8 @@
 @interface GRMustacheSection: NSObject {
 @private
     id _sectionElement;
-    id _renderingContext;
-    id _filterContext;
-    id _delegatingTemplate;
-    id _delegates;
+    id _runtime;
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Accessing the current rendering context
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * The current rendering context.
- *
- * @since v2.0
- * @deprecated v4.3
- */
-@property (nonatomic, retain, readonly) id renderingContext AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_3;
-
 
 
 
@@ -75,7 +55,7 @@
  *
  * @since v2.0
  */
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +69,7 @@
  *
  * @since v2.0
  */
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +88,6 @@
  *
  * @since v4.3
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 @end

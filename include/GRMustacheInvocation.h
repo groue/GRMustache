@@ -38,27 +38,9 @@
  */
 @interface GRMustacheInvocation : NSObject {
 @private
-    NSString *_key;
     id _returnValue;
-    id _debuggingToken;
+    id _token;
 }
-
-/**
- * The key that did provide the return value of the invocation.
- *
- * For instance, the invocation that you would get for a `{{name}}` tag would
- * have @"name" in its `key` property, and the name in the `returnValue`
- * property.
- *
- * For tags with compound keys, such as `{{person.name}}`, the key will be
- * @"name" if the person could be found in the context stack. It would be
- * @"person" otherwise.
- *
- * @see returnValue
- *
- * @since v1.12
- */
-@property (nonatomic, readonly) NSString *key AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
 
 /**
  * The return value of the invocation.
@@ -66,17 +48,12 @@
  * For instance, the invocation that you would get for a `{{name}}` tag would
  * have the name in the `returnValue` property.
  *
- * For tags with compound keys, such as `{{person.name}}`, the value will be
- * the person's name, if the person could be found in the context stack.
- * It would be nil otherwise.
- *
  * In a template's delegate methods, you can set the returnValue of an
  * invocation, and alter a template rendering.
  *
- * @see key
  * @see GRMustacheTemplateDelegate
  *
  * @since v1.12
  */
-@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 @end

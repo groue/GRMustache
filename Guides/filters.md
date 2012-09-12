@@ -84,7 +84,7 @@ You can for instance declare a filter that outputs numbers as percentages:
 id percentFilters = [[PercentFilter alloc] init];
 ```
 
-Starting iOS4 and MacOS 10.6, the Objective-C language provides us with blocks. This can relieve the burden of declaring a full class for each filter:
+The protocol comes with a `GRMustacheFilter` class, which provides a convenient method for building a filter without implementing a full class that conforms to the protocol:
 
 ```objc
 id percentFilter = [GRMustacheFilter filterWithBlock:^id(id object) {

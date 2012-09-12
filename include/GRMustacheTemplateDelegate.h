@@ -27,20 +27,21 @@
 @class GRMustacheInvocation;
 
 /**
- * The various ways GRMustache can interpret a value.
+ * The various ways GRMustache can render a value.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
  * @see GRMustacheTemplateDelegate
- * 
+ *
  * @since v4.1
  */
 typedef enum {
     /**
-     * The value is interpreted for section rendering: whether it is a NSNumber,
-     * an object conforming to the NSFastEnumeration protocol, an object
-     * conforming to the GRMustacheHelper protocol, or any other value, the
-     * section will render differently.
+     * The value is interpreted for section rendering, such as
+     * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
+     * to the NSFastEnumeration protocol, an object conforming to the
+     * GRMustacheHelper protocol, or any other value, the section will render
+     * differently.
      *
      * @since v4.1
      */
@@ -54,13 +55,6 @@ typedef enum {
      */
     GRMustacheInterpretationVariable,
     
-    /**
-     * The value is interpreted as a filter parameter, for tags such as
-     * `{{uppercase(name)}}`.
-     *
-     * @since v4.3
-     */
-    GRMustacheInterpretationFilterArgument,
 } GRMustacheInterpretation;
 
 /**
@@ -86,7 +80,7 @@ typedef enum {
  *
  * @since v1.12
  */
-- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 /**
  * Sent right after a template has finished rendering.
@@ -95,42 +89,12 @@ typedef enum {
  *
  * @since v1.12
  */
-- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Observing the Rendering of individual Mustache tags
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Sent right before GRMustache interprets and renders a value (Deprecated in
- * GRMustache 4.1).
- *
- * @param template    The template that is about to interpret a value.
- * @param invocation  The invocation object providing information about the
- *                    value.
- *
- * @see GRMustacheInvocation
- *
- * @since v1.12
- * @deprecated v4.1
- */
-- (void)template:(GRMustacheTemplate *)template willRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
-
-/**
- * Sent right after GRMustache has interpreted and rendered a value (Deprecated
- * in GRMustache 4.1).
- *
- * @param template    The template that has rendered a value.
- * @param invocation  The invocation object providing information about the
- *                    value.
- *
- * @see GRMustacheInvocation
- *
- * @since v1.12
- * @deprecated v4.1
- */
-- (void)template:(GRMustacheTemplate *)template didRenderReturnValueOfInvocation:(GRMustacheInvocation *)invocation AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_4_1;
 
 /**
  * Sent right before GRMustache interprets and renders a value.
@@ -143,7 +107,7 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 /**
  * Sent right after GRMustache has interpreted and rendered a value.
@@ -156,5 +120,6 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_4_1_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+
 @end
