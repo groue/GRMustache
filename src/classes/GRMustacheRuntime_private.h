@@ -26,16 +26,31 @@
 @protocol GRMustacheTemplateDelegate;
 @class GRMustacheTemplate;
 @class GRMustacheToken;
-@class GRMustacheContext;
+
+#if !defined(NS_BLOCK_ASSERTIONS)
+/**
+ * This global variable is used by GRPreventNSUndefinedKeyExceptionAttackTest.
+ */
+extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
+#endif
 
 @interface GRMustacheRuntime : NSObject {
+    BOOL _parentHasContext;
+    BOOL _parentHasFilter;
+    BOOL _parentHasTemplateDelegate;
+    GRMustacheRuntime *_parent;
     GRMustacheTemplate *_template;
-    GRMustacheContext *_renderingContext;
-    GRMustacheContext *_filterContext;
+    id<GRMustacheTemplateDelegate> _templateDelegate;
+    id _contextObject;
+    id _filterObject;
 }
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template renderingContext:(GRMustacheContext *)renderingContext filterContext:(GRMustacheContext *)filterContext;
-- (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)delegate;
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)object;
++ (void)preventNSUndefinedKeyExceptionAttack;
++ (id)valueForKey:(NSString *)key inObject:(id)object;
+
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template;
+- (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
+- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject;
+- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject;
 
 - (id)contextValueForKey:(NSString *)key;
 - (id)filterValueForKey:(NSString *)key;

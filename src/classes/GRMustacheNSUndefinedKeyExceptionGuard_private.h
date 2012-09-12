@@ -27,11 +27,11 @@
  * This class avoids most NSUndefinedException to be raised by the invocation of
  * `valueForKey:` method on user's objects.
  *
- * It is used by GRMustacheContext after the library user has called
+ * It is used by GRMustacheRuntime after the library user has called
  * `[GRMustache preventNSUndefinedKeyExceptionAttack]`.
  *
  * @see GRMustache.
- * @see GRMustacheContext
+ * @see GRMustacheRuntime
  */
 @interface GRMustacheNSUndefinedKeyExceptionGuard : NSObject
 

@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilterLibrary_private.h"
-#import "GRMustacheContext_private.h"
 #import "GRMustacheFilter.h"
 
 
@@ -134,7 +133,7 @@
 
 @implementation GRMustacheFilterLibrary
 
-+ (GRMustacheContext *)filterContextWithFilters:(id)filters
++ (id)filterLibrary
 {
     static NSDictionary *GRMustacheLibrary = nil;
     if (GRMustacheLibrary == nil) {
@@ -147,11 +146,7 @@
                               nil] retain];
     }
     
-    GRMustacheContext *filterContext = [GRMustacheContext contextWithObject:GRMustacheLibrary];
-    if (filters == nil) {
-        return filterContext;
-    }
-    return [filterContext contextByAddingObject:filters];
+    return GRMustacheLibrary;
 }
 
 @end

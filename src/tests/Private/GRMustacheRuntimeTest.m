@@ -21,10 +21,10 @@
 // THE SOFTWARE.
 
 #import "GRMustachePrivateAPITest.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplate_private.h"
 
-@interface GRMustacheContextTest : GRMustachePrivateAPITest
+@interface GRMustacheRuntimeTest : GRMustachePrivateAPITest
 @end
 
 
@@ -118,45 +118,49 @@
 
 @end
 
-@implementation GRMustacheContextTest
+@implementation GRMustacheRuntimeTest
 
-- (void)testOneDepthContextForwardsValueForKeyToItsObject
+- (void)testOneDepthRuntimeForwardsValueForKeyToItsObject
 {
     GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:recorder];
-    [context valueForKey:@"foo"];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:recorder];
+    [runtime contextValueForKey:@"foo"];
     STAssertEqualObjects(recorder.lastAccessedKey, @"foo", nil);
 }
 
-- (void)testTwoDepthContextForwardsValueForKeyToTopObjectOnlyIfTopObjectHasKey
+- (void)testTwoDepthRuntimeForwardsValueForKeyToTopObjectOnlyIfTopObjectHasKey
 {
     GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-    context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context valueForKey:@"top"], @"top", nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:rootRecorder];
+    runtime = [runtime runtimeByAddingContextObject:topRecorder];
+    STAssertEqualObjects([runtime contextValueForKey:@"top"], @"top", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
     STAssertNil(rootRecorder.lastAccessedKey, nil);
 }
 
-- (void)testTwoDepthContextForwardsValueForKeyToBothObjectIfTopObjectMisses
+- (void)testTwoDepthRuntimeForwardsValueForKeyToBothObjectIfTopObjectMisses
 {
     GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-    context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context valueForKey:@"root"], @"root", nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:rootRecorder];
+    runtime = [runtime runtimeByAddingContextObject:topRecorder];
+    STAssertEqualObjects([runtime contextValueForKey:@"root"], @"root", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
 }
 
-- (void)testTwoDepthContextMissesIfBothObjectMisses
+- (void)testTwoDepthRuntimeMissesIfBothObjectMisses
 {
     GRKVCRecorder *rootRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"root"];
     GRKVCRecorder *topRecorder = [GRKVCRecorder recorderWithRecognizedKey:@"top"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:rootRecorder];
-    context = [context contextByAddingObject:topRecorder];
-    STAssertNil([context valueForKey:@"foo"], nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:rootRecorder];
+    runtime = [runtime runtimeByAddingContextObject:topRecorder];
+    STAssertNil([runtime contextValueForKey:@"foo"], nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
 }
@@ -164,72 +168,78 @@
 - (void)testNilDoesNotStopsExploration
 {
     NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
     dictionary = [NSDictionary dictionary];
-    context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context valueForKey:@"key"], @"foo", nil);
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
+    STAssertEqualObjects([runtime contextValueForKey:@"key"], @"foo", nil);
 }
 
 - (void)testNSNullDoesStopExploration
 {
     NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
-    context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context valueForKey:@"key"], [NSNull null], nil);
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
+    STAssertEqualObjects([runtime contextValueForKey:@"key"], [NSNull null], nil);
 }
 
 - (void)testNSNumberWithBoolNODoesStopExploration
 {
     NSDictionary *dictionary = [NSDictionary dictionaryWithObject:@"foo" forKey:@"key"];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:dictionary];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
-    context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context valueForKey:@"key"], [NSNumber numberWithBool:NO], nil);
+    runtime = [runtime runtimeByAddingContextObject:dictionary];
+    STAssertEqualObjects([runtime contextValueForKey:@"key"], [NSNumber numberWithBool:NO], nil);
 }
 
-- (void)testOneDepthContextTemplate
+- (void)testOneDepthRuntimeTemplate
 {
     NSString *result = [GRMustacheTemplate renderObject:@"foo" fromString:@"{{length}}" error:nil];
     STAssertEqualObjects(result, @"3", nil);
 }
 
-- (void)testTwoDepthContextTemplateWithTopObjectSuccess
+- (void)testTwoDepthRuntimeTemplateWithTopObjectSuccess
 {
     NSString *templateString = @"{{#name}}{{length}}{{/name}}";
-    id context = [GRKVCRecorder recorderWithRecognizedKey:@"name"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    id runtime = [GRKVCRecorder recorderWithRecognizedKey:@"name"];
+    NSString *result = [GRMustacheTemplate renderObject:runtime fromString:templateString error:nil];
     STAssertEqualObjects(result, @"4", nil);
 }
 
-- (void)testTwoDepthContextTemplateWithTopObjectMiss
+- (void)testTwoDepthRuntimeTemplateWithTopObjectMiss
 {
     NSString *templateString = @"{{#name}}{{name}}{{/name}}";
-    NSDictionary *context = [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:templateString error:nil];
+    NSDictionary *runtime = [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"];
+    NSString *result = [GRMustacheTemplate renderObject:runtime fromString:templateString error:nil];
     STAssertEqualObjects(result, @"foo", nil);
 }
 
-- (void)testContextRethrowsNonNSUndefinedKeyException
+- (void)testRuntimeRethrowsNonNSUndefinedKeyException
 {
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertThrows([context valueForKey:@"NonNSUndefinedKeyException"], nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:throwingObject];
+    STAssertThrows([runtime contextValueForKey:@"NonNSUndefinedKeyException"], nil);
 }
 
-- (void)testContextSwallowsNonSelfNSUndefinedKeyException
+- (void)testRuntimeSwallowsNonSelfNSUndefinedKeyException
 {
     // This test makes sure users can implement proxy objects
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertNoThrow([context valueForKey:@"NonSelfNSUndefinedKeyException"], nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:throwingObject];
+    STAssertNoThrow([runtime contextValueForKey:@"NonSelfNSUndefinedKeyException"], nil);
 }
 
-- (void)testContextSwallowsSelfNSUndefinedKeyException
+- (void)testRuntimeSwallowsSelfNSUndefinedKeyException
 {
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:throwingObject];
-    STAssertNoThrow([context valueForKey:@"SelfNSUndefinedKeyException"], nil);
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:nil];
+    runtime = [runtime runtimeByAddingContextObject:throwingObject];
+    STAssertNoThrow([runtime contextValueForKey:@"SelfNSUndefinedKeyException"], nil);
 }
 
 @end

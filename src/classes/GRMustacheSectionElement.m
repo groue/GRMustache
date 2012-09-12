@@ -94,7 +94,7 @@
 
 - (NSString *)renderInnerElementsInRuntime:(GRMustacheRuntime *)runtime
 {
-    NSMutableString *rendering = [NSMutableString string];
+    NSMutableString *rendering = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
     @autoreleasepool {
         for (id<GRMustacheRenderingElement> elem in _elems) {
             [rendering appendString:[elem renderInRuntime:runtime]];
@@ -129,7 +129,7 @@
         {
             // False value
             if (_inverted) {
-                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+                return [self renderInnerElementsInRuntime:sectionRuntime];
             }
         }
         else if ([value isKindOfClass:[NSDictionary class]])
@@ -137,7 +137,7 @@
             // True value
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+                return [self renderInnerElementsInRuntime:sectionRuntime];
             }
         }
         else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -150,7 +150,7 @@
                     break;
                 }
                 if (empty) {
-                    return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+                    return [self renderInnerElementsInRuntime:sectionRuntime];
                 }
             } else {
                 NSMutableString *rendering = [NSMutableString string];
@@ -167,7 +167,7 @@
             // Helper
             if (!_inverted) {
                 GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                return [[(id<GRMustacheHelper>)value renderSection:section] retain];
+                return [(id<GRMustacheHelper>)value renderSection:section];
             }
         }
         else
@@ -175,7 +175,7 @@
             // True value
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                return [[self renderInnerElementsInRuntime:sectionRuntime] retain];
+                return [self renderInnerElementsInRuntime:sectionRuntime];
             }
         }
         

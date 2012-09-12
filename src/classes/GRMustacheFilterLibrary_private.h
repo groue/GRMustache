@@ -22,8 +22,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class GRMustacheContext;
-
 @interface GRMustacheFilterLibrary : NSObject
-+ (GRMustacheContext *)filterContextWithFilters:(id)filters;
++ (id)filterLibrary;
 @end

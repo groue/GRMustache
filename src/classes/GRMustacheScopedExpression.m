@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheScopedExpression_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheScopedExpression()
@@ -80,7 +80,7 @@
 - (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
     id scopedValue = [_baseExpression evaluateInRuntime:runtime asFilterValue:filterValue];
-    return [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+    return [GRMustacheRuntime valueForKey:_scopeIdentifier inObject:scopedValue];
 }
 
 @end

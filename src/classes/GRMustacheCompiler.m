@@ -234,7 +234,7 @@
             
             // Expand stacks
             self.currentSectionOpeningToken = token;
-            self.currentElements = [NSMutableArray array];
+            self.currentElements = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
             [_sectionOpeningTokenStack addObject:token];
             [_elementsStack addObject:_currentElements];
         } break;

@@ -21,10 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheContext_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheFilterLibrary_private.h"
 
 @interface GRMustacheTemplate()
 - (id)initWithElements:(NSArray *)elems;
@@ -198,9 +196,9 @@
 {
     NSString *rendering;
     @autoreleasepool {
-        GRMustacheContext *renderingContext = [GRMustacheContext contextWithObject:object];
-        GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
-        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self renderingContext:renderingContext filterContext:filterContext];
+        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
+        runtime = [runtime runtimeByAddingFilterObject:filters];
+        runtime = [runtime runtimeByAddingContextObject:object];
         rendering = [[self renderInRuntime:runtime] retain];
     }
     return [rendering autorelease];
@@ -215,12 +213,11 @@
 {
     NSString *rendering;
     @autoreleasepool {
-        GRMustacheContext *renderingContext = nil;
+        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
+        runtime = [runtime runtimeByAddingFilterObject:filters];
         for (id object in objects) {
-            renderingContext = renderingContext ? [renderingContext contextByAddingObject:object] : [GRMustacheContext contextWithObject:object];
+            runtime = [runtime runtimeByAddingContextObject:object];
         }
-        GRMustacheContext *filterContext = [GRMustacheFilterLibrary filterContextWithFilters:filters];
-        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self renderingContext:renderingContext filterContext:filterContext];
         rendering = [[self renderInRuntime:runtime] retain];
     }
     return [rendering autorelease];

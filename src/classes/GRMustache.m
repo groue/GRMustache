@@ -21,14 +21,14 @@
 // THE SOFTWARE.
 
 #import "GRMustache_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheRuntime_private.h"
 #import "GRMustacheVersion.h"
 
 @implementation GRMustache
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
+    [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack];
 }
 
 + (GRMustacheVersion)version

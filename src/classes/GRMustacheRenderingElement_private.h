@@ -37,7 +37,7 @@
  * GRMustacheRenderingElement.
  * 
  * Their responsability is to render the data provided by the library user. This
- * data is encapsulated into GRMustacheContext objects, which represent a
+ * data is encapsulated into GRMustacheRuntime objects, which represent a
  * context stack that grows when entering a Mustache {{#section}}, and shrinks
  * when leaving that same {{/section}}.
  * 
@@ -51,7 +51,7 @@
  *   render the concatenation of their renderings.
  * 
  * @see GRMustacheCompiler
- * @see GRMustacheContext
+ * @see GRMustacheRuntime
  */
 @protocol GRMustacheRenderingElement<NSObject>
 @required
