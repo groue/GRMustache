@@ -43,15 +43,10 @@
 }
 
 /**
- * TODO
  * The return value of the invocation.
  *
  * For instance, the invocation that you would get for a `{{name}}` tag would
  * have the name in the `returnValue` property.
- *
- * For tags with compound keys, such as `{{person.name}}`, the value will be
- * the person's name, if the person could be found in the context stack.
- * It would be nil otherwise.
  *
  * In a template's delegate methods, you can set the returnValue of an
  * invocation, and alter a template rendering.
@@ -60,5 +55,5 @@
  *
  * @since v1.12
  */
-@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 @end

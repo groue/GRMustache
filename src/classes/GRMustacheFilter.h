@@ -35,7 +35,7 @@
  *
  * @since v4.3
  */
-extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 /**
@@ -67,7 +67,7 @@ extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4
  *
  * @since v4.3
  */
-- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 @end
 
@@ -92,8 +92,6 @@ extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4
 /// @name Creating Filters
 ////////////////////////////////////////////////////////////////////////////////
 
-#if NS_BLOCKS_AVAILABLE
-
 /**
  * Returns a GRMustacheFilter object that executes the provided block when
  * tranforming a value.
@@ -104,8 +102,6 @@ extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_4
  *
  * @since v4.3
  */
-+ (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
-
-#endif /* if NS_BLOCKS_AVAILABLE */
++ (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 @end

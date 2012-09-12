@@ -55,7 +55,7 @@
  *
  * @since v2.0
  */
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@
  *
  * @since v2.0
  */
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_4_0_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +88,6 @@
  *
  * @since v4.3
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_4_3_AND_LATER;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 @end
