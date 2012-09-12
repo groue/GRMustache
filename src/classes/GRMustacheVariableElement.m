@@ -51,21 +51,21 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
-    return [runtime renderValue:value fromToken:_expression.token as:GRMustacheInterpretationVariable usingBlock:^NSString *(id value) {
+    [runtime delegateValue:value fromToken:_expression.token interpretation:GRMustacheInterpretationVariable usingBlock:^(id value) {
         
-        NSString *rendering = nil;
-        
-        if (value && (value != [NSNull null])) {
-            rendering = [value description];
-            if (!_raw) {
-                rendering = [self htmlEscape:rendering];
-            }
+        if ((value == nil) || (value == [NSNull null])) {
+            return;
         }
         
-        return rendering;
+        NSString *rendering = [value description];
+        if (!_raw) {
+            rendering = [self htmlEscape:rendering];
+        }
+        [buffer appendString:rendering];
+        
     }];
 }
 

@@ -47,7 +47,8 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (void)preventNSUndefinedKeyExceptionAttack;
 + (id)valueForKey:(NSString *)key inObject:(id)object;
 
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template;
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject;
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObjects:(NSArray *)contextObjects;
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject;
 - (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject;
@@ -56,5 +57,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 - (id)filterValueForKey:(NSString *)key;
 - (id)currentContextValue;
 
-- (NSString *)renderValue:(id)value fromToken:(GRMustacheToken *)token as:(GRMustacheInterpretation)interpretation usingBlock:(NSString *(^)(id value))block;
+- (void)delegateValue:(id)value fromToken:(GRMustacheToken *)token interpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block;
+
 @end

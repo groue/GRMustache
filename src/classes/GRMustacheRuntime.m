@@ -41,7 +41,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 @interface GRMustacheRuntime()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
-- (id)initWithTemplate:(GRMustacheTemplate *)template;
+- (id)initWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject;
 - (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
 - (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate contextObject:(id)contextObject;
 - (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate filterObject:(id)filterObject;
@@ -54,9 +54,18 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     preventingNSUndefinedKeyExceptionAttack = YES;
 }
 
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject
 {
-    return [[[self alloc] initWithTemplate:template] autorelease];
+    return [[[self alloc] initWithTemplate:template contextObject:contextObject] autorelease];
+}
+
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObjects:(NSArray *)contextObjects
+{
+    GRMustacheRuntime *runtime = [[[self alloc] initWithTemplate:template contextObject:nil] autorelease];
+    for (id contextObject in contextObjects) {
+        runtime = [runtime runtimeByAddingContextObject:contextObject];
+    }
+    return runtime;
 }
 
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
@@ -143,10 +152,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return nil;
 }
 
-- (NSString *)renderValue:(id)value fromToken:(GRMustacheToken *)token as:(GRMustacheInterpretation)interpretation usingBlock:(NSString *(^)(id value))block
+- (void)delegateValue:(id)value fromToken:(GRMustacheToken *)token interpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
-    NSString *rendering = nil;
-    
     if (_templateDelegate) {
         GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
         invocation.token = token;
@@ -157,9 +164,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
         
         if (_parent) {
-            rendering = [_parent renderValue:invocation.returnValue fromToken:token as:interpretation usingBlock:block];
+            [_parent delegateValue:invocation.returnValue fromToken:token interpretation:interpretation usingBlock:block];
         } else {
-            rendering = block(invocation.returnValue);
+            block(invocation.returnValue);
         }
         
         if ([_templateDelegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
@@ -167,16 +174,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
     } else {
         if (_parentHasTemplateDelegate) {
-            rendering = [_parent renderValue:value fromToken:token as:interpretation usingBlock:block];
+            [_parent delegateValue:value fromToken:token interpretation:interpretation usingBlock:block];
         } else {
-            rendering = block(value);
+            block(value);
         }
     }
-    
-    if (rendering == nil) {
-        return @"";
-    }
-    return rendering;
 }
 
 #pragma mark - Private
@@ -226,13 +228,14 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return value;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template
+- (id)initWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject
 {
     self = [super init];
     if (self) {
         _template = [template retain];
         _templateDelegate = [template.delegate retain];
         _filterObject = [[GRMustacheFilterLibrary filterLibrary] retain];
+        _contextObject = [contextObject retain];
     }
     return self;
 }

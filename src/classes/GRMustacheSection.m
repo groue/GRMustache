@@ -55,7 +55,9 @@
 
 - (NSString *)render
 {
-    return [_sectionElement renderInnerElementsInRuntime:_runtime];
+    NSMutableString *buffer = [NSMutableString string];
+    [_sectionElement renderInnerElementsInBuffer:buffer withRuntime:_runtime];
+    return buffer;
 }
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
@@ -64,7 +66,10 @@
     if (!template) {
         return nil;
     }
-    return [template renderInRuntime:_runtime];
+    
+    NSMutableString *buffer = [NSMutableString string];
+    [template renderInBuffer:buffer withRuntime:_runtime];
+    return buffer;
 }
 
 - (NSString *)innerTemplateString

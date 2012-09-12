@@ -93,6 +93,6 @@
  *
  * @return The rendering of inner elements.
  */
-- (NSString *)renderInnerElementsInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
+- (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -69,5 +69,5 @@
  *
  * @return The rendering.
  */
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

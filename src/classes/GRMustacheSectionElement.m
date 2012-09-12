@@ -92,23 +92,19 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-- (NSString *)renderInnerElementsInRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
-    NSMutableString *rendering = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
-    @autoreleasepool {
-        for (id<GRMustacheRenderingElement> elem in _elems) {
-            [rendering appendString:[elem renderInRuntime:runtime]];
-        }
+    for (id<GRMustacheRenderingElement> elem in _elems) {
+        [elem renderInBuffer:buffer withRuntime:runtime];
     }
-    return rendering;
 }
 
 #pragma mark - <GRMustacheRenderingElement>
 
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
-    return [runtime renderValue:value fromToken:_expression.token as:GRMustacheInterpretationSection usingBlock:^NSString *(id value) {
+    [runtime delegateValue:value fromToken:_expression.token interpretation:GRMustacheInterpretationSection usingBlock:^(id value) {
         
         GRMustacheRuntime *sectionRuntime = runtime;
         
@@ -129,7 +125,8 @@
         {
             // False value
             if (_inverted) {
-                return [self renderInnerElementsInRuntime:sectionRuntime];
+                [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
+                return;
             }
         }
         else if ([value isKindOfClass:[NSDictionary class]])
@@ -137,7 +134,8 @@
             // True value
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                return [self renderInnerElementsInRuntime:sectionRuntime];
+                [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
+                return;
             }
         }
         else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
@@ -150,16 +148,15 @@
                     break;
                 }
                 if (empty) {
-                    return [self renderInnerElementsInRuntime:sectionRuntime];
+                    [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
+                    return;
                 }
             } else {
-                NSMutableString *rendering = [NSMutableString string];
                 for (id item in value) {
                     GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
-                    NSString *itemRendering = [self renderInnerElementsInRuntime:itemRuntime];
-                    [rendering appendString:itemRendering];
+                    [self renderInnerElementsInBuffer:buffer withRuntime:itemRuntime];
                 }
-                return rendering;
+                return;
             }
         }
         else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
@@ -167,7 +164,11 @@
             // Helper
             if (!_inverted) {
                 GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                return [(id<GRMustacheHelper>)value renderSection:section];
+                NSString *rendering = [(id<GRMustacheHelper>)value renderSection:section];
+                if (rendering) {
+                    [buffer appendString:rendering];
+                }
+                return;
             }
         }
         else
@@ -175,11 +176,10 @@
             // True value
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
-                return [self renderInnerElementsInRuntime:sectionRuntime];
+                [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
+                return;
             }
         }
-        
-        return nil;
     }];
 }
 

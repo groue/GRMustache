@@ -194,14 +194,11 @@
 
 - (NSString *)renderObject:(id)object withFilters:(id)filters
 {
-    NSString *rendering;
-    @autoreleasepool {
-        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
-        runtime = [runtime runtimeByAddingFilterObject:filters];
-        runtime = [runtime runtimeByAddingContextObject:object];
-        rendering = [[self renderInRuntime:runtime] retain];
-    }
-    return [rendering autorelease];
+    NSMutableString *buffer = [NSMutableString string];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextObject:object];
+    runtime = [runtime runtimeByAddingFilterObject:filters];
+    [self renderInBuffer:buffer withRuntime:runtime];
+    return buffer;
 }
 
 - (NSString *)renderObjectsInArray:(NSArray *)objects
@@ -211,38 +208,29 @@
 
 - (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters
 {
-    NSString *rendering;
-    @autoreleasepool {
-        GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
-        runtime = [runtime runtimeByAddingFilterObject:filters];
-        for (id object in objects) {
-            runtime = [runtime runtimeByAddingContextObject:object];
-        }
-        rendering = [[self renderInRuntime:runtime] retain];
-    }
-    return [rendering autorelease];
+    NSMutableString *buffer = [NSMutableString string];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextObjects:objects];
+    runtime = [runtime runtimeByAddingFilterObject:filters];
+    [self renderInBuffer:buffer withRuntime:runtime];
+    return buffer;
 }
 
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
-    NSMutableString *rendering = [NSMutableString stringWithCapacity:1024];    // allocate 1Kb
-    @autoreleasepool {
-        if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
-            [_delegate templateWillRender:self];
-        }
-        
-        for (id<GRMustacheRenderingElement> elem in _elems) {
-            [rendering appendString:[elem renderInRuntime:runtime]];
-        }
-        
-        if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
-            [_delegate templateDidRender:self];
-        }
+    if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
+        [_delegate templateWillRender:self];
     }
-    return rendering;
+    
+    for (id<GRMustacheRenderingElement> elem in _elems) {
+        [elem renderInBuffer:buffer withRuntime:runtime];
+    }
+    
+    if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
+        [_delegate templateDidRender:self];
+    }
 }
 
 
