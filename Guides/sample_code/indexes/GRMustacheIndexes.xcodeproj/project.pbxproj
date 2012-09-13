@@ -12,7 +12,7 @@
 		562952B915A167710061A6B1 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952B815A167710061A6B1 /* Document.m */; };
 		562952BC15A167E90061A6B1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952BB15A167E90061A6B1 /* Person.m */; };
 		562952BF15A168550061A6B1 /* PositionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 562952BE15A168550061A6B1 /* PositionFilter.m */; };
-		56F9D2CF15A30E47003026DD /* libGRMustache4-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F9D2CE15A30E47003026DD /* libGRMustache4-MacOS.a */; };
+		56F9D2CF15A30E47003026DD /* libGRMustache5-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F9D2CE15A30E47003026DD /* libGRMustache5-MacOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,7 +39,7 @@
 		562952BB15A167E90061A6B1 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		562952BD15A168550061A6B1 /* PositionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionFilter.h; sourceTree = "<group>"; };
 		562952BE15A168550061A6B1 /* PositionFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PositionFilter.m; sourceTree = "<group>"; };
-		56F9D2CE15A30E47003026DD /* libGRMustache4-MacOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache4-MacOS.a"; path = "lib/libGRMustache4-MacOS.a"; sourceTree = "<group>"; };
+		56F9D2CE15A30E47003026DD /* libGRMustache5-MacOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache5-MacOS.a"; path = "lib/libGRMustache5-MacOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +48,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				562952A215A1663B0061A6B1 /* Foundation.framework in Frameworks */,
-				56F9D2CF15A30E47003026DD /* libGRMustache4-MacOS.a in Frameworks */,
+				56F9D2CF15A30E47003026DD /* libGRMustache5-MacOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				562952B315A167220061A6B1 /* GRMustache.h */,
-				56F9D2CE15A30E47003026DD /* libGRMustache4-MacOS.a */,
+				56F9D2CE15A30E47003026DD /* libGRMustache5-MacOS.a */,
 			);
 			name = GRMustache;
 			path = ../../../..;

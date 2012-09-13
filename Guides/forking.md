@@ -93,7 +93,7 @@ The library features are described in the [guides](introduction.md). This sectio
 
 ### Project organisation
 
-Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache4-MacOS` and `GRMustache4-iOS` targets of the `src/GRMustache.xcodeproj` project.
+Objective-C files that make GRMustache are stored in the `src/classes` folder. They are added to both `GRMustache5-MacOS` and `GRMustache5-iOS` targets of the `src/GRMustache.xcodeproj` project.
 
 Headers are splitted in two categories:
 
@@ -124,7 +124,7 @@ There are two kinds of tests, all stored in the `src/tests` folder.
 - tests of private APIs
 - tests of public APIs
 
-When a file is added or removed from the `src/tests` folder, both `GRMustache4-MacOSTests` and `GRMustache4-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
+When a file is added or removed from the `src/tests` folder, both `GRMustache5-MacOSTests` and `GRMustache5-iOSTests` targets of the `src/GRMustache.xcodeproj` project are updated.
 
 ### Tests of private APIs
 
