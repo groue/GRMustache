@@ -5,6 +5,8 @@ GRMustache is a production-ready implementation of [Mustache](http://mustache.gi
 
 **September 12th, 2012: GRMustache 5.0.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
+**iPhone5 development**: use the [iPhone5 branch](https://github.com/groue/GRMustache/tree/iPhone5). It includes the armv7s slice.
+
 Breaking news on Twitter: http://twitter.com/GRMustache
 
 How To
