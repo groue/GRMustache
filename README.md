@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is a production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-**September 12th, 2012: GRMustache 5.0.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**September 15th, 2012: GRMustache 5.0.1 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 **iPhone5 development**: use the [iPhone5 branch](https://github.com/groue/GRMustache/tree/iPhone5). It includes the armv7s slice.
 

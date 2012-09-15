@@ -43,6 +43,18 @@
 }
 
 /**
+ * Returns a string that describes the invocation.
+ *
+ * It contains the original Mustache tag, the line number, and the path, URL, or
+ * name of the template, if any.
+ *
+ * @return a string that describes the invocation.
+ *
+ * @since v1.12
+ */
+- (NSString *)description;
+
+/**
  * The return value of the invocation.
  *
  * For instance, the invocation that you would get for a `{{name}}` tag would

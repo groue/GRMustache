@@ -4,6 +4,14 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.0.1
+
+Bug fixes:
+
+- [Section delegates](Guides/delegate.md) used not to be given the rendered template as expected.
+- [Helpers](Guides/helpers.md) used not to be able to render partial templates when rendering alternate template strings.
+
+
 ## v5.0.0
 
 **[Performance improvements](https://github.com/groue/GRMustacheBenchmark), and fix for flaws in the GRMustacheDelegate API.**

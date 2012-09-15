@@ -129,8 +129,6 @@
  */
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 /**
  * Parses a template file, and returns a compiled template.
  * 
@@ -149,8 +147,6 @@
  * @since v1.11
  */
 + (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
-
-#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 /**
  * Renders an object from a file template.
@@ -193,9 +189,6 @@
  */
 + (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfFile:(NSString *)path error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
-
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 /**
  * Renders an object from a file template.
  * 
@@ -236,8 +229,6 @@
  * @since v4.3
  */
 + (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfURL:(NSURL *)url error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
-
-#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 
 ////////////////////////////////////////////////////////////////////////////////
