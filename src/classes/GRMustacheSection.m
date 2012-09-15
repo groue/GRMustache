@@ -24,6 +24,7 @@
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheSection()
 - (id)initWithSectionElement:(GRMustacheSectionElement *)sectionElement runtime:(GRMustacheRuntime *)runtime;
@@ -62,7 +63,7 @@
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
 {
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:string error:outError];
+    GRMustacheTemplate *template = [_sectionElement.templateRepository templateFromString:string error:outError];
     if (!template) {
         return nil;
     }

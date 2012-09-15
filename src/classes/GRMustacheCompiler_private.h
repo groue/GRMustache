@@ -27,50 +27,9 @@
 
 
 @class GRMustacheCompiler;
+@class GRMustacheTemplateRepository;
 @protocol GRMustacheRenderingElement;
 
-
-// =============================================================================
-#pragma mark - <GRMustacheCompilerDataSource>
-
-/**
- * The protocol for a GRMustacheCompiler's dataSource.
- * 
- * The dataSource's responsability is to provide an object conforming to the
- * GRMustacheRenderingElement protocol when the compiler meets a partial Mustache
- * tag such as {{>name}}.
- * 
- * @see GRMustacheTemplateRepository
- * @see GRMustacheRenderingElement
- */
-@protocol GRMustacheCompilerDataSource <NSObject>
-@required
-
-/**
- * Sent when a compiler has found a partial tag such as `{{> name}}`.
- * 
- * This method should return a rendering element that represents the partial.
- * 
- * The _name_ parameter is guaranteed to be not nil, non empty, and stripped of
- * white-space characters.
- * 
- * @param compiler  The template compiler asking for a rendering element
- * @param name            The partial name
- * @param outError        If there is an error loading or parsing the partial,
- *                        upon return contains an NSError object that describes
- *                        the problem.
- *
- * @return A <GRMustacheRenderingElement> instance
- * 
- * @see [GRMustacheTemplateRepository compiler:renderingElementForPartialName:error:]
- * @see GRMustacheRenderingElement
- */
-- (id<GRMustacheRenderingElement>)compiler:(GRMustacheCompiler *)compiler renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
-@end
-
-
-// =============================================================================
-#pragma mark - GRMustacheCompiler
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
@@ -89,18 +48,18 @@
     NSMutableArray *_sectionOpeningTokenStack;
     NSMutableArray *_currentElements;
     GRMustacheToken *_currentSectionOpeningToken;
-    id<GRMustacheCompilerDataSource> _dataSource;
+    GRMustacheTemplateRepository *_templateRepository;
 }
 
 /**
- * The compiler's dataSource.
+ * The template repository that:
+ * - provides partial templates to the compiler.
+ * - allows helpers to render alternate template strings that contain partials.
  * 
- * The data source is sent messages as the compiler finds partial tags such as
- * `{{> name}}`.
- * 
- * @see GRMustacheCompilerDataSource
+ * @see GRMustacheTemplateRepository
+ * @see GRMustacheSection
  */
-@property (nonatomic, assign) id<GRMustacheCompilerDataSource> dataSource GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an NSArray of objects conforming to the GRMustacheRenderingElement

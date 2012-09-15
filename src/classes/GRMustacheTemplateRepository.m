@@ -97,7 +97,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - GRMustacheTemplateRepository
 
-@interface GRMustacheTemplateRepository()<GRMustacheCompilerDataSource>
+@interface GRMustacheTemplateRepository()
 
 /**
  * Returns a template or a partial template, given its name.
@@ -126,6 +126,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * @see GRMustacheTemplateRepository
  */
 - (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
+
 @end
 
 @implementation GRMustacheTemplateRepository
@@ -215,9 +216,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [GRMustacheTemplate templateWithElements:renderingElements];
 }
 
-#pragma mark GRMustacheCompilerDataSource
-
-- (id<GRMustacheRenderingElement>)compiler:(GRMustacheCompiler *)compiler renderingElementForPartialName:(NSString *)name error:(NSError **)outError
+- (id<GRMustacheRenderingElement>)renderingElementForPartialName:(NSString *)name error:(NSError **)outError
 {
     return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
@@ -231,8 +230,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // Create a Mustache compiler
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
         
-        // We tell the compiler where are the partials
-        compiler.dataSource = self;
+        // We tell the compiler where provide the partials
+        compiler.templateRepository = self;
         
         // Create a Mustache parser
         GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];

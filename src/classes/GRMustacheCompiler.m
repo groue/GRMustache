@@ -22,6 +22,7 @@
 
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheSectionElement_private.h"
@@ -111,7 +112,7 @@
 @implementation GRMustacheCompiler
 @synthesize fatalError=_fatalError;
 @synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
-@synthesize dataSource=_dataSource;
+@synthesize templateRepository=_templateRepository;
 @synthesize currentElements=_currentElements;
 @synthesize elementsStack=_elementsStack;
 @synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
@@ -268,6 +269,7 @@
             NSRange openingTokenRange = _currentSectionOpeningToken.range;
             NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
             GRMustacheSectionElement *sectionElement = [GRMustacheSectionElement sectionElementWithExpression:_currentSectionOpeningToken.value.expression
+                                                                                           templateRepository:_templateRepository
                                                                                                templateString:token.templateString
                                                                                                    innerRange:innerRange
                                                                                                      inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
@@ -291,13 +293,13 @@
             // Parser validation
             NSAssert([token.value.partialName isKindOfClass:[NSString class]], @"WTF parser?");
             
-            // Validate the compiler:renderingElementForPartialName:error: contract:
+            // Validate the renderingElementForPartialName:error: contract:
             // Non nil, non empty, white-space stripped partial name.
             NSAssert([token.value.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
             
-            // Ask dataSource for rendering element
+            // Ask templateRepository for rendering element
             NSError *partialError;
-            id<GRMustacheRenderingElement> partial = [_dataSource compiler:self renderingElementForPartialName:token.value.partialName error:&partialError];
+            id<GRMustacheRenderingElement> partial = [_templateRepository renderingElementForPartialName:token.value.partialName error:&partialError];
             if (partial == nil) {
                 [self failWithFatalError:partialError];
                 return NO;

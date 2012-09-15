@@ -23,6 +23,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
 
+@class GRMustacheTemplateRepository;
 @class GRMustacheExpression;
 
 /**
@@ -33,12 +34,18 @@
  */
 @interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement> {
 @private
+    GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
     NSString *_templateString;
     NSRange _innerRange;
     BOOL _inverted;
     NSArray *_elems;
 }
+
+/**
+ * A template repository, so that helpers can render alternate template strings.
+ */
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
  * The literal inner content of the section, with unprocessed Mustache
@@ -48,6 +55,7 @@
 
 
 /**
+ * TODO: document templateRepository
  * Builds a GRMustacheSectionElement.
  * 
  * The rendering of Mustache sections depend on the value they are attached to,
@@ -78,7 +86,7 @@
  * @see GRMustacheRuntime
  * @see GRMustacheHelper
  */
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

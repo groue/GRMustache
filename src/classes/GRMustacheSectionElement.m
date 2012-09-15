@@ -32,56 +32,24 @@
 @interface GRMustacheSectionElement()
 
 /**
- * The rendering of Mustache sections depend on the object they are attached to,
- * whether they are truthy, falsey, enumerable, or helpers. The object is
- * fetched by applying this expression to a rendering context.
+ * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:elements:]
  */
-@property (nonatomic, retain) GRMustacheExpression *expression;
-
-/**
- * The template string containing the inner template string of the section.
- */
-@property (nonatomic, retain) NSString *templateString;
-
-/**
- * The range of the inner template string of the section in `templateString`.
- */
-@property (nonatomic) NSRange innerRange;
-
-/**
- * YES if the section is {{^inverted}}; otherwise, NO.
- */
-@property (nonatomic) BOOL inverted;
-
-/**
- * The GRMustacheRenderingElement objects that make the section.
- * 
- * @see GRMustacheRenderingElement
- */
-@property (nonatomic, retain) NSArray *elems;
-
-/**
- * @see +[GRMustacheSectionElement sectionElementWithExpression:templateString:innerRange:inverted:elements:]
- */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSectionElement
-@synthesize templateString=_templateString;
-@synthesize innerRange=_innerRange;
-@synthesize expression=_expression;
-@synthesize inverted=_inverted;
-@synthesize elems=_elems;
+@synthesize templateRepository=_templateRepository;
 
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
-    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
 }
 
 - (void)dealloc
 {
     [_expression release];
+    [_templateRepository release];
     [_templateString release];
     [_elems release];
     [super dealloc];
@@ -186,15 +154,16 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
-        self.expression = expression;
-        self.templateString = templateString;
-        self.innerRange = innerRange;
-        self.inverted = inverted;
-        self.elems = elems;
+        _expression = [expression retain];
+        _templateRepository = [templateRepository retain];
+        _templateString = [templateString retain];
+        _innerRange = innerRange;
+        _inverted = inverted;
+        _elems = [elems retain];
     }
     return self;
 }

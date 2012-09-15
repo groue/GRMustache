@@ -273,8 +273,6 @@
 
 - (void)testHelperCanRenderCurrentContextInDistinctTemplate
 {
-    // This test is against Mustache spec lambda definition, which do not have access to the current rendering context.
-    
     id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
         return [section renderTemplateString:@"{{subject}}" error:NULL];
     }];
@@ -283,6 +281,19 @@
                              @"---", @"subject", nil];
     NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{/helper}}" error:nil];
     STAssertEqualObjects(result, @"---", @"");
+}
+
+- (void)testHelperCanRenderCurrentContextInDistinctTemplateContainingPartial
+{
+    id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        return [section renderTemplateString:@"{{>partial}}" error:NULL];
+    }];
+    NSDictionary *context = @{@"helper": helper};
+    NSDictionary *partials = @{@"partial": @"In partial."};
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{#helper}}{{/helper}}" error:nil];
+    NSString *result = [template renderObject:context];
+    STAssertEqualObjects(result, @"In partial.", @"");
 }
 
 - (void)testTemplateDelegateCallbacksAreCalledWithinSectionRendering
