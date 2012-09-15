@@ -38,8 +38,6 @@
     return [templateRepository templateFromString:templateString error:outError];
 }
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 + (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError
 {
     NSURL *baseURL = [URL URLByDeletingLastPathComponent];
@@ -48,8 +46,6 @@
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension];
     return [templateRepository templateForName:templateName error:outError];
 }
-
-#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError
 {
@@ -102,8 +98,6 @@
     return [rendering autorelease];
 }
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 + (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)URL error:(NSError **)outError
 {
     return [self renderObject:object withFilters:nil fromContentsOfURL:URL error:outError];
@@ -122,8 +116,6 @@
     if (!template && outError != NULL) [*outError autorelease];
     return [rendering autorelease];
 }
-
-#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 + (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError
 {

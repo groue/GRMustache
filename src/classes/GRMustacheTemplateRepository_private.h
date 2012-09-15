@@ -48,8 +48,6 @@
 // Documented in GRMustacheTemplateRepository.h
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource GRMUSTACHE_API_PUBLIC;
 
-#if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
 
@@ -61,8 +59,6 @@
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
-
-#endif /* if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000 */
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
