@@ -49,7 +49,7 @@ You can read the following properties of the *invocation* parameter:
 - `id returnValue`: the return value of the invocation.
 - `NSString *description`: a string that helps you locate the corresponding Mustache tag.
 
-Note that those methods do not allow you to build a complete "stack trace" of GRMustache rendering. They are not called for each accessed key. They are called for each tag rendering, which is quite different.
+Note that those methods do not allow you to build a complete "stack trace" of a template rendering.
 
 For instance, a tag like `{{person.name}}` is rendered once. Thus `template:willInterpretReturnValueOfInvocation:as:` will be called once. If the person has been found, the return value will be the name of the person. If the person could not be found, the return value will be `nil`.
 
@@ -71,16 +71,14 @@ typedef enum {
 
 ### A practical use: debugging templates
 
-You may, for instance, give your templates a delegate that locate missing keys:
+You may, for instance, give your templates a delegate that locate missing values:
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     // When returnValue is nil, GRMustache could not find any value to render.
     if (invocation.returnValue == nil) {
-        
-        // Log the missing key
-        NSLog(@"GRMustache missing key: `%@` for %@", invocation.key, invocation.description);
+        NSLog(@"GRMustache missing value for %@", invocation.description);
     }
 }
 ```
@@ -88,7 +86,7 @@ You may, for instance, give your templates a delegate that locate missing keys:
 You'll get something like:
 
 ```
-GRMustache missing key: `items` for <GRMustacheInvocation: {{#items}} at line 23
+GRMustache missing value for <GRMustacheInvocation: {{#items}} at line 23
 in template /path/to/template.mustache>
 ```
 
