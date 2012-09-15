@@ -42,9 +42,9 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @interface GRMustacheRuntime()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 - (id)initWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject;
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate contextObject:(id)contextObject;
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate filterObject:(id)filterObject;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate contextObject:(id)contextObject;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate filterObject:(id)filterObject;
 @end
 
 @implementation GRMustacheRuntime
@@ -74,11 +74,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         return self;
     }
     
-    return [[[GRMustacheRuntime alloc] initWithParent:self
-                                          withContext:_contextObject || _parentHasContext
-                                           withFilter:_filterObject || _parentHasFilter
-                                         withDelegate:_templateDelegate || _parentHasTemplateDelegate
-                                     templateDelegate:templateDelegate] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template
+                                                 parent:self
+                                            withContext:_contextObject || _parentHasContext
+                                             withFilter:_filterObject || _parentHasFilter
+                                           withDelegate:_templateDelegate || _parentHasTemplateDelegate
+                                       templateDelegate:templateDelegate] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject
@@ -87,11 +88,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         return self;
     }
     
-    return [[[GRMustacheRuntime alloc] initWithParent:self
-                                          withContext:_contextObject || _parentHasContext
-                                           withFilter:_filterObject || _parentHasFilter
-                                         withDelegate:_templateDelegate || _parentHasTemplateDelegate
-                                        contextObject:contextObject] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template
+                                                 parent:self
+                                            withContext:_contextObject || _parentHasContext
+                                             withFilter:_filterObject || _parentHasFilter
+                                           withDelegate:_templateDelegate || _parentHasTemplateDelegate
+                                          contextObject:contextObject] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject;
@@ -100,11 +102,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         return self;
     }
     
-    return [[[GRMustacheRuntime alloc] initWithParent:self
-                                          withContext:_contextObject || _parentHasContext
-                                           withFilter:_filterObject || _parentHasFilter
-                                         withDelegate:_templateDelegate || _parentHasTemplateDelegate
-                                         filterObject:filterObject] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template
+                                                 parent:self
+                                            withContext:_contextObject || _parentHasContext
+                                             withFilter:_filterObject || _parentHasFilter
+                                           withDelegate:_templateDelegate || _parentHasTemplateDelegate
+                                           filterObject:filterObject] autorelease];
 }
 
 - (void)dealloc
@@ -155,6 +158,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (void)delegateValue:(id)value fromToken:(GRMustacheToken *)token interpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
 {
     if (_templateDelegate) {
+        NSAssert(_template, @"WTF");
+        
         GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
         invocation.token = token;
         invocation.returnValue = value;
@@ -240,10 +245,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return self;
 }
 
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
 {
     self = [super init];
     if (self) {
+        _template = [template retain];
         _parent = [parent retain];
         _templateDelegate = [templateDelegate retain];
         _parentHasContext = withContext;
@@ -253,10 +259,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return self;
 }
 
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate contextObject:(id)contextObject
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate contextObject:(id)contextObject
 {
     self = [super init];
     if (self) {
+        _template = [template retain];
         _parent = [parent retain];
         _contextObject = [contextObject retain];
         _parentHasContext = withContext;
@@ -266,10 +273,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return self;
 }
 
-- (id)initWithParent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate filterObject:(id)filterObject
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent withContext:(BOOL)withContext withFilter:(BOOL)withFilter withDelegate:(BOOL)withDelegate filterObject:(id)filterObject
 {
     self = [super init];
     if (self) {
+        _template = [template retain];
         _parent = [parent retain];
         _filterObject = [filterObject retain];
         _parentHasContext = withContext;
