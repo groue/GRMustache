@@ -3,3 +3,4 @@
 - update forking.md for v5.0.0
 - test that [GRMustacheSection renderTemplateString:error:] can render partials
 - document [GRMustacheInvation description] in GRMustacheInvocation.h
+- remove #if !TARGET_OS_IPHONE || __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
