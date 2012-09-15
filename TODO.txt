@@ -1,0 +1,5 @@
+- reorganize tests for v5.0.0
+- document private stuff of v5.0.0
+- update forking.md for v5.0.0
+- test that [GRMustacheSection renderTemplateString:error:] can render partials
+- document [GRMustacheInvation description] in GRMustacheInvocation.h
