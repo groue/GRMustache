@@ -184,4 +184,16 @@
     STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
+- (void)testFilterNameSpace
+{
+    id doubleFilter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return @(2 * [(NSNumber *)value doubleValue]);
+    }];
+    NSString *rendering = [GRMustacheTemplate renderObject:@(0.5)
+                                               withFilters:@{ @"math": @{ @"double": doubleFilter } }
+                                                fromString:@"{{%FILTERS}}{{ math.double(.) }}"
+                                                     error:NULL];
+    STAssertEqualObjects(rendering, @"1", nil);
+}
+
 @end
