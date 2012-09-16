@@ -24,7 +24,7 @@
 
 /**
  * The GRMustacheIdentifierExpression is able to perform the deep lookup of an
- * identifier in a context stack.
+ * identifier in a runtime.
  *
  * @see GRMustacheExpression
  */
@@ -43,5 +43,5 @@
  *
  * @return A GRMustacheIdentifierExpression.
  */
-+ (id)expressionWithIdentifier:(NSString *)identifier;
++ (id)expressionWithIdentifier:(NSString *)identifier GRMUSTACHE_API_INTERNAL;
 @end

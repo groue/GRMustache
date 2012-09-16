@@ -107,5 +107,5 @@
  * @see GRMustacheCompiler
  * @see GRMustacheRenderingElement
  */
-- (id<GRMustacheRenderingElement>)renderingElementForPartialName:(NSString *)name error:(NSError **)outError;
+- (id<GRMustacheRenderingElement>)renderingElementForPartialName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

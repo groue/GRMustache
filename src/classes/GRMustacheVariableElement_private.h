@@ -46,8 +46,7 @@
 /**
  * Builds and returns a GRMustacheVariableElement.
  *
- * @param expression  The expression that would evaluate against a context
- *                    stack.
+ * @param expression  The expression that would evaluate against a runtime.
  * @param raw         NO if the value should be rendered HTML-escaped.
  *
  * @return a GRMustacheVariableElement

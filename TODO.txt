@@ -1,2 +1,1 @@
-- document private stuff of v5.0.0
 - update forking.md for v5.0.0

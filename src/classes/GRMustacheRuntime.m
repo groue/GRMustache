@@ -54,6 +54,11 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     preventingNSUndefinedKeyExceptionAttack = YES;
 }
 
++ (id)runtime
+{
+    return [[[self alloc] initWithTemplate:nil contextObject:nil] autorelease];
+}
+
 + (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject
 {
     return [[[self alloc] initWithTemplate:template contextObject:contextObject] autorelease];
@@ -155,7 +160,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return nil;
 }
 
-- (void)delegateValue:(id)value fromToken:(GRMustacheToken *)token interpretation:(GRMustacheInterpretation)interpretation usingBlock:(void(^)(id value))block
+- (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block
 {
     if (_templateDelegate) {
         NSAssert(_template, @"WTF");
@@ -169,7 +174,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
         
         if (_parent) {
-            [_parent delegateValue:invocation.returnValue fromToken:token interpretation:interpretation usingBlock:block];
+            [_parent delegateValue:invocation.returnValue interpretation:interpretation forRenderingToken:token usingBlock:block];
         } else {
             block(invocation.returnValue);
         }
@@ -179,7 +184,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         }
     } else {
         if (_parentHasTemplateDelegate) {
-            [_parent delegateValue:value fromToken:token interpretation:interpretation usingBlock:block];
+            [_parent delegateValue:value interpretation:interpretation forRenderingToken:token usingBlock:block];
         } else {
             block(value);
         }

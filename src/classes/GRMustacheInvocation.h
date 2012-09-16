@@ -25,7 +25,7 @@
 
 /**
  * The GRMustacheInvocation class gives you information about the values that
- * are found in the context stack when rendering tags such as `{{name}}`.
+ * are rendered.
  *
  * You'll be given GRMustacheInvocation instances when providing a
  * GRMustacheTemplateDelegate to your templates.

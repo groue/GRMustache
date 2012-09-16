@@ -27,10 +27,8 @@
 @class GRMustacheToken;
 
 /**
- * TODO
- *
- * The GRMustacheExpression is the protocol for objects that can provide values
- * out of the data provided by the library user.
+ * The GRMustacheExpression is the base class for objects that can provide
+ * values out of a Mustache runtime.
  *
  * GRMustacheExpression instances are built by GRMustacheParser. For instance,
  * the `{{ name }}` tag would yield a GRMustacheIdentifierExpression.
@@ -46,16 +44,23 @@
 }
 
 /**
- * TODO
  * This property stores a token whose sole purpose is to help the library user
- * debugging his templates, using the tokens' ability to output their location
- * (`{{ foo }} at line 23 of /path/to/template`).
+ * debugging his templates, using the token's ability to output its location
+ * (`{{ foo }}` at line 23 of /path/to/template).
+ *
+ * @see GRMustacheInvocation
  */
-@property (nonatomic, retain) GRMustacheToken *token;
+@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Evaluates an expression against a runtime, and return the value.
+ *
+ * @param runtime       A Mustache runtime object
+ * @param filterValue   The expression evaluates in the runtime's context stack,
+ *                      or filter stack, depending on this boolean.
+ *
+ * @return The value of the expression.
  */
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue;
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue GRMUSTACHE_API_INTERNAL;
 
 @end

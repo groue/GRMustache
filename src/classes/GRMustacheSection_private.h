@@ -43,20 +43,16 @@
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
  * Builds and returns a section suitable for GRMustacheHelper.
  *
- * @param sectionElement      The underlying sectionElement.
- * @param renderingContext    A rendering context stack.
- * @param filterContext       A filters context stack.
- * @param template            A template.
- * @param delegates           An array of GRMustacheTemplateDelegate objects
- *                            whose callbacks should be called whenever
- *                            relevant, with _template_ as a template.
+ * @param sectionElement    The underlying sectionElement.
+ * @param runtime           A runtime.
  *
  * @return A section.
  *
  * @see GRMustacheHelper
+ * @see GRMustacheSectionElement
+ * @see GRMustacheRuntime
  */
 + (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

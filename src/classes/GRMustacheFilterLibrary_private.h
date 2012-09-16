@@ -21,7 +21,15 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
+/**
+ * The GRMustacheFilterLibrary provides all built-in filters.
+ */
 @interface GRMustacheFilterLibrary : NSObject
-+ (id)filterLibrary;
+
+/**
+ * Returns the shared filter library.
+ */
++ (id)filterLibrary GRMUSTACHE_API_INTERNAL;
 @end

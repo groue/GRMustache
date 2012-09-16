@@ -72,7 +72,7 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
-    [runtime delegateValue:value fromToken:_expression.token interpretation:GRMustacheInterpretationSection usingBlock:^(id value) {
+    [runtime delegateValue:value interpretation:GRMustacheInterpretationSection forRenderingToken:_expression.token usingBlock:^(id value) {
         
         GRMustacheRuntime *sectionRuntime = runtime;
         
