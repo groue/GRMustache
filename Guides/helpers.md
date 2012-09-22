@@ -335,7 +335,7 @@ NSString *rendering = [template renderObject:data];
 This works because Movie and Person classes conform to the GRMustacheVariableHelper protocol. Let's assume their core interface is already defined, and let's focus on their rendering:
 
 ```objc
-@implementation Movie(GRMustache)
+@implementation Movie
 
 // A movie renders itself with the movie.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
@@ -344,7 +344,7 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 }
 @end
 
-@implementation Person(GRMustache)
+@implementation Person
 
 // A person renders itself with the movie.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
