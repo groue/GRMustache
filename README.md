@@ -89,15 +89,15 @@ What other people say
 
 > I'm loving grmustache
 
-[@basilshkara](https://twitter.com/basilshkara/status/218569924296187904)
+[@basilshkara](https://twitter.com/basilshkara/status/218569924296187904):
 
 > Oh man GRMustache saved my ass once again. Awesome lib.
 
-[@guiheneuf](https://twitter.com/guiheneuf/status/249061029978460160)
+[@guiheneuf](https://twitter.com/guiheneuf/status/249061029978460160):
 
 > GRMustache filters extension saved us from great escaping PITAs. Thanks @groue.
 
-[@orj](https://twitter.com/orj/status/195310301820878848)
+[@orj](https://twitter.com/orj/status/195310301820878848):
 
 > Thank fucking christ for decent iOS developers who ship .lib files in their Github repos. #GRMustache
 
