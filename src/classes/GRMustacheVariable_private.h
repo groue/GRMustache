@@ -40,7 +40,18 @@
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * Builds and returns a variable suitable for GRMustacheVariableHelper.
+ *
+ * @param templateRepository  A Template repository that allows helpers to
+ *                            render template strings through
+ *                            renderTemplateString:error: and
+ *                            renderTemplateNamed:error: methods.
+ * @param runtime             A runtime.
+ *
+ * @return A variable.
+ *
+ * @see GRMustacheVariableHelper
+ * @see GRMustacheRuntime
  */
 + (id)variableWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

@@ -41,7 +41,7 @@
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
- * @since TODO
+ * @since v5.1
  */
 @protocol GRMustacheVariableHelper<NSObject>
 @required
@@ -57,7 +57,7 @@
  *
  * @return The rendering of the variable
  *
- * @since TODO
+ * @since v5.1
  */
 - (NSString *)renderVariable:(GRMustacheVariable *)variable;
 @end
@@ -75,7 +75,7 @@
  *
  * @see GRMustacheVariableHelper protocol
  *
- * @since TODO
+ * @since v5.1
  */
 @interface GRMustacheVariableHelper: NSObject<GRMustacheVariableHelper>
 
@@ -91,7 +91,7 @@
  *
  * @return a GRMustacheVariableHelper object.
  *
- * @since TODO
+ * @since v5.1
  */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
 
@@ -102,13 +102,14 @@
 #pragma mark - GRMustacheDynamicPartial
 
 /**
- * TODO
+ * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableHelper
+ * that, given a partial template name, renders this template.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
  * @see GRMustacheVariableHelper protocol
  *
- * @since TODO
+ * @since v5.1
  */
 @interface GRMustacheDynamicPartial: NSObject<GRMustacheVariableHelper> {
     NSString *_name;
@@ -119,9 +120,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * TODO
+ * Returns a GRMustacheDynamicPartial that renders a partial template named
+ * _name_.
  *
- * @since TODO
+ * @param name  A template name
+ *
+ * @return a GRMustacheDynamicPartial
+ *
+ * @since v5.1
  */
 + (id)dynamicPartialWithName:(NSString *)name;
 

@@ -20,5 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// Deprecated header
+#warning GRMustacheHelper.h is deprecated
+
 #import "GRMustacheSectionHelper.h"

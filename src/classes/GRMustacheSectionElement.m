@@ -49,7 +49,6 @@
 - (void)dealloc
 {
     [_expression release];
-    [_templateRepository release];
     [_templateString release];
     [_elems release];
     [super dealloc];
@@ -159,7 +158,7 @@
     self = [self init];
     if (self) {
         _expression = [expression retain];
-        _templateRepository = [templateRepository retain];  // TODO: check if we have introduced a retain cycle here
+        _templateRepository = templateRepository; // do not retain, since self is retained by a template, that is retained by the template repository.
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _inverted = inverted;

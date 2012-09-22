@@ -94,3 +94,16 @@
 }
 
 @end
+
+
+// =============================================================================
+#pragma mark - GRMustacheHelper
+
+@implementation GRMustacheHelper
+
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
+{
+    return [GRMustacheSectionHelper helperWithBlock:block];
+}
+
+@end

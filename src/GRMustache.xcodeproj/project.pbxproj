@@ -789,7 +789,7 @@
 				56DEC3B1152638E20031E8DC /* GRMustachePublicAPITest.h */,
 				56DEC3B2152638E20031E8DC /* GRMustachePublicAPITest.m */,
 				56DEC3BD152639420031E8DC /* v5.0 */,
-				56EB54A9160D8146006A5F57 /* variable_helper */,
+				56EB54A9160D8146006A5F57 /* v5.1 */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -821,12 +821,12 @@
 			path = JSONKit;
 			sourceTree = "<group>";
 		};
-		56EB54A9160D8146006A5F57 /* variable_helper */ = {
+		56EB54A9160D8146006A5F57 /* v5.1 */ = {
 			isa = PBXGroup;
 			children = (
 				56EB54AB160D8229006A5F57 /* GRMustacheVariableHelperTest.m */,
 			);
-			path = variable_helper;
+			path = v5.1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -26,7 +26,17 @@
 @class GRMustacheTemplateRepository;
 
 /**
- * TODO
+ * A GRMustacheVariable represents a Mustache variable such as `{{name}}`.
+ *
+ * You will be provided with GRMustacheVariable objects when implementing
+ * mustache lambda sections with objects conforming to the
+ * GRMustacheVariableHelper protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ *
+ * @see GRMustacheVariableHelper
+ *
+ * @since v5.1
  */
 @interface GRMustacheVariable : NSObject {
 @private
@@ -35,13 +45,32 @@
 }
 
 /**
- * TODO
+ * Renders a template string with the current rendering context.
+ *
+ * @param string    A template string
+ * @param outError  If there is an error loading or parsing template and
+ *                  partials, upon return contains an NSError object that
+ *                  describes the problem.
+ *
+ * @return A string containing the rendering of the template string.
+ *
+ * @since v5.1
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+
 
 /**
- * TODO
+ * Renders a partial template with the current rendering context.
+ *
+ * @param name      The name of the partial template.
+ * @param outError  If there is an error loading or parsing template and
+ *                  partials, upon return contains an NSError object that
+ *                  describes the problem.
+ *
+ * @return A string containing the rendering of the partial template.
+ *
+ * @since v5.1
  */
-- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 
 @end

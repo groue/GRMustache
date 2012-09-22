@@ -47,7 +47,7 @@
 {
     self = [super init];
     if (self) {
-        _templateRepository = [templateRepository retain];  // TODO: check if we have introduced a retain cycle here
+        _templateRepository = [templateRepository retain];
         _runtime = [runtime retain];
     }
     return self;

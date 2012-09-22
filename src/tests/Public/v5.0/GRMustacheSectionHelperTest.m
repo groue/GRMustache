@@ -23,10 +23,10 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheSectionHelperTest : GRMustachePublicAPITest
+@interface GRMustacheHelperTest : GRMustachePublicAPITest
 @end
 
-@interface GRMustacheStringSectionHelper : NSObject<GRMustacheSectionHelper> {
+@interface GRMustacheStringSectionHelper : NSObject<GRMustacheHelper> {
     NSString *_string;
 }
 @property (nonatomic, copy) NSString *string;
@@ -45,7 +45,7 @@
 }
 @end
 
-@interface GRMustacheRecorderSectionHelper : NSObject<GRMustacheSectionHelper> {
+@interface GRMustacheRecorderSectionHelper : NSObject<GRMustacheHelper> {
     NSUInteger _invocationCount;
     NSString *_lastInnerTemplateString;
     NSString *_lastRenderedContent;
@@ -74,12 +74,12 @@
 }
 @end
 
-@implementation GRMustacheSectionHelperTest
+@implementation GRMustacheHelperTest
 
 - (void)testHelperPerformsRendering
 {
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         GRMustacheStringSectionHelper *helper = [[[GRMustacheStringSectionHelper alloc] init] autorelease];
         helper.string = @"---";
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -87,8 +87,8 @@
         STAssertEqualObjects(result, @"---", @"");
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
-        id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        // [GRMustacheHelper helperWithBlock:]
+        id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
             return @"---";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -102,7 +102,7 @@
     // This test is against Mustache spec lambda definition, which render a template string that should be processed.
     
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         GRMustacheStringSectionHelper *helper = [[[GRMustacheStringSectionHelper alloc] init] autorelease];
         helper.string = @"&<>{{foo}}";
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -110,8 +110,8 @@
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
-        id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        // [GRMustacheHelper helperWithBlock:]
+        id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -123,7 +123,7 @@
 - (void)testHelperCanRenderNil
 {
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         GRMustacheStringSectionHelper *helper = [[[GRMustacheStringSectionHelper alloc] init] autorelease];
         helper.string = nil;
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -131,8 +131,8 @@
         STAssertEqualObjects(result, @"", @"");
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
-        id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        // [GRMustacheHelper helperWithBlock:]
+        id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -144,16 +144,16 @@
 - (void)testHelperCanAccessInnerTemplateString
 {
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         GRMustacheRecorderSectionHelper *helper = [[[GRMustacheRecorderSectionHelper alloc] init] autorelease];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
         [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{subject}}{{/helper}}" error:nil];
         STAssertEqualObjects(helper.lastInnerTemplateString, @"{{subject}}", @"");
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
+        // [GRMustacheHelper helperWithBlock:]
         __block NSString *lastInnerTemplateString = nil;
-        id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
             [lastInnerTemplateString release];
             lastInnerTemplateString = [section.innerTemplateString retain];
             return nil;
@@ -168,7 +168,7 @@
 - (void)testHelperCanAccessRenderedContent
 {
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         GRMustacheRecorderSectionHelper *helper = [[[GRMustacheRecorderSectionHelper alloc] init] autorelease];
         NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
                                  helper, @"helper",
@@ -177,9 +177,9 @@
         STAssertEqualObjects(helper.lastRenderedContent, @"---===---", @"");
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
+        // [GRMustacheHelper helperWithBlock:]
         __block NSString *lastRenderedContent = nil;
-        id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+        id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
             [lastRenderedContent release];
             lastRenderedContent = [[section render] retain];
             return nil;
@@ -196,7 +196,7 @@
 - (void)testHelperIsNotCalledWhenItDoesntNeedTo
 {
     {
-        // GRMustacheSectionHelper protocol
+        // GRMustacheHelper protocol
         {
             GRMustacheRecorderSectionHelper *helper = [[[GRMustacheRecorderSectionHelper alloc] init] autorelease];
             NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -223,10 +223,10 @@
         }
     }
     {
-        // [GRMustacheSectionHelper helperWithBlock:]
+        // [GRMustacheHelper helperWithBlock:]
         {
             __block NSUInteger invocationCount = 0;
-            id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 invocationCount++;
                 return nil;
             }];
@@ -236,7 +236,7 @@
         }
         {
             __block NSUInteger invocationCount = 0;
-            id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 invocationCount++;
                 return nil;
             }];
@@ -246,7 +246,7 @@
         }
         {
             __block NSUInteger invocationCount = 0;
-            id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 invocationCount++;
                 return nil;
             }];
@@ -256,7 +256,7 @@
         }
         {
             __block NSUInteger invocationCount = 0;
-            id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 invocationCount++;
                 return nil;
             }];
@@ -269,7 +269,7 @@
 
 - (void)testHelperCanRenderCurrentContextInDistinctTemplate
 {
-    id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+    id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
         return [section renderTemplateString:@"{{subject}}" error:NULL];
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -281,7 +281,7 @@
 
 - (void)testHelperCanRenderCurrentContextInDistinctTemplateContainingPartial
 {
-    id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+    id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
         return [section renderTemplateString:@"{{>partial}}" error:NULL];
     }];
     NSDictionary *context = @{@"helper": helper};
@@ -294,7 +294,7 @@
 
 - (void)testTemplateDelegateCallbacksAreCalledWithinSectionRendering
 {
-    id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+    id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
         return [section render];
     }];
     
@@ -316,7 +316,7 @@
 
 - (void)testTemplateDelegateCallbacksAreCalledWithinSectionAlternateTemplateStringRendering
 {
-    id helper = [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+    id helper = [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
         return [section renderTemplateString:@"{{subject}}" error:NULL];
     }];
     

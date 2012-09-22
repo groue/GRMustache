@@ -59,7 +59,7 @@
  *
  * @since v2.0
  */
-- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 @end
 
 
@@ -92,7 +92,7 @@
  *
  * @since v2.0
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 
 @end
 
@@ -100,10 +100,26 @@
 // =============================================================================
 #pragma mark - Compatibility layer
 
-// TODO: mark as deprecated
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+/**
+ * Deprecated. Use GRMustacheSectionHelper instead.
+ *
+ * @since v1.9
+ * @deprecated v5.1
+ */
+AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_1
 @protocol GRMustacheHelper <GRMustacheSectionHelper>
 @end
+#pragma clang diagnostic pop
 
-// TODO: mark as deprecated
+/**
+ * Deprecated. Use GRMustacheSectionHelper instead.
+ *
+ * @since v2.0
+ * @deprecated v5.1
+ */
+AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_1
 @interface GRMustacheHelper: GRMustacheSectionHelper
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block;
 @end

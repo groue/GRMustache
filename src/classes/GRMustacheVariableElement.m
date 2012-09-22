@@ -45,7 +45,6 @@
 - (void)dealloc
 {
     [_expression release];
-    [_templateRepository release];
     [_enumerableSectionElement release];
     [super dealloc];
 }
@@ -115,7 +114,7 @@
 {
     self = [self init];
     if (self) {
-        _templateRepository = [templateRepository retain];  // TODO: check if we have introduced a retain cycle here
+        _templateRepository = templateRepository; // do not retain, since self is retained by a template, that is retained by the template repository.
         _expression = [expression retain];
         _raw = raw;
     }
