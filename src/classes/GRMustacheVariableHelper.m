@@ -92,9 +92,8 @@
 
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-    NSString *templateString = [NSString stringWithFormat:@"{{>%@}}", _name];
     // TODO: what should we do about the error? (empty name, missing template...)
-    return [variable renderTemplateString:templateString error:NULL];
+    return [variable renderTemplateNamed:_name error:NULL];
 }
 
 @end

@@ -36,6 +36,9 @@
 // Documented in GRMustacheVariable.h
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheVariable.h
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
 /**
  * TODO
  */

@@ -39,4 +39,9 @@
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 
+/**
+ * TODO
+ */
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError;
+
 @end

@@ -64,8 +64,7 @@
 }
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-    NSString *templateString = [NSString stringWithFormat:@"{{>%@}}", self.partialName];
-    return [variable renderTemplateString:templateString error:NULL];
+    return [variable renderTemplateNamed:self.partialName error:NULL];
 }
 @end
 

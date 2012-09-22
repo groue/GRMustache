@@ -65,4 +65,10 @@
     return buffer;
 }
 
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError
+{
+    NSString *templateString = [NSString stringWithFormat:@"{{>%@}}", name];
+    return [self renderTemplateString:templateString error:outError];
+}
+
 @end

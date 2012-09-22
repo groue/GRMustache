@@ -97,6 +97,7 @@ typedef struct {
 #import "GRMustacheTemplateRepository.h"
 #import "GRMustacheFilter.h"
 #import "GRMustacheHelper.h"    // deprecated
+#import "GRMustacheVariable.h"
 #import "GRMustacheVariableHelper.h"
 #import "GRMustacheSectionHelper.h"
 #import "GRMustacheError.h"
