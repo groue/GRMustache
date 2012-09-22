@@ -82,6 +82,26 @@ FAQ
 
     A: GRMustache does not need it. However, *you* may happy having GRMustache [swizzle](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) `valueForUndefinedKey:` in the NSObject and NSManagedObject classes when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`. The use case is described in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
 
+What other people say
+---------------------
+
+[@JeffSchilling](https://twitter.com/jeffschilling/status/142374437776408577):
+
+> I'm loving grmustache
+
+[@basilshkara](https://twitter.com/basilshkara/status/218569924296187904)
+
+> Oh man GRMustache saved my ass once again. Awesome lib.
+
+[@guiheneuf](https://twitter.com/guiheneuf/status/249061029978460160)
+
+> GRMustache filters extension saved us from great escaping PITAs. Thanks @groue.
+
+[@orj](https://twitter.com/orj/status/195310301820878848)
+
+> Thank fucking christ for decent iOS developers who ship .lib files in their Github repos. #GRMustache
+
+
 
 Contribution wish-list
 ----------------------
