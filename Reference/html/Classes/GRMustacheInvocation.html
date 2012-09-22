@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.1 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -47,6 +47,11 @@
 	
 	
 	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/description">&nbsp;&nbsp;&nbsp;&nbsp;- description</option>
+	
+	
 	
 </select>
 				</li>
@@ -77,6 +82,12 @@
 
 
 
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/description">description</a></span></li>
+	
+</ul></li>
 
 
 			</ul>
@@ -114,7 +125,7 @@
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
 						<p>The GRMustacheInvocation class gives you information about the values that
-are found in the context stack when rendering tags such as <code>{{name}}</code>.</p>
+are rendered.</p>
 
 <p>You&rsquo;ll be given GRMustacheInvocation instances when providing a
 <a href="../Protocols/GRMustacheTemplateDelegate.html">GRMustacheTemplateDelegate</a> to your templates.</p>
@@ -136,6 +147,13 @@ are found in the context stack when rendering tags such as <code>{{name}}</code>
 
 						<ul class="task-list">
 							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
+		<span class="tooltip"><p>Returns a string that describes the invocation.</p></span>
+	</span>
+	
+	
+</li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/returnValue">&nbsp;&nbsp;returnValue</a></code>
 		<span class="tooltip"><p>The return value of the invocation.</p></span>
@@ -187,10 +205,6 @@ are found in the context stack when rendering tags such as <code>{{name}}</code>
 		<p>For instance, the invocation that you would get for a <code>{{name}}</code> tag would
 have the name in the <code>returnValue</code> property.</p>
 
-<p>For tags with compound keys, such as <code>{{person.name}}</code>, the value will be
-the person&rsquo;s name, if the person could be found in the context stack.
-It would be nil otherwise.</p>
-
 <p>In a template&rsquo;s delegate methods, you can set the returnValue of an
 invocation, and alter a template rendering.</p>
 	</div>
@@ -202,8 +216,6 @@ invocation, and alter a template rendering.</p>
 	<div class="method-subsection see-also-section">
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
-			
-			<li><code><p><a href="#//api/name/key">@property key</a></p></code></li>
 			
 			<li><code><p><a href="../Protocols/GRMustacheTemplateDelegate.html">GRMustacheTemplateDelegate</a></p></code></li>
 			
@@ -226,6 +238,64 @@ invocation, and alter a template rendering.</p>
 					
 					
 					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/description" title="description"></a>
+	<h3 class="subsubtitle method-title">description</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a string that describes the invocation.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)description</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>a string that describes the invocation.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v1.12</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>It contains the original Mustache tag, the line number, and the path, URL, or
+name of the template, if any.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheInvocation.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
 					
 				</div>
 				<div class="main-navigation navigation-bottom">
@@ -237,9 +307,9 @@ invocation, and alter a template rendering.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-09-22)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						
 					</div>
 				</div>

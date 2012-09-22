@@ -27,16 +27,6 @@
 // =============================================================================
 #pragma mark - <GRMustacheFilter>
 
-/**
- * The name of exceptions raised by GRMustache whenever a filter is missing, or
- * the object expected to conform to the <GRMustacheFilter> protocol does not.
- *
- * @see GRMustacheFilter protocol
- *
- * @since v4.3
- */
-extern NSString * const GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
-
 
 /**
  * The protocol for implementing GRMustache filters.

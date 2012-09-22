@@ -28,12 +28,12 @@
  * `{{#name}}...{{/name}}`.
  *
  * You will be provided with GRMustacheSection objects when implementing
- * mustache lambda sections with objects conforming to the GRMustacheHelper
- * protocol.
+ * mustache lambda sections with objects conforming to the
+ * GRMustacheSectionHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
- * @see GRMustacheHelper
+ * @see GRMustacheSectionHelper protocol
  *
  * @since v1.3
  */

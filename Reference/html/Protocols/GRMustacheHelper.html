@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.1 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -32,19 +32,12 @@
 	
 	
 	
-	<option value="tasks">Tasks</option>
 	
 	
 	
 	
 	
 	
-	
-	
-	
-	<option value="instance_methods">Instance Methods</option>
-	
-	<option value="//api/name/renderSection:">&nbsp;&nbsp;&nbsp;&nbsp;- renderSection:</option>
 	
 	
 	
@@ -60,11 +53,6 @@
 
 
 
-<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering Sections">Rendering Sections</a></span></li>
-	
-</ul></li>
 
 
 
@@ -72,13 +60,6 @@
 
 
 
-
-
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderSection:">renderSection:</a></span></li>
-	
-</ul></li>
 
 
 			</ul>
@@ -102,10 +83,10 @@
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
 	<td class="specification-title">Conforms to</td>
-	<td class="specification-value">NSObject</td>
+	<td class="specification-value"><a href="../Protocols/GRMustacheSectionHelper.html">GRMustacheSectionHelper</a></td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">GRMustacheHelper.h</td>
+	<td class="specification-value">GRMustacheSectionHelper.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -115,41 +96,7 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The protocol for implementing Mustache &ldquo;lambda&rdquo; sections.</p>
-
-<p>The responsability of a <a href="../Classes/GRMustacheHelper.html">GRMustacheHelper</a> is to render a Mustache section such
-as <code>{{#bold}}...{{/bold}}</code>.</p>
-
-<p>When the data given to a Mustache section is a <a href="../Classes/GRMustacheHelper.html">GRMustacheHelper</a>, <a href="../Classes/GRMustache.html">GRMustache</a>
-invokes the <a href="#//api/name/renderSection:"><code>renderSection:</code></a> method of the helper, and inserts the raw return
-value in the template rendering.</p>
-
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/helpers.md">https://github.com/groue/GRMustache/blob/master/Guides/helpers.md</a></p>
-					</div>
-					
-					
-					
-					
-					
-					<div class="section section-tasks">
-						<a title="Tasks" name="tasks"></a>
-						<h2 class="subtitle subtitle-tasks">Tasks</h2>
-						
-						
-						<a title="Rendering Sections" name="task_Rendering Sections"></a>
-						
-<h3 class="subsubtitle task-title">Rendering Sections</h3>
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/renderSection:">&ndash;&nbsp;renderSection:</a></code>
-		<span class="tooltip"><p>Returns the rendering of a Mustache section.</p></span>
-	</span>
-	
-	<span class="task-item-suffix">required method</span>
-</li>
-						</ul>
-						
+						<p>Deprecated. Use <a href="../Classes/GRMustacheSectionHelper.html">GRMustacheSectionHelper</a> instead.</p>
 					</div>
 					
 					
@@ -160,67 +107,9 @@ value in the template rendering.</p>
 					
 					
 					
-					<div class="section section-methods">
-						<a title="Instance Methods" name="instance_methods"></a>
-						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
-						
-						<div class="section-method">
-	<a name="//api/name/renderSection:" title="renderSection:"></a>
-	<h3 class="subsubtitle method-title">renderSection:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Returns the rendering of a Mustache section.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (NSString *)renderSection:(GRMustacheSection *)<em>section</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>section</em></dt>
-			<dd><p>The section to render</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The rendering of the section</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v2.0</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheHelper.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-					</div>
+					
+					
+					
 					
 					
 				</div>
@@ -233,9 +122,9 @@ value in the template rendering.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-09-22)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						
 					</div>
 				</div>

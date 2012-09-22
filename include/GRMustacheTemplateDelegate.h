@@ -40,8 +40,8 @@ typedef enum {
      * The value is interpreted for section rendering, such as
      * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
      * to the NSFastEnumeration protocol, an object conforming to the
-     * GRMustacheHelper protocol, or any other value, the section will render
-     * differently.
+     * GRMustacheSectionHelper protocol, or any other value, the section will
+     * render differently.
      *
      * @since v4.1
      */
@@ -49,7 +49,8 @@ typedef enum {
     
     /**
      * The value is interpreted for variable substitution, for tags such as
-     * `{{name}}`.
+     * `{{name}}`. Whether it is an object conforming to the GRMustacheVariable
+     * protocol, or another object, the variable will render differently.
      *
      * @since v4.1
      */
