@@ -25,6 +25,7 @@
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
+@class GRMustacheSectionElement;
 
 /**
  * A GRMustacheVariableElement is a rendering element that renders variable
@@ -42,6 +43,7 @@
 @private
     GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
+    GRMustacheSectionElement *_enumerableSectionElement;
     BOOL _raw;
 }
 

@@ -26,6 +26,8 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
+#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheImplicitIteratorExpression_private.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
@@ -44,6 +46,7 @@
 {
     [_expression release];
     [_templateRepository release];
+    [_enumerableSectionElement release];
     [super dealloc];
 }
 
@@ -61,27 +64,46 @@
             (value == [NSNull null]))
         {
             // Missing value
-            return;
+        }
+        else if ([value conformsToProtocol:@protocol(NSFastEnumeration)] && ![value isKindOfClass:[NSDictionary class]])
+        {
+            // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
+            
+            if (_enumerableSectionElement == nil) {
+                // build {{.}}
+                GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
+                GRMustacheVariableElement *itemElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:NO];
+                
+                // build {{#items}}{{.}}{{/items}}
+                _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
+                                                                                templateRepository:_templateRepository
+                                                                                    templateString:@"{{.}}"
+                                                                                        innerRange:NSMakeRange(0, 5)
+                                                                                          inverted:NO
+                                                                                          elements:[NSArray arrayWithObject:itemElement]];
+                [_enumerableSectionElement retain];
+            }
+            [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
         }
         else if ([value conformsToProtocol:@protocol(GRMustacheVariableHelper)])
         {
             // Helper
+            
             GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:runtime];
             NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
             if (rendering) {
                 [buffer appendString:rendering];
             }
-            return;
         }
         else
         {
-            // Other value
+            // Object
+            
             NSString *rendering = [value description];
             if (!_raw) {
                 rendering = [self htmlEscape:rendering];
             }
             [buffer appendString:rendering];
-            return;
         }
     }];
 }
