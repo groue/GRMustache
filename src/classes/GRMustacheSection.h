@@ -33,7 +33,7 @@
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
- * @see GRMustacheSectionHelper
+ * @see GRMustacheSectionHelper protocol
  *
  * @since v1.3
  */

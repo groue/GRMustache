@@ -50,7 +50,7 @@
  *
  * @return A variable.
  *
- * @see GRMustacheVariableHelper
+ * @see GRMustacheVariableHelper protocol
  * @see GRMustacheRuntime
  */
 + (id)variableWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;

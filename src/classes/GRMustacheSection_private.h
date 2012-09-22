@@ -50,7 +50,7 @@
  *
  * @return A section.
  *
- * @see GRMustacheSectionHelper
+ * @see GRMustacheSectionHelper protocol
  * @see GRMustacheSectionElement
  * @see GRMustacheRuntime
  */

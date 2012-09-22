@@ -30,7 +30,7 @@
 #pragma mark - <GRMustacheVariableHelper>
 
 /**
- * The protocol for implementing Mustache "variable lambdas".
+ * The protocol for implementing Mustache "lambda" variable tags.
  *
  * The responsability of a GRMustacheVariableHelper is to render a Mustache
  * variable tag such as `{{name}}`.

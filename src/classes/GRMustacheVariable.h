@@ -34,7 +34,7 @@
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
- * @see GRMustacheVariableHelper
+ * @see GRMustacheVariableHelper protocol
  *
  * @since v5.1
  */
