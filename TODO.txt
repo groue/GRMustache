@@ -1,0 +1,2 @@
+- consider renaming renderVariable: renderAsMustacheVariable: (would improve https://gist.github.com/3765850 readability)
+- consider renaming renderSection: renderAsMustacheSection: 
