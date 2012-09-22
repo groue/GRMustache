@@ -22,7 +22,7 @@
 
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheHelper.h"
+#import "GRMustacheSectionHelper.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheSection_private.h"

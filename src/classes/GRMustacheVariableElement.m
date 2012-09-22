@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheHelper.h"
+#import "GRMustacheVariableHelper.h"
 #import "GRMustacheVariable_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
