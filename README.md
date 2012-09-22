@@ -58,6 +58,10 @@ FAQ
     
     A: Check [Guides/sample_code/number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
+- **Q: How do I render partial templates whose name is only known at runtime?**
+
+    A: Some call them "dynamic partials". Check the `GRMustacheDynamicPartial` documentation and samples in [Guides/helper.md](GRMustache/blob/master/Guides/helper.md)
+
 - **Q: How do I localize templates?**
 
     A: Check [Guides/sample_code/localization.md](GRMustache/blob/master/Guides/sample_code/localization.md)

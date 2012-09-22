@@ -4,6 +4,87 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.1.0
+
+### Array rendering
+
+The Mustache spec does not specify (yet) how a collection of objects should be rendered. For instance, the rendering of `{{items}}` is unspecified if items is an array.
+
+GRMustache 5.1 renders an array as the concatenation of the rendering of its individual items.
+
+Coupled with variable helpers that we'll introduce below, GRMustache is now able to render `{{items}}` just as Rails renders `<%= render @items %>`.
+
+### Variable helpers and dynamic partials
+
+The library was missing support for "Mustache variable lambdas", that let you execute code when rendering a plain `{{variable}}` tag.
+
+Support for variable lambdas is there now, through the `GRMustacheVariableHelper` protocol.
+
+Variable helpers are the base for "dynamic partials", that is to say the ability to defer the choice of a template partial until the actual rendering. Now your context objects can choose which partial should be rendered.
+
+Variable helpers can also help objects being able to "render themselves".
+
+All of those new features are documented at [Guides/helpers.md](Guides/helpers.md).
+
+New APIs:
+
+```objc
+// The name of exceptions raised whenever the rendering could not be completed.
+extern NSString * const GRMustacheRenderingException;
+
+// Base protocol for "variable lambdas".
+@protocol GRMustacheVariableHelper<NSObject>
+@required
+- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+@end
+
+// Convenience class in order to avoid implementing a full class that conforms
+// to the GRMustacheVariableHelper protocol
+@interface GRMustacheVariableHelper: NSObject<GRMustacheVariableHelper>
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
+@end
+
+// Convenience class for building variable helpers that render the content of a
+// template partial.
+@interface GRMustacheDynamicPartial: NSObject<GRMustacheVariableHelper>
++ (id)dynamicPartialWithName:(NSString *)name;
+@end
+
+// Allows you to implement variable helpers through the GRMustacheVariableHelper
+// protocol.
+@interface GRMustacheVariable : NSObject
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError;
+@end
+
+// This protocol is identical to the deprecated GRMustacheHelper protocol.
+@protocol GRMustacheSectionHelper<NSObject>
+@required
+- (NSString *)renderSection:(GRMustacheSection *)section;
+@end
+
+// This class is identical to the deprecated GRMustacheHelper class.
+@interface GRMustacheSectionHelper: NSObject<GRMustacheSectionHelper>
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block;
+@end
+```
+
+Deprecated APIs:
+
+```objc
+// Use GRMustacheRenderingException instead
+extern NSString * GRMustacheFilterException;
+
+// Use GRMustacheSectionHelper protocol instead
+@protocol GRMustacheHelper
+@end
+
+// Use GRMustacheSectionHelper class instead
+@interface GRMustacheHelper
+@end
+```
+
+
 ## v5.0.1
 
 Bug fixes:
