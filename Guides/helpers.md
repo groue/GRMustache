@@ -231,16 +231,16 @@ id data = @{
     @"movie": @{
         @"url": @"/movies/123",
         @"title": @"Citizen Kane",
-		@"link": [GRMustacheVariableHelper helperWithBlock:^(GRMustacheVariable *variable) {
-			return [variable renderTemplateString:movieLinkTemplateString error:NULL];
-		}],
+        @"link": [GRMustacheVariableHelper helperWithBlock:^(GRMustacheVariable *variable) {
+            return [variable renderTemplateString:movieLinkTemplateString error:NULL];
+        }],
         @"director": @{
             @"url": @"/people/321",
             @"firstName": @"Orson",
             @"lastName": @"Welles",
-			@"link": [GRMustacheVariableHelper helperWithBlock:^(GRMustacheVariable *variable) {
-				return [variable renderTemplateString:directorLinkTemplateString error:NULL];
-			}],
+            @"link": [GRMustacheVariableHelper helperWithBlock:^(GRMustacheVariable *variable) {
+                return [variable renderTemplateString:directorLinkTemplateString error:NULL];
+            }],
         }
     }
 }
@@ -261,41 +261,41 @@ Variable helper example: have a variable expand into a partial template
 
 Templates:
 
-	base.mustache
+    base.mustache
     {{#items}}
-		- {{link}}
-	{{/items}}
+        - {{link}}
+    {{/items}}
 
-	movie_link.mustache
-	<a href="{{url}}">{{title}}</a>
-	
-	director_link.mustache
-	<a href="{{url}}">{{firstName}} {{lastName}}</a>
+    movie_link.mustache
+    <a href="{{url}}">{{title}}</a>
+    
+    director_link.mustache
+    <a href="{{url}}">{{firstName}} {{lastName}}</a>
 
 Data:
 
 ```objc
 id data = @{
-	@"items": @[
-		@{	// movie
-	        @"url": @"/movies/123",
-	        @"title": @"Citizen Kane",
-			@"link": [GRMustacheDynamicPartial dynamicPartialWithName:@"movie_link"],
-		},
-		@{	// director
+    @"items": @[
+        @{    // movie
+            @"url": @"/movies/123",
+            @"title": @"Citizen Kane",
+            @"link": [GRMustacheDynamicPartial dynamicPartialWithName:@"movie_link"],
+        },
+        @{    // director
             @"url": @"/people/321",
             @"firstName": @"Orson",
             @"lastName": @"Welles",
-			@"link": [GRMustacheDynamicPartial dynamicPartialWithName:@"director_link"],
-		}
-	]
+            @"link": [GRMustacheDynamicPartial dynamicPartialWithName:@"director_link"],
+        }
+    ]
 };
 ```
 
 Render:
 
     - <a href="/movies/123">Citizen Kane</a>
-	- <a href="/people/321">Orson Welles</a>
+    - <a href="/people/321">Orson Welles</a>
 
 ```objc
 NSString *rendering = [template renderObject:data];
@@ -307,14 +307,14 @@ Variable helper example: have objects able to "render themselves"
 
 Templates:
 
-	base.mustache
+    base.mustache
     {{movie}}
 
-	movie.mustache
-	{{title}} by {{director}}
-	
-	person.mustache
-	{{firstName}} {{lastName}}
+    movie.mustache
+    {{title}} by {{director}}
+    
+    person.mustache
+    {{firstName}} {{lastName}}
 
 Data:
 
@@ -339,7 +339,7 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 // A movie renders itself with the movie.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-	return [variable renderTemplateNamed:@"movie" error:NULL];
+    return [variable renderTemplateNamed:@"movie" error:NULL];
 }
 @end
 
@@ -347,7 +347,7 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 // A person renders itself with the person.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-	return [variable renderTemplateNamed:@"person" error:NULL];
+    return [variable renderTemplateNamed:@"person" error:NULL];
 }
 @end
 ```
