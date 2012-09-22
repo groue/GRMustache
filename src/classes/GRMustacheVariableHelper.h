@@ -59,7 +59,7 @@
  *
  * @since v5.1
  */
-- (NSString *)renderVariable:(GRMustacheVariable *)variable;
+- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 @end
 
 
@@ -93,7 +93,7 @@
  *
  * @since v5.1
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 
 @end
 
@@ -129,6 +129,6 @@
  *
  * @since v5.1
  */
-+ (id)dynamicPartialWithName:(NSString *)name;
++ (id)dynamicPartialWithName:(NSString *)name AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
 
 @end
