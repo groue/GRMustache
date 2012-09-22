@@ -23,29 +23,53 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_1
 #import "GRMustachePublicAPITest.h"
 
+
 @interface GRMustacheVariableHelperTest : GRMustachePublicAPITest
 @end
 
 @interface GRMustacheStringVariableHelper : NSObject<GRMustacheVariableHelper> {
-    NSString *_string;
+    NSString *_rendering;
 }
-@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSString *rendering;
 @end
 
 @implementation GRMustacheStringVariableHelper
-@synthesize string=_string;
+@synthesize rendering=_rendering;
 - (void)dealloc
 {
-    self.string = nil;
+    self.rendering = nil;
     [super dealloc];
 }
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-    return self.string;
+    return self.rendering;
 }
 @end
 
-@interface GRMustacheCollectionItemVariableHelper : NSObject<GRMustacheVariableHelper> {
+@interface GRMustacheTemplateStringSelfRenderingHelper : NSObject<GRMustacheVariableHelper> {
+    NSString *_name;
+    NSString *_templateString;
+}
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *templateString;
+@end
+
+@implementation GRMustacheTemplateStringSelfRenderingHelper
+@synthesize name=_name;
+@synthesize templateString=_templateString;
+- (void)dealloc
+{
+    self.name = nil;
+    self.templateString = nil;
+    [super dealloc];
+}
+- (NSString *)renderVariable:(GRMustacheVariable *)variable
+{
+    return [variable renderTemplateString:self.templateString error:NULL];
+}
+@end
+
+@interface GRMustachePartialSelfRenderingHelper : NSObject<GRMustacheVariableHelper> {
     NSString *_name;
     NSString *_partialName;
 }
@@ -53,7 +77,7 @@
 @property (nonatomic, copy) NSString *partialName;
 @end
 
-@implementation GRMustacheCollectionItemVariableHelper
+@implementation GRMustachePartialSelfRenderingHelper
 @synthesize name=_name;
 @synthesize partialName=_partialName;
 - (void)dealloc
@@ -94,7 +118,7 @@
     {
         // GRMustacheVariableHelper protocol
         GRMustacheStringVariableHelper *helper = [[[GRMustacheStringVariableHelper alloc] init] autorelease];
-        helper.string = @"---";
+        helper.rendering = @"---";
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
         NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
         STAssertEqualObjects(result, @"---", @"");
@@ -117,7 +141,7 @@
     {
         // GRMustacheVariableHelper protocol
         GRMustacheStringVariableHelper *helper = [[[GRMustacheStringVariableHelper alloc] init] autorelease];
-        helper.string = @"&<>{{foo}}";
+        helper.rendering = @"&<>{{foo}}";
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
         NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
@@ -138,7 +162,7 @@
     {
         // GRMustacheVariableHelper protocol
         GRMustacheStringVariableHelper *helper = [[[GRMustacheStringVariableHelper alloc] init] autorelease];
-        helper.string = nil;
+        helper.rendering = nil;
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
         NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
         STAssertEqualObjects(result, @"", @"");
@@ -310,10 +334,10 @@
 
 - (void)testDynamicPartialCollectionsCanRenderItemProperties
 {
-    GRMustacheCollectionItemVariableHelper *item1 = [[[GRMustacheCollectionItemVariableHelper alloc] init] autorelease];
+    GRMustachePartialSelfRenderingHelper *item1 = [[[GRMustachePartialSelfRenderingHelper alloc] init] autorelease];
     item1.partialName = @"partial";
     item1.name = @"item1";
-    GRMustacheCollectionItemVariableHelper *item2 = [[[GRMustacheCollectionItemVariableHelper alloc] init] autorelease];
+    GRMustachePartialSelfRenderingHelper *item2 = [[[GRMustachePartialSelfRenderingHelper alloc] init] autorelease];
     item2.partialName = @"partial";
     item2.name = @"item2";
     NSDictionary *context = @{@"items": @[item1, item2]};
@@ -331,5 +355,17 @@
     STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:NULL], NSException, GRMustacheRenderingException, nil);
 }
 
+- (void)testHelperDoesEnterContextStack
+{
+    GRMustacheTemplateStringSelfRenderingHelper *item = [[[GRMustacheTemplateStringSelfRenderingHelper alloc] init] autorelease];
+    item.templateString = @"{{name}}";
+    item.name = @"name";
+    NSDictionary *context = @{@"item": item};
+    NSDictionary *partials = @{@"item": @"{{name}}"};
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{item}}" error:nil];
+    NSString *result = [template renderObject:context];
+    STAssertEqualObjects(result, @"name", @"");
+}
 
 @end

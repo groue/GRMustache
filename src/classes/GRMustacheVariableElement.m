@@ -88,7 +88,8 @@
         {
             // Helper
             
-            GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:runtime];
+            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
+            GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:helperRuntime];
             NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
             if (rendering) {
                 [buffer appendString:rendering];
