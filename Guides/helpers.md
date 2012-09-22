@@ -336,7 +336,6 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 
 ```objc
 @implementation Movie
-
 // A movie renders itself with the movie.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
@@ -345,8 +344,7 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 @end
 
 @implementation Person
-
-// A person renders itself with the movie.mustache partial template.
+// A person renders itself with the person.mustache partial template.
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
 	return [variable renderTemplateNamed:@"person" error:NULL];
