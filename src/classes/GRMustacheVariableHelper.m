@@ -22,6 +22,7 @@
 
 #import "GRMustacheVariableHelper.h"
 #import "GRMustacheVariable.h"
+#import "GRMustacheError.h"
 
 
 // =============================================================================
@@ -92,8 +93,12 @@
 
 - (NSString *)renderVariable:(GRMustacheVariable *)variable
 {
-    // TODO: what should we do about the error? (empty name, missing template...)
-    return [variable renderTemplateNamed:_name error:NULL];
+    NSError *error;
+    NSString *rendering = [variable renderTemplateNamed:_name error:&error];
+    if (!rendering) {
+        [NSException raise:GRMustacheRenderingException format:@"%@", [error localizedDescription]];
+    }
+    return rendering;
 }
 
 @end

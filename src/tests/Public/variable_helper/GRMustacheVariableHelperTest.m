@@ -324,4 +324,12 @@
     STAssertEqualObjects(result, @"<item1><item2>", @"");
 }
 
+- (void)testMissingDynamicPartialRaisesGRMustacheRenderingException
+{
+    id helper = [GRMustacheDynamicPartial dynamicPartialWithName:@"missing_partial"];
+    NSDictionary *context = @{@"helper": helper};
+    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:NULL], NSException, GRMustacheRenderingException, nil);
+}
+
+
 @end

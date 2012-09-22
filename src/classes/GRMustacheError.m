@@ -23,4 +23,7 @@
 #import "GRMustacheError.h"
 
 
-NSString* const GRMustacheErrorDomain = @"GRMustacheErrorDomain";
+NSString * const GRMustacheErrorDomain = @"GRMustacheErrorDomain";
+NSString * const GRMustacheRenderingException = @"GRMustacheRenderingException";
+NSString *GRMustacheFilterException = nil;   // initialized in [GRMustache load]
+

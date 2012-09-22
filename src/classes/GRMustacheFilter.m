@@ -22,8 +22,6 @@
 
 #import "GRMustacheFilter.h"
 
-NSString * const GRMustacheFilterException = @"GRMustacheFilterException";
-
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
 

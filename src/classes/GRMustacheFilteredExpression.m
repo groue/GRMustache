@@ -22,6 +22,7 @@
 
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheFilter.h"
+#import "GRMustacheError.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 
@@ -84,11 +85,11 @@
     id filter = [_filterExpression evaluateInRuntime:runtime asFilterValue:YES];
 
     if (filter == nil) {
-        [NSException raise:GRMustacheFilterException format:@"Missing filter"];
+        [NSException raise:GRMustacheRenderingException format:@"Missing filter"];
     }
     
     if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
-        [NSException raise:GRMustacheFilterException format:@"Object does not conform to GRMustacheFilter protocol"];
+        [NSException raise:GRMustacheRenderingException format:@"Object does not conform to GRMustacheFilter protocol"];
     }
     
     return [(id<GRMustacheFilter>)filter transformedValue:parameter];
