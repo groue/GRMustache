@@ -69,17 +69,15 @@
             // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
             
             if (_enumerableSectionElement == nil) {
-                // build {{.}}
+                // Build {{#items}}{{.}}{{/items}} or {{#items}}{{{.}}}{{/items}}, depending on _raw
                 GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
-                GRMustacheVariableElement *itemElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:NO];
-                
-                // build {{#items}}{{.}}{{/items}}
+                GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
                 _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
                                                                                 templateRepository:_templateRepository
-                                                                                    templateString:@"{{.}}"
-                                                                                        innerRange:NSMakeRange(0, 5)
+                                                                                    templateString:nil                          // unused
+                                                                                        innerRange:NSMakeRange(NSNotFound, 0)   // unused
                                                                                           inverted:NO
-                                                                                          elements:[NSArray arrayWithObject:itemElement]];
+                                                                                          elements:[NSArray arrayWithObject:innerElement]];
                 [_enumerableSectionElement retain];
             }
             [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
@@ -92,6 +90,7 @@
             GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:helperRuntime];
             NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
             if (rendering) {
+                // Never HTML escape helpers
                 [buffer appendString:rendering];
             }
         }
