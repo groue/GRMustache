@@ -6,13 +6,19 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v5.1.0
 
+### Dropped support for armv6
+
+libGRMustache5-iOS.a is now compiled with Xcode 4.5, and does not longer embed the armv6 slice.
+
+For armv6 support, use [GRMustache 5.0.1](https://github.com/groue/GRMustache/tree/v5.0.1).
+
 ### Array rendering
 
-The Mustache spec does not specify (yet) how a collection of objects should be rendered. For instance, the rendering of `{{items}}` is unspecified if items is an array.
+The Mustache specification does not specify how a collection of objects should be rendered. For instance, the rendering of `{{items}}` is unspecified if items is an array.
 
 GRMustache 5.1 renders an array as the concatenation of the rendering of its individual items.
 
-Coupled with variable helpers that we'll introduce below, GRMustache is now able to render `{{items}}` just as Rails renders `<%= render @items %>`.
+This makes GRMustache able to render `{{items}}` just as Ruby on Rails renders `<%= render @items %>`. Keep on reading.
 
 ### Variable helpers and dynamic partials
 
@@ -22,7 +28,7 @@ Support for variable lambdas is there now, through the `GRMustacheVariableHelper
 
 Variable helpers are the base for "dynamic partials", that is to say the ability to defer the choice of a template partial until the actual rendering. Now your context objects can choose which partial should be rendered.
 
-Variable helpers can also help objects being able to "render themselves".
+Variable helpers can also help objects being able to "render themselves", and have `{{item}}` and `{{items}}` rendering controlled by these items themselves.
 
 All of those new features are documented at [Guides/helpers.md](Guides/helpers.md).
 
