@@ -357,11 +357,11 @@ GRMustache helpers vs. Mustache lambdas
 
 **Warning: If your goal is to design GRMustache helpers that remain compatible with Mustache lambdas of [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), read the following with great care.**
 
-The strings returned by GRMustache section helpers are directly inserted in the final rendering, without any further processing.
+The strings returned by GRMustache helpers are directly inserted in the final rendering, without any further processing.
 
 However, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/%7Elambdas.yml#L90) that "Lambdas used for sections should have their results parsed" (read, processed as a Mustache template, and rendered in the current context).
 
-In order to comply with the genuine Mustache behavior, a helper must return the result of the `renderTemplateString:` method of the section, as the linking helper seen above.
+In order to comply with the genuine Mustache behavior, a section helper MUST return the result of the `renderTemplateString:error:` method of its _section_ parameter, as the linking helper seen above, and a variable helper MUST return the result of a method of its _variable_ parameter.
 
 
 Sample code
