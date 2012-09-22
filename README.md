@@ -60,7 +60,7 @@ FAQ
 
 - **Q: How do I render partial templates whose name is only known at runtime?**
 
-    A: Some call them "dynamic partials". Check the `GRMustacheDynamicPartial` documentation and samples in [Guides/helper.md](GRMustache/blob/master/Guides/helper.md)
+    A: Some call them "dynamic partials". Check the `GRMustacheDynamicPartial` documentation and samples in [Guides/helpers.md](GRMustache/blob/master/Guides/helpers.md)
 
 - **Q: How do I localize templates?**
 
