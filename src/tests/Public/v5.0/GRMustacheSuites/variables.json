@@ -43,6 +43,18 @@
       "template": "<{{first-subject}}{{middle_subject!}}{{lastSubject?}}>",
       "expected": "<123>"
     },
+    {
+      "name": "Enumeration is rendered as the concatenation of the rendering of items.",
+      "data": { "subject": ["&","\"","<",">",0,1,2] },
+      "template": "<{{subject}}>",
+      "expected": "<&amp;&quot;&lt;&gt;012>"
+    },
+    {
+      "name": "Triple mustaches should interpolate enumerations without HTML escaping",
+      "data": { "subject": ["&","\"","<",">",0,1,2] },
+      "template": "<{{{subject}}}>",
+      "expected": "<&\"<>012>"
+    },
     
     // Boolean interpretation
     
