@@ -24,26 +24,27 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheSection;
+@class GRMustacheVariable;
 
 
 // =============================================================================
-#pragma mark - <GRMustacheHelper>
+#pragma mark - <GRMustacheSectionHelper>
 
 /**
  * The protocol for implementing Mustache "lambda" sections.
  *
- * The responsability of a GRMustacheHelper is to render a Mustache section such
- * as `{{#bold}}...{{/bold}}`.
+ * The responsability of a GRMustacheSectionHelper is to render a Mustache
+ * section such as `{{#bold}}...{{/bold}}`.
  *
- * When the data given to a Mustache section is a GRMustacheHelper, GRMustache
- * invokes the `renderSection:` method of the helper, and inserts the raw return
- * value in the template rendering.
+ * When the data given to a Mustache section is a GRMustacheSectionHelper,
+ * GRMustache invokes the `renderSection:` method of the helper, and inserts the
+ * raw return value in the template rendering.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
  * @since v1.9
  */
-@protocol GRMustacheHelper<NSObject>
+@protocol GRMustacheSectionHelper<NSObject>
 @required
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,34 +65,148 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheHelper
+#pragma mark - GRMustacheSectionHelper
 
 /**
- * The GRMustacheHelper class helps building mustache helpers without writing a
- * custom class that conforms to the GRMustacheHelper protocol.
+ * The GRMustacheSectionHelper class helps building mustache helpers without
+ * writing a custom class that conforms to the GRMustacheSectionHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
  *
- * @see GRMustacheHelper protocol
+ * @see GRMustacheSectionHelper protocol
  *
  * @since v2.0
  */ 
-@interface GRMustacheHelper: NSObject<GRMustacheHelper>
+@interface GRMustacheSectionHelper: NSObject<GRMustacheSectionHelper>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Creating Helpers
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns a GRMustacheHelper object that executes the provided block when
- * rendering a section.
+ * Returns a GRMustacheSectionHelper object that executes the provided block
+ * when rendering a section tag.
  *
  * @param block   The block that renders a section.
  *
- * @return a GRMustacheHelper object.
+ * @return a GRMustacheSectionHelper object.
  *
  * @since v2.0
  */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
+@end
+
+
+// =============================================================================
+#pragma mark - <GRMustacheVariableHelper>
+
+/**
+ * The protocol for implementing Mustache "lambda" sections.
+ *
+ * The responsability of a GRMustacheVariableHelper is to render a Mustache
+ * variable tag such as `{{name}}`.
+ *
+ * When the data given to a Mustache variable tag is a GRMustacheVariableHelper,
+ * GRMustache invokes the `renderVariable:` method of the helper, and inserts
+ * the raw return value in the template rendering.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ *
+ * @since TODO
+ */
+@protocol GRMustacheVariableHelper<NSObject>
+@required
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering Sections
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns the rendering of a Mustache variable.
+ *
+ * @param variable   The variable to render
+ *
+ * @return The rendering of the variable
+ *
+ * @since TODO
+ */
+- (NSString *)renderVariable:(GRMustacheVariable *)variable;
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheVariableHelper
+
+/**
+ * The GRMustacheVariableHelper class helps building mustache helpers without
+ * writing a custom class that conforms to the GRMustacheVariableHelper
+ * protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ *
+ * @see GRMustacheVariableHelper protocol
+ *
+ * @since TODO
+ */
+@interface GRMustacheVariableHelper: NSObject<GRMustacheVariableHelper>
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Helpers
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns a GRMustacheVariableHelper object that executes the provided block
+ * when rendering a variable tag.
+ *
+ * @param block   The block that renders a variable.
+ *
+ * @return a GRMustacheVariableHelper object.
+ *
+ * @since TODO
+ */
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
+
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheDynamicPartial
+
+/**
+ * TODO
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ *
+ * @see GRMustacheVariableHelper protocol
+ *
+ * @since TODO
+ */
+@interface GRMustacheDynamicPartial: NSObject<GRMustacheVariableHelper> {
+    NSString *_name;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Dynamic Partials
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO
+ *
+ * @since TODO
+ */
++ (id)dynamicPartialWithName:(NSString *)name;
+
+@end
+
+
+// =============================================================================
+#pragma mark - Compatibility layer
+
+// TODO: mark as deprecated
+@protocol GRMustacheHelper <GRMustacheSectionHelper>
+@end
+
+// TODO: mark as deprecated
+@interface GRMustacheHelper: GRMustacheSectionHelper
 @end

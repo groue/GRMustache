@@ -86,7 +86,7 @@
  * @see GRMustacheSection
  * @see GRMustacheTemplateRepository
  * @see GRMustacheRuntime
- * @see GRMustacheHelper
+ * @see GRMustacheSectionHelper
  */
 + (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 

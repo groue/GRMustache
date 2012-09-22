@@ -203,7 +203,9 @@
             NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:NO]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression
+                                                                              templateRepository:_templateRepository
+                                                                                             raw:NO]];
         } break;
             
             
@@ -218,7 +220,9 @@
             NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression raw:YES]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression
+                                                                              templateRepository:_templateRepository
+                                                                                             raw:YES]];
         } break;
             
             

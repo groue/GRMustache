@@ -21,30 +21,29 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
+#import "GRMustacheHelper.h"
+#import "GRMustacheVariable_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheVariableElement()
-@property (nonatomic, retain) GRMustacheExpression *expression;
-@property (nonatomic) BOOL raw;
-- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
-@synthesize expression=_expression;
-@synthesize raw=_raw;
 
-+ (id)variableElementWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
++ (id)variableElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw
 {
-    return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
+    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository raw:raw] autorelease];
 }
 
 - (void)dealloc
 {
     [_expression release];
+    [_templateRepository release];
     [super dealloc];
 }
 
@@ -55,29 +54,48 @@
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheInterpretationVariable forRenderingToken:_expression.token usingBlock:^(id value) {
-        
-        if ((value == nil) || (value == [NSNull null])) {
+
+        // Interpret value
+
+        if ((value == nil) ||
+            (value == [NSNull null]))
+        {
+            // Missing value
             return;
         }
-        
-        NSString *rendering = [value description];
-        if (!_raw) {
-            rendering = [self htmlEscape:rendering];
+        else if ([value conformsToProtocol:@protocol(GRMustacheVariableHelper)])
+        {
+            // Helper
+            GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:runtime];
+            NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
+            if (rendering) {
+                [buffer appendString:rendering];
+            }
+            return;
         }
-        [buffer appendString:rendering];
-        
+        else
+        {
+            // Other value
+            NSString *rendering = [value description];
+            if (!_raw) {
+                rendering = [self htmlEscape:rendering];
+            }
+            [buffer appendString:rendering];
+            return;
+        }
     }];
 }
 
 
 #pragma mark Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw
 {
     self = [self init];
     if (self) {
-        self.expression = expression;
-        self.raw = raw;
+        _templateRepository = [templateRepository retain];  // TODO: check if we have introduced a retain cycle here
+        _expression = [expression retain];
+        _raw = raw;
     }
     return self;
 }

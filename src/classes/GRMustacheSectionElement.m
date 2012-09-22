@@ -127,12 +127,12 @@
                 return;
             }
         }
-        else if ([value conformsToProtocol:@protocol(GRMustacheHelper)])
+        else if ([value conformsToProtocol:@protocol(GRMustacheSectionHelper)])
         {
             // Helper
             if (!_inverted) {
                 GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
-                NSString *rendering = [(id<GRMustacheHelper>)value renderSection:section];
+                NSString *rendering = [(id<GRMustacheSectionHelper>)value renderSection:section];
                 if (rendering) {
                     [buffer appendString:rendering];
                 }
@@ -159,7 +159,7 @@
     self = [self init];
     if (self) {
         _expression = [expression retain];
-        _templateRepository = [templateRepository retain];
+        _templateRepository = [templateRepository retain];  // TODO: check if we have introduced a retain cycle here
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _inverted = inverted;

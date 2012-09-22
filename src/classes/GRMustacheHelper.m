@@ -22,15 +22,17 @@
 
 #import "GRMustacheHelper.h"
 #import "GRMustacheSection.h"
+#import "GRMustacheVariable.h"
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockHelper
+#pragma mark - Private concrete class GRMustacheBlockSectionHelper
 
 /**
- * Private subclass of GRMustacheHelper that render sections by calling a block.
+ * Private subclass of GRMustacheSectionHelper that render sections by calling
+ * a block.
  */
-@interface GRMustacheBlockHelper: GRMustacheHelper {
+@interface GRMustacheBlockSectionHelper: GRMustacheSectionHelper {
 @private
     NSString *(^_block)(GRMustacheSection* section);
 }
@@ -39,16 +41,31 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheHelper
+#pragma mark - Private concrete class GRMustacheBlockVariableHelper
 
-@implementation GRMustacheHelper
+/**
+ * Private subclass of GRMustacheVariableHelper that render variables by calling
+ * a block.
+ */
+@interface GRMustacheBlockVariableHelper: GRMustacheVariableHelper {
+@private
+    NSString *(^_block)(GRMustacheVariable* variable);
+}
+- (id)initWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheSectionHelper
+
+@implementation GRMustacheSectionHelper
 
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
-    return [[[GRMustacheBlockHelper alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheBlockSectionHelper alloc] initWithBlock:block] autorelease];
 }
 
-#pragma mark <GRMustacheHelper>
+#pragma mark <GRMustacheSectionHelper>
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
@@ -59,9 +76,70 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockHelper
+#pragma mark - GRMustacheVariableHelper
 
-@implementation GRMustacheBlockHelper
+@implementation GRMustacheVariableHelper
+
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block
+{
+    return [[[GRMustacheBlockVariableHelper alloc] initWithBlock:block] autorelease];
+}
+
+#pragma mark <GRMustacheVariableHelper>
+
+- (NSString *)renderVariable:(GRMustacheVariable *)variable
+{
+    return [self description];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheDynamicPartial
+
+@interface GRMustacheDynamicPartial()
+- (id)initWithName:(NSString *)name;
+@end
+
+@implementation GRMustacheDynamicPartial
+
++ (id)dynamicPartialWithName:(NSString *)name
+{
+    return [[[GRMustacheDynamicPartial alloc] initWithName:name] autorelease];
+}
+
+- (void)dealloc
+{
+    [_name release];
+    [super dealloc];
+}
+
+- (id)initWithName:(NSString *)name
+{
+    self = [super init];
+    if (self) {
+        _name = [name retain];
+    }
+    return self;
+}
+
+#pragma mark <GRMustacheVariableHelper>
+
+- (NSString *)renderVariable:(GRMustacheVariable *)variable
+{
+    NSString *templateString = [NSString stringWithFormat:@"{{>%@}}", _name];
+    // TODO: what should we do about the error? (empty name, missing template...)
+    return [variable renderTemplateString:templateString error:NULL];
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheBlockSectionHelper
+
+@implementation GRMustacheBlockSectionHelper
 
 - (id)initWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
@@ -79,7 +157,7 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheHelper>
+#pragma mark <GRMustacheSectionHelper>
 
 - (NSString *)renderSection:(GRMustacheSection *)section
 {
@@ -93,3 +171,42 @@
 }
 
 @end
+
+
+// =============================================================================
+#pragma mark - Private concrete class GRMustacheBlockVariableHelper
+
+@implementation GRMustacheBlockVariableHelper
+
+- (id)initWithBlock:(NSString *(^)(GRMustacheVariable* variable))block
+{
+    self = [self init];
+    if (self) {
+        _block = [block copy];
+    }
+    return self;
+}
+
+
+- (void)dealloc
+{
+    [_block release];
+    [super dealloc];
+}
+
+#pragma mark <GRMustacheVariableHelper>
+
+- (NSString *)renderVariable:(GRMustacheVariable *)variable
+{
+    NSString *rendering = nil;
+    
+    if (_block) {
+        rendering = _block(variable);
+    }
+    
+    return rendering;
+}
+
+@end
+
+
