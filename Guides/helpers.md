@@ -350,7 +350,7 @@ This works because Movie and Person classes conform to the GRMustacheVariableHel
 	return [variable renderTemplateNamed:@"person" error:NULL];
 }
 @end
-
+```
 
 GRMustache helpers vs. Mustache lambdas
 ---------------------------------------
