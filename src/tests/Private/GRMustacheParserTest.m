@@ -658,7 +658,7 @@
     STAssertEqualObjects(@"name", [tokenRecorder tokenTemplateNameValueAtIndex:0], nil);
 }
 
-- (void)testParserParsesSuperTemplateClosingTokenWithoutExtension
+- (void)testParserParsesOverridablePartialClosingTokenWithoutExtension
 {
     NSString *templateString = @"{{/name}}";
     [parser parseTemplateString:templateString templateID:nil];
@@ -668,7 +668,7 @@
     STAssertEqualObjects(@"name", [tokenRecorder tokenTemplateNameValueAtIndex:0], nil);
 }
 
-- (void)testParserParsesSuperTemplateClosingTokenWithExtension
+- (void)testParserParsesOverridablePartialClosingTokenWithExtension
 {
     NSString *templateString = @"{{/name.html}}";
     [parser parseTemplateString:templateString templateID:nil];
@@ -678,7 +678,7 @@
     STAssertEqualObjects(@"name.html", [tokenRecorder tokenTemplateNameValueAtIndex:0], nil);
 }
 
-- (void)testParserTrimsSuperTemplateClosingToken
+- (void)testParserTrimsOverridablePartialClosingToken
 {
     NSString *templateString = @"{{/ \n\tname \n\t}}";
     [parser parseTemplateString:templateString templateID:nil];

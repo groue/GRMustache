@@ -310,7 +310,7 @@
                         return NO;
                     }
                     
-                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithSuperTemplate:template elements:_currentElements];
+                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithTemplate:template elements:_currentElements];
                 } break;
                     
                 default:

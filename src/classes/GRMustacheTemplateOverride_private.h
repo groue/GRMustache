@@ -31,13 +31,13 @@
  * TODO
  */
 @interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement, GRMustacheRenderingOverride> {
-    GRMustacheTemplate *_superTemplate;
+    GRMustacheTemplate *_template;
     NSArray *_elems;
 }
 
 /**
  * TODO
  */
-+ (id)templateOverrideWithSuperTemplate:(GRMustacheTemplate *)superTemplate elements:(NSArray *)elements GRMUSTACHE_API_INTERNAL;
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements GRMUSTACHE_API_INTERNAL;
 
 @end

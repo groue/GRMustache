@@ -25,20 +25,20 @@
 #import "GRMustacheError.h"
 
 @interface GRMustacheTemplateOverride()
-@property (nonatomic, retain, readonly) GRMustacheTemplate *superTemplate;
-- (id)initWithSuperTemplate:(GRMustacheTemplate *)superTemplate elements:(NSArray *)elements;
+@property (nonatomic, retain, readonly) GRMustacheTemplate *template;
+- (id)initWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements;
 @end
 
 @implementation GRMustacheTemplateOverride
 
-+ (id)templateOverrideWithSuperTemplate:(GRMustacheTemplate *)superTemplate elements:(NSArray *)elements
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements
 {
-    return [[[self alloc] initWithSuperTemplate:superTemplate elements:elements] autorelease];
+    return [[[self alloc] initWithTemplate:template elements:elements] autorelease];
 }
 
 - (void)dealloc
 {
-    [_superTemplate release];
+    [_template release];
     [_elems release];
     [super dealloc];
 }
@@ -62,7 +62,7 @@
         return;
     }
     
-    if (((GRMustacheTemplateOverride *)renderingOverride).superTemplate == _superTemplate) {
+    if (((GRMustacheTemplateOverride *)renderingOverride).template == _template) {
         [NSException raise:GRMustacheRenderingException format:@"Partial override cycle"];
     }
 }
@@ -72,7 +72,7 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     runtime = [runtime runtimeByAddingRenderingOverride:self];
-    [_superTemplate renderInBuffer:buffer withRuntime:runtime];
+    [_template renderInBuffer:buffer withRuntime:runtime];
 }
 
 - (BOOL)isFinal
@@ -88,11 +88,11 @@
 
 #pragma mark - Private
 
-- (id)initWithSuperTemplate:(GRMustacheTemplate *)superTemplate elements:(NSArray *)elements
+- (id)initWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements
 {
     self = [super init];
     if (self) {
-        _superTemplate = [superTemplate retain];
+        _template = [template retain];
         _elems = [elements retain];
     }
     return self;
