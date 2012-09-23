@@ -1,9 +1,9 @@
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>{{$page_title}}Default title{{/page_title}}</title>
 </head>
 <body>
-    {{> header }}
-    {{{ embeddedContent }}}
+    {{>header}}
+    {{$page_content}}Default header{{/page_content}}
 </body>
 </html>

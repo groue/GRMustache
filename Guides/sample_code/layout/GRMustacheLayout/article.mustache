@@ -1,3 +1,10 @@
-<p>{{ text }}</p>
+{{<layout}}
+    {{$page_title}}
+        {{title}}
+    {{/page_title}}
 
-<p>by {{ author }}</p>
+    {{$page_content}}
+        <p>{{text}}</p>
+        <p>by {{author}}</p>
+    {{/page_content}}
+{{/layout}}

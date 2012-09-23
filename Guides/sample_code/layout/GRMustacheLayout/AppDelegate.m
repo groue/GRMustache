@@ -35,31 +35,8 @@
      *
      * - layout.mustache: the base structure for a HTML page.
      * - header.mustache: a partial template that renders a HTML header.
-     * - article.mustache: the content of a specific "article" page.
-     *
-     * All of those want to access the rendered data. Precisely speaking,
-     * layout.mustache needs to fill its <title> HTML tag; header.mustache needs
-     * to fill its <h1> HTML tag; and article.mustache needs some text to be
-     * displayed.
-     *
-     * header.mustache is embedded as a partial into layout.mustache, with the
-     * {{> header }} tag, because all pages have a header.
-     *
-     * However, article.mustache is not embedded as a partial, and we do not
-     * want it to be.
-     *
-     * This is because Mustache partials are always harcoded. Since we would
-     * like to use layout.mustache with some other templates like, say,
-     * author.mustache, video.mustache, or whatever, Mustache partials are not
-     * the solution.
-     *
-     * No problem: we'll render our document in two passes:
-     *
-     * - the first pass will render the embedded content with article.mustache.
-     * - the second pass will fill the {{{ embeddedContent }}} tag of
-     *   layout.mustache with this embedded content.
-     *
-     * Is the plan clear? Let's start by defining the rendered data:
+     * - article.mustache: a template that overrides layout and header elements,
+     *   in order to build a specific "article" page.
      */
     
     Article *article = [Article new];
@@ -67,37 +44,7 @@
     article.author = @"John Doe";
     article.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam risus, scelerisque et malesuada a, facilisis et lorem.";
     
-    
-    /**
-     * Now let's render the embedded content, by providing the article to
-     * article.mustache:
-     */
-    
-    GRMustacheTemplate *articleTemplate = [GRMustacheTemplate templateFromResource:@"article" bundle:nil error:NULL];
-    NSString *embeddedContent = [articleTemplate renderObject:article];
-    
-    
-    /**
-     * Finally, render layout.mustache with two objects:
-     *
-     * - layoutContext: this object associates the embeddedContent to the
-     *                  "embeddedContent" key, so that the layout template can
-     *                  find it and perform its layout job.
-     * 
-     * - article:       so that the layout can render the article's properties.
-     *
-     * There are so few occasions to use the little know
-     * -[GRMustacheTemplate renderObjectsInArray:] method :-)
-     */
-    
-    GRMustacheTemplate *layoutTemplate = [GRMustacheTemplate templateFromResource:@"layout" bundle:nil error:NULL];
-    NSDictionary *layoutContext = [NSDictionary dictionaryWithObject:embeddedContent forKey:@"embeddedContent"];
-    NSArray *renderedObjects = [NSArray arrayWithObjects:layoutContext, article, nil];
-    NSString *rendering = [layoutTemplate renderObjectsInArray:renderedObjects];
-    
-    
-    // 4. Success!
-    
+    NSString *rendering = [GRMustacheTemplate renderObject:article fromResource:@"article" bundle:nil error:NULL];
     NSLog(@"%@", rendering);
 }
 
