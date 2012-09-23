@@ -93,10 +93,10 @@
             // Missing value
             if (_inverted || _overridable) {
                 [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
-                return;
             }
+            return;
         }
-        else if (value == nil ||
+        else if (
             value == [NSNull null] ||
             ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
             ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
@@ -104,8 +104,8 @@
             // False value
             if (_inverted) {
                 [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
-                return;
             }
+            return;
         }
         else if ([value isKindOfClass:[NSDictionary class]])
         {
@@ -113,8 +113,8 @@
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
                 [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
-                return;
             }
+            return;
         }
         else if ([value conformsToProtocol:@protocol(NSFastEnumeration)])
         {
@@ -127,15 +127,14 @@
                 }
                 if (empty) {
                     [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
-                    return;
                 }
             } else {
                 for (id item in value) {
                     GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
                     [self renderInnerElementsInBuffer:buffer withRuntime:itemRuntime];
                 }
-                return;
             }
+            return;
         }
         else if ([value conformsToProtocol:@protocol(GRMustacheSectionHelper)])
         {
@@ -146,8 +145,8 @@
                 if (rendering) {
                     [buffer appendString:rendering];
                 }
-                return;
             }
+            return;
         }
         else
         {
@@ -155,8 +154,8 @@
             if (!_inverted) {
                 sectionRuntime = [sectionRuntime runtimeByAddingContextObject:value];
                 [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
-                return;
             }
+            return;
         }
     }];
 }
