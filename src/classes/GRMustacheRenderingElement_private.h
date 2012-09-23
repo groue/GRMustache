@@ -66,5 +66,5 @@
 /**
  *
  */
-- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 @end

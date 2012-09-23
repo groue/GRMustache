@@ -165,7 +165,7 @@
     return !_overridable;
 }
 
-- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     if (!_overridable) {
         return NO;

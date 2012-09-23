@@ -113,7 +113,7 @@
     return YES;
 }
 
-- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     return NO;
 }

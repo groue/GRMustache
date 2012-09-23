@@ -49,7 +49,7 @@
 - (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     for (id<GRMustacheRenderingElement> elem in _elems) {
-        if ([elem canOverrideRenderingElement:element]) {
+        if ([elem canOverrideNonFinalRenderingElement:element]) {
             return elem;
         }
     }
@@ -80,7 +80,7 @@
     return YES;
 }
 
-- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     return NO;
 }
