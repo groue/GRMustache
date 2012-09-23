@@ -115,6 +115,8 @@ Partial template inclusion
 
 When a `{{>name}}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
 
+You can write recursive partials. Just avoid infinite loops in your context objects.
+
 Depending on the method which has been used to create the original template, partials will be looked for in different places :
 
 - In the main bundle, with ".mustache" extension:
@@ -133,11 +135,11 @@ Depending on the method which has been used to create the original template, par
     - `renderObject:fromContentsOfFile:error:`
     - `templateFromContentsOfFile:error:`
 
-You can write recursive partials. Just avoid infinite loops in your context objects.
+Check [Guides/template_repositories.md](template_repositories.md) for more partial loading strategies.
 
 ### Overriding portions of partials
 
-Partials may contain *overridable sections*. Those sections are written with a dollar. For example, let's consider the following partial:
+Partials may contain *overridable sections*. Those sections start with a dollar instead of a pound. For example, let's consider the following partial:
 
     page_layout.mustache
     <html>
