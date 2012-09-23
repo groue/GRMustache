@@ -22,8 +22,10 @@
 
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheError.h"
 
 @interface GRMustacheTemplateOverride()
+@property (nonatomic, retain, readonly) GRMustacheTemplate *superTemplate;
 - (id)initWithSuperTemplate:(GRMustacheTemplate *)superTemplate elements:(NSArray *)elements;
 @end
 
@@ -54,6 +56,16 @@
     return nil;
 }
 
+- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+{
+    if (![renderingOverride isKindOfClass:[GRMustacheTemplateOverride class]]) {
+        return;
+    }
+    
+    if (((GRMustacheTemplateOverride *)renderingOverride).superTemplate == _superTemplate) {
+        [NSException raise:GRMustacheRenderingException format:@"Partial override cycle"];
+    }
+}
 
 #pragma mark - GRMustacheRenderingElement
 

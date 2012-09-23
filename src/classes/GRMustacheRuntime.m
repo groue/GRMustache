@@ -47,6 +47,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride filterObject:(id)filterObject;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride renderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
 - (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element;
+- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
 @end
 
 @implementation GRMustacheRuntime
@@ -125,6 +126,8 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     if (renderingOverride == nil) {
         return self;
     }
+    
+    [self assertAcyclicRenderingOverride:renderingOverride];
     
     return [[[GRMustacheRuntime alloc] initWithTemplate:_template
                                                  parent:self
@@ -233,6 +236,16 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         if (overridingElement) { return overridingElement; }
     }
     return nil;
+}
+
+- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+{
+    if (_renderingOverride) {
+        [_renderingOverride assertAcyclicRenderingOverride:renderingOverride];
+    }
+    if (_parentHasRenderingOverride) {
+        [_parent assertAcyclicRenderingOverride:renderingOverride];
+    }
 }
 
 + (id)valueForKey:(NSString *)key inObject:(id)object

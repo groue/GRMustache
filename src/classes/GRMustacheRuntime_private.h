@@ -38,7 +38,7 @@
  * TODO
  */
 - (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
-
+- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride GRMUSTACHE_API_INTERNAL;
 @end
 
 #if !defined(NS_BLOCK_ASSERTIONS)
