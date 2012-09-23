@@ -33,7 +33,7 @@
 {
     void(^block)(NSDictionary *test, NSString *path) = ^(NSDictionary *test, NSString *path) { [self runTest:test atPath:path]; };
     [self enumerateTestsFromResource:@"overridable_sections.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
-    [self enumerateTestsFromResource:@"template_inheritance.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
+    [self enumerateTestsFromResource:@"overridable_partials.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
 }
 
 - (void)runTest:(NSDictionary *)test atPath:(NSString *)path

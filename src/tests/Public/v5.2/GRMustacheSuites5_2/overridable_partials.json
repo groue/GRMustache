@@ -63,6 +63,13 @@
       "expected": "123"
     },
     {
+      "name": "Templates can override duplicated overridable sections",
+      "data": { },
+      "template": "{{<partial}}{{$overridable}}overriden{{/overridable}}{{/partial}}",
+      "partials": { "partial": "{{$overridable}}ignored{{/overridable}} {{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden overriden"
+    },
+    {
       "name": "Overridable partials can override overridable sections in their own overridable partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
