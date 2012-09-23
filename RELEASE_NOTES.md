@@ -12,7 +12,7 @@ Inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustac
 
 Overridable partials are documented as [Guides/templates.md](Guides/templates.md).
 
-The [layout](../../tree/master/Guides/sample_code/layout) sample code has been updated.
+The [layout](../../tree/master/Guides/sample_code/layout) sample code has been updated to take profit of overridable partials. There is not much left of it :-).
 
 
 ## v5.1.0
