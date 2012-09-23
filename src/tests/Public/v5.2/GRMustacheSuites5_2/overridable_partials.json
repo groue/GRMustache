@@ -104,6 +104,20 @@
         "partial1": "{{<partial2}}{{$overridable}}ignored{{/overridable}}{{/partial2}}",
         "partial2": "{{$overridable}}ignored{{/overridable}}" },
       "expected": "overriden"
+    },
+    {
+      "name": "Templates can not override non-overridable sections",
+      "data": { "section": true },
+      "template": "{{<partial}}{{$section}}overriden{{/section}}{{/partial}}",
+      "partials": { "partial": "{{#section}}success{{/section}}" },
+      "expected": "success"
+    },
+    {
+      "name": "Templates sections can not override overridable sections in overridable partial",
+      "data": { "section": true },
+      "template": "{{<partial}}{{#section}}overriden{{/section}}{{/partial}}",
+      "partials": { "partial": "{{$section}}success{{/section}}" },
+      "expected": "success"
     }
   ]
 }
