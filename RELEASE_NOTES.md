@@ -4,6 +4,17 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.2.0
+
+**Overridable partials**
+
+Inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), GRMustache now supports "template inheritance". Precisely, your templates can embed as many partials as before, but now you can override portions of those partials.
+
+Overridable partials are documented as [Guides/templates.md](Guides/templates.md).
+
+The [layout](../../tree/master/Guides/sample_code/layout) sample code has been updated.
+
+
 ## v5.1.0
 
 ### Dropped support for armv6

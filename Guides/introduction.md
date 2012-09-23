@@ -27,15 +27,20 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 
 Genuine Mustache falls short on a few topics. GRMustache implements features that are not in the specification:
 
+- "**filters**", as `{{ uppercase(name) }}`.
+    
+    This extension is backed on the discussion at [mustache/spec#41](https://github.com/mustache/spec/issues/41)
+
+- "**overridable partials**", aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+    
+    This extension is backed on the discussion at [mustache/spec#38](https://github.com/mustache/spec/issues/38)
+
 - "**anchored key paths**", as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
     If you are not familiar with the "context stack" and the key lookup mechanism, check [Guides/runtime/context_stack.md](runtime/context_stack.md).
     
     This extension is backed on the discussions at [mustache/spec#10](https://github.com/mustache/spec/issues/10) and [mustache/spec#52](https://github.com/mustache/spec/issues/52).
     
-- "**filters**", as `{{ uppercase(name) }}`.
-    
-    This extension is backed on the discussion at [mustache/spec#41](https://github.com/mustache/spec/issues/41)
 
 ### Template delegate
 
