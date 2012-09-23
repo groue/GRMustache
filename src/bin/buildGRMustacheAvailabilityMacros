@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 MAJOR_VERSION = 5
-MAX_MINOR_VERSION = 1
+MAX_MINOR_VERSION = 2
 
 puts <<-LICENSE
 // The MIT License
