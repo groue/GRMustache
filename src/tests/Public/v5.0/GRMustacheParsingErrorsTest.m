@@ -154,15 +154,6 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testParsingReportsEmptySectionClosingTag
-{
-    NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{#foo}}{{/}}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{#foo}}{{/ }}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-}
-
 - (void)testParsingReportsEmptyPartialTag
 {
     NSError *error;
@@ -301,40 +292,40 @@
 - (void)testParsingReportsFilteredClosingSectionsMismatch
 {
     NSError *error;
-    STAssertNotNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a}}{{/a}}" error:&error], nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a}}{{/b}}" error:&error], nil);
+    STAssertNotNil([GRMustacheTemplate templateFromString:@"{{#a}}{{/a}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a}}{{/b}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a}}{{/a(b)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a}}{{/a(b)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a}}{{/b(a)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a}}{{/b(a)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
     
-    STAssertNotNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/a(b)}}" error:&error], nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/a}}" error:&error], nil);
+    STAssertNotNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/a(b)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/a}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/b}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/b}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/a(b(c))}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/a(b(c))}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/c(a(b))}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/c(a(b))}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/b(a)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{#a(b)}}{{/b(a)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
 - (void)testParsingErrorReportsImplicitIteratorAsFilter
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{.(a)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{.(a)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{.f(a)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{.f(a)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
 - (void)testParsingErrorReportsFilteredValueAsFilter
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{f(a)(b)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{f(a)(b)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 

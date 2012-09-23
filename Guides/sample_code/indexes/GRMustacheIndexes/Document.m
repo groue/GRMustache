@@ -42,12 +42,9 @@
      * filters to be an instance of the PositionFilter class. That class has
      * been implemented so that it provides us with the extra keys for free.
      *
-     * For now, we just declare our template. The initial {{%FILTERS}} pragma
-     * tag tells GRMustache to trigger support for filters, which are an
-     * extension to the Mustache specification.
+     * For now, we just declare our template.
      */
-    NSString *templateString = @"{{% FILTERS}}"
-                               @"<ul>\n"
+    NSString *templateString = @"<ul>\n"
                                @"{{# withPosition(people) }}"
                                @"  <li class=\"{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}\">\n"
                                @"    {{ position }}:{{ name }}\n"

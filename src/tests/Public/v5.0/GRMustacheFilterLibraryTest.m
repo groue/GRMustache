@@ -31,27 +31,27 @@
 - (void)testCapitalizeFilter
 {
     id data = @"EDGAR allan poE";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{capitalized(.)}}" error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{capitalized(.)}}" error:NULL];
     STAssertEqualObjects(rendering, @"Edgar Allan Poe", nil);
 }
 
 - (void)testLowercaseFilter
 {
     id data = @"NAME";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{lowercase(.)}}" error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{lowercase(.)}}" error:NULL];
     STAssertEqualObjects(rendering, @"name", nil);
 }
 
 - (void)testUppercaseFilter
 {
     id data = @"name";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{%FILTERS}}{{uppercase(.)}}" error:NULL];
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{uppercase(.)}}" error:NULL];
     STAssertEqualObjects(rendering, @"NAME", nil);
 }
 
 - (void)testBlankFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{#isBlank(.)}}YES{{/isBlank(.)}}{{^isBlank(.)}}NO{{/isBlank(.)}}";
+    NSString *templateString = @"{{#isBlank(.)}}YES{{/isBlank(.)}}{{^isBlank(.)}}NO{{/isBlank(.)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     
     {
@@ -117,7 +117,7 @@
 
 - (void)testEmptyFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{#isEmpty(.)}}YES{{/isEmpty(.)}}{{^isEmpty(.)}}NO{{/isEmpty(.)}}";
+    NSString *templateString = @"{{#isEmpty(.)}}YES{{/isEmpty(.)}}{{^isEmpty(.)}}NO{{/isEmpty(.)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     
     {

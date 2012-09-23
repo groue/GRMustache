@@ -42,6 +42,7 @@
     [self enumerateTestsFromResource:@"partials.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
+    [self enumerateTestsFromResource:@"pragmas.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
 }
 
 - (void)runTest:(NSDictionary *)test atPath:(NSString *)path

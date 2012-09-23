@@ -3,7 +3,7 @@
 Filters
 =======
 
-**Filters are not yet part of the Mustache specification**. You thus need to explicitely opt-in in order to use them, with the `{{%FILTERS}}` special "pragma" tag in your templates.
+**Filters are not yet part of the Mustache specification**.
 
 > The topic of filters is currently under [discussion](http://github.com/mustache/spec/issues/41) with other implementors of Mustache. A detailed explanation of the ideas behind the filtering API described below is available at [WhyMustacheFilters.md](../Articles/WhyMustacheFilters.md).
 
@@ -13,7 +13,7 @@ Overview
 
 You apply a filter just like calling a function, with parentheses:
 
-- `{{%FILTERS}}My name is {{ uppercase(name) }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
+- `My name is {{ uppercase(name) }}` would render `My name is ARTHUR`, provided with "Arthur" as a name.
 
 - Filters can chain: `{{ uppercase(reversed(name)) }}` would render `RUHTRA`.
 
@@ -104,7 +104,7 @@ id data = @{ @"gain": @0.5 };
 id filters = @{ @percent: percentFilter };
 
 // Renders @"Enjoy your 50% productivity bump!"
-NSString *templateString = @"{{%FILTERS}}Enjoy your {{ percent(gain) }} productivity bump!";
+NSString *templateString = @"Enjoy your {{ percent(gain) }} productivity bump!";
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                            withFilters:filters
                                             fromString:templateString
@@ -128,7 +128,7 @@ id filters = @{
 
 [GRMustacheTemplate renderObject:...
                      withFilters:filters
-                      fromString:@"{{%FILTERS}}{{math.abs(x)}}"
+                      fromString:@"{{math.abs(x)}}"
                            error:NULL];
 ```
 

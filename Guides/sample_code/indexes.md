@@ -28,7 +28,6 @@ So check again the genuine Mustache way, above. Or keep on reading, now that you
 
 Below we'll implement the special keys `position`, `isFirst`, and `isOdd`. We'll render the following template:
 
-    {{% FILTERS}}
     <ul>
     {{# withPosition(people) }}
       <li class="{{#isOdd}}odd{{/isOdd}} {{#isFirst}}first{{/isFirst}}">
@@ -93,12 +92,9 @@ We have everything we need to render our template:
      * filters to be an instance of the PositionFilter class. That class has
      * been implemented so that it provides us with the extra keys for free.
      *
-     * For now, we just declare our template. The initial {{%FILTERS}} pragma
-     * tag tells GRMustache to trigger support for filters, which are an
-     * extension to the Mustache specification.
+     * For now, we just declare our template.
      */
-    NSString *templateString = @"{{% FILTERS}}"
-                               @"<ul>\n"
+    NSString *templateString = @"<ul>\n"
                                @"{{# withPosition(people) }}"
                                @"  <li class=\"{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}\">\n"
                                @"    {{ position }}:{{ name }}\n"

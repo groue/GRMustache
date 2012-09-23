@@ -267,14 +267,9 @@
                 case GRMustacheTokenTypeOverridableSectionOpening: {
                     // Expression validation
                     // We need a valid expression that matches section opening,
-                    // unless parser has the FILTERS pragma, in which case we
-                    // accept `{{/}}` closing tags.
+                    // or an empty `{{/}}` closing tags.
                     if (token.expressionValue == nil && token.invalidExpressionValue) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                        return NO;
-                    }
-                    if (token.expressionValue == nil && ![parser.pragmas containsObject:@"FILTERS"]) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
                         return NO;
                     }
                     if (token.expressionValue && ![token.expressionValue isEqual:_currentOpeningToken.expressionValue]) {

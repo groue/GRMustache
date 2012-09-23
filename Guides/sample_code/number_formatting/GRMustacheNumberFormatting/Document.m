@@ -34,13 +34,10 @@
      * This is typically a job for filters: we'll define the `percent` and
      * `decimal` filters.
      *
-     * For now, we just have our template use them. The initial {{%FILTERS}}
-     * pragma tag tells GRMustache to trigger support for filters, which are an
-     * extension to the Mustache specification.
+     * For now, we just have our template use them.
      */
      
-    NSString *templateString = @"{{%FILTERS}}"
-                               @"raw: {{value}}\n"
+    NSString *templateString = @"raw: {{value}}\n"
                                @"percent: {{percent(value)}}\n"
                                @"decimal: {{decimal(value)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];

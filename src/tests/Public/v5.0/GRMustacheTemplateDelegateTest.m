@@ -382,7 +382,7 @@
             interpretedValue = invocation.returnValue;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{uppercase(subject)}}" error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
         template.delegate = delegate;
         NSString *rendering = [template render];
         
@@ -400,7 +400,7 @@
             interpretedValue = invocation.returnValue;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{uppercase(subject)}}" error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
         template.delegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         
@@ -418,7 +418,7 @@
             interpretedValue = invocation.returnValue;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{uppercase(subject).length}}" error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject).length}}" error:NULL];
         template.delegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         

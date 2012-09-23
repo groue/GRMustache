@@ -104,7 +104,6 @@ So check again the genuine Mustache way, above. Or keep on reading, now that you
 
 Let's first rewrite our template so that it uses filters:
 
-    {{% FILTERS }}        # tell GRMustache to trigger support for filters
     raw: {{ value }}
     percent: {{ percent(value) }}
     decimal: {{ decimal(value) }}
@@ -121,13 +120,10 @@ After we have told GRMustache how the `percent` and `decimal` filters should pro
      * This is typically a job for filters: we'll define the `percent` and
      * `decimal` filters.
      *
-     * For now, we just have our template use them. The initial {{ %FILTERS }}
-     * pragma tag tells GRMustache to trigger support for filters, which are an
-     * extension to the Mustache specification.
+     * For now, we just have our template use them.
      */
      
-    NSString *templateString = @"{{% FILTERS }}"
-                               @"raw: {{ value }}\n"
+    NSString *templateString = @"raw: {{ value }}\n"
                                @"percent: {{ percent(value) }}\n"
                                @"decimal: {{ decimal(value) }}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];

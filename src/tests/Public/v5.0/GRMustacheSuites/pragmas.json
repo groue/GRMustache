@@ -1,0 +1,10 @@
+{
+  "tests": [
+    {
+      "name": "Pragmas tags are not rendered.",
+      "data": { },
+      "template": "<{{% PRAGMA }}>",
+      "expected": "<>"
+    }
+  ]
+}

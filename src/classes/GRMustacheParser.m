@@ -473,7 +473,6 @@
         stateValid
     } state = stateInitial;
     BOOL canFilter = NO;
-    BOOL hasFilterSupport = [self.pragmas containsObject:@"FILTERS"];
     NSUInteger identifierStart = NSNotFound;
     NSMutableArray *filterExpressionStack = [NSMutableArray array];
     GRMustacheExpression *currentExpression=nil;
@@ -513,7 +512,7 @@
                         break;
                         
                     default:
-                        canFilter = hasFilterSupport;
+                        canFilter = YES;
                         state = stateIdentifier;
                         
                         // enter stateIdentifier

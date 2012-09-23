@@ -231,37 +231,37 @@
 
 - (void)testParserParsesEscapedVariableTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{toto.titi(foo.bar)}}";
+    NSString *templateString = @"{{toto.titi(foo.bar)}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsEscapedVariableTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
+    NSString *templateString = @"{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesEscapedVariableTokenWithComplexExpression
 {
-    NSString *templateString = @"{{%FILTERS}}{{ a.b ( c.d ( e.f ) .g.h ).i.j }}";
+    NSString *templateString = @"{{ a.b ( c.d ( e.f ) .g.h ).i.j }}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeEscapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheExpression *expression_e = [GRMustacheIdentifierExpression expressionWithIdentifier:@"e"];
     GRMustacheExpression *expression_ef = [GRMustacheScopedExpression expressionWithBaseExpression:expression_e scopeIdentifier:@"f"];
     GRMustacheExpression *expression_c = [GRMustacheIdentifierExpression expressionWithIdentifier:@"c"];
@@ -275,7 +275,7 @@
     GRMustacheExpression *expression_abcdefghi = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefgh scopeIdentifier:@"i"];
     GRMustacheExpression *expression_abcdefghij = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefghi scopeIdentifier:@"j"];
     
-    STAssertEqualObjects(expression_abcdefghij, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression_abcdefghij, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesUnescapedVariableTokenWithThreeMustacheWithSingleKey
@@ -324,28 +324,28 @@
 
 - (void)testParserParsesUnescapedVariableTokenWithThreeMustacheWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{{toto.titi(foo.bar)}}}";
+    NSString *templateString = @"{{{toto.titi(foo.bar)}}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsUnescapedVariableTokenWithThreeMustacheWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}}";
+    NSString *templateString = @"{{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesUnescapedVariableTokenWithAmpersandWithSingleKey
@@ -394,28 +394,28 @@
 
 - (void)testParserParsesUnescapedVariableTokenWithAmpersandWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{{toto.titi(foo.bar)}}}";
+    NSString *templateString = @"{{{toto.titi(foo.bar)}}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsUnescapedVariableTokenWithAmpersandWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}}";
+    NSString *templateString = @"{{{ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeUnescapedVariable, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSectionOpeningTokenWithSingleKey
@@ -464,28 +464,28 @@
 
 - (void)testParserParsesSectionOpeningTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{#toto.titi(foo.bar)}}";
+    NSString *templateString = @"{{#toto.titi(foo.bar)}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSectionOpeningTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{# \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
+    NSString *templateString = @"{{# \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesInvertedSectionOpeningTokenWithSingleKey
@@ -534,28 +534,28 @@
 
 - (void)testParserParsesInvertedSectionOpeningTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{^toto.titi(foo.bar)}}";
+    NSString *templateString = @"{{^toto.titi(foo.bar)}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsInvertedSectionOpeningTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{^ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
+    NSString *templateString = @"{{^ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeInvertedSectionOpening, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesSectionClosingTokenWithSingleKey
@@ -604,28 +604,28 @@
 
 - (void)testParserParsesSectionClosingTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{/toto.titi(foo.bar)}}";
+    NSString *templateString = @"{{/toto.titi(foo.bar)}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeClosing, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserTrimsSectionClosingTokenWithFilter
 {
-    NSString *templateString = @"{{%FILTERS}}{{/ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
+    NSString *templateString = @"{{/ \n\ttoto.titi \n\t( \n\tfoo.bar \n\t) \n\t}}";
     [parser parseTemplateString:templateString templateID:nil];
     STAssertNil(tokenRecorder.error, nil);
-    STAssertEquals((NSUInteger)2, tokenRecorder.tokenCount, nil);
-    STAssertEquals(GRMustacheTokenTypeClosing, [tokenRecorder tokenTypeAtIndex:1], nil);
+    STAssertEquals((NSUInteger)1, tokenRecorder.tokenCount, nil);
+    STAssertEquals(GRMustacheTokenTypeClosing, [tokenRecorder tokenTypeAtIndex:0], nil);
     GRMustacheScopedExpression *parameterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:parameterExpression];
-    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:1], nil);
+    STAssertEqualObjects(expression, [tokenRecorder tokenExpressionValueAtIndex:0], nil);
 }
 
 - (void)testParserParsesPartialTokenWithoutExtension
