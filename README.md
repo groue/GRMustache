@@ -62,6 +62,10 @@ FAQ
 
     A: Some call them "dynamic partials". Check the `GRMustacheDynamicPartial` documentation and samples in [Guides/helpers.md](GRMustache/blob/master/Guides/helpers.md)
 
+- **Q: Does GRMustache provide any layout or template inheritance facility?**
+    
+    A: Look for "Overriding portions of partials" in [Guides/templates.md](GRMustache/blob/master/Guides/templates.md), and check the [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout).
+
 - **Q: How do I localize templates?**
 
     A: Check [Guides/sample_code/localization.md](GRMustache/blob/master/Guides/sample_code/localization.md)
@@ -69,10 +73,6 @@ FAQ
 - **Q: How do I render default values for missing keys?**
 
     A: Check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
-
-- **Q: Does GRMustache provide any layout facility?**
-    
-    A: No. But there is a [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout) that demonstrates how to do that.
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 

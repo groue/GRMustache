@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Overridable sections render for missing values",
+      "name": "Overridable sections, unlike regular sections, render for missing values",
       "data": { },
       "template": "<{{$overridable}}[{{subject}}]{{/overridable}}>",
       "expected": "<[]>"

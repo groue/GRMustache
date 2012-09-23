@@ -135,6 +135,54 @@ Depending on the method which has been used to create the original template, par
 
 You can write recursive partials. Just avoid infinite loops in your context objects.
 
+### Overriding portions of partials
+
+Partials may contain *overridable sections*. Those sections are written with a dollar. For example, let's consider the following partial:
+
+    page_layout.mustache
+    <html>
+    <head>
+        <title>{{$page_title}}Default title{{/page_title}}</title>
+    </head>
+    <body>
+        <h1>{{$page_title}}Default title{{/page_title}}</h1>
+        {{$page_content}
+            Default content
+        {{/page_content}}}
+    </body>
+    </html>
+
+You can embed such an overridable partial, and override its sections with the `{{<partial}}...{{/partial}}` syntax:
+
+    article_page.mustache
+    {{<page_layout}}
+    
+        {{! override page_title }}
+        {{$page_title}}{{article.title}}{{/page_title}}
+        
+        {{! override page_content }}
+        {{$page_content}}
+            {{$article}}
+                {{body}}
+                by {{author}}
+            {{/article}}
+        {{/page_content}}
+        
+    {{/page_layout}}
+
+When you render `article.mustache`, you will get a full HTML page.
+
+You can override a section with attached data, as well:
+
+    anonymous_article.mustache
+    {{<article_page}}
+        {{$article}}
+            {{body}}
+            by anonymous coward
+        {{/article}}
+    {{/article_page}}
+
+
 More loading options
 --------------------
 
