@@ -79,7 +79,7 @@
       "expected": "partial1"
     },
     {
-      "name": "Templates can override overridable sections in deep overridable partials",
+      "name": "Templates can override overridable sections in partials embedded in overridable partials",
       "data": { },
       "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
       "partials": {
