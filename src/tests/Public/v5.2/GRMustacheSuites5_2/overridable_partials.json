@@ -88,6 +88,15 @@
       "expected": "overriden"
     },
     {
+      "name": "Templates can override overridable sections in overridable partials embedded in overridable partials",
+      "data": { },
+      "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{<partial2}}{{/partial2}}",
+        "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
+    },
+    {
       "name": "Templates can override already overriden overridable sections",
       "data": { },
       "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
