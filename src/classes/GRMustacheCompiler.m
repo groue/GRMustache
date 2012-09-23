@@ -26,6 +26,7 @@
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
 #import "GRMustacheSectionElement_private.h"
+#import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
@@ -41,15 +42,15 @@
 @property (nonatomic, retain) NSError *fatalError;
 
 /**
- * After a section opening token has been found, such as {{#foo}} or {{^bar}},
+ * After a opening token has been found such as {{#foo}}, {{^bar}}, or {{<baz}},
  * contains this token.
  * 
  * This object is always identical to
- * [self.sectionOpeningTokenStack lastObject].
+ * [self.openingTokenStack lastObject].
  * 
- * @see sectionOpeningTokenStack
+ * @see openingTokenStack
  */
-@property (nonatomic, retain) GRMustacheToken *currentSectionOpeningToken;
+@property (nonatomic, retain) GRMustacheToken *currentOpeningToken;
 
 /**
  * An array where rendering elements are appended as tokens are yielded
@@ -82,9 +83,9 @@
  * This stack grows with section opening tokens, and shrinks with section
  * closing tokens.
  * 
- * @see currentSectionOpeningToken
+ * @see currentOpeningToken
  */
-@property (nonatomic, retain) NSMutableArray *sectionOpeningTokenStack;
+@property (nonatomic, retain) NSMutableArray *openingTokenStack;
 
 /**
  * This method is called whenever an error has occurred beyond any repair hope.
@@ -111,11 +112,11 @@
 
 @implementation GRMustacheCompiler
 @synthesize fatalError=_fatalError;
-@synthesize currentSectionOpeningToken=_currentSectionOpeningToken;
+@synthesize currentOpeningToken=_currentOpeningToken;
 @synthesize templateRepository=_templateRepository;
 @synthesize currentElements=_currentElements;
 @synthesize elementsStack=_elementsStack;
-@synthesize sectionOpeningTokenStack=_sectionOpeningTokenStack;
+@synthesize openingTokenStack=_openingTokenStack;
 
 - (id)init
 {
@@ -124,7 +125,7 @@
         _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
         _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
         [_elementsStack addObject:_currentElements];
-        _sectionOpeningTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+        _openingTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
     }
     return self;
 }
@@ -141,9 +142,9 @@
     }
     
     // Unclosed section?
-    if (_currentSectionOpeningToken) {
+    if (_currentOpeningToken) {
         if (outError != NULL) {
-            *outError = [self parseErrorAtToken:_currentSectionOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentSectionOpeningToken.templateSubstring]];
+            *outError = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
         }
         return nil;
     }
@@ -155,10 +156,10 @@
 - (void)dealloc
 {
     [_fatalError release];
-    [_currentSectionOpeningToken release];
+    [_currentOpeningToken release];
     [_currentElements release];
     [_elementsStack release];
-    [_sectionOpeningTokenStack release];
+    [_openingTokenStack release];
     [super dealloc];
 }
 
@@ -184,26 +185,27 @@
             
         case GRMustacheTokenTypeText:
             // Parser validation
-            NSAssert([token.value.text isKindOfClass:[NSString class]], @"WTF parser?");
-            NSAssert(token.value.text.length > 0, @"WTF parser?");
+            NSAssert(token.textValue.length > 0, @"WTF parser?");
             
             // Success: append GRMustacheTextElement
-            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.value.text]];
+            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.textValue]];
             break;
             
             
         case GRMustacheTokenTypeEscapedVariable: {
             // Expression validation
-            if (token.value.expression == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                return NO;
+            if (token.expressionValue == nil) {
+                if (token.invalidExpressionValue) {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
+                    return NO;
+                } else {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                    return NO;
+                }
             }
             
-            // Parser validation
-            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
-            
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expressionValue
                                                                               templateRepository:_templateRepository
                                                                                              raw:NO]];
         } break;
@@ -211,111 +213,166 @@
             
         case GRMustacheTokenTypeUnescapedVariable: {
             // Expression validation
-            if (token.value.expression == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                return NO;
+            if (token.expressionValue == nil) {
+                if (token.invalidExpressionValue) {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
+                    return NO;
+                } else {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                    return NO;
+                }
             }
             
-            // Parser validation
-            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
-            
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.value.expression
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expressionValue
                                                                               templateRepository:_templateRepository
                                                                                              raw:YES]];
         } break;
             
             
         case GRMustacheTokenTypeSectionOpening:
-        case GRMustacheTokenTypeInvertedSectionOpening: {
+        case GRMustacheTokenTypeInvertedSectionOpening:
+        case GRMustacheTokenTypeOverridableSectionOpening: {
             // Expression validation
-            if (token.value.expression == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                return NO;
+            if (token.expressionValue == nil) {
+                if (token.invalidExpressionValue) {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
+                    return NO;
+                } else {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                    return NO;
+                }
             }
             
-            // Parser validation
-            NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
-            
             // Expand stacks
-            self.currentSectionOpeningToken = token;
+            self.currentOpeningToken = token;
             self.currentElements = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_sectionOpeningTokenStack addObject:token];
+            [_openingTokenStack addObject:token];
             [_elementsStack addObject:_currentElements];
         } break;
             
             
-        case GRMustacheTokenTypeSectionClosing: {
-            // Expression validation
-            // We need an expression, unless parser has the FILTERS pragma, in which case we accept `{{/}}` closing tags.
-            if (token.value.expression == nil && ![parser.pragmas containsObject:@"FILTERS"]) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+        case GRMustacheTokenTypeClosing: {
+            if (_currentOpeningToken == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                 return NO;
             }
             
-            // Parser validation
-            if (token.value.expression) {
-                NSAssert([token.value.expression isKindOfClass:[GRMustacheExpression class]], @"WTF parser?");
+            // What are we closing?
+            
+            id<GRMustacheRenderingElement> wrapperElement = nil;
+            switch (_currentOpeningToken.type) {
+                case GRMustacheTokenTypeSectionOpening:
+                case GRMustacheTokenTypeInvertedSectionOpening:
+                case GRMustacheTokenTypeOverridableSectionOpening: {
+                    // Expression validation
+                    // We need a valid expression that matches section opening,
+                    // unless parser has the FILTERS pragma, in which case we
+                    // accept `{{/}}` closing tags.
+                    if (token.expressionValue == nil && token.invalidExpressionValue) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
+                        return NO;
+                    }
+                    if (token.expressionValue == nil && ![parser.pragmas containsObject:@"FILTERS"]) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
+                        return NO;
+                    }
+                    if (token.expressionValue && ![token.expressionValue isEqual:_currentOpeningToken.expressionValue]) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
+                        return NO;
+                    }
+                    
+                    // Nothing prevents tokens to come from different template strings.
+                    // We, however, do not support this case, because GRMustacheSectionElement
+                    // builds from a single template string and a single innerRange.
+                    NSAssert(_currentOpeningToken.templateString == token.templateString, @"not implemented");
+                    
+                    // Success: append GRMustacheSectionElement and shrink stacks
+                    NSRange openingTokenRange = _currentOpeningToken.range;
+                    NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
+                    wrapperElement = [GRMustacheSectionElement sectionElementWithExpression:_currentOpeningToken.expressionValue
+                                                                         templateRepository:_templateRepository
+                                                                             templateString:token.templateString
+                                                                                 innerRange:innerRange
+                                                                                   inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                                overridable:(_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening)
+                                                                                   elements:_currentElements];
+                    
+                } break;
+                    
+                case GRMustacheTokenTypeOverridableTemplate: {
+                    // Validate token: overridable template ending should be missing, or match overridable template opening
+                    if (token.templateNameValue && ![token.templateNameValue isEqual:_currentOpeningToken.templateNameValue]) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ super template closing tag", token.templateSubstring]]];
+                        return NO;
+                    }
+                    
+                    // Ask templateRepository for super template
+                    NSError *templateError;
+                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.templateNameValue error:&templateError];
+                    if (template == nil) {
+                        [self failWithFatalError:templateError];
+                        return NO;
+                    }
+                    
+                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithSuperTemplate:template elements:_currentElements];
+                } break;
+                    
+                default:
+                    NSAssert(NO, @"WTF");
+                    break;
             }
             
-            // Validate token: section ending should match section opening
-            if (token.value.expression && ![token.value.expression isEqual:_currentSectionOpeningToken.value.expression]) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
-                return NO;
-            }
-
-            // Nothing prevents tokens to come from different template strings.
-            // We, however, do not support this case, because GRMustacheSectionElement
-            // builds from a single template string and a single innerRange.
-            NSAssert(_currentSectionOpeningToken.templateString == token.templateString, @"not implemented");
-            
-            // Success: append GRMustacheSectionElement and shrink stacks
-            NSRange openingTokenRange = _currentSectionOpeningToken.range;
-            NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-            GRMustacheSectionElement *sectionElement = [GRMustacheSectionElement sectionElementWithExpression:_currentSectionOpeningToken.value.expression
-                                                                                           templateRepository:_templateRepository
-                                                                                               templateString:token.templateString
-                                                                                                   innerRange:innerRange
-                                                                                                     inverted:(_currentSectionOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                                                     elements:_currentElements];
-            
-            [_sectionOpeningTokenStack removeLastObject];
+            NSAssert(wrapperElement, @"WTF");
+            [_openingTokenStack removeLastObject];
             [_elementsStack removeLastObject];
-            self.currentSectionOpeningToken = [_sectionOpeningTokenStack lastObject];
+            self.currentOpeningToken = [_openingTokenStack lastObject];
             self.currentElements = [_elementsStack lastObject];
-            [_currentElements addObject:sectionElement];
+            [_currentElements addObject:wrapperElement];
         } break;
             
             
         case GRMustacheTokenTypePartial: {
-            // Partial name validation
-            if (token.value.partialName == nil) {
+            // Template name validation
+            if (token.templateNameValue == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing partial name"]]];
                 return NO;
             }
             
-            // Parser validation
-            NSAssert([token.value.partialName isKindOfClass:[NSString class]], @"WTF parser?");
+            // Validate the renderingElementForTemplateName:error: contract:
+            // Non nil, non empty, white-space stripped template name.
+            NSAssert([token.templateNameValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
             
-            // Validate the renderingElementForPartialName:error: contract:
-            // Non nil, non empty, white-space stripped partial name.
-            NSAssert([token.value.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
-            
-            // Ask templateRepository for rendering element
-            NSError *partialError;
-            id<GRMustacheRenderingElement> partial = [_templateRepository renderingElementForPartialName:token.value.partialName error:&partialError];
-            if (partial == nil) {
-                [self failWithFatalError:partialError];
+            // Ask templateRepository for partial template
+            NSError *templateError;
+            id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.templateNameValue error:&templateError];
+            if (template == nil) {
+                [self failWithFatalError:templateError];
                 return NO;
             }
             
-            // Success: append partial element
-            [_currentElements addObject:partial];
+            // Success: append template element
+            [_currentElements addObject:template];
         } break;
+        
+        
+        case GRMustacheTokenTypeOverridableTemplate: {
+            // Template name validation
+            if (token.templateNameValue == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing super template name"]]];
+                return NO;
+            }
             
-        default:
-            NSAssert(NO, @"");
-            break;
+            // Validate the renderingElementForTemplateName:error: contract:
+            // Non nil, non empty, white-space stripped template name.
+            NSAssert([token.templateNameValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
+            
+            // Expand stacks
+            self.currentOpeningToken = token;
+            self.currentElements = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            [_openingTokenStack addObject:token];
+            [_elementsStack addObject:_currentElements];
+        } break;
             
     }
     return YES;
@@ -335,9 +392,9 @@
     self.currentElements = nil;
     
     // All those objects are useless, now
-    self.currentSectionOpeningToken = nil;
+    self.currentOpeningToken = nil;
     self.elementsStack = nil;
-    self.sectionOpeningTokenStack = nil;
+    self.openingTokenStack = nil;
 }
 
 - (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description

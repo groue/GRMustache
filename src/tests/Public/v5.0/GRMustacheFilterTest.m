@@ -123,6 +123,14 @@
     STAssertEqualObjects(rendering, @"<FOO> <FOO>", nil);
 }
 
+- (void)testFilteredSectionClosingTagCanNotBeInvalid
+{
+    NSString *templateString = @"{{%FILTERS}}<{{#uppercase(.)}}{{.}}{{/uppercase(.}}>";
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromString:templateString error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
 - (void)testMissingFilterChainRaisesGRMustacheFilterException
 {
     id replaceFilter = [GRMustacheFilter filterWithBlock:^id(id value) {

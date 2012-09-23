@@ -65,9 +65,9 @@ typedef enum {
     GRMustacheTokenTypeInvertedSectionOpening,
     
     /**
-     * The kind of tokens representing section closing tags such as `{{/name}}`.
+     * The kind of tokens representing closing tags such as `{{/name}}`.
      */
-    GRMustacheTokenTypeSectionClosing,
+    GRMustacheTokenTypeClosing,
     
     /**
      * The kind of tokens representing partial tags such as `{{>name}}`.
@@ -83,20 +83,18 @@ typedef enum {
      * The kind of tokens representing pragma tags such as `{{%FILTERS}}`.
      */
     GRMustacheTokenTypePragma,
+    
+    /**
+     * The kind of tokens representing super template tags such as `{{<name}}`.
+     */
+    GRMustacheTokenTypeOverridableTemplate,
+    
+    /**
+     * The kind of tokens representing overridable ection opening tags such as
+     * `{{$name}}`.
+     */
+    GRMustacheTokenTypeOverridableSectionOpening,
 } GRMustacheTokenType;
-
-/**
- * The type of a GRMustacheToken's value.
- *
- * @see GRMustacheToken.value
- */
-typedef union {
-    id object;
-    NSString *text;
-    GRMustacheExpression *expression;
-    NSString *partialName;
-    NSString *pragma;
-} GRMustacheTokenValue;
 
 /**
  * A GRMustacheToken is the product of GRMustacheParser. It represents a
@@ -112,11 +110,15 @@ typedef union {
 @interface GRMustacheToken : NSObject {
 @private
     GRMustacheTokenType _type;
-    GRMustacheTokenValue _value;
     NSString *_templateString;
     id _templateID;
     NSUInteger _line;
     NSRange _range;
+    NSString *_textValue;
+    GRMustacheExpression *_expressionValue;
+    BOOL _invalidExpressionValue;
+    NSString *_templateNameValue;
+    NSString *_pragmaValue;
 }
 
 /**
@@ -125,6 +127,8 @@ typedef union {
 @property (nonatomic, readonly) GRMustacheTokenType type GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
+ *
  * The value of a token depends on its type.
  * 
  * For tokens of type GRMustacheTokenTypeText or GRMustacheTokenTypeComment,
@@ -137,13 +141,14 @@ typedef union {
  * For tokens whose type is
  * GRMustacheTokenTypeEscapedVariable, GRMustacheTokenTypeUnescapedVariable,
  * GRMustacheTokenTypeSectionOpening, GRMustacheTokenTypeInvertedSectionOpening,
- * GRMustacheTokenTypeSectionClosing, value.expression is an expression.
+ * GRMustacheTokenTypeClosing, value.expression is an expression.
  *
  * For instance, a token of type GRMustacheTokenTypeEscapedVariable and
  * expression 'foo' represents a `{{ foo }}` tag.
  *
- * For tokens of type GRMustacheTokenTypePartial, the value.partialName is the
- * name of a partial template.
+ * For tokens of type GRMustacheTokenTypePartial and
+ * GRMustacheTokenTypeOverridableTemplate, the value.templateName is the name of
+ * a template.
  *
  * For instance, a token of type GRMustacheTokenTypePartial and partial name
  * 'profile' represents a `{{> profile }}` tag.
@@ -156,7 +161,11 @@ typedef union {
  *
  * Tokens of type GRMustacheTokenTypeSetDelimiter do not have any value.
  */
-@property (nonatomic, readonly) GRMustacheTokenValue value GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign, readonly) NSString *textValue GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign, readonly) GRMustacheExpression *expressionValue GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) BOOL invalidExpressionValue GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign, readonly) NSString *templateNameValue GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign, readonly) NSString *pragmaValue GRMUSTACHE_API_INTERNAL;
 
 /**
  * The Mustache template string this token comes from.
@@ -192,6 +201,7 @@ typedef union {
 @property (nonatomic, readonly) NSString *templateSubstring GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
  * Builds and return a token.
  * 
  * The caller is responsible for honoring the template properties semantics and
@@ -205,5 +215,5 @@ typedef union {
  * @see line
  * @see range
  */
-+ (id)tokenWithType:(GRMustacheTokenType)type value:(GRMustacheTokenValue)value templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
++ (id)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range textValue:(NSString *)textValue expressionValue:(GRMustacheExpression *)expressionValue invalidExpressionValue:(BOOL)invalidExpressionValue templateNameValue:(NSString *)templateNameValue pragmaValue:(NSString *)pragmaValue GRMUSTACHE_API_INTERNAL;
 @end

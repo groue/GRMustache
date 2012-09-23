@@ -77,23 +77,23 @@
 /**
  * Returns an expression from a string.
  *
- * @param string    A string.
- * @param outEmpty  If the string contains an empty expression, upon return
- *                  contains YES.
+ * @param string        A string.
+ * @param outInvalid    If the string contains an invalid expression, upon
+ *                      return contains YES.
  *
  * @return An expression, or nil if the parsing fails or if the expression is
  * empty.
  */
-- (GRMustacheExpression *)parseExpression:(NSString *)string empty:(BOOL *)outEmpty;
+- (GRMustacheExpression *)parseExpression:(NSString *)string invalid:(BOOL *)outInvalid;
 
 /**
- * Returns a partial name from the inner string of a tag.
+ * Returns a template name from the inner string of a tag.
  *
  * @param innerTagString  the inner string of a tag.
  *
- * @return a partial name, or nil if the string is not a partial name.
+ * @return a template name, or nil if the string is not a partial name.
  */
-- (NSString *)parsePartialName:(NSString *)innerTagString;
+- (NSString *)parseTemplateName:(NSString *)innerTagString;
 
 /**
  * Returns a pragma from the inner string of a tag.
@@ -145,8 +145,10 @@
         ['!'] = GRMustacheTokenTypeComment,
         ['#'] = GRMustacheTokenTypeSectionOpening,
         ['^'] = GRMustacheTokenTypeInvertedSectionOpening,
-        ['/'] = GRMustacheTokenTypeSectionClosing,
+        ['$'] = GRMustacheTokenTypeOverridableSectionOpening,
+        ['/'] = GRMustacheTokenTypeClosing,
         ['>'] = GRMustacheTokenTypePartial,
+        ['<'] = GRMustacheTokenTypeOverridableTemplate,
         ['='] = GRMustacheTokenTypeSetDelimiter,
         ['{'] = GRMustacheTokenTypeUnescapedVariable,
         ['&'] = GRMustacheTokenTypeUnescapedVariable,
@@ -163,11 +165,15 @@
         if (orange.location == NSNotFound) {
             if (p < templateString.length) {
                 [self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                               value:(GRMustacheTokenValue){ .text = [templateString substringFromIndex:p] }
                                                                       templateString:templateString
                                                                           templateID:templateID
                                                                                 line:line
-                                                                               range:NSMakeRange(p, templateString.length-p)]];
+                                                                               range:NSMakeRange(p, templateString.length-p)
+                                                                           textValue:[templateString substringFromIndex:p]
+                                                                     expressionValue:nil
+                                                              invalidExpressionValue:NO
+                                                                   templateNameValue:nil
+                                                                         pragmaValue:nil]];
             }
             return;
         }
@@ -175,11 +181,15 @@
         if (orange.location > p) {
             NSRange range = NSMakeRange(p, orange.location-p);
             if (![self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
-                                                                                value:(GRMustacheTokenValue){ .text = [templateString substringWithRange:range] }
                                                                        templateString:templateString
                                                                            templateID:templateID
                                                                                  line:line
-                                                                                range:range]]) {
+                                                                                range:range
+                                                                            textValue:[templateString substringWithRange:range]
+                                                                      expressionValue:nil
+                                                               invalidExpressionValue:NO
+                                                                    templateNameValue:nil
+                                                                          pragmaValue:nil]]) {
                 return;
             }
         }
@@ -224,54 +234,85 @@
         switch (tokenType) {
             case GRMustacheTokenTypeComment:
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeComment
-                                                 value:(GRMustacheTokenValue){ .text = [tag substringFromIndex:1] }   // strip initial '!'
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:[tag substringFromIndex:1]   // strip initial '!'
+                                       expressionValue:nil
+                                invalidExpressionValue:NO
+                                     templateNameValue:nil
+                                           pragmaValue:nil];
                 break;
                 
             case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
-                BOOL empty;
-                GRMustacheExpression * expression = [self parseExpression:tag empty:&empty];
-                if (expression == nil && !empty) {
-                    [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
-                }
+                BOOL invalid;
+                GRMustacheExpression * expression = [self parseExpression:tag invalid:&invalid];
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeEscapedVariable
-                                                 value:(GRMustacheTokenValue){ .expression = expression }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:expression
+                                invalidExpressionValue:invalid
+                                     templateNameValue:nil
+                                           pragmaValue:nil];
                 expression.token = token;
             } break;
                 
             case GRMustacheTokenTypeSectionOpening:
             case GRMustacheTokenTypeInvertedSectionOpening:
-            case GRMustacheTokenTypeSectionClosing:
+            case GRMustacheTokenTypeOverridableSectionOpening:
             case GRMustacheTokenTypeUnescapedVariable: {
-                BOOL empty;
-                GRMustacheExpression * expression = [self parseExpression:[tag substringFromIndex:1] empty:&empty];   // strip initial '#', '^' etc.
-                if (expression == nil && !empty) {
-                    [self failWithParseErrorAtLine:line description:@"Invalid expression" templateID:templateID];
-                }
+                BOOL invalid;
+                GRMustacheExpression * expression = [self parseExpression:[tag substringFromIndex:1] invalid:&invalid];   // strip initial '#', '^' etc.
                 token = [GRMustacheToken tokenWithType:tokenType
-                                                 value:(GRMustacheTokenValue){ .expression = expression }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:expression
+                                invalidExpressionValue:invalid
+                                     templateNameValue:nil
+                                           pragmaValue:nil];
                 expression.token = token;
             } break;
                 
-            case GRMustacheTokenTypePartial: {
-                NSString *partialName = [self parsePartialName:[tag substringFromIndex:1]];   // strip initial '>'
-                token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePartial
-                                                 value:(GRMustacheTokenValue){ .partialName = partialName }
+            case GRMustacheTokenTypeClosing: {
+                // Closing tags close sections and super template tags, so we
+                // parse both expression and templateName.
+                BOOL invalid;
+                GRMustacheExpression * expression = [self parseExpression:[tag substringFromIndex:1] invalid:&invalid];   // strip initial '/' etc.
+                NSString *templateName = [self parseTemplateName:[tag substringFromIndex:1]];   // strip initial '/'
+                
+                token = [GRMustacheToken tokenWithType:tokenType
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:expression
+                                invalidExpressionValue:invalid
+                                     templateNameValue:templateName
+                                           pragmaValue:nil];
+                expression.token = token;
+            } break;
+                
+            case GRMustacheTokenTypePartial:
+            case GRMustacheTokenTypeOverridableTemplate: {
+                NSString *templateName = [self parseTemplateName:[tag substringFromIndex:1]];   // strip initial '>'
+                token = [GRMustacheToken tokenWithType:tokenType
+                                        templateString:templateString
+                                            templateID:templateID
+                                                  line:line
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:nil
+                                invalidExpressionValue:NO
+                                     templateNameValue:templateName
+                                           pragmaValue:nil];
             } break;
                 
             case GRMustacheTokenTypeSetDelimiter: {
@@ -295,11 +336,15 @@
                     return;
                 }
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeSetDelimiter
-                                                 value:(GRMustacheTokenValue){ .object = nil }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:nil
+                                invalidExpressionValue:NO
+                                     templateNameValue:nil
+                                           pragmaValue:nil];
             } break;
                 
             case GRMustacheTokenTypePragma: {
@@ -313,11 +358,15 @@
                 }
                 [self.pragmas addObject:pragma];
                 token = [GRMustacheToken tokenWithType:GRMustacheTokenTypePragma
-                                                 value:(GRMustacheTokenValue){ .pragma = pragma }
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
-                                                 range:tokenRange];
+                                                 range:tokenRange
+                                             textValue:nil
+                                       expressionValue:nil
+                                invalidExpressionValue:NO
+                                     templateNameValue:nil
+                                           pragmaValue:pragma];
             } break;
                 
             case GRMustacheTokenTypeText:
@@ -385,7 +434,7 @@
     return NSMakeRange(NSNotFound, 0);
 }
 
-- (GRMustacheExpression *)parseExpression:(NSString *)string empty:(BOOL *)outEmpty
+- (GRMustacheExpression *)parseExpression:(NSString *)string invalid:(BOOL *)outInvalid
 {
     //    -> ;;sm_parenLevel=0, canFilter=YES -> stateInitial
     //    stateInitial -> ' ' -> stateInitial
@@ -776,11 +825,11 @@
     
     switch (state) {
         case stateEmpty:
-            *outEmpty = YES;
+            *outInvalid = NO;
             return nil;
             
         case stateError:
-            *outEmpty = NO;
+            *outInvalid = YES;
             return nil;
             
         case stateValid:
@@ -795,13 +844,13 @@
     return nil;
 }
 
-- (NSString *)parsePartialName:(NSString *)innerTagString
+- (NSString *)parseTemplateName:(NSString *)innerTagString
 {
-    NSString *partialName = [innerTagString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if (partialName.length == 0) {
+    NSString *templateName = [innerTagString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (templateName.length == 0) {
         return nil;
     }
-    return partialName;
+    return templateName;
 }
 
 - (NSString *)parsePragma:(NSString *)innerTagString

@@ -316,7 +316,7 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
     STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/a(b(c))}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/c(a(b)}}" error:&error], nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/c(a(b))}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
     STAssertNil([GRMustacheTemplate templateFromString:@"{{%FILTERS}}{{#a(b)}}{{/b(a)}}" error:&error], nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);

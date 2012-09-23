@@ -21,7 +21,30 @@
 // THE SOFTWARE.
 
 #import "GRMustachePublicAPITest.h"
+#import "JSONKit.h"
 
 
 @implementation GRMustachePublicAPITest
+
+- (void)enumerateTestsFromResource:(NSString *)name subdirectory:(NSString *)subpath usingBlock:(void(^)(NSDictionary *test, NSString *path))block
+{
+    NSString *path = [[self.testBundle pathForResource:subpath ofType:nil] stringByAppendingPathComponent:name];
+    
+    NSError *error;
+    NSData *testSuiteData = [NSData dataWithContentsOfFile:path];
+    STAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
+    if (!testSuiteData) return;
+    
+    NSDictionary *testSuite = [testSuiteData objectFromJSONDataWithParseOptions:JKParseOptionComments error:&error];
+    STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
+    if (!testSuite) return;
+    
+    NSArray *tests = [testSuite objectForKey:@"tests"];
+    STAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
+    
+    for (NSDictionary *test in tests) {
+        block(test, path);
+    }
+}
+
 @end

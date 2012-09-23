@@ -25,8 +25,21 @@
 #import "GRMustacheTemplateDelegate.h"
 
 @protocol GRMustacheTemplateDelegate;
+@protocol GRMustacheRenderingElement;
 @class GRMustacheTemplate;
 @class GRMustacheToken;
+
+/**
+ * TODO
+ */
+@protocol GRMustacheRenderingOverride <NSObject>
+@required
+/**
+ * TODO
+ */
+- (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+
+@end
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 /**
@@ -54,9 +67,11 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
     BOOL _parentHasContext;
     BOOL _parentHasFilter;
     BOOL _parentHasTemplateDelegate;
+    BOOL _parentHasRenderingOverride;
     GRMustacheRuntime *_parent;
     GRMustacheTemplate *_template;
     id<GRMustacheTemplateDelegate> _templateDelegate;
+    id<GRMustacheRenderingOverride> _renderingOverride;
     id _contextObject;
     id _filterObject;
 }
@@ -171,6 +186,11 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 - (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
+ */
+- (GRMustacheRuntime *)runtimeByAddingRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride GRMUSTACHE_API_INTERNAL;
+
+/**
  * Performs a key lookup in the receiver's context stack, and returns the found
  * value.
  *
@@ -217,5 +237,10 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @see -[GRMustacheVariableElement renderInBuffer:withRuntime:]
  */
 - (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (id<GRMustacheRenderingElement>)finalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 
 @end

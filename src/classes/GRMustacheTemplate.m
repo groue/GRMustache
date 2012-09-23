@@ -217,6 +217,7 @@
     }
     
     for (id<GRMustacheRenderingElement> elem in _elems) {
+        elem = [runtime finalRenderingElement:elem];
         [elem renderInBuffer:buffer withRuntime:runtime];
     }
     
@@ -225,6 +226,15 @@
     }
 }
 
+- (BOOL)isFinal
+{
+    return YES;
+}
+
+- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+{
+    return NO;
+}
 
 #pragma mark Private
 

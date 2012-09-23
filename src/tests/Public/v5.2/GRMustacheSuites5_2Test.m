@@ -20,28 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
+// TODO #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheSuitesTest : GRMustachePublicAPITest
+@interface GRMustacheSuites5_2Test : GRMustachePublicAPITest
 - (void)runTest:(NSDictionary *)test atPath:(NSString *)path;
 @end
 
-@implementation GRMustacheSuitesTest
+@implementation GRMustacheSuites5_2Test
 
 - (void)testGRMustacheSuites
 {
     void(^block)(NSDictionary *test, NSString *path) = ^(NSDictionary *test, NSString *path) { [self runTest:test atPath:path]; };
-    [self enumerateTestsFromResource:@"comments.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"compound_keys.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"delimiters.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"encodings.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"partials.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
+    [self enumerateTestsFromResource:@"overridable_sections.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
+    [self enumerateTestsFromResource:@"template_inheritance.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
 }
 
 - (void)runTest:(NSDictionary *)test atPath:(NSString *)path
@@ -95,6 +87,13 @@
     id data = [test objectForKey:@"data"];
     NSString *expected = [test objectForKey:@"expected"];
     NSString *rendering = [template renderObject:data];
+    
+    // Allow Breakpointing failing tests
+    
+    if (![expected isEqualToString:rendering]) {
+        [template renderObject:data];
+    }
+    
     STAssertEqualObjects(rendering, expected, @"Failed test in suite at %@: %@", path, test);
 }
 

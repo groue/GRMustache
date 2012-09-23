@@ -38,6 +38,7 @@
     GRMustacheExpression *_expression;
     NSString *_templateString;
     NSRange _innerRange;
+    BOOL _overridable;
     BOOL _inverted;
     NSArray *_elems;
 }
@@ -76,6 +77,8 @@
  *                            GRMustacheSection objects.
  * @param inverted            YES if the section is {{^inverted}}.
  *                            Otherwise, NO.
+ * @param overridable         YES if the section can override a super template
+ *                            section.
  * @param elems               An array of GRMustacheRenderingElement that make
  *                            the section.
  *
@@ -88,7 +91,7 @@
  * @see GRMustacheRuntime
  * @see GRMustacheSectionHelper protocol
  */
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
 
 /**
  * Appends the rendering of inner elements in a buffer.

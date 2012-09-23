@@ -216,7 +216,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [GRMustacheTemplate templateWithElements:renderingElements];
 }
 
-- (id<GRMustacheRenderingElement>)renderingElementForPartialName:(NSString *)name error:(NSError **)outError
+- (id<GRMustacheRenderingElement>)renderingElementForTemplateName:(NSString *)name error:(NSError **)outError
 {
     return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }

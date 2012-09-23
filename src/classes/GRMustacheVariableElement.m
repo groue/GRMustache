@@ -77,6 +77,7 @@
                                                                                     templateString:nil                          // unused
                                                                                         innerRange:NSMakeRange(NSNotFound, 0)   // unused
                                                                                           inverted:NO
+                                                                                       overridable:NO
                                                                                           elements:[NSArray arrayWithObject:innerElement]];
                 [_enumerableSectionElement retain];
             }
@@ -105,6 +106,16 @@
             [buffer appendString:rendering];
         }
     }];
+}
+
+- (BOOL)isFinal
+{
+    return YES;
+}
+
+- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+{
+    return NO;
 }
 
 

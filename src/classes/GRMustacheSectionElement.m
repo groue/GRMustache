@@ -30,20 +30,22 @@
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheSectionElement()
+@property (nonatomic, retain, readonly) GRMustacheExpression *expression;
 
 /**
- * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:elements:]
+ * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:overridable:elements:]
  */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems;
 @end
 
 
 @implementation GRMustacheSectionElement
 @synthesize templateRepository=_templateRepository;
+@synthesize expression=_expression;
 
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems
 {
-    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository templateString:templateString innerRange:innerRange inverted:inverted elements:elems] autorelease];
+    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable elements:elems] autorelease];
 }
 
 - (void)dealloc
@@ -62,6 +64,7 @@
 - (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     for (id<GRMustacheRenderingElement> elem in _elems) {
+        elem = [runtime finalRenderingElement:elem];
         [elem renderInBuffer:buffer withRuntime:runtime];
     }
 }
@@ -85,7 +88,15 @@
         
         // Interpret value
         
-        if (value == nil ||
+        if (value == nil)
+        {
+            // Missing value
+            if (_inverted || _overridable) {
+                [self renderInnerElementsInBuffer:buffer withRuntime:sectionRuntime];
+                return;
+            }
+        }
+        else if (value == nil ||
             value == [NSNull null] ||
             ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
             ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
@@ -150,10 +161,27 @@
     }];
 }
 
+- (BOOL)isFinal
+{
+    return !_overridable;
+}
+
+- (BOOL)canOverrideRenderingElement:(id<GRMustacheRenderingElement>)element
+{
+    if (!_overridable) {
+        return NO;
+    }
+    if (![element isKindOfClass:[GRMustacheSectionElement class]]) {
+        return NO;
+    }
+    GRMustacheSectionElement *otherSectionElement = (GRMustacheSectionElement *)element;
+    return [otherSectionElement.expression isEqual:_expression];
+}
+
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted elements:(NSArray *)elems
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems
 {
     self = [self init];
     if (self) {
@@ -162,6 +190,7 @@
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _inverted = inverted;
+        _overridable = overridable;
         _elems = [elems retain];
     }
     return self;

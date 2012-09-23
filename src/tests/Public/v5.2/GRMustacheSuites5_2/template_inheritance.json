@@ -1,0 +1,93 @@
+{
+  "tests": [
+    {
+      "name": "Template can embed an overridable partial",
+      "data": { },
+      "template": "before {{<partial}}ignored{{/partial}} after",
+      "partials": { "partial": "partial" },
+      "expected": "before partial after"
+    },
+    {
+      "name": "Template can embed several overridable partials",
+      "data": { },
+      "template": "before1 {{<partial1}}ignored{{/partial1}} | {{<partial2}}ignored{{/partial2}} after2",
+      "partials": { "partial1": "partial1", "partial2": "partial2" },
+      "expected": "before1 partial1 | partial2 after2"
+    },
+    {
+      "name": "Template can embed an overridable partial inside in a section",
+      "data": { "items": [1,2,3] },
+      "template": "{{#items}}{{<partial}}ignored{{/partial}}{{/items}}",
+      "partials": { "partial": "{{.}}" },
+      "expected": "123"
+    },
+    {
+      "name": "Overridable partials can have overridable partials",
+      "data": { },
+      "template": "before1 {{<partial1}}{{/partial1}} after1",
+      "partials": {
+        "partial1": "before2 {{<partial2}}{{/partial2}} after2",
+        "partial2": "partial2" },
+      "expected": "before1 before2 partial2 after2 after1"
+    },
+    {
+      "name": "Partials can have overridable partials",
+      "data": { },
+      "template": "before1 {{>partial1}} after1",
+      "partials": {
+        "partial1": "before2 {{<partial2}}{{/partial2}} after2",
+        "partial2": "partial2" },
+      "expected": "before1 before2 partial2 after2 after1"
+    },
+    {
+      "name": "Overridable partials can have partials",
+      "data": { },
+      "template": "before1 {{<partial1}}{{/partial1}} after1",
+      "partials": {
+        "partial1": "before2 {{>partial2}} after2",
+        "partial2": "partial2" },
+      "expected": "before1 before2 partial2 after2 after1"
+    },
+    {
+      "name": "Templates can override top level overridable sections in overridable partials",
+      "data": { },
+      "template": "{{<partial}}{{$overridable}}overriden{{/overridable}}{{/partial}}",
+      "partials": { "partial": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
+    },
+    {
+      "name": "Templates can override nested overridable sections in overridable partials",
+      "data": { "items": [1,2,3] },
+      "template": "{{<partial}}{{$overridable}}{{.}}{{/overridable}}{{/partial}}",
+      "partials": { "partial": "{{#items}}{{$overridable}}ignored{{/overridable}}{{/items}}" },
+      "expected": "123"
+    },
+    {
+      "name": "Overridable partials can override overridable sections in their own overridable partials",
+      "data": { },
+      "template": "{{<partial1}}{{/partial1}}",
+      "partials": {
+          "partial1": "{{<partial2}}{{$overridable}}partial1{{/overridable}}{{/partial2}}",
+          "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "partial1"
+    },
+    {
+      "name": "Templates can override overridable sections in deep overridable partials",
+      "data": { },
+      "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{>partial2}}",
+        "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
+    },
+    {
+      "name": "Templates can override already overriden overridable sections",
+      "data": { },
+      "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{<partial2}}{{$overridable}}ignored{{/overridable}}{{/partial2}}",
+        "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
+    }
+  ]
+}
