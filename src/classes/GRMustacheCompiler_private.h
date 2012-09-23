@@ -45,9 +45,9 @@
 @private
     NSError *_fatalError;
     NSMutableArray *_elementsStack;
-    NSMutableArray *_sectionOpeningTokenStack;
+    NSMutableArray *_openingTokenStack;
     NSMutableArray *_currentElements;
-    GRMustacheToken *_currentSectionOpeningToken;
+    GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
 }
 
