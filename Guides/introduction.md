@@ -29,22 +29,22 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 
 - "**filters**", as `{{ uppercase(name) }}`.
     
-    This extension is backed on the discussion at [mustache/spec#41](https://github.com/mustache/spec/issues/41)
+    Filters are documented in [filters.md](filters.md).
 
 - "**overridable partials**", aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
-    This extension is backed on the discussion at [mustache/spec#38](https://github.com/mustache/spec/issues/38)
+    Overridable partials are documented in [partials.md](partials.md).
 
 - "**anchored key paths**", as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
     If you are not familiar with the "context stack" and the key lookup mechanism, check [Guides/runtime/context_stack.md](runtime/context_stack.md).
     
-    This extension is backed on the discussions at [mustache/spec#10](https://github.com/mustache/spec/issues/10) and [mustache/spec#52](https://github.com/mustache/spec/issues/52).
-    
 
 ### Template delegate
 
 All the nice Objective-C classes you know allow for observation and customization through delegates. GRMustache will not let you down.
+
+Template delegates are documented in [delegate.md](delegate.md).
 
 
 Getting started
@@ -117,7 +117,8 @@ Full documentation map
 Loading templates:
 
 - [templates.md](templates.md): how to load templates from common sources.
-- [templates_repositories.md](template_repositories.md): how to load templates from uncommon sources.
+- [partials.md](partials.md): how to embed templates in other templates.
+- [templates_repositories.md](template_repositories.md): how to load templates and partials from uncommon sources.
 
 Rendering templates:
 
