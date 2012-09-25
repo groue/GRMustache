@@ -102,51 +102,6 @@ NSString *barbieProfile = [profileTemplate renderObject:barbie];
 
 ### Other use cases
 
-Examples above are common use cases for MacOS and iOS applications. The library does much more:
-
-
-Full documentation map
-----------------------
-
-### Mustache syntax
-
-- http://mustache.github.com/mustache.5.html
-
-### Guides
-
-Loading templates:
-
-- [templates.md](templates.md): how to load templates from common sources.
-- [partials.md](partials.md): how to embed templates in other templates.
-- [templates_repositories.md](template_repositories.md): how to load templates and partials from uncommon sources.
-
-Rendering templates:
-
-- [runtime.md](runtime.md): how to provide data to templates: an overview
-- [runtime/context_stack.md](runtime/context_stack.md): the key lookup in detail.
-- [runtime/booleans.md](runtime/booleans.md): boolean sections.
-- [runtime/loops.md](runtime/loops.md): enumerable sections.
-
-Advanced Mustache:
-
-- [section_helpers.md](section_helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
-- [variable_helpers.md](variable_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
-- [filters.md](filters.md): how to process data before it is rendered with "filters".
-- [delegate.md](delegate.md): how to hook into template rendering.
-
-Sample code:
-
-- [layout](../../../tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
-- [number_formatting.md](sample_code/number_formatting.md): how to format numbers
-- [indexes.md](sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- [localization.md](sample_code/localization.md): how to localize portions of your templates
-
-### Reference
-
-- [Reference](http://groue.github.com/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
-
-### Internals
-
-- [forking.md](forking.md): the forking guide tells you everything about GRMustache organization.
+Examples above are common use cases for MacOS and iOS applications. The library does [much more](../../../../GRMustache#documentation).
 
 [up](../../../../GRMustache), [next](templates.md)
