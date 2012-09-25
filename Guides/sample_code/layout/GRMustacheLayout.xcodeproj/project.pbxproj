@@ -173,7 +173,7 @@
 		5667CC3B15A1B95E0096B183 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 5667CC3E15A1B95E0096B183 /* Build configuration list for PBXProject "GRMustacheLayout" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -299,6 +299,7 @@
 		5667CC6315A1B95F0096B183 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GRMustacheLayout/GRMustacheLayout-Prefix.pch";
 				INFOPLIST_FILE = "GRMustacheLayout/GRMustacheLayout-Info.plist";
@@ -314,6 +315,7 @@
 		5667CC6415A1B95F0096B183 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GRMustacheLayout/GRMustacheLayout-Prefix.pch";
 				INFOPLIST_FILE = "GRMustacheLayout/GRMustacheLayout-Info.plist";
