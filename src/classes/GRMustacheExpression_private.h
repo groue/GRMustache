@@ -63,4 +63,9 @@
  */
 - (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue GRMUSTACHE_API_INTERNAL;
 
+/**
+ * TODO
+ * Subclasses must override
+ */
+- (BOOL)isEqual:(id)anObject;
 @end

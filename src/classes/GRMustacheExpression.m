@@ -40,4 +40,9 @@
     return nil;
 }
 
+- (BOOL)isEqual:(id)anObject
+{
+    return [super isEqual:anObject];
+}
+
 @end
