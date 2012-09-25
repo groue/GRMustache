@@ -45,6 +45,25 @@
 }
 @end
 
+@interface GRMustacheAttributedSectionHelper : NSObject<GRMustacheHelper> {
+    NSString *_attribute;
+}
+@property (nonatomic, copy) NSString *attribute;
+@end
+
+@implementation GRMustacheAttributedSectionHelper
+@synthesize attribute=_attribute;
+- (void)dealloc
+{
+    self.attribute = nil;
+    [super dealloc];
+}
+- (NSString *)renderSection:(GRMustacheSection *)section
+{
+    return [section renderTemplateString:@"{{attribute}}" error:NULL];
+}
+@end
+
 @interface GRMustacheRecorderSectionHelper : NSObject<GRMustacheHelper> {
     NSUInteger _invocationCount;
     NSString *_lastInnerTemplateString;
@@ -276,6 +295,14 @@
                              helper, @"helper",
                              @"---", @"subject", nil];
     NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{/helper}}" error:nil];
+    STAssertEqualObjects(result, @"---", @"");
+}
+
+- (void)testHelperEnterCurrentContext
+{
+    GRMustacheAttributedSectionHelper *attributedHelper = [[[GRMustacheAttributedSectionHelper alloc] init] autorelease];
+    attributedHelper.attribute = @"---";
+    NSString *result = [GRMustacheTemplate renderObject:@{ @"helper": attributedHelper } fromString:@"{{#helper}}{{/helper}}" error:NULL];
     STAssertEqualObjects(result, @"---", @"");
 }
 

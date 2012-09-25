@@ -141,7 +141,8 @@
         {
             // Helper
             if (!_inverted) {
-                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:sectionRuntime];
+                GRMustacheRuntime *helperRuntime = [sectionRuntime runtimeByAddingContextObject:value];
+                GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:helperRuntime];
                 NSString *rendering = [(id<GRMustacheSectionHelper>)value renderSection:section];
                 if (rendering) {
                     [buffer appendString:rendering];
