@@ -106,7 +106,7 @@ FAQ
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: Look for "Overriding portions of partials" in [Guides/templates.md](GRMustache/blob/master/Guides/templates.md), and check the [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout).
+    A: Check [Guides/partials.md](GRMustache/blob/master/Guides/partials.md), and the [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout).
 
 - **Q: How do I localize templates?**
 
