@@ -69,7 +69,7 @@ This protocol is defined as:
 @end
 ```
 
-This `renderVariable:` method will be called when the helper is asked to render the variable tag is it attached to. Its result will be directly inserted in the final rendering.
+This `renderVariable:` method will be called when the helper is asked to render the variable tag is it attached to. Its result will be directly inserted in the final rendering, *without any HTML escaping*, regardless of the number of braces in the template. More on that below.
 
 The protocol comes with a `GRMustacheVariableHelper` class, which provides a convenient method for building a helper without implementing a full class that conforms to the protocol:
 
@@ -91,15 +91,58 @@ The `GRMustacheVariable` parameter represents the variable attached to a helper.
 ```
 The `renderTemplateString:error:` returns the *rendering of a template string*. The eventual `{{tags}}` in the template string are interpolated in the current context. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
 
-The `GRMustacheDynamicPartial` class let you define helpers that render partials whose name in only known at runtime:
+#### Purpose of variable helpers
+
+Variable helpers are designed to let you send simple variable tags on steroids. Let's see an example, based on the story of a very short template snippet:
+
+    by {{author}}
+
+Let's assume, for the purpose of the demonstration, that this template is shared among several Mustache applications: an iOS app, an Android app, a website: you can *not* change it freely.
+
+The 1st iteration of your application simply renders a person name:
 
 ```objc
-@interface GRMustacheDynamicPartial: NSObject<GRMustacheVariableHelper>
-+ (id)dynamicPartialWithName:(NSString *)name;
-@end
+id data = @{ @"author": person.name };
+
+// by Orson Welles
+NSString *rendering = [template render:data];
 ```
 
-We'll give illustrating examples below.
+2nd iteration of your application should now render a link to the person instead of its plain name. Remember: the template can not change. How would we do?
+
+Variable lambdas to the rescue!
+
+```objc
+id data = @{
+    @"author_url": person.url
+    @"author_name": person.name
+    @"author": [GRMustacheVariableHelper helperWithBlock:^(GRMustacheVariable *variable) {
+        return [variable renderTemplateNamed:@"<a href=\"{{author_url}}\">{{author_name}}</a>" error:NULL];
+    }]
+
+// by <a href="...">Orson Welles</a>
+NSString *rendering = [template render:data];
+```
+
+Using this technique, you can still safely HTML-escape your values, while performing a complex rendering out from a simple variable tag.
+
+#### Dynamic partials
+
+You may not want to embed inline templates in your code, and keep them in partial templates. The example above could be rewritten with the `GRMustacheDynamicPartial` class, which lets you renders partials given their name:
+
+```objc
+id data = @{
+    @"author_url": person.url
+    @"author_name": person.name
+    // author.mustache contains `<a href="{{author_url}}">{{author_name}}</a>`
+    @"author": [GRMustacheDynamicPartial dynamicPartialWithName:@"author"];
+    }]
+
+// by <a href="...">Orson Welles</a>
+NSString *rendering = [template render:data];
+```
+
+We'll give more illustrating examples below.
 
 
 Section helper example: wrapping a section's content
