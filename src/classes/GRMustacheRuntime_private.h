@@ -37,8 +37,12 @@
 /**
  * TODO
  */
-- (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
-- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (BOOL)isEqual:(id)anObject;
 @end
 
 #if !defined(NS_BLOCK_ASSERTIONS)
@@ -241,6 +245,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 /**
  * TODO
  */
-- (id<GRMustacheRenderingElement>)finalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 
 @end

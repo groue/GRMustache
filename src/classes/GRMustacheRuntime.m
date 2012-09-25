@@ -32,6 +32,7 @@
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheFilterLibrary_private.h"
+#import "GRMustacheError.h"
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
@@ -46,7 +47,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride contextObject:(id)contextObject;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride filterObject:(id)filterObject;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride renderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
-- (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element;
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element;
 - (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
 @end
 
@@ -214,34 +215,34 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     }
 }
 
-- (id<GRMustacheRenderingElement>)finalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    if (element.isFinal) { return element; }
-    
-    id<GRMustacheRenderingElement> overridingElement = [self overridingElementForNonFinalRenderingElement:element];
-    if (overridingElement) { return overridingElement; }
+    if (element.isOverridable) {
+        id<GRMustacheRenderingElement> overridingElement = [self resolveOverridableRenderingElement:element];
+        if (overridingElement) { return overridingElement; }
+    }
     return element;
 }
 
 #pragma mark - Private
 
-- (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    if (_parentHasRenderingOverride) {
-        id<GRMustacheRenderingElement> overridingElement = [_parent overridingElementForNonFinalRenderingElement:element];
-        if (overridingElement) { return overridingElement; }
-    }
     if (_renderingOverride) {
-        id<GRMustacheRenderingElement> overridingElement = [_renderingOverride overridingElementForNonFinalRenderingElement:element];
-        if (overridingElement) { return overridingElement; }
+        element = [_renderingOverride resolveOverridableRenderingElement:element];
     }
-    return nil;
+    if (_parentHasRenderingOverride) {
+        element = [_parent resolveOverridableRenderingElement:element];
+    }
+    return element;
 }
 
 - (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
 {
     if (_renderingOverride) {
-        [_renderingOverride assertAcyclicRenderingOverride:renderingOverride];
+        if ([_renderingOverride isEqual:renderingOverride]) {
+            [NSException raise:GRMustacheRenderingException format:@"Override cycle"];
+        }
     }
     if (_parentHasRenderingOverride) {
         [_parent assertAcyclicRenderingOverride:renderingOverride];

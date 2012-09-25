@@ -42,6 +42,7 @@
 @implementation GRMustacheSectionElement
 @synthesize templateRepository=_templateRepository;
 @synthesize expression=_expression;
+@synthesize overridable=_overridable;
 
 + (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
 {
@@ -160,21 +161,19 @@
     }];
 }
 
-- (BOOL)isFinal
-{
-    return !_overridable;
-}
-
-- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     if (!_overridable) {
-        return NO;
+        return element;
     }
     if (![element isKindOfClass:[GRMustacheSectionElement class]]) {
-        return NO;
+        return element;
     }
     GRMustacheSectionElement *otherSectionElement = (GRMustacheSectionElement *)element;
-    return [otherSectionElement.expression isEqual:_expression];
+    if ([otherSectionElement.expression isEqual:_expression]) {
+        return self;
+    }
+    return element;
 }
 
 

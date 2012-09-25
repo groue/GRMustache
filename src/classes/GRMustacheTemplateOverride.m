@@ -22,7 +22,6 @@
 
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheError.h"
 
 @interface GRMustacheTemplateOverride()
 @property (nonatomic, retain, readonly) GRMustacheTemplate *template;
@@ -44,27 +43,26 @@
 }
 
 
-#pragma mark - GRMustacheRenderingOverride
+#pragma mark - GRMustacheRenderingOverride + GRMustacheRenderingElement
 
-- (id<GRMustacheRenderingElement>)overridingElementForNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    for (id<GRMustacheRenderingElement> elem in _elems) {
-        if ([elem canOverrideNonFinalRenderingElement:element]) {
-            return elem;
-        }
+    for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
+        element = [innerElement resolveOverridableRenderingElement:element];
     }
-    return nil;
+    return element;
 }
 
-- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+
+#pragma mark - GRMustacheRenderingOverride
+
+- (BOOL)isEqual:(id)anObject
 {
-    if (![renderingOverride isKindOfClass:[GRMustacheTemplateOverride class]]) {
-        return;
+    if (![anObject isKindOfClass:[GRMustacheTemplateOverride class]]) {
+        return NO;
     }
     
-    if (((GRMustacheTemplateOverride *)renderingOverride).template == _template) {
-        [NSException raise:GRMustacheRenderingException format:@"Partial override cycle"];
-    }
+    return (((GRMustacheTemplateOverride *)anObject).template == _template);
 }
 
 #pragma mark - GRMustacheRenderingElement
@@ -75,12 +73,7 @@
     [_template renderInBuffer:buffer withRuntime:runtime];
 }
 
-- (BOOL)isFinal
-{
-    return YES;
-}
-
-- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (BOOL)isOverridable
 {
     return NO;
 }

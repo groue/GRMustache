@@ -108,14 +108,14 @@
     }];
 }
 
-- (BOOL)isFinal
-{
-    return YES;
-}
-
-- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element
+- (BOOL)isOverridable
 {
     return NO;
+}
+
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
+{
+    return element;
 }
 
 

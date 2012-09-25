@@ -51,7 +51,7 @@
  */
 @protocol GRMustacheRenderingElement<NSObject>
 @required
-@property (nonatomic, readonly, getter=isFinal) BOOL final GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly, getter=isOverridable) BOOL overridable GRMUSTACHE_API_INTERNAL;
 
 /**
  * Appends the rendering of the receiver in a buffer.
@@ -66,5 +66,5 @@
 /**
  *
  */
-- (BOOL)canOverrideNonFinalRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 @end
