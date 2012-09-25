@@ -47,7 +47,7 @@ The `GRMustacheVariable` parameter represents the variable attached to a helper.
 ```
 The `renderTemplateString:error:` method returns the *rendering of a template string*. The eventual `{{tags}}` in the template string are interpolated in the current context. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
 
-The `renderTemplateNamed:` method is a shortcut that returns the *rendering of a partial template*, given its name.
+The `renderTemplateNamed:error:` method is a shortcut that returns the *rendering of a partial template*, given its name.
 
 
 ### Purpose of variable helpers
