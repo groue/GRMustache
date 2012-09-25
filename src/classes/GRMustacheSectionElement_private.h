@@ -40,7 +40,7 @@
     NSRange _innerRange;
     BOOL _overridable;
     BOOL _inverted;
-    NSArray *_elems;
+    NSArray *_innerElements;
 }
 
 /**
@@ -62,8 +62,8 @@
  * whether they are truthy, falsey, enumerable, or helpers. The value is fetched
  * by evaluating the _expression_ parameter against a runtime.
  *
- * The _elems_ array contains the GRMustacheRenderingElement objects that make
- * the section (texts, variables, other sections, etc.)
+ * The _innerElements_ array contains the GRMustacheRenderingElement objects
+ * that make the section (texts, variables, other sections, etc.)
  * 
  * @param expression          The expression that would evaluate against a
  *                            runtime.
@@ -79,7 +79,7 @@
  *                            Otherwise, NO.
  * @param overridable         YES if the section can override a super template
  *                            section.
- * @param elems               An array of GRMustacheRenderingElement that make
+ * @param innerElements       An array of GRMustacheRenderingElement that make
  *                            the section.
  *
  * @return A GRMustacheSectionElement
@@ -91,7 +91,7 @@
  * @see GRMustacheRuntime
  * @see GRMustacheSectionHelper protocol
  */
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 /**
  * Appends the rendering of inner elements in a buffer.

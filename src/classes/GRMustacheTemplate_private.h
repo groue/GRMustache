@@ -28,7 +28,7 @@
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
 @private
-    NSArray *_elems;
+    NSArray *_innerElements;
     id<GRMustacheTemplateDelegate> _delegate;
 }
 
@@ -38,29 +38,29 @@
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
 
 
-#pragma mark Template elements
+#pragma mark Template innerElements
 
 /**
  * The GRMustacheRenderingElement objects that make the template.
  * 
  * @see GRMustacheRenderingElement
  */
-@property (nonatomic, retain) NSArray *elems GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) NSArray *innerElements GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds and return a GRMustacheTemplate with an array of
  * GRMustacheRenderingElement objects.
  *
- * The _elems_ array may be nil. This is used by GRMustacheTemplateRepository
- * in order to support recursive partials.
+ * The _innerElements_ array may be nil. This is used by
+ * GRMustacheTemplateRepository in order to support recursive partials.
  *
- * @param elems   An array of GRMustacheRenderingElement objects.
+ * @param innerElements  An array of GRMustacheRenderingElement objects.
  *
  * @return a template
  *
  * @see GRMustacheRenderingElement
  */
-+ (id)templateWithElements:(NSArray *)elems GRMUSTACHE_API_INTERNAL;
++ (id)templateWithInnerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 #pragma mark String template
 

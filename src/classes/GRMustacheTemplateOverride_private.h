@@ -32,12 +32,12 @@
  */
 @interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement, GRMustacheRenderingOverride> {
     GRMustacheTemplate *_template;
-    NSArray *_elems;
+    NSArray *_innerElements;
 }
 
 /**
  * TODO
  */
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements GRMUSTACHE_API_INTERNAL;
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 @end

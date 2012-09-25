@@ -291,7 +291,7 @@
                                                                                  innerRange:innerRange
                                                                                    inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
                                                                                 overridable:(_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening)
-                                                                                   elements:_currentElements];
+                                                                              innerElements:_currentElements];
                     
                 } break;
                     
@@ -310,7 +310,7 @@
                         return NO;
                     }
                     
-                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithTemplate:template elements:_currentElements];
+                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithTemplate:template innerElements:_currentElements];
                 } break;
                     
                 default:

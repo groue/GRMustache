@@ -213,7 +213,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     if (!renderingElements) {
         return nil;
     }
-    return [GRMustacheTemplate templateWithElements:renderingElements];
+    return [GRMustacheTemplate templateWithInnerElements:renderingElements];
 }
 
 - (id<GRMustacheRenderingElement>)renderingElementForTemplateName:(NSString *)name error:(NSError **)outError
@@ -288,7 +288,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         }
         
         // store an empty template before parsing, so that we support recursive partials
-        template = [GRMustacheTemplate templateWithElements:nil];
+        template = [GRMustacheTemplate templateWithInnerElements:nil];
         [_templateForTemplateID setObject:template forKey:templateID];
         
         // prepare for GRMustacheCompilerDataSource methods
@@ -302,7 +302,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         _currentlyParsedTemplateID = previousParsedTemplateID;
         
         if (renderingElements) {
-            template.elems = renderingElements;
+            template.innerElements = renderingElements;
         } else {
             // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];

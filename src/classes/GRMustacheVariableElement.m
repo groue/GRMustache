@@ -78,7 +78,7 @@
                                                                                         innerRange:NSMakeRange(NSNotFound, 0)   // unused
                                                                                           inverted:NO
                                                                                        overridable:NO
-                                                                                          elements:[NSArray arrayWithObject:innerElement]];
+                                                                                     innerElements:[NSArray arrayWithObject:innerElement]];
                 [_enumerableSectionElement retain];
             }
             [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];

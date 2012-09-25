@@ -25,11 +25,11 @@
 #import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheTemplate()
-- (id)initWithElements:(NSArray *)elems;
+- (id)initWithInnerElements:(NSArray *)innerElements;
 @end
 
 @implementation GRMustacheTemplate
-@synthesize elems=_elems;
+@synthesize innerElements=_innerElements;
 @synthesize delegate=_delegate;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError
@@ -68,14 +68,14 @@
     return [templateRepository templateForName:name error:outError];
 }
 
-+ (id)templateWithElements:(NSArray *)elems
++ (id)templateWithInnerElements:(NSArray *)innerElements
 {
-    return [[[self alloc] initWithElements:elems] autorelease];
+    return [[[self alloc] initWithInnerElements:innerElements] autorelease];
 }
 
 - (void)dealloc
 {
-    [_elems release];
+    [_innerElements release];
     [super dealloc];
 }
 
@@ -216,9 +216,9 @@
         [_delegate templateWillRender:self];
     }
     
-    for (id<GRMustacheRenderingElement> elem in _elems) {
-        elem = [runtime finalRenderingElement:elem];
-        [elem renderInBuffer:buffer withRuntime:runtime];
+    for (id<GRMustacheRenderingElement> element in _innerElements) {
+        element = [runtime resolveRenderingElement:element];
+        [element renderInBuffer:buffer withRuntime:runtime];
     }
     
     if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
@@ -238,11 +238,11 @@
 
 #pragma mark Private
 
-- (id)initWithElements:(NSArray *)elems
+- (id)initWithInnerElements:(NSArray *)innerElements
 {
     self = [self init];
     if (self) {
-        self.elems = elems;
+        self.innerElements = innerElements;
     }
     return self;
 }

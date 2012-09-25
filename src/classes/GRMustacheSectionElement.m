@@ -33,9 +33,9 @@
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
 
 /**
- * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:overridable:elements:]
+ * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:overridable:innerElements:]
  */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements;
 @end
 
 
@@ -43,16 +43,16 @@
 @synthesize templateRepository=_templateRepository;
 @synthesize expression=_expression;
 
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems
++ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
 {
-    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable elements:elems] autorelease];
+    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable innerElements:innerElements] autorelease];
 }
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
-    [_elems release];
+    [_innerElements release];
     [super dealloc];
 }
 
@@ -63,9 +63,9 @@
 
 - (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
-    for (id<GRMustacheRenderingElement> elem in _elems) {
-        elem = [runtime finalRenderingElement:elem];
-        [elem renderInBuffer:buffer withRuntime:runtime];
+    for (id<GRMustacheRenderingElement> element in _innerElements) {
+        element = [runtime resolveRenderingElement:element];      // apply overrides
+        [element renderInBuffer:buffer withRuntime:runtime];   // render
     }
 }
 
@@ -180,7 +180,7 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable elements:(NSArray *)elems
+- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
 {
     self = [self init];
     if (self) {
@@ -190,7 +190,7 @@
         _innerRange = innerRange;
         _inverted = inverted;
         _overridable = overridable;
-        _elems = [elems retain];
+        _innerElements = [innerElements retain];
     }
     return self;
 }

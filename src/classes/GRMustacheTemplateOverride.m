@@ -26,20 +26,20 @@
 
 @interface GRMustacheTemplateOverride()
 @property (nonatomic, retain, readonly) GRMustacheTemplate *template;
-- (id)initWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements;
+- (id)initWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements;
 @end
 
 @implementation GRMustacheTemplateOverride
 
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements
 {
-    return [[[self alloc] initWithTemplate:template elements:elements] autorelease];
+    return [[[self alloc] initWithTemplate:template innerElements:innerElements] autorelease];
 }
 
 - (void)dealloc
 {
     [_template release];
-    [_elems release];
+    [_innerElements release];
     [super dealloc];
 }
 
@@ -88,12 +88,12 @@
 
 #pragma mark - Private
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template elements:(NSArray *)elements
+- (id)initWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements
 {
     self = [super init];
     if (self) {
         _template = [template retain];
-        _elems = [elements retain];
+        _innerElements = [innerElements retain];
     }
     return self;
 }
