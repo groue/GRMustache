@@ -304,7 +304,7 @@
                     
                     // Ask templateRepository for super template
                     NSError *templateError;
-                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.templateNameValue error:&templateError];
+                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:_currentOpeningToken.templateNameValue error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
                         return NO;
