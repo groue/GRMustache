@@ -41,7 +41,7 @@ Variable helpers are the base for "dynamic partials", that is to say the ability
 
 Variable helpers can also help objects being able to "render themselves", and have `{{item}}` and `{{items}}` rendering controlled by these items themselves.
 
-All of those new features are documented at [Guides/helpers.md](Guides/helpers.md).
+All of those new features are documented at [Guides/variable_helpers.md](Guides/variable_helpers.md).
 
 New APIs:
 

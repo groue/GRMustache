@@ -31,7 +31,7 @@
  * mustache lambda sections with objects conforming to the
  * GRMustacheSectionHelper protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_helpers.md
  *
  * @see GRMustacheSectionHelper protocol
  *

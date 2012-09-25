@@ -39,7 +39,7 @@
  * GRMustache invokes the `renderSection:` method of the helper, and inserts the
  * raw return value in the template rendering.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_helpers.md
  *
  * @since v1.9
  */
@@ -70,7 +70,7 @@
  * The GRMustacheSectionHelper class helps building mustache helpers without
  * writing a custom class that conforms to the GRMustacheSectionHelper protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_helpers.md
  *
  * @see GRMustacheSectionHelper protocol
  *

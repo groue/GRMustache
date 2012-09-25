@@ -39,7 +39,7 @@
  * GRMustache invokes the `renderVariable:` method of the helper, and inserts
  * the raw return value in the template rendering.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_helpers.md
  *
  * @since v5.1
  */
@@ -71,7 +71,7 @@
  * writing a custom class that conforms to the GRMustacheVariableHelper
  * protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_helpers.md
  *
  * @see GRMustacheVariableHelper protocol
  *
@@ -105,7 +105,7 @@
  * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableHelper
  * that, given a partial template name, renders this template.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_helpers.md
  *
  * @see GRMustacheVariableHelper protocol
  *

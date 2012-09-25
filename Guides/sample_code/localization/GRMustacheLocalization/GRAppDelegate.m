@@ -23,7 +23,7 @@
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
 
-@interface LocalizatingHelper : NSObject<GRMustacheHelper, GRMustacheTemplateDelegate>
+@interface LocalizatingHelper : NSObject<GRMustacheSectionHelper, GRMustacheTemplateDelegate>
 @end
 
 @implementation GRAppDelegate
@@ -36,7 +36,7 @@
          */
         
         id data = @{
-            @"localize": [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            @"localize": [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 return NSLocalizedString(section.innerTemplateString, nil);
             }]
         };
@@ -54,7 +54,7 @@
         
         id data = @{
             @"greeting": @"Hello",
-            @"localize": [GRMustacheHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
+            @"localize": [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
                 return NSLocalizedString([section render], nil);
             }]
         };

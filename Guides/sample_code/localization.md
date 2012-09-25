@@ -8,7 +8,7 @@ Overview
 
 Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localizes its input.
 
-[Mustache lambda sections](../helpers.md) are our vector. We'll eventually render the following template:
+[Mustache lambda sections](../section_helpers.md) are our vector. We'll eventually render the following template:
 
     {{#localize}}
         Hello {{name1}}, do you know {{name2}}?
@@ -51,13 +51,13 @@ And render, depending on the current locale:
     Bonjour
     Hola
 
-We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheHelper` protocol.
+We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionHelper` protocol.
 
-The shortest way to build a helper is the `[GRMustacheHelper helperWithBlock:]` method. Its block is given a `GRMustacheSection` object whose `innerTemplateString` property perfectly suits our needs:
+The shortest way to build a helper is the `[GRMustacheSectionHelper helperWithBlock:]` method. Its block is given a `GRMustacheSection` object whose `innerTemplateString` property perfectly suits our needs:
 
 ```objc
 id data = @{
-    @"localize": [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
+    @"localize": [GRMustacheSectionHelper helperWithBlock:^(GRMustacheSection *section) {
         return NSLocalizedString(section.innerTemplateString, nil);
     }]
 };
@@ -70,7 +70,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-`GRMustacheHelper` and `innerTemplateString` are documented in the [helpers.md](../helpers.md) guide.
+`GRMustacheSectionHelper` and `innerTemplateString` are documented in the [section_helpers.md](../section_helpers.md) guide.
 
 
 Localizing a value
@@ -92,7 +92,7 @@ Rendering:
     Bonjour
     Hola
 
-Again, we'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheHelper` protocol.
+Again, we'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionHelper` protocol.
 
 However, this time, we are not localizing a raw portion of the template. Instead, we are localizing a value that comes from the rendered data.
 
@@ -101,7 +101,7 @@ Fortunately, `GRMustacheSection` objects are able to provide helpers with the re
 ```objc
 id data = @{
     @"greeting": @"Hello",
-    @"localize": [GRMustacheHelper helperWithBlock:^(GRMustacheSection *section) {
+    @"localize": [GRMustacheSectionHelper helperWithBlock:^(GRMustacheSection *section) {
         return NSLocalizedString([section render], nil);
     }]
 };
@@ -116,7 +116,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 You can see this as a "double-pass" rendering: the section is rendered once, in order to turn `{{greeting}}` into `Hello`, and the localization of this string is eventually inserted in the final rendering.
 
-`GRMustacheHelper` and `[GRMustacheSection render]` are documented in the [helpers.md](../helpers.md) guide.
+`GRMustacheSectionHelper` and `[GRMustacheSection render]` are documented in the [section_helpers.md](../section_helpers.md) guide.
 
 
 Localizing a template section with arguments
@@ -169,19 +169,19 @@ The [GRMustacheDelegate](../delegate.md) protocol is a nifty tool: it lets you k
 
 This looks like a nice way to build our format arguments and the localizable format string in a single strike: instead of letting GRMustache render `Arthur` and `Barbara`, we'll put those values away, and tell the library to render `%@` instead.
 
-We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate side, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
+We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate side, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
 
-Now the convenient `[GRMustacheHelper helperWithBlock:]` method is not enough. Let's go for a full class:
+Now the convenient `[GRMustacheSectionHelper helperWithBlock:]` method is not enough. Let's go for a full class:
 
 ```objc
-@interface LocalizatingHelper : NSObject<GRMustacheHelper, GRMustacheTemplateDelegate>
+@interface LocalizatingHelper : NSObject<GRMustacheSectionHelper, GRMustacheTemplateDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizatingHelper
 
 /**
- * GRMustacheHelper method
+ * GRMustacheSectionHelper method
  */
 
 - (NSString *)renderSection:(GRMustacheSection *)section

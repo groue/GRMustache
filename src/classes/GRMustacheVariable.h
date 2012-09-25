@@ -32,7 +32,7 @@
  * mustache lambda sections with objects conforming to the
  * GRMustacheVariableHelper protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_helpers.md
  *
  * @see GRMustacheVariableHelper protocol
  *

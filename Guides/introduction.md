@@ -128,7 +128,8 @@ Rendering templates:
 
 Advanced Mustache:
 
-- [helpers.md](helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
+- [section_helpers.md](section_helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
+- [variable_helpers.md](variable_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
 - [filters.md](filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](delegate.md): how to hook into template rendering.
 
