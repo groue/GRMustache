@@ -28,7 +28,7 @@
 /**
  * @see +[GRMustacheToken tokenWithType:value:templateString:templateID:line:range:]
  */
-- (id)initWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range textValue:(NSString *)textValue expressionValue:(GRMustacheExpression *)expressionValue invalidExpressionValue:(BOOL)invalidExpressionValue templateNameValue:(NSString *)templateNameValue pragmaValue:(NSString *)pragmaValue;
+- (id)initWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range text:(NSString *)text expression:(GRMustacheExpression *)expression invalidExpression:(BOOL)invalidExpression partialName:(NSString *)partialName pragma:(NSString *)pragma;
 
 @end
 
@@ -38,11 +38,11 @@
 @synthesize templateID=_templateID;
 @synthesize line=_line;
 @synthesize range=_range;
-@synthesize textValue=_textValue;
-@synthesize expressionValue=_expressionValue;
-@synthesize invalidExpressionValue=_invalidExpressionValue;
-@synthesize templateNameValue=_templateNameValue;
-@synthesize pragmaValue=_pragmaValue;
+@synthesize text=_text;
+@synthesize expression=_expression;
+@synthesize invalidExpression=_invalidExpression;
+@synthesize partialName=_partialName;
+@synthesize pragma=_pragma;
 
 - (void)dealloc
 {
@@ -51,15 +51,15 @@
     [super dealloc];
 }
 
-+ (id)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range textValue:(NSString *)textValue expressionValue:(GRMustacheExpression *)expressionValue invalidExpressionValue:(BOOL)invalidExpressionValue templateNameValue:(NSString *)templateNameValue pragmaValue:(NSString *)pragmaValue
++ (id)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range text:(NSString *)text expression:(GRMustacheExpression *)expression invalidExpression:(BOOL)invalidExpression partialName:(NSString *)partialName pragma:(NSString *)pragma
 {
-    return [[[self alloc] initWithType:type templateString:templateString templateID:templateID line:line range:range textValue:textValue expressionValue:expressionValue invalidExpressionValue:invalidExpressionValue templateNameValue:templateNameValue pragmaValue:pragmaValue] autorelease];
+    return [[[self alloc] initWithType:type templateString:templateString templateID:templateID line:line range:range text:text expression:expression invalidExpression:invalidExpression partialName:partialName pragma:pragma] autorelease];
 }
 
 
 #pragma mark Private
 
-- (id)initWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range textValue:(NSString *)textValue expressionValue:(GRMustacheExpression *)expressionValue invalidExpressionValue:(BOOL)invalidExpressionValue templateNameValue:(NSString *)templateNameValue pragmaValue:(NSString *)pragmaValue;
+- (id)initWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range text:(NSString *)text expression:(GRMustacheExpression *)expression invalidExpression:(BOOL)invalidExpression partialName:(NSString *)partialName pragma:(NSString *)pragma;
 {
     self = [self init];
     if (self) {
@@ -68,11 +68,11 @@
         _templateID = [templateID retain];
         _line = line;
         _range = range;
-        _textValue = textValue;
-        _expressionValue = expressionValue;
-        _invalidExpressionValue = invalidExpressionValue;
-        _templateNameValue = templateNameValue;
-        _pragmaValue = pragmaValue;
+        _text = text;
+        _expression = expression;
+        _invalidExpression = invalidExpression;
+        _partialName = partialName;
+        _pragma = pragma;
     }
     return self;
 }

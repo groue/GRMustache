@@ -148,7 +148,7 @@
         ['$'] = GRMustacheTokenTypeOverridableSectionOpening,
         ['/'] = GRMustacheTokenTypeClosing,
         ['>'] = GRMustacheTokenTypePartial,
-        ['<'] = GRMustacheTokenTypeOverridableTemplate,
+        ['<'] = GRMustacheTokenTypeOverridablePartial,
         ['='] = GRMustacheTokenTypeSetDelimiter,
         ['{'] = GRMustacheTokenTypeUnescapedVariable,
         ['&'] = GRMustacheTokenTypeUnescapedVariable,
@@ -169,11 +169,11 @@
                                                                           templateID:templateID
                                                                                 line:line
                                                                                range:NSMakeRange(p, templateString.length-p)
-                                                                           textValue:[templateString substringFromIndex:p]
-                                                                     expressionValue:nil
-                                                              invalidExpressionValue:NO
-                                                                   templateNameValue:nil
-                                                                         pragmaValue:nil]];
+                                                                                text:[templateString substringFromIndex:p]
+                                                                          expression:nil
+                                                                   invalidExpression:NO
+                                                                         partialName:nil
+                                                                              pragma:nil]];
             }
             return;
         }
@@ -185,11 +185,11 @@
                                                                            templateID:templateID
                                                                                  line:line
                                                                                 range:range
-                                                                            textValue:[templateString substringWithRange:range]
-                                                                      expressionValue:nil
-                                                               invalidExpressionValue:NO
-                                                                    templateNameValue:nil
-                                                                          pragmaValue:nil]]) {
+                                                                                 text:[templateString substringWithRange:range]
+                                                                           expression:nil
+                                                                    invalidExpression:NO
+                                                                          partialName:nil
+                                                                               pragma:nil]]) {
                 return;
             }
         }
@@ -238,11 +238,11 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:[tag substringFromIndex:1]   // strip initial '!'
-                                       expressionValue:nil
-                                invalidExpressionValue:NO
-                                     templateNameValue:nil
-                                           pragmaValue:nil];
+                                                  text:[tag substringFromIndex:1]   // strip initial '!'
+                                            expression:nil
+                                     invalidExpression:NO
+                                           partialName:nil
+                                                pragma:nil];
                 break;
                 
             case GRMustacheTokenTypeEscapedVariable: {    // default value in tokenTypeForCharacter = 0 = GRMustacheTokenTypeEscapedVariable
@@ -253,11 +253,11 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:expression
-                                invalidExpressionValue:invalid
-                                     templateNameValue:nil
-                                           pragmaValue:nil];
+                                                  text:nil
+                                            expression:expression
+                                     invalidExpression:invalid
+                                           partialName:nil
+                                                pragma:nil];
                 expression.token = token;
             } break;
                 
@@ -272,11 +272,11 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:expression
-                                invalidExpressionValue:invalid
-                                     templateNameValue:nil
-                                           pragmaValue:nil];
+                                                  text:nil
+                                            expression:expression
+                                     invalidExpression:invalid
+                                           partialName:nil
+                                                pragma:nil];
                 expression.token = token;
             } break;
                 
@@ -292,27 +292,27 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:expression
-                                invalidExpressionValue:invalid
-                                     templateNameValue:templateName
-                                           pragmaValue:nil];
+                                                  text:nil
+                                            expression:expression
+                                     invalidExpression:invalid
+                                           partialName:templateName
+                                                pragma:nil];
                 expression.token = token;
             } break;
                 
             case GRMustacheTokenTypePartial:
-            case GRMustacheTokenTypeOverridableTemplate: {
+            case GRMustacheTokenTypeOverridablePartial: {
                 NSString *templateName = [self parseTemplateName:[tag substringFromIndex:1]];   // strip initial '>'
                 token = [GRMustacheToken tokenWithType:tokenType
                                         templateString:templateString
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:nil
-                                invalidExpressionValue:NO
-                                     templateNameValue:templateName
-                                           pragmaValue:nil];
+                                                  text:nil
+                                            expression:nil
+                                     invalidExpression:NO
+                                           partialName:templateName
+                                                pragma:nil];
             } break;
                 
             case GRMustacheTokenTypeSetDelimiter: {
@@ -340,11 +340,11 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:nil
-                                invalidExpressionValue:NO
-                                     templateNameValue:nil
-                                           pragmaValue:nil];
+                                                  text:nil
+                                            expression:nil
+                                     invalidExpression:NO
+                                           partialName:nil
+                                                pragma:nil];
             } break;
                 
             case GRMustacheTokenTypePragma: {
@@ -362,11 +362,11 @@
                                             templateID:templateID
                                                   line:line
                                                  range:tokenRange
-                                             textValue:nil
-                                       expressionValue:nil
-                                invalidExpressionValue:NO
-                                     templateNameValue:nil
-                                           pragmaValue:pragma];
+                                                  text:nil
+                                            expression:nil
+                                     invalidExpression:NO
+                                           partialName:nil
+                                                pragma:pragma];
             } break;
                 
             case GRMustacheTokenTypeText:

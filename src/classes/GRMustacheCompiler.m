@@ -185,17 +185,17 @@
             
         case GRMustacheTokenTypeText:
             // Parser validation
-            NSAssert(token.textValue.length > 0, @"WTF parser?");
+            NSAssert(token.text.length > 0, @"WTF parser?");
             
             // Success: append GRMustacheTextElement
-            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.textValue]];
+            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.text]];
             break;
             
             
         case GRMustacheTokenTypeEscapedVariable: {
             // Expression validation
-            if (token.expressionValue == nil) {
-                if (token.invalidExpressionValue) {
+            if (token.expression == nil) {
+                if (token.invalidExpression) {
                     [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
                     return NO;
                 } else {
@@ -205,7 +205,7 @@
             }
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expressionValue
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression
                                                                               templateRepository:_templateRepository
                                                                                              raw:NO]];
         } break;
@@ -213,8 +213,8 @@
             
         case GRMustacheTokenTypeUnescapedVariable: {
             // Expression validation
-            if (token.expressionValue == nil) {
-                if (token.invalidExpressionValue) {
+            if (token.expression == nil) {
+                if (token.invalidExpression) {
                     [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
                     return NO;
                 } else {
@@ -224,7 +224,7 @@
             }
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expressionValue
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression
                                                                               templateRepository:_templateRepository
                                                                                              raw:YES]];
         } break;
@@ -234,8 +234,8 @@
         case GRMustacheTokenTypeInvertedSectionOpening:
         case GRMustacheTokenTypeOverridableSectionOpening: {
             // Expression validation
-            if (token.expressionValue == nil) {
-                if (token.invalidExpressionValue) {
+            if (token.expression == nil) {
+                if (token.invalidExpression) {
                     [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
                     return NO;
                 } else {
@@ -268,11 +268,11 @@
                     // Expression validation
                     // We need a valid expression that matches section opening,
                     // or an empty `{{/}}` closing tags.
-                    if (token.expressionValue == nil && token.invalidExpressionValue) {
+                    if (token.expression == nil && token.invalidExpression) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
                         return NO;
                     }
-                    if (token.expressionValue && ![token.expressionValue isEqual:_currentOpeningToken.expressionValue]) {
+                    if (token.expression && ![token.expression isEqual:_currentOpeningToken.expression]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
                         return NO;
                     }
@@ -285,7 +285,7 @@
                     // Success: append GRMustacheSectionElement and shrink stacks
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                    wrapperElement = [GRMustacheSectionElement sectionElementWithExpression:_currentOpeningToken.expressionValue
+                    wrapperElement = [GRMustacheSectionElement sectionElementWithExpression:_currentOpeningToken.expression
                                                                          templateRepository:_templateRepository
                                                                              templateString:token.templateString
                                                                                  innerRange:innerRange
@@ -295,16 +295,20 @@
                     
                 } break;
                     
-                case GRMustacheTokenTypeOverridableTemplate: {
+                case GRMustacheTokenTypeOverridablePartial: {
                     // Validate token: overridable template ending should be missing, or match overridable template opening
-                    if (token.templateNameValue && ![token.templateNameValue isEqual:_currentOpeningToken.templateNameValue]) {
+                    if (token.partialName && ![token.partialName isEqual:_currentOpeningToken.partialName]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ super template closing tag", token.templateSubstring]]];
                         return NO;
                     }
                     
+                    // Validate the renderingElementForTemplateName:error: contract:
+                    // Non nil, non empty, white-space stripped template name.
+                    NSAssert([_currentOpeningToken.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
+                    
                     // Ask templateRepository for super template
                     NSError *templateError;
-                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:_currentOpeningToken.templateNameValue error:&templateError];
+                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:_currentOpeningToken.partialName error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
                         return NO;
@@ -329,18 +333,18 @@
             
         case GRMustacheTokenTypePartial: {
             // Template name validation
-            if (token.templateNameValue == nil) {
+            if (token.partialName == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing partial name"]]];
                 return NO;
             }
             
             // Validate the renderingElementForTemplateName:error: contract:
             // Non nil, non empty, white-space stripped template name.
-            NSAssert([token.templateNameValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
+            NSAssert([token.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
             
             // Ask templateRepository for partial template
             NSError *templateError;
-            id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.templateNameValue error:&templateError];
+            id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.partialName error:&templateError];
             if (template == nil) {
                 [self failWithFatalError:templateError];
                 return NO;
@@ -351,16 +355,12 @@
         } break;
         
         
-        case GRMustacheTokenTypeOverridableTemplate: {
+        case GRMustacheTokenTypeOverridablePartial: {
             // Template name validation
-            if (token.templateNameValue == nil) {
+            if (token.partialName == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing super template name"]]];
                 return NO;
             }
-            
-            // Validate the renderingElementForTemplateName:error: contract:
-            // Non nil, non empty, white-space stripped template name.
-            NSAssert([token.templateNameValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
             
             // Expand stacks
             self.currentOpeningToken = token;

@@ -51,6 +51,18 @@
  */
 @protocol GRMustacheRenderingElement<NSObject>
 @required
+
+/**
+ * Returns YES if rendering element can be overriden, in the context of
+ * overridable partials.
+ *
+ * All classes conforming to the GRMustacheRenderingElement protocol return NO,
+ * but GRMustacheSectionElement.
+ *
+ * @see [GRMustacheRuntime resolveRenderingElement:]
+ * @see GRMustacheTemplateOverride
+ * @see GRMustacheSectionElement
+ */
 @property (nonatomic, readonly, getter=isOverridable) BOOL overridable GRMUSTACHE_API_INTERNAL;
 
 /**
@@ -64,7 +76,16 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 
 /**
+ * Returns the receiver if it can override the _element_ parameter, whose
+ * overridable property is guaranteed to return YES. Otherwise, return the
+ * _element_ parameter.
  *
+ * All classes conforming to the GRMustacheRenderingElement protocol return
+ * _element_, but GRMustacheSectionElement.
+ *
+ * @param element  A rendering element
+ *
+ * @return the resolution of the element in the context of overridable partials.
  */
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 @end
