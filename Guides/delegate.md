@@ -12,11 +12,11 @@ Template delegate and section delegates
 While rendering a template, several objects may get messages from GRMustache:
 
 - The template's delegate itself, which you set via the `delegate` property of the GRMustacheTemplate class.
-- Objects attached to sections, as long as they conform to the GRMustacheTemplateDelegate protocol.
+- Objects attached to section tags, as long as they conform to the GRMustacheTemplateDelegate protocol.
 
-The template's delegate can observe the full template rendering. However, sections delegates can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
+The template's delegate can observe the full template rendering. However, Delegates of section tags can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
 
-You'll find template delegate usages below. Section delegates are used in the [localization](sample_code/localization.md) sample code.
+You'll find template delegate usages below. Delegates of section tags are used in the [localization](sample_code/localization.md) sample code.
 
 
 Observe the template rendering
@@ -31,11 +31,11 @@ The following methods are called before, and after the whole template rendering:
 - (void)templateDidRender:(GRMustacheTemplate *)template;
 ```
 
-Section delegates are not sent these messages. Only template delegates are.
+Delegates of section tags are not sent these messages. Only template delegates are.
 
 ### Tag rendering
 
-The following methods are called before, and after the rendering of substitution and sections tags (`{{name}}` and `{{#name}}...{{/name}}`):
+The following methods are called before, and after the rendering of variable and sections tags (`{{name}}` and `{{#name}}...{{/name}}`):
 
 ```objc
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation;
@@ -59,14 +59,14 @@ The *interpretation* parameter tells you how the return value of the invocation 
 
 ```objc
 typedef enum {
-    GRMustacheInterpretationSection,
-    GRMustacheInterpretationVariable,
+    GRMustacheSectionTagInterpretation,
+    GRMustacheVariableTagInterpretation,
 } GRMustacheInterpretation;
 ```
 
-`GRMustacheInterpretationVariable` tells you that the return value is rendered by a Mustache variable tag such as `{{name}}`. Basically, GRMustache simply invokes its `description` method. See [Guides/runtime.md](runtime.md) for more information.
+`GRMustacheVariableTagInterpretation` tells you that the return value is rendered by a Mustache variable tag such as `{{name}}`. Basically, GRMustache simply invokes its `description` method. See [Guides/runtime.md](runtime.md) for more information.
 
-`GRMustacheInterpretationSection` tells you that the return value is used by a Mustache section such as `{{#name}}...{{/name}}`. Mustache sections are versatile: there are boolean sections, loop sections, and lambda sections, and this depends solely on the rendered value, that is to say: the return value of the invocation. Again, see [Guides/runtime.md](runtime.md) for more information.
+`GRMustacheSectionTagInterpretation` tells you that the return value is used by a Mustache section tag such as `{{#name}}...{{/name}}`. Mustache sections are versatile: there are boolean sections, loop sections, and lambda sections, and this depends solely on the rendered value, that is to say: the return value of the invocation. Again, see [Guides/runtime.md](runtime.md) for more information.
 
 
 ### A practical use: debugging templates
@@ -122,7 +122,7 @@ GRMustacheTemplateDelegate will help you when you can not, or do not want, to em
 Sample code
 -----------
 
-The [localization.md](sample_code/localization.md) sample code uses section delegates for localizing portions of template.
+The [localization.md](sample_code/localization.md) sample code uses delegates of section tags for localizing portions of a template.
 
 
 [up](introduction.md), [next](../../../tree/master/Guides/sample_code)

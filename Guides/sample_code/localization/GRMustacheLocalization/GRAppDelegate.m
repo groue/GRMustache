@@ -23,7 +23,7 @@
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
 
-@interface LocalizatingHelper : NSObject<GRMustacheSectionHelper, GRMustacheTemplateDelegate>
+@interface LocalizatingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
 @end
 
 @implementation GRAppDelegate
@@ -36,8 +36,8 @@
          */
         
         id data = @{
-            @"localize": [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
-                return NSLocalizedString(section.innerTemplateString, nil);
+            @"localize": [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
+                return NSLocalizedString(context.innerTemplateString, nil);
             }]
         };
         
@@ -54,8 +54,8 @@
         
         id data = @{
             @"greeting": @"Hello",
-            @"localize": [GRMustacheSectionHelper helperWithBlock:^NSString *(GRMustacheSection *section) {
-                return NSLocalizedString([section render], nil);
+            @"localize": [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
+                return NSLocalizedString([context render], nil);
             }]
         };
         
@@ -96,14 +96,14 @@
 
 @implementation LocalizatingHelper
 
-- (NSString *)renderSection:(GRMustacheSection *)section
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
     /**
      * Let's perform a first rendering of the section, invoking
-     * [section render].
+     * [context render].
      *
-     * This method returns the rendering of the section
-     * ("Hello {{name1}}! Do you know {{name2}}?" in our specific example).
+     * This method returns the rendering of the section:
+     * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
      *
      * Normally, it would return "Hello Arthur! Do you know Barbara?", which
      * we could not localize.
@@ -126,7 +126,7 @@
      */
     
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [section render]; // triggers delegate callbacks
+    NSString *localizableFormat = [context render]; // triggers delegate callbacks
     
     
     /**

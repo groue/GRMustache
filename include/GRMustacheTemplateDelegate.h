@@ -37,24 +37,49 @@
  */
 typedef enum {
     /**
-     * The value is interpreted for section rendering, such as
+     * The value is interpreted by a Mustache section tag such as
      * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
      * to the NSFastEnumeration protocol, an object conforming to the
-     * GRMustacheSectionHelper protocol, or any other value, the section will
+     * GRMustacheSectionTagHelper protocol, or any other value, the section will
+     * render differently.
+     *
+     * @since v5.3
+     */
+    GRMustacheSectionTagInterpretation = 0,
+    
+    /**
+     * The value is interpreted by a Mustache variable tag such as `{{name}}`.
+     * Whether it is an object conforming to the GRMustacheVariableTagHelper
+     * protocol, or another object, the tag will render differently.
+     *
+     * @since v5.3
+     */
+    GRMustacheVariableTagInterpretation,
+    
+    
+    // Deprecated values
+    
+    /**
+     * The value is interpreted by a Mustache section tag such as
+     * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
+     * to the NSFastEnumeration protocol, an object conforming to the
+     * GRMustacheSectionTagHelper protocol, or any other value, the section will
      * render differently.
      *
      * @since v4.1
+     * @deprecated v5.3
      */
-    GRMustacheInterpretationSection,
-    
+    GRMustacheInterpretationSection AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = GRMustacheSectionTagInterpretation,
+
     /**
-     * The value is interpreted for variable substitution, for tags such as
-     * `{{name}}`. Whether it is an object conforming to the GRMustacheVariable
-     * protocol, or another object, the variable will render differently.
+     * The value is interpreted by a Mustache variable tag such as `{{name}}`.
+     * Whether it is an object conforming to the GRMustacheVariableTagHelper
+     * protocol, or another object, the tag will render differently.
      *
      * @since v4.1
+     * @deprecated v5.3
      */
-    GRMustacheInterpretationVariable,
+    GRMustacheInterpretationVariable AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = GRMustacheVariableTagInterpretation,
     
 } GRMustacheInterpretation;
 

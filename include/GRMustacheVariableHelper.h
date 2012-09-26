@@ -30,7 +30,9 @@
 #pragma mark - <GRMustacheVariableHelper>
 
 /**
- * The protocol for implementing Mustache "lambda" variable tags.
+ * Deprecated protocol. Use GRMustacheVariableTagHelper protocol instead.
+ *
+ * The deprecated protocol for implementing Mustache "lambda" variable tags.
  *
  * The responsability of a GRMustacheVariableHelper is to render a Mustache
  * variable tag such as `{{name}}`.
@@ -39,9 +41,12 @@
  * GRMustache invokes the `renderVariable:` method of the helper, and inserts
  * the raw return value in the template rendering.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
  * @since v5.1
+ * @deprecated v5.3
+ *
+ * @see GRMustacheVariableTagHelper
  */
 @protocol GRMustacheVariableHelper<NSObject>
 @required
@@ -58,8 +63,9 @@
  * @return The rendering of the variable
  *
  * @since v5.1
+ * @deprecated v5.3
  */
-- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
 @end
 
 
@@ -71,11 +77,12 @@
  * writing a custom class that conforms to the GRMustacheVariableHelper
  * protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
  * @see GRMustacheVariableHelper protocol
  *
  * @since v5.1
+ * @deprecated v5.3
  */
 @interface GRMustacheVariableHelper: NSObject<GRMustacheVariableHelper>
 
@@ -93,42 +100,7 @@
  *
  * @since v5.1
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
 
 @end
 
-
-// =============================================================================
-#pragma mark - GRMustacheDynamicPartial
-
-/**
- * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableHelper
- * that, given a partial template name, renders this template.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
- *
- * @see GRMustacheVariableHelper protocol
- *
- * @since v5.1
- */
-@interface GRMustacheDynamicPartial: NSObject<GRMustacheVariableHelper> {
-    NSString *_name;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Creating Dynamic Partials
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Returns a GRMustacheDynamicPartial that renders a partial template named
- * _name_.
- *
- * @param name  A template name
- *
- * @return a GRMustacheDynamicPartial
- *
- * @since v5.1
- */
-+ (id)dynamicPartialWithName:(NSString *)name AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
-
-@end

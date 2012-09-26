@@ -8,7 +8,7 @@ Overview
 
 Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localizes its input.
 
-[Mustache lambda sections](../section_helpers.md) are our vector. We'll eventually render the following template:
+[Section tag helpers](../section_tag_helpers.md) are our vector. We'll eventually render the following template:
 
     {{#localize}}
         Hello {{name1}}, do you know {{name2}}?
@@ -51,14 +51,14 @@ And render, depending on the current locale:
     Bonjour
     Hola
 
-We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionHelper` protocol.
+We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionTagHelper` protocol.
 
-The shortest way to build a helper is the `[GRMustacheSectionHelper helperWithBlock:]` method. Its block is given a `GRMustacheSection` object whose `innerTemplateString` property perfectly suits our needs:
+The shortest way to build a helper is the `[GRMustacheSectionTagHelper helperWithBlock:]` method. Its block is given a `GRMustacheSectionTagRenderingContext` object whose `innerTemplateString` property perfectly suits our needs:
 
 ```objc
 id data = @{
-    @"localize": [GRMustacheSectionHelper helperWithBlock:^(GRMustacheSection *section) {
-        return NSLocalizedString(section.innerTemplateString, nil);
+    @"localize": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
+        return NSLocalizedString(context.innerTemplateString, nil);
     }]
 };
 
@@ -70,7 +70,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-`GRMustacheSectionHelper` and `innerTemplateString` are documented in the [section_helpers.md](../section_helpers.md) guide.
+`GRMustacheSectionTagHelper` and `innerTemplateString` are documented in the [section_tag_helpers.md](../section_tag_helpers.md) guide.
 
 
 Localizing a value
@@ -92,17 +92,17 @@ Rendering:
     Bonjour
     Hola
 
-Again, we'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionHelper` protocol.
+Again, we'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionTagHelper` protocol.
 
 However, this time, we are not localizing a raw portion of the template. Instead, we are localizing a value that comes from the rendered data.
 
-Fortunately, `GRMustacheSection` objects are able to provide helpers with the rendering of their inner content, `"Hello"` in our case, with their `render` method:
+Fortunately, `GRMustacheSectionTagRenderingContext` objects are able to provide helpers with the rendering of their inner content, `"Hello"` in our case, with their `render` method:
 
 ```objc
 id data = @{
     @"greeting": @"Hello",
-    @"localize": [GRMustacheSectionHelper helperWithBlock:^(GRMustacheSection *section) {
-        return NSLocalizedString([section render], nil);
+    @"localize": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
+        return NSLocalizedString([context render], nil);
     }]
 };
 
@@ -116,7 +116,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 You can see this as a "double-pass" rendering: the section is rendered once, in order to turn `{{greeting}}` into `Hello`, and the localization of this string is eventually inserted in the final rendering.
 
-`GRMustacheSectionHelper` and `[GRMustacheSection render]` are documented in the [section_helpers.md](../section_helpers.md) guide.
+`GRMustacheSectionTagHelper` and `[GRMustacheSectionTagRenderingContext render]` are documented in the [section_tag_helpers.md](../section_tag_helpers.md) guide.
 
 
 Localizing a template section with arguments
@@ -169,29 +169,29 @@ The [GRMustacheDelegate](../delegate.md) protocol is a nifty tool: it lets you k
 
 This looks like a nice way to build our format arguments and the localizable format string in a single strike: instead of letting GRMustache render `Arthur` and `Barbara`, we'll put those values away, and tell the library to render `%@` instead.
 
-We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate side, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
+We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionTagHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate side, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
 
-Now the convenient `[GRMustacheSectionHelper helperWithBlock:]` method is not enough. Let's go for a full class:
+Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not enough. Let's go for a full class:
 
 ```objc
-@interface LocalizatingHelper : NSObject<GRMustacheSectionHelper, GRMustacheTemplateDelegate>
+@interface LocalizatingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizatingHelper
 
 /**
- * GRMustacheSectionHelper method
+ * GRMustacheSectionTagHelper method
  */
 
-- (NSString *)renderSection:(GRMustacheSection *)section
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
     /**
      * Let's perform a first rendering of the section, invoking
-     * [section render].
+     * [context render].
      *
-     * This method returns the rendering of the section
-     * ("Hello {{name1}}! Do you know {{name2}}?" in our specific example).
+     * This method returns the rendering of the section:
+     * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
      *
      * Normally, it would return "Hello Arthur! Do you know Barbara?", which
      * we could not localize.
@@ -214,7 +214,7 @@ Now the convenient `[GRMustacheSectionHelper helperWithBlock:]` method is not en
      */
 
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [section render]; // triggers delegate callbacks
+    NSString *localizableFormat = [context render]; // triggers delegate callbacks
 
 
     /**

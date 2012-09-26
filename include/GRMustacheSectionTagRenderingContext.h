@@ -24,21 +24,17 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 /**
- * A GRMustacheSection represents a Mustache section such as 
- * `{{#name}}...{{/name}}`.
- *
- * You will be provided with GRMustacheSection objects when implementing
- * mustache lambda sections with objects conforming to the
- * deprecated GRMustacheSectionHelper protocol.
+ * You will be provided with GRMustacheSectionTagRenderingContext objects when
+ * implementing variable tag helpers with objects conforming to the
+ * GRMustacheSectionTagHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
- * @see GRMustacheSectionTagHelper
+ * @see GRMustacheSectionTagHelper protocol
  *
- * @since v1.3
- * @deprecated v5.3
+ * @since v5.3
  */
-@interface GRMustacheSection: NSObject {
+@interface GRMustacheSectionTagRenderingContext: NSObject {
 @private
     id _sectionElement;
     id _runtime;
@@ -54,10 +50,9 @@
  * The literal inner content of the section, with unprocessed Mustache
  * `{{tags}}`.
  *
- * @since v2.0
- * @deprecated v5.3
+ * @since v5.3
  */
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,10 +64,9 @@
  * 
  * @return A string containing the rendered inner content.
  *
- * @since v2.0
- * @deprecated v5.3
+ * @since v5.3
  */
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,9 +83,8 @@
  *
  * @return A string containing the rendering of the template string.
  *
- * @since v4.3
- * @deprecated v5.3
+ * @since v5.3
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 @end

@@ -32,7 +32,7 @@ Mustache does a little more than rendering plain `{{name}}` tags. Let's review M
 
 - [context_stack.md](runtime/context_stack.md)
 
-    This guide digs into Mustache sections such as `{{#section}}...{{/section}}`, and the key lookup mechanism.
+    This guide digs into Mustache section tags such as `{{#section}}...{{/section}}`, and the key lookup mechanism.
     
 - [loops.md](runtime/loops.md)
     

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>GRMustacheSectionHelper Protocol Reference</title>
+		<title>GRMustacheSectionTagHelper Protocol Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
@@ -17,7 +17,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">GRMustacheSectionHelper Protocol Reference</h1>
+				<h1 class="hideInXcode">GRMustacheSectionTagHelper Protocol Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -44,7 +44,7 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/renderSection:">&nbsp;&nbsp;&nbsp;&nbsp;- renderSection:</option>
+	<option value="//api/name/renderForSectionTagInContext:">&nbsp;&nbsp;&nbsp;&nbsp;- renderForSectionTagInContext:</option>
 	
 	
 	
@@ -76,7 +76,7 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderSection:">renderSection:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderForSectionTagInContext:">renderForSectionTagInContext:</a></span></li>
 	
 </ul></li>
 
@@ -85,7 +85,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="GRMustacheSectionHelper Protocol Reference" name="top"></a>
+				<a title="GRMustacheSectionTagHelper Protocol Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -94,7 +94,7 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">GRMustacheSectionHelper Protocol Reference</h1>
+						<h1 class="title title-header">GRMustacheSectionTagHelper Protocol Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
@@ -105,7 +105,7 @@
 	<td class="specification-value">NSObject</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">GRMustacheSectionHelper.h</td>
+	<td class="specification-value">GRMustacheSectionTagHelper.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -115,16 +115,14 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Deprecated protocol. Use <a href="../Classes/GRMustacheSectionTagHelper.html">GRMustacheSectionTagHelper</a> protocol instead.</p>
+						<p>The protocol for implementing Section tag helpers.</p>
 
-<p>The deprecated protocol for implementing Mustache &ldquo;lambda&rdquo; sections.</p>
-
-<p>The responsability of a GRMustacheSectionHelper is to render a Mustache
+<p>The responsability of a GRMustacheSectionTagHelper is to render a Mustache
 section such as <code>{{#bold}}...{{/bold}}</code>.</p>
 
-<p>When the data given to a Mustache section is a GRMustacheSectionHelper,
-<a href="../Classes/GRMustache.html">GRMustache</a> invokes the <a href="#//api/name/renderSection:"><code>renderSection:</code></a> method of the helper, and inserts the
-raw return value in the template rendering.</p>
+<p>When the data given to a Mustache section is a GRMustacheSectionTagHelper,
+<a href="../Classes/GRMustache.html">GRMustache</a> invokes the <a href="#//api/name/renderForSectionTagInContext:"><code>renderForSectionTagInContext:</code></a> method of the helper,
+and inserts the raw return value in the final rendering.</p>
 
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/section">https://github.com/groue/GRMustache/blob/master/Guides/section</a>_tag_helpers.md</p>
 					</div>
@@ -144,7 +142,7 @@ raw return value in the template rendering.</p>
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/renderSection:">&ndash;&nbsp;renderSection:</a></code>
+		<code><a href="#//api/name/renderForSectionTagInContext:">&ndash;&nbsp;renderForSectionTagInContext:</a></code>
 		<span class="tooltip"><p>Returns the rendering of a Mustache section.</p></span>
 	</span>
 	
@@ -167,8 +165,8 @@ raw return value in the template rendering.</p>
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/renderSection:" title="renderSection:"></a>
-	<h3 class="subsubtitle method-title">renderSection:</h3>
+	<a name="//api/name/renderForSectionTagInContext:" title="renderForSectionTagInContext:"></a>
+	<h3 class="subsubtitle method-title">renderForSectionTagInContext:</h3>
 	
 	
 	
@@ -178,7 +176,7 @@ raw return value in the template rendering.</p>
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (NSString *)renderSection:(GRMustacheSection *)<em>section</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)<em>context</em></code></div>
 
     
 	
@@ -186,8 +184,8 @@ raw return value in the template rendering.</p>
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>section</em></dt>
-			<dd><p>The section to render</p></dd>
+			<dt><em>context</em></dt>
+			<dd><p>A section tag rendering context</p></dd>
 		</dl>
 		
 	</div>
@@ -203,8 +201,7 @@ raw return value in the template rendering.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v2.0
-@deprecated v5.3</p>
+		<p>v5.3</p>
 	</div>
 	
 	
@@ -217,7 +214,7 @@ raw return value in the template rendering.</p>
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheSectionHelper.h</code><br />
+		<code class="declared-in-ref">GRMustacheSectionTagHelper.h</code><br />
 	</div>				
 	
 	

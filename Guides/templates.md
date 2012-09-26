@@ -105,10 +105,10 @@ On success, those methods return GRMustacheTemplate instances, which render obje
 
 ```objc
 - (NSString *)renderObject:(id)object;
-- (NSString *)renderObjectsInArray:(NSArray *)objects
+- (NSString *)renderObjectsFromArray:(NSArray *)objects
 ```
 
-The latter method, which takes several arguments, is helpful when several objects should feed the template.
+The latter method, which takes an array of objects, is helpful when several objects should feed the template.
 
 
 More loading options

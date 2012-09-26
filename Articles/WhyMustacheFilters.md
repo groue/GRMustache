@@ -58,7 +58,7 @@ Since filters are not tied to the view model, they are *reusable*.
 
 There are major differences between *expressions* and *statements*. Statements chain, one after the other, independently, and can not provide any value. Statements *perform* and return nothing. Expressions are a different kind of beast: by essence, they provide *values*, and can be *composed* from other expressions.
 
-Obviously, Mustache needs values: substitution tags need a value that they can render, section tags need a value that they can test, loop, or make enter the context stack. Since only expressions provide with values, they are what Mustache need.
+Obviously, Mustache needs values: variable tags need a value that they can render, section tags need a value that they can test, loop, or make enter the context stack. Since only expressions provide with values, they are what Mustache need.
 
 Mustache already has two kinds of expressions: keys and key paths. `name` is a key. `person.name` is a key path. Both expressions evaluate in a different manner. The key expression looks in the context stack for an object that would provide the "name" key. The key path expression looks in the context stack for an object that would provide the "person" key, and then extract the "name" key right from this person. The latter behavior is called a "scoped lookup".
 
@@ -183,7 +183,7 @@ after the other, until it reaches the *VALID*, *EMPTY*, or *INVALID* state:
 
 ### Filtered variables, filtered sections
 
-Expressions as a way for the library user to build values that would be rendered by Mustache. Now those values are actually rendered as variables (substitution tags) tags, or sections.
+Expressions as a way for the library user to build values that would be rendered by Mustache. Now those values are actually rendered by variable tags, or section tags.
 
 The only argument so far I've read against filtered sections is: "I see no compelling use case that need this feature".
 

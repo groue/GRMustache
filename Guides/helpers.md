@@ -1,15 +1,13 @@
-[up](introduction.md), [next](section_helpers.md)
+[up](introduction.md), [next](section_tag_helpers.md)
 
 Helpers
 =======
 
-GRMustache allows you to implement "Mustache lambdas", that is to say sections and variable tags that render in your own fashion.
+Section tag helpers let you render a section tag as `{{#name}}...{{/name}}` with your own custom code.
 
-Section helpers let you attach code to a section `{{#name}}...{{/name}}`.
+Variable tag helpers let you render a variable tag as: `{{name}}` with you own code as well.
 
-Variable helpers let you attach code to a variable `{{name}}`.
+- [Section tag  helpers](section_tag_helpers.md)
+- [Variable tag helpers](variable_tag_helpers.md)
 
-- [Section helpers](section_helpers.md)
-- [Variable helpers](section_helpers.md)
-
-[up](introduction.md), [next](section_helpers.md)
+[up](introduction.md), [next](section_tag_helpers.md)

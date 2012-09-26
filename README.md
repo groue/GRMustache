@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is a production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-**September 23th, 2012: GRMustache 5.2 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**September 26th, 2012: GRMustache 5.3 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -69,8 +69,8 @@ Rendering templates:
 
 Advanced Mustache:
 
-- [section_helpers.md](GRMustache/blob/master/Guides/section_helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
-- [variable_helpers.md](GRMustache/blob/master/Guides/variable_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
+- [section_tag_helpers.md](GRMustache/blob/master/Guides/section_tag_helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
+- [variable_tag_helpers.md](GRMustache/blob/master/Guides/variable_tag_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
@@ -102,7 +102,7 @@ FAQ
 
 - **Q: How do I render partial templates whose name is only known at runtime?**
 
-    A: Check [Guides/variable_helpers.md](GRMustache/blob/master/Guides/variable_helpers.md)
+    A: Check [Guides/variable_tag_helpers.md](GRMustache/blob/master/Guides/variable_tag_helpers.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     

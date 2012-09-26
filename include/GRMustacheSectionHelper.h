@@ -30,7 +30,9 @@
 #pragma mark - <GRMustacheSectionHelper>
 
 /**
- * The protocol for implementing Mustache "lambda" sections.
+ * Deprecated protocol. Use GRMustacheSectionTagHelper protocol instead.
+ *
+ * The deprecated protocol for implementing Mustache "lambda" sections.
  *
  * The responsability of a GRMustacheSectionHelper is to render a Mustache
  * section such as `{{#bold}}...{{/bold}}`.
@@ -39,9 +41,12 @@
  * GRMustache invokes the `renderSection:` method of the helper, and inserts the
  * raw return value in the template rendering.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
  * @since v1.9
+ * @deprecated v5.3
+ *
+ * @see GRMustacheSectionTagHelper
  */
 @protocol GRMustacheSectionHelper<NSObject>
 @required
@@ -58,8 +63,9 @@
  * @return The rendering of the section
  *
  * @since v2.0
+ * @deprecated v5.3
  */
-- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
 @end
 
 
@@ -70,12 +76,13 @@
  * The GRMustacheSectionHelper class helps building mustache helpers without
  * writing a custom class that conforms to the GRMustacheSectionHelper protocol.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/helpers.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
  * @see GRMustacheSectionHelper protocol
  *
  * @since v2.0
- */ 
+ * @deprecated v5.3
+ */
 @interface GRMustacheSectionHelper: NSObject<GRMustacheSectionHelper>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,14 +98,15 @@
  * @return a GRMustacheSectionHelper object.
  *
  * @since v2.0
+ * @deprecated v5.3
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
 
 @end
 
 
 // =============================================================================
-#pragma mark - Compatibility layer
+#pragma mark - Compatibility with deprecated declarations
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

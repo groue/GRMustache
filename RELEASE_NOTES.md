@@ -4,13 +4,60 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.3.0
+
+**API cleanup**
+
+The introduction of variable tag helpers in v5.1.0 introduced many confusing APIs. Those are still there, but deprecated.
+
+No new feature has been added, but semantics have been much improved. Many thanks to [@pierlo](https://github.com/pierlo) for his help.
+
+### Helpers API changes
+
+`GRMustacheVariableTagHelper` replaces `GRMustacheVariableHelper`. See [Guides/variable_tag_helpers.md](Guides/variable_tag_helpers.md).
+
+```objc
+@protocol GRMustacheVariableTagHelper<NSObject>
+@required
+- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context;
+@end
+
+@interface GRMustacheVariableTagRenderingContext : NSObject
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+@end
+```
+
+`GRMustacheSectionTagHelper` replaces `GRMustacheSectionHelper`. See [Guides/section_tag_helpers.md](Guides/section_tag_helpers.md).
+
+```objc
+@protocol GRMustacheSectionTagHelper<NSObject>
+@required
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+@end
+
+@interface GRMustacheSectionTagRenderingContext: NSObject
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+@end
+```
+
+### GRMustacheTemplateDelegate API changes
+
+In the `GRMustacheInterpretation` enumeration, `GRMustacheSectionTagInterpretation` replaces `GRMustacheInterpretationSection`, and `GRMustacheVariableTagInterpretation` replaces `GRMustacheInterpretationVariable`.
+
+### GRMustacheTemplate API changes
+
+`[GRMustacheTemplate renderObjectsFromArray:]` and `[GRMustacheTemplate renderObjectsFromArray:withFilters:]` replace `[GRMustacheTemplate renderObjectsInArray:]` and `[GRMustacheTemplate renderObjectsInArray:withFilters:]`.
+
 ## v5.2.0
 
 **Overridable partials**
 
 Inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), GRMustache now supports "template inheritance". Precisely, your templates can embed as many partials as before, but now you can override portions of those partials.
 
-Overridable partials are documented as [Guides/templates.md](Guides/templates.md).
+Overridable partials are documented as [Guides/partials.md](Guides/partials.md).
 
 The [layout](../../tree/master/Guides/sample_code/layout) sample code has been updated to take profit of overridable partials. There is not much left of it :-).
 

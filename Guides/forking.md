@@ -48,7 +48,7 @@ The library features are described in the [guides](introduction.md). This sectio
     
     The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *rendering elements*.
     
-    Rendering elements are actually able to provide the rendering expected by the library user. *Templates* render full templates and partials, *section elements* render Mustache sections, *text elements* render raw text, and *variable elements* perform variable substitution.
+    Rendering elements are actually able to provide the rendering expected by the library user. *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, and *variable elements* render Mustache variable tags.
     
     For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a variable element.
 
@@ -67,11 +67,17 @@ The library features are described in the [guides](introduction.md). This sectio
 
     *Invocations* are created by runtime objects, and exposed to *delegates*, so that the library user inspect or override rendered values.
     
-- **Lambda sections**
-    - `GRMustacheHelper`
-    - `GRMustacheSection`
+- **Lambdas Sections**
+    - `GRMustacheSectionTagHelper`
+    - `GRMustacheSectionTagRenderingContext`
 
-    The library user can implement *helpers* in order to have some sections behave as "Mustache lambda sections". In order to be able to perform the job described by the Mustache specification, they are provided with *section* objects that provide the required information and tools.
+    The library user can implement *section tag helpers* in order to have some section tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
+
+- **Lambdas Variables**
+    - `GRMustacheVariableTagHelper`
+    - `GRMustacheVariableTagRenderingContext`
+
+    The library user can implement *variable tag helpers* in order to have some variable tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
 
 - **Filters**
     - `GRMustacheFilter`

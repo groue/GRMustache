@@ -10,11 +10,11 @@ Features
 
 ### Core Mustache
 
-- **variables**, as `{{name}}` and `{{{name}}}` (HTML-escaped or not)
-- **sections** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
-- **partial templates inclusion**, including recursive partials, as `{{> partial}}`
-- **comments**, as `{{! comment }}`
-- "**set delimiter**" tags, as `{{=<% %>=}}`
+- **variable tags**, as `{{name}}` and `{{{name}}}` (HTML-escaped or not)
+- **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
+- **partial tags**, as `{{> partial}}`
+- **comment tag**, as `{{! comment }}`
+- "**set delimiter tags**", as `{{=<% %>=}}`
 
 ### Overlooked Mustache
 
