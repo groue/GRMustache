@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.3 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -42,8 +42,6 @@
 	
 	<option value="//api/name/innerTemplateString">&nbsp;&nbsp;&nbsp;&nbsp;innerTemplateString</option>
 	
-	<option value="//api/name/renderingContext">&nbsp;&nbsp;&nbsp;&nbsp;renderingContext</option>
-	
 	
 	
 	
@@ -71,8 +69,6 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Accessing the current rendering context">Accessing the current rendering context</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Accessing the literal inner content">Accessing the literal inner content</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering the inner content">Rendering the inner content</a></span></li>
@@ -88,8 +84,6 @@
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/innerTemplateString">innerTemplateString</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingContext">renderingContext</a></span></li>
 	
 </ul></li>
 
@@ -144,10 +138,10 @@
 <code>{{#name}}...{{/name}}</code>.</p>
 
 <p>You will be provided with GRMustacheSection objects when implementing
-mustache lambda sections with objects conforming to the <a href="../Classes/GRMustacheHelper.html">GRMustacheHelper</a>
-protocol.</p>
+mustache lambda sections with objects conforming to the
+deprecated <a href="../Classes/GRMustacheSectionHelper.html">GRMustacheSectionHelper</a> protocol.</p>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/helpers.md">https://github.com/groue/GRMustache/blob/master/Guides/helpers.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/section">https://github.com/groue/GRMustache/blob/master/Guides/section</a>_tag_helpers.md</p>
 					</div>
 					
 					
@@ -157,21 +151,6 @@ protocol.</p>
 					<div class="section section-tasks">
 						<a title="Tasks" name="tasks"></a>
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
-						
-						
-						<a title="Accessing the current rendering context" name="task_Accessing the current rendering context"></a>
-						<h3 class="subsubtitle task-title">Accessing the current rendering context</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/renderingContext">&nbsp;&nbsp;renderingContext</a></code>
-		<span class="tooltip"><p>The current rendering context.</p></span>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li>
-						</ul>
 						
 						
 						<a title="Accessing the literal inner content" name="task_Accessing the literal inner content"></a>
@@ -252,49 +231,8 @@ protocol.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v2.0</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheSection.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/renderingContext" title="renderingContext"></a>
-	<h3 class="subsubtitle method-title">renderingContext</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>The current rendering context.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) id renderingContext</code></div>
-
-    
-	
-	
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
 		<p>v2.0
-@deprecated v4.3</p>
+@deprecated v5.3</p>
 	</div>
 	
 	
@@ -350,7 +288,8 @@ protocol.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v2.0</p>
+		<p>v2.0
+@deprecated v5.3</p>
 	</div>
 	
 	
@@ -395,11 +334,9 @@ protocol.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -415,7 +352,8 @@ protocol.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v4.3</p>
+		<p>v4.3
+@deprecated v5.3</p>
 	</div>
 	
 	
@@ -447,9 +385,9 @@ protocol.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-09-26)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						
 					</div>
 				</div>

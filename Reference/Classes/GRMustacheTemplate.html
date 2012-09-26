@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.3 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -88,7 +88,9 @@
 	
 	<option value="//api/name/renderObject:withFilters:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObject:withFilters:</option>
 	
-	<option value="//api/name/renderObjects:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjects:</option>
+	<option value="//api/name/renderObjectsFromArray:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjectsFromArray:</option>
+	
+	<option value="//api/name/renderObjectsFromArray:withFilters:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjectsFromArray:withFilters:</option>
 	
 	<option value="//api/name/renderObjectsInArray:">&nbsp;&nbsp;&nbsp;&nbsp;- renderObjectsInArray:</option>
 	
@@ -178,7 +180,9 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObject:withFilters:">renderObject:withFilters:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjects:">renderObjects:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjectsFromArray:">renderObjectsFromArray:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjectsFromArray:withFilters:">renderObjectsFromArray:withFilters:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderObjectsInArray:">renderObjectsInArray:</a></span></li>
 	
@@ -401,6 +405,13 @@ services.</p>
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObjectsInArray:">&ndash;&nbsp;renderObjectsInArray:</a></code>
+		<span class="tooltip"><p>Deprecated method: Use <a href="#//api/name/renderObjectsFromArray:">renderObjectsFromArray:</a> instead.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderObjectsFromArray:">&ndash;&nbsp;renderObjectsFromArray:</a></code>
 		<span class="tooltip"><p>Renders a template with a context stack initialized with an array of objects.</p></span>
 	</span>
 	
@@ -408,14 +419,14 @@ services.</p>
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderObjectsInArray:withFilters:">&ndash;&nbsp;renderObjectsInArray:withFilters:</a></code>
-		<span class="tooltip"><p>Renders a template with a context stack initialized with an array of objects.</p></span>
+		<span class="tooltip"><p>Deprecated method: Use <a href="#//api/name/renderObjectsFromArray:withFilters:">renderObjectsFromArray:withFilters:</a> instead.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/renderObjects:">&ndash;&nbsp;renderObjects:</a></code>
-		<span class="tooltip"><p>Renders a template with a context stack initialized with several objects.</p></span>
+		<code><a href="#//api/name/renderObjectsFromArray:withFilters:">&ndash;&nbsp;renderObjectsFromArray:withFilters:</a></code>
+		<span class="tooltip"><p>Renders a template with a context stack initialized with an array of objects.</p></span>
 	</span>
 	
 	
@@ -451,7 +462,7 @@ services.</p>
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) id&lt;&gt; delegate</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) id&lt;GRMustacheTemplateDelegate&gt; delegate</code></div>
 
     
 	
@@ -533,11 +544,9 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -618,11 +627,9 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -708,11 +715,9 @@ services.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -806,11 +811,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -894,11 +897,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>                   partials, upon return contains an NSError object that
-                   describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -969,11 +970,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1059,11 +1058,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1154,11 +1151,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1257,11 +1252,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1350,11 +1343,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>                   partials, upon return contains an NSError object that
-                   describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1415,11 +1406,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1495,11 +1484,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1580,11 +1567,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1673,11 +1658,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>             partials, upon return contains an NSError object that
-             describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1756,11 +1739,9 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>outError</em></dt>
-			<dd><p>If there is an error loading or parsing template and</p>
-
-<pre><code>                   partials, upon return contains an NSError object that
-                   describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -1967,18 +1948,18 @@ bundle.</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/renderObjects:" title="renderObjects:"></a>
-	<h3 class="subsubtitle method-title">renderObjects:</h3>
+	<a name="//api/name/renderObjectsFromArray:" title="renderObjectsFromArray:"></a>
+	<h3 class="subsubtitle method-title">renderObjectsFromArray:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a template with a context stack initialized with several objects.</p>
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (NSString *)renderObjects:(id)<em>object</em>, <em>...</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderObjectsFromArray:(NSArray *)<em>objects</em></code></div>
 
     
 	
@@ -1986,13 +1967,8 @@ bundle.</p>
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
-			<dt><em>object</em></dt>
-			<dd><p>The bottom object in the context stack.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>...</em></dt>
-			<dd><p>The other objects in the context stack.</p></dd>
+			<dt><em>objects</em></dt>
+			<dd><p>An array of context objects for interpreting Mustache tags.</p></dd>
 		</dl>
 		
 	</div>
@@ -2008,8 +1984,68 @@ bundle.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.5
-@deprecated v4.3</p>
+		<p>v5.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderObjectsFromArray:withFilters:" title="renderObjectsFromArray:withFilters:"></a>
+	<h3 class="subsubtitle method-title">renderObjectsFromArray:withFilters:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderObjectsFromArray:(NSArray *)<em>objects</em> withFilters:(id)<em>filters</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>objects</em></dt>
+			<dd><p>An array of context objects for interpreting Mustache tags.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>filters</em></dt>
+			<dd><p>An object that provides custom filters.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered template.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.3</p>
 	</div>
 	
 	
@@ -2035,7 +2071,7 @@ bundle.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a template with a context stack initialized with an array of objects.</p>
+		<p>Deprecated method: Use <a href="#//api/name/renderObjectsFromArray:">renderObjectsFromArray:</a> instead.</p>
 	</div>		
 	
     
@@ -2065,14 +2101,29 @@ bundle.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v4.3</p>
+		<p>v4.3
+@deprecated v5.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
 	</div>
 	
 	
 	
 	
 	
-	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/renderObjectsFromArray:">&ndash; renderObjectsFromArray:</a></p></code></li>
+			
+		</ul>
+	</div>
 	
 	
 	
@@ -2091,7 +2142,7 @@ bundle.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Renders a template with a context stack initialized with an array of objects.</p>
+		<p>Deprecated method: Use <a href="#//api/name/renderObjectsFromArray:withFilters:">renderObjectsFromArray:withFilters:</a> instead.</p>
 	</div>		
 	
     
@@ -2126,14 +2177,29 @@ bundle.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v4.3</p>
+		<p>v4.3
+@deprecated v4.3</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Renders a template with a context stack initialized with an array of objects.</p>
 	</div>
 	
 	
 	
 	
 	
-	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/renderObjectsFromArray:withFilters:">&ndash; renderObjectsFromArray:withFilters:</a></p></code></li>
+			
+		</ul>
+	</div>
 	
 	
 	
@@ -2158,9 +2224,9 @@ bundle.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-09-26)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						
 					</div>
 				</div>

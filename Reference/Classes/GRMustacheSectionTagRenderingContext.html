@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>GRMustacheFilter Protocol Reference</title>
+		<title>GRMustacheSectionTagRenderingContext Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
@@ -17,7 +17,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">GRMustacheFilter Protocol Reference</h1>
+				<h1 class="hideInXcode">GRMustacheSectionTagRenderingContext Class Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -38,13 +38,20 @@
 	
 	
 	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/innerTemplateString">&nbsp;&nbsp;&nbsp;&nbsp;innerTemplateString</option>
+	
+	
 	
 	
 	
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/transformedValue:">&nbsp;&nbsp;&nbsp;&nbsp;- transformedValue:</option>
+	<option value="//api/name/render">&nbsp;&nbsp;&nbsp;&nbsp;- render</option>
+	
+	<option value="//api/name/renderTemplateString:error:">&nbsp;&nbsp;&nbsp;&nbsp;- renderTemplateString:error:</option>
 	
 	
 	
@@ -62,7 +69,11 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Transforming Values">Transforming Values</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Accessing the literal inner content">Accessing the literal inner content</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering the inner content">Rendering the inner content</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering another template string">Rendering another template string</a></span></li>
 	
 </ul></li>
 
@@ -70,13 +81,21 @@
 
 
 
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/innerTemplateString">innerTemplateString</a></span></li>
+	
+</ul></li>
+
 
 
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/transformedValue:">transformedValue:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/render">render</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderTemplateString:error:">renderTemplateString:error:</a></span></li>
 	
 </ul></li>
 
@@ -85,7 +104,7 @@
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="GRMustacheFilter Protocol Reference" name="top"></a>
+				<a title="GRMustacheSectionTagRenderingContext Class Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -94,18 +113,18 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">GRMustacheFilter Protocol Reference</h1>
+						<h1 class="title title-header">GRMustacheSectionTagRenderingContext Class Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
-	<td class="specification-title">Conforms to</td>
+	<td class="specification-title">Inherits from</td>
 	<td class="specification-value">NSObject</td>
 </tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">GRMustacheFilter.h</td>
+	<td class="specification-value">GRMustacheSectionTagRenderingContext.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -115,15 +134,11 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The protocol for implementing <a href="../Classes/GRMustache.html">GRMustache</a> filters.</p>
+						<p>You will be provided with GRMustacheSectionTagRenderingContext objects when
+implementing variable tag helpers with objects conforming to the
+<a href="../Classes/GRMustacheSectionTagHelper.html">GRMustacheSectionTagHelper</a> protocol.</p>
 
-<p>The responsability of a GRMustacheFilter is to transform a value into
-another.</p>
-
-<p>For instance, the tag <code>{{ uppercase(name) }}</code> uses a filter object that
-returns the uppercase version of its input.</p>
-
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/section">https://github.com/groue/GRMustache/blob/master/Guides/section</a>_tag_helpers.md</p>
 					</div>
 					
 					
@@ -135,17 +150,48 @@ returns the uppercase version of its input.</p>
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
-						<a title="Transforming Values" name="task_Transforming Values"></a>
-						
-<h3 class="subsubtitle task-title">Transforming Values</h3>
+						<a title="Accessing the literal inner content" name="task_Accessing the literal inner content"></a>
+						<h3 class="subsubtitle task-title">Accessing the literal inner content</h3>
+
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/transformedValue:">&ndash;&nbsp;transformedValue:</a></code>
-		<span class="tooltip"><p>Applies some transformation to its input, and returns the transformed value.</p></span>
+		<code><a href="#//api/name/innerTemplateString">&nbsp;&nbsp;innerTemplateString</a></code>
+		<span class="tooltip"><p>The literal inner content of the section, with unprocessed Mustache
+<code>{{tags}}</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Rendering the inner content" name="task_Rendering the inner content"></a>
+						<h3 class="subsubtitle task-title">Rendering the inner content</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/render">&ndash;&nbsp;render</a></code>
+		<span class="tooltip"><p>Renders the inner content of the receiver with the current rendering context.</p></span>
 	</span>
 	
-	<span class="task-item-suffix">required method</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Rendering another template string" name="task_Rendering another template string"></a>
+						<h3 class="subsubtitle task-title">Rendering another template string</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderTemplateString:error:">&ndash;&nbsp;renderTemplateString:error:</a></code>
+		<span class="tooltip"><p>Renders a template string with the current rendering context.</p></span>
+	</span>
+	
+	
 </li>
 						</ul>
 						
@@ -155,52 +201,34 @@ returns the uppercase version of its input.</p>
 					
 					
 					
-					
-					
-					
-					
 					<div class="section section-methods">
-						<a title="Instance Methods" name="instance_methods"></a>
-						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/transformedValue:" title="transformedValue:"></a>
-	<h3 class="subsubtitle method-title">transformedValue:</h3>
+	<a name="//api/name/innerTemplateString" title="innerTemplateString"></a>
+	<h3 class="subsubtitle method-title">innerTemplateString</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Applies some transformation to its input, and returns the transformed value.</p>
+		<p>The literal inner content of the section, with unprocessed Mustache
+<code>{{tags}}</code>.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (id)transformedValue:(id)<em>object</em></code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *innerTemplateString</code></div>
 
     
 	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>object</em></dt>
-			<dd><p>An object to be processed by the filter.</p></dd>
-		</dl>
-		
-	</div>
 	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A transformed value.</p>
-	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v4.3</p>
+		<p>v5.3</p>
 	</div>
 	
 	
@@ -213,7 +241,126 @@ returns the uppercase version of its input.</p>
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheFilter.h</code><br />
+		<code class="declared-in-ref">GRMustacheSectionTagRenderingContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/render" title="render"></a>
+	<h3 class="subsubtitle method-title">render</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders the inner content of the receiver with the current rendering context.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)render</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendered inner content.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheSectionTagRenderingContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderTemplateString:error:" title="renderTemplateString:error:"></a>
+	<h3 class="subsubtitle method-title">renderTemplateString:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Renders a template string with the current rendering context.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)renderTemplateString:(NSString *)<em>string</em> error:(NSError **)<em>outError</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>string</em></dt>
+			<dd><p>A template string</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>outError</em></dt>
+			<dd><p>If there is an error loading or parsing template and
+partials, upon return contains an NSError object that
+describes the problem.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A string containing the rendering of the template string.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.3</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheSectionTagRenderingContext.h</code><br />
 	</div>				
 	
 	

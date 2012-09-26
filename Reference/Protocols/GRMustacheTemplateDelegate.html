@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.3 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -46,11 +46,7 @@
 	
 	<option value="//api/name/template:didInterpretReturnValueOfInvocation:as:">&nbsp;&nbsp;&nbsp;&nbsp;- template:didInterpretReturnValueOfInvocation:as:</option>
 	
-	<option value="//api/name/template:didRenderReturnValueOfInvocation:">&nbsp;&nbsp;&nbsp;&nbsp;- template:didRenderReturnValueOfInvocation:</option>
-	
 	<option value="//api/name/template:willInterpretReturnValueOfInvocation:as:">&nbsp;&nbsp;&nbsp;&nbsp;- template:willInterpretReturnValueOfInvocation:as:</option>
-	
-	<option value="//api/name/template:willRenderReturnValueOfInvocation:">&nbsp;&nbsp;&nbsp;&nbsp;- template:willRenderReturnValueOfInvocation:</option>
 	
 	<option value="//api/name/templateDidRender:">&nbsp;&nbsp;&nbsp;&nbsp;- templateDidRender:</option>
 	
@@ -90,11 +86,7 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/template:didInterpretReturnValueOfInvocation:as:">template:didInterpretReturnValueOfInvocation:as:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/template:didRenderReturnValueOfInvocation:">template:didRenderReturnValueOfInvocation:</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/template:willInterpretReturnValueOfInvocation:as:">template:willInterpretReturnValueOfInvocation:as:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/template:willRenderReturnValueOfInvocation:">template:willRenderReturnValueOfInvocation:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateDidRender:">templateDidRender:</a></span></li>
 	
@@ -181,22 +173,6 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/template:willRenderReturnValueOfInvocation:">&ndash;&nbsp;template:willRenderReturnValueOfInvocation:</a></code>
-		<span class="tooltip"><p>Sent right before <a href="../Classes/GRMustache.html">GRMustache</a> interprets and renders a value (Deprecated in
-<a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p></span>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/template:didRenderReturnValueOfInvocation:">&ndash;&nbsp;template:didRenderReturnValueOfInvocation:</a></code>
-		<span class="tooltip"><p>Sent right after <a href="../Classes/GRMustache.html">GRMustache</a> has interpreted and rendered a value (Deprecated
-in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p></span>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
 		<code><a href="#//api/name/template:willInterpretReturnValueOfInvocation:as:">&ndash;&nbsp;template:willInterpretReturnValueOfInvocation:as:</a></code>
 		<span class="tooltip"><p>Sent right before <a href="../Classes/GRMustache.html">GRMustache</a> interprets and renders a value.</p></span>
 	</span>
@@ -252,10 +228,8 @@ in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p></span>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>invocation</em></dt>
-			<dd><p>The invocation object providing information about the</p>
-
-<pre><code>                   value.
-</code></pre></dd>
+			<dd><p>The invocation object providing information about the
+value.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -272,76 +246,6 @@ in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p></span>
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
 		<p>v4.1</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="../Classes/GRMustacheInvocation.html">GRMustacheInvocation</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheTemplateDelegate.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/template:didRenderReturnValueOfInvocation:" title="template:didRenderReturnValueOfInvocation:"></a>
-	<h3 class="subsubtitle method-title">template:didRenderReturnValueOfInvocation:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Sent right after <a href="../Classes/GRMustache.html">GRMustache</a> has interpreted and rendered a value (Deprecated
-in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)template:(GRMustacheTemplate *)<em>template</em> didRenderReturnValueOfInvocation:(GRMustacheInvocation *)<em>invocation</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>template</em></dt>
-			<dd><p>The template that has rendered a value.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>invocation</em></dt>
-			<dd><p>The invocation object providing information about the</p>
-
-<pre><code>               value.
-</code></pre></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.12
-@deprecated v4.1</p>
 	</div>
 	
 	
@@ -395,10 +299,8 @@ in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>invocation</em></dt>
-			<dd><p>The invocation object providing information about the</p>
-
-<pre><code>                   value.
-</code></pre></dd>
+			<dd><p>The invocation object providing information about the
+value.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
@@ -415,76 +317,6 @@ in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p>
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
 		<p>v4.1</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="../Classes/GRMustacheInvocation.html">GRMustacheInvocation</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheTemplateDelegate.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/template:willRenderReturnValueOfInvocation:" title="template:willRenderReturnValueOfInvocation:"></a>
-	<h3 class="subsubtitle method-title">template:willRenderReturnValueOfInvocation:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Sent right before <a href="../Classes/GRMustache.html">GRMustache</a> interprets and renders a value (Deprecated in
-<a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (void)template:(GRMustacheTemplate *)<em>template</em> willRenderReturnValueOfInvocation:(GRMustacheInvocation *)<em>invocation</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>template</em></dt>
-			<dd><p>The template that is about to interpret a value.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>invocation</em></dt>
-			<dd><p>The invocation object providing information about the</p>
-
-<pre><code>               value.
-</code></pre></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.12
-@deprecated v4.1</p>
 	</div>
 	
 	
@@ -627,9 +459,9 @@ in <a href="../Classes/GRMustache.html">GRMustache</a> 4.1).</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-08-04)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-09-26)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						
 					</div>
 				</div>
