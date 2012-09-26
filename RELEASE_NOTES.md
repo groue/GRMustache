@@ -23,8 +23,8 @@ No new feature has been added, but semantics have been much improved. Many thank
 @end
 
 @interface GRMustacheVariableTagRenderingContext : NSObject
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
-- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError;
 @end
 ```
 
@@ -33,13 +33,13 @@ No new feature has been added, but semantics have been much improved. Many thank
 ```objc
 @protocol GRMustacheSectionTagHelper<NSObject>
 @required
-- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context;
 @end
 
 @interface GRMustacheSectionTagRenderingContext: NSObject
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
-- (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString;
+- (NSString *)render;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
 @end
 ```
 
@@ -99,7 +99,7 @@ extern NSString * const GRMustacheRenderingException;
 // Base protocol for "variable lambdas".
 @protocol GRMustacheVariableHelper<NSObject>
 @required
-- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+- (NSString *)renderVariable:(GRMustacheVariable *)variable;
 @end
 
 // Convenience class in order to avoid implementing a full class that conforms
@@ -631,7 +631,7 @@ New protocol:
 ```objc
 @protocol GRMustacheHelper<NSObject>
 @required
-- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context AVAILABLE_GRMUSTACHE_VERSION_1_9_AND_LATER;
+- (NSString *)renderSection:(GRMustacheSection *)section withContext:(id)context;
 @end
 ```
 
