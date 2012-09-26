@@ -411,17 +411,35 @@
 - (NSString *)renderObject:(id)object withFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 /**
+ * Deprecated method: Use renderObjectsFromArray: instead.
+ *
  * Renders a template with a context stack initialized with an array of objects.
  * 
  * @param objects  An array of context objects for interpreting Mustache tags.
  *
  * @return A string containing the rendered template.
  *
+ * @see renderObjectsFromArray:
+ *
  * @since v4.3
+ * @deprecated v5.3
  */
-- (NSString *)renderObjectsInArray:(NSArray *)objects AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (NSString *)renderObjectsInArray:(NSArray *)objects AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
 
 /**
+ * Renders a template with a context stack initialized with an array of objects.
+ *
+ * @param objects  An array of context objects for interpreting Mustache tags.
+ *
+ * @return A string containing the rendered template.
+ *
+ * @since v5.3
+ */
+- (NSString *)renderObjectsFromArray:(NSArray *)objects AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+
+/**
+ * Deprecated method: Use renderObjectsFromArray:withFilters: instead.
+ *
  * Renders a template with a context stack initialized with an array of objects.
  * 
  * @param objects  An array of context objects for interpreting Mustache tags.
@@ -429,9 +447,24 @@
  *
  * @return A string containing the rendered template.
  *
+ * @see renderObjectsFromArray:withFilters:
+ *
  * @since v4.3
+ * @deprecated v4.3
  */
-- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+
+/**
+ * Renders a template with a context stack initialized with an array of objects.
+ *
+ * @param objects  An array of context objects for interpreting Mustache tags.
+ * @param filters  An object that provides custom filters.
+ *
+ * @return A string containing the rendered template.
+ *
+ * @since v5.3
+ */
+- (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 /**
  * Renders a template without any context object for interpreting Mustache tags.

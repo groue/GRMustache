@@ -195,10 +195,20 @@
 
 - (NSString *)renderObjectsInArray:(NSArray *)objects
 {
-    return [self renderObjectsInArray:objects withFilters:nil];
+    return [self renderObjectsFromArray:objects withFilters:nil];
+}
+
+- (NSString *)renderObjectsFromArray:(NSArray *)objects
+{
+    return [self renderObjectsFromArray:objects withFilters:nil];
 }
 
 - (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters
+{
+    return [self renderObjectsFromArray:objects withFilters:filters];
+}
+
+- (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters
 {
     NSMutableString *buffer = [NSMutableString string];
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextObjects:objects];
