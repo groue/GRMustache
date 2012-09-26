@@ -28,7 +28,16 @@
 @class GRMustacheTemplate;
 
 /**
- * TODO
+ * A GRMustacheTemplateOverride is a rendering element that renders overridable
+ * partials as `{{<name}}...{{/name}}`.
+ *
+ * It conforms to the `GRMustacheRenderingOverride` protocol, so that it
+ * collaborates with runtimes for the resolving of rendering elements in the
+ * context of Mustache overridable partials.
+ *
+ * @see GRMustacheRenderingElement
+ * @see GRMustacheRenderingOverride
+ * @see GRMustacheRuntime
  */
 @interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement, GRMustacheRenderingOverride> {
     GRMustacheTemplate *_template;
@@ -36,7 +45,13 @@
 }
 
 /**
- * TODO
+ * Builds a GRMustacheTemplateOverride.
+ *
+ * @param template       The partial template that is overriden
+ * @param innerElements  The elements that may override elements of the
+ *                       overriden partial template.
+ *
+ * @return A GRMustacheTemplateOverride
  */
 + (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 

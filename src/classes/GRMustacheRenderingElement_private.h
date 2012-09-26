@@ -34,7 +34,8 @@
  * This syntax tree is made of objects conforming to the
  * GRMustacheRenderingElement.
  * 
- * Their responsability is to render, provided with a Mustache runtime.
+ * Their responsability is to render, provided with a Mustache runtime, through
+ * their `renderInBuffer:withRuntime:` implementation.
  * 
  * For instance, the template string "hello {{name}}!" would give four rendering
  * elements:
@@ -46,6 +47,10 @@
  * - a GRMustacheTemplate that would contain the three previous elements, and
  *   render the concatenation of their renderings.
  * 
+ * Rendering elements are able to override other rendering elements, in the
+ * context of Mustache overridable partials. This feature is backed on the
+ * `overridable` property and the `resolveOverridableRenderingElement:` method.
+ *
  * @see GRMustacheCompiler
  * @see GRMustacheRuntime
  */
@@ -54,7 +59,7 @@
 
 /**
  * Returns YES if rendering element can be overriden, in the context of
- * overridable partials.
+ * Mustache overridable partials.
  *
  * All classes conforming to the GRMustacheRenderingElement protocol return NO,
  * but GRMustacheSectionElement.
@@ -81,11 +86,15 @@
  * _element_ parameter.
  *
  * All classes conforming to the GRMustacheRenderingElement protocol return
- * _element_, but GRMustacheSectionElement.
+ * _element_, but GRMustacheSectionElement and GRMustacheTemplateOverride.
  *
  * @param element  A rendering element
  *
- * @return the resolution of the element in the context of overridable partials.
+ * @return the resolution of the element in the context of Mustache overridable
+ * partials.
+ *
+ * @see GRMustacheSectionElement
+ * @see GRMustacheTemplateOverride
  */
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 @end
