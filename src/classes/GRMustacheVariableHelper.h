@@ -73,13 +73,15 @@
 #pragma mark - GRMustacheVariableHelper
 
 /**
+ * Deprecated class. Use GRMustacheVariableTagHelper class instead.
+ *
  * The GRMustacheVariableHelper class helps building mustache helpers without
  * writing a custom class that conforms to the GRMustacheVariableHelper
  * protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
- * @see GRMustacheVariableHelper protocol
+ * @see GRMustacheVariableTagHelper class
  *
  * @since v5.1
  * @deprecated v5.3
