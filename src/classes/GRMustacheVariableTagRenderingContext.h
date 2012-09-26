@@ -26,27 +26,24 @@
 @class GRMustacheTemplateRepository;
 
 /**
- * A GRMustacheVariable represents a Mustache variable such as `{{name}}`.
- *
- * You will be provided with GRMustacheVariable objects when implementing
- * mustache lambda sections with objects conforming to the
- * deprecated GRMustacheVariableHelper protocol.
+ * You will be provided with GRMustacheVariableTagRenderingContext objects when
+ * implementing variable tag helpers with objects conforming to the
+ * GRMustacheVariableTagHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
- * @see GRMustacheVariableTagHelper
+ * @see GRMustacheVariableTagHelper protocol
  *
  * @since v5.1
- * @deprecated v5.3
  */
-@interface GRMustacheVariable : NSObject {
+@interface GRMustacheVariableTagRenderingContext : NSObject {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     id _runtime;
 }
 
 /**
- * Renders a template string with the current rendering context.
+ * Renders a template string.
  *
  * @param string    A template string
  * @param outError  If there is an error loading or parsing template and
@@ -56,13 +53,12 @@
  * @return A string containing the rendering of the template string.
  *
  * @since v5.1
- * @deprecated v5.3
  */
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 
 /**
- * Renders a partial template with the current rendering context.
+ * Renders a partial template.
  *
  * @param name      The name of the partial template.
  * @param outError  If there is an error loading or parsing template and
@@ -72,8 +68,7 @@
  * @return A string containing the rendering of the partial template.
  *
  * @since v5.1
- * @deprecated v5.3
  */
-- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 @end

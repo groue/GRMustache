@@ -20,43 +20,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheRenderingElement_private.h"
 
-@class GRMustacheExpression;
-@class GRMustacheTemplateRepository;
 @class GRMustacheSectionElement;
+@class GRMustacheRuntime;
 
-/**
- * A GRMustacheVariableElement is a rendering element that renders variable
- * tags such as `{{name}}` and `{{{name}}}`.
- *
- * For instance, the template string "{{name}} is {{age}} years old." would give
- * two GRMustacheVariableElement instances:
- *
- * - a GRMustacheVariableElement that renders the `name` key in a context.
- * - a GRMustacheVariableElement that renders the `age` key in a context.
- *
- * @see GRMustacheRenderingElement
- */
-@interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
+// Documented in GRMustacheSectionTagRenderingContext.h
+@interface GRMustacheSectionTagRenderingContext: NSObject {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
-    GRMustacheExpression *_expression;
-    GRMustacheSectionElement *_enumerableSectionElement;
-    BOOL _raw;
+    GRMustacheSectionElement *_sectionElement;
+    GRMustacheRuntime *_runtime;
 }
 
-/**
- * Builds and returns a GRMustacheVariableElement.
- *
- * @param expression  The expression that would evaluate against a runtime.
- * @param raw         NO if the value should be rendered HTML-escaped.
- *
- * @return a GRMustacheVariableElement
- *
- * @see GRMustacheExpression
- */
-+ (id)variableElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheSectionTagRenderingContext.h
+@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)render GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+/**
+ * Builds and returns a context suitable for GRMustacheSectionTagHelper.
+ *
+ * @param sectionElement    The underlying sectionElement.
+ * @param runtime           A runtime.
+ *
+ * @return A section rendering context.
+ *
+ * @see GRMustacheSectionTagHelper protocol
+ * @see GRMustacheSectionElement
+ * @see GRMustacheRuntime
+ */
++ (id)contextWithSectionElement:(GRMustacheSectionElement *)sectionElement runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 @end

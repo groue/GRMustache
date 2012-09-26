@@ -69,16 +69,17 @@
  *                            runtime.
  * @param templateRepository  A Template repository that allows helpers to
  *                            render alternate template strings through
- *                            GRMustacheSection objects.
+ *                            GRMustacheSectionTagRenderingContext objects.
  * @param templateString      A Mustache template string
  * @param innerRange          The range of the inner template string of the
  *                            section in _templateString_, that allows helpers
  *                            to get the section's inner template string through
- *                            GRMustacheSection objects.
+ *                            GRMustacheSectionTagRenderingContext objects.
  * @param inverted            YES if the section is {{^inverted}}.
  *                            Otherwise, NO.
- * @param overridable         YES if the section can override a super template
- *                            section.
+ * @param overridable         YES if the section can override another section,
+ *                            or be overriden, in the context of overridable
+ *                            partials.
  * @param innerElements       An array of GRMustacheRenderingElement that make
  *                            the section.
  *
@@ -86,10 +87,10 @@
  * 
  * @see GRMustacheExpression
  * @see GRMustacheRuntime
- * @see GRMustacheSection
+ * @see GRMustacheSectionTagRenderingContext
  * @see GRMustacheTemplateRepository
  * @see GRMustacheRuntime
- * @see GRMustacheSectionHelper protocol
+ * @see GRMustacheSectionTagHelper protocol
  */
 + (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 

@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2012 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,38 +21,36 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
-
-@class GRMustacheSectionElement;
-@class GRMustacheRuntime;
-
-// Documented in GRMustacheSection.h
-@interface GRMustacheSection: NSObject {
-@private
-    GRMustacheSectionElement *_sectionElement;
-    GRMustacheRuntime *_runtime;
-}
-
-// Documented in GRMustacheSection.h
-@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheSection.h
-- (NSString *)render GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheSection.h
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
+#import "GRMustacheAvailabilityMacros.h"
 
 /**
- * Builds and returns a section suitable for GRMustacheSectionHelper.
+ * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableTagHelper
+ * that, given a partial template name, renders this template.
  *
- * @param sectionElement    The underlying sectionElement.
- * @param runtime           A runtime.
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
- * @return A section.
+ * @see GRMustacheVariableTagHelper protocol
  *
- * @see GRMustacheSectionHelper protocol
- * @see GRMustacheSectionElement
- * @see GRMustacheRuntime
+ * @since v5.1
  */
-+ (id)sectionWithSectionElement:(GRMustacheSectionElement *)sectionElement runtime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
+@interface GRMustacheDynamicPartial: NSObject {
+    NSString *_name;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Dynamic Partials
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns a GRMustacheDynamicPartial that renders a partial template named
+ * _name_.
+ *
+ * @param name  A template name
+ *
+ * @return a GRMustacheDynamicPartial
+ *
+ * @since v5.1
+ */
++ (id)dynamicPartialWithName:(NSString *)name AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+
 @end

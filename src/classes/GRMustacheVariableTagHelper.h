@@ -23,32 +23,27 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@class GRMustacheVariable;
+@class GRMustacheVariableTagRenderingContext;
 
 
 // =============================================================================
-#pragma mark - <GRMustacheVariableHelper>
+#pragma mark - <GRMustacheVariableTagHelper>
 
 /**
- * Deprecated protocol. Use GRMustacheVariableTagHelper protocol instead.
+ * The protocol for implementing Mustache "lambda" variable tags.
  *
- * The deprecated protocol for implementing Mustache "lambda" variable tags.
- *
- * The responsability of a GRMustacheVariableHelper is to render a Mustache
+ * The responsability of a GRMustacheVariableTagHelper is to render a Mustache
  * variable tag such as `{{name}}`.
  *
- * When the data given to a Mustache variable tag is a GRMustacheVariableHelper,
- * GRMustache invokes the `renderVariable:` method of the helper, and inserts
- * the raw return value in the template rendering.
+ * When the data given to a Mustache variable tag is a GRMustacheVariableTagHelper,
+ * GRMustache invokes the `renderForVariableTagInContext:` method of the helper,
+ * and inserts the raw return value in the final rendering.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
  * @since v5.1
- * @deprecated v5.3
- *
- * @see GRMustacheVariableTagHelper
  */
-@protocol GRMustacheVariableHelper<NSObject>
+@protocol GRMustacheVariableTagHelper<NSObject>
 @required
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,51 +51,48 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns the rendering of a Mustache variable.
+ * Returns the rendering of a Mustache variable tag.
  *
- * @param variable   The variable to render
+ * @param context   A variable tag rendering context
  *
- * @return The rendering of the variable
+ * @return The rendering of the variable tag
  *
  * @since v5.1
- * @deprecated v5.3
  */
-- (NSString *)renderVariable:(GRMustacheVariable *)variable AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheVariableHelper
+#pragma mark - GRMustacheVariableTagHelper
 
 /**
- * The GRMustacheVariableHelper class helps building mustache helpers without
- * writing a custom class that conforms to the GRMustacheVariableHelper
+ * The GRMustacheVariableTagHelper class helps building mustache helpers without
+ * writing a custom class that conforms to the GRMustacheVariableTagHelper
  * protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
- * @see GRMustacheVariableHelper protocol
+ * @see GRMustacheVariableTagHelper protocol
  *
  * @since v5.1
- * @deprecated v5.3
  */
-@interface GRMustacheVariableHelper: NSObject<GRMustacheVariableHelper>
+@interface GRMustacheVariableTagHelper: NSObject<GRMustacheVariableTagHelper>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Creating Helpers
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns a GRMustacheVariableHelper object that executes the provided block
+ * Returns a GRMustacheVariableTagHelper object that executes the provided block
  * when rendering a variable tag.
  *
- * @param block   The block that renders a variable.
+ * @param block   The block that renders a variable tag.
  *
- * @return a GRMustacheVariableHelper object.
+ * @return a GRMustacheVariableTagHelper object.
  *
  * @since v5.1
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheVariableTagRenderingContext* context))block AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 @end
-

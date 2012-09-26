@@ -23,10 +23,10 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
+@interface GRMustacheTemplateDelegate5_0Test : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheTemplateDelegateTest
+@implementation GRMustacheTemplateDelegate5_0Test
 
 - (void)testTemplateWillRenderIsCalledForTemplate
 {
@@ -78,7 +78,7 @@
     };
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegate5_0Test}}" error:NULL];
     template.delegate = delegate;
     [template render];
     
@@ -98,7 +98,7 @@
     };
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegate5_0Test}}" error:NULL];
     template.delegate = delegate;
     [template render];
     
@@ -167,8 +167,8 @@
     STAssertEqualObjects(rendering, @"---delegate---", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationVariable, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationVariable, @"", @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
     STAssertEqualObjects(preRenderingValue, @"value", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }
@@ -201,8 +201,8 @@
     STAssertEqualObjects(rendering, @"<>", @"");
     STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
     STAssertEquals(templateDidRenderCount, (NSUInteger)1, @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationSection, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationSection, @"", @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
 }
@@ -275,10 +275,10 @@
     STAssertEqualObjects(preRenderingValue2, (id)nil, @"");
     STAssertEqualObjects(postRenderingValue1, @"delegate", @"");
     STAssertEqualObjects(postRenderingValue2, @(YES), @"");
-    STAssertEquals(preRenderingInterpretation1, GRMustacheInterpretationSection, @"", @"");
-    STAssertEquals(preRenderingInterpretation2, GRMustacheInterpretationVariable, @"", @"");
-    STAssertEquals(postRenderingInterpretation1, GRMustacheInterpretationVariable, @"", @"");
-    STAssertEquals(postRenderingInterpretation2, GRMustacheInterpretationSection, @"", @"");
+    STAssertEquals(preRenderingInterpretation1, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingInterpretation2, GRMustacheVariableTagInterpretation, @"", @"");
+    STAssertEquals(postRenderingInterpretation1, GRMustacheVariableTagInterpretation, @"", @"");
+    STAssertEquals(postRenderingInterpretation2, GRMustacheSectionTagInterpretation, @"", @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue
@@ -535,12 +535,12 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest" bundle:self.testBundle error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegate5_0Test" bundle:self.testBundle error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -551,12 +551,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -570,12 +570,12 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest" withExtension:@"mustache"] error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegate5_0Test" withExtension:@"mustache"] error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -586,12 +586,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -605,12 +605,12 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"] error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"] error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -621,12 +621,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -640,12 +640,12 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest_wrapper" bundle:self.testBundle error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegate5_0Test_wrapper" bundle:self.testBundle error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -656,12 +656,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -672,12 +672,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegate5_0Test}}" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -691,12 +691,12 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegate5_0Test_wrapper" withExtension:@"mustache"] error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -707,12 +707,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -723,12 +723,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegate5_0Test}}" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -742,12 +742,13 @@
             description = [invocation description];
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
+        NSError *error;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test_wrapper" ofType:@"mustache"] error:&error];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -758,12 +759,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegate5_0Test_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -774,12 +775,12 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegate5_0Test}}" error:NULL];
         template.delegate = delegate;
         [template render];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegate5_0Test" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -821,8 +822,8 @@
     STAssertEquals(templateDidRenderCount, (NSUInteger)0, @"");
     STAssertEquals(preRenderingTemplate, template, @"");
     STAssertEquals(postRenderingTemplate, template, @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationVariable, @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationVariable, @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
     STAssertEqualObjects(preRenderingValue, @"foo", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }

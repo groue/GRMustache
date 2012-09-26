@@ -103,7 +103,10 @@
 
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [GRMustacheSectionHelper helperWithBlock:block];
+#pragma clang diagnostic pop
 }
 
 @end

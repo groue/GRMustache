@@ -22,12 +22,17 @@
 
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheSectionHelper.h"
+#import "GRMustacheSectionTagHelper.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheSection_private.h"
+#import "GRMustacheSectionTagRenderingContext_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
+
+// Compatibility with deprecated declarations
+
+#import "GRMustacheSectionHelper.h"
+#import "GRMustacheSection_private.h"
 
 @interface GRMustacheSectionElement()
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
@@ -75,7 +80,7 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
-    [runtime delegateValue:value interpretation:GRMustacheInterpretationSection forRenderingToken:_expression.token usingBlock:^(id value) {
+    [runtime delegateValue:value interpretation:GRMustacheSectionTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
         
         GRMustacheRuntime *sectionRuntime = runtime;
         
@@ -133,6 +138,19 @@
                 for (id item in value) {
                     GRMustacheRuntime *itemRuntime = [sectionRuntime runtimeByAddingContextObject:item];
                     [self renderInnerElementsInBuffer:buffer withRuntime:itemRuntime];
+                }
+            }
+            return;
+        }
+        else if ([value conformsToProtocol:@protocol(GRMustacheSectionTagHelper)])
+        {
+            // Helper
+            if (!_inverted) {
+                GRMustacheRuntime *helperRuntime = [sectionRuntime runtimeByAddingContextObject:value];
+                GRMustacheSectionTagRenderingContext *context = [GRMustacheSectionTagRenderingContext contextWithSectionElement:self runtime:helperRuntime];
+                NSString *rendering = [(id<GRMustacheSectionTagHelper>)value renderForSectionTagInContext:context];
+                if (rendering) {
+                    [buffer appendString:rendering];
                 }
             }
             return;

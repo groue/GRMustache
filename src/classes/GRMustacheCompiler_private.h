@@ -57,7 +57,7 @@
  * - allows helpers to render alternate template strings that contain partials.
  * 
  * @see GRMustacheTemplateRepository
- * @see GRMustacheSection
+ * @see GRMustacheSectionTagRenderingContext
  */
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 

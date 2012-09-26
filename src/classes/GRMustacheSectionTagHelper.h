@@ -23,32 +23,27 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@class GRMustacheSection;
+@class GRMustacheSectionTagRenderingContext;
 
 
 // =============================================================================
-#pragma mark - <GRMustacheSectionHelper>
+#pragma mark - <GRMustacheSectionTagHelper>
 
 /**
- * Deprecated protocol. Use GRMustacheSectionTagHelper protocol instead.
+ * The protocol for implementing Section tag helpers.
  *
- * The deprecated protocol for implementing Mustache "lambda" sections.
- *
- * The responsability of a GRMustacheSectionHelper is to render a Mustache
+ * The responsability of a GRMustacheSectionTagHelper is to render a Mustache
  * section such as `{{#bold}}...{{/bold}}`.
  *
- * When the data given to a Mustache section is a GRMustacheSectionHelper,
- * GRMustache invokes the `renderSection:` method of the helper, and inserts the
- * raw return value in the template rendering.
+ * When the data given to a Mustache section is a GRMustacheSectionTagHelper,
+ * GRMustache invokes the `renderForSectionTagInContext:` method of the helper,
+ * and inserts the raw return value in the final rendering.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
  * @since v1.9
- * @deprecated v5.3
- *
- * @see GRMustacheSectionTagHelper
  */
-@protocol GRMustacheSectionHelper<NSObject>
+@protocol GRMustacheSectionTagHelper<NSObject>
 @required
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -58,76 +53,46 @@
 /**
  * Returns the rendering of a Mustache section.
  *
- * @param section   The section to render
+ * @param context   A section tag rendering context
  *
  * @return The rendering of the section
  *
  * @since v2.0
- * @deprecated v5.3
  */
-- (NSString *)renderSection:(GRMustacheSection *)section AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheSectionHelper
+#pragma mark - GRMustacheSectionTagHelper
 
 /**
- * The GRMustacheSectionHelper class helps building mustache helpers without
- * writing a custom class that conforms to the GRMustacheSectionHelper protocol.
+ * The GRMustacheSectionTagHelper class helps building mustache helpers without
+ * writing a custom class that conforms to the GRMustacheSectionTagHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
- * @see GRMustacheSectionHelper protocol
+ * @see GRMustacheSectionTagHelper protocol
  *
  * @since v2.0
- * @deprecated v5.3
- */
-@interface GRMustacheSectionHelper: NSObject<GRMustacheSectionHelper>
+ */ 
+@interface GRMustacheSectionTagHelper: NSObject<GRMustacheSectionTagHelper>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Creating Helpers
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns a GRMustacheSectionHelper object that executes the provided block
- * when rendering a section tag.
+ * Returns a GRMustacheSectionTagHelper object that executes the provided block
+ * when rendering a Mustache section.
  *
  * @param block   The block that renders a section.
  *
- * @return a GRMustacheSectionHelper object.
+ * @return a GRMustacheSectionTagHelper object.
  *
  * @since v2.0
- * @deprecated v5.3
  */
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3;
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSectionTagRenderingContext* context))block AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
 @end
 
-
-// =============================================================================
-#pragma mark - Compatibility with deprecated declarations
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-/**
- * Deprecated. Use GRMustacheSectionHelper instead.
- *
- * @since v1.9
- * @deprecated v5.1
- */
-AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_1
-@protocol GRMustacheHelper <GRMustacheSectionHelper>
-@end
-#pragma clang diagnostic pop
-
-/**
- * Deprecated. Use GRMustacheSectionHelper instead.
- *
- * @since v2.0
- * @deprecated v5.1
- */
-AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_1
-@interface GRMustacheHelper: GRMustacheSectionHelper
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheSection* section))block;
-@end

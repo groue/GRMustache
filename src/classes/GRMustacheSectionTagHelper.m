@@ -20,52 +20,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableHelper.h"
-#import "GRMustacheVariable.h"
-#import "GRMustacheError.h"
+#import "GRMustacheSectionTagHelper.h"
+#import "GRMustacheSectionTagRenderingContext.h"
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockVariableHelper
+#pragma mark - Private concrete class GRMustacheBlockSectionTagHelper
 
 /**
- * Private subclass of GRMustacheVariableHelper that render variable tags by
- * calling a block.
+ * Private subclass of GRMustacheSectionTagHelper that render sections by calling
+ * a block.
  */
-@interface GRMustacheBlockVariableHelper: GRMustacheVariableHelper {
+@interface GRMustacheBlockSectionTagHelper: GRMustacheSectionTagHelper {
 @private
-    NSString *(^_block)(GRMustacheVariable* variable);
+    NSString *(^_block)(GRMustacheSectionTagRenderingContext* context);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheVariable* variable))block;
+- (id)initWithBlock:(NSString *(^)(GRMustacheSectionTagRenderingContext* context))block;
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheVariableHelper
+#pragma mark - GRMustacheSectionTagHelper
 
-@implementation GRMustacheVariableHelper
+@implementation GRMustacheSectionTagHelper
 
-+ (id)helperWithBlock:(NSString *(^)(GRMustacheVariable* variable))block
++ (id)helperWithBlock:(NSString *(^)(GRMustacheSectionTagRenderingContext* context))block
 {
-    return [[[GRMustacheBlockVariableHelper alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheBlockSectionTagHelper alloc] initWithBlock:block] autorelease];
 }
 
-#pragma mark <GRMustacheVariableHelper>
+#pragma mark <GRMustacheSectionTagHelper>
 
-- (NSString *)renderVariable:(GRMustacheVariable *)variable
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
-    return [self description];
+    return [context render];
 }
 
 @end
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheBlockVariableHelper
+#pragma mark - Private concrete class GRMustacheBlockSectionTagHelper
 
-@implementation GRMustacheBlockVariableHelper
+@implementation GRMustacheBlockSectionTagHelper
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheVariable* variable))block
+- (id)initWithBlock:(NSString *(^)(GRMustacheSectionTagRenderingContext* context))block
 {
     self = [self init];
     if (self) {
@@ -81,19 +80,18 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheVariableHelper>
+#pragma mark <GRMustacheSectionTagHelper>
 
-- (NSString *)renderVariable:(GRMustacheVariable *)variable
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
     NSString *rendering = nil;
     
     if (_block) {
-        rendering = _block(variable);
+        rendering = _block(context);
     }
     
     return rendering;
 }
 
 @end
-
 

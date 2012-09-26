@@ -34,10 +34,10 @@
 }
 
 // Documented in GRMustacheVariable.h
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustacheVariable.h
-- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 /**
  * Builds and returns a variable suitable for GRMustacheVariableHelper.

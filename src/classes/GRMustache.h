@@ -90,14 +90,22 @@ typedef struct {
 
 @end
 
-#import "GRMustacheSection.h"
 #import "GRMustacheInvocation.h"
 #import "GRMustacheTemplate.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateRepository.h"
 #import "GRMustacheFilter.h"
-#import "GRMustacheVariable.h"
-#import "GRMustacheVariableHelper.h"
-#import "GRMustacheSectionHelper.h"
+#import "GRMustacheDynamicPartial.h"
+#import "GRMustacheVariableTagHelper.h"
+#import "GRMustacheVariableTagRenderingContext.h"
+#import "GRMustacheSectionTagHelper.h"
+#import "GRMustacheSectionTagRenderingContext.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
+
+// Compatibility with deprecated declarations
+
+#import "GRMustacheSectionHelper.h"
+#import "GRMustacheSection.h"
+#import "GRMustacheVariableHelper.h"
+#import "GRMustacheVariable.h"

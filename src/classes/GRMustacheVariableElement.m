@@ -21,13 +21,18 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheVariableHelper.h"
-#import "GRMustacheVariable_private.h"
+#import "GRMustacheVariableTagHelper.h"
+#import "GRMustacheVariableTagRenderingContext_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
+
+// Compatibility with deprecated declarations
+
+#import "GRMustacheVariableHelper.h"
+#import "GRMustacheVariable_private.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
@@ -55,7 +60,7 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
-    [runtime delegateValue:value interpretation:GRMustacheInterpretationVariable forRenderingToken:_expression.token usingBlock:^(id value) {
+    [runtime delegateValue:value interpretation:GRMustacheVariableTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
 
         // Interpret value
 
@@ -82,6 +87,18 @@
                 [_enumerableSectionElement retain];
             }
             [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
+        }
+        else if ([value conformsToProtocol:@protocol(GRMustacheVariableTagHelper)])
+        {
+            // Helper
+            
+            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
+            GRMustacheVariableTagRenderingContext *context = [GRMustacheVariableTagRenderingContext contextWithTemplateRepository:_templateRepository runtime:helperRuntime];
+            NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
+            if (rendering) {
+                // Never HTML escape helpers
+                [buffer appendString:rendering];
+            }
         }
         else if ([value conformsToProtocol:@protocol(GRMustacheVariableHelper)])
         {
