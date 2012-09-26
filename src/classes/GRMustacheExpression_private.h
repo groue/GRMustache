@@ -64,8 +64,18 @@
 - (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
- * Subclasses must override
+ * Returns a Boolean value that indicates whether the receiver and a given
+ * object are equal.
+ *
+ * Expressions are equal if and only if the result of their
+ * `evaluateInRuntime:asFilterValue:` implementation would return the same value
+ * for all runtimes.
+ *
+ * Default implementation is NSObject's one: subclasses must override.
+ *
+ * @param anObject  The object to be compared to the receiver.
+ *
+ * @return YES if the receiver and anObject are equal, otherwise NO.
  */
-- (BOOL)isEqual:(id)anObject;
+- (BOOL)isEqual:(id)anObject; // no availability macro for Foundation method declaration
 @end
