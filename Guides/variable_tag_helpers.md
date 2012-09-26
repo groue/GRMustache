@@ -259,7 +259,7 @@ How can this work? Let's assume the core interface of our Movie and Person class
 
 // And now implement the protocol:
 
-@implementation Movie
+@implementation Movie(GRMustache)
 
 - (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
 {
@@ -269,7 +269,7 @@ How can this work? Let's assume the core interface of our Movie and Person class
 
 @end
 
-@implementation Person
+@implementation Person(GRMustache)
 
 - (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
 {
