@@ -166,16 +166,19 @@ NSString *rendering = [template renderObjectsFromArray:@[helpers, movie]];
 ```
 
 
-GRMustache helpers vs. Mustache lambdas
----------------------------------------
+Compatibility with other Mustache implementations
+-------------------------------------------------
 
-**Warning: If your goal is to design GRMustache helpers that remain compatible with Mustache lambdas of [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), read the following with great care.**
+There are many [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations). They all basically enter one of these two sets:
 
-The strings returned by GRMustache helpers are directly inserted in the final rendering, without any further processing.
+- Implementations that do support "Mustache lambdas" as specified by the [specification](https://github.com/mustache/spec).
+- Implementations that do not support "Mustache lambdas" at all, or support a form of "Mustache lambdas" that does not comply with the [specification](https://github.com/mustache/spec).
 
-However, the specification [states](https://github.com/mustache/spec/blob/v1.1.2/specs/%7Elambdas.yml#L90) that "Lambdas used for sections should have their results parsed" (read, processed as a Mustache template, and rendered in the current context).
+GRMustache itself belongs to the first set, since you *can* write specification-compliant "mustache lambdas" with section tag helpers. However section tag helpers are more versatile than plain Mustache lambdas:
 
-In order to comply with the genuine Mustache behavior, a section tag helper MUST return the result of the `renderTemplateString:error:` method of its _section_ parameter, as the linking helper seen above, and a variable tag helper MUST return the result of a method of its _variable_ parameter.
+In order to be compatible with all specification-compliant implementations, your section tag helper MUST return the result of the `renderTemplateString:error:` method of its _context_ parameter, as the `link` helper seen above.
+
+For compatibility with other Mustache implementations, check their documentation.
 
 
 Sample code
