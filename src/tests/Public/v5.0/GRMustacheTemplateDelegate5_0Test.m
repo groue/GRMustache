@@ -167,8 +167,8 @@
     STAssertEqualObjects(rendering, @"---delegate---", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationVariable, @"", @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationVariable, @"", @"");
     STAssertEqualObjects(preRenderingValue, @"value", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }
@@ -201,8 +201,8 @@
     STAssertEqualObjects(rendering, @"<>", @"");
     STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
     STAssertEquals(templateDidRenderCount, (NSUInteger)1, @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationSection, @"", @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationSection, @"", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
 }
@@ -275,10 +275,10 @@
     STAssertEqualObjects(preRenderingValue2, (id)nil, @"");
     STAssertEqualObjects(postRenderingValue1, @"delegate", @"");
     STAssertEqualObjects(postRenderingValue2, @(YES), @"");
-    STAssertEquals(preRenderingInterpretation1, GRMustacheSectionTagInterpretation, @"", @"");
-    STAssertEquals(preRenderingInterpretation2, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation1, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation2, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingInterpretation1, GRMustacheInterpretationSection, @"", @"");
+    STAssertEquals(preRenderingInterpretation2, GRMustacheInterpretationVariable, @"", @"");
+    STAssertEquals(postRenderingInterpretation1, GRMustacheInterpretationVariable, @"", @"");
+    STAssertEquals(postRenderingInterpretation2, GRMustacheInterpretationSection, @"", @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue
@@ -822,8 +822,8 @@
     STAssertEquals(templateDidRenderCount, (NSUInteger)0, @"");
     STAssertEquals(preRenderingTemplate, template, @"");
     STAssertEquals(postRenderingTemplate, template, @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
+    STAssertEquals(preRenderingInterpretation, GRMustacheInterpretationVariable, @"");
+    STAssertEquals(postRenderingInterpretation, GRMustacheInterpretationVariable, @"");
     STAssertEqualObjects(preRenderingValue, @"foo", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }
