@@ -41,7 +41,7 @@
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
- * @since v1.9
+ * @since v5.3
  */
 @protocol GRMustacheSectionTagHelper<NSObject>
 @required
@@ -57,7 +57,7 @@
  *
  * @return The rendering of the section
  *
- * @since v2.0
+ * @since v5.3
  */
 - (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 @end
@@ -74,7 +74,7 @@
  *
  * @see GRMustacheSectionTagHelper protocol
  *
- * @since v2.0
+ * @since v5.3
  */ 
 @interface GRMustacheSectionTagHelper: NSObject<GRMustacheSectionTagHelper>
 
@@ -90,7 +90,7 @@
  *
  * @return a GRMustacheSectionTagHelper object.
  *
- * @since v2.0
+ * @since v5.3
  */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheSectionTagRenderingContext* context))block AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 

@@ -148,7 +148,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @return A GRMustacheRuntime object.
  *
  * @see GRMustacheFilterLibrary
- * @see -[GRMustacheTemplate renderObjectsInArray:withFilters:]
+ * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
  */
 + (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObjects:(NSArray *)contextObjects GRMUSTACHE_API_INTERNAL;
 
@@ -185,7 +185,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @return A GRMustacheRuntime object.
  *
  * @see -[GRMustacheTemplate renderObject:withFilters:]
- * @see -[GRMustacheTemplate renderObjectsInArray:withFilters:]
+ * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
  */
 - (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_INTERNAL;
 

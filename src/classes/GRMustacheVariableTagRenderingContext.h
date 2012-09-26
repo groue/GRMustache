@@ -34,7 +34,7 @@
  *
  * @see GRMustacheVariableTagHelper protocol
  *
- * @since v5.1
+ * @since v5.3
  */
 @interface GRMustacheVariableTagRenderingContext : NSObject {
 @private
@@ -52,7 +52,7 @@
  *
  * @return A string containing the rendering of the template string.
  *
- * @since v5.1
+ * @since v5.3
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
@@ -67,7 +67,7 @@
  *
  * @return A string containing the rendering of the partial template.
  *
- * @since v5.1
+ * @since v5.3
  */
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 

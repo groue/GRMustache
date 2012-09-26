@@ -41,7 +41,7 @@
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
  *
- * @since v5.1
+ * @since v5.3
  */
 @protocol GRMustacheVariableTagHelper<NSObject>
 @required
@@ -57,7 +57,7 @@
  *
  * @return The rendering of the variable tag
  *
- * @since v5.1
+ * @since v5.3
  */
 - (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 @end
@@ -75,7 +75,7 @@
  *
  * @see GRMustacheVariableTagHelper protocol
  *
- * @since v5.1
+ * @since v5.3
  */
 @interface GRMustacheVariableTagHelper: NSObject<GRMustacheVariableTagHelper>
 
@@ -91,7 +91,7 @@
  *
  * @return a GRMustacheVariableTagHelper object.
  *
- * @since v5.1
+ * @since v5.3
  */
 + (id)helperWithBlock:(NSString *(^)(GRMustacheVariableTagRenderingContext* context))block AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 

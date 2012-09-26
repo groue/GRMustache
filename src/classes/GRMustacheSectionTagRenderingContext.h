@@ -32,7 +32,7 @@
  *
  * @see GRMustacheSectionTagHelper protocol
  *
- * @since v1.3
+ * @since v5.3
  */
 @interface GRMustacheSectionTagRenderingContext: NSObject {
 @private
@@ -50,7 +50,7 @@
  * The literal inner content of the section, with unprocessed Mustache
  * `{{tags}}`.
  *
- * @since v2.0
+ * @since v5.3
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
@@ -64,7 +64,7 @@
  * 
  * @return A string containing the rendered inner content.
  *
- * @since v2.0
+ * @since v5.3
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
@@ -83,7 +83,7 @@
  *
  * @return A string containing the rendering of the template string.
  *
- * @since v4.3
+ * @since v5.3
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
