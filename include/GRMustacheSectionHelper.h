@@ -73,12 +73,14 @@
 #pragma mark - GRMustacheSectionHelper
 
 /**
+ * Deprecated class. Use GRMustacheSectionTagHelper class instead.
+ *
  * The GRMustacheSectionHelper class helps building mustache helpers without
  * writing a custom class that conforms to the GRMustacheSectionHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
  *
- * @see GRMustacheSectionHelper protocol
+ * @see GRMustacheSectionTagHelper protocol
  *
  * @since v2.0
  * @deprecated v5.3

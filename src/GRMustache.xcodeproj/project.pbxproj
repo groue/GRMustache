@@ -51,8 +51,8 @@
 		564D9AAC15CA373800A32AA7 /* GRMustacheScopedExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 564D9AA915CA373700A32AA7 /* GRMustacheScopedExpression_private.h */; };
 		564D9AAD15CA373800A32AA7 /* GRMustacheScopedExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 564D9AAA15CA373800A32AA7 /* GRMustacheScopedExpression.m */; };
 		564D9AAE15CA373800A32AA7 /* GRMustacheScopedExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 564D9AAA15CA373800A32AA7 /* GRMustacheScopedExpression.m */; };
-		5664EBF416136F2400922B50 /* GRMustacheVariableTagHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664EBF216136F2300922B50 /* GRMustacheVariableTagHelper.h */; };
-		5664EBF516136F2400922B50 /* GRMustacheVariableTagHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664EBF216136F2300922B50 /* GRMustacheVariableTagHelper.h */; };
+		5664EBF416136F2400922B50 /* GRMustacheVariableTagHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664EBF216136F2300922B50 /* GRMustacheVariableTagHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5664EBF516136F2400922B50 /* GRMustacheVariableTagHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664EBF216136F2300922B50 /* GRMustacheVariableTagHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5664EBF616136F2400922B50 /* GRMustacheVariableTagHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5664EBF316136F2300922B50 /* GRMustacheVariableTagHelper.m */; };
 		5664EBF716136F2400922B50 /* GRMustacheVariableTagHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5664EBF316136F2300922B50 /* GRMustacheVariableTagHelper.m */; };
 		5664EC0116137DF900922B50 /* GRMustacheSectionTagRenderingContext_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664EBFE16137DEF00922B50 /* GRMustacheSectionTagRenderingContext_private.h */; };
@@ -81,8 +81,8 @@
 		56683CF6161382CA0035FD9C /* GRMustacheVariableHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56683CF1161382CA0035FD9C /* GRMustacheVariableHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56683CF7161382CA0035FD9C /* GRMustacheVariableHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56683CF2161382CA0035FD9C /* GRMustacheVariableHelper.m */; };
 		56683CF8161382CA0035FD9C /* GRMustacheVariableHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56683CF2161382CA0035FD9C /* GRMustacheVariableHelper.m */; };
-		56683CFB161384930035FD9C /* GRMustacheDynamicPartial.h in Headers */ = {isa = PBXBuildFile; fileRef = 56683CF9161384930035FD9C /* GRMustacheDynamicPartial.h */; };
-		56683CFC161384930035FD9C /* GRMustacheDynamicPartial.h in Headers */ = {isa = PBXBuildFile; fileRef = 56683CF9161384930035FD9C /* GRMustacheDynamicPartial.h */; };
+		56683CFB161384930035FD9C /* GRMustacheDynamicPartial.h in Headers */ = {isa = PBXBuildFile; fileRef = 56683CF9161384930035FD9C /* GRMustacheDynamicPartial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56683CFC161384930035FD9C /* GRMustacheDynamicPartial.h in Headers */ = {isa = PBXBuildFile; fileRef = 56683CF9161384930035FD9C /* GRMustacheDynamicPartial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56683CFD161384930035FD9C /* GRMustacheDynamicPartial.m in Sources */ = {isa = PBXBuildFile; fileRef = 56683CFA161384930035FD9C /* GRMustacheDynamicPartial.m */; };
 		56683CFE161384930035FD9C /* GRMustacheDynamicPartial.m in Sources */ = {isa = PBXBuildFile; fileRef = 56683CFA161384930035FD9C /* GRMustacheDynamicPartial.m */; };
 		56683D03161389070035FD9C /* GRMustacheSectionTagHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56683D00161389070035FD9C /* GRMustacheSectionTagHelperTest.m */; };
