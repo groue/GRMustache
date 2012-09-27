@@ -34,6 +34,10 @@
 @end
 
 @implementation GRMustacheTestingDelegate
+@synthesize templateWillRenderBlock=_templateWillRenderBlock;
+@synthesize templateDidRenderBlock=_templateDidRenderBlock;
+@synthesize templateWillInterpretBlock=_templateWillInterpretBlock;
+@synthesize templateDidInterpretBlock=_templateDidInterpretBlock;
 
 - (void)dealloc
 {
