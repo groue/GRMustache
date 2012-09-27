@@ -323,7 +323,11 @@ GRMustache *template = [GRMustacheTemplate templateFromResource:@"base" bundle:n
 NSString *rendering = [template renderObject:data];
 ```
 
-How can this work? Let's assume the core interface of our Movie and Person classes is already defined, and let's have them render themselves:
+How can this work? GRMustache is written in Objective-C, not Ruby: there is no automagic rendering of an object with a partial, through some conversion from a class name to a partial name.
+
+No. We actually have our Movie and Person classes explicitly render themselves with the movie.mustache and person.mustache partials, with the code below.
+
+(Of course, you can write automagic code in your own application.)
 
 ```objc
 
