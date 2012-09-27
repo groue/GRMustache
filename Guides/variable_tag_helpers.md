@@ -159,8 +159,8 @@ id filters = @{ @"format": [GRMustacheFilter filterWithBlock:^id(id date) {
     return [formatter stringFromDate:date];
 }]};
 NSString *rendering = [GRMustacheTemplate renderObject:blogPost
-                                            fromString:@"{{format(date)}}"
                                            withFilters:filters
+                                            fromString:@"{{format(date)}}"
                                                  error:NULL];
 ```
 
