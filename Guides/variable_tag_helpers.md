@@ -197,7 +197,7 @@ id data = @{
 NSString *rendering = [template render:data];
 ```
 
-However, keep in mind the longer version that uses `renderTemplateNamed:error:`, that we'll find again in the final example.
+However, keep in mind the longer version that uses `renderTemplateNamed:error:`, that we'll find again in some interesting examples below.
 
 
 Examples
