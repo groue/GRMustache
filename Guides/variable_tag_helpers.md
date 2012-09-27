@@ -7,7 +7,7 @@ Variable Tag Helpers
 Overview
 --------
 
-Variable tag helpers allow you to use the full Mustache rendering engine when rendering a variable tag such as `{{name}}`.
+Variable tag helpers allow you to use the full Mustache rendering engine for simple variable tag such as `{{name}}`.
 
 When GRMustache renders a variable tag `{{name}}`, it looks for the `name` key in the [context stack](runtime/context_stack.md), using the standard Key-Value Coding `valueForKey:` method. GRMustache may find a string, an [array](runtime/loops.md), a [boolean](runtime/booleans.md), whatever, or a *variable tag helper*. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
