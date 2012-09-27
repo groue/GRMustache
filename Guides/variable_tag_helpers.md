@@ -287,7 +287,7 @@ id data = @{
                                                        lastName:@"Welles"]]
 };
 
-GRMustache *template = [GRMustacheTemplate templateFromContentsOfFile:@".../base.mustache" error:NULL];
+GRMustache *template = [GRMustacheTemplate templateFromResource:@"base" bundle:nil error:NULL];
 NSString *rendering = [template renderObject:data];
 ```
 
