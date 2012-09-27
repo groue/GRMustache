@@ -220,7 +220,7 @@ NSString *rendering = [template renderObject:data];
 Templates:
 
     base.mustache
-    {{movie}}
+    {{movies}}
 
     movie.mustache
     {{title}} by {{director}}
@@ -232,15 +232,19 @@ Data:
 
 ```objc
 id data = @{
-    @"movie": [Movie movieWithTitle:@"Citizen Kane"
-                           director:[Person personWithFirstName:@"Orson"
-                                                       lastName:@"Welles"]]
+    @"movies": @[
+        [Movie movieWithTitle:@"Citizen Kane"
+                     director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
+        [Movie movieWithTitle:@"Sunset Blvd."
+                     director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
+    ]
 };
 ```
 
 Rendering:
 
     Citizen Kane by Orson Welles
+    Sunset Blvd. by Billy Wilder
 
 How can this work? Let's assume the core interface of our Movie and Person classes is already defined, and let's have them render themselves:
 
@@ -282,9 +286,12 @@ How can this work? Let's assume the core interface of our Movie and Person class
 // And render:
 
 id data = @{
-    @"movie": [Movie movieWithTitle:@"Citizen Kane"
-                           director:[Person personWithFirstName:@"Orson"
-                                                       lastName:@"Welles"]]
+    @"movies": @[
+        [Movie movieWithTitle:@"Citizen Kane"
+                     director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
+        [Movie movieWithTitle:@"Sunset Blvd."
+                     director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
+    ]
 };
 
 GRMustache *template = [GRMustacheTemplate templateFromResource:@"base" bundle:nil error:NULL];
