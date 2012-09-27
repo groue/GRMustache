@@ -20,8 +20,9 @@ Features
 
 Those features are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
-- **key paths**, as `{{ person.name }}`, for direct access to an object's property.
-- "**implicit iterator**", aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
+- **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
+- "**Implicit iterator**", aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
+- "**Mustache lambads**", that allow section tags such as `{{#name}}...{{/name}}`, and variable tags like `{{name}}` to perform custom rendering. Those are documented at [section_tag_helpers.md](section_tag_helpers.md) and [variable_tag_helpers.md](variable_tag_helpers.md).
 
 ### Language extensions
 
