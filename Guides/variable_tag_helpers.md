@@ -327,6 +327,8 @@ There are many [other Mustache implementations](https://github.com/defunkt/musta
 - Implementations that do support "Mustache lambdas" as specified by the [specification](https://github.com/mustache/spec).
 - Implementations that do not support "Mustache lambdas" at all, or support a form of "Mustache lambdas" that does not comply with the [specification](https://github.com/mustache/spec).
 
+For instance, the popular Ruby implementation [defunkt/mustache](https://github.com/defunkt/mustache) is conform, but the even more popular javascript implementation [janl/mustache.js](https://github.com/janl/mustache.js) is not.
+
 GRMustache itself belongs to the first set, since you *can* write specification-compliant "mustache lambdas" with variable tag helpers. However variable tag helpers are more versatile than plain Mustache lambdas:
 
 In order to be compatible with all specification-compliant implementations, your variable tag helper MUST return the result of the `renderTemplateString:error:` or `renderTemplateNamed:error:` methods of its _context_ parameter, and it MUST be embedded with triple braces in your templates: `{{{helper}}}`.
