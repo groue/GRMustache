@@ -29,6 +29,7 @@
 @end
 
 @implementation GRMustacheTemplateOverride
+@synthesize template=_template;
 
 + (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements
 {
