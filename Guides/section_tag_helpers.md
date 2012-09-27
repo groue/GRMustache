@@ -3,18 +3,19 @@
 Section Tag Helpers
 ===================
 
-Section tag helpers allow you to render a Mustache section such as `{{#name}}...{{/name}}` with you own custom code.
-
 
 Overview
 --------
+
+Section tag helpers allow you to render a Mustache section such as `{{#name}}...{{/name}}` with you own custom code.
 
 When GRMustache renders a section `{{#name}}...{{/name}}`, it looks for the `name` key in the [context stack](runtime/context_stack.md), using the standard Key-Value Coding `valueForKey:` method. GRMustache may find a string, an [array](runtime/loops.md), a [boolean](runtime/booleans.md), whatever, or a *section tag helper*. It's here a matter of attaching code, instead of regular values, to the keys of your data objects.
 
 GRMustache recognizes a section tag helper when it finds an object that conforms to the `GRMustacheSectionTagHelper` protocol.
 
 
-### GRMustacheSectionTagHelper protocol and class
+GRMustacheSectionTagHelper protocol and class
+---------------------------------------------
 
 This protocol is defined as:
 
