@@ -66,7 +66,7 @@ GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:b
 
 Bundles provide a flat, non-hierarchical, resource storage. Hence this hierarchy of partials is not available to templates stored as bundle resources.
 
-However, You can embed a full directory and its contents as a bundle resource, and fall backto URL-based of file path-based APIs:
+However, You can embed a full directory and its contents as a bundle resource, and fall back to URL-based of file path-based APIs:
 
 ```objc
 // URL of the templates directory resource
