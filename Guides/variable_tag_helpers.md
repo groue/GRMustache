@@ -217,10 +217,10 @@ NSString *rendering = [template renderObject:data];
 
 ### Have objects able to "render themselves"
 
-Templates:
+Base template and partials:
 
     base.mustache
-    {{movies}}
+    {{movie}}
 
     movie.mustache
     {{title}} by {{director}}
@@ -228,23 +228,22 @@ Templates:
     person.mustache
     {{firstName}} {{lastName}}
 
-Data:
-
-```objc
-id data = @{
-    @"movies": @[
-        [Movie movieWithTitle:@"Citizen Kane"
-                     director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
-        [Movie movieWithTitle:@"Sunset Blvd."
-                     director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
-    ]
-};
-```
-
 Rendering:
 
     Citizen Kane by Orson Welles
-    Sunset Blvd. by Billy Wilder
+
+Render code:
+
+```objc
+id data = @{
+    @"movie": [Movie movieWithTitle:@"Citizen Kane"
+                           director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]]
+    ]
+};
+
+GRMustache *template = [GRMustacheTemplate templateFromResource:@"base" bundle:nil error:NULL];
+NSString *rendering = [template renderObject:data];
+```
 
 How can this work? Let's assume the core interface of our Movie and Person classes is already defined, and let's have them render themselves:
 
@@ -281,15 +280,36 @@ How can this work? Let's assume the core interface of our Movie and Person class
 }
 
 @end
+```
 
+### Render collections of objects
 
-// And render:
+Using the same Movie and Person class introduced above, we can easily render a list of movies:
 
+Base template and partials:
+
+    base.mustache
+    {{movies}}  {{! note the plural }}
+
+    movie.mustache
+    {{title}} by {{director}}
+    
+    person.mustache
+    {{firstName}} {{lastName}}
+
+Rendering:
+
+    Citizen Kane by Orson Welles
+    Some Like It Hot by Billy Wilder
+
+Render code:
+
+```objc
 id data = @{
     @"movies": @[
         [Movie movieWithTitle:@"Citizen Kane"
                      director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
-        [Movie movieWithTitle:@"Sunset Blvd."
+        [Movie movieWithTitle:@"Some Like It Hot"
                      director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
     ]
 };
