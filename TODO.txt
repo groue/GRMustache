@@ -1,1 +1,0 @@
-- Document `{{> path/to/partial }}` and `{{> ../partial }}` in partials.md

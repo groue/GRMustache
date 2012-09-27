@@ -32,6 +32,71 @@ Depending on the method which has been used to create the original template, par
 Check [Guides/template_repositories.md](template_repositories.md) for more partial loading strategies.
 
 
+Partials in the file system
+---------------------------
+
+When you identify a template through a URL or a file path, you are able to navigate through a hierarchy of directories and partial files.
+
+The partial tag `{{>name}}` actually interprets the *name* as a *path*, and loads the template relatively to the embedding template. For example, given the following hierarchy:
+
+    - templates
+        - a.mustache
+        - partials
+            - b.mustache
+
+The a.mustache template can embed b.mustache with the `{{> partials/b }}` tag, and b.mustache can embed a.mustache with the `{{> ../a }}` tag.
+
+```objc
+// Render a.mustache
+NSString *aPath = @"/path/to/templates/a.mustache";
+GRMustacheTemplate *aTemplate = [GRMustacheTemplate templateFromContentsOfFile:aPath error:NULL];
+[aTemplate render...];
+
+// Render b.mustache
+NSString *bPath = @"/path/to/templates/partials/b.mustache";
+GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:bPath error:NULL];
+[bTemplate render...];
+```
+
+
+
+### Template Hierarchy in an NSBundle
+
+Bundles provide a flat, non-hierarchical, resource storage. Hence this hierarchy of partials is not available to templates stored as bundle resources.
+
+However, You can embed a full directory and its contents as a bundle resource, and fall backto URL-based of file path-based APIs:
+
+```objc
+// URL of the templates directory resource
+NSString *templatesPath = [[NSBundle mainBundle] pathForResource:@"templates" ofType:nil];
+
+// Render a.mustache
+NSString *aPath = [templatesPath stringByAppendingPathComponent:@"a.mustache"];
+GRMustacheTemplate *aTemplate = [GRMustacheTemplate templateFromContentsOfFile:aPath error:NULL];
+[aTemplate render...];
+
+// Render b.mustache
+NSString *bPath = [templatesPath stringByAppendingPathComponent:@"partials/b.mustache"];
+GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:bPath error:NULL];
+[bTemplate render...];
+```
+
+You may also use the `GRMustacheTemplateRepository` class, that will be introduced in the [template_repositories.md](template_repositories.md):
+
+```objc
+// Repository of templates stored in templates directory resource:
+NSString *templatesPath = [[NSBundle mainBundle] pathForResource:@"templates" ofType:nil];
+GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath];
+
+// Render a.mustache
+GRMustacheTemplate *aTemplate = [repository templateForName:@"a" error:NULL];
+[aTemplate render...];
+
+// Render b.mustache
+GRMustacheTemplate *bTemplate = [repository templateForName:@"partials/b" error:NULL];
+[bTemplate render...];
+```
+
 Overriding portions of partials
 -------------------------------
 
