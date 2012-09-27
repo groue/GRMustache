@@ -138,7 +138,6 @@ For example, using a category on top of an existing class:
     return [formatter stringFromDate:self.date];
 }
 @end
-```
 
 // September 27th, 2012
 BlogPost *blogPost = ...;
