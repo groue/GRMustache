@@ -371,7 +371,7 @@ Using the same Movie and Person class introduced above, we can easily render a l
 Base template and partials:
 
     base.mustache
-    {{movies}}  {{! note the plural }}
+    {{movies}}  {{! render a collection }}
 
     movie.mustache
     {{title}} by {{director}}
