@@ -3,7 +3,7 @@
 Variable Tag Helpers
 ====================
 
-Variable tag helpers allow you to render a Mustache variable tag such as `{{name}}` with you own custom code.
+Variable tag helpers allow you to use the full Mustache rendering engine when rendering a variable tag such as `{{name}}`.
 
 
 Overview
@@ -52,7 +52,7 @@ The `renderTemplateNamed:error:` method is a shortcut that returns the *renderin
 
 ### Purpose of variable tag helpers
 
-Variable tag helpers are designed to let you send simple variable tags on steroids. Let's see an example, based on the story of a very short template snippet:
+Variable tag helpers are designed to let you send simple variable tags on steroids by leveraging the full Mustache engine. Let's see an example, based on the story of a very short template snippet:
 
     by {{author}}
 
@@ -87,6 +87,82 @@ NSString *rendering = [template render:data];
 Using this technique, you can still safely HTML-escape your values, while performing a complex rendering out from a simple variable tag.
 
 Now you understand why the output of variable tag helpers is not HTML-escaped: your helpers use rendering APIs that already provide HTML escaping.
+
+
+### What variable tag helpers are not
+
+Variable tag helpers are not the right tool for rendering computed properties such as the full name of a person (defined as the concatenation of his first and last names), or a formatted value.
+
+They sure can perform such a job. But one does not use a cannon to kill a Mosquito.
+
+For computed properties, simply provide the computed property right in your data object:
+
+```objc
+@interface Person
+@property (nonatomic, copy) NSString *firstName;
+@property (nonatomic, copy) NSString *lastName;
+@property (nonatomic, readonly) NSString *fullName;
+@end
+
+@implementation Person
+- (NSString *)fullName
+{
+    return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
+}
+@end
+
+// Hello Alfred Burroughs
+Person *person = [Person new];
+person.firstName = @"Alfred";
+person.lastName = @"Burroughs";
+NSString *rendering = [GRMustacheTemplate renderObject:person
+                                            fromString:@"{{fullName}}"
+                                                 error:NULL];
+```
+
+If your template needs a computed property that should not "pollute" your base class, consider declaring a category on your class, or use [filters](filters.md).
+
+For example, using a category on top of an existing class:
+
+```objc
+#import "BlogPost"
+
+@interface BlogPost(GRMustache)
+@property (nonatomic, readonly) NSString *formattedDate;
+@end
+
+@implementation BlogPost(GRMustache)
+- (NSString *)formattedDate
+{
+    NSDateFormatter *formatter = [NSDateFormatter ...];
+    return [formatter stringFromDate:self.date];
+}
+@end
+```
+
+// September 27th, 2012
+BlogPost *blogPost = ...;
+NSString *rendering = [GRMustacheTemplate renderObject:blogPost
+                                            fromString:@"{{formattedDate}}"
+                                                 error:NULL];
+```
+
+Using filters:
+
+```objc
+#import "BlogPost"
+
+// September 27th, 2012
+BlogPost *blogPost = ...;
+id filters = @{ @"format": [GRMustacheFilter filterWithBlock:^id(id date) {
+    NSDateFormatter *formatter = [NSDateFormatter ...];
+    return [formatter stringFromDate:date];
+}]};
+NSString *rendering = [GRMustacheTemplate renderObject:blogPost
+                                            fromString:@"{{format(date)}}"
+                                           withFilters:filters
+                                                 error:NULL];
+```
 
 
 #### Dynamic partials
