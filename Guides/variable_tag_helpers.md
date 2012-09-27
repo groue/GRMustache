@@ -14,7 +14,8 @@ When GRMustache renders a variable tag `{{name}}`, it looks for the `name` key i
 GRMustache recognizes a variable tag helper when it finds an object that conforms to the `GRMustacheVariableTagHelper` protocol.
 
 
-### GRMustacheVariableTagHelper protocol and class
+GRMustacheVariableTagHelper protocol and class
+----------------------------------------------
 
 This protocol is defined as:
 
@@ -164,7 +165,8 @@ NSString *rendering = [GRMustacheTemplate renderObject:blogPost
 ```
 
 
-#### Dynamic partials
+Dynamic partials
+----------------
 
 You may not want to embed inline templates in your code, and keep them in partial templates. The example above could be rewritten this way:
 
@@ -196,6 +198,7 @@ NSString *rendering = [template render:data];
 ```
 
 However, keep in mind the longer version that uses `renderTemplateNamed:error:`, that we'll find again in the final example.
+
 
 Examples
 --------
