@@ -231,25 +231,23 @@ Templates:
 Data:
 
 ```objc
-Person *orson = [Person personWithFirstName:@"Orson" lastName:@"Welles"];
-Movie *movie = [Movie movieWithTitle:@"Citizen Kane" director:orson];
-id data = @{ @"movie": movie };
+id data = @{
+    @"movie": [Movie movieWithTitle:@"Citizen Kane"
+                           director:[Person personWithFirstName:@"Orson"
+                                                       lastName:@"Welles"]]
+};
 ```
 
-Render:
+Rendering:
 
     Citizen Kane by Orson Welles
 
-```objc
-NSString *rendering = [template renderObject:data];
-```
-
-How can this work? Let's assume the core interface of our Movie and Person classes is already defined, and let's have them render themselves with a partial:
+How can this work? Let's assume the core interface of our Movie and Person classes is already defined, and let's have them render themselves:
 
 ```objc
 
 // Declare categories on our classes so that they conform to the
-// GRMustacheVariableTagHelper protocol.
+// GRMustacheVariableTagHelper protocol:
 
 @interface Movie(GRMustache)<GRMustacheVariableTagHelper>
 @end
@@ -257,7 +255,8 @@ How can this work? Let's assume the core interface of our Movie and Person class
 @interface Person(GRMustache)<GRMustacheVariableTagHelper>
 @end
 
-// And now implement the protocol:
+
+// Now implement the protocol:
 
 @implementation Movie(GRMustache)
 
@@ -278,6 +277,18 @@ How can this work? Let's assume the core interface of our Movie and Person class
 }
 
 @end
+
+
+// And render:
+
+id data = @{
+    @"movie": [Movie movieWithTitle:@"Citizen Kane"
+                           director:[Person personWithFirstName:@"Orson"
+                                                       lastName:@"Welles"]]
+};
+
+GRMustache *template = [GRMustacheTemplate templateFromContentsOfFile:@".../base.mustache" error:NULL];
+NSString *rendering = [template renderObject:data];
 ```
 
 
