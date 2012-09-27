@@ -107,7 +107,7 @@ id data = @{
 NSString *rendering = [template render:data];
 ```
 
-Since this pattern should be common, the library ships with the `GRMustacheDynamicPartial` class, which is less verbose:
+Since some of you may fall in love with dynamic partials, the library ships with the `GRMustacheDynamicPartial` class, which is less verbose:
 
 ```objc
 id data = @{
