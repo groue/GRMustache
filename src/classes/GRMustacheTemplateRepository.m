@@ -347,6 +347,16 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
+    // Rebase template names starting with a /
+    if ([name characterAtIndex:0] == '/') {
+        name = [name substringFromIndex:1];
+        baseTemplateID = nil;
+    }
+    
+    if (name.length == 0) {
+        return nil;
+    }
+    
     if (baseTemplateID) {
         NSAssert([baseTemplateID isKindOfClass:[NSURL class]], @"");
         if (_templateExtension.length == 0) {
@@ -400,6 +410,16 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
+    // Rebase template names starting with a /
+    if ([name characterAtIndex:0] == '/') {
+        name = [name substringFromIndex:1];
+        baseTemplateID = nil;
+    }
+    
+    if (name.length == 0) {
+        return nil;
+    }
+    
     if (baseTemplateID) {
         NSAssert([baseTemplateID isKindOfClass:[NSString class]], @"");
         NSString *basePath = [(NSString *)baseTemplateID stringByDeletingLastPathComponent];

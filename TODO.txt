@@ -1,2 +1,1 @@
-- Allow "absolute" partial paths as {{>/partials/person}}. This should strip the initial slash, and embed the template of ID `...templateIDForName:@"partials/person" relativeToTemplateID:nil]`.
 - Document `{{> path/to/partial }}` and `{{> ../partial }}` in partials.md
