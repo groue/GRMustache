@@ -1,2 +1,1 @@
-- consider renaming renderVariable: renderAsMustacheVariable: (would improve https://gist.github.com/3765850 readability)
-- consider renaming renderSection: renderAsMustacheSection: 
+- Allow "absolute" partial paths as {{>/partials/person}}. This should strip the initial slash, and embed the template of ID `...templateIDForName:@"partials/person" relativeToTemplateID:nil]`.
