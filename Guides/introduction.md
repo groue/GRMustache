@@ -32,6 +32,10 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
     
     Filters are documented in [filters.md](filters.md).
 
+- **support for partial templates in a file system hierarchy**.
+    
+    Use relative or absolute paths to your partial templates in your partial tags: see [partials.md](partials.md).
+
 - "**overridable partials**", aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
     Overridable partials are documented in [partials.md](partials.md).

@@ -4,15 +4,29 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.4.0
+
+### Support for templates and partials stored in a hierarchy of directories
+
+When your templates are stored in a hierarchy of directories, you need to refer to [partial templates](Guides/partials.md) in both relative and absolute ways, depending on the context.
+
+Your [variable tag helpers](Guides/variable_tag_helpers.md) and your [section tag helpers](Guides/section_tag_helpers.md) will typically use absolute paths, in order to always include the same partial template, regardless of the hierarchical position of the templates that use them.
+
+Relative partial paths look like regular Mustache partial tags: `{{> header }}`, `{{> partials/header }}`.
+
+GRMustache v5.4.0 brings absolute paths, that start with a slash: `{{> /path/to/partial }}`. 
+
+The root of absolute paths is specified with `GRMustacheTemplateRepository` objects: check the full story at [Guides/template_repositories.md](Guides/template_repositories.md).
+
 ## v5.3.0
 
-**API cleanup**
+### API cleanup
 
 The introduction of variable tag helpers in v5.1.0 introduced many confusing APIs. Those are still there, but deprecated.
 
 No new feature has been added, but semantics have been much improved. Many thanks to [@pierlo](https://github.com/pierlo) for his help.
 
-### Helpers API changes
+**Helpers API changes**
 
 `GRMustacheVariableTagHelper` replaces `GRMustacheVariableHelper`. See [Guides/variable_tag_helpers.md](Guides/variable_tag_helpers.md).
 
@@ -43,11 +57,11 @@ No new feature has been added, but semantics have been much improved. Many thank
 @end
 ```
 
-### GRMustacheTemplateDelegate API changes
+**GRMustacheTemplateDelegate API changes**
 
 In the `GRMustacheInterpretation` enumeration, `GRMustacheSectionTagInterpretation` replaces `GRMustacheInterpretationSection`, and `GRMustacheVariableTagInterpretation` replaces `GRMustacheInterpretationVariable`.
 
-### GRMustacheTemplate API changes
+**GRMustacheTemplate API changes**
 
 `[GRMustacheTemplate renderObjectsFromArray:]` and `[GRMustacheTemplate renderObjectsFromArray:withFilters:]` replace `[GRMustacheTemplate renderObjectsInArray:]` and `[GRMustacheTemplate renderObjectsInArray:withFilters:]`.
 

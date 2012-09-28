@@ -48,7 +48,7 @@ The `GRMustacheVariableTagRenderingContext` parameter provides the following met
 ```
 The `renderTemplateString:error:` method returns the *rendering of a template string*. The eventual `{{tags}}` in the template string are interpolated. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
 
-The `renderTemplateNamed:error:` method is a shortcut that returns the *rendering of a partial template*, given its name.
+The `renderTemplateNamed:error:` method is a shortcut that returns the *rendering of a partial template*, given its name. If your templates are stored in a directory hierarchy, you might want to provide the absolute path to the partial in a [template repository](template_repositories.md).
 
 
 ### Purpose of variable tag helpers
@@ -199,6 +199,7 @@ NSString *rendering = [template render:data];
 
 However, keep in mind the longer version that uses `renderTemplateNamed:error:`, that we'll find again in some interesting examples below.
 
+And again, if your templates are stored in a directory hierarchy, you might want to provide the absolute path to the partial in a [template repository](template_repositories.md).
 
 Examples
 --------

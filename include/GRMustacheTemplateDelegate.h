@@ -45,7 +45,7 @@ typedef enum {
      *
      * @since v5.3
      */
-    GRMustacheSectionTagInterpretation = 0,
+    GRMustacheSectionTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER = 0,
     
     /**
      * The value is interpreted by a Mustache variable tag such as `{{name}}`.
@@ -54,7 +54,7 @@ typedef enum {
      *
      * @since v5.3
      */
-    GRMustacheVariableTagInterpretation,
+    GRMustacheVariableTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER,
     
     
     // Deprecated values
@@ -69,7 +69,7 @@ typedef enum {
      * @since v4.1
      * @deprecated v5.3
      */
-    GRMustacheInterpretationSection AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = GRMustacheSectionTagInterpretation,
+    GRMustacheInterpretationSection AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = 0,
 
     /**
      * The value is interpreted by a Mustache variable tag such as `{{name}}`.
@@ -79,7 +79,7 @@ typedef enum {
      * @since v4.1
      * @deprecated v5.3
      */
-    GRMustacheInterpretationVariable AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = GRMustacheVariableTagInterpretation,
+    GRMustacheInterpretationVariable AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3,
     
 } GRMustacheInterpretation;
 

@@ -35,14 +35,14 @@ typedef enum {
      *
      * @since v1.0
      */
-    GRMustacheErrorCodeParseError,
+    GRMustacheErrorCodeParseError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER,
     
     /**
      * The error code for not found templates and partials.
      *
      * @since v1.0
      */
-    GRMustacheErrorCodeTemplateNotFound,
+    GRMustacheErrorCodeTemplateNotFound AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER,
 } GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
 

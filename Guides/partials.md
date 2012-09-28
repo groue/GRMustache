@@ -37,7 +37,7 @@ Partials in the file system
 
 When you identify a template through a URL or a file path, you are able to navigate through a hierarchy of directories and partial files.
 
-The partial tag `{{>name}}` actually interprets the *name* as a *path*, and loads the template relatively to the embedding template. For example, given the following hierarchy:
+The partial tag `{{>name}}` actually interprets the *name* as a *path*, and loads the template *relatively* to the embedding template. For example, given the following hierarchy:
 
     - templates
         - a.mustache
@@ -60,7 +60,20 @@ GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:b
 [bTemplate render...];
 ```
 
+### Absolute paths to partials
 
+When your templates are stored in a hierarchy of directories, you sometimes need to refer to a partial template in an absolute way, that does not depend of the location of the embedding template.
+
+Compare:
+
+    `{{> partials/header }}`
+    `{{> /partials/header }}`   {{! with a leading slash }}
+
+The first partial tag provides a *relative path*, and refers to a different template, depending on the path of the including template.
+
+The latter always references the same partial, with an *absolute path*.
+
+Absolute partial paths need a root, and the objects that set this root are `GRMustacheTemplateRepository` objects. The rest of the story is documented at [template_repositories.md](template_repositories.md).
 
 ### Template Hierarchy in an NSBundle
 
@@ -83,7 +96,7 @@ GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:b
 [bTemplate render...];
 ```
 
-You may also use the `GRMustacheTemplateRepository` class, that will be introduced in the [template_repositories.md](template_repositories.md):
+You may also use the `GRMustacheTemplateRepository` class, that is documented in [template_repositories.md](template_repositories.md):
 
 ```objc
 // Repository of templates stored in templates directory resource:
