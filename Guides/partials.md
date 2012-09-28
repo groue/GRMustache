@@ -48,18 +48,6 @@ The a.mustache template can embed b.mustache with the `{{> partials/b }}` tag, a
 
 Never use file extensions in your partial tags. `{{> partials/b.mustache }}` would have you get an error of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeTemplateNotFound`. 
 
-```objc
-// Render a.mustache
-NSString *aPath = @"/path/to/templates/a.mustache";
-GRMustacheTemplate *aTemplate = [GRMustacheTemplate templateFromContentsOfFile:aPath error:NULL];
-[aTemplate render...];
-
-// Render b.mustache
-NSString *bPath = @"/path/to/templates/partials/b.mustache";
-GRMustacheTemplate *bTemplate = [GRMustacheTemplate templateFromContentsOfFile:bPath error:NULL];
-[bTemplate render...];
-```
-
 ### Absolute paths to partials
 
 When your templates are stored in a hierarchy of directories, you sometimes need to refer to a partial template in an absolute way, that does not depend of the location of the embedding template.
