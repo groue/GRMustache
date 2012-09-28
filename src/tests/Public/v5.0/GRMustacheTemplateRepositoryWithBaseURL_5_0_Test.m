@@ -23,10 +23,10 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheTemplateRepositoryWithBaseURLTest : GRMustachePublicAPITest
+@interface GRMustacheTemplateRepositoryWithBaseURL_5_0_Test : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheTemplateRepositoryWithBaseURLTest
+@implementation GRMustacheTemplateRepositoryWithBaseURL_5_0_Test
 
 - (void)testTemplateRepositoryWithBaseURL
 {

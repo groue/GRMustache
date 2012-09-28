@@ -58,11 +58,11 @@
  * For instance, a file-based data source may use NSString objects containing
  * paths to the templates.
  * 
- * You should try to choose "human-readable" template IDs. That is because
- * template IDs are embedded in the description of errors that may happen during
- * a template processing, in order to help the library user locate, and fix, the
- * faulting template.
- * 
+ * You should try to choose "human-readable" template IDs, because template IDs
+ * are embedded in the description of errors that may happen during a template
+ * processing, in order to help the library user locate, and fix, the faulting
+ * template.
+ *
  * Whenever relevant, template and partial hierarchies are supported via the
  * _baseTemplateID_ parameter: it contains the template ID of the enclosing
  * template, or nil when the data source is asked for a template ID for a
@@ -71,11 +71,14 @@
  * 
  * Not all data sources have to implement hierarchies: they can simply ignore
  * this parameter.
- * 
- * The returned value can be nil: the library user would then eventually get an
- * NSError of domain GRMustacheErrorDomain and code
+ *
+ * Data sources that implement hierarchies have to implement their own support
+ * for absolute partial paths.
+ *
+ * The return value of this method can be nil: the library user would then
+ * eventually get an NSError of domain GRMustacheErrorDomain and code
  * GRMustacheErrorCodeTemplateNotFound.
- * 
+ *
  * @param templateRepository  The GRMustacheTemplateRepository asking for a
  *                            template ID.
  * @param name                The name of the template or template partial.

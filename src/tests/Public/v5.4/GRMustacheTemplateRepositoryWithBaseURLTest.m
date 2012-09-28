@@ -20,17 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_3
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_4
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheTemplateRepositoryWithBaseURL_future_Test : GRMustachePublicAPITest
+@interface GRMustacheTemplateRepositoryWithBaseURLTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheTemplateRepositoryWithBaseURL_future_Test
+@implementation GRMustacheTemplateRepositoryWithBaseURLTest
 
 - (void)testAbsolutePartialName
 {
-    NSURL *URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepository_future_Test" withExtension:nil];
+    NSURL *URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest" withExtension:nil];
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL];
     GRMustacheTemplate *template = [repository templateForName:@"base" error:NULL];
     NSString *rendering = [template render];
