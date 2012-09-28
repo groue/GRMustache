@@ -168,7 +168,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:blogPost
 Dynamic partials
 ----------------
 
-You may not want to embed inline templates in your code, and keep them in partial templates:
+You may not want to embed inline templates in your code. Helpers can refer to partial templates as well:
 
 ```objc
 id data = @{
