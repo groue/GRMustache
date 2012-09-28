@@ -287,19 +287,32 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             return nil;
         }
         
-        // store an empty template before parsing, so that we support recursive partials
+        
+        // store an empty template before compiling, so that we support
+        // recursive partials
+        
         template = [GRMustacheTemplate templateWithInnerElements:nil];
         [_templateForTemplateID setObject:template forKey:templateID];
         
-        // prepare for GRMustacheCompilerDataSource methods
-        id previousParsedTemplateID = _currentlyParsedTemplateID;
-        _currentlyParsedTemplateID = templateID;
         
-        // parse
-        NSArray *renderingElements = [self renderingElementsFromString:templateString templateID:templateID error:outError];
+        // We are about to compile templateString. GRMustacheCompiler may
+        // invoke [self renderingElementForTemplateName:error:] when compiling
+        // partial tags {{> name }}. Since partials are relative, we need to
+        // know the ID of the currently parsed template.
+        //
+        // And since partials may embed other partials, we need to handle the
+        // currently parsed template ID in a recursive way.
         
-        // parsing done
-        _currentlyParsedTemplateID = previousParsedTemplateID;
+        NSArray *renderingElements = nil;
+        {
+            id previousParsedTemplateID = _currentlyParsedTemplateID;
+            _currentlyParsedTemplateID = templateID;
+            renderingElements = [self renderingElementsFromString:templateString templateID:templateID error:outError];
+            _currentlyParsedTemplateID = previousParsedTemplateID;
+        }
+        
+        
+        // compiling done
         
         if (renderingElements) {
             template.innerElements = renderingElements;
