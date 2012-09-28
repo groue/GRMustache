@@ -17,7 +17,7 @@ How To
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache5-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache5-iOS.a` to your project.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 5.3'` to your Podfile.
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 5.4'` to your Podfile.
 
 GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
 
