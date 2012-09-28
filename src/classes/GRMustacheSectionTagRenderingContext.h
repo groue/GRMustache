@@ -25,7 +25,7 @@
 
 /**
  * You will be provided with GRMustacheSectionTagRenderingContext objects when
- * implementing variable tag helpers with objects conforming to the
+ * implementing section tag helpers with objects conforming to the
  * GRMustacheSectionTagHelper protocol.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md
