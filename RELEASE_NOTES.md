@@ -16,7 +16,7 @@ Relative partial paths look like regular Mustache partial tags: `{{> header }}`,
 
 GRMustache v5.4.0 brings absolute paths, that start with a slash: `{{> /path/to/partial }}`. 
 
-The root of absolute paths is specified with `GRMustacheTemplateRepository` objects: check the full story at [Guides/template_repositories.md](Guides/template_repositories.md).
+The full story starts at [Guides/partials.md](Guides/partials.md#partials-in-the-file-system).
 
 ## v5.3.0
 
