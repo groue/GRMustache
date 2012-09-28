@@ -46,7 +46,7 @@ The partial tag `{{>name}}` actually interprets the *name* as a *path*, and load
 
 The a.mustache template can embed b.mustache with the `{{> partials/b }}` tag, and b.mustache can embed a.mustache with the `{{> ../a }}` tag.
 
-Never use file extensions in your partial tags. `{{> partials/b.mustache }}` would have you get an èrror of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeTemplateNotFound`. 
+Never use file extensions in your partial tags. `{{> partials/b.mustache }}` would have you get an error of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeTemplateNotFound`. 
 
 ```objc
 // Render a.mustache
