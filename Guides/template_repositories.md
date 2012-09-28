@@ -139,7 +139,7 @@ NSString *rendering = [aTemplate renderObject:...];
 
 ### Absolute paths to partials and helpers
 
-When you implement a variable or section tag helper that uses a partial, you want it to always include the same partial, whichever is the hierarchical position of the templates that use it. Again, absolute paths to partials are the solution.
+When you implement a variable or section tag helper that uses a partial, you want it to always include the same partial, regardless of the hierarchical position of the templates that use it. Again, absolute paths to partials are the solution.
 
 See [variable_tag_helpers.md](variable_tag_helpers.md) and [section_tag_helpers.md](section_tag_helpers.md) for more information about tag helpers.
 
