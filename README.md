@@ -58,7 +58,7 @@ Loading templates:
 
 - [templates.md](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
 - [partials.md](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
-- [templates_repositories.md](GRMustache/blob/master/Guides/template_repositories.md): how to load templates and partials from uncommon sources.
+- [templates_repositories.md](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
 
 Rendering templates:
 
