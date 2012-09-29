@@ -22,9 +22,9 @@
 
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheTemplateOverride()
-@property (nonatomic, retain, readonly) GRMustacheTemplate *template;
 - (id)initWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements;
 @end
 
@@ -43,8 +43,18 @@
     [super dealloc];
 }
 
+#pragma mark - GRMustacheRenderingElement
 
-#pragma mark - GRMustacheRenderingOverride + GRMustacheRenderingElement
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
+{
+    runtime = [runtime runtimeByAddingTemplateOverride:self];
+    [_template renderInBuffer:buffer withRuntime:runtime];
+}
+
+- (BOOL)isOverridable
+{
+    return NO;
+}
 
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
@@ -52,31 +62,6 @@
         element = [innerElement resolveOverridableRenderingElement:element];
     }
     return element;
-}
-
-
-#pragma mark - GRMustacheRenderingOverride
-
-- (BOOL)isEqual:(id)anObject
-{
-    if (![anObject isKindOfClass:[GRMustacheTemplateOverride class]]) {
-        return NO;
-    }
-    
-    return (((GRMustacheTemplateOverride *)anObject).template == _template);
-}
-
-#pragma mark - GRMustacheRenderingElement
-
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
-{
-    runtime = [runtime runtimeByAddingRenderingOverride:self];
-    [_template renderInBuffer:buffer withRuntime:runtime];
-}
-
-- (BOOL)isOverridable
-{
-    return NO;
 }
 
 

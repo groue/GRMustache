@@ -23,7 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
-#import "GRMustacheRuntime_private.h"
 
 @class GRMustacheTemplate;
 
@@ -31,18 +30,25 @@
  * A GRMustacheTemplateOverride is a rendering element that renders overridable
  * partials as `{{<name}}...{{/name}}`.
  *
- * It conforms to the `GRMustacheRenderingOverride` protocol, so that it
- * collaborates with runtimes for the resolving of rendering elements in the
+ * It collaborates with runtimes for the resolving of rendering elements in the
  * context of Mustache overridable partials.
  *
  * @see GRMustacheRenderingElement
- * @see GRMustacheRenderingOverride
  * @see GRMustacheRuntime
  */
-@interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement, GRMustacheRenderingOverride> {
+@interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement> {
     GRMustacheTemplate *_template;
     NSArray *_innerElements;
 }
+
+/**
+ * The overridable partial template.
+ *
+ * This property is used by [GRMustacheRuntime assertAcyclicTemplateOverride:].
+ *
+ * @see GRMustacheRuntime
+ */
+@property (nonatomic, retain, readonly) GRMustacheTemplate *template GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds a GRMustacheTemplateOverride.

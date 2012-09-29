@@ -28,22 +28,7 @@
 @protocol GRMustacheRenderingElement;
 @class GRMustacheTemplate;
 @class GRMustacheToken;
-
-/**
- * TODO
- */
-@protocol GRMustacheRenderingOverride <NSObject>
-@required
-/**
- * TODO
- */
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
-- (BOOL)isEqual:(id)anObject;
-@end
+@class GRMustacheTemplateOverride;
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 /**
@@ -71,11 +56,11 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
     BOOL _parentHasContext;
     BOOL _parentHasFilter;
     BOOL _parentHasTemplateDelegate;
-    BOOL _parentHasRenderingOverride;
+    BOOL _parentHasTemplateOverride;
     GRMustacheRuntime *_parent;
     GRMustacheTemplate *_template;
     id<GRMustacheTemplateDelegate> _templateDelegate;
-    id<GRMustacheRenderingOverride> _renderingOverride;
+    GRMustacheTemplateOverride *_templateOverride;
     id _contextObject;
     id _filterObject;
 }
@@ -192,7 +177,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 /**
  * TODO
  */
-- (GRMustacheRuntime *)runtimeByAddingRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride GRMUSTACHE_API_INTERNAL;
+- (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found

@@ -86,7 +86,8 @@
  * _element_ parameter.
  *
  * All classes conforming to the GRMustacheRenderingElement protocol return
- * _element_, but GRMustacheSectionElement and GRMustacheTemplateOverride.
+ * _element_, but GRMustacheSectionElement, GRMustacheTemplateOverride, and
+ * GRMustacheTemplate.
  *
  * @param element  A rendering element
  *

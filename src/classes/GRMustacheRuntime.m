@@ -33,6 +33,7 @@
 #import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheFilterLibrary_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheTemplateOverride_private.h"
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
@@ -43,12 +44,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 @interface GRMustacheRuntime()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 - (id)initWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject;
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride contextObject:(id)contextObject;
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride filterObject:(id)filterObject;
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride renderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride contextObject:(id)contextObject;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride filterObject:(id)filterObject;
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride templateOverride:(GRMustacheTemplateOverride *)templateOverride;
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element;
-- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride;
+- (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
 @end
 
 @implementation GRMustacheRuntime
@@ -88,7 +89,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
                                        parentHasContext:_contextObject || _parentHasContext
                                         parentHasFilter:_filterObject || _parentHasFilter
                               parentHasTemplateDelegate:_templateDelegate || _parentHasTemplateDelegate
-                             parentHasRenderingOverride:_renderingOverride || _parentHasRenderingOverride
+                              parentHasTemplateOverride:_templateOverride || _parentHasTemplateOverride
                                        templateDelegate:templateDelegate] autorelease];
 }
 
@@ -103,7 +104,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
                                        parentHasContext:_contextObject || _parentHasContext
                                         parentHasFilter:_filterObject || _parentHasFilter
                               parentHasTemplateDelegate:_templateDelegate || _parentHasTemplateDelegate
-                             parentHasRenderingOverride:_renderingOverride || _parentHasRenderingOverride
+                              parentHasTemplateOverride:_templateOverride || _parentHasTemplateOverride
                                           contextObject:contextObject] autorelease];
 }
 
@@ -118,25 +119,25 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
                                        parentHasContext:_contextObject || _parentHasContext
                                         parentHasFilter:_filterObject || _parentHasFilter
                               parentHasTemplateDelegate:_templateDelegate || _parentHasTemplateDelegate
-                              parentHasRenderingOverride:_renderingOverride || _parentHasRenderingOverride
+                              parentHasTemplateOverride:_templateOverride || _parentHasTemplateOverride
                                            filterObject:filterObject] autorelease];
 }
 
-- (GRMustacheRuntime *)runtimeByAddingRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+- (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
 {
-    if (renderingOverride == nil) {
+    if (templateOverride == nil) {
         return self;
     }
     
-    [self assertAcyclicRenderingOverride:renderingOverride];
+    [self assertAcyclicTemplateOverride:templateOverride];
     
     return [[[GRMustacheRuntime alloc] initWithTemplate:_template
                                                  parent:self
                                        parentHasContext:_contextObject || _parentHasContext
                                         parentHasFilter:_filterObject || _parentHasFilter
                               parentHasTemplateDelegate:_templateDelegate || _parentHasTemplateDelegate
-                             parentHasRenderingOverride:_renderingOverride || _parentHasRenderingOverride
-                                      renderingOverride:renderingOverride] autorelease];
+                              parentHasTemplateOverride:_templateOverride || _parentHasTemplateOverride
+                                       templateOverride:templateOverride] autorelease];
 }
 
 - (void)dealloc
@@ -228,24 +229,24 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    if (_renderingOverride) {
-        element = [_renderingOverride resolveOverridableRenderingElement:element];
+    if (_templateOverride) {
+        element = [_templateOverride resolveOverridableRenderingElement:element];
     }
-    if (_parentHasRenderingOverride) {
+    if (_parentHasTemplateOverride) {
         element = [_parent resolveOverridableRenderingElement:element];
     }
     return element;
 }
 
-- (void)assertAcyclicRenderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+- (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
 {
-    if (_renderingOverride) {
-        if ([_renderingOverride isEqual:renderingOverride]) {
+    if (_templateOverride) {
+        if (_templateOverride.template == templateOverride.template) {
             [NSException raise:GRMustacheRenderingException format:@"Override cycle"];
         }
     }
-    if (_parentHasRenderingOverride) {
-        [_parent assertAcyclicRenderingOverride:renderingOverride];
+    if (_parentHasTemplateOverride) {
+        [_parent assertAcyclicTemplateOverride:templateOverride];
     }
 }
 
@@ -306,7 +307,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return self;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride templateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
 {
     self = [super init];
     if (self) {
@@ -316,12 +317,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         _parentHasContext = parentHasContext;
         _parentHasFilter = parentHasFilter;
         _parentHasTemplateDelegate = parentHasTemplateDelegate;
-        _parentHasRenderingOverride = parentHasRenderingOverride;
+        _parentHasTemplateOverride = parentHasTemplateOverride;
     }
     return self;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride contextObject:(id)contextObject
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride contextObject:(id)contextObject
 {
     self = [super init];
     if (self) {
@@ -331,12 +332,12 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         _parentHasContext = parentHasContext;
         _parentHasFilter = parentHasFilter;
         _parentHasTemplateDelegate = parentHasTemplateDelegate;
-        _parentHasRenderingOverride = parentHasRenderingOverride;
+        _parentHasTemplateOverride = parentHasTemplateOverride;
     }
     return self;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride filterObject:(id)filterObject
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride filterObject:(id)filterObject
 {
     self = [super init];
     if (self) {
@@ -346,22 +347,22 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
         _parentHasContext = parentHasContext;
         _parentHasFilter = parentHasFilter;
         _parentHasTemplateDelegate = parentHasTemplateDelegate;
-        _parentHasRenderingOverride = parentHasRenderingOverride;
+        _parentHasTemplateOverride = parentHasTemplateOverride;
     }
     return self;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasRenderingOverride:(BOOL)parentHasRenderingOverride renderingOverride:(id<GRMustacheRenderingOverride>)renderingOverride
+- (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride templateOverride:(GRMustacheTemplateOverride *)templateOverride
 {
     self = [super init];
     if (self) {
         _template = [template retain];
         _parent = [parent retain];
-        _renderingOverride = [renderingOverride retain];
+        _templateOverride = [templateOverride retain];
         _parentHasContext = parentHasContext;
         _parentHasFilter = parentHasFilter;
         _parentHasTemplateDelegate = parentHasTemplateDelegate;
-        _parentHasRenderingOverride = parentHasRenderingOverride;
+        _parentHasTemplateOverride = parentHasTemplateOverride;
     }
     return self;
 }
