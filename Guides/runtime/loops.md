@@ -14,8 +14,10 @@ Each item enters the context stack on its turn. Below, the `name` key will be lo
     - {{name}}
     {{/items}}
 
-Arrays of scalar values
------------------------
+Mustache variable tags such as `{{items}}` can also be given an enumerable object: they then render the concatenation of the rendering of each item.
+
+Lists of scalar values
+----------------------
 
 The "implicit iterator" `{{.}}` tag will help you iterating arrays of strings or numbers, generally objects that don't have any dedicated key for rendering themselves.
 

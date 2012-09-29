@@ -22,7 +22,8 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - "**Implicit iterator**", aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
-- "**Mustache lambdas**", that allow section tags such as `{{#name}}...{{/name}}`, and variable tags like `{{name}}` to perform custom rendering. Those are documented at [section_tag_helpers.md](section_tag_helpers.md) and [variable_tag_helpers.md](variable_tag_helpers.md).
+- "**Mustache lambdas for sections tags**", allow section tags such as `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at [section_tag_helpers.md](section_tag_helpers.md).
+- "**Mustache lambdas for variable tags**", that allow variable tags like `{{item}}` to perform custom rendering. You may think of Ruby on Rails' `<%= render @item %>`. Those are documented at [variable_tag_helpers.md](variable_tag_helpers.md).
 
 ### Language extensions
 
@@ -39,6 +40,8 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 - "**overridable partials**", aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
     Overridable partials are documented in [partials.md](partials.md).
+
+- **loops in variable tags**: in GRMustache, a simple variable tag `{{items}}` renders as the concatenation of the rendering of each individual items. You may think of Ruby on Rails' `<%= render @items %>`.
 
 - "**anchored key paths**", as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     

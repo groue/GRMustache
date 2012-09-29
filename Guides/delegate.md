@@ -64,9 +64,11 @@ typedef enum {
 } GRMustacheInterpretation;
 ```
 
-`GRMustacheVariableTagInterpretation` tells you that the return value is rendered by a Mustache variable tag such as `{{name}}`. Basically, GRMustache simply invokes its `description` method. See [Guides/runtime.md](runtime.md) for more information.
+`GRMustacheVariableTagInterpretation` tells you that the return value is rendered by a Mustache variable tag such as `{{name}}`. `GRMustacheSectionTagInterpretation` tells you that the return value is used by a Mustache section tag such as `{{#name}}...{{/name}}`.
 
-`GRMustacheSectionTagInterpretation` tells you that the return value is used by a Mustache section tag such as `{{#name}}...{{/name}}`. Mustache sections are versatile: there are boolean sections, loop sections, and lambda sections, and this depends solely on the rendered value, that is to say: the return value of the invocation. Again, see [Guides/runtime.md](runtime.md) for more information.
+Given a value, both kinds of tags do not behave the same. For example, a variable tag will render "0" when given a false boolean, when a section will simply not render at all.
+
+See [Guides/runtime.md](runtime.md) for more information.
 
 
 ### A practical use: debugging templates
