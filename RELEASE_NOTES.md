@@ -4,6 +4,13 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.4.1
+
+Fix some corner cases in the handling of [overridable partials](Guides/partials.md), should your templates include conflicting overriding sections. Basically, the last one wins:
+
+`{{<layout}} {{$content}}Not rendered{{/content}} {{$content}}Rendered{{/content}} {{/layout}}`.
+
+
 ## v5.4.0
 
 ### Support for templates and partials stored in a hierarchy of directories
