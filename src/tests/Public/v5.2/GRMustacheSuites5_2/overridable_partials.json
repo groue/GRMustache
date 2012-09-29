@@ -70,6 +70,13 @@
       "expected": "overriden overriden"
     },
     {
+      "name": "Out of several overriding sections, the last one wins",
+      "data": { },
+      "template": "{{<partial}}{{$overridable}}ignored{{/overridable}}{{$overridable}}overriden{{/overridable}}{{/partial}}",
+      "partials": { "partial": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
+    },
+    {
       "name": "Overridable partials can override overridable sections in their own overridable partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
