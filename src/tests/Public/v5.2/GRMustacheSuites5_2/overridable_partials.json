@@ -77,6 +77,15 @@
       "expected": "overriden"
     },
     {
+      "name": "Partials can define the last winning overridable section",
+      "data": { },
+      "template": "{{<partial1}}{{$overridable}}ignored{{/overridable}}{{>partial2}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{$overridable}}ignored{{/overridable}}",
+        "partial2": "{{$overridable}}partial2{{/overridable}}" },
+      "expected": "partial2"
+    },
+    {
       "name": "Overridable partials can override overridable sections in their own overridable partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
