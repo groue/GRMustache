@@ -140,7 +140,7 @@ Filters that return filters
 
 Some of you may like defining "meta-filters". No problem:
 
-template.mustache:
+base.mustache:
 
     {{#object1}}
         {{ dateFormat(format)(date) }}
@@ -149,10 +149,12 @@ template.mustache:
         {{ dateFormat(format)(date) }}
     {{/object2}}
 
+render.m:
+
 ```objc
 id filters = @{
     @"dateFormat": [GRMustacheFilter filterWithBlock:^id(id format) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] new];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = [format description]; // force string coercion
         return [GRMustacheFilter filterWithBlock:^id(id date) {
             return [dateFormatter stringFromDate:date];
@@ -163,17 +165,18 @@ id filters = @{
 id data = @{
     @"object1": @{
         @"format": @"yyyy-MM-dd 'at' HH:mm",
-        @"date": [NSDate date];
-    }
+        @"date": [NSDate date]
+    },
     @"object2": @{
         @"format": @"yyyy-MM-dd",
-        @"date": [NSDate date];
+        @"date": [NSDate date]
     }
-}
+};
 
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                            withFilters:filters
-                                          fromResource:@"template"
+                                          fromResource:@"base"
+                                                bundle:nil
                                                  error:NULL];
 ```
 
