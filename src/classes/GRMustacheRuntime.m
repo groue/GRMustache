@@ -380,57 +380,65 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     // those classes, because they are class clusters and that we can't be sure
     // they provide a single implementation of valueForKey:
     
-    static SEL selector = nil;
-    static IMP NSObjectIMPL = nil;
-    static IMP NSDictionaryIMPL = nil;
-    static BOOL NSManagedObjectIMPLComputed = NO;
-    static IMP NSManagedObjectIMPL = nil;
-    static Class NSOrderedSetClass = nil;
-    
-    if (selector == nil) {
-        selector = @selector(valueForKey:);
+    static SEL valueForKeySelector = nil;
+    if (valueForKeySelector == nil) {
+        valueForKeySelector = @selector(valueForKey:);
     }
+    IMP objectIMP = class_getMethodImplementation([object class], valueForKeySelector);
     
-    if (NSObjectIMPL == nil) {
-        NSObjectIMPL = class_getMethodImplementation([NSObject class], selector);
-    }
-    
-    if (NSDictionaryIMPL == nil) {
-        NSDictionaryIMPL = class_getMethodImplementation([NSDictionary class], selector);
-    }
-    
-    if (NSManagedObjectIMPLComputed == NO) {
-        Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
-        if (NSManagedObjectClass) {
-            NSManagedObjectIMPL = class_getMethodImplementation(NSManagedObjectClass, selector);
+    // Fast path: objects using NSObject's implementation of valueForKey: are not collections
+    {
+        static IMP NSObjectIMP = nil;
+        if (NSObjectIMP == nil) {
+            NSObjectIMP = class_getMethodImplementation([NSObject class], valueForKeySelector);
         }
-        NSManagedObjectIMPLComputed = YES;
+        if (objectIMP == NSObjectIMP) {
+            return NO;
+        }
     }
     
-    IMP objectIMPL = class_getMethodImplementation([object class], selector);
-    
-    if (objectIMPL == NSObjectIMPL) {
-        return NO;
+    // Fast path: objects using NSDictionary's implementation of valueForKey: are not collections
+    {
+        static IMP NSDictionaryIMP = nil;
+        if (NSDictionaryIMP == nil) {
+            NSDictionaryIMP = class_getMethodImplementation([NSDictionary class], valueForKeySelector);
+        }
+        if (objectIMP == NSDictionaryIMP) {
+            return NO;
+        }
     }
     
-    if (objectIMPL == NSDictionaryIMPL) {
-        return NO;
+    // Fast path: objects using NSManagedObject's implementation of valueForKey: are not collections
+    {
+        // NSManagedObject may not be linked. Don't name it directly.
+        static BOOL NSManagedObjectIMPComputed = NO;
+        static IMP NSManagedObjectIMP = nil;
+        if (NSManagedObjectIMPComputed == NO) {
+            Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+            if (NSManagedObjectClass) {
+                NSManagedObjectIMP = class_getMethodImplementation(NSManagedObjectClass, valueForKeySelector);
+            }
+            NSManagedObjectIMPComputed = YES;
+        }
+        if (objectIMP == NSManagedObjectIMP) {
+            return NO;
+        }
     }
     
-    if (objectIMPL == NSManagedObjectIMPL) {
-        return NO;
+    // Slow path: NSArray, NSSet and NSOrderedSet are collections
+    {
+        // NSOrderedSet is iOS >= 5 or OSX >= 10.7. Don't name it directly.
+        static BOOL NSOrderedSetClassComputed = NO;
+        static Class NSOrderedSetClass = nil;
+        if (NSOrderedSetClassComputed == NO) {
+            NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
+            NSOrderedSetClassComputed = YES;
+        }
+        
+        return ([object isKindOfClass:[NSArray class]] ||
+                [object isKindOfClass:[NSSet class]] ||
+                (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]));
     }
-    
-    // NSOrderedSet is iOS >= 5 or OSX >= 10.7. Don't name it directly.
-    if (NSOrderedSetClass == nil) {
-        NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-    }
-    
-    if ([object isKindOfClass:[NSArray class]] || [object isKindOfClass:[NSSet class]] || (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass])) {
-        return YES;
-    }
-    
-    return NO;
 }
 
 @end
