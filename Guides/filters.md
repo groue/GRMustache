@@ -25,6 +25,8 @@ You apply a filter just like calling a function, with parentheses:
     
     For brevity's sake, closing section tags can be empty: `{{^ isEmpty(people) }}...{{/}}` is valid.
 
+- Filters can return filters: `{{ dateFormat(format)(date) }}`.
+
 
 Standard filters library
 ------------------------
@@ -131,6 +133,54 @@ id filters = @{
                       fromString:@"{{math.abs(x)}}"
                            error:NULL];
 ```
+
+
+Filters that return filters
+---------------------------
+
+Some of you may like defining "meta-filters". No problem:
+
+template.mustache:
+
+    {{#object1}}
+        {{ dateFormat(format)(date) }}
+    {{/object1}}
+    {{#object2}}
+        {{ dateFormat(format)(date) }}
+    {{/object2}}
+
+```objc
+id filters = @{
+    @"dateFormat": [GRMustacheFilter filterWithBlock:^id(id format) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] new];
+        dateFormatter.dateFormat = [format description]; // force string coercion
+        return [GRMustacheFilter filterWithBlock:^id(id date) {
+            return [dateFormatter stringFromDate:date];
+        }];
+    }]
+};
+
+id data = @{
+    @"object1": @{
+        @"format": @"yyyy-MM-dd 'at' HH:mm",
+        @"date": [NSDate date];
+    }
+    @"object2": @{
+        @"format": @"yyyy-MM-dd",
+        @"date": [NSDate date];
+    }
+}
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                           withFilters:filters
+                                          fromResource:@"template"
+                                                 error:NULL];
+```
+
+Rendering:
+
+    2012-09-29 at 12:54
+    2012-09-29
 
 
 Filters exceptions

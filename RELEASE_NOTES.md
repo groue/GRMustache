@@ -4,6 +4,10 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.4.2
+
+Until this version, filters could not return filters. This useless inconsistency is considered a bug, and has been fixed. Check [Guides/filters.md](Guides/filters.md).
+
 ## v5.4.1
 
 Fix some corner cases in the handling of [overridable partials](Guides/partials.md), should your templates include conflicting overriding sections. Basically, the last one wins:
