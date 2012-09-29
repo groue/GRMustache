@@ -79,7 +79,7 @@ Just like `x`, `f(x)` is an expression that has a value. The GRMustache expressi
 - One can render `{{ f(x) }}` instead of `{{ x }}`.
 - One can render `{{ f(x.y) }}` instead of `{{ x.y }}`.
 - One can render `{{ f(g(x)) }}` instead of `{{ g(x) }}`.
-- One can render `{{ f(x)(y) }}` instead of `{{ f(x) }}` (`f` is a meta-filter: a filter that return a filter).
+- One can render `{{ f(x)(y) }}` instead of `{{ f(x) }}` (`f` is a meta-filter: a filter that returns a filter).
 
 This fits pretty well with the "scoped" Mustache expression: the regular Mustache syntax lets the user write `*.y` anywhere he can write `*`:
 
