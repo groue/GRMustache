@@ -204,7 +204,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError
 {
-    return [self templateForName:name relativeToTemplateID:nil error:outError];
+    return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError
@@ -214,11 +214,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         return nil;
     }
     return [GRMustacheTemplate templateWithInnerElements:renderingElements];
-}
-
-- (id<GRMustacheRenderingElement>)renderingElementForTemplateName:(NSString *)name error:(NSError **)outError
-{
-    return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
 
 #pragma mark Private
@@ -254,7 +249,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError
 {
-    id templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
+    id templateID = nil;
+    if (name) {
+       templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
+    }
     if (templateID == nil) {
         if (outError != NULL) {
             *outError = [NSError errorWithDomain:GRMustacheErrorDomain
@@ -296,9 +294,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         
         // We are about to compile templateString. GRMustacheCompiler may
-        // invoke [self renderingElementForTemplateName:error:] when compiling
-        // partial tags {{> name }}. Since partials are relative, we need to
-        // know the ID of the currently parsed template.
+        // invoke [self templateForName:error:] when compiling partial tags
+        // {{> name }}. Since partials are relative, we need to know the ID of
+        // the currently parsed template.
         //
         // And since partials may embed other partials, we need to handle the
         // currently parsed template ID in a recursive way.

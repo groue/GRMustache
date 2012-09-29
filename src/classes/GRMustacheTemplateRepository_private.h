@@ -91,21 +91,4 @@
 // Documented in GRMustacheTemplateRepository.h
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
-/**
- * This method returns a rendering element that represents a template.
- *
- * The _name_ parameter is guaranteed to be not nil, non empty, and stripped of
- * white-space characters.
- *
- * @param name            The template name
- * @param outError        If there is an error loading or parsing the tempalte,
- *                        upon return contains an NSError object that describes
- *                        the problem.
- *
- * @return A <GRMustacheRenderingElement> instance
- *
- * @see GRMustacheCompiler
- * @see GRMustacheRenderingElement
- */
-- (id<GRMustacheRenderingElement>)renderingElementForTemplateName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end

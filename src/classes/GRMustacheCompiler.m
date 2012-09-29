@@ -302,13 +302,9 @@
                         return NO;
                     }
                     
-                    // Validate the renderingElementForTemplateName:error: contract:
-                    // Non nil, non empty, white-space stripped template name.
-                    NSAssert([_currentOpeningToken.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
-                    
-                    // Ask templateRepository for super template
+                    // Ask templateRepository for overridable template
                     NSError *templateError;
-                    id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:_currentOpeningToken.partialName error:&templateError];
+                    GRMustacheTemplate *template = [_templateRepository templateForName:_currentOpeningToken.partialName error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
                         return NO;
@@ -338,13 +334,9 @@
                 return NO;
             }
             
-            // Validate the renderingElementForTemplateName:error: contract:
-            // Non nil, non empty, white-space stripped template name.
-            NSAssert([token.partialName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0, @"WTF parser?");
-            
             // Ask templateRepository for partial template
             NSError *templateError;
-            id<GRMustacheRenderingElement> template = [_templateRepository renderingElementForTemplateName:token.partialName error:&templateError];
+            GRMustacheTemplate *template = [_templateRepository templateForName:token.partialName error:&templateError];
             if (template == nil) {
                 [self failWithFatalError:templateError];
                 return NO;
