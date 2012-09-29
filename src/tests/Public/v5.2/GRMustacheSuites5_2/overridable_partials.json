@@ -104,6 +104,15 @@
       "expected": "partial1"
     },
     {
+      "name": "Templates and partials can both override the same overridable partial",
+      "data": { },
+      "template": "{{<partial2}}{{$overridable}}base{{/overridable}}{{/partial2}} {{>partial1}}",
+      "partials": {
+          "partial1": "{{<partial2}}{{$overridable}}partial1{{/overridable}}{{/partial2}}",
+          "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "base partial1"
+    },
+    {
       "name": "Templates can override overridable sections in partials embedded in overridable partials",
       "data": { },
       "template": "{{<partial1}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
