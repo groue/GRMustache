@@ -1,1 +1,2 @@
 - document migration path from all previous versions to latest version
+- have proxy objects able to pose as variable tag helpers
