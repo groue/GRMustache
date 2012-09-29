@@ -243,6 +243,9 @@
 
 - (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
 {
+    for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
+        element = [innerElement resolveOverridableRenderingElement:element];
+    }
     return element;
 }
 
