@@ -155,7 +155,7 @@ render.m:
 id filters = @{
     @"dateFormat": [GRMustacheFilter filterWithBlock:^id(id format) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = [format description]; // force string coercion
+        dateFormatter.dateFormat = format;
         return [GRMustacheFilter filterWithBlock:^id(id date) {
             return [dateFormatter stringFromDate:date];
         }];
