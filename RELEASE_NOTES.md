@@ -25,7 +25,7 @@ Your [variable tag helpers](Guides/variable_tag_helpers.md) and your [section ta
 
 Relative partial paths look like regular Mustache partial tags: `{{> header }}`, `{{> partials/header }}`.
 
-GRMustache v5.4.0 brings absolute paths, that start with a slash: `{{> /path/to/partial }}`. 
+GRMustache v5.4.0 brings absolute paths, that start with a slash: `{{> /partials/header }}`. 
 
 The full story starts at [Guides/partials.md](Guides/partials.md#partials-in-the-file-system).
 
