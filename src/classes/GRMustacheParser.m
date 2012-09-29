@@ -457,6 +457,7 @@
     //    stateIdentifierDone -> canFilter;'(';++sm_parenLevel -> stateInitial
     //    stateFilterDone -> ' ' -> stateFilterDone
     //    stateFilterDone -> '.' -> stateWaitingForIdentifier
+    //    stateFilterDone -> '(';++sm_parenLevel -> stateInitial
     //    stateFilterDone -> sm_parenLevel==0;EOF; -> stateValid
     //    stateFilterDone -> sm_parenLevel>0;')';--sm_parenLevel -> stateFilterDone
     
@@ -720,7 +721,10 @@
                         break;
                         
                     case '(':
-                        state = stateError;
+                        NSAssert(currentExpression, @"WTF");
+                        state = stateInitial;
+                        [filterExpressionStack addObject:currentExpression];
+                        currentExpression = nil;
                         break;
                         
                     case ')':

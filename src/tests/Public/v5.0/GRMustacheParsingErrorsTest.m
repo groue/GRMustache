@@ -322,11 +322,4 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testParsingErrorReportsFilteredValueAsFilter
-{
-    NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{f(a)(b)}}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-}
-
 @end

@@ -204,4 +204,18 @@
     STAssertEqualObjects(rendering, @"1", nil);
 }
 
+- (void)testFiltersCanReturnFilters
+{
+    id filter = [GRMustacheFilter filterWithBlock:^id(id value1) {
+        return [GRMustacheFilter filterWithBlock:^id(id value2) {
+            return [NSString stringWithFormat:@"%@%@", value1, value2];
+        }];
+    }];
+    
+    id data = @{ @"prefix": @"prefix", @"value": @"value" };
+    id filters = @{ @"f": filter };
+    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{f(prefix)(value)}}" error:NULL];
+    STAssertEqualObjects(rendering, @"prefixvalue", @"");
+}
+
 @end
