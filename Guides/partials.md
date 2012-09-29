@@ -50,7 +50,7 @@ Never use file extensions in your partial tags. `{{> partials/b.mustache }}` wou
 
 ### Absolute paths to partials
 
-When your templates are stored in a hierarchy of directories, you sometimes need to refer to a partial template in an absolute way, that does not depend of the location of the embedding template.
+When your templates are stored in a hierarchy of directories, you sometimes need to refer to a partial template in an absolute way, that does not depend on the location of the embedding template.
 
 Compare:
 
