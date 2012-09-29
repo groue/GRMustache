@@ -219,8 +219,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
     if (element.isOverridable) {
-        id<GRMustacheRenderingElement> overridingElement = [self resolveOverridableRenderingElement:element];
-        if (overridingElement) { return overridingElement; }
+        element = [self resolveOverridableRenderingElement:element];
     }
     return element;
 }
