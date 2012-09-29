@@ -52,7 +52,7 @@ Documentation
 
 Introduction:
 
-- [introduction.md](GRMustache/blob/master/Guides/introduction.md).
+- [introduction.md](GRMustache/blob/master/Guides/introduction.md): a tour of the library features, and most common use cases.
 
 Loading templates:
 
