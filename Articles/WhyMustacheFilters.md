@@ -74,11 +74,12 @@ The latter point is important: there is no good reason to prevent the library us
 
 GRMustache implements filters with a good old function call syntax: `f(x)`.
 
-Just like `x`, `f(x)` is an expression that has a value. The GRMustache expression syntax let the user write `f(*)` anywhere he can write `*`:
+Just like `x`, `f(x)` is an expression that has a value. The GRMustache expression syntax let the user write `f(*)` and `*(x)` anywhere he can write `*`:
 
 - One can render `{{ f(x) }}` instead of `{{ x }}`.
-- One can render `{{ f(g(x)) }}` instead of `{{ g(x) }}`.
 - One can render `{{ f(x.y) }}` instead of `{{ x.y }}`.
+- One can render `{{ f(g(x)) }}` instead of `{{ g(x) }}`.
+- One can render `{{ f(x)(y) }}` instead of `{{ f(x) }}` (`f` is a meta-filter: a filter that return a filter).
 
 This fits pretty well with the "scoped" Mustache expression: the regular Mustache syntax lets the user write `*.y` anywhere he can write `*`:
 
@@ -86,7 +87,7 @@ This fits pretty well with the "scoped" Mustache expression: the regular Mustach
 - One can render `{{ f(x).y }}` instead of `{{ f(x) }}`.
 - One can render `{{ f.g(x) }}` instead of `{{ f(x) }}`.
 
-A contrieved user could write `{{a.b(c.d(e.f).g.h).i.j}}`. Whether this is sane or not is not the business of a library that embraces userland code.
+A contrieved user could write `{{a.b(c.d(e.f).g.h).i.j(k.l)}}`. Whether this is sane or not is not the business of a library that embraces userland code.
 
 Last point: white space is irrelevant. `f(x)` is the same as `f ( x )`.
 
@@ -102,10 +103,14 @@ Pipes have great ascendants (unix shell, Liquid filters), and this syntax sports
 
 However, it fails on the composition part, since pipes build *statements*, not expressions.
 
-For instance, how would pipes handle cases like `f(x).y` without the introduction of parenthesis in a fashion that is not common to pipes?
+For example, how would pipes handle cases like `f(x).y` without the introduction of parenthesis in a fashion that is not common to pipes?
 
     {{ (x | f).y }}         vs.    {{ f(x).y }}
     {{ (x | f).y | g }}     vs.    {{ g(f(x).y) }}
+
+More, how would pipes handle meta-filters like `f(x)(y)` ?
+
+    {{ y | (x | f) }}       vs.    {{ f(x)(y) }}
 
 The `f(x)` notation has here an advantage, which is its pervasiveness if many widely adopted languages that also use the dot as a property accessor.
 
@@ -119,35 +124,7 @@ As a consequence, the `.(x)` syntax is forbidden. In Mustache, `.` aka the "impl
 
 ## 3. Parsing GRMustache expressions
 
-Here is a formal grammar that describes the GRMustache syntax for expressions:
-
-    [_a-zA-Z0-9]+[?!]?       return ID;
-    [ \t\n\t]+               return WS;
-    .                        return IMPLICIT_ENUMERATOR;
-
-    input : WS? expression WS?;
-
-    expression : scopableExpression
-               | nonScopableExpression
-
-    nonScopableExpression : implicitEnumeratorExpression
-
-    scopableExpression : identifierExpression
-                       | scopedExpression
-                       | filterExpression
-
-    implicitEnumeratorExpression : IMPLICIT_ENUMERATOR
-
-    identifierExpression : ID
-
-    scopedExpression : '.' ID
-                     | scopableExpression '.' ID
-
-    filterExpression : expression WS? '(' WS? expression WS? ')'
-
-My apologies: it contains left-recursive rules, and may thus be rejected by many parsers.
-
-The following state machine is much easier to implement. It reads one character
+Here is a state machine that describes GRMustache expressions. It reads one character
 after the other, until it reaches the *VALID*, *EMPTY*, or *INVALID* state:
 
     # ID stands for "identifier character"
@@ -175,6 +152,7 @@ after the other, until it reaches the *VALID*, *EMPTY*, or *INVALID* state:
     IDENTIFIER_DONE && parenthesisLevel==0 -> EOF -> VALID
     FILTER_DONE -> WS -> FILTER_DONE
     FILTER_DONE -> '.' -> WAITING_FOR_IDENTIFIER
+    FILTER_DONE -> '(' -> ++parenthesisLevel, INITIAL
     FILTER_DONE && parenthesisLevel>0 -> ')' -> --parenthesisLevel, FILTER_DONE
     FILTER_DONE && parenthesisLevel==0 -> EOF -> VALID
 
