@@ -79,8 +79,8 @@
                 GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
                 _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
                                                                                 templateRepository:_templateRepository
-                                                                                    templateString:nil                          // unused
-                                                                                        innerRange:NSMakeRange(NSNotFound, 0)   // unused
+                                                                                    templateString:_raw ? @"{{{.}}}" : @"{{.}}"
+                                                                                        innerRange:_raw ? NSMakeRange(0, 7) : NSMakeRange(0, 5)
                                                                                           inverted:NO
                                                                                        overridable:NO
                                                                                      innerElements:[NSArray arrayWithObject:innerElement]];
