@@ -389,4 +389,28 @@
     STAssertEqualObjects(rendering, @"12", @"");
 }
 
+- (void)testHelperCanAccessTheInnerTemplateStringOfAutomaticSectionRequiredByVariableTagRenderingArrays
+{
+    __block NSString *lastInnerTemplateString = nil;
+    id helper = [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
+        [lastInnerTemplateString release];
+        lastInnerTemplateString = [context.innerTemplateString retain];
+        return nil;
+    }];
+
+    NSDictionary *context = [NSDictionary dictionaryWithObject:@[helper] forKey:@"items"];
+
+    // {{items}} is rendered just as {{#items}}{{.}}{{/items}}.
+    // Check that section tag helpers have access to this {{.}}.
+    [GRMustacheTemplate renderObject:context fromString:@"{{items}}" error:nil];
+    STAssertEqualObjects(lastInnerTemplateString, @"{{.}}", @"");
+    
+    // {{{items}}} is rendered just as {{#items}}{{{.}}}{{/items}}.
+    // Check that section tag helpers have access to this {{{.}}}.
+    [GRMustacheTemplate renderObject:context fromString:@"{{{items}}}" error:nil];
+    STAssertEqualObjects(lastInnerTemplateString, @"{{{.}}}", @"");
+    
+    [lastInnerTemplateString release];
+}
+
 @end
