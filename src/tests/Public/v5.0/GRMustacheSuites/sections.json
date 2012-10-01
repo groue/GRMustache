@@ -69,6 +69,12 @@
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
+    {
+      "name": "List made of an empty list should trigger the section rendering.",
+      "data": { "subject": [[]] },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
     
     // Context stack
     

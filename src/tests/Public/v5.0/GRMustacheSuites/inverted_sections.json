@@ -75,6 +75,12 @@
       "template": "<{{^subject}}---{{/subject}}>",
       "expected": "<>"
     },
+    {
+      "name": "List made of an empty list should trigger the section omission.",
+      "data": { "subject": [[]] },
+      "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<>"
+    },
     
     // Whitespace Insensitivity
 
