@@ -391,6 +391,19 @@
 
 - (void)testHelperCanAccessTheInnerTemplateStringOfAutomaticSectionRequiredByVariableTagRenderingArrays
 {
+    // This test is required for this sample code to work:
+    //
+    //  // item renders its position (1-based index)
+    //  id item = [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
+    //      return [context renderTemplateString:@"{{position}}" error:NULL];
+    //  }];
+    //  id data = @{ @"items": @[item] };
+    //  // Same PositionFilter as in GRMustacheIndexes sample project, which
+    //  // uses a section tag helper that needs these tests to pass.
+    //  NSDictionary *filters = [NSDictionary dictionaryWithObject:[[[PositionFilter alloc] init] autorelease] forKey:@"withPosition"];
+    //  NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{withPosition(items)}}" error:NULL];
+    //  STAssertEqualObjects(@"1", rendering, @"");
+
     __block NSString *lastInnerTemplateString = nil;
     id helper = [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
         [lastInnerTemplateString release];
@@ -400,12 +413,12 @@
 
     NSDictionary *context = [NSDictionary dictionaryWithObject:@[helper] forKey:@"items"];
 
-    // {{items}} is rendered just as {{#items}}{{.}}{{/items}}.
+    // {{items}} is supposedly rendered just as {{#items}}{{.}}{{/items}}.
     // Check that section tag helpers have access to this {{.}}.
     [GRMustacheTemplate renderObject:context fromString:@"{{items}}" error:nil];
     STAssertEqualObjects(lastInnerTemplateString, @"{{.}}", @"");
     
-    // {{{items}}} is rendered just as {{#items}}{{{.}}}{{/items}}.
+    // {{{items}}} is supposedly rendered just as {{#items}}{{{.}}}{{/items}}.
     // Check that section tag helpers have access to this {{{.}}}.
     [GRMustacheTemplate renderObject:context fromString:@"{{{items}}}" error:nil];
     STAssertEqualObjects(lastInnerTemplateString, @"{{{.}}}", @"");
