@@ -363,4 +363,30 @@
     STAssertEqualObjects(result, @"delegate", @"");
 }
 
+- (void)testArrayOfHelpersInSectionTag
+{
+    GRMustacheStringSectionTagHelper *helper1 = [[[GRMustacheStringSectionTagHelper alloc] init] autorelease];
+    helper1.string = @"1";
+    
+    GRMustacheStringSectionTagHelper *helper2 = [[[GRMustacheStringSectionTagHelper alloc] init] autorelease];
+    helper2.string = @"2";
+    
+    id items = @{@"items": @[helper1, helper2] };
+    NSString *rendering = [GRMustacheTemplate renderObject:items fromString:@"{{#items}}{{.}}{{/items}}" error:NULL];
+    STAssertEqualObjects(rendering, @"12", @"");
+}
+
+- (void)testArrayOfHelpersInVariableTag
+{
+    GRMustacheStringSectionTagHelper *helper1 = [[[GRMustacheStringSectionTagHelper alloc] init] autorelease];
+    helper1.string = @"1";
+    
+    GRMustacheStringSectionTagHelper *helper2 = [[[GRMustacheStringSectionTagHelper alloc] init] autorelease];
+    helper2.string = @"2";
+    
+    id items = @{@"items": @[helper1, helper2] };
+    NSString *rendering = [GRMustacheTemplate renderObject:items fromString:@"{{items}}" error:NULL];
+    STAssertEqualObjects(rendering, @"12", @"");
+}
+
 @end
