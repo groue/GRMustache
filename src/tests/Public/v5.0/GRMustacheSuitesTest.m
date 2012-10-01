@@ -96,6 +96,13 @@
     id data = [test objectForKey:@"data"];
     NSString *expected = [test objectForKey:@"expected"];
     NSString *rendering = [template renderObject:data];
+    
+    // Allow Breakpointing failing tests
+    
+    if (![expected isEqualToString:rendering]) {
+        [template renderObject:data];
+    }
+    
     STAssertEqualObjects(rendering, expected, @"Failed test in suite at %@: %@", path, test);
 }
 
