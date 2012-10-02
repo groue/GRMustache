@@ -219,9 +219,7 @@ Our filter is ready. We now just need to implement the `PositionFilterItem` clas
 
 It must "*provide a Mustache section both values for the `position`, `isOdd`, and `isFirst` identifiers, and the original objects properties*".
 
-It looks like we have two sets of informations here: the original object's properties on one side, and the position keys on the other side.
-
-This sounds like the job of the Mustache [context stack](../runtime/context_stack.md): generally speaking, in the template snippet `{{#outer}}{{#inner}}...{{/inner}}{{/outer}}`, the enclosed content can access both properties of `inner` and `outer`. If a key can not be found in `inner`, the lookup goes on in the context of the enclosing section, `outer`, etc.
+We have two sets of informations here: the original object's properties on one side, and the position keys on the other side. This sounds like the job of the Mustache [context stack](../runtime/context_stack.md): generally speaking, in the template snippet `{{#outer}}{{#inner}}...{{/inner}}{{/outer}}`, the enclosed content can access both properties of `inner` and `outer`. If a key can not be found in `inner`, the lookup goes on in the context of the enclosing section, `outer`, etc.
 
 Let's get back to our specific `PositionFilterItem` class. It is used when Mustache renders an array: `{{# withPosition(people) }}...{{/ withPosition(people) }}`. If we wrap the inner section string with another section, that we bind to the original object, as in `{{#originalObject}}...{{/originalObject}}`, then the inner section will have access to both our `PositionFilterItem` properties, and the original object's properties. Exactly what we need, actually.
 
