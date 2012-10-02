@@ -2,9 +2,9 @@
 
 Indexes
 =======
--------------------------
 
 In a genuine Mustache way
+-------------------------
 
 Mustache is a simple template language. Its [specification](https://github.com/mustache/spec) does not provide any built-in access to loop indexes. It does not provide any way to render a section at the beginning of the loop, and another section at the end. It does not help you render different sections for odd and even indexes.
 
