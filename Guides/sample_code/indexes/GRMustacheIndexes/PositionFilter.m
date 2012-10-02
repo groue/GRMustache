@@ -25,24 +25,23 @@
 #pragma mark - PositionFilterItem declaration
 
 /**
- * PositionFilterItem's responsability is, given an array and an index, to
- * forward to the original item in the array all keys but:
+ * PositionFilterItem's responsability is, given an object and an index, to
+ * have a Mustache section render values for the `position`, `isOdd`, and
+ * `isFirst` identifiers, while letting the wrapped object provide his own keys.
  *
  * - position: returns the 1-based index of the item
  * - isOdd: returns YES if the position of the item is odd
  * - isFirst: returns YES if the item is at position 1
- *
- * All other keys are forwared to the original item.
  */
 @interface PositionFilterItem : NSObject
 @property (nonatomic, readonly) NSUInteger position;
 @property (nonatomic, readonly) BOOL isFirst;
 @property (nonatomic, readonly) BOOL isOdd;
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array;
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array;
 @end
 
 
-#pragma mark - PositionFilter
+#pragma mark - PositionFilter implementation
 
 // Documented in PositionFilter.h
 @implementation PositionFilter
@@ -67,8 +66,8 @@
      */
     
     NSMutableArray *replacementArray = [NSMutableArray arrayWithCapacity:array.count];
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:idx inArray:array];
+    [array enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
+        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:index fromArray:array];
         [replacementArray addObject:item];
     }];
     return replacementArray;
@@ -79,51 +78,46 @@
 
 #pragma mark - PositionFilterItem implementation
 
-@implementation PositionFilterItem {
-    /**
-     * The original 0-based index and the array of original items are stored in
-     * ivars without any exposed property: we do not want GRMustache to render
-     * the unintended {{ index }} or {{ array }}.
-     */
-    NSUInteger _index;
-    NSArray *_array;
-}
+/**
+ * Let's make PositionFilterItem a section tag helper, and give him two private
+ * properties: `array_` and `item_`. The underscore suffix avoids those
+ * properties to pollute Mustache context: it's unlikely that your templates
+ * contain any {{array_}} or {{index_}} tags.
+ *
+ * @see renderForSectionTagInContext: implementation
+ */
+@interface PositionFilterItem()<GRMustacheSectionTagHelper>
+@property (nonatomic, strong) NSArray *array_;
+@property (nonatomic) NSUInteger index_;
+@end
 
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array
+@implementation PositionFilterItem
+
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array
 {
     self = [super init];
     if (self) {
-        _index = index;
-        _array = array;
+        self.index_ = index;
+        self.array_ = array;
     }
     return self;
 }
 
 /**
- * The implementation of `description` is required so that whenever GRMustache
- * wants to render the original item itself (with a `{{ . }}` tag, for
- * instance).
- */
-- (NSString *)description
-{
-    id originalObject = [_array objectAtIndex:_index];
-    return [originalObject description];
-}
-
-/**
- * Support for `{{position}}`: return a 1-based index.
+ * Support for {{position}}: returns the 1-based index of the object.
  */
 - (NSUInteger)position
 {
-    return _index + 1;
+    return self.index_ + 1;
 }
 
 /**
- * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the first
+ * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the
+ * first.
  */
 - (BOOL)isFirst
 {
-    return _index == 0;
+    return self.index_ == 0;
 }
 
 /**
@@ -132,16 +126,44 @@
  */
 - (BOOL)isOdd
 {
-    return (_index % 2) == 0;
+    return (self.index_ % 2) == 0;
 }
 
+#pragma mark GRMustacheSectionTagHelper
+
 /**
- * Support for other keys: forward to original array element
+ * GRMustacheSectionTagHelper protocol implementation.
+ *
+ * Wrap wrap the section inner template string inside another section:
+ *
+ *     {{#positionFilterItemWrappedObject}}...{{/positionFilterItemWrappedObject}}
+ *
+ * The `positionFilterItemWrappedObject` key returns the original object, so
+ * that when the innerTemplateString is rendered, both the position filter item
+ * and its original object are in the context stack, each of them ready to
+ * provide their own keys to the Mustache engine.
+ *
+ * @see positionFilterItemWrappedObject implementation below
+ *
+ * Section tag helpers are documented at
+ * https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md.
  */
-- (id)valueForUndefinedKey:(NSString *)key
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
-    id originalObject = [_array objectAtIndex:_index];
-    return [originalObject valueForKey:key];
+    NSString *templateString = [NSString stringWithFormat:@"{{#positionFilterItemWrappedObject}}%@{{/positionFilterItemWrappedObject}}", context.innerTemplateString];
+    return [context renderTemplateString:templateString error:NULL];
+}
+
+#pragma mark Private
+
+/**
+ * Returns the wrapped original object.
+ *
+ * @see renderForSectionTagInContext: implementation
+ */
+- (id)positionFilterItemWrappedObject
+{
+    return [self.array_ objectAtIndex:self.index_];
 }
 
 @end

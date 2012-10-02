@@ -25,7 +25,8 @@
 
 /**
  * A GRMustache filter that, given an array, returns another array made of
- * objects that forward all keys to the original array items, but the following:
+ * objects that render values for the `position`, `isOdd`, and `isFirst`
+ * identifiers, while letting original objects provide their own keys.
  *
  * - position: returns the 1-based index of the item
  * - isOdd: returns YES if the position of the item is odd
