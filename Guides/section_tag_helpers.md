@@ -187,5 +187,7 @@ Sample code
 
 The [localization.md](sample_code/localization.md) sample code uses section tag helpers for localizing portions of template.
 
+The [indexes.md](sample_code/indexes.md) sample code uses section tag helpers for rendering indexes of an array items.
+
 
 [up](introduction.md), [next](variable_tag_helpers.md)
