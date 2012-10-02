@@ -4,6 +4,10 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.4.3
+
+Until this version, GRMustache would not trigger section tag helpers, variable tag helpers and section delegates in a few corner cases.
+
 ## v5.4.2
 
 Until this version, filters could not return filters. This useless inconsistency is considered a bug, and has been fixed. Check [Guides/filters.md](Guides/filters.md).
