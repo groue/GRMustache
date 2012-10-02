@@ -1,2 +1,38 @@
 - document migration path from all previous versions to latest version
-- have proxy objects able to pose as variable tag helpers
+- document the wrapping technique of GRMustacheIndexes sample code in the section tag helper guide.
+- now that f(x)(y) is allowed, which is the curried form of f(x,y), assume multi-argument filters, and clean up the mess:
+    - expose currying in API, as today with "meta-filters", and use the comma as syntactic sugar in the expression grammar?
+    - how could we hide currying?
+        // Expose arguments in an array, and internalize currying?
+        + (id)filterWithArguments:(id(^)(NSArray *arguments))block {
+            // Not applicable: we do not know the number of arguments in the
+            // template, and we do not know how many levels of currying is
+            // necessary
+            return [GRMustacheFilter filterWithBlock:^(id argument1) {
+               return [GRMustacheFilter filterWithBlock:^(id argument2) {
+                   return [GRMustacheFilter filterWithBlock:^(id argument3) {
+                       return block(@[argument1, argument2, argument3]);
+                   }];
+               }];
+            }];
+        }
+        
+        // Expose number of expected arguments?
+        // Inelegant :-(
+        + (id)filterWithOneArgument:(id(^)(id value))block {
+           return [GRMustacheFilter filterWithBlock:^(id value) {
+               return block(value);
+           }];
+        }
+        + (id)filterWithTwoArgument:(id(^)(id argument1, id argument2))block {
+            return [GRMustacheFilter filterWithBlock:^(id argument1) {
+                return [GRMustacheFilter filterWithBlock:^(id argument2) {
+                    return block(argument1, argument2);
+                }];
+            }];
+        }
+        
+    - allow default argument?
+        f:(date, format)->string = f:date->|string         (string facet)
+                                           |format->string (filter facet)
+    - allow named arguments?
