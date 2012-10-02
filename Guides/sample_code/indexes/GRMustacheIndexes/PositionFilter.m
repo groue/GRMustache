@@ -80,9 +80,9 @@
 
 /**
  * Let's make PositionFilterItem a section tag helper, and give him two private
- * properties: `array_` and `item_`. The underscore suffix avoids those
- * properties to pollute Mustache context: it's unlikely that your templates
- * contain any {{array_}} or {{index_}} tags.
+ * properties: `array_` and `item_` in order to store its state. The underscore
+ * suffix avoids those properties to pollute Mustache context: it's unlikely
+ * that your templates contain any {{array_}} or {{index_}} tags.
  *
  * @see renderForSectionTagInContext: implementation
  */
@@ -136,21 +136,21 @@
  *
  * Wrap wrap the section inner template string inside another section:
  *
- *     {{#positionFilterItemWrappedObject}}...{{/positionFilterItemWrappedObject}}
+ *     {{#originalObject_}}...{{/originalObject_}}
  *
- * The `positionFilterItemWrappedObject` key returns the original object, so
+ * The `originalObject_` key returns the original object, so
  * that when the innerTemplateString is rendered, both the position filter item
  * and its original object are in the context stack, each of them ready to
  * provide their own keys to the Mustache engine.
  *
- * @see positionFilterItemWrappedObject implementation below
+ * @see originalObject_ implementation below
  *
  * Section tag helpers are documented at
  * https://github.com/groue/GRMustache/blob/master/Guides/section_tag_helpers.md.
  */
 - (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
-    NSString *templateString = [NSString stringWithFormat:@"{{#positionFilterItemWrappedObject}}%@{{/positionFilterItemWrappedObject}}", context.innerTemplateString];
+    NSString *templateString = [NSString stringWithFormat:@"{{#originalObject_}}%@{{/originalObject_}}", context.innerTemplateString];
     return [context renderTemplateString:templateString error:NULL];
 }
 
@@ -161,7 +161,7 @@
  *
  * @see renderForSectionTagInContext: implementation
  */
-- (id)positionFilterItemWrappedObject
+- (id)originalObject_
 {
     return [self.array_ objectAtIndex:self.index_];
 }

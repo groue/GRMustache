@@ -2,9 +2,9 @@
 
 Indexes
 =======
+-------------------------
 
 In a genuine Mustache way
--------------------------
 
 Mustache is a simple template language. Its [specification](https://github.com/mustache/spec) does not provide any built-in access to loop indexes. It does not provide any way to render a section at the beginning of the loop, and another section at the end. It does not help you render different sections for odd and even indexes.
 
@@ -13,12 +13,12 @@ If your goal is to design your templates so that they are compatible with [other
 For instance, instead of `[ { name:'Alice' }, { name:'Bob' } ]`, you would provide: `[ { name:'Alice', position:1, isFirst:true, isOdd:true }, { name:'Bob', position:2, isFirst:false, isOdd:false } ]`.
 
 
-GRMustache solution: filters
-----------------------------
+GRMustache solution
+-------------------
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-The [GRMustacheFilter](../filters.md) protocol can help you extend the mustache language, and avoid preparing your data.
+You can have Mustache templates render positional keys like `position` or `isFirst` for you, and avoid preparing your data.
 
 **However, it may be tedious or impossible for other Mustache implementations to produce the same rendering.**
 
@@ -30,7 +30,7 @@ Below we'll implement the special keys `position`, `isFirst`, and `isOdd`. We'll
 
     <ul>
     {{# withPosition(people) }}
-      <li class="{{#isOdd}}odd{{/isOdd}} {{#isFirst}}first{{/isFirst}}">
+      <li class="{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}">
         {{ position }}:{{ name }}
       </li>
     {{/ withPosition(people) }}
@@ -51,18 +51,17 @@ We expect, on output, the following rendering:
     </ul>
     
 
-Our people array will be a plain array filled with plain people who don't know anything but their name. The support for the special positional keys will be entirely done by a filter object.
-
-We can thus focus on the two subjects separately.
+Our people array will be a plain array filled with plain people who don't know anything but their name. The support for the special positional keys will be brought by the `withPosition` [filter](../filters.md).
 
 ### The rendering
 
-Let's first assume that the class PositionFilter is already written. Here is its documentation:
+Let's first assume that the filter is already implemented, ready to be used. It comes as a `PositionFilter` class that is documented this way:
 
 ```objc
 /**
  * A GRMustache filter that, given an array, returns another array made of
- * objects that forward all keys to the original array items, but the following:
+ * objects that provide a Mustache section both values for the `position`,
+ * `isOdd`, and `isFirst` identifiers, and the original objects properties.
  *
  * - position: returns the 1-based index of the item
  * - isOdd: returns YES if the position of the item is odd
@@ -72,7 +71,7 @@ Let's first assume that the class PositionFilter is already written. Here is its
 @end
 ```
 
-Well, it looks quite a good fit for our task: if we provide to this filter an array of people, it will return an array of objects that will be able to tell a template their position, and for all other keys, will give the original person's value. 
+Well, it looks quite a good fit for our task: if we provide this filter with an array of people, it will return an array of objects that will be able to give a template both their positions, and the properties of their people.
 
 We have everything we need to render our template:
 
@@ -147,7 +146,9 @@ We have everything we need to render our template:
 
 ### The filter implementation
 
-Now it's time to implement this nifty PositionFilter class.
+You may just skip the rest of this document, and [download the `PositionFilter` class](../../../../tree/master/Guides/sample_code/indexes). It should be trivial to adapt, should you need the `isLast` property, for example.
+
+Let's now implement this nifty `PositionFilter` class.
 
 We have already seen above its declaration: it's simply a class that conforms to the GRMustacheFilter protocol:
 
@@ -166,28 +167,20 @@ As such, it must implement the `transformedValue:` method:
 }
 ```
 
-Provided with an array, it returns another array filled with objects "that forward all keys to the original array items, but the following: position, isOdd, isFirst". We have to implement those objects as well. In order to do their job, they have to now both the original item in the original array, and its index. Here is the declaration of those objects:
+Provided with an array, it returns another array filled with objects "that provide a Mustache section both values for the `position`, `isOdd`, and `isFirst` identifiers, and the original objects properties".
+
+We have to implement those objects as well. In order to do their job, they have to now both the original item in the original array, and its index. Here is the declaration of those objects, made of the expected properties, and of an initialization method that provides all the required information:
 
 ```objc
-/**
- * PositionFilterItem's responsability is, given an array and an index, to
- * forward to the original item in the array all keys but:
- *
- * - position: returns the 1-based index of the item
- * - isOdd: returns YES if the position of the item is odd
- * - isFirst: returns YES if the item is at position 1
- *
- * All other keys are forwared to the original item.
- */
 @interface PositionFilterItem : NSObject
 @property (nonatomic, readonly) NSUInteger position;
 @property (nonatomic, readonly) BOOL isFirst;
 @property (nonatomic, readonly) BOOL isOdd;
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array;
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array;
 @end
 ```
 
-Now we can implement the PositionFilter class itself:
+Based on this declaration, we can implement the `PositionFilter` class itself:
 
 ```objc
 @implementation PositionFilter
@@ -212,8 +205,8 @@ Now we can implement the PositionFilter class itself:
      */
     
     NSMutableArray *replacementArray = [NSMutableArray arrayWithCapacity:array.count];
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:idx inArray:array];
+    [array enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
+        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:index fromArray:array];
         [replacementArray addObject:item];
     }];
     return replacementArray;
@@ -222,54 +215,74 @@ Now we can implement the PositionFilter class itself:
 @end
 ```
 
-And finally, write the PositionFilterItem implementation:
+Our filter is ready. We now just need to implement the `PositionFilterItem` class itself.
+
+It must "*provide a Mustache section both values for the `position`, `isOdd`, and `isFirst` identifiers, and the original objects properties*".
+
+It looks like we have two sets of informations here: the original object's properties on one side, and the position keys on the other side.
+
+This sounds like the job of the [Mustache context stack guide](../runtime/context_stack.md): generally speaking, in the template snippet `{{#outer}}{{#inner}}...{{/inner}}{{/outer}}`, the enclosed content can access both properties of `inner` and `outer`. If a key can not be found in `inner`, the lookup goes on in the context of the enclosing section, `outer`, etc.
+
+Let's get back to our specific `PositionFilterItem` class. It is used when Mustache renders an array: `{{# withPosition(people) }}...{{/ withPosition(people) }}`. If we wrap the inner section string with another section, that we bind to the original object, as in `{{#originalObject}}...{{/originalObject}}`, then the inner section will have access to both our `PositionFilterItem` properties, and the original object's properties. Exactly what we need, actually.
+
+But this extra section `{{#originalObject}}...{{/originalObject}}` is not in our base template? No problem: we can process the template string itself, and insert the extra section. The tool for this task is the `GRMustacheSectionTagHelper` protocol, documented at [section_tag_helpers.md](../section_tag_helpers.md).
+
+Let's sum up the road map:
+
+- `PositionFilterItem` should provide the `position`, `isOdd`, and `isFirst` properties.
+- `PositionFilterItem` should conform to `GRMustacheSectionTagHelper`, and use this protocol to wrap the rendered section in an extra section that will be bounded to the original object.
+
+Here we go: the declaration of the `PositionFilterItem` class needs some extension:
 
 ```objc
-@implementation PositionFilterItem {
-    /**
-     * The original 0-based index and the array of original items are stored in
-     * ivars without any exposed property: we do not want GRMustache to render
-     * {{ index }} or {{ array }}
-     */
-    NSUInteger _index;
-    NSArray *_array;
-}
+/**
+ * Let's make PositionFilterItem a section tag helper, and give him two private
+ * properties: `array_` and `item_` in order to store its state.
+ *
+ * The underscore suffix avoids those properties to pollute Mustache context:
+ * your templates may contain a {{position}} tag, but it's unlikely they embed
+ * any {{array_}} or {{index_}} tags.
+ */
+@interface PositionFilterItem()<GRMustacheSectionTagHelper>
+@property (nonatomic, strong) NSArray *array_;
+@property (nonatomic) NSUInteger index_;
+@end
+```
 
-- (id)initWithObjectAtIndex:(NSUInteger)index inArray:(NSArray *)array
+The initializer is straightforward:
+
+```objc
+@implementation PositionFilterItem
+
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array
 {
     self = [super init];
     if (self) {
-        _index = index;
-        _array = array;
+        self.index_ = index;
+        self.array_ = array;
     }
     return self;
 }
+```
 
-/**
- * The implementation of `description` is required so that whenever GRMustache
- * wants to render the original item itself (with a `{{ . }}` tag, for
- * instance).
- */
-- (NSString *)description
-{
-    id originalObject = [_array objectAtIndex:_index];
-    return [originalObject description];
-}
+So are the three positional properties, `position`, `isOdd`, and `isFirst`:
 
+```objc
 /**
- * Support for `{{position}}`: return a 1-based index.
+ * Support for {{position}}: returns the 1-based index of the object.
  */
 - (NSUInteger)position
 {
-    return _index + 1;
+    return self.index_ + 1;
 }
 
 /**
- * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the first
+ * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the
+ * first.
  */
 - (BOOL)isFirst
 {
-    return _index == 0;
+    return self.index_ == 0;
 }
 
 /**
@@ -278,16 +291,42 @@ And finally, write the PositionFilterItem implementation:
  */
 - (BOOL)isOdd
 {
-    return (_index % 2) == 0;
+    return (self.index_ % 2) == 0;
+}
+```
+
+Let's now implement the `renderForSectionTagInContext:` required by the `GRMustacheSectionTagHelper` protocol:
+
+```objc
+/**
+ * GRMustacheSectionTagHelper protocol implementation.
+ *
+ * Wrap wrap the section inner template string inside another section:
+ *
+ *     {{#originalObject_}}...{{/originalObject_}}
+ *
+ * The `originalObject_` key returns the original object, so
+ * that when the section inner template string is rendered, both the position
+ * filter item and its original object are in the context stack, each of them
+ * ready to provide their own keys to the Mustache engine.
+ *
+ * @see originalObject_ implementation below
+ */
+- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
+{
+    NSString *templateString = [NSString stringWithFormat:@"{{#originalObject_}}%@{{/originalObject_}}", context.innerTemplateString];
+    return [context renderTemplateString:templateString error:NULL];
 }
 
 /**
- * Support for other keys: forward to original array element
+ * Returns the original object (still with an underscore suffix to prevent
+ * context pollution).
+ *
+ * @see renderForSectionTagInContext: implementation
  */
-- (id)valueForUndefinedKey:(NSString *)key
+- (id)originalObject_
 {
-    id originalObject = [_array objectAtIndex:_index];
-    return [originalObject valueForKey:key];
+    return [self.array_ objectAtIndex:self.index_];
 }
 
 @end
