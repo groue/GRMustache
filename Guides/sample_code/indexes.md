@@ -176,7 +176,7 @@ We have to implement those objects as well. In order to do their job, they have 
 @property (nonatomic, readonly) NSUInteger position;
 @property (nonatomic, readonly) BOOL isFirst;
 @property (nonatomic, readonly) BOOL isOdd;
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array;
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array;
 @end
 ```
 
@@ -252,7 +252,7 @@ The initializer is straightforward:
 ```objc
 @implementation PositionFilterItem
 
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(id)array
+- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array
 {
     self = [super init];
     if (self) {
@@ -299,7 +299,7 @@ Let's now implement the `renderForSectionTagInContext:` required by the `GRMusta
 /**
  * GRMustacheSectionTagHelper protocol implementation.
  *
- * Wrap wrap the section inner template string inside another section:
+ * Wrap the section inner template string inside another section:
  *
  *     {{#originalObject_}}...{{/originalObject_}}
  *
