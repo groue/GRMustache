@@ -46,6 +46,36 @@
 }
 @end
 
+@interface GRMustacheVariableTagHelperDelegate: NSObject<GRMustacheVariableTagHelper, GRMustacheTemplateDelegate>
+@property (nonatomic, retain) NSString *returnValue;
+@end
+
+@implementation GRMustacheVariableTagHelperDelegate
+@synthesize returnValue;
+
+- (void)dealloc
+{
+    self.returnValue = nil;
+    [super dealloc];
+}
+
+- (NSString *)foo
+{
+    return @"foo";
+}
+
+- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+{
+    return [context renderTemplateString:@"<{{foo}}>" error:NULL];
+}
+
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+{
+    self.returnValue = invocation.returnValue;
+}
+
+@end
+
 @interface GRMustacheSelfRenderingWithTemplateStringVariableTagHelper : NSObject<GRMustacheVariableTagHelper> {
     NSString *_name;
     NSString *_templateString;
@@ -392,6 +422,14 @@
     id items = @{@"items": @[helper1, helper2] };
     NSString *rendering = [GRMustacheTemplate renderObject:items fromString:@"{{items}}" error:NULL];
     STAssertEqualObjects(rendering, @"12", @"");
+}
+
+- (void)testDelegateInVariableTag
+{
+    GRMustacheVariableTagHelperDelegate *helper = [[[GRMustacheVariableTagHelperDelegate alloc] init] autorelease];
+    NSString *rendering = [GRMustacheTemplate renderObject:@{ @"helper": helper } fromString:@"{{helper}}" error:NULL];
+    STAssertEqualObjects(rendering, @"<foo>", @"");
+    STAssertEqualObjects(helper.returnValue, @"foo", @"");
 }
 
 @end
