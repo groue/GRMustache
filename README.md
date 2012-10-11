@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is a production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-**October 2nd, 2012: GRMustache 5.4.3 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**October 11th, 2012: GRMustache 5.4.4 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -74,7 +74,7 @@ Advanced Mustache:
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
-Sample code:
+### Sample code
 
 - [layout template](../../../tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
 - [number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers

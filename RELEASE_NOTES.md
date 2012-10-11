@@ -4,6 +4,11 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.4.4
+
+- Fix a memory leak in [overridable partials](Guides/partials.md).
+- Until this version, GRMustache would not trigger delegate methods for objects conforming to both GRMustacheVariableHelper and GRMustacheTemplateDelegate protocols.
+
 ## v5.4.3
 
 Until this version, GRMustache would not trigger section tag helpers, variable tag helpers and section delegates in a few corner cases.
