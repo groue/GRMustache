@@ -175,7 +175,15 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 - (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns a GRMustacheRuntime object identical to the receiver, but for the
+ * template override stack that is extended with _templateOverride_.
+ *
+ * @param templateOverride  A template override object
+ *
+ * @return A GRMustacheRuntime object.
+ *
+ * @see GRMustacheTemplateOverride
+ * @see [GRMustacheTemplateOverride renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
@@ -228,7 +236,14 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 - (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * In the context of overridable partials, return the element that should be
+ * rendered in lieu of _element_, should _element_ be overriden by another
+ * element.
+ *
+ * @param element  A rendering element
+ *
+ * @return The resolution of the element in the context of Mustache overridable
+ *         partials.
  */
 - (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 

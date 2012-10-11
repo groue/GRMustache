@@ -51,15 +51,11 @@
     [_template renderInBuffer:buffer withRuntime:runtime];
 }
 
-- (BOOL)isOverridable
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    return NO;
-}
-
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
-{
+    // look for the last overriding element in inner elements
     for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
-        element = [innerElement resolveOverridableRenderingElement:element];
+        element = [innerElement resolveRenderingElement:element];
     }
     return element;
 }

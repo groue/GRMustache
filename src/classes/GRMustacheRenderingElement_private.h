@@ -49,26 +49,13 @@
  * 
  * Rendering elements are able to override other rendering elements, in the
  * context of Mustache overridable partials. This feature is backed on the
- * `overridable` property and the `resolveOverridableRenderingElement:` method.
+ * `resolveRenderingElement:` method.
  *
  * @see GRMustacheCompiler
  * @see GRMustacheRuntime
  */
 @protocol GRMustacheRenderingElement<NSObject>
 @required
-
-/**
- * Returns YES if rendering element can be overriden, in the context of
- * Mustache overridable partials.
- *
- * All classes conforming to the GRMustacheRenderingElement protocol return NO,
- * but GRMustacheSectionElement.
- *
- * @see [GRMustacheRuntime resolveRenderingElement:]
- * @see GRMustacheTemplateOverride
- * @see GRMustacheSectionElement
- */
-@property (nonatomic, readonly, getter=isOverridable) BOOL overridable GRMUSTACHE_API_INTERNAL;
 
 /**
  * Appends the rendering of the receiver in a buffer.
@@ -81,9 +68,9 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns the receiver if it can override the _element_ parameter, whose
- * overridable property is guaranteed to return YES. Otherwise, return the
- * _element_ parameter.
+ * In the context of overridable partials, return the element that should be
+ * rendered in lieu of _element_, should _element_ be overriden by another
+ * element.
  *
  * All classes conforming to the GRMustacheRenderingElement protocol return
  * _element_, but GRMustacheSectionElement, GRMustacheTemplateOverride, and
@@ -91,11 +78,12 @@
  *
  * @param element  A rendering element
  *
- * @return the resolution of the element in the context of Mustache overridable
- * partials.
+ * @return The resolution of the element in the context of Mustache overridable
+ *         partials.
  *
  * @see GRMustacheSectionElement
+ * @see GRMustacheTemplate
  * @see GRMustacheTemplateOverride
  */
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
 @end

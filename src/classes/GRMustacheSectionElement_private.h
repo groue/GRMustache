@@ -44,6 +44,11 @@
 }
 
 /**
+ * An overridable section tag is `{{$...}}`.
+ */
+@property (nonatomic, readonly, getter=isOverridable) BOOL overridable;
+
+/**
  * A template repository, so that helpers can render alternate template strings.
  */
 @property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;

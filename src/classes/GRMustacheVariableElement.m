@@ -92,8 +92,18 @@
         {
             // Helper
             
+            // helpers enter the runtime
             GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
+            
+            // delegates enter the runtime.
+            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+            }
+            
+            // build variable helper tag context
             GRMustacheVariableTagRenderingContext *context = [GRMustacheVariableTagRenderingContext contextWithTemplateRepository:_templateRepository runtime:helperRuntime];
+            
+            // render
             NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
             if (rendering) {
                 // Never HTML escape helpers
@@ -104,8 +114,18 @@
         {
             // Helper
             
+            // helpers enter the runtime
             GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
+            
+            // delegates enter the runtime.
+            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+            }
+            
+            // build variable helper tag context
             GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:helperRuntime];
+            
+            // render
             NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
             if (rendering) {
                 // Never HTML escape helpers
@@ -125,13 +145,9 @@
     }];
 }
 
-- (BOOL)isOverridable
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    return NO;
-}
-
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
-{
+    // variable tags can not override any other element
     return element;
 }
 

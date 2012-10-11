@@ -48,7 +48,6 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride contextObject:(id)contextObject;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride filterObject:(id)filterObject;
 - (id)initWithTemplate:(GRMustacheTemplate *)template parent:(GRMustacheRuntime *)parent parentHasContext:(BOOL)parentHasContext parentHasFilter:(BOOL)parentHasFilter parentHasTemplateDelegate:(BOOL)parentHasTemplateDelegate parentHasTemplateOverride:(BOOL)parentHasTemplateOverride templateOverride:(GRMustacheTemplateOverride *)templateOverride;
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element;
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
 @end
 
@@ -147,6 +146,7 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     [_templateDelegate release];
     [_contextObject release];
     [_filterObject release];
+    [_templateOverride release];
     [super dealloc];
 }
 
@@ -218,24 +218,16 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 - (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    if (element.isOverridable) {
-        element = [self resolveOverridableRenderingElement:element];
+    if (_templateOverride) {
+        element = [_templateOverride resolveRenderingElement:element];
+    }
+    if (_parentHasTemplateOverride) {
+        element = [_parent resolveRenderingElement:element];
     }
     return element;
 }
 
 #pragma mark - Private
-
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
-{
-    if (_templateOverride) {
-        element = [_templateOverride resolveOverridableRenderingElement:element];
-    }
-    if (_parentHasTemplateOverride) {
-        element = [_parent resolveOverridableRenderingElement:element];
-    }
-    return element;
-}
 
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
 {

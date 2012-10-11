@@ -75,8 +75,11 @@
 - (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     for (id<GRMustacheRenderingElement> element in _innerElements) {
-        element = [runtime resolveRenderingElement:element];      // apply overrides
-        [element renderInBuffer:buffer withRuntime:runtime];   // render
+        // element may be overriden by a GRMustacheTemplateOverride: resolve it.
+        element = [runtime resolveRenderingElement:element];
+        
+        // render
+        [element renderInBuffer:buffer withRuntime:runtime];
     }
 }
 
@@ -136,19 +139,29 @@
     }];
 }
 
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
+    // Only {{$...}} section can override elements
     if (!_overridable) {
         return element;
     }
+    
+    // {{$...}} sections can only override other sections
     if (![element isKindOfClass:[GRMustacheSectionElement class]]) {
         return element;
     }
     GRMustacheSectionElement *otherSectionElement = (GRMustacheSectionElement *)element;
+
+    // {{$...}} sections can only override other overridable sections
+    if (!otherSectionElement.isOverridable) {
+        return otherSectionElement;
+    }
+
+    // {{$...}} sections can only override other sections with the same expression
     if ([otherSectionElement.expression isEqual:_expression]) {
         return self;
     }
-    return element;
+    return otherSectionElement;
 }
 
 

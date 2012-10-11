@@ -50,13 +50,9 @@
     [buffer appendString:_text];
 }
 
-- (BOOL)isOverridable
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    return NO;
-}
-
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
-{
+    // text elements can not override any other element
     return element;
 }
 

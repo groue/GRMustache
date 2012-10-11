@@ -227,7 +227,10 @@
     }
     
     for (id<GRMustacheRenderingElement> element in _innerElements) {
+        // element may be overriden by a GRMustacheTemplateOverride: resolve it.
         element = [runtime resolveRenderingElement:element];
+        
+        // render
         [element renderInBuffer:buffer withRuntime:runtime];
     }
     
@@ -236,15 +239,24 @@
     }
 }
 
-- (BOOL)isOverridable
+- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
 {
-    return NO;
-}
-
-- (id<GRMustacheRenderingElement>)resolveOverridableRenderingElement:(id<GRMustacheRenderingElement>)element
-{
+    // look for the last overriding element in inner elements.
+    //
+    // This allows a partial do define an overriding section:
+    //
+    //    {
+    //        data: { },
+    //        expected: "partial1",
+    //        name: "Partials in overridable partials can override overridable sections",
+    //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
+    //        partials: {
+    //            partial1: "{{$overridable}}partial1{{/overridable}}";
+    //            partial2: "{{$overridable}}ignored{{/overridable}}";
+    //        },
+    //    }
     for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
-        element = [innerElement resolveOverridableRenderingElement:element];
+        element = [innerElement resolveRenderingElement:element];
     }
     return element;
 }
