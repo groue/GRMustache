@@ -82,8 +82,17 @@
       "template": "{{<partial1}}{{$overridable}}ignored{{/overridable}}{{>partial2}}{{/partial1}}",
       "partials": {
         "partial1": "{{$overridable}}ignored{{/overridable}}",
-        "partial2": "{{$overridable}}partial2{{/overridable}}" },
+        "partial2": "{{$overridable}}ignored{{/overridable}}{{$overridable}}partial2{{/overridable}}" },
       "expected": "partial2"
+    },
+    {
+      "name": "Templates can define the last winning overridable section",
+      "data": { },
+      "template": "{{<partial1}}{{>partial2}}{{$overridable}}overriden{{/overridable}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{$overridable}}ignored{{/overridable}}",
+        "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "overriden"
     },
     {
       "name": "Overridable partials can override overridable sections in their own overridable partials",
@@ -91,6 +100,15 @@
       "template": "{{<partial1}}{{/partial1}}",
       "partials": {
           "partial1": "{{<partial2}}{{$overridable}}partial1{{/overridable}}{{/partial2}}",
+          "partial2": "{{$overridable}}ignored{{/overridable}}" },
+      "expected": "partial1"
+    },
+    {
+      "name": "Partials in overridable partials can override overridable sections",
+      "data": { },
+      "template": "{{<partial2}}{{>partial1}}{{/partial2}}",
+      "partials": {
+          "partial1": "{{$overridable}}partial1{{/overridable}}",
           "partial2": "{{$overridable}}ignored{{/overridable}}" },
       "expected": "partial1"
     },
