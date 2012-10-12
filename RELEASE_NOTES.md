@@ -11,7 +11,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v5.4.3
 
-Until this version, GRMustache would not trigger section tag helpers, variable tag helpers and section delegates in a few corner cases.
+Until this version, GRMustache would not trigger section tag helpers, variable tag helpers and tag delegates in a few corner cases.
 
 ## v5.4.2
 

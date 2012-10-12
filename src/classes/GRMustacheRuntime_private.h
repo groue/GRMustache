@@ -50,7 +50,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * - provide the current context object.
  * - perform a key lookup in the context stack.
  * - perform a key lookup in the filter stack.
- * - let template and section delegates interpret rendered values.
+ * - let template and tag delegates interpret rendered values.
  */
 @interface GRMustacheRuntime : NSObject {
     BOOL _parentHasContext;

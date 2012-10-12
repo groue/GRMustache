@@ -6,15 +6,19 @@ GRMustacheTemplateDelegate protocol
 This protocol lets you observe, and possibly alter the rendering of a template.
 
 
-Template delegate and section delegates
----------------------------------------
+Template delegate and tag delegates
+-----------------------------------
 
 While rendering a template, several objects may get messages from GRMustache:
 
 - The template's delegate itself, which you set via the `delegate` property of the GRMustacheTemplate class.
-- Objects attached to section tags, as long as they conform to the GRMustacheTemplateDelegate protocol.
+- Objects attached to section and variable tags, as long as they conform to the GRMustacheTemplateDelegate protocol.
 
-The template's delegate can observe the full template rendering. However, Delegates of section tags can only observe the rendering of their inner content. As sections get nested, a template gets more and more delegates.
+The template's delegate can observe the full template rendering.
+
+Section tag delegates can only observe the rendering of their inner content. As sections get nested, a template would get more and more delegates.
+
+[Variable tag helpers](variable_tag_helpers.md) can also be delegates, and observe their own rendering.
 
 You'll find template delegate usages below. Delegates of section tags are used in the [localization](sample_code/localization.md) sample code.
 
@@ -31,7 +35,7 @@ The following methods are called before, and after the whole template rendering:
 - (void)templateDidRender:(GRMustacheTemplate *)template;
 ```
 
-Delegates of section tags are not sent these messages. Only template delegates are.
+Tag delegates are not sent these messages. Only template delegates are.
 
 ### Tag rendering
 
@@ -124,7 +128,7 @@ GRMustacheTemplateDelegate will help you when you can not, or do not want, to em
 Sample code
 -----------
 
-The [localization.md](sample_code/localization.md) sample code uses delegates of section tags for localizing portions of a template.
+The [localization.md](sample_code/localization.md) sample code uses section tag delegate for localizing portions of a template.
 
 
 [up](introduction.md), [next](../../../tree/master/Guides/sample_code)
