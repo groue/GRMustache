@@ -21,7 +21,7 @@ Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): 
 
 GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
 
-**armv6 architecture**: The last GRMustache library that embeds the armv6 slice is [GRMustache 5.0.1](https://github.com/groue/GRMustache/tree/v5.0.1).
+**armv6 architecture**: The last GRMustache static library that embeds the armv6 slice is [GRMustache 5.0.1](https://github.com/groue/GRMustache/tree/v5.0.1). You now have to compile GRMustache yourself, or to use [CocoaPods](https://github.com/CocoaPods/CocoaPods).
 
 ### 2. Start rendering templates
 
