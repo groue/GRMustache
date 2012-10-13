@@ -43,12 +43,13 @@ The library features are described in the [guides](introduction.md). This sectio
     - `GRMustacheRenderingElement`
     - `GRMustacheSectionElement`
     - `GRMustacheTemplate`
+    - `GRMustacheTemplateOverride`
     - `GRMustacheTextElement`
     - `GRMustacheVariableElement`
     
     The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *rendering elements*.
     
-    Rendering elements are actually able to provide the rendering expected by the library user. *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, and *variable elements* render Mustache variable tags.
+    Rendering elements are actually able to provide the rendering expected by the library user. *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, *variable elements* render Mustache variable tags, and *template overrides* render overridable partial tags.
     
     For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a variable element.
 
@@ -56,16 +57,20 @@ The library features are described in the [guides](introduction.md). This sectio
 	- `GRMustacheInvocation`
     - `GRMustacheRuntime`
 	- `GRMustacheTemplateDelegate`
+    - `GRMustacheNSUndefinedKeyExceptionGuard`
     
-    A *runtime* implements a state of three different stacks:
+    A *runtime* implements a state of four different stacks:
 	
 	- a *context stack*, initialized with the initial object that the library user provides in order to "fill" the template. Section elements create new runtime objects with an extended context stack.
-	- a *filter stack*, that is initialized with the *filter library* (see below). Templates extend this filter stack with user's custom filters.
-	- a *delegate stack*, initialized with a template's delegate. Section elements create new runtime objects with an extended delegate stack whenever they render objects that conform to the GRMustacheTemplateDelegate protocol.
+	- a *filter stack*, that is initialized with the *filter library* (see below). It is extended with user's custom filters.
+	- a *delegate stack*, initialized with a template's delegate. Section and variable elements create new runtime objects with an extended delegate stack whenever they render objects that conform to the GRMustacheTemplateDelegate protocol.
+	- a *template override stack*, that grows when a template override element renders.
     
     A runtime is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the runtime in order to compute their values.
 
     *Invocations* are created by runtime objects, and exposed to *delegates*, so that the library user inspect or override rendered values.
+    
+    *GRMustacheNSUndefinedKeyExceptionGuard* is a funny tool that allows the library user to avoid his debugger to stop on every NSUndefinedKeyException raised by the template rendering.
     
 - **Lambdas Sections**
     - `GRMustacheSectionTagHelper`
@@ -74,10 +79,11 @@ The library features are described in the [guides](introduction.md). This sectio
     The library user can implement *section tag helpers* in order to have some section tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
 
 - **Lambdas Variables**
+    - `GRMustacheDynamicPartial`
     - `GRMustacheVariableTagHelper`
     - `GRMustacheVariableTagRenderingContext`
 
-    The library user can implement *variable tag helpers* in order to have some variable tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
+    The library user can implement *variable tag helpers* in order to have some variable tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools. *Dynamic partials* are variable tag helpers dedicated to rendering partials.
 
 - **Filters**
     - `GRMustacheFilter`
@@ -86,14 +92,6 @@ The library features are described in the [guides](introduction.md). This sectio
     The *filter library* provides with built-in filters.
     
     The library user can implement her own *filters*, that will add to the built-in ones.
-    
-- **Misc**
-    - `GRMustache`
-    - `GRMustacheNSUndefinedKeyExceptionGuard`
-    
-    *GRMustache* provides with library configuration.
-    
-    *GRMustacheNSUndefinedKeyExceptionGuard* is a funny tool that allows the library user to avoid his debugger to stop on every NSUndefinedKeyException raised by the template rendering.
     
     
 
