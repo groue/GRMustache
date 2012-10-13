@@ -39,11 +39,12 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 
 /**
  * The GRMustacheRuntime responsability is to provide a runtime context for
- * Mustache rendering. It internally maintains three stacks:
+ * Mustache rendering. It internally maintains the following stacks:
  *
  * - a context stack,
  * - a filter stack,
- * - a delegate stack.
+ * - a delegate stack,
+ * - a template override stack.
  *
  * As such, it is able to:
  *
@@ -51,18 +52,14 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * - perform a key lookup in the context stack.
  * - perform a key lookup in the filter stack.
  * - let template and tag delegates interpret rendered values.
+ * - let partial templates override rendering elements.
  */
 @interface GRMustacheRuntime : NSObject {
-    BOOL _parentHasContext;
-    BOOL _parentHasFilter;
-    BOOL _parentHasTemplateDelegate;
-    BOOL _parentHasTemplateOverride;
-    GRMustacheRuntime *_parent;
     GRMustacheTemplate *_template;
-    id<GRMustacheTemplateDelegate> _templateDelegate;
-    GRMustacheTemplateOverride *_templateOverride;
-    id _contextObject;
-    id _filterObject;
+    NSArray *_contextStack;
+    NSArray *_filterStack;
+    NSArray *_delegateStack;
+    NSArray *_templateOverrideStack;
 }
 
 /**
@@ -89,11 +86,8 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a GRMustacheRuntime object whose:
- *
- * - context stack is empty,
- * - delegate stack is empty,
- * - filter stack is initialized with the filter library.
+ * Returns a GRMustacheRuntime object with empty stacks, but the filter stack,
+ * initialized with the filter library.
  *
  * This method is only used by GRMustacheRuntimeTest.
  *
@@ -104,38 +98,24 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (id)runtime GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a GRMustacheRuntime object whose:
+ * Returns a GRMustacheRuntime object with empty stacks but:
  *
- * - context stack is initialized with _contextObject_,
- * - delegate stack is initialized with _template_'s delegate,
- * - filter stack is initialized with the filter library.
+ * - the context stack is initialized with _contextStack_,
+ * - the delegate stack is initialized with _template_'s delegate,
+ * - the filter stack is initialized with the filter library.
  *
- * @param template       a template
- * @param contextObject  a context object
- *
- * @return A GRMustacheRuntime object.
- *
- * @see GRMustacheFilterLibrary
- * @see -[GRMustacheTemplate renderObject:withFilters:]
- */
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObject:(id)contextObject GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a GRMustacheRuntime object whose:
- *
- * - context stack is initialized with objects in _contextObjects_,
- * - delegate stack is initialized with _template_'s delegate,
- * - filter stack is initialized with the filter library.
+ * Object at index 0 in contextStack is the top of the stack (the first queried
+ * object when looking for a key).
  *
  * @param template       a template
- * @param contextObject  a context object
+ * @param contextStack   a context stack
  *
  * @return A GRMustacheRuntime object.
  *
  * @see GRMustacheFilterLibrary
  * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
  */
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextObjects:(NSArray *)contextObjects GRMUSTACHE_API_INTERNAL;
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the

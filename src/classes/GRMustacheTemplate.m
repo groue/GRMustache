@@ -187,7 +187,7 @@
 - (NSString *)renderObject:(id)object withFilters:(id)filters
 {
     NSMutableString *buffer = [NSMutableString string];
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextObject:object];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextStack:(object ? [NSArray arrayWithObject:object] : nil)];
     runtime = [runtime runtimeByAddingFilterObject:filters];
     [self renderInBuffer:buffer withRuntime:runtime];
     return buffer;
@@ -210,8 +210,14 @@
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters
 {
+    // GRMustacheRuntime contextStack is in reversed order
+    NSMutableArray *contextStack = [NSMutableArray arrayWithCapacity:objects.count];
+    for (id object in [objects reverseObjectEnumerator]) {
+        [contextStack addObject:object];
+    }
+    
     NSMutableString *buffer = [NSMutableString string];
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextObjects:objects];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextStack:contextStack];
     runtime = [runtime runtimeByAddingFilterObject:filters];
     [self renderInBuffer:buffer withRuntime:runtime];
     return buffer;

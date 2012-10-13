@@ -457,6 +457,9 @@
 /**
  * Renders a template with a context stack initialized with an array of objects.
  *
+ * The last object in the array will be the first queried when performing a key
+ * lookup.
+ *
  * @param objects  An array of context objects for interpreting Mustache tags.
  * @param filters  An object that provides custom filters.
  *
