@@ -137,10 +137,12 @@
             // Object
             
             NSString *rendering = [value description];
-            if (!_raw) {
-                rendering = [self htmlEscape:rendering];
+            if (rendering) {
+                if (!_raw) {
+                    rendering = [self htmlEscape:rendering];
+                }
+                [buffer appendString:rendering];
             }
-            [buffer appendString:rendering];
         }
     }];
 }
