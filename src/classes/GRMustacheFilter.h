@@ -94,4 +94,6 @@
  */
 + (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
++ (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block;
+
 @end

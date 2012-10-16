@@ -512,6 +512,10 @@
                         state = stateError;
                         break;
                         
+                    case ',':
+                        state = stateError;
+                        break;
+                        
                     default:
                         canFilter = YES;
                         state = stateIdentifier;
@@ -552,6 +556,20 @@
                             state = stateError;
                         }
                         break;
+                    
+                    case ',':
+                        if (filterExpressionStack.count > 0) {
+                            NSAssert(currentExpression, @"WTF");
+                            NSAssert(filterExpressionStack.count > 0, @"WTF");
+                            
+                            state = stateInitial;
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
+                            [filterExpressionStack removeLastObject];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression]];
+                            currentExpression = nil;
+                        } else {
+                            state = stateError;
+                        }
                         
                     default:
                         state = stateIdentifier;
@@ -631,6 +649,29 @@
                         }
                     } break;
                         
+                    case ',': {
+                        // leave stateIdentifier
+                        NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
+                        if (currentExpression) {
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                        } else {
+                            currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
+                        }
+                        
+                        if (filterExpressionStack.count > 0) {
+                            NSAssert(currentExpression, @"WTF");
+                            NSAssert(filterExpressionStack.count > 0, @"WTF");
+                            state = stateInitial;
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
+                            [filterExpressionStack removeLastObject];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression]];
+                            currentExpression = nil;
+                        } else {
+                            state = stateError;
+                        }
+                    } break;
+                        
+                        
                     default:
                         break;
                 }
@@ -654,6 +695,10 @@
                         break;
                         
                     case ')':
+                        state = stateError;
+                        break;
+                    
+                    case ',':
                         state = stateError;
                         break;
                         
@@ -701,6 +746,20 @@
                             state = stateError;
                         }
                         break;
+                    
+                    case ',':
+                        if (filterExpressionStack.count > 0) {
+                            NSAssert(currentExpression, @"WTF");
+                            NSAssert(filterExpressionStack.count > 0, @"WTF");
+                            state = stateInitial;
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
+                            [filterExpressionStack removeLastObject];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression]];
+                            currentExpression = nil;
+                        } else {
+                            state = stateError;
+                        }
+                        break;
                         
                     default:
                         state = stateError;
@@ -735,6 +794,20 @@
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
                             currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression];
+                        } else {
+                            state = stateError;
+                        }
+                        break;
+                        
+                    case ',':
+                        if (filterExpressionStack.count > 0) {
+                            NSAssert(currentExpression, @"WTF");
+                            NSAssert(filterExpressionStack.count > 0, @"WTF");
+                            state = stateInitial;
+                            GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
+                            [filterExpressionStack removeLastObject];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression parameterExpression:currentExpression]];
+                            currentExpression = nil;
                         } else {
                             state = stateError;
                         }
