@@ -23,8 +23,6 @@
 #import "GRMustacheFilter.h"
 #import "GRMustacheSectionTagHelper.h"
 #import "GRMustacheSectionTagRenderingContext.h"
-#import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheVariableTagRenderingContext.h"
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
@@ -48,9 +46,10 @@
  */
 @interface GRMustacheMultiArgumentBlockFilter: GRMustacheFilter {
 @private
+    NSArray *_arguments;
     id(^_block)(NSArray *arguments);
 }
-- (id)initWithBlock:(id(^)(NSArray *arguments))block;
+- (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments;
 @end
 
 
@@ -66,7 +65,7 @@
 
 + (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block
 {
-    return [[[GRMustacheMultiArgumentBlockFilter alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheMultiArgumentBlockFilter alloc] initWithBlock:block arguments:[NSArray array]] autorelease];
 }
 
 - (id)transformedValue:(id)object
@@ -115,44 +114,13 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheMultiArgumentBlockFilter
 
-@interface GRTruc : NSObject<GRMustacheFilter, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper> {
-@private
-    NSArray *_arguments;
-    id(^_block)(NSArray *arguments);
-}
-- (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments;
+@interface GRMustacheMultiArgumentBlockFilter()<GRMustacheSectionTagHelper>
+
 @end
 
 @implementation GRMustacheMultiArgumentBlockFilter
 
-- (id)initWithBlock:(id(^)(NSArray *arguments))block
-{
-    self = [self init];
-    if (self) {
-        _block = [block copy];
-    }
-    return self;
-}
-
-
-- (void)dealloc
-{
-    [_block release];
-    [super dealloc];
-}
-
-#pragma mark <GRMustacheFilter>
-
-- (id)transformedValue:(id)object
-{
-    return [[[GRTruc alloc] initWithBlock:_block arguments:[NSArray arrayWithObject:object]] autorelease];
-}
-
-@end
-
-@implementation GRTruc
-
-- (id)initWithBlock:(id (^)(NSArray *))block arguments:(NSArray *)arguments
+- (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
 {
     self = [self init];
     if (self) {
@@ -169,25 +137,38 @@
     [super dealloc];
 }
 
+- (id)_result
+{
+    return _block(_arguments);
+}
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    return [[self _result] valueForKey:key];
+}
+
+- (NSString *)description
+{
+    return [[self _result] description];
+}
+
+
+#pragma mark <GRMustacheFilter>
+
 - (id)transformedValue:(id)object
 {
-    return [[[GRTruc alloc] initWithBlock:_block arguments:[_arguments arrayByAddingObject:object]] autorelease];
+    // Turn nil into [NSNull null]
+    NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
+    return [[[GRMustacheMultiArgumentBlockFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
 }
+
+
+#pragma mark <GRMustacheSectionTagHelper>
 
 - (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
-    NSString *templateString = [NSString stringWithFormat:@"{{#_value}}%@{{/value}}", context.innerTemplateString];
+    NSString *templateString = [NSString stringWithFormat:@"{{#_result}}%@{{/_result}}", context.innerTemplateString];
     return [context renderTemplateString:templateString error:NULL];
-}
-
-- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
-{
-    return [context renderTemplateString:@"{{_value}}" error:NULL];
-}
-
-- (id)_value
-{
-    return _block(_arguments);
 }
 
 @end
