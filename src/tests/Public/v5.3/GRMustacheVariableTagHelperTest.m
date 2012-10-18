@@ -46,12 +46,14 @@
 }
 @end
 
-@interface GRMustacheVariableTagHelperDelegate: NSObject<GRMustacheVariableTagHelper, GRMustacheTemplateDelegate>
+@interface GRMustacheVariableTagHelperDelegate: NSObject<GRMustacheVariableTagHelper, GRMustacheTemplateDelegate> {
+    NSString *_returnValue;
+}
 @property (nonatomic, retain) NSString *returnValue;
 @end
 
 @implementation GRMustacheVariableTagHelperDelegate
-@synthesize returnValue;
+@synthesize returnValue=_returnValue;
 
 - (void)dealloc
 {
