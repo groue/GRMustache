@@ -251,6 +251,51 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     return value;
 }
 
++ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data
+{
+    id value = nil;
+    
+    if (super_data->receiver)
+    {
+        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:super_data->receiver]) {
+            // Specific case here: we don't want to return another collection.
+            // See issue #21 and "anchored key should not extract properties
+            // inside an array" test in
+            // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+            return nil;
+        }
+        
+        @try
+        {
+            if (preventingNSUndefinedKeyExceptionAttack)
+            {
+                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inSuper:super_data];
+            }
+            else
+            {
+                value = objc_msgSendSuper(super_data, @selector(valueForKey:), key);
+            }
+        }
+        @catch (NSException *exception)
+        {
+            // swallow all NSUndefinedKeyException, reraise other exceptions
+            if (![[exception name] isEqualToString:NSUndefinedKeyException])
+            {
+                [exception raise];
+            }
+#if !defined(NS_BLOCK_ASSERTIONS)
+            else
+            {
+                // For testing purpose
+                GRMustacheRuntimeDidCatchNSUndefinedKeyException = YES;
+            }
+#endif
+        }
+    }
+    
+    return value;
+}
+
 - (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack filterStack:(NSArray *)filterStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
 {
     self = [super init];

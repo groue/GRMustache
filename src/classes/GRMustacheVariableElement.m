@@ -65,7 +65,7 @@
         // Interpret value
 
         if ((value == nil) ||
-            (value == [NSNull null]))
+            ([value isKindOfClass:[NSNull class]]))
         {
             // Missing value
         }

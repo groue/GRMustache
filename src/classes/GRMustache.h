@@ -102,6 +102,7 @@ typedef struct {
 #import "GRMustacheSectionTagRenderingContext.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
+#import "GRMustacheProxy.h"
 
 // Compatibility with deprecated declarations
 

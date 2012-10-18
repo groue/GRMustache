@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <objc/message.h>
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateDelegate.h"
@@ -84,6 +85,11 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @see preventNSUndefinedKeyExceptionAttack
  */
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
++ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheRuntime object with empty stacks, but the filter stack,

@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilter.h"
+#import "GRMustacheProxy.h"
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
@@ -42,7 +43,7 @@
 /**
  * TODO
  */
-@interface GRMustacheMultiArgumentBlockFilter: GRMustacheFilter {
+@interface GRMustacheMultiArgumentBlockFilter: GRMustacheProxy<GRMustacheFilter> {
 @private
     NSArray *_arguments;
     id(^_block)(NSArray *arguments);
@@ -131,18 +132,9 @@
     [super dealloc];
 }
 
-// Support for {{ f(a,b).key }}
-- (id)valueForUndefinedKey:(NSString *)key
+- (id)resolveSurrogate
 {
-    id result = _block(_arguments);
-    return [result valueForKey:key];
-}
-
-// Support for {{ f(a,b) }}
-- (NSString *)description
-{
-    id result = _block(_arguments);
-    return [result description];
+    return _block(_arguments);
 }
 
 #pragma mark <GRMustacheFilter>

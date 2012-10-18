@@ -100,7 +100,7 @@
             }
             return;
         }
-        else if (value == [NSNull null] ||
+        else if ([value isKindOfClass:[NSNull class]] ||
                  ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
                  ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
         {

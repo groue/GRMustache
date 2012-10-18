@@ -41,9 +41,12 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
     if (object == nil) {
         return nil;
     }
+    
     [self swizzleIfNeeded];
+    
     NSMutableSet *silentObjects = [self silentObjectsForCurrentThread];
     [silentObjects addObject:object];
+    
     id value = nil;
     @try {
         value = [object valueForKey:key];
@@ -55,8 +58,36 @@ static const NSString *GRMustacheNSUndefinedKeyExceptionGuardSilentObjects = @"G
         [exception raise];
     }
     [silentObjects removeObject:object];
+    
     return value;
 }
+
++ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data
+{
+    if (super_data->receiver == nil) {
+        return nil;
+    }
+    
+    [self swizzleIfNeeded];
+    
+    NSMutableSet *silentObjects = [self silentObjectsForCurrentThread];
+    [silentObjects addObject:super_data->receiver];
+    
+    id value = nil;
+    @try {
+        value = objc_msgSendSuper(super_data, @selector(valueForKey:), key);
+    }
+    @catch (NSException *exception) {
+        // We may not prevent all exceptions.
+        // Make sure we do not leak any memory, and raise again.
+        [silentObjects removeObject:super_data->receiver];
+        [exception raise];
+    }
+    [silentObjects removeObject:super_data->receiver];
+    
+    return value;
+}
+
 
 #pragma mark Private
 
