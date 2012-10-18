@@ -91,9 +91,25 @@
  * @return a GRMustacheFilter object.
  *
  * @since v4.3
+ *
+ * @see multiArgumentsFilterWithBlock:
  */
 + (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
-+ (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block;
+/**
+ * Returns a GRMustacheFilter object that executes the provided block, given an
+ * array of arguments.
+ *
+ * Those filters can evaluate expressions like `{{ f(a,b) }}`.
+ *
+ * @param block   The block that transforms its input.
+ *
+ * @return a GRMustacheFilter object.
+ *
+ * @since v5.5
+ *
+ * @see filterWithBlock:
+ */
++ (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
 
 @end
