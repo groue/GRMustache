@@ -31,15 +31,15 @@
 }
 
 // Documented in GRMustacheProxy.h
-@property (nonatomic, retain) id delegate;
+@property (nonatomic, retain) id delegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheProxy.h
-- (id)init;
+- (id)init GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheProxy.h
-- (id)initWithDelegate:(id)delegate;
+- (id)initWithDelegate:(id)delegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheProxy.h
-- (void)loadDelegate;
+- (void)loadDelegate GRMUSTACHE_API_PUBLIC;
 @end
 
