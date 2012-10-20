@@ -73,6 +73,7 @@ Advanced Mustache:
 - [variable_tag_helpers.md](GRMustache/blob/master/Guides/variable_tag_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
+- [proxies.md](GRMustache/blob/master/Guides/proxies.md): how to extend the behavior of regular objects, and write robust and reusable filters and helpers.
 
 ### Sample code
 
