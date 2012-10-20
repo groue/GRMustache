@@ -1,4 +1,4 @@
-[up](introduction.md), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](runtime.md)
 
 Template repositories
 =====================
@@ -273,4 +273,4 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 repository.dataSource = mars;
 ```
 
-[up](introduction.md), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](runtime.md)

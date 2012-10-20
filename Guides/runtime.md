@@ -1,4 +1,4 @@
-[up](introduction.md), [next](runtime/context_stack.md)
+[up](../../../../GRMustache#documentation), [next](runtime/context_stack.md)
 
 GRMustache runtime
 ==================
@@ -51,4 +51,4 @@ Mustache does a little more than rendering plain `{{name}}` tags. Let's review M
     Control whether a Mustache section should render or not.
 
 
-[up](introduction.md), [next](runtime/context_stack.md)
+[up](../../../../GRMustache#documentation), [next](runtime/context_stack.md)

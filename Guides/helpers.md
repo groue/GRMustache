@@ -1,4 +1,4 @@
-[up](introduction.md), [next](section_tag_helpers.md)
+[up](../../../../GRMustache#documentation), [next](section_tag_helpers.md)
 
 Helpers
 =======
@@ -10,4 +10,4 @@ Variable tag helpers let you render a variable tag as: `{{name}}` with you own c
 - [Section tag  helpers](section_tag_helpers.md)
 - [Variable tag helpers](variable_tag_helpers.md)
 
-[up](introduction.md), [next](section_tag_helpers.md)
+[up](../../../../GRMustache#documentation), [next](section_tag_helpers.md)

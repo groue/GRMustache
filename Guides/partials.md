@@ -1,4 +1,4 @@
-[up](introduction.md), [next](template_repositories.md)
+[up](../../../../GRMustache#documentation), [next](template_repositories.md)
 
 Partial templates
 =================
@@ -148,5 +148,5 @@ You can override a section with attached data, as well:
         {{/article}}
     {{/article_page}}
 
-[up](introduction.md), [next](template_repositories.md)
+[up](../../../../GRMustache#documentation), [next](template_repositories.md)
 

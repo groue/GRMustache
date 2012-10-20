@@ -1,4 +1,4 @@
-[up](introduction.md), [next](variable_tag_helpers.md)
+[up](../../../../GRMustache#documentation), [next](variable_tag_helpers.md)
 
 Section Tag Helpers
 ===================
@@ -190,4 +190,4 @@ The [localization.md](sample_code/localization.md) sample code uses section tag 
 The [indexes.md](sample_code/indexes.md) sample code uses section tag helpers for rendering indexes of an array items.
 
 
-[up](introduction.md), [next](variable_tag_helpers.md)
+[up](../../../../GRMustache#documentation), [next](variable_tag_helpers.md)

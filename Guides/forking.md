@@ -1,4 +1,4 @@
-[up](introduction.md)
+[up](../../../../GRMustache#documentation)
 
 # Forking GRMustache
 
@@ -167,4 +167,4 @@ Then, issue the following command:
 
     $ make clean && make
 
-[up](introduction.md)
+[up](../../../../GRMustache#documentation)

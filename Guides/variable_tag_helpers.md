@@ -1,4 +1,4 @@
-[up](introduction.md), [next](filters.md)
+[up](../../../../GRMustache#documentation), [next](filters.md)
 
 Variable Tag Helpers
 ====================
@@ -419,4 +419,4 @@ In order to be compatible with all specification-compliant implementations, your
 For compatibility with other Mustache implementations, check their documentation.
 
 
-[up](introduction.md), [next](filters.md)
+[up](../../../../GRMustache#documentation), [next](filters.md)
