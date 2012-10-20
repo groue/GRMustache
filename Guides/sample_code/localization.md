@@ -174,11 +174,11 @@ We'll thus now attach to the `localize` section an object that conforms to *both
 Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not enough. Let's go for a full class:
 
 ```objc
-@interface LocalizatingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
+@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
-@implementation LocalizatingHelper
+@implementation LocalizingHelper
 
 /**
  * GRMustacheSectionTagHelper method
@@ -301,7 +301,7 @@ With such a helper, the rendering is easy:
 id data = @{
     @"name1": @"Arthur",
     @"name2": @"Barbara",
-    @"localize": [[LocalizatingHelper alloc] init]
+    @"localize": [[LocalizingHelper alloc] init]
 };
 
 NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";

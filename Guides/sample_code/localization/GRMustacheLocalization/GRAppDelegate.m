@@ -23,7 +23,7 @@
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
 
-@interface LocalizatingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
+@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
 @end
 
 @implementation GRAppDelegate
@@ -73,7 +73,7 @@
         id data = @{
             @"name1": @"Arthur",
             @"name2": @"Barbara",
-            @"localize": [[LocalizatingHelper alloc] init]
+            @"localize": [[LocalizingHelper alloc] init]
         };
         
         NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
@@ -87,14 +87,14 @@
 
 
 /**
- * LocalizatingHelper
+ * LocalizingHelper
  */
 
-@interface LocalizatingHelper()
+@interface LocalizingHelper()
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
-@implementation LocalizatingHelper
+@implementation LocalizingHelper
 
 - (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
 {
