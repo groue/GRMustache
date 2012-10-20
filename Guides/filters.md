@@ -25,7 +25,7 @@ You apply a filter just like calling a function, with parentheses:
     
     For brevity's sake, closing section tags can be empty: `{{^ isEmpty(people) }}...{{/}}` is valid.
 
-- Filters can return filters: `{{ dateFormat(format)(date) }}`.
+- Filters can take several arguments: `{{ formatDate(date, format) }}`.
 
 
 Standard filters library
@@ -113,6 +113,57 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
+Variadic filters
+----------------
+
+A *variadic filter* is a filter that accepts a variable number of arguments.
+
+You create a variadic filter with the `variadicFilterWithBlock:` method:
+
+```objc
+// Prepare the filter
+id dateFormatFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+    // first argument is date
+    NSDate *date = [arguments objectAtIndex:0];
+    
+    // second argument is format
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.format = [arguments objectAtIndex:1];
+    
+    // compute the result
+    return [dateFormatter stringFromDate:date];
+}];
+
+// Prepare the data
+id data = @{
+    @"object1": @{
+        @"format": @"yyyy-MM-dd 'at' HH:mm",
+        @"date": [NSDate date]
+    },
+    @"object2": @{
+        @"format": @"yyyy-MM-dd",
+        @"date": [NSDate date]
+    }
+};
+
+// Prepare the filters
+id filters = @{ @"dateFormat": dateFormatFilter };
+
+NSString *templateString = @"{{#object1}}
+                           @"    {{ dateFormat(date, format) }}"
+                           @"{{/object1}}"
+                           @"{{#object2}}"
+                           @"    {{ dateFormat(date, format) }}"
+                           @"{{/object2}}";
+
+// Renders:
+// 2012-10-20 at 14:10
+// 2012-10-20
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                           withFilters:filters
+                                            fromString:templateString
+                                                 error:NULL];
+```
 
 Filters namespaces
 ------------------
@@ -133,57 +184,6 @@ id filters = @{
                       fromString:@"{{math.abs(x)}}"
                            error:NULL];
 ```
-
-
-Filters that return filters
----------------------------
-
-Some of you may like defining "meta-filters". No problem:
-
-base.mustache:
-
-    {{#object1}}
-        {{ dateFormat(format)(date) }}
-    {{/object1}}
-    {{#object2}}
-        {{ dateFormat(format)(date) }}
-    {{/object2}}
-
-render.m:
-
-```objc
-id filters = @{
-    @"dateFormat": [GRMustacheFilter filterWithBlock:^id(id format) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = format;
-        return [GRMustacheFilter filterWithBlock:^id(id date) {
-            return [dateFormatter stringFromDate:date];
-        }];
-    }]
-};
-
-id data = @{
-    @"object1": @{
-        @"format": @"yyyy-MM-dd 'at' HH:mm",
-        @"date": [NSDate date]
-    },
-    @"object2": @{
-        @"format": @"yyyy-MM-dd",
-        @"date": [NSDate date]
-    }
-};
-
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                           withFilters:filters
-                                          fromResource:@"base"
-                                                bundle:nil
-                                                 error:NULL];
-```
-
-Rendering:
-
-    2012-09-29 at 12:54
-    2012-09-29
 
 
 Filters exceptions
