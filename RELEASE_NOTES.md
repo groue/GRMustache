@@ -4,6 +4,19 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.5
+
+### Variadic filters
+
+Filters can now take several arguments: `{{ f(a,b) }}`. Check [Guides/filters.md](Guides/filters.md).
+
+### GRMustacheProxy
+
+Proxies are a tool for the developer who wants to write reusable and robust filters, helpers, and template delegates that extend the abilities of the rendered data. Check [Guides/proxies.md](Guides/proxies.md).
+
+The [array indexes.md](Guides/sample_code/indexes.md) sample code now uses proxies. The visible benefit is that the sample code is shorter. It is also more robust. Before proxies were introduced, we used not to be able to properly render indexes for "special" array items such as NSNull, false booleans, or helpers. Proxies are really all about robustness.
+
+
 ## v5.4.4
 
 - Fix a memory leak in [overridable partials](Guides/partials.md).

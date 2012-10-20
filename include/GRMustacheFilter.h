@@ -91,7 +91,30 @@
  * @return a GRMustacheFilter object.
  *
  * @since v4.3
+ *
+ * @see variadicFilterWithBlock:
  */
 + (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+
+/**
+ * Returns a GRMustacheFilter object that executes the provided block, given an
+ * array of arguments.
+ *
+ * Those filters can evaluate expressions like `{{ f(a,b) }}`.
+ *
+ * GRMustache will invoke the filter regardless of the number of arguments in
+ * the template: `{{ f(a) }}`, `{{ f(a,b) }}` and `{{ f(a,b,c) }}` will provide
+ * arrays of 1, 2, and 3 arguments respectively. It is your responsability to
+ * check that you are provided with as many arguments as you expect.
+ *
+ * @param block   The block that transforms its input.
+ *
+ * @return a GRMustacheFilter object.
+ *
+ * @since v5.5
+ *
+ * @see filterWithBlock:
+ */
++ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
 
 @end
