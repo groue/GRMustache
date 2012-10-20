@@ -1,0 +1,587 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GRMustacheProxy Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.5 </a></h1>
+				<a id="developerHome" href="../index.html">Gwendal Roué</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GRMustacheProxy Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/delegate">&nbsp;&nbsp;&nbsp;&nbsp;delegate</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	
+	<option value="//api/name/initWithDelegate:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithDelegate:</option>
+	
+	<option value="//api/name/loadDelegate">&nbsp;&nbsp;&nbsp;&nbsp;- loadDelegate</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/delegate">delegate</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithDelegate:">initWithDelegate:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/loadDelegate">loadDelegate</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GRMustacheProxy Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GRMustacheProxy Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GRMustacheProxy.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>When thrown in the Mustache rendering engine, GRMustacheProxy instances have
+the same behavior as another object, named their &ldquo;delegate&rdquo;:</p>
+
+<p>Mustache variable tags and section tags, <code>{{name}}</code>, <code>{{#name}}</code>, and
+<code>{{^name}}</code> render <em>exactly</em> the same whenever the <code>name</code> key resolves to an
+object or to a proxy whose <a href="#//api/name/delegate">delegate</a> is that object.</p>
+
+<p>You will generally subclass the GRMustacheProxy class in order to extend the
+abilities of the <a href="#//api/name/delegate">delegate</a>.</p>
+
+<p>For instance, you may define some extra keys: the <code>valueForKey:</code>
+implementation of GRMustacheProxy looks for custom keys in the proxy before
+forwarding the lookup in the delegate object. This is the technique used
+by the PositionFilter filter in the &ldquo;indexes&rdquo; sample code (see
+<a href="https://github.com/groue/GRMustache/blob/master/Guides/sample_code/indexes.md">https://github.com/groue/GRMustache/blob/master/Guides/sample_code/indexes.md).</a>.)</p>
+
+<p>GRMustacheProxies provides two initialization methods: <a href="#//api/name/initWithDelegate:"><code>initWithDelegate:</code></a>,
+and <a href="#//api/name/init"><code>init</code></a>. The <a href="#//api/name/initWithDelegate:"><code>initWithDelegate:</code></a> sets the <a href="#//api/name/delegate">delegate</a> of the proxy, which is
+from now on ready to use. The <a href="#//api/name/init"><code>init</code></a> method does not set the delegate: you
+will generally provide your own implementation of the <a href="#//api/name/loadDelegate"><code>loadDelegate</code></a> method,
+whose responsability is to lazily set the <a href="#//api/name/delegate">delegate</a> of the proxy.</p>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/proxies.md">https://github.com/groue/GRMustache/blob/master/Guides/proxies.md</a></p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+		<span class="tooltip"><p>The delegate object of the proxy.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+		<span class="tooltip"><p>Returns a newly initialized proxy without any <a href="#//api/name/delegate">delegate</a>.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithDelegate:">&ndash;&nbsp;initWithDelegate:</a></code>
+		<span class="tooltip"><p>Returns a newly initialized proxy with the provided <a href="#//api/name/delegate">delegate</a>.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/loadDelegate">&ndash;&nbsp;loadDelegate</a></code>
+		<span class="tooltip"><p>You should never call this method directly. The proxy calls this method when
+its <a href="#//api/name/delegate">delegate</a> property is requested but has not been set yet. This method
+assigns nil to the <a href="#//api/name/delegate">delegate</a> property.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="subsubtitle method-title">delegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The delegate object of the proxy.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) id delegate</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.5</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Proxies initialized with the <a href="#//api/name/initWithDelegate:"><code>initWithDelegate:</code></a> method have a delegate
+property whose value is the provided delegate object.</p>
+
+<p>Proxies initialized with the <a href="#//api/name/init"><code>init</code></a> method have no default value for their
+delegate property. If this property is accessed, the proxy automatically
+calls the <a href="#//api/name/loadDelegate"><code>loadDelegate</code></a> method, and returns the resulting delegate.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/init">&ndash; init</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/loadDelegate">&ndash; loadDelegate</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheProxy.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="subsubtitle method-title">init</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a newly initialized proxy without any <a href="#//api/name/delegate">delegate</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A newly initialized GRMustacheProxy object.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.5</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Unless you subclass GRMustacheProxy, and provide your own implementation of
+the <a href="#//api/name/loadDelegate"><code>loadDelegate</code></a> method, the <a href="#//api/name/delegate">delegate</a> property will resolve to <code>nil</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/initWithDelegate:">&ndash; initWithDelegate:</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/delegate">@property delegate</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheProxy.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithDelegate:" title="initWithDelegate:"></a>
+	<h3 class="subsubtitle method-title">initWithDelegate:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a newly initialized proxy with the provided <a href="#//api/name/delegate">delegate</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)initWithDelegate:(id)<em>delegate</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>delegate</em></dt>
+			<dd><p>The value for the <a href="#//api/name/delegate">delegate</a> property.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A newly initialized GRMustacheProxy object.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.5</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/delegate">@property delegate</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheProxy.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/loadDelegate" title="loadDelegate"></a>
+	<h3 class="subsubtitle method-title">loadDelegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>You should never call this method directly. The proxy calls this method when
+its <a href="#//api/name/delegate">delegate</a> property is requested but has not been set yet. This method
+assigns nil to the <a href="#//api/name/delegate">delegate</a> property.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)loadDelegate</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v5.5</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>You can override this method in order to load a custom <a href="#//api/name/delegate">delegate</a> object.
+If you choose to do so, assign any object to the <a href="#//api/name/delegate">delegate</a> property.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/delegate">@property delegate</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheProxy.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-10-20)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
