@@ -76,7 +76,7 @@ Advanced Mustache:
 
 ### Sample code
 
-- [layout template](../../../tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
+- [layout template](GRMustache/tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
 - [number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
 - [indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
 - [localization.md](GRMustache/blob/master/Guides/sample_code/localization.md): how to localize portions of your templates
