@@ -946,7 +946,7 @@
 				56EB54D3160EFAB0006A5F57 /* v5.2 */,
 				56683CFF161389070035FD9C /* v5.3 */,
 				5660B6D31614178F007F7FD5 /* v5.4 */,
-				56F5ECAA162D2DC0001B2D59 /* future */,
+				56F5ECAA162D2DC0001B2D59 /* v5.5 */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -996,13 +996,13 @@
 			path = v5.2;
 			sourceTree = "<group>";
 		};
-		56F5ECAA162D2DC0001B2D59 /* future */ = {
+		56F5ECAA162D2DC0001B2D59 /* v5.5 */ = {
 			isa = PBXGroup;
 			children = (
 				56F5ECAD162D2DD6001B2D59 /* GRMustacheVariadicFilterTest.m */,
 				56F5ECB1162DEF18001B2D59 /* GRMustacheProxyTest.m */,
 			);
-			path = future;
+			path = v5.5;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
