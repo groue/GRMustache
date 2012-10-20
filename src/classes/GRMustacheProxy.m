@@ -22,17 +22,12 @@
 
 #import "GRMustacheProxy_private.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheError.h"
-
-@interface GRMustacheProxy()
-@property (nonatomic, readonly) id surrogate;
-@end
 
 @implementation GRMustacheProxy
 
 - (void)dealloc
 {
-    [_surrogate release];
+    [_delegate release];
     [super dealloc];
 }
 
@@ -41,19 +36,35 @@
     return [super init];
 }
 
-- (id)initWithSurrogate:(id)surrogate
+- (id)initWithDelegate:(id)delegate
 {
     self = [self init];
     if (self) {
-        _surrogate = [surrogate retain];
-        _surrogateResolved = YES;
+        self.delegate = delegate;
     }
     return self;
 }
 
-- (id)resolveSurrogate
+- (void)loadDelegate
 {
-    return nil;
+    self.delegate = nil;
+}
+
+- (id)delegate
+{
+    if (!_delegateLoaded) {
+        [self loadDelegate];
+    }
+    return _delegate;
+}
+
+- (void)setDelegate:(id)delegate
+{
+    if (delegate != _delegate) {
+        [_delegate release];
+        _delegate = [delegate retain];
+    }
+    _delegateLoaded = YES;
 }
 
 
@@ -66,7 +77,7 @@
     if ([super respondsToSelector:aSelector]) {
         return YES;
     }
-    return [self.surrogate respondsToSelector:aSelector];
+    return [self.delegate respondsToSelector:aSelector];
 }
 
 // Support for NSNull
@@ -75,7 +86,7 @@
     if ([super isKindOfClass:aClass]) {
         return YES;
     }
-    return [self.surrogate isKindOfClass:aClass];
+    return [self.delegate isKindOfClass:aClass];
 }
 
 // Support for optional methods of protocols used by GRMustache:
@@ -85,7 +96,7 @@
     if ([super conformsToProtocol:aProtocol]) {
         return YES;
     }
-    return [self.surrogate conformsToProtocol:aProtocol];
+    return [self.delegate conformsToProtocol:aProtocol];
 }
 
 // https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/nsobject_Class/Reference/Reference.html
@@ -99,7 +110,7 @@
 {
     NSMethodSignature* signature = [super methodSignatureForSelector:aSelector];
     if (!signature) {
-        signature = [self.surrogate methodSignatureForSelector:aSelector];
+        signature = [self.delegate methodSignatureForSelector:aSelector];
     }
     return signature;
 }
@@ -108,9 +119,9 @@
 // NSFastEnumeration, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper, GRMustacheTemplateDelegate
 - (void)forwardInvocation:(NSInvocation *)anInvocation
 {
-    id surrogate = self.surrogate;
-    if ([surrogate respondsToSelector:[anInvocation selector]]) {
-        [anInvocation invokeWithTarget:surrogate];
+    id delegate = self.delegate;
+    if ([delegate respondsToSelector:[anInvocation selector]]) {
+        [anInvocation invokeWithTarget:delegate];
     } else {
         [super forwardInvocation:anInvocation];
     }
@@ -119,7 +130,7 @@
 // Support for {{ proxy }}
 - (NSString *)description
 {
-    return [self.surrogate description];
+    return [self.delegate description];
 }
 
 // Support for {{ proxy.key }}
@@ -131,20 +142,8 @@
         return value;
     }
     
-    // ... and on failure, ask surrogate
-    return [self.surrogate valueForKey:key];
-}
-
-
-#pragma mark - Private
-
-- (id)surrogate
-{
-    if (!_surrogateResolved) {
-        _surrogate = [[self resolveSurrogate] retain];
-        _surrogateResolved = YES;
-    }
-    return _surrogate;
+    // ... and on failure, ask delegate
+    return [self.delegate valueForKey:key];
 }
 
 @end

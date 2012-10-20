@@ -87,7 +87,19 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Invokes `objc_msgSendSuper(super_data, @selector(valueForKey:), key);`, and
+ * returns the result. Should this function call raise an
+ * NSUndefinedKeyException, returns nil.
+ *
+ * This method is used by the GRMustacheProxy class.
+ *
+ * @param key         The searched key
+ * @param super_data  A pointer to an objc_super struct
+ *
+ * @return The result of `objc_msgSendSuper(super_data, @selector(valueForKey:), key);`,
+ *         or nil if this function call raises an NSUndefinedException.
+ *
+ * @see GRMustacheProxy
  */
 + (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
 

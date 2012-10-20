@@ -27,7 +27,8 @@
 #pragma mark - Private concrete class GRMustacheBlockFilter
 
 /**
- * Private subclass of GRMustacheFilter that filter values by calling a block.
+ * Private subclass of GRMustacheFilter that filters a single argument by
+ * calling a block.
  */
 @interface GRMustacheBlockFilter: GRMustacheFilter {
 @private
@@ -41,7 +42,8 @@
 #pragma mark - Private concrete class GRMustacheBlockVariadicFilter
 
 /**
- * TODO
+ * Private subclass of GRMustacheFilter that filters an array of arguments by
+ * calling a block.
  */
 @interface GRMustacheBlockVariadicFilter: GRMustacheProxy<GRMustacheFilter> {
 @private
@@ -132,9 +134,9 @@
     [super dealloc];
 }
 
-- (id)resolveSurrogate
+- (void)loadDelegate
 {
-    return _block(_arguments);
+    self.delegate = _block(_arguments);
 }
 
 #pragma mark <GRMustacheFilter>

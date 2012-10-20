@@ -26,17 +26,20 @@
 // Documented in GRMustacheProxy.h
 @interface GRMustacheProxy : NSObject {
 @private
-    BOOL _surrogateResolved;
-    id _surrogate;
+    BOOL _delegateLoaded;
+    id _delegate;
 }
+
+// Documented in GRMustacheProxy.h
+@property (nonatomic, retain) id delegate;
 
 // Documented in GRMustacheProxy.h
 - (id)init;
 
 // Documented in GRMustacheProxy.h
-- (id)initWithSurrogate:(id)surrogate;
+- (id)initWithDelegate:(id)delegate;
 
 // Documented in GRMustacheProxy.h
-- (id)resolveSurrogate;
+- (void)loadDelegate;
 @end
 

@@ -23,7 +23,6 @@
 #import "GRMustachePublicAPITest.h"
 
 @interface GRPositionFilterItem : GRMustacheProxy {
-    NSArray *array_;
     NSUInteger index_;
 }
 @property (nonatomic, readonly) NSUInteger position;
@@ -51,26 +50,22 @@
 @end
 
 @interface GRPositionFilterItem()
-@property (nonatomic, retain) NSArray *array_;
 @property (nonatomic) NSUInteger index_;
 @end
 
 @implementation GRPositionFilterItem
-@synthesize array_;
 @synthesize index_;
 
 - (void)dealloc
 {
-    self.array_ = nil;
     [super dealloc];
 }
 
 - (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array
 {
-    self = [super init];
+    self = [super initWithDelegate:[array objectAtIndex:index]];
     if (self) {
         self.index_ = index;
-        self.array_ = array;
     }
     return self;
 }
@@ -78,11 +73,6 @@
 - (NSUInteger)position
 {
     return self.index_ + 1;
-}
-
-- (id)resolveSurrogate
-{
-    return [self.array_ objectAtIndex:self.index_];
 }
 
 @end
