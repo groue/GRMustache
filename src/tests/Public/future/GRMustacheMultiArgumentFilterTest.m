@@ -30,7 +30,7 @@
 
 - (void)testMultiArgumentsFiltersCanAccessAllArguments
 {
-    GRMustacheFilter *joinFilter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *joinFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return [[arguments valueForKey:@"description"] componentsJoinedByString:@","];
     }];
     
@@ -43,7 +43,7 @@
 - (void)testMultiArgumentsFiltersHaveNSNullArgumentForNilInput
 {
     __block NSUInteger NSNullCount = 0;
-    GRMustacheFilter *filter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *filter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         for (id argument in arguments) {
             if (argument == [NSNull null]) {
                 ++NSNullCount;
@@ -60,7 +60,7 @@
 
 - (void)testMultiArgumentsFiltersCanBeRootOfScopedExpression
 {
-    GRMustacheFilter *filter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *filter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return @{@"foo": @"bar"};
     }];
     
@@ -72,7 +72,7 @@
 
 - (void)testMultiArgumentsFiltersCanBeUsedForObjectSections
 {
-    GRMustacheFilter *filter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *filter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return @{@"foo": @"bar"};
     }];
     
@@ -84,7 +84,7 @@
 
 - (void)testMultiArgumentsFiltersCanBeUsedForEnumerableSections
 {
-    GRMustacheFilter *filter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *filter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return arguments;
     }];
     
@@ -96,12 +96,12 @@
 
 - (void)testMultiArgumentsFiltersCanBeUsedForBooleanSections
 {
-    GRMustacheFilter *filter = [GRMustacheFilter multiArgumentsFilterWithBlock:^id(NSArray *arguments) {
+    GRMustacheFilter *identityFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return [arguments objectAtIndex:0];
     }];
     
     id data = @{ @"yes": @YES, @"no": @NO };
-    id filters = @{ @"f": filter };
+    id filters = @{ @"f": identityFilter };
     NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL];
     STAssertEqualObjects(rendering, @"YES NO", @"");
 }

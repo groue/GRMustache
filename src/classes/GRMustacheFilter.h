@@ -92,7 +92,7 @@
  *
  * @since v4.3
  *
- * @see multiArgumentsFilterWithBlock:
+ * @see variadicFilterWithBlock:
  */
 + (id)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
 
@@ -110,6 +110,6 @@
  *
  * @see filterWithBlock:
  */
-+ (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
++ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
 
 @end

@@ -38,12 +38,12 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheMultiArgumentBlockFilter
+#pragma mark - Private concrete class GRMustacheBlockVariadicFilter
 
 /**
  * TODO
  */
-@interface GRMustacheMultiArgumentBlockFilter: GRMustacheProxy<GRMustacheFilter> {
+@interface GRMustacheBlockVariadicFilter: GRMustacheProxy<GRMustacheFilter> {
 @private
     NSArray *_arguments;
     id(^_block)(NSArray *arguments);
@@ -62,9 +62,9 @@
     return [[[GRMustacheBlockFilter alloc] initWithBlock:block] autorelease];
 }
 
-+ (id)multiArgumentsFilterWithBlock:(id(^)(NSArray *arguments))block
++ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block
 {
-    return [[[GRMustacheMultiArgumentBlockFilter alloc] initWithBlock:block arguments:[NSArray array]] autorelease];
+    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:block arguments:[NSArray array]] autorelease];
 }
 
 - (id)transformedValue:(id)object
@@ -111,9 +111,9 @@
 
 
 // =============================================================================
-#pragma mark - Private concrete class GRMustacheMultiArgumentBlockFilter
+#pragma mark - Private concrete class GRMustacheBlockVariadicFilter
 
-@implementation GRMustacheMultiArgumentBlockFilter
+@implementation GRMustacheBlockVariadicFilter
 
 - (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
 {
@@ -145,7 +145,7 @@
     NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
     
     // Curry
-    return [[[GRMustacheMultiArgumentBlockFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
+    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
 }
 
 @end
