@@ -143,14 +143,16 @@
 // Support for {{ proxy.key }}
 - (id)valueForKey:(NSString *)key
 {
-    // First perform a lookup in self (using the NSObject implementation of valueForKey:)
+    // First perform a lookup in self (using the NSObject implementation of
+    // valueForKey:, not this method).
     id value = [GRMustacheRuntime valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
     if (value) {
         return value;
     }
     
-    // ... and on failure, ask delegate
-    return [self.delegate valueForKey:key];
+    // ... and on failure, ask delegate (using GRMustacheRuntime support for
+    // NSUndefinedKeyException prevention):
+    return [GRMustacheRuntime valueForKey:key inObject:self.delegate];
 }
 
 @end
