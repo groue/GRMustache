@@ -11,7 +11,7 @@ You will generally subclass the GRMustacheProxy class in order to extend the abi
 
 For instance, you may define some extra keys: the `valueForKey:` implementation of GRMustacheProxy looks for custom keys in the proxy before forwarding the lookup in the delegate object. This is the technique used by the PositionFilter filter in the [indexes sample code](sample_code/indexes.md).
 
-GRMustacheProxies provides two initialization methods: `initWithDelegate:`, and `init`. The `initWithDelegate:` sets the delegate of the proxy, which is from now on ready to use. The `init` method does not set the delegate: you will generally provide your own implementation of the `loadDelegate` method, whose responsability is to lazily set the delegate of the proxy.
+GRMustacheProxies provides two initialization methods: `initWithDelegate:`, and `init`. The `initWithDelegate:` sets the delegate of the proxy, which is from now on ready to use. The `init` method does not set the delegate: you must then provide your own implementation of the `loadDelegate` method, whose responsability is to set the delegate of the proxy.
 
 
 Usage of proxies

@@ -43,8 +43,8 @@
  * GRMustacheProxies provides two initialization methods: `initWithDelegate:`,
  * and `init`. The `initWithDelegate:` sets the delegate of the proxy, which is
  * from now on ready to use. The `init` method does not set the delegate: you
- * will generally provide your own implementation of the `loadDelegate` method,
- * whose responsability is to lazily set the delegate of the proxy.
+ * must then provide your own implementation of the `loadDelegate` method, whose
+ * responsability is to set the delegate of the proxy.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/proxies.md
  *
@@ -67,6 +67,8 @@
  * delegate property. If this property is accessed, the proxy automatically
  * calls the `loadDelegate` method, and returns the resulting delegate.
  *
+ * Delegate objects can not be nil: use [NSNull null] instead.
+ *
  * @see init
  * @see initWithDelegate
  * @see loadDelegate
@@ -78,8 +80,8 @@
 /**
  * Returns a newly initialized proxy without any delegate.
  *
- * Unless you subclass GRMustacheProxy, and provide your own implementation of
- * the `loadDelegate` method, the delegate property will resolve to `nil`.
+ * In order to use this method, you must subclass GRMustacheProxy, and provide
+ * your own implementation of the `loadDelegate` method.
  *
  * @return A newly initialized GRMustacheProxy object.
  *
@@ -94,6 +96,8 @@
 /**
  * Returns a newly initialized proxy with the provided delegate.
  *
+ * Delegate objects can not be nil: use [NSNull null] instead.
+ *
  * @param delegate  The value for the delegate property.
  *
  * @return A newly initialized GRMustacheProxy object.
@@ -106,12 +110,16 @@
 
 /**
  * You should never call this method directly. The proxy calls this method when
- * its delegate property is requested but has not been set yet. This method
- * assigns nil to the delegate property.
+ * its delegate property is requested but has not been set yet.
  *
- * You can override this method in order to load a custom delegate object.
- * If you choose to do so, assign any object to the delegate property.
+ * Unless the proxy object has been initialized with the `initWithDelegate:`
+ * method, you must override this method and assign any object to the delegate
+ * property.
  *
+ * Delegate objects can not be nil: use [NSNull null] instead.
+ *
+ * @see init
+ * @see initWithDelegate
  * @see delegate
  *
  * @since v5.5
