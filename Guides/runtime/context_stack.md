@@ -77,19 +77,15 @@ For instance, if the pet above has to `name` property, it will raise an `NSUndef
 
 When debugging your project, those exceptions may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
 
-You can avoid that: make sure you call before any GRMustache rendering the following method:
-
-    [GRMustache preventNSUndefinedKeyExceptionAttack];
-
-You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration.
-
-One way to achieve this is to add `-DDEBUG` to the "Other C Flags" setting of your development configuration, and to wrap the preventNSUndefinedKeyExceptionAttack method call in a #if block, like:
+You can avoid that: add the `-ObjC` linker flag to your target (http://developer.apple.com/library/mac/#qa/qa1490/_index.html), and make sure you call before any GRMustache rendering the following method:
 
 ```objc
-#ifdef DEBUG
+#if !defined(NS_BLOCK_ASSERTIONS)
 [GRMustache preventNSUndefinedKeyExceptionAttack];
 #endif
 ```
+
+You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration. This is the purpose of the conditional compilation based on the `NS_BLOCK_ASSERTIONS` preprocessor macro (see http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html).
 
 [up](../runtime.md), [next](loops.md)
 
