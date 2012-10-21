@@ -118,7 +118,7 @@
     STAssertEqualObjects(rendering, @"YES NO", @"");
 }
 
-- (void)testVariadicFiltersCanReturnNilAndStillBeUsedInBooleanSections
+- (void)testVariadicFiltersThatReturnNilCanBeUsedInBooleanSections
 {
     GRMustacheFilter *nilFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         return nil;
