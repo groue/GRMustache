@@ -136,7 +136,11 @@
 
 - (void)loadDelegate
 {
-    self.delegate = _block(_arguments);
+    if (_block) {
+        self.delegate = _block(_arguments) ?: [NSNull null];
+    } else {
+        self.delegate = [NSNull null];
+    }
 }
 
 #pragma mark <GRMustacheFilter>
