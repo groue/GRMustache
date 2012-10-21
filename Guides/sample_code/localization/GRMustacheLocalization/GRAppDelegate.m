@@ -94,7 +94,7 @@
             return @NO;
         }]};
         
-        NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} common friends{{/}}{{^isPlural(count)}}one common friend{{/}}{{/count}}{{^count}}have no common friend{{/count}}.{{/localize}}";
+        NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         
         {

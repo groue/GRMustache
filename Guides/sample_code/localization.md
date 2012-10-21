@@ -11,14 +11,30 @@ Mustache and GRMustache have no built-in localization feature. It is thus a matt
 [Section tag helpers](../section_tag_helpers.md) are our vector. We'll eventually render the following template:
 
     {{#localize}}
-        Hello {{name1}}, do you know {{name2}}?
+        {{name1}} and {{name2}}
+        {{#count}}
+            {{! at least one mutual friend }}
+            have
+            {{#isPlural(count)}}
+                {{! several mutual friend }}
+                {{count}} mutual friends
+            {{/}}
+            {{^isPlural(count)}}
+                {{! single mutual friend }}
+                one mutual friend
+            {{/}}
+        {{/}}
+        {{^count}}
+            {{! no mutual friend }}
+            have no mutual friend
+        {{/}}.
     {{/localize}}
 
 Into the various renderings below, depending on the current locale:
 
-    Hello Arthur, do you know Barbara?
-    Bonjour Arthur, est-ce que tu connais Barbara ?
-    Hola Arthur, sabes Barbara?
+    Arthur and Barbara have no mutual friend.
+    Craig et Dennis ont un ami commun.
+    Eugene y Fiona tiene 5 amigos en común.
 
 Yet this will be quite a smartish sample code, and it's better starting with simpler cases. We'll see how to localize:
 
@@ -33,6 +49,10 @@ Yet this will be quite a smartish sample code, and it's better starting with sim
 3. a portion of a template *with arguments*, as above:
     
         {{#localize}}Hello {{name1}}, do you know {{name2}}?{{/localize}}
+
+4. a portion of a template with arguments and *conditions*, as above:
+    
+        {{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}
 
 Of course, we'll always eventually use the standard `NSLocalizedString` function.
 
@@ -282,7 +302,7 @@ Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not
      * [NSString stringWithFormat:].
      */
 
-    [self.formatArguments addObject:invocation.returnValue];
+    [self.formatArguments addObject:invocation.returnValue ?: [NSNull null]];
 
 
     /**
@@ -313,5 +333,73 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
                                                  error:NULL];
 ```
+
+**[Download the code](../../../../tree/master/Guides/sample_code/localization)**
+
+
+Localizing a template section with arguments and conditions
+-----------------------------------------------------------
+
+Download the [GRMustacheLocalization Xcode project](../../../../tree/master/Guides/sample_code/localization): it provides tiny modifications to the `LocalizingHelper` class, in order to have the following code work:
+
+```objc
+id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+    if ([count intValue] > 1) {
+        return @YES;
+    }
+    return @NO;
+}]};
+
+NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+
+{
+    id data = @{
+    @"name1": @"Arthur",
+    @"name2": @"Barbara",
+    @"count": @(0),
+    @"localize": [[LocalizingHelper alloc] init]
+    };
+    
+    // Arthur and Barbara have no mutual friend.
+    // Arthur et Barbara n’ont pas d’ami commun.
+    // Arthur y Barbara no tienen ningún amigo en común.
+    
+    NSString *rendering = [template renderObject:data withFilters:filters];
+}
+
+{
+    id data = @{
+    @"name1": @"Craig",
+    @"name2": @"Dennis",
+    @"count": @(1),
+    @"localize": [[LocalizingHelper alloc] init]
+    };
+    
+    
+    // Arthur and Barbara have one mutual friend.
+    // Arthur et Barbara ont un ami commun.
+    // Arthur y Barbara tiene un amigo en común.
+    
+    NSString *rendering = [template renderObject:data withFilters:filters];
+}
+
+{
+    id data = @{
+    @"name1": @"Eugene",
+    @"name2": @"Fiona",
+    @"count": @(5),
+    @"localize": [[LocalizingHelper alloc] init]
+    };
+    
+    // Arthur and Barbara have 5 mutual friends.
+    // Arthur et Barbara ont 5 amis communs.
+    // Arthur y Barbara tiene 5 amigos en común.
+    
+    NSString *rendering = [template renderObject:data withFilters:filters];
+}
+```
+
+**[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
 [up](../../../../tree/master/Guides/sample_code), [next](../forking.md)
