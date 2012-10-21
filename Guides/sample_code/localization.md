@@ -377,9 +377,9 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
     };
     
     
-    // Arthur and Barbara have one mutual friend.
-    // Arthur et Barbara ont un ami commun.
-    // Arthur y Barbara tiene un amigo en común.
+    // Craig and Dennis have one mutual friend.
+    // Craig et Dennis ont un ami commun.
+    // Craig y Dennis tiene un amigo en común.
     
     NSString *rendering = [template renderObject:data withFilters:filters];
 }
@@ -392,9 +392,9 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
     @"localize": [[LocalizingHelper alloc] init]
     };
     
-    // Arthur and Barbara have 5 mutual friends.
-    // Arthur et Barbara ont 5 amis communs.
-    // Arthur y Barbara tiene 5 amigos en común.
+    // Eugene and Fiona have 5 mutual friends.
+    // Eugene et Fiona ont 5 amis communs.
+    // Eugene y Fiona tiene 5 amigos en común.
     
     NSString *rendering = [template renderObject:data withFilters:filters];
 }
