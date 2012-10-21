@@ -134,6 +134,8 @@
     [super dealloc];
 }
 
+#pragma mark GRMustacheProxy
+
 - (void)loadDelegate
 {
     if (_block) {
