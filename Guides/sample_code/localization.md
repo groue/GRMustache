@@ -165,7 +165,7 @@ Rendering:
 
 Before diving in the sample code, let's first describe out strategy:
 
-1. We'll build the following string, the *localizable format string*:
+1. We'll build the following string, the *localizable format*:
 
     `Hello %@, do you know %@?`
 
@@ -173,23 +173,23 @@ Before diving in the sample code, let's first describe out strategy:
     - `Arthur`
     - `Barbara`
     
-3. We'll localize the localizable format string with `NSLocalizedString`, that will give us the *localized format string*:
+3. We'll localize the localizable format with `NSLocalizedString`, that will give us the *localized format*:
     - `Hello %@, do you know %@?`
     - `Bonjour %@, est-ce que tu connais %@ ?`
     - `Hola %@, sabes %@?`
 
-4. We'll finally use `[NSString stringWithFormat:]`, with the localized format string, and format arguments:
+4. We'll finally use `[NSString stringWithFormat:]`, with the localized format, and format arguments:
     - `Hello Arthur, do you know Barbara?`
     - `Bonjour Arthur, est-ce que tu connais Barbara ?`
     - `Hola Arthur, sabes Barbara?`
 
-The tricky part is building the *localizable format string* and extracting the *format arguments*. We could most certainly "manually" parse the inner template string of the section, `Hello {{name1}}, do you know {{name2}}?`. However, we'll take a more robust and reusable path.
+The tricky part is building the *localizable format* and extracting the *format arguments*. We could most certainly "manually" parse the inner template string of the section, `Hello {{name1}}, do you know {{name2}}?`. However, we'll take a more robust and reusable path.
 
 The [GRMustacheDelegate](../delegate.md) protocol is a nifty tool: it lets you know what GRMustache is about to render, and replace it with whatever value you want.
 
-This looks like a nice way to build our format arguments and the localizable format string in a single strike: instead of letting GRMustache render `Arthur` and `Barbara`, we'll put those values away, and tell the library to render `%@` instead.
+This looks like a nice way to build our format arguments and the localizable format in a single strike: instead of letting GRMustache render `Arthur` and `Barbara`, we'll put those values away, and tell the library to render `%@` instead.
 
-We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionTagHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate facet, build the localizable format string, and fill the format arguments. The second rendering will simply mix the format and the arguments.
+We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionTagHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate facet, build the localizable format, and fill the format arguments. The second rendering will simply mix the format and the arguments.
 
 Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not enough. Let's go for a full class:
 
