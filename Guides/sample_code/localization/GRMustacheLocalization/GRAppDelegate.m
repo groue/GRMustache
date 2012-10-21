@@ -71,15 +71,70 @@
          */
         
         id data = @{
-            @"name1": @"Arthur",
-            @"name2": @"Barbara",
-            @"localize": [[LocalizingHelper alloc] init]
+        @"name1": @"Arthur",
+        @"name2": @"Barbara",
+        @"localize": [[LocalizingHelper alloc] init]
         };
         
         NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
         NSLog(@"rendering = %@", rendering);
+    }
+    
+    {
+        /**
+         * Localizing a template section with arguments and conditions
+         */
+        
+        id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+            if ([count intValue] > 1) {
+                return @YES;
+            }
+            return @NO;
+        }]};
+        
+        NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} common friends{{/}}{{^isPlural(count)}}one common friend{{/}}{{/count}}{{^count}}have no common friend{{/count}}.{{/localize}}";
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        
+        {
+            id data = @{
+            @"name1": @"Arthur",
+            @"name2": @"Barbara",
+            @"count": @(0),
+            @"localize": [[LocalizingHelper alloc] init]
+            };
+            
+            NSString *rendering = [template renderObject:data withFilters:filters];
+            
+            NSLog(@"rendering = %@", rendering);
+        }
+        
+        {
+            id data = @{
+            @"name1": @"Craig",
+            @"name2": @"Dennis",
+            @"count": @(1),
+            @"localize": [[LocalizingHelper alloc] init]
+            };
+            
+            NSString *rendering = [template renderObject:data withFilters:filters];
+            
+            NSLog(@"rendering = %@", rendering);
+        }
+        
+        {
+            id data = @{
+            @"name1": @"Eugene",
+            @"name2": @"Fiona",
+            @"count": @(5),
+            @"localize": [[LocalizingHelper alloc] init]
+            };
+            
+            NSString *rendering = [template renderObject:data withFilters:filters];
+            
+            NSLog(@"rendering = %@", rendering);
+        }
     }
 }
 
@@ -126,11 +181,14 @@
      */
     
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [context render]; // triggers delegate callbacks
+    NSString *localizableFormat = [context render];
     
     
     /**
-     * Now localize the format.
+     * [context render] has rendered the localizable format, and has triggered
+     * delegate callbacks: now self.formatArguments is ready.
+     *
+     * Let's localize the format.
      */
     
     NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
@@ -169,6 +227,10 @@
                          [self.formatArguments objectAtIndex:1],
                          [self.formatArguments objectAtIndex:2]];
             break;
+        
+        default:
+            NSAssert(NO, @"Not implemented");
+            break;
     }
     
     
@@ -183,20 +245,31 @@
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
 {
     /**
-     * invocation.returnValue is "Arthur" or "Barbara".
+     * We are only interested in the rendering of variable tags such as
+     * {{name1}}. We do not want to mess with Mustache handling of boolean
+     * sections such as {{#isPlural(count)}}...{{/}}.
      *
-     * Fill self.formatArguments so that we have arguments for
-     * [NSString stringWithFormat:].
+     * We target variable tags with the interpretation argument:
      */
     
-    [self.formatArguments addObject:invocation.returnValue];
-    
-    
-    /**
-     * Render "%@" instead of the value.
-     */
-    
-    invocation.returnValue = @"%@";
+    if (interpretation == GRMustacheVariableTagInterpretation) {
+        
+        /**
+         * invocation.returnValue is "Arthur" or "Barbara".
+         *
+         * Fill self.formatArguments so that we have arguments for
+         * [NSString stringWithFormat:].
+         */
+        
+        [self.formatArguments addObject:invocation.returnValue ?: [NSNull null]];
+        
+        
+        /**
+         * Render "%@" instead of the value.
+         */
+        
+        invocation.returnValue = @"%@";
+    }
 }
 
 @end
