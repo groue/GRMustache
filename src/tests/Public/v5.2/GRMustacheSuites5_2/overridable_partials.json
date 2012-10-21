@@ -170,6 +170,23 @@
       "template": "{{<partial}}{{#section}}overriden{{/section}}{{/partial}}",
       "partials": { "partial": "{{$section}}success{{/section}}" },
       "expected": "success"
+    },
+    {
+      "name": "Recursive overridable partials should be rendered.",
+      "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
+      "template": "<{{<node}}{{/node}}>",
+      "partials": {
+        "node": "{{content}}<{{#nodes}}{{>node}}{{/nodes}}>"
+      },
+      "expected": "<X<Y<>>>"
+    },
+    {
+      // Inspired by https://github.com/spullara/mustache.java/commit/d2942e39a671ee71c0427b3a963149af81bdb0a5
+      "name": "Templates can override overridable sections in recursive partials",
+      "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
+      "template": "<{{<node}}{{$nodes}}{{>node}}{{/nodes}}{{/node}}>",
+      "partials": { "node": "{{content}}<{{$nodes}}overriden{{/nodes}}>" },
+      "expected": "<X<Y<>>>"
     }
   ]
 }
