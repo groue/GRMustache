@@ -118,4 +118,15 @@
     STAssertEqualObjects(rendering, @"YES NO", @"");
 }
 
+- (void)testVariadicFiltersCanReturnNilAndStillBeUsedInBooleanSections
+{
+    GRMustacheFilter *nilFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+        return nil;
+    }];
+    
+    id filters = @{ @"f": nilFilter };
+    NSString *rendering = [GRMustacheTemplate renderObject:nil withFilters:filters fromString:@"{{^f(x)}}nil{{/}}" error:NULL];
+    STAssertEqualObjects(rendering, @"nil", @"");
+}
+
 @end
