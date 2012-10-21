@@ -47,24 +47,30 @@
 
 - (void)loadDelegate
 {
-    self.delegate = nil;
+    // do nothing
 }
 
 - (id)delegate
 {
-    if (!_delegateLoaded) {
+    if (!_delegate) {
         [self loadDelegate];
+        if (!_delegate) {
+            [NSException raise:NSInternalInconsistencyException format:@"-[GRMustacheProxy delegate]: expected loadDelegate to set the delegate."];
+        }
     }
     return _delegate;
 }
 
 - (void)setDelegate:(id)delegate
 {
+    if (!delegate) {
+        [NSException raise:NSInvalidArgumentException format:@"-[GRMustacheProxy setDelegate:]: delegate cannot be nil. Use [NSNull null] instead."];
+    }
+    
     if (delegate != _delegate) {
         [_delegate release];
         _delegate = [delegate retain];
     }
-    _delegateLoaded = YES;
 }
 
 

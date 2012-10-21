@@ -26,7 +26,6 @@
 // Documented in GRMustacheProxy.h
 @interface GRMustacheProxy : NSObject {
 @private
-    BOOL _delegateLoaded;
     id _delegate;
 }
 

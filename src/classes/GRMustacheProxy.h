@@ -54,7 +54,6 @@
  */
 @interface GRMustacheProxy : NSObject {
 @private
-    BOOL _delegateLoaded;
     id _delegate;
 }
 
