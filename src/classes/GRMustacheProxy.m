@@ -86,7 +86,8 @@
     return [self.delegate respondsToSelector:aSelector];
 }
 
-// Support for NSNull
+// Support for classes used by GRMustache:
+// NSNull, NSNumber, NSString, NSDictionary, NSArray, NSSet, NSOrderedSetClass
 - (BOOL)isKindOfClass:(Class)aClass
 {
     if ([super isKindOfClass:aClass]) {
@@ -95,7 +96,7 @@
     return [self.delegate isKindOfClass:aClass];
 }
 
-// Support for optional methods of protocols used by GRMustache:
+// Support for protocols used by GRMustache:
 // NSFastEnumeration, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper, GRMustacheTemplateDelegate
 - (BOOL)conformsToProtocol:(Protocol *)aProtocol
 {
