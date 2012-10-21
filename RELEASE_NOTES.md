@@ -4,6 +4,18 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.5.1
+
+### Niceties and bug fixes
+
+The `count` method of NSArray, NSSet and NSOrderedSet can now be queried in templates: `{{collection.count}}` renders as expected, and `{{#collection.count}}...{{/}}` can conditionally render a section if and only if the collection is not empty. See [Guides/runtime/context_stack.md](Guides/runtime/context_stack.md) for a detailed explanation.
+
+[Variadic filters](Guides/filters.md) that return nil used to not play well with boolean sections.
+
+[GRMustacheProxy](Guides/proxies.md) cooperates with `NSUndefinedKeyException` prevention, and keeps its delegate quiet after you have invoked `[GRMustache preventNSUndefinedKeyExceptionAttack]`.
+
+[GRMustacheProxy](Guides/proxies.md) refuses `nil` delegate, since it can not pose as `nil`. You must use [NSNull null] instead.
+
 ## v5.5
 
 ### Variadic filters
