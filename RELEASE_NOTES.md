@@ -8,7 +8,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ### Niceties and bug fixes
 
-The `count` method of NSArray, NSSet and NSOrderedSet can now be queried in templates: `{{collection.count}}` renders as expected, and `{{#collection.count}}...{{/}}` can conditionally render a section if and only if the collection is not empty. See [Guides/runtime/context_stack.md](Guides/runtime/context_stack.md) for a detailed explanation.
+The `count` method of NSArray, NSSet and NSOrderedSet can now be queried in templates: `{{collection.count}}` renders as expected, and `{{#collection.count}}...{{/}}` can conditionally render a section if and only if the collection is not empty. See [Guides/runtime/context_stack.md](Guides/runtime/context_stack.md#nsarray-nsset-nsorderedset) for a detailed explanation.
 
 [Variadic filters](Guides/filters.md) that return nil used to not play well with boolean sections.
 
