@@ -15,21 +15,23 @@ The library features are described in the [guides](introduction.md). This sectio
 - **Parsing**
     - `GRMustacheTemplateRepository`
     - `GRMustacheTemplateRepositoryDataSource`
-    - `GRMustacheParser`
-    - `GRMustacheToken`
-    - `GRMustacheExpression`
-    - `GRMustacheFilteredExpression`
-    - `GRMustacheIdentifierExpression`
-    - `GRMustacheImplicitIteratorExpression`
-    - `GRMustacheScopedExpression`
     
     *Template repositories* are objects that load template strings from various sources.
     
     GRMustache ships with various template repositories that are able to load templates from the file system, and from a dictionary of template strings. The library user can also provide a *data source* to a template repository, in order to load template strings from unimagined locations.
     
+    - `GRMustacheParser`
+    - `GRMustacheToken`
+    
     The *parser* is able to produce a [parse tree](http://en.wikipedia.org/wiki/Parse_tree) of *tokens* out of a template string.
     
     For instance, a parser generates three tokens from `Hello {{name}}!`: two text tokens and a variable token.
+    
+    - `GRMustacheExpression`
+    - `GRMustacheFilteredExpression`
+    - `GRMustacheIdentifierExpression`
+    - `GRMustacheImplicitIteratorExpression`
+    - `GRMustacheScopedExpression`
     
     Some tokens contain an *expression*. Expressions will go live during the rendering of a template (see below), being able to compute rendered values:
     
@@ -41,51 +43,49 @@ The library features are described in the [guides](introduction.md). This sectio
 - **Compiling**
     - `GRMustacheCompiler`
     - `GRMustacheRenderingElement`
-    - `GRMustacheSectionElement`
-    - `GRMustacheTemplate`
-    - `GRMustacheTemplateOverride`
-    - `GRMustacheTextElement`
-    - `GRMustacheVariableElement`
     
     The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *rendering elements*.
     
-    Rendering elements are actually able to provide the rendering expected by the library user. *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, *variable elements* render Mustache variable tags, and *template overrides* render overridable partial tags.
+    Rendering elements are actually able to provide the rendering expected by the library user:
+
+    - `GRMustacheTemplate`
+    - `GRMustacheSectionElement`
+    - `GRMustacheTextElement`
+    - `GRMustacheVariableElement`
+    - `GRMustacheTemplateOverride`
+    
+    *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, *variable elements* render Mustache variable tags, and *template overrides* render overridable partial tags.
     
     For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a variable element.
 
 - **Runtime**
-	- `GRMustacheInvocation`
     - `GRMustacheRuntime`
-	- `GRMustacheTemplateDelegate`
-    - `GRMustacheNSUndefinedKeyExceptionGuard`
     
     A *runtime* implements a state of four different stacks:
-	
-	- a *context stack*, initialized with the initial object that the library user provides in order to "fill" the template. Section elements create new runtime objects with an extended context stack.
-	- a *filter stack*, that is initialized with the *filter library* (see below). It is extended with user's custom filters.
-	- a *delegate stack*, initialized with a template's delegate. Section and variable elements create new runtime objects with an extended delegate stack whenever they render objects that conform to the GRMustacheTemplateDelegate protocol.
-	- a *template override stack*, that grows when a template override element renders.
+    
+    - a *context stack*, initialized with the initial object that the library user provides in order to "fill" the template. Section elements create new runtime objects with an extended context stack.
+    - a *filter stack*, that is initialized with the *filter library* (see below). It is extended with user's custom filters.
+    - a *delegate stack*, initialized with a template's delegate. Section and variable elements create new runtime objects with an extended delegate stack whenever they render objects that conform to the GRMustacheTemplateDelegate protocol.
+    - a *template override stack*, that grows when a template override element renders.
     
     A runtime is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the runtime in order to compute their values.
 
+    - `GRMustacheInvocation`
+    - `GRMustacheTemplateDelegate`
+
     *Invocations* are created by runtime objects, and exposed to *delegates*, so that the library user inspect or override rendered values.
     
-    *GRMustacheNSUndefinedKeyExceptionGuard* is a funny tool that allows the library user to avoid his debugger to stop on every NSUndefinedKeyException raised by the template rendering.
-    
-- **Lambdas Sections**
     - `GRMustacheSectionTagHelper`
     - `GRMustacheSectionTagRenderingContext`
 
     The library user can implement *section tag helpers* in order to have some section tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
 
-- **Lambdas Variables**
     - `GRMustacheDynamicPartial`
     - `GRMustacheVariableTagHelper`
     - `GRMustacheVariableTagRenderingContext`
 
     The library user can implement *variable tag helpers* in order to have some variable tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools. *Dynamic partials* are variable tag helpers dedicated to rendering partials.
 
-- **Filters**
     - `GRMustacheFilter`
     - `GRMustacheFilterLibrary`
     
