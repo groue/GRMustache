@@ -20,38 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if (TARGET_OS_IPHONE)
-#import <objc/runtime.h>
 #import <objc/message.h>
-#else
-#import <objc/objc-class.h>
-#endif
-
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheInvocation_private.h"
-#import "GRMustacheNSUndefinedKeyExceptionGuard_private.h"
 #import "GRMustacheFilterLibrary_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateOverride_private.h"
+#import "JRSwizzle.h"
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 #endif
 
-static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
+static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheRuntime()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 - (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack filterStack:(NSArray *)filterStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
+
++ (void)setupPreventionOfNSUndefinedKeyException;
++ (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
++ (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
++ (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects;
 @end
 
 @implementation GRMustacheRuntime
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    preventingNSUndefinedKeyExceptionAttack = YES;
+    shouldPreventNSUndefinedKeyException = YES;
 }
 
 + (id)runtime
@@ -208,92 +207,74 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
 
 + (id)valueForKey:(NSString *)key inObject:(id)object
 {
-    id value = nil;
+    // We don't want to use NSArray, NSSet and NSOrderedSet implementation
+    // of valueForKey:, because they return another collection: see issue #21
+    // and "anchored key should not extract properties inside an array" test in
+    // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+    //
+    // Still, we do not want to prevent access to [NSArray count]. We thus
+    // invoke NSObject's implementation of valueForKey: for those objects, with
+    // our valueForKey:inSuper: method.
     
-    if (object)
-    {
-        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
-            // Specific case here: we don't want to return another collection.
-            // See issue #21 and "anchored key should not extract properties
-            // inside an array" test in
-            // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
-            return nil;
-        }
-        
-        @try
-        {
-            if (preventingNSUndefinedKeyExceptionAttack)
-            {
-                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inObject:object];
-            }
-            else
-            {
-                value = [object valueForKey:key];
-            }
-        }
-        @catch (NSException *exception)
-        {
-            // swallow all NSUndefinedKeyException, reraise other exceptions
-            if (![[exception name] isEqualToString:NSUndefinedKeyException])
-            {
-                [exception raise];
-            }
-#if !defined(NS_BLOCK_ASSERTIONS)
-            else
-            {
-                // For testing purpose
-                GRMustacheRuntimeDidCatchNSUndefinedKeyException = YES;
-            }
-#endif
-        }
+    if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
+        return [self valueForKey:key inSuper:&(struct objc_super){ object, [NSObject class] }];
     }
     
-    return value;
+    
+    // For other objects, return the result of their own implementation of
+    // valueForKey: (but use our valueForKey:inSuper: with nil super_class, so
+    // that we can prevent or catch NSUndefinedKeyException).
+    
+    return [self valueForKey:key inSuper:&(struct objc_super){ object, nil }];
 }
 
 + (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data
 {
-    id value = nil;
+    if (super_data->receiver == nil) {
+        return nil;
+    }
     
-    if (super_data->receiver)
-    {
-        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:super_data->receiver]) {
-            // Specific case here: we don't want to return another collection.
-            // See issue #21 and "anchored key should not extract properties
-            // inside an array" test in
-            // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
-            return nil;
+    @try {
+        if (shouldPreventNSUndefinedKeyException) {
+            [self beginPreventionOfNSUndefinedKeyExceptionFromObject:super_data->receiver];
         }
         
-        @try
-        {
-            if (preventingNSUndefinedKeyExceptionAttack)
-            {
-                value = [GRMustacheNSUndefinedKeyExceptionGuard valueForKey:key inSuper:super_data];
-            }
-            else
-            {
-                value = objc_msgSendSuper(super_data, @selector(valueForKey:), key);
-            }
-        }
-        @catch (NSException *exception)
-        {
-            // swallow all NSUndefinedKeyException, reraise other exceptions
-            if (![[exception name] isEqualToString:NSUndefinedKeyException])
-            {
-                [exception raise];
-            }
-#if !defined(NS_BLOCK_ASSERTIONS)
-            else
-            {
-                // For testing purpose
-                GRMustacheRuntimeDidCatchNSUndefinedKeyException = YES;
-            }
+        // We accept nil super_data->super_class, as a convenience for our
+        // implementation of valueForKey:inObject:.
+#if !defined(__cplusplus)  &&  !__OBJC2__
+        if (super_data->class)  // support for 32bits MacOS (see declaration of struct objc_super in <objc/message.h>)
+#else
+        if (super_data->super_class)
 #endif
+        {
+            return objc_msgSendSuper(super_data, @selector(valueForKey:), key);
+        } else {
+            return [super_data->receiver valueForKey:key];
         }
     }
     
-    return value;
+    @catch (NSException *exception) {
+        
+        // Swallow NSUndefinedKeyException only
+        
+        if (![[exception name] isEqualToString:NSUndefinedKeyException]) {
+            [exception raise];
+        }
+#if !defined(NS_BLOCK_ASSERTIONS)
+        else {
+            // For testing purpose
+            GRMustacheRuntimeDidCatchNSUndefinedKeyException = YES;
+        }
+#endif
+    }
+    
+    @finally {
+        if (shouldPreventNSUndefinedKeyException) {
+            [self endPreventionOfNSUndefinedKeyExceptionFromObject:super_data->receiver];
+        }
+    }
+    
+    return nil;
 }
 
 - (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack filterStack:(NSArray *)filterStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
@@ -322,6 +303,10 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
     // NSOrderedSet with isKindOfClass:. We can not compare implementations for
     // those classes, because they are class clusters and that we can't be sure
     // they provide a single implementation of valueForKey:
+    
+    if (object == nil) {
+        return NO;
+    }
     
     static SEL valueForKeySelector = nil;
     if (valueForKeySelector == nil) {
@@ -382,6 +367,75 @@ static BOOL preventingNSUndefinedKeyExceptionAttack = NO;
                 [object isKindOfClass:[NSSet class]] ||
                 (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]));
     }
+}
+
+#pragma mark - NSUndefinedKeyException prevention
+
++ (void)setupPreventionOfNSUndefinedKeyException
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        // Swizzle [NSObject valueForUndefinedKey:]
+        
+        [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
+                        withMethod:@selector(GRMustacheRuntimeValueForUndefinedKey_NSObject:)
+                             error:nil];
+        
+        
+        // Swizzle [NSManagedObject valueForUndefinedKey:]
+        
+        Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+        if (NSManagedObjectClass) {
+            [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
+                                        withMethod:@selector(GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:)
+                                             error:nil];
+        }
+    });
+}
+
++ (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object
+{
+    [self setupPreventionOfNSUndefinedKeyException];
+    [[self preventionOfNSUndefinedKeyExceptionObjects] addObject:object];
+}
+
++ (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object
+{
+    [[self preventionOfNSUndefinedKeyExceptionObjects] removeObject:object];
+}
+
++ (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects
+{
+    static NSString const * GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects";
+    NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects];
+    if (silentObjects == nil) {
+        silentObjects = [NSMutableSet set];
+        [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects];
+    }
+    return silentObjects;
+}
+
+@end
+
+@implementation NSObject(GRMustacheRuntimePreventionOfNSUndefinedKeyException)
+
+// NSObject
+- (id)GRMustacheRuntimeValueForUndefinedKey_NSObject:(NSString *)key
+{
+    if ([[GRMustacheRuntime preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+        return nil;
+    }
+    return [self GRMustacheRuntimeValueForUndefinedKey_NSObject:key];
+}
+
+// NSManagedObject
+- (id)GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:(NSString *)key
+{
+    if ([[GRMustacheRuntime preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+        return nil;
+    }
+    return [self GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:key];
 }
 
 @end

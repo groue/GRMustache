@@ -64,17 +64,23 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 }
 
 /**
- * Triggers the trick for avoiding most NSUndefinedException to be raised
- * by the invocation of `valueForKey:` method on user's objects.
+ * Avoids most NSUndefinedException to be raised by the invocation of
+ * `valueForKey:inObject:` and `valueForKey:inSuper:`.
  *
- * @see GRMustacheNSUndefinedKeyExceptionGuard
+ * @see valueForKey:inObject:
+ * @see valueForKey:inSuper:
  */
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
 
 /**
  * Sends the `valueForKey:` message to _object_ with the provided _key_, and
- * returns the result. Should `valueForKey:` raise an NSUndefinedKeyException,
- * returns nil.
+ * returns the result.
+ *
+ * Should [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack] method have
+ * been called earlier, temporarily swizzle _object_ so that most
+ * NSUndefinedKeyException are avoided.
+ * 
+ * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
  *
  * @param key     The searched key
  * @param object  The queried object
@@ -87,17 +93,24 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
- * Invokes `objc_msgSendSuper(super_data, @selector(valueForKey:), key);`, and
- * returns the result. Should this function call raise an
- * NSUndefinedKeyException, returns nil.
+ * Sends the `valueForKey:` message to super_data->receiver with the provided
+ * key, using the implementation of super_data->super_class, and returns the
+ * result.
+ *
+ * Should [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack] method have
+ * been called earlier, temporarily swizzle _object_ so that it does not raise
+ * any NSUndefinedKeyException.
+ *
+ * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
  *
  * This method is used by the GRMustacheProxy class.
  *
  * @param key         The searched key
- * @param super_data  A pointer to an objc_super struct
+ * @param super_data  A pointer to a struct objc_super
  *
- * @return The result of `objc_msgSendSuper(super_data, @selector(valueForKey:), key);`,
- *         or nil if this function call raises an NSUndefinedException.
+ * @return The result of the implementation of `valueForKey:` in
+ *         super_data->super_class, or nil should an NSUndefinedKeyException be
+ *         raised.
  *
  * @see GRMustacheProxy
  */
