@@ -58,16 +58,18 @@
     STAssertEquals(NSNullCount, (NSUInteger)3, @"");
 }
 
-- (void)testVariadicFiltersAreCurriedFilters
+- (void)testVariadicFiltersCanReturnFilters
 {
-    GRMustacheFilter *joinFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
-        return [[arguments valueForKey:@"description"] componentsJoinedByString:@","];
+    GRMustacheFilter *filter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+        return [GRMustacheFilter filterWithBlock:^id(id value) {
+            return [NSString stringWithFormat:@"%@+%@", [arguments componentsJoinedByString:@","], value];
+        }];
     }];
     
-    id data = @{ @"a": @"a", @"b": @"b" };
-    id filters = @{ @"join": joinFilter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{join(a,b)}} {{join(a)(b)}}" error:NULL];
-    STAssertEqualObjects(rendering, @"a,b a,b", @"");
+    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"d": @"d" };
+    id filters = @{ @"f": filter };
+    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL];
+    STAssertEqualObjects(rendering, @"a+d a,b+d a,b,c+d", @"");
 }
 
 - (void)testVariadicFiltersCanBeRootOfScopedExpression
