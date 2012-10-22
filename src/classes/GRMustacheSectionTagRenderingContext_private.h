@@ -40,7 +40,19 @@
 - (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)renderObject:(id)object withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSectionTagRenderingContext.h
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSectionTagRenderingContext.h
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
  * Builds and returns a context suitable for GRMustacheSectionTagHelper.

@@ -68,12 +68,23 @@
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
 
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object withFilters:(id)filters;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Rendering another template string
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * TODO: deprecate and rename renderString:error:
  * Renders a template string with the current rendering context.
  *
  * @param string    A template string
@@ -86,5 +97,15 @@
  * @since v5.3
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError;
 
 @end

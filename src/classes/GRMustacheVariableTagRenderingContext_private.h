@@ -37,7 +37,19 @@
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheVariableTagRenderingContext.h
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheVariableTagRenderingContext.h
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheVariableTagRenderingContext.h
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheVariableTagRenderingContext.h
+- (NSString *)renderObject:(id)object fromTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheVariableTagRenderingContext.h
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromTemplateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 /**
  * Builds and returns a context suitable for GRMustacheVariableTagHelper.

@@ -43,6 +43,8 @@
 }
 
 /**
+ * TODO: deprecate, and rename renderString:error:
+ *
  * Renders a template string.
  *
  * @param string    A template string
@@ -55,6 +57,16 @@
  * @since v5.3
  */
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError;
 
 
 /**
@@ -70,5 +82,15 @@
  * @since v5.3
  */
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object fromTemplateNamed:(NSString *)name error:(NSError **)outError;
+
+/**
+ * TODO
+ */
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromTemplateNamed:(NSString *)name error:(NSError **)outError;
 
 @end

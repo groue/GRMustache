@@ -55,20 +55,42 @@
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
 {
+    return [self renderObject:nil withFilters:nil fromString:string error:outError];
+}
+
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError
+{
+    return [self renderObject:object withFilters:nil fromString:string error:outError];
+}
+
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError
+{
     GRMustacheTemplate *template = [_templateRepository templateFromString:string error:outError];
     if (!template) {
         return nil;
     }
     
     NSMutableString *buffer = [NSMutableString string];
-    [template renderInBuffer:buffer withRuntime:_runtime];
+    GRMustacheRuntime *runtime = [_runtime runtimeByAddingContextObject:object];
+    runtime = [runtime runtimeByAddingFilterObject:filters];
+    [template renderInBuffer:buffer withRuntime:runtime];
     return buffer;
 }
 
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError
 {
+    return [self renderObject:nil withFilters:nil fromTemplateNamed:name error:outError];
+}
+
+- (NSString *)renderObject:(id)object fromTemplateNamed:(NSString *)name error:(NSError **)outError
+{
+    return [self renderObject:object withFilters:nil fromTemplateNamed:name error:outError];
+}
+
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromTemplateNamed:(NSString *)name error:(NSError **)outError
+{
     NSString *templateString = [NSString stringWithFormat:@"{{>%@}}", name];
-    return [self renderTemplateString:templateString error:outError];
+    return [self renderObject:object withFilters:filters fromString:templateString error:outError];
 }
 
 @end

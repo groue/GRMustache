@@ -21,9 +21,8 @@
 // THE SOFTWARE.
 
 #import <Cocoa/Cocoa.h>
+#import "GRMustache.h"
 
-@interface GRAppDelegate : NSObject <NSApplicationDelegate>
-
-@property (assign) IBOutlet NSWindow *window;
-
+@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper>
 @end
+

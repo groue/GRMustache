@@ -14,6 +14,7 @@
 		5632EF2915E0D55D009EA316 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5632EF2715E0D55D009EA316 /* MainMenu.xib */; };
 		5632EF3615E0D5BF009EA316 /* libGRMustache5-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5632EF3515E0D5BF009EA316 /* libGRMustache5-MacOS.a */; };
 		56BF7C5615E0E08F0067308D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56BF7C5415E0E08F0067308D /* Localizable.strings */; };
+		56F1AB551635CD5500CC68EE /* LocalizingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F1AB541635CD5500CC68EE /* LocalizingHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		5632EF3415E0D5BF009EA316 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRMustache.h; path = include/GRMustache.h; sourceTree = "<group>"; };
 		5632EF3515E0D5BF009EA316 /* libGRMustache5-MacOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache5-MacOS.a"; path = "lib/libGRMustache5-MacOS.a"; sourceTree = "<group>"; };
 		56BF7C5515E0E08F0067308D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		56F1AB531635CD5500CC68EE /* LocalizingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizingHelper.h; sourceTree = "<group>"; };
+		56F1AB541635CD5500CC68EE /* LocalizingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalizingHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				5632EF2415E0D55D009EA316 /* GRAppDelegate.h */,
 				5632EF2515E0D55D009EA316 /* GRAppDelegate.m */,
+				56F1AB531635CD5500CC68EE /* LocalizingHelper.h */,
+				56F1AB541635CD5500CC68EE /* LocalizingHelper.m */,
 				56BF7C5415E0E08F0067308D /* Localizable.strings */,
 				5632EF3315E0D594009EA316 /* GRMustache */,
 				5632EF1915E0D55D009EA316 /* Supporting Files */,
@@ -184,6 +189,7 @@
 			files = (
 				5632EF1F15E0D55D009EA316 /* main.m in Sources */,
 				5632EF2615E0D55D009EA316 /* GRAppDelegate.m in Sources */,
+				56F1AB551635CD5500CC68EE /* LocalizingHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

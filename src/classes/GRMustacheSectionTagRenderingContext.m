@@ -56,12 +56,34 @@
 
 - (NSString *)render
 {
+    return [self renderObject:nil withFilters:nil];
+}
+
+- (NSString *)renderObject:(id)object
+{
+    return [self renderObject:object withFilters:nil];
+}
+
+- (NSString *)renderObject:(id)object withFilters:(id)filters
+{
     NSMutableString *buffer = [NSMutableString string];
-    [_sectionElement renderInnerElementsInBuffer:buffer withRuntime:_runtime];
+    GRMustacheRuntime *runtime = [_runtime runtimeByAddingContextObject:object];
+    runtime = [runtime runtimeByAddingFilterObject:filters];
+    [_sectionElement renderInnerElementsInBuffer:buffer withRuntime:runtime];
     return buffer;
 }
 
 - (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
+{
+    return [self renderObject:nil withFilters:nil fromString:string error:outError];
+}
+
+- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError
+{
+    return [self renderObject:object withFilters:nil fromString:string error:outError];
+}
+
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError
 {
     GRMustacheTemplate *template = [_sectionElement.templateRepository templateFromString:string error:outError];
     if (!template) {
@@ -69,7 +91,9 @@
     }
     
     NSMutableString *buffer = [NSMutableString string];
-    [template renderInBuffer:buffer withRuntime:_runtime];
+    GRMustacheRuntime *runtime = [_runtime runtimeByAddingContextObject:object];
+    runtime = [runtime runtimeByAddingFilterObject:filters];
+    [template renderInBuffer:buffer withRuntime:runtime];
     return buffer;
 }
 

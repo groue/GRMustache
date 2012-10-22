@@ -22,9 +22,7 @@
 
 #import "GRAppDelegate.h"
 #import "GRMustache.h"
-
-@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
-@end
+#import "LocalizingHelper.h"
 
 @implementation GRAppDelegate
 
@@ -136,140 +134,100 @@
             NSLog(@"rendering = %@", rendering);
         }
     }
-}
-
-@end
-
-
-/**
- * LocalizingHelper
- */
-
-@interface LocalizingHelper()
-@property (nonatomic, strong) NSMutableArray *formatArguments;
-@end
-
-@implementation LocalizingHelper
-
-- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
-{
-    /**
-     * Let's perform a first rendering of the section, invoking
-     * [context render].
-     *
-     * This method returns the rendering of the section:
-     * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
-     *
-     * Normally, it would return "Hello Arthur! Do you know Barbara?", which
-     * we could not localize.
-     *
-     * But we are also a GRMustacheTemplateDelegate, and as such, GRMustache
-     * will tell us when it is about to render a value.
-     *
-     * In the template:willInterpretReturnValueOfInvocation:as: delegate method,
-     * we'll tell GRMustache to render "%@" instead of the actual values
-     * "Arthur" and "Barbara".
-     *
-     * The rendering of the section will thus be "Hello %@! Do you know %@?",
-     * which is a string that is suitable for localization.
-     *
-     * We still need the format arguments to fill the format: "Arthur", and
-     * "Barbara".
-     *
-     * They also be gathered in the delegate method, that will fill the
-     * self.formatArguments array, here initialized as an empty array.
-     */
     
-    self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [context render];
-    
-    
-    /**
-     * [context render] has rendered the localizable format, and has triggered
-     * delegate callbacks: now self.formatArguments is ready.
-     *
-     * Let's localize the format.
-     */
-    
-    NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
-    
-    
-    /**
-     * Render!
-     *
-     * [NSString stringWithFormat:] unfortunately does not accept an array of
-     * formatArguments to fill the format. Let's support up to 3 arguments:
-     */
-    
-    NSString *rendering = nil;
-    switch (self.formatArguments.count) {
-        case 0:
-            rendering = localizedFormat;
-            break;
+    {
+        /**
+         * Encapsulation of the sentence
+         */
         
-        case 1:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0]];
-            break;
-            
-        case 2:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0],
-                         [self.formatArguments objectAtIndex:1]];
-            break;
-            
-        case 3:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0],
-                         [self.formatArguments objectAtIndex:1],
-                         [self.formatArguments objectAtIndex:2]];
-            break;
+        // In order to render `{{ localizedMutualFriendsSentence(x, y) }}`,
+        // let's write a variadic filter.
         
-        default:
-            NSAssert(NO, @"Not implemented");
-            break;
+        id localizedMutualFriendsSentence = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+            
+            // The filter can not access Mustache engine itself. However, it can
+            // return a variable tag helper that can, and will render our
+            // sentence:
+            
+            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
+                
+                // Build local context from filter arguments:
+                
+                id data = @{
+                    @"name1": [arguments objectAtIndex:0],
+                    @"name2": [arguments objectAtIndex:1],
+                    @"count": [arguments objectAtIndex:2],
+                    @"localize": [[LocalizingHelper alloc] init],
+                };
+                
+                
+                // Build local filters
+                
+                id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+                    if ([count intValue] > 1) {
+                        return @YES;
+                    }
+                    return @NO;
+                }]};
+                
+                // Render
+                
+                NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
+                return [context renderObject:data
+                                 withFilters:filters
+                                  fromString:templateString
+                                       error:NULL];
+            }];
+        }];
+        
+        {
+            id data = @{
+                @"name1": @"Gwendal",
+                @"name2": @"Henry",
+                @"count12": @(20),
+                @"name3": @"Kyle",
+                @"name4": @"Louis",
+                @"count34": @(50),
+            };
+            
+            id filters = @{ @"localizedMutualFriendsSentence": localizedMutualFriendsSentence };
+            
+            NSString *rendering = [GRMustacheTemplate renderObject:data
+                                                       withFilters:filters
+                                                        fromString:@"{{localizedMutualFriendsSentence(name1, name2, count12)}}\n"
+                                                                   @"{{localizedMutualFriendsSentence(name3, name4, count34)}}"
+                                                             error:NULL];
+            
+            NSLog(@"rendering = %@", rendering);
+        }
     }
     
-    
-    /**
-     * Cleanup and return the rendering
-     */
-    
-    self.formatArguments = nil;
-    return rendering;
-}
-
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
-{
-    /**
-     * We are only interested in the rendering of variable tags such as
-     * {{name1}}. We do not want to mess with Mustache handling of boolean
-     * sections such as {{#isPlural(count)}}...{{/}}.
-     *
-     * We target variable tags with the interpretation argument:
-     */
-    
-    if (interpretation == GRMustacheVariableTagInterpretation) {
+    {
+        id pairFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
+                id data = @{
+                @"first": [arguments objectAtIndex:0],
+                @"last": [arguments objectAtIndex:1],
+                };
+                return [context renderObject:data fromString:@"({{first}},{{last}})" error:NULL];
+            }];
+        }];
         
-        /**
-         * invocation.returnValue is "Arthur" or "Barbara".
-         *
-         * Fill self.formatArguments so that we have arguments for
-         * [NSString stringWithFormat:].
-         */
+        id data = @{
+        @"a":@"a",
+        @"b":@"b",
+        @"c":@"c",
+        @"d":@"d",
+        };
         
-        [self.formatArguments addObject:invocation.returnValue ?: [NSNull null]];
+        NSString *rendering = [GRMustacheTemplate renderObject:data
+                                                   withFilters:@{ @"pair": pairFilter }
+                                                    fromString:@"{{pair(a,b)}} {{pair(c,d)}}"
+                                                         error:NULL];
         
-        
-        /**
-         * Render "%@" instead of the value.
-         */
-        
-        invocation.returnValue = @"%@";
+        NSLog(@"rendering = %@", rendering);
     }
 }
 
 @end
+
