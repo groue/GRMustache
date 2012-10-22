@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilterLibrary_private.h"
-#import "GRMustacheFilter.h"
+#import "GRMustacheFilter_private.h"
 
 
 // =============================================================================

@@ -33,6 +33,7 @@
 @private
     GRMustacheExpression *_filterExpression;
     GRMustacheExpression *_parameterExpression;
+    BOOL _allowCurrying;
 }
 
 /**
@@ -52,4 +53,23 @@
  * @return A GRMustacheFilteredExpression.
  */
 + (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns a filtered expression, given an expression that returns a filter, and
+ * an expression that return the filter parameter.
+ *
+ * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
+ * whose filterExpression is a GRMustacheIdentifierExpression (for the
+ * identifier `f`), and whose parameterExpression is a
+ * GRMustacheIdentifierExpression (for the identifier `x`).
+ *
+ * @param filterExpression     An expression whose value is an object conforming
+ *                             to the <GRMustacheFilter> protocol.
+ * @param parameterExpression  An expression whose value is the parameter of the
+ *                             filter.
+ * @param allowCurrying        TODO
+ *
+ * @return A GRMustacheFilteredExpression.
+ */
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression allowCurrying:(BOOL)allowCurrying GRMUSTACHE_API_INTERNAL;
 @end
