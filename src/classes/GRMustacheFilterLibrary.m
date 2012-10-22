@@ -86,7 +86,7 @@
         return [NSNumber numberWithBool:YES];
     }
     
-    if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+    if (![object isKindOfClass:[NSDictionary class]] && [object conformsToProtocol:@protocol(NSFastEnumeration)]) {
         for (id _ in object) {
             return [NSNumber numberWithBool:NO];
         }
@@ -114,7 +114,7 @@
         return [NSNumber numberWithBool:YES];
     }
     
-    if ([object conformsToProtocol:@protocol(NSFastEnumeration)]) {
+    if (![object isKindOfClass:[NSDictionary class]] && [object conformsToProtocol:@protocol(NSFastEnumeration)]) {
         for (id _ in object) {
             return [NSNumber numberWithBool:NO];
         }
