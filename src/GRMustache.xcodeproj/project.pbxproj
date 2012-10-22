@@ -173,8 +173,6 @@
 		56907EF115FE5D180081BC2A /* GRMustacheInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907EED15FE5D180081BC2A /* GRMustacheInvocation.m */; };
 		56907EF315FE5D9E0081BC2A /* GRMustacheInvocation_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56907EF215FE5D9E0081BC2A /* GRMustacheInvocation_private.h */; };
 		56907EF415FE5D9E0081BC2A /* GRMustacheInvocation_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56907EF215FE5D9E0081BC2A /* GRMustacheInvocation_private.h */; };
-		56907F171604B5C50081BC2A /* GRMustacheFilterLibraryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F151604B5C50081BC2A /* GRMustacheFilterLibraryTest.m */; };
-		56907F181604B5C50081BC2A /* GRMustacheFilterLibraryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F151604B5C50081BC2A /* GRMustacheFilterLibraryTest.m */; };
 		56907F191604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */; };
 		56907F1A1604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */; };
 		56A4D11015EA098A00550610 /* GRMustacheRuntime_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A4D10E15EA098A00550610 /* GRMustacheRuntime_private.h */; };
@@ -407,7 +405,6 @@
 		56907EEC15FE5D170081BC2A /* GRMustacheInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInvocation.h; sourceTree = "<group>"; };
 		56907EED15FE5D180081BC2A /* GRMustacheInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheInvocation.m; sourceTree = "<group>"; };
 		56907EF215FE5D9E0081BC2A /* GRMustacheInvocation_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInvocation_private.h; sourceTree = "<group>"; };
-		56907F151604B5C50081BC2A /* GRMustacheFilterLibraryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilterLibraryTest.m; sourceTree = "<group>"; };
 		56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilterTest.m; sourceTree = "<group>"; };
 		56A4D10E15EA098A00550610 /* GRMustacheRuntime_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRuntime_private.h; sourceTree = "<group>"; };
 		56A4D10F15EA098A00550610 /* GRMustacheRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheRuntime.m; sourceTree = "<group>"; };
@@ -934,7 +931,6 @@
 			isa = PBXGroup;
 			children = (
 				560CE88E1526EEF4004F935E /* GRBooleanTest.m */,
-				56907F151604B5C50081BC2A /* GRMustacheFilterLibraryTest.m */,
 				56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */,
 				563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */,
 				5623B7901527224000DF16A6 /* GRMustacheSectionHelperTest.m */,
@@ -1417,7 +1413,6 @@
 				5682B48F1528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
 				5682B4911528473200ADD123 /* GRMustacheTemplateRepositoryWithDirectory_5_0_Test.m in Sources */,
 				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
-				56907F171604B5C50081BC2A /* GRMustacheFilterLibraryTest.m in Sources */,
 				56907F191604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */,
 				56EB54AC160D8229006A5F57 /* GRMustacheVariableHelperTest.m in Sources */,
 				56EB54DB160EFEEA006A5F57 /* GRMustacheSuites5_2Test.m in Sources */,
@@ -1496,7 +1491,6 @@
 				5682B4901528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
 				5682B4921528473200ADD123 /* GRMustacheTemplateRepositoryWithDirectory_5_0_Test.m in Sources */,
 				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
-				56907F181604B5C50081BC2A /* GRMustacheFilterLibraryTest.m in Sources */,
 				56907F1A1604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */,
 				56EB54AD160D8229006A5F57 /* GRMustacheVariableHelperTest.m in Sources */,
 				56EB54DC160EFEEA006A5F57 /* GRMustacheSuites5_2Test.m in Sources */,

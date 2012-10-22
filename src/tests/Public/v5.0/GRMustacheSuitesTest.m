@@ -36,6 +36,7 @@
     [self enumerateTestsFromResource:@"compound_keys.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"delimiters.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"encodings.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
+    [self enumerateTestsFromResource:@"filter_library.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
     [self enumerateTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];

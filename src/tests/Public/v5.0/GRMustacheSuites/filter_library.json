@@ -1,0 +1,160 @@
+{
+  "tests": [
+    {
+      "name": "`capitalized` filter should change the first character from each word to its corresponding uppercase value, and all remaining characters to their corresponding lowercase values.",
+      "data": "EDGAR allan poE",
+      "template": "{{ capitalized(.) }}",
+      "expected": "Edgar Allan Poe"
+    },
+    {
+      "name": "`capitalized` filter should be unicode-aware.",
+      "data": "éÉ πΠ ßß ﬁﬁ œŒ ΣΣ ıI",
+      "template": "{{ capitalized(.) }}",
+      "expected": "Éé Ππ Ssß Fiﬁ Œœ Σς Ii"
+    },
+    {
+      "name": "`lowercase` filter should change the all characters to their corresponding lowercase values.",
+      "data": "EDGAR allan poE",
+      "template": "{{ lowercase(.) }}",
+      "expected": "edgar allan poe"
+    },
+    {
+      "name": "`lowercase` filter should be unicode-aware.",
+      "data": "ΣÉΠŒIΣ",
+      "template": "{{ lowercase(.) }}",
+      "expected": "σéπœiς"
+    },
+    {
+      "name": "`uppercase` filter should change the all characters to their corresponding lowercase values.",
+      "data": "EDGAR allan poE",
+      "template": "{{ uppercase(.) }}",
+      "expected": "EDGAR ALLAN POE"
+    },
+    {
+      "name": "`uppercase` filter should be unicode-aware.",
+      "data": "σéπßﬁœıς",
+      "template": "{{ uppercase(.) }}",
+      "expected": "ΣÉΠSSFIŒIΣ"
+    },
+    {
+      "name": "`isBlank` filter should match missing keys.",
+      "data": {},
+      "template": "{{# isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should match null.",
+      "data": { "object": null },
+      "template": "{{# isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should match empty string.",
+      "data": { "object": "" },
+      "template": "{{# isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should match string containing only white spaces, tabs and new lines.",
+      "data": { "object": " \t\n" },
+      "template": "{{# isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should match empty list.",
+      "data": { "object": [] },
+      "template": "{{# isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should not match string containing non space character.",
+      "data": { "object": " \t\nX \t\n" },
+      "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should not match non-empty list.",
+      "data": { "object": [1,2,3] },
+      "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should not match non-empty list, even lists made of false values.",
+      "data": { "object": [null] },
+      "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should not match any object.",
+      "data": { "object": { "foo": "bar" } },
+      "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isBlank` filter should not match any object, even objects without any key.",
+      "data": { "object": {} },
+      "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should match missing keys.",
+      "data": {},
+      "template": "{{# isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should match null.",
+      "data": { "object": null },
+      "template": "{{# isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should match empty string.",
+      "data": { "object": "" },
+      "template": "{{# isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should match empty list.",
+      "data": { "object": [] },
+      "template": "{{# isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match string containing only white spaces, tabs and new lines.",
+      "data": { "object": " \t\n" },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match string containing non space character.",
+      "data": { "object": " \t\nX \t\n" },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match non-empty list.",
+      "data": { "object": [1,2,3] },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match non-empty list, even lists made of false values.",
+      "data": { "object": [null] },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match any object.",
+      "data": { "object": { "foo": "bar" } },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    },
+    {
+      "name": "`isEmpty` filter should not match any object, even objects without any key.",
+      "data": { "object": {} },
+      "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
+      "expected": "success"
+    }
+  ]
+}
