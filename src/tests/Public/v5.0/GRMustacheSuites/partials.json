@@ -130,7 +130,6 @@
       "name": "Posix relative path should navigate the file system",
       "data": { },
       "template_name": "template.mustache",
-      "encoding": 4, // NSUTF8StringEncoding
       "partials": {
         "template.mustache": "<{{>partials/partial}}>",
         "partials/partial.mustache": "{{>../other_partials/deep_partial}}",
@@ -142,7 +141,6 @@
       "name": "Posix relative path should navigate the file system",
       "data": { },
       "template_name": "partials/template.mustache",
-      "encoding": 4, // NSUTF8StringEncoding
       "partials": {
         "partials/template.mustache": "<{{>partial}}>",
         "partials/partial.mustache": "{{>../other_partials/deep_partial}}",
@@ -154,7 +152,6 @@
       "name": "Posix relative path should navigate the file system",
       "data": { },
       "template_name": "file1",
-      "encoding": 4, // NSUTF8StringEncoding
       "partials": {
         "file1": "file1 {{>dir/file1}}{{>file2}}",
         "file1.mustache": "file1.mustache {{>dir/file1}}{{>file2}}",
@@ -182,7 +179,6 @@
       "name": "Posix relative path should navigate the file system",
       "data": { },
       "template_name": "file1.mustache",
-      "encoding": 4, // NSUTF8StringEncoding
       "partials": {
         "file1": "file1 {{>dir/file1}}{{>file2}}",
         "file1.mustache": "file1.mustache {{>dir/file1}}{{>file2}}",
