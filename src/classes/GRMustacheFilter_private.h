@@ -20,25 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
+
+
+// Documented in GRMustacheFilter.h
+@protocol GRMustacheFilter <NSObject>
+@required
+
+// Documented in GRMustacheFilter.h
+- (id)transformedValue:(id)object GRMUSTACHE_API_PUBLIC;
+
+@optional
 
 /**
- * The major component of GRMustache version
- * 
- * @since v1.0
+ * TODO
  */
-#define GRMUSTACHE_MAJOR_VERSION 5
+- (id)transformedValue:(id)object allowCurrying:(BOOL)allowCurrying GRMUSTACHE_API_INTERNAL;
+@end
 
-/**
- * The minor component of GRMustache version
- * 
- * @since v1.0
- */
-#define GRMUSTACHE_MINOR_VERSION 5
 
-/**
- * The patch-level component of GRMustache version
- * 
- * @since v1.0
- */
-#define GRMUSTACHE_PATCH_VERSION 2
+// Documented in GRMustacheFilter.h
+@interface GRMustacheFilter : NSObject<GRMustacheFilter>
 
+// Documented in GRMustacheFilter.h
++ (id)filterWithBlock:(id(^)(id value))block GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheFilter.h
++ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block GRMUSTACHE_API_PUBLIC;
+
+@end

@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheFilter.h"
-#import "GRMustacheProxy.h"
+#import "GRMustacheFilter_private.h"
+#import "GRMustacheProxy_private.h"
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
@@ -149,11 +149,29 @@
 
 - (id)transformedValue:(id)object
 {
-    // Turn nil into [NSNull null]
+    return [self transformedValue:object allowCurrying:YES];
+}
+
+- (id)transformedValue:(id)object allowCurrying:(BOOL)allowCurrying
+{
+    // Append argument (turning nil into [NSNull null]):
+    
     NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
     
-    // Curry
-    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
+    
+    // Curry, or...
+    
+    if (allowCurrying) {
+        return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
+    }
+    
+    
+    // ... evaluate right away
+    
+    if (_block) {
+        return _block(arguments);
+    }
+    return nil;
 }
 
 @end

@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheFilter.h"
+#import "GRMustacheFilter_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
@@ -29,7 +29,7 @@
 @interface GRMustacheFilteredExpression()
 @property (nonatomic, retain) GRMustacheExpression *filterExpression;
 @property (nonatomic, retain) GRMustacheExpression *parameterExpression;
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression;
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression allowCurrying:(BOOL)allowCurrying;
 @end
 
 @implementation GRMustacheFilteredExpression
@@ -38,15 +38,21 @@
 
 + (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression
 {
-    return [[[self alloc] initWithFilterExpression:filterExpression parameterExpression:parameterExpression] autorelease];
+    return [[[self alloc] initWithFilterExpression:filterExpression parameterExpression:parameterExpression allowCurrying:YES] autorelease];
 }
 
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression allowCurrying:(BOOL)allowCurrying
+{
+    return [[[self alloc] initWithFilterExpression:filterExpression parameterExpression:parameterExpression allowCurrying:allowCurrying] autorelease];
+}
+
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression allowCurrying:(BOOL)allowCurrying
 {
     self = [super init];
     if (self) {
         _filterExpression = [filterExpression retain];
         _parameterExpression = [parameterExpression retain];
+        _allowCurrying = allowCurrying;
     }
     return self;
 }
@@ -90,6 +96,10 @@
     
     if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
         [NSException raise:GRMustacheRenderingException format:@"Object does not conform to GRMustacheFilter protocol"];
+    }
+    
+    if ([filter respondsToSelector:@selector(transformedValue:allowCurrying:)]) {
+        return [(id<GRMustacheFilter>)filter transformedValue:parameter allowCurrying:_allowCurrying];
     }
     
     return [(id<GRMustacheFilter>)filter transformedValue:parameter];

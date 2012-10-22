@@ -4,9 +4,15 @@ GRMustache Release Notes
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
 
+## v5.5.2
+
+**Bug fixes**
+
+[Variadic filters](Guides/filters.md) can now return filters, just as filters with a single argument.
+
 ## v5.5.1
 
-### Niceties and bug fixes
+**Niceties and bug fixes**
 
 The `count` method of NSArray, NSSet and NSOrderedSet can now be queried in templates: `{{collection.count}}` renders as expected, and `{{#collection.count}}...{{/}}` can conditionally render a section if and only if the collection is not empty. See [Guides/runtime/context_stack.md](Guides/runtime/context_stack.md#nsarray-nsset-nsorderedset) for a detailed explanation.
 
