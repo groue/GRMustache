@@ -23,88 +23,25 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheSuitesTest : GRMustachePublicAPITest
-- (void)runTest:(NSDictionary *)test atPath:(NSString *)path;
+@interface GRMustacheSuitesTest : GRMustachePublicAPISuiteTest
 @end
 
 @implementation GRMustacheSuitesTest
 
 - (void)testGRMustacheSuites
 {
-    void(^block)(NSDictionary *test, NSString *path) = ^(NSDictionary *test, NSString *path) { [self runTest:test atPath:path]; };
-    [self enumerateTestsFromResource:@"comments.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"compound_keys.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"delimiters.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"encodings.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"filter_library.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"partials.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-    [self enumerateTestsFromResource:@"pragmas.json" subdirectory:@"GRMustacheSuites" usingBlock:block];
-}
-
-- (void)runTest:(NSDictionary *)test atPath:(NSString *)path
-{
-    NSError *error;
-    
-    // Load template
-    
-    GRMustacheTemplate *template = nil;
-    
-    NSDictionary *partialsDictionary = [test objectForKey:@"partials"];
-    NSString *templateName = [test objectForKey:@"template_name"];
-    if (templateName.length > 0) {
-        
-        // Write partials in a file hierarchy
-        
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *templatesDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"GRMustacheTest"];
-        [fm removeItemAtPath:templatesDirectoryPath error:nil];
-        
-        NSNumber *encodingNumber = [test objectForKey:@"encoding"];
-        NSStringEncoding encoding = encodingNumber ? [encodingNumber unsignedIntegerValue] : NSUTF8StringEncoding;
-        
-        for (NSString *partialName in partialsDictionary) {
-            NSString *partialString = [partialsDictionary objectForKey:partialName];
-            NSString *partialPath = [templatesDirectoryPath stringByAppendingPathComponent:partialName];
-            [fm createDirectoryAtPath:[partialPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
-            [fm createFileAtPath:partialPath contents:[partialString dataUsingEncoding:encoding] attributes:nil];
-        }
-        
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath
-                                                                                               templateExtension:[templateName pathExtension]
-                                                                                                        encoding:encoding];
-        template = [repository templateForName:[templateName stringByDeletingPathExtension] error:&error];
-        
-        [fm removeItemAtPath:templatesDirectoryPath error:NULL];
-    } else {
-        
-        // Keep partials in memory
-        
-        NSString *templateString = [test objectForKey:@"template"];
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
-        template = [repository templateFromString:templateString error:&error];
-    }
-    STAssertNotNil(template, @"Could not template: %@", error);
-    if (!template) return;
-
-    
-    // Test rendering
-    
-    id data = [test objectForKey:@"data"];
-    NSString *expected = [test objectForKey:@"expected"];
-    NSString *rendering = [template renderObject:data];
-    
-    // Allow Breakpointing failing tests
-    
-    if (![expected isEqualToString:rendering]) {
-        [template renderObject:data];
-    }
-    
-    STAssertEqualObjects(rendering, expected, @"Failed test in suite at %@: %@", path, test);
+    [self runTestsFromResource:@"comments.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"compound_keys.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"delimiters.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"filters.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"filter_library.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"partials.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"pragmas.json" subdirectory:@"GRMustacheSuites"];
 }
 
 @end

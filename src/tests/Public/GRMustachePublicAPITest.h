@@ -24,7 +24,11 @@
 #import "GRMustacheTestBase.h"
 
 @interface GRMustachePublicAPITest: GRMustacheTestBase
+@end
 
-- (void)enumerateTestsFromResource:(NSString *)name subdirectory:(NSString *)subpath usingBlock:(void(^)(NSDictionary *test, NSString *path))block;
-
+@interface GRMustachePublicAPISuiteTest: GRMustachePublicAPITest
+- (void)runTestsFromResource:(NSString *)name subdirectory:(NSString *)subpath;
+- (GRMustacheTemplate *)templateForTemplateString:(NSString *)templateString partialsDictionary:(NSDictionary *)partialsDictionary error:(NSError **)outError;
+- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesPath:(NSString *)templatesPath encoding:(NSStringEncoding)encoding error:(NSError **)outError;
+- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesURL:(NSURL *)templatesURL encoding:(NSStringEncoding)encoding error:(NSError **)outError;
 @end

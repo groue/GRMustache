@@ -23,78 +23,15 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_5_2
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheSuites5_2Test : GRMustachePublicAPITest
-- (void)runTest:(NSDictionary *)test atPath:(NSString *)path;
+@interface GRMustacheSuites5_2Test : GRMustachePublicAPISuiteTest
 @end
 
 @implementation GRMustacheSuites5_2Test
 
 - (void)testGRMustacheSuites
 {
-    void(^block)(NSDictionary *test, NSString *path) = ^(NSDictionary *test, NSString *path) { [self runTest:test atPath:path]; };
-    [self enumerateTestsFromResource:@"overridable_sections.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
-    [self enumerateTestsFromResource:@"overridable_partials.json" subdirectory:@"GRMustacheSuites5_2" usingBlock:block];
-}
-
-- (void)runTest:(NSDictionary *)test atPath:(NSString *)path
-{
-    NSError *error;
-    
-    // Load template
-    
-    GRMustacheTemplate *template = nil;
-    
-    NSDictionary *partialsDictionary = [test objectForKey:@"partials"];
-    NSString *templateName = [test objectForKey:@"template_name"];
-    if (templateName.length > 0) {
-        
-        // Write partials in a file hierarchy
-        
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *templatesDirectoryPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"GRMustacheTest"];
-        [fm removeItemAtPath:templatesDirectoryPath error:nil];
-        
-        NSNumber *encodingNumber = [test objectForKey:@"encoding"];
-        NSStringEncoding encoding = encodingNumber ? [encodingNumber unsignedIntegerValue] : NSUTF8StringEncoding;
-        
-        for (NSString *partialName in partialsDictionary) {
-            NSString *partialString = [partialsDictionary objectForKey:partialName];
-            NSString *partialPath = [templatesDirectoryPath stringByAppendingPathComponent:partialName];
-            [fm createDirectoryAtPath:[partialPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
-            [fm createFileAtPath:partialPath contents:[partialString dataUsingEncoding:encoding] attributes:nil];
-        }
-        
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath
-                                                                                               templateExtension:[templateName pathExtension]
-                                                                                                        encoding:encoding];
-        template = [repository templateForName:[templateName stringByDeletingPathExtension] error:&error];
-        
-        [fm removeItemAtPath:templatesDirectoryPath error:NULL];
-    } else {
-        
-        // Keep partials in memory
-        
-        NSString *templateString = [test objectForKey:@"template"];
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
-        template = [repository templateFromString:templateString error:&error];
-    }
-    STAssertNotNil(template, @"Could not template: %@", error);
-    if (!template) return;
-
-    
-    // Test rendering
-    
-    id data = [test objectForKey:@"data"];
-    NSString *expected = [test objectForKey:@"expected"];
-    NSString *rendering = [template renderObject:data];
-    
-    // Allow Breakpointing failing tests
-    
-    if (![expected isEqualToString:rendering]) {
-        [template renderObject:data];
-    }
-    
-    STAssertEqualObjects(rendering, expected, @"Failed test in suite at %@: %@", path, test);
+    [self runTestsFromResource:@"overridable_sections.json" subdirectory:@"GRMustacheSuites5_2"];
+    [self runTestsFromResource:@"overridable_partials.json" subdirectory:@"GRMustacheSuites5_2"];
 }
 
 @end

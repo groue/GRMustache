@@ -1,0 +1,10 @@
+{
+  "tests": [
+    {
+      "name": "Filter should render.",
+      "data": { "name": "EDGAR allan poE" },
+      "template": "{{ capitalized(name) }}",
+      "expected": "Edgar Allan Poe"
+    }
+  ]
+}
