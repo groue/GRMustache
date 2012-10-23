@@ -42,25 +42,10 @@
 
 /**
  * The GRMustacheRenderingElement objects that make the template.
- * 
+ *
  * @see GRMustacheRenderingElement
  */
 @property (nonatomic, retain) NSArray *innerElements GRMUSTACHE_API_INTERNAL;
-
-/**
- * Builds and return a GRMustacheTemplate with an array of
- * GRMustacheRenderingElement objects.
- *
- * The _innerElements_ array may be nil. This is used by
- * GRMustacheTemplateRepository in order to support recursive partials.
- *
- * @param innerElements  An array of GRMustacheRenderingElement objects.
- *
- * @return a template
- *
- * @see GRMustacheRenderingElement
- */
-+ (id)templateWithInnerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 #pragma mark String template
 

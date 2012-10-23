@@ -213,7 +213,10 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     if (!renderingElements) {
         return nil;
     }
-    return [GRMustacheTemplate templateWithInnerElements:renderingElements];
+    
+    GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
+    template.innerElements = renderingElements;
+    return template;
 }
 
 #pragma mark Private
@@ -289,7 +292,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // store an empty template before compiling, so that we support
         // recursive partials
         
-        template = [GRMustacheTemplate templateWithInnerElements:nil];
+        template = [[[GRMustacheTemplate alloc] init] autorelease];
         [_templateForTemplateID setObject:template forKey:templateID];
         
         

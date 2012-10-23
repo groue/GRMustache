@@ -25,7 +25,6 @@
 #import "GRMustacheTemplateRepository_private.h"
 
 @interface GRMustacheTemplate()
-- (id)initWithInnerElements:(NSArray *)innerElements;
 @end
 
 @implementation GRMustacheTemplate
@@ -66,11 +65,6 @@
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext];
     return [templateRepository templateNamed:name error:outError];
-}
-
-+ (id)templateWithInnerElements:(NSArray *)innerElements
-{
-    return [[[self alloc] initWithInnerElements:innerElements] autorelease];
 }
 
 - (void)dealloc
@@ -255,17 +249,6 @@
         element = [innerElement resolveRenderingElement:element];
     }
     return element;
-}
-
-#pragma mark Private
-
-- (id)initWithInnerElements:(NSArray *)innerElements
-{
-    self = [self init];
-    if (self) {
-        self.innerElements = innerElements;
-    }
-    return self;
 }
 
 @end
