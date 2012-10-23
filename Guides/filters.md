@@ -189,7 +189,7 @@ id filters = @{
 Filters exceptions
 ------------------
 
-Should a filter be missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception of name `GRMustacheFilterException`.
+Should a filter be missing, or should the matching object not conform to the GRMustacheFilter protocol, GRMustache will raise an exception of name `GRMustacheRenderingException`.
 
 The message describes the exact place where the error occur has occurred:
 

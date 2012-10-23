@@ -92,11 +92,11 @@ NSString *templatesPath = [[NSBundle mainBundle] pathForResource:@"templates" of
 GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath];
 
 // Render a.mustache
-GRMustacheTemplate *aTemplate = [repository templateForName:@"a" error:NULL];
+GRMustacheTemplate *aTemplate = [repository templateNamed:@"a" error:NULL];
 [aTemplate render...];
 
 // Render b.mustache
-GRMustacheTemplate *bTemplate = [repository templateForName:@"partials/b" error:NULL];
+GRMustacheTemplate *bTemplate = [repository templateNamed:@"partials/b" error:NULL];
 [bTemplate render...];
 ```
 

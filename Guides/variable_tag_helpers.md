@@ -42,11 +42,11 @@ The `GRMustacheVariableTagRenderingContext` parameter provides the following met
 
 ```objc
 @interface GRMustacheVariableTagRenderingContext : NSObject
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderString:(NSString *)string error:(NSError **)outError;
 - (NSString *)renderTemplateNamed:(NSString *)name error:(NSError **)outError;
 @end
 ```
-The `renderTemplateString:error:` method returns the *rendering of a template string*. The eventual `{{tags}}` in the template string are interpolated. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
+The `renderString:error:` method returns the *rendering of a template string*. The eventual `{{tags}}` in the template string are interpolated. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
 
 The `renderTemplateNamed:error:` method is a shortcut that returns the *rendering of a partial template*, given its name. If your templates are stored in a directory hierarchy, you might want to provide the absolute path to the partial in a [template repository](template_repositories.md).
 
@@ -77,7 +77,7 @@ id data = @{
     @"author_url": person.url
     @"author_name": person.name
     @"author": [GRMustacheVariableTagHelper helperWithBlock:^(GRMustacheVariableTagRenderingContext *context) {
-        return [context renderTemplateString:@"<a href=\"{{author_url}}\">{{author_name}}</a>" error:NULL];
+        return [context renderString:@"<a href=\"{{author_url}}\">{{author_name}}</a>" error:NULL];
     }]
 };
 
@@ -225,14 +225,14 @@ id data = @{
         @"url": @"/movies/123",
         @"title": @"Citizen Kane",
         @"link": [GRMustacheVariableTagHelper helperWithBlock:^(GRMustacheVariableTagRenderingContext *context) {
-            return [context renderTemplateString:movieLinkTemplateString error:NULL];
+            return [context renderString:movieLinkTemplateString error:NULL];
         }],
         @"director": @{
             @"url": @"/people/321",
             @"firstName": @"Orson",
             @"lastName": @"Welles",
             @"link": [GRMustacheVariableTagHelper helperWithBlock:^(GRMustacheVariableTagRenderingContext *context) {
-                return [context renderTemplateString:directorLinkTemplateString error:NULL];
+                return [context renderString:directorLinkTemplateString error:NULL];
             }],
         }
     }
@@ -414,7 +414,7 @@ For instance, the popular Ruby implementation [defunkt/mustache](https://github.
 
 GRMustache itself belongs to the first set, since you *can* write specification-compliant "mustache lambdas" with variable tag helpers. However variable tag helpers are more versatile than plain Mustache lambdas:
 
-In order to be compatible with all specification-compliant implementations, your variable tag helper MUST return the result of the `renderTemplateString:error:` or `renderTemplateNamed:error:` methods of its _context_ parameter, and it MUST be embedded with triple braces in your templates: `{{{helper}}}`.
+In order to be compatible with all specification-compliant implementations, your variable tag helper MUST return the result of the `renderString:error:` or `renderTemplateNamed:error:` methods of its _context_ parameter, and it MUST be embedded with triple braces in your templates: `{{{helper}}}`.
 
 For compatibility with other Mustache implementations, check their documentation.
 

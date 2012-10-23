@@ -66,7 +66,7 @@
  *
  * @param templateRepository  A Template repository that allows helpers to
  *                            render template strings through
- *                            renderTemplateString:error: and
+ *                            renderString:error: and
  *                            renderTemplateNamed:error: methods.
  * @param runtime             A runtime.
  *

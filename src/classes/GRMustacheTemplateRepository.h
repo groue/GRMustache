@@ -164,7 +164,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.mustache
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.mustache`, located in the enclosing template's directory.
@@ -204,7 +204,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.txt`, located in the enclosing template's directory.
@@ -246,7 +246,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.txt`, located in the enclosing template's directory.
@@ -285,7 +285,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.mustache
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.mustache`, located in the enclosing template's directory.
@@ -324,7 +324,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.txt`, located in the enclosing template's directory.
@@ -365,7 +365,7 @@
  *     
  *     // Returns a template for the file stored in
  *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * A partial tag `{{>partial}}` loads a partial template stored in a file named
  * `partial.txt`, located in the enclosing template's directory.
@@ -408,7 +408,7 @@
  *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
  *     
  *     // Returns a template for the resource profile.mustache
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * You may provide nil for the bundle parameter: the repository will use the
  * main bundle.
@@ -437,7 +437,7 @@
  *                                                                                         templateExtension:@"txt"];
  *     
  *     // Returns a template for the resource profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * You may provide nil for the bundle parameter: the repository will use the
  * main bundle.
@@ -468,7 +468,7 @@
  *                                                                                                  encoding:NSMacOSRomanStringEncoding];
  *     
  *     // Returns a template for the resource profile.txt
- *     GRMustacheTemplate *template = [repository templateForName:@"profile" error:NULL];
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
  * 
  * You may provide nil for the bundle parameter: the repository will use the
  * main bundle.
@@ -501,7 +501,7 @@
  *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
  *     
  *     // Two templates that would render "It works."
- *     GRMustacheTemplate *template1 = [repository templateForName:@"partial" error:NULL];
+ *     GRMustacheTemplate *template1 = [repository templateNamed:@"partial" error:NULL];
  *     GRMustacheTemplate *template2 = [repository templateFromString:@"{{>partial}}" error:NULL];
  * 
  * @param partialsDictionary  A dictionary of whose keys are template names, and
@@ -529,7 +529,7 @@
  *     
  *     // Returns nil, and sets error to an NSError of domain
  *     // GRMustacheErrorDomain, code GRMustacheErrorCodeTemplateNotFound.
- *     [repository templateForName:@"foo" error:&error];
+ *     [repository templateNamed:@"foo" error:&error];
  *     
  *     // Returns nil, and sets error to an NSError of domain GRMustacheErrorDomain,
  *     // code GRMustacheErrorCodeTemplateNotFound.
@@ -547,7 +547,7 @@
  *     repository.dataSource = ...;
  *     
  *     // Returns a template built from the string provided by the dataSource.
- *     [repository templateForName:@"foo" error:NULL];
+ *     [repository templateNamed:@"foo" error:NULL];
  * 
  * @return a GRMustacheTemplateRepository
  *
@@ -588,7 +588,7 @@
  *
  * @since v1.13
  */
-- (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a template built from the provided Mustache template string.

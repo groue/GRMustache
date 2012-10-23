@@ -239,7 +239,7 @@ static struct {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath
                                                                                            templateExtension:[templateName pathExtension]
                                                                                                     encoding:encoding];
-    return [repository templateForName:[templateName stringByDeletingPathExtension] error:outError];
+    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:outError];
 }
 
 - (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesURL:(NSURL *)templatesURL encoding:(NSStringEncoding)encoding error:(NSError **)outError
@@ -247,7 +247,7 @@ static struct {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:templatesURL
                                                                                          templateExtension:[templateName pathExtension]
                                                                                                   encoding:encoding];
-    return [repository templateForName:[templateName stringByDeletingPathExtension] error:outError];
+    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:outError];
 }
 
 @end

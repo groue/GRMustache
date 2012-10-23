@@ -44,7 +44,7 @@
     NSString *templateExtension = [URL pathExtension];
     NSString *templateName = [[URL lastPathComponent] stringByDeletingPathExtension];
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension];
-    return [templateRepository templateForName:templateName error:outError];
+    return [templateRepository templateNamed:templateName error:outError];
 }
 
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError
@@ -53,19 +53,19 @@
     NSString *templateExtension = [path pathExtension];
     NSString *templateName = [[path lastPathComponent] stringByDeletingPathExtension];
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension];
-    return [templateRepository templateForName:templateName error:outError];
+    return [templateRepository templateNamed:templateName error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
-    return [templateRepository templateForName:name error:outError];
+    return [templateRepository templateNamed:name error:outError];
 }
 
 + (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle templateExtension:ext];
-    return [templateRepository templateForName:name error:outError];
+    return [templateRepository templateNamed:name error:outError];
 }
 
 + (id)templateWithInnerElements:(NSArray *)innerElements

@@ -84,7 +84,7 @@ You may now load a template:
 
 ```objc
 // Loads path/to/templates/document.mustache
-GRMustacheTemplate *template = [repository templateForName:@"document" error:NULL];
+GRMustacheTemplate *template = [repository templateNamed:@"document" error:NULL];
 ```
  
 You may also have the repository parse a template string. Only partials would then be loaded from the repository:
@@ -133,7 +133,7 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 
 // Loads path/to/templates/a.mustache, and provides a root for
 // absolute partial tags: 
-GRMustacheTemplate aTemplate = [repository templateForName:@"a"];
+GRMustacheTemplate aTemplate = [repository templateNamed:@"a"];
 NSString *rendering = [aTemplate renderObject:...];
 ```
 
@@ -170,7 +170,7 @@ Then load templates from it:
 
 ```objc
 GRMustacheTemplate *template1 = [repository templateFromString:@"{{>partial}}" error:NULL];
-GRMustacheTemplate *template2 = [repository templateForName:@"partial" error:NULL];
+GRMustacheTemplate *template2 = [repository templateNamed:@"partial" error:NULL];
 ```
 
 And finally render:

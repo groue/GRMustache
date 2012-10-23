@@ -304,7 +304,7 @@
                     
                     // Ask templateRepository for overridable template
                     NSError *templateError;
-                    GRMustacheTemplate *template = [_templateRepository templateForName:_currentOpeningToken.partialName error:&templateError];
+                    GRMustacheTemplate *template = [_templateRepository templateNamed:_currentOpeningToken.partialName error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
                         return NO;
@@ -336,7 +336,7 @@
             
             // Ask templateRepository for partial template
             NSError *templateError;
-            GRMustacheTemplate *template = [_templateRepository templateForName:token.partialName error:&templateError];
+            GRMustacheTemplate *template = [_templateRepository templateNamed:token.partialName error:&templateError];
             if (template == nil) {
                 [self failWithFatalError:templateError];
                 return NO;

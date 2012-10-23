@@ -44,7 +44,7 @@ The `GRMustacheSectionTagRenderingContext` parameter provides the following meth
 @interface GRMustacheSectionTagRenderingContext: NSObject
 @property (nonatomic, readonly) NSString *innerTemplateString;
 - (NSString *)render;
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderString:(NSString *)string error:(NSError **)outError;
 @end
 ```
 
@@ -52,7 +52,7 @@ The `innerTemplateString` property contains the *raw template string* inside the
 
 The `render` method returns the *rendering of the inner content* of the section, just as if the helper was not here. `{{tags}}` are, this time, interpolated in the current context. This allows helper to perform "double-pass" rendering, by performing a first "classical" Mustache rendering followed by some post-processing.
 
-The `renderTemplateString:error:` returns the *rendering of an alternate content*. The eventual `{{tags}}` in the alternate content are, again, interpolated. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
+The `renderString:error:` returns the *rendering of an alternate content*. The eventual `{{tags}}` in the alternate content are, again, interpolated. Should you provide a template string with a syntax error, or that loads a missing template partial, the method would return nil, and sets its error argument.
 
 Let's see a few examples.
 
@@ -123,7 +123,7 @@ id data = @{
     @"link": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
         NSString *format = @"<a href=\"{{url}}\">%@</a>";
         NSString *templateString = [NSString stringWithFormat:format, context.innerTemplateString];
-        return [context renderTemplateString:templateString error:NULL];
+        return [context renderString:templateString error:NULL];
     }]
 }
 ```
@@ -177,7 +177,7 @@ There are many [other Mustache implementations](https://github.com/defunkt/musta
 
 GRMustache itself belongs to the first set, since you *can* write specification-compliant "mustache lambdas" with section tag helpers. However section tag helpers are more versatile than plain Mustache lambdas:
 
-In order to be compatible with all specification-compliant implementations, your section tag helper MUST return the result of the `renderTemplateString:error:` method of its _context_ parameter, as the `link` helper seen above.
+In order to be compatible with all specification-compliant implementations, your section tag helper MUST return the result of the `renderString:error:` method of its _context_ parameter, as the `link` helper seen above.
 
 For compatibility with other Mustache implementations, check their documentation.
 

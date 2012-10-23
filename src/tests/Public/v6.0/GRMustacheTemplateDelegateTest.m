@@ -551,7 +551,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
         [template render];
         
@@ -586,7 +586,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
         [template render];
         
@@ -621,7 +621,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
         [template render];
         
@@ -656,7 +656,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         
@@ -707,7 +707,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         
@@ -758,7 +758,7 @@
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateForName:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
         [template render];
         

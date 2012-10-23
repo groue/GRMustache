@@ -86,7 +86,7 @@
 + (id)templateRepository GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-- (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;

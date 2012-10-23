@@ -41,7 +41,7 @@
                               nil];
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
     
-    template = [repository templateForName:@"not found" error:&error];
+    template = [repository templateNamed:@"not found" error:&error];
     STAssertNil(template, @"");
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
@@ -51,7 +51,7 @@
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
-    template = [repository templateForName:@"a" error:&error];
+    template = [repository templateNamed:@"a" error:&error];
     result = [template render];
     STAssertEqualObjects(result, @"ABC", @"");
     

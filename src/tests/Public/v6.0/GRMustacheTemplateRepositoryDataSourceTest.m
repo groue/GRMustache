@@ -74,7 +74,7 @@
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)0, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)0, @"");
     
-    result = [[repository templateForName:@"foo" error:NULL] render];
+    result = [[repository templateNamed:@"foo" error:NULL] render];
     STAssertEqualObjects(result, @"foo", @"");
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)1, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");

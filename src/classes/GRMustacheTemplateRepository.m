@@ -110,7 +110,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  *
  * @return a template
  */
-- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
 
 /**
  * Parses templateString and returns rendering elements.
@@ -202,9 +202,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     [super dealloc];
 }
 
-- (GRMustacheTemplate *)templateForName:(NSString *)name error:(NSError **)outError
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)outError
 {
-    return [self templateForName:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
+    return [self templateNamed:name relativeToTemplateID:_currentlyParsedTemplateID error:outError];
 }
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError
@@ -247,7 +247,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [renderingElements autorelease];
 }
 
-- (GRMustacheTemplate *)templateForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError
+- (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError
 {
     id templateID = nil;
     if (name) {
@@ -294,7 +294,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         
         // We are about to compile templateString. GRMustacheCompiler may
-        // invoke [self templateForName:error:] when compiling partial tags
+        // invoke [self templateNamed:error:] when compiling partial tags
         // {{> name }}. Since partials are relative, we need to know the ID of
         // the currently parsed template.
         //
