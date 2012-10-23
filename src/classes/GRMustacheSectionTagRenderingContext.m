@@ -78,14 +78,14 @@
     return [self renderObject:nil withFilters:nil fromString:string error:outError];
 }
 
-- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError
 {
-    return [self renderObject:object withFilters:nil fromString:string error:outError];
+    return [self renderObject:object withFilters:nil fromString:templateString error:outError];
 }
 
-- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError
 {
-    GRMustacheTemplate *template = [_sectionElement.templateRepository templateFromString:string error:outError];
+    GRMustacheTemplate *template = [_sectionElement.templateRepository templateFromString:templateString error:outError];
     if (!template) {
         return nil;
     }

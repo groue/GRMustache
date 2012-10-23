@@ -194,33 +194,33 @@
  * Renders a template string with the current rendering context, augmented by
  * _object_.
  *
- * @param object    An object used for interpreting Mustache tags.
- * @param string    A template string
- * @param outError  If there is an error loading or parsing template and
- *                  partials, upon return contains an NSError object that
- *                  describes the problem.
+ * @param object          An object used for interpreting Mustache tags.
+ * @param templateString  A template string
+ * @param outError        If there is an error loading or parsing template and
+ *                        partials, upon return contains an NSError object that
+ *                        describes the problem.
  *
  * @return A string containing the rendering of the template string.
  *
  * @since v6.0
  */
-- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
 
 /**
  * Renders a template string with the current rendering context, augmented by
  * _object_ and _filters_.
  *
- * @param object    An object used for interpreting Mustache tags.
- * @param filters   An object that provides custom filters.
- * @param string    A template string
- * @param outError  If there is an error loading or parsing template and
- *                  partials, upon return contains an NSError object that
- *                  describes the problem.
+ * @param object          An object used for interpreting Mustache tags.
+ * @param filters         An object that provides custom filters.
+ * @param templateString  A template string
+ * @param outError        If there is an error loading or parsing template and
+ *                        partials, upon return contains an NSError object that
+ *                        describes the problem.
  *
  * @return A string containing the rendering of the template string.
  *
  * @since v6.0
  */
-- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError;
 
 @end

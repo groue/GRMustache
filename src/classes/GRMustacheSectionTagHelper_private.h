@@ -91,9 +91,9 @@
 - (NSString *)renderString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSectionTagHelper.h
-- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheSectionTagHelper.h
-- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 @end

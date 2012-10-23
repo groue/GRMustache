@@ -136,12 +136,12 @@
 /**
  * TODO
  */
-- (NSString *)renderObject:(id)object fromString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError;
 
 /**
  * TODO
  */
-- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)string error:(NSError **)outError;
+- (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError;
 
 
 /**
