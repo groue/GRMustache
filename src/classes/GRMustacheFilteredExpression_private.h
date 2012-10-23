@@ -67,7 +67,8 @@
  *                             to the <GRMustacheFilter> protocol.
  * @param parameterExpression  An expression whose value is the parameter of the
  *                             filter.
- * @param allowCurrying        TODO
+ * @param allowCurrying        If NO, this expressions will evaluate to a
+ *                             resolved value, not a curried filter.
  *
  * @return A GRMustacheFilteredExpression.
  */

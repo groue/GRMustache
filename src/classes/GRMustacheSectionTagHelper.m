@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSectionTagHelper.h"
-#import "GRMustacheSectionTagRenderingContext.h"
 
 
 // =============================================================================

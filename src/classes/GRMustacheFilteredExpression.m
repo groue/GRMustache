@@ -99,10 +99,12 @@
     }
     
     if ([filter respondsToSelector:@selector(transformedValue:allowCurrying:)]) {
+        // Curried variadic filters
         return [(id<GRMustacheFilter>)filter transformedValue:parameter allowCurrying:_allowCurrying];
+    } else {
+        // Single-argument filters
+        return [(id<GRMustacheFilter>)filter transformedValue:parameter];
     }
-    
-    return [(id<GRMustacheFilter>)filter transformedValue:parameter];
 }
 
 @end

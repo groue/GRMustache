@@ -22,7 +22,6 @@
 
 #import "GRMustacheDynamicPartial.h"
 #import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheVariableTagRenderingContext.h"
 #import "GRMustacheError.h"
 
 @interface GRMustacheDynamicPartial()<GRMustacheVariableTagHelper>

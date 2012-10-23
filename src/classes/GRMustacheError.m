@@ -25,5 +25,4 @@
 
 NSString * const GRMustacheErrorDomain = @"GRMustacheErrorDomain";
 NSString * const GRMustacheRenderingException = @"GRMustacheRenderingException";
-NSString *GRMustacheFilterException = nil;   // initialized in [GRMustache load]
 

@@ -75,7 +75,7 @@
  *
  * @since v5.5
  */
-@property (nonatomic, retain) id delegate AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
+@property (nonatomic, retain) id delegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a newly initialized proxy without any delegate.
@@ -91,7 +91,7 @@
  *
  * @since v5.5
  */
-- (id)init AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
+- (id)init AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a newly initialized proxy with the provided delegate.
@@ -106,7 +106,7 @@
  *
  * @since v5.5
  */
-- (id)initWithDelegate:(id)delegate AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
+- (id)initWithDelegate:(id)delegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * You should never call this method directly. The proxy calls this method when
@@ -124,7 +124,7 @@
  *
  * @since v5.5
  */
-- (void)loadDelegate AVAILABLE_GRMUSTACHE_VERSION_5_5_AND_LATER;
+- (void)loadDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 

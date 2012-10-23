@@ -21,18 +21,12 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheVariableTagRenderingContext_private.h"
+#import "GRMustacheVariableTagHelper_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
-
-// Compatibility with deprecated declarations
-
-#import "GRMustacheVariableHelper.h"
-#import "GRMustacheVariable_private.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
@@ -69,7 +63,7 @@
         {
             // Missing value
         }
-        else if ([value conformsToProtocol:@protocol(NSFastEnumeration)] && ![value isKindOfClass:[NSDictionary class]])
+        else if (![value isKindOfClass:[NSDictionary class]] && [value conformsToProtocol:@protocol(NSFastEnumeration)])
         {
             // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
             
@@ -105,28 +99,6 @@
             
             // render
             NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
-            if (rendering) {
-                // Never HTML escape helpers
-                [buffer appendString:rendering];
-            }
-        }
-        else if ([value conformsToProtocol:@protocol(GRMustacheVariableHelper)])
-        {
-            // Helper
-            
-            // helpers enter the runtime
-            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
-            
-            // delegates enter the runtime.
-            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
-            }
-            
-            // build variable helper tag context
-            GRMustacheVariable *variable = [GRMustacheVariable variableWithTemplateRepository:_templateRepository runtime:helperRuntime];
-            
-            // render
-            NSString *rendering = [(id<GRMustacheVariableHelper>)value renderVariable:variable];
             if (rendering) {
                 // Never HTML escape helpers
                 [buffer appendString:rendering];

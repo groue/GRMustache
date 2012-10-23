@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableTagRenderingContext_private.h"
+#import "GRMustacheVariableTagHelper_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateRepository_private.h"
@@ -53,7 +53,7 @@
     return self;
 }
 
-- (NSString *)renderTemplateString:(NSString *)string error:(NSError **)outError
+- (NSString *)renderString:(NSString *)string error:(NSError **)outError
 {
     return [self renderObject:nil withFilters:nil fromString:string error:outError];
 }

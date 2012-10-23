@@ -22,17 +22,11 @@
 
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheSectionTagHelper.h"
+#import "GRMustacheSectionTagHelper_private.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheSectionTagRenderingContext_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
-
-// Compatibility with deprecated declarations
-
-#import "GRMustacheSectionHelper.h"
-#import "GRMustacheSection_private.h"
 
 @interface GRMustacheSectionElement()
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
@@ -198,16 +192,6 @@
         
         GRMustacheSectionTagRenderingContext *context = [GRMustacheSectionTagRenderingContext contextWithSectionElement:self runtime:runtime];
         NSString *rendering = [(id<GRMustacheSectionTagHelper>)object renderForSectionTagInContext:context];
-        if (rendering) {
-            [buffer appendString:rendering];
-        }
-    }
-    else if ([object conformsToProtocol:@protocol(GRMustacheSectionHelper)])
-    {
-        // Deprecated Helper
-        
-        GRMustacheSection *section = [GRMustacheSection sectionWithSectionElement:self runtime:runtime];
-        NSString *rendering = [(id<GRMustacheSectionHelper>)object renderSection:section];
         if (rendering) {
             [buffer appendString:rendering];
         }

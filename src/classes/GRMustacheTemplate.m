@@ -193,19 +193,9 @@
     return buffer;
 }
 
-- (NSString *)renderObjectsInArray:(NSArray *)objects
-{
-    return [self renderObjectsFromArray:objects withFilters:nil];
-}
-
 - (NSString *)renderObjectsFromArray:(NSArray *)objects
 {
     return [self renderObjectsFromArray:objects withFilters:nil];
-}
-
-- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters
-{
-    return [self renderObjectsFromArray:objects withFilters:filters];
 }
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters

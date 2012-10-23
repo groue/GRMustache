@@ -20,8 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheVariableTagRenderingContext.h"
+#import "GRMustacheVariableTagHelper_private.h"
 #import "GRMustacheError.h"
 
 

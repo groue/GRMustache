@@ -45,7 +45,7 @@ typedef enum {
      *
      * @since v5.3
      */
-    GRMustacheSectionTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER = 0,
+    GRMustacheSectionTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER = 0,
     
     /**
      * The value is interpreted by a Mustache variable tag such as `{{name}}`.
@@ -54,32 +54,7 @@ typedef enum {
      *
      * @since v5.3
      */
-    GRMustacheVariableTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_5_3_AND_LATER,
-    
-    
-    // Deprecated values
-    
-    /**
-     * The value is interpreted by a Mustache section tag such as
-     * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
-     * to the NSFastEnumeration protocol, an object conforming to the
-     * GRMustacheSectionTagHelper protocol, or any other value, the section will
-     * render differently.
-     *
-     * @since v4.1
-     * @deprecated v5.3
-     */
-    GRMustacheInterpretationSection AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3 = 0,
-
-    /**
-     * The value is interpreted by a Mustache variable tag such as `{{name}}`.
-     * Whether it is an object conforming to the GRMustacheVariableTagHelper
-     * protocol, or another object, the tag will render differently.
-     *
-     * @since v4.1
-     * @deprecated v5.3
-     */
-    GRMustacheInterpretationVariable AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_3,
+    GRMustacheVariableTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
 } GRMustacheInterpretation;
 
@@ -106,7 +81,7 @@ typedef enum {
  *
  * @since v1.12
  */
-- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Sent right after a template has finished rendering.
@@ -115,7 +90,7 @@ typedef enum {
  *
  * @since v1.12
  */
-- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +108,7 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Sent right after GRMustache has interpreted and rendered a value.
@@ -146,6 +121,6 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

@@ -124,13 +124,7 @@
 - (NSString *)renderObject:(id)object withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObjectsInArray:(NSArray *)objects GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheTemplate.h
 - (NSString *)renderObjectsFromArray:(NSArray *)objects GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-- (NSString *)renderObjectsInArray:(NSArray *)objects withFilters:(id)filters GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustacheTemplate.h
 - (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters GRMUSTACHE_API_PUBLIC;

@@ -34,7 +34,15 @@
 @optional
 
 /**
- * TODO
+ * Applies some transformation to its input, and returns the transformed value.
+ *
+ * @param object         An object to be processed by the filter.
+ * @param allowCurrying  If NO, curried filters such as
+ *                       GRMustacheBlockVariadicFilter must returned a resolved
+ *                       value, not another filter.
+ *
+ * @return A transformed value.
+
  */
 - (id)transformedValue:(id)object allowCurrying:(BOOL)allowCurrying GRMUSTACHE_API_INTERNAL;
 @end

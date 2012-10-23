@@ -52,7 +52,7 @@ typedef struct {
  *
  * @since v1.0
  */
-+ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
++ (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
@@ -86,7 +86,7 @@ typedef struct {
  * 
  * @since v1.7
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 
@@ -97,16 +97,7 @@ typedef struct {
 #import "GRMustacheFilter.h"
 #import "GRMustacheDynamicPartial.h"
 #import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheVariableTagRenderingContext.h"
 #import "GRMustacheSectionTagHelper.h"
-#import "GRMustacheSectionTagRenderingContext.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheProxy.h"
-
-// Compatibility with deprecated declarations
-
-#import "GRMustacheSectionHelper.h"
-#import "GRMustacheSection.h"
-#import "GRMustacheVariableHelper.h"
-#import "GRMustacheVariable.h"
