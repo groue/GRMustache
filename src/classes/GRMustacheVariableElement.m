@@ -21,12 +21,13 @@
 // THE SOFTWARE.
 
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheVariableTagHelper_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
+#import "GRMustacheRenderer_private.h"
+#import "GRMustacheRenderingObject.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
@@ -55,67 +56,82 @@
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheVariableTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
+        
+        id<GRMustacheRenderingObject> renderingObject = [GRMustacheRenderer renderingObjectForValue:value];
+        
+        BOOL HTMLEscaped = NO;
+        NSString *rendering = [renderingObject renderInRuntime:runtime
+                                            templateRepository:_templateRepository
+                                            forRenderingObject:nil
+                                                   HTMLEscaped:&HTMLEscaped];
+        
+        if (rendering) {
+            if (!_raw && !HTMLEscaped) {
+                rendering = [self htmlEscape:rendering];
+            }
+            [buffer appendString:rendering];
+        }
 
-        // Interpret value
-
-        if ((value == nil) ||
-            ([value isKindOfClass:[NSNull class]]))
-        {
-            // Missing value
-        }
-        else if (![value isKindOfClass:[NSDictionary class]] && [value conformsToProtocol:@protocol(NSFastEnumeration)])
-        {
-            // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
-            
-            if (_enumerableSectionElement == nil) {
-                // Build {{#items}}{{.}}{{/items}} or {{#items}}{{{.}}}{{/items}}, depending on _raw
-                GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
-                GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
-                _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
-                                                                                templateRepository:_templateRepository
-                                                                                    templateString:_raw ? @"{{{.}}}" : @"{{.}}"
-                                                                                        innerRange:_raw ? NSMakeRange(0, 7) : NSMakeRange(0, 5)
-                                                                                          inverted:NO
-                                                                                       overridable:NO
-                                                                                     innerElements:[NSArray arrayWithObject:innerElement]];
-                [_enumerableSectionElement retain];
-            }
-            [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
-        }
-        else if ([value conformsToProtocol:@protocol(GRMustacheVariableTagHelper)])
-        {
-            // Helper
-            
-            // helpers enter the runtime
-            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
-            
-            // delegates enter the runtime.
-            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
-            }
-            
-            // build variable helper tag context
-            GRMustacheVariableTagRenderingContext *context = [GRMustacheVariableTagRenderingContext contextWithTemplateRepository:_templateRepository runtime:helperRuntime];
-            
-            // render
-            NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
-            if (rendering) {
-                // Never HTML escape helpers
-                [buffer appendString:rendering];
-            }
-        }
-        else
-        {
-            // Object
-            
-            NSString *rendering = [value description];
-            if (rendering) {
-                if (!_raw) {
-                    rendering = [self htmlEscape:rendering];
-                }
-                [buffer appendString:rendering];
-            }
-        }
+//        // Interpret value
+//
+//        if ((value == nil) ||
+//            ([value isKindOfClass:[NSNull class]]))
+//        {
+//            // Missing value
+//        }
+//        else if (![value isKindOfClass:[NSDictionary class]] && [value conformsToProtocol:@protocol(NSFastEnumeration)])
+//        {
+//            // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
+//            
+//            if (_enumerableSectionElement == nil) {
+//                // Build {{#items}}{{.}}{{/items}} or {{#items}}{{{.}}}{{/items}}, depending on _raw
+//                GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
+//                GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
+//                _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
+//                                                                                templateRepository:_templateRepository
+//                                                                                    templateString:_raw ? @"{{{.}}}" : @"{{.}}"
+//                                                                                        innerRange:_raw ? NSMakeRange(0, 7) : NSMakeRange(0, 5)
+//                                                                                          inverted:NO
+//                                                                                       overridable:NO
+//                                                                                     innerElements:[NSArray arrayWithObject:innerElement]];
+//                [_enumerableSectionElement retain];
+//            }
+//            [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
+//        }
+//        else if ([value conformsToProtocol:@protocol(GRMustacheVariableTagHelper)])
+//        {
+//            // Helper
+//            
+//            // helpers enter the runtime
+//            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
+//            
+//            // delegates enter the runtime.
+//            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+//                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+//            }
+//            
+//            // build variable helper tag context
+//            GRMustacheVariableTagRenderingContext *context = [GRMustacheVariableTagRenderingContext contextWithTemplateRepository:_templateRepository runtime:helperRuntime];
+//            
+//            // render
+//            NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
+//            if (rendering) {
+//                // Never HTML escape helpers
+//                [buffer appendString:rendering];
+//            }
+//        }
+//        else
+//        {
+//            // Object
+//            
+//            NSString *rendering = [value description];
+//            if (rendering) {
+//                if (!_raw) {
+//                    rendering = [self htmlEscape:rendering];
+//                }
+//                [buffer appendString:rendering];
+//            }
+//        }
     }];
 }
 

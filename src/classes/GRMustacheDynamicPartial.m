@@ -21,10 +21,11 @@
 // THE SOFTWARE.
 
 #import "GRMustacheDynamicPartial.h"
-#import "GRMustacheVariableTagHelper.h"
 #import "GRMustacheError.h"
+#import "GRMustacheTemplateRepository.h"
+#import "GRMustacheRenderingObject.h"
 
-@interface GRMustacheDynamicPartial()<GRMustacheVariableTagHelper>
+@interface GRMustacheDynamicPartial()
 - (id)initWithName:(NSString *)name;
 @end
 
@@ -51,16 +52,16 @@
 }
 
 // =============================================================================
-#pragma mark - <GRMustacheVariableTagHelper>
+#pragma mark - <GRMustacheRenderingObject> informal protocol
 
-- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository forRenderingObject:(id<GRMustacheRenderingObject>)renderingObject HTMLEscaped:(BOOL *)HTMLEscaped
 {
     NSError *error;
-    NSString *rendering = [context renderTemplateNamed:_name error:&error];
-    if (!rendering) {
+    GRMustacheTemplate *template = [templateRepository templateNamed:_name error:&error];
+    if (!template) {
         [NSException raise:GRMustacheRenderingException format:@"%@", [error localizedDescription]];
     }
-    return rendering;
+    return [template renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
 }
 
 @end

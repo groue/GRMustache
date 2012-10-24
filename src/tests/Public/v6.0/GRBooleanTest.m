@@ -87,6 +87,7 @@
     } else if ([result isEqualToString:@"NO"]) {
         return NO;
     } else {
+        result = [template renderObject:object];    // allow breakpoint
         STAssertTrue(NO, @"");
         return NO; // meaningless
     }

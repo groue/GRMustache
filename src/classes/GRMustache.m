@@ -23,9 +23,199 @@
 #import "GRMustache_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheVersion.h"
-#import "GRMustacheError.h"
+#import "GRMustacheRenderer_private.h"
+#import "GRMustacheRenderingObject.h"
 
 @implementation GRMustache
+
++ (void)load
+{
+    [GRMustacheRenderer registerNilWithRenderingObjectBuilder:^id<GRMustacheRenderingObject>(id value) {
+        return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+            
+            if (renderingObject) {
+                if (renderingObject.isInverted || renderingObject.isOverridable) {
+                    return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                } else {
+                    return nil;
+                }
+            } else {
+                return nil;
+            }
+        }];
+    }];
+    
+    [GRMustacheRenderer registerObjectWithRenderingObjectBuilder:^id<GRMustacheRenderingObject>(id value) {
+        return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+            
+            if (renderingObject) {
+                if (renderingObject.isInverted) {
+                    return nil;
+                } else {
+                    // value enters the runtime as a context object
+                    runtime = [runtime runtimeByAddingContextObject:value];
+                    
+                    // value may enter the runtime as a delegate object
+                    if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                        runtime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+                    }
+                    
+                    return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                }
+            } else {
+                *HTMLEscaped = NO;
+                return [value description];
+            }
+        }];
+    }];
+    
+    [GRMustacheRenderer registerClass:[NSNull class] withRenderingObjectBuilder:^id<GRMustacheRenderingObject>(NSNull *null) {
+        return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+            
+            if (renderingObject) {
+                if (renderingObject.isInverted) {
+                    return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                } else {
+                    return nil;
+                }
+            } else {
+                return nil;
+            }
+        }];
+    }];
+    
+    [GRMustacheRenderer registerClass:[NSNumber class] withRenderingObjectBuilder:^id<GRMustacheRenderingObject>(NSNumber *number) {
+        return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+            
+            if (renderingObject) {
+                if ([number boolValue] ^ renderingObject.isInverted) {
+                    if (!renderingObject.isInverted) {
+                        // value enters the runtime as a context object
+                        runtime = [runtime runtimeByAddingContextObject:number];
+                        
+                        // value may enter the runtime as a delegate object
+                        if ([number conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                            runtime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)number];
+                        }
+                    }
+                    
+                    return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                } else {
+                    return nil;
+                }
+            } else {
+                *HTMLEscaped = NO;
+                return [number description];
+            }
+        }];
+    }];
+    
+    [GRMustacheRenderer registerClass:[NSString class] withRenderingObjectBuilder:^id<GRMustacheRenderingObject>(NSString *string) {
+        return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+            
+            if (renderingObject) {
+                if ((string.length > 0) ^ renderingObject.isInverted) {
+                    if (!renderingObject.isInverted) {
+                        // value enters the runtime as a context object
+                        runtime = [runtime runtimeByAddingContextObject:string];
+                        
+                        // value may enter the runtime as a delegate object
+                        if ([string conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                            runtime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)string];
+                        }
+                    }
+                    
+                    return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                } else {
+                    return nil;
+                }
+            } else {
+                *HTMLEscaped = NO;
+                return string;
+            }
+        }];
+    }];
+    
+    [GRMustacheRenderer registerProtocol:@protocol(NSFastEnumeration) withRenderingObjectBuilder:^id<GRMustacheRenderingObject>(id value) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+                
+                if (renderingObject) {
+                    if (renderingObject.isInverted) {
+                        return nil;
+                    } else {
+                        // value enters the runtime as a context object
+                        runtime = [runtime runtimeByAddingContextObject:value];
+                        
+                        // value may enter the runtime as a delegate object
+                        if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                            runtime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
+                        }
+                        
+                        return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                    }
+                } else {
+                    *HTMLEscaped = NO;
+                    return [value description];
+                }
+            }];
+        } else {
+            id<NSFastEnumeration>list = value;
+            return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, id<GRMustacheRenderingObject> renderingObject, BOOL *HTMLEscaped) {
+                
+                if (renderingObject) {
+                    if (renderingObject.isInverted) {
+                        BOOL empty = YES;
+                        for (id item in list) {
+                            empty = NO;
+                            break;
+                        }
+                        if (empty) {
+                            return [renderingObject renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                        } else {
+                            return nil;
+                        }
+                    } else {
+                        NSMutableString *buffer = [NSMutableString string];
+                        for (id item in list) {
+                            // item enters the runtime as a context object
+                            GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
+                            
+                            // item may enter the runtime as a delegate object
+                            if ([item conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                                itemRuntime = [itemRuntime runtimeByAddingTemplateDelegate:item];
+                            }
+                            
+                            NSString *rendering = [renderingObject renderInRuntime:itemRuntime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                            if (rendering) {
+                                [buffer appendString:rendering];
+                            }
+                        }
+                        return buffer;
+                    }
+                } else {
+                    NSMutableString *buffer = [NSMutableString string];
+                    for (id item in list) {
+                        // item enters the runtime as a context object
+                        GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
+                        
+                        // item may enter the runtime as a delegate object
+                        if ([item conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
+                            itemRuntime = [itemRuntime runtimeByAddingTemplateDelegate:item];
+                        }
+                        
+                        id<GRMustacheRenderingObject> itemRenderingObject = [GRMustacheRenderer renderingObjectForValue:item];
+                        NSString *rendering = [itemRenderingObject renderInRuntime:itemRuntime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+                        if (rendering) {
+                            [buffer appendString:rendering];
+                        }
+                    }
+                    return buffer;
+                }
+            }];
+        }
+    }];
+}
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {

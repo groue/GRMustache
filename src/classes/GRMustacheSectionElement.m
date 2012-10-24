@@ -22,11 +22,11 @@
 
 #import "GRMustacheSectionElement_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheSectionTagHelper_private.h"
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
+#import "GRMustacheRenderer_private.h"
 
 @interface GRMustacheSectionElement()
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
@@ -35,11 +35,6 @@
  * @see +[GRMustacheSectionElement sectionElementWithExpression:templateRepository:templateString:innerRange:inverted:overridable:innerElements:]
  */
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements;
-
-/**
- * Check object type, and render it as a section tag helper or a plain object.
- */
-- (void)renderObject:(id)object inBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime;
 @end
 
 
@@ -47,6 +42,7 @@
 @synthesize templateRepository=_templateRepository;
 @synthesize expression=_expression;
 @synthesize overridable=_overridable;
+@synthesize inverted=_inverted;
 
 + (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
 {
@@ -77,58 +73,35 @@
     }
 }
 
+
+#pragma mark - <GRMustacheRenderingObject>
+
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository forRenderingObject:(id<GRMustacheRenderingObject>)renderingObject HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    NSMutableString *buffer = [NSMutableString string];
+    [self renderInnerElementsInBuffer:buffer withRuntime:runtime];
+    *HTMLEscaped = YES;
+    return buffer;
+}
+
+
 #pragma mark - <GRMustacheRenderingElement>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheSectionTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
+
+        id<GRMustacheRenderingObject> renderingObject = [GRMustacheRenderer renderingObjectForValue:value];
         
-        // Interpret value
+        BOOL HTMLEscaped = NO;
+        NSString *rendering = [renderingObject renderInRuntime:runtime
+                                            templateRepository:_templateRepository
+                                            forRenderingObject:self
+                                                   HTMLEscaped:&HTMLEscaped];
         
-        if (value == nil)
-        {
-            // Missing value
-            if (_inverted || _overridable) {
-                [self renderInnerElementsInBuffer:buffer withRuntime:runtime];
-            }
-            return;
-        }
-        else if ([value isKindOfClass:[NSNull class]] ||
-                 ([value isKindOfClass:[NSNumber class]] && [((NSNumber*)value) boolValue] == NO) ||
-                 ([value isKindOfClass:[NSString class]] && [((NSString*)value) length] == 0))
-        {
-            // False value
-            if (_inverted) {
-                [self renderInnerElementsInBuffer:buffer withRuntime:runtime];
-            }
-            return;
-        }
-        else if (![value isKindOfClass:[NSDictionary class]] && [value conformsToProtocol:@protocol(NSFastEnumeration)])
-        {
-            // Enumerable
-            if (_inverted) {
-                BOOL empty = YES;
-                for (id item in value) {
-                    empty = NO;
-                    break;
-                }
-                if (empty) {
-                    [self renderInnerElementsInBuffer:buffer withRuntime:runtime];
-                }
-            } else {
-                for (id item in value) {
-                    [self renderObject:item inBuffer:buffer withRuntime:runtime];
-                }
-            }
-            return;
-        }
-        else
-        {
-            // Other values
-            if (!_inverted) {
-                [self renderObject:value inBuffer:buffer withRuntime:runtime];
-            }
+        if (rendering) {
+            [buffer appendString:rendering];
         }
     }];
 }
@@ -174,34 +147,6 @@
         _innerElements = [innerElements retain];
     }
     return self;
-}
-
-- (void)renderObject:(id)object inBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
-{
-    // Objects that conform to the GRMustacheTemplateDelegate protocol enter the runtime.
-    if ([object conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-        runtime = [runtime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)object];
-    }
-    
-    // Objects enter context stack
-    runtime = [runtime runtimeByAddingContextObject:object];
-    
-    if ([object conformsToProtocol:@protocol(GRMustacheSectionTagHelper)])
-    {
-        // Helper
-        
-        GRMustacheSectionTagRenderingContext *context = [GRMustacheSectionTagRenderingContext contextWithSectionElement:self runtime:runtime];
-        NSString *rendering = [(id<GRMustacheSectionTagHelper>)object renderForSectionTagInContext:context];
-        if (rendering) {
-            [buffer appendString:rendering];
-        }
-    }
-    else
-    {
-        // True object
-        
-        [self renderInnerElementsInBuffer:buffer withRuntime:runtime];
-    }
 }
 
 @end

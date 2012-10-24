@@ -96,8 +96,6 @@ typedef struct {
 #import "GRMustacheTemplateRepository.h"
 #import "GRMustacheFilter.h"
 #import "GRMustacheDynamicPartial.h"
-#import "GRMustacheVariableTagHelper.h"
-#import "GRMustacheSectionTagHelper.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheProxy.h"

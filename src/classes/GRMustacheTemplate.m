@@ -23,6 +23,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
+#import "GRMustacheRenderingObject.h"
 
 @interface GRMustacheTemplate()
 @end
@@ -249,6 +250,16 @@
         element = [innerElement resolveRenderingElement:element];
     }
     return element;
+}
+
+#pragma mark <GRMustacheRenderingObject> informal protocol
+
+- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository forRenderingObject:(id<GRMustacheRenderingObject>)renderingObject HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    NSMutableString *buffer = [NSMutableString string];
+    [self renderInBuffer:buffer withRuntime:runtime];
+    *HTMLEscaped = YES;
+    return buffer;
 }
 
 @end

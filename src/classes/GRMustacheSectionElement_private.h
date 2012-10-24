@@ -22,6 +22,7 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheRenderingObject.h"
 
 @class GRMustacheTemplateRepository;
 @class GRMustacheExpression;
@@ -32,7 +33,7 @@
  *
  * @see GRMustacheRenderingElement
  */
-@interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
@@ -42,11 +43,6 @@
     BOOL _inverted;
     NSArray *_innerElements;
 }
-
-/**
- * An overridable section tag is `{{$...}}`.
- */
-@property (nonatomic, readonly, getter=isOverridable) BOOL overridable;
 
 /**
  * A template repository, so that helpers can render alternate template strings.
