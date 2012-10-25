@@ -259,29 +259,10 @@
 
 - (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
-    if (section) {
-        // Section tag {{# template }}...{{/}}
-        
-        // We behave as a true object: the section renders if and only if it is not inverted
-        if (section.isInverted)
-        {
-            return nil;
-        }
-        else
-        {
-            runtime = [runtime runtimeByAddingContextObject:self];
-            return [section renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
-        }
-    }
-    else
-    {
-        // Variable tag {{ template }}
-        
-        NSMutableString *buffer = [NSMutableString string];
-        [self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
-        *HTMLEscaped = YES;
-        return buffer;
-    }
+    NSMutableString *buffer = [NSMutableString string];
+    [self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+    *HTMLEscaped = YES;
+    return buffer;
 }
 
 @end

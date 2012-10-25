@@ -410,7 +410,7 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
             
             // render item
             id<GRMustacheRenderingObject> itemRenderingObject = [GRMustache renderingObjectForValue:item];
-            BOOL itemHasRenderedHTMLEscaped;
+            BOOL itemHasRenderedHTMLEscaped = NO;
             NSString *rendering = [itemRenderingObject renderForSection:nil inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:&itemHasRenderedHTMLEscaped];
             
             if (rendering)
@@ -424,7 +424,7 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
                     }
                 } else {
                     oneItemHasRenderedHTMLUnescaped = YES;
-                    if (itemHasRenderedHTMLEscaped) {
+                    if (oneItemHasRenderedHTMLEscaped) {
                         [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
                     }
                 }
