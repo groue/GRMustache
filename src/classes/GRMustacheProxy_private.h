@@ -22,9 +22,10 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheRenderingObject_private.h"
 
 // Documented in GRMustacheProxy.h
-@interface GRMustacheProxy : NSObject {
+@interface GRMustacheProxy : NSObject<GRMustacheRenderingObject> {
 @private
     id _delegate;
 }

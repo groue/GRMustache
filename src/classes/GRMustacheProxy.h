@@ -22,8 +22,11 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheRenderingObject.h"
 
 /**
+ * TODO
+ *
  * When thrown in the Mustache rendering engine, GRMustacheProxy instances have
  * the same behavior as another object, named their "delegate":
  *
@@ -52,7 +55,7 @@
  *
  * @since v5.5
  */
-@interface GRMustacheProxy : NSObject {
+@interface GRMustacheProxy : NSObject<GRMustacheRenderingObject> {
 @private
     id _delegate;
 }

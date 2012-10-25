@@ -22,6 +22,7 @@
 
 #import "GRMustacheProxy_private.h"
 #import "GRMustacheRuntime_private.h"
+#import "GRMustache_private.h"
 
 @implementation GRMustacheProxy
 
@@ -73,74 +74,6 @@
     }
 }
 
-
-#pragma mark - Proxy
-
-// Support for optional methods of protocols used by GRMustache:
-// NSFastEnumeration, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper, GRMustacheTemplateDelegate
-- (BOOL)respondsToSelector:(SEL)aSelector
-{
-    if ([super respondsToSelector:aSelector]) {
-        return YES;
-    }
-    return [self.delegate respondsToSelector:aSelector];
-}
-
-// Support for classes used by GRMustache:
-// NSNull, NSNumber, NSString, NSDictionary, NSArray, NSSet, NSOrderedSetClass
-- (BOOL)isKindOfClass:(Class)aClass
-{
-    if ([super isKindOfClass:aClass]) {
-        return YES;
-    }
-    return [self.delegate isKindOfClass:aClass];
-}
-
-// Support for protocols used by GRMustache:
-// NSFastEnumeration, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper, GRMustacheTemplateDelegate
-- (BOOL)conformsToProtocol:(Protocol *)aProtocol
-{
-    if ([super conformsToProtocol:aProtocol]) {
-        return YES;
-    }
-    return [self.delegate conformsToProtocol:aProtocol];
-}
-
-// https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/nsobject_Class/Reference/Reference.html
-//
-// > This method is used in the implementation of protocols. This method is also
-// > used in situations where an NSInvocation object must be created, such as
-// > during message forwarding. If your object maintains a delegate or is
-// > capable of handling messages that it does not directly implement, you
-// > should override this method to return an appropriate method signature.
-- (NSMethodSignature*)methodSignatureForSelector:(SEL)aSelector
-{
-    NSMethodSignature* signature = [super methodSignatureForSelector:aSelector];
-    if (!signature) {
-        signature = [self.delegate methodSignatureForSelector:aSelector];
-    }
-    return signature;
-}
-
-// Support for optional methods of protocols used by GRMustache:
-// NSFastEnumeration, GRMustacheSectionTagHelper, GRMustacheVariableTagHelper, GRMustacheTemplateDelegate
-- (void)forwardInvocation:(NSInvocation *)anInvocation
-{
-    id delegate = self.delegate;
-    if ([delegate respondsToSelector:[anInvocation selector]]) {
-        [anInvocation invokeWithTarget:delegate];
-    } else {
-        [super forwardInvocation:anInvocation];
-    }
-}
-
-// Support for {{ proxy }}
-- (NSString *)description
-{
-    return [self.delegate description];
-}
-
-// Support for {{ proxy.key }}
 - (id)valueForKey:(NSString *)key
 {
     // First perform a lookup in self (using the NSObject implementation of
@@ -153,6 +86,16 @@
     // ... and on failure, ask delegate (using GRMustacheRuntime support for
     // NSUndefinedKeyException prevention):
     return [GRMustacheRuntime valueForKey:key inObject:self.delegate];
+}
+
+
+#pragma mark - <GRMustacheRenderingObject>
+
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    id<GRMustacheRenderingObject> renderingObject = [GRMustache renderingObjectForValue:self.delegate];
+    runtime = [runtime runtimeByAddingContextObject:self];
+    return [renderingObject renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
 }
 
 @end
