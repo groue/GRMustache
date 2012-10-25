@@ -41,6 +41,10 @@ typedef struct {
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (id<GRMustacheRenderingObject>)renderingObjectForValue:(id)value;
++ (id<GRMustacheRenderingObject>)renderingObjectForValue:(id)value GRMUSTACHE_API_PUBLIC;
 
+/**
+ * TODO
+ */
++ (NSString *)htmlEscape:(NSString *)string GRMUSTACHE_API_INTERNAL;
 @end

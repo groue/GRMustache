@@ -48,11 +48,8 @@
 // Documented in GRMustacheSection.h
 @property (nonatomic, readonly, getter = isOverridable) BOOL overridable GRMUSTACHE_API_PUBLIC;
 
-/**
- * The literal inner content of the section, with unprocessed Mustache
- * `{{tags}}`.
- */
-@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheSection.h
+@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 
 /**

@@ -27,10 +27,10 @@
 #import "GRMustacheSection_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheRenderingObject_private.h"
+#import "GRMustache_private.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
-- (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
@@ -63,7 +63,7 @@
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
-                rendering = [self htmlEscape:rendering];
+                rendering = [GRMustache htmlEscape:rendering];
             }
             [buffer appendString:rendering];
         }
@@ -87,17 +87,6 @@
         _raw = raw;
     }
     return self;
-}
-
-- (NSString *)htmlEscape:(NSString *)string
-{
-    NSMutableString *result = [NSMutableString stringWithString:string];
-    [result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-    [result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-    [result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-    [result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-    [result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
-    return result;
 }
 
 @end

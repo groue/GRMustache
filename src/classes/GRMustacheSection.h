@@ -45,11 +45,17 @@
 /**
  * TODO
  */
-@property (nonatomic, readonly, getter = isInverted) BOOL inverted;
+@property (nonatomic, readonly, getter = isInverted) BOOL inverted AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * TODO
  */
-@property (nonatomic, readonly, getter = isOverridable) BOOL overridable;
+@property (nonatomic, readonly, getter = isOverridable) BOOL overridable AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * The literal inner content of the section, with unprocessed Mustache
+ * `{{tags}}`.
+ */
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

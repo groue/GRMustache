@@ -27,6 +27,7 @@
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheRenderingObject_private.h"
+#import "GRMustache_private.h"
 
 @interface GRMustacheSection()
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
@@ -97,6 +98,9 @@
                                                     HTMLEscaped:&HTMLEscaped];
         
         if (rendering) {
+            if (!HTMLEscaped) {
+                rendering = [GRMustache htmlEscape:rendering];
+            }
             [buffer appendString:rendering];
         }
     }];

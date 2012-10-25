@@ -110,6 +110,18 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
     return [GRMustacheRenderingObject renderingObjectWithObject:value implementation:implementation];
 }
 
++ (NSString *)htmlEscape:(NSString *)string
+{
+    NSMutableString *result = [NSMutableString stringWithString:string];
+    [result replaceOccurrencesOfString:@"&" withString:@"&amp;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"<" withString:@"&lt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@">" withString:@"&gt;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    [result replaceOccurrencesOfString:@"'" withString:@"&apos;" options:NSLiteralSearch range:NSMakeRange(0, result.length)];
+    return result;
+}
+
+
 #pragma mark Private
 
 + (void)load
@@ -155,7 +167,7 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
 
 
 // =============================================================================
-#pragma mark - nil(GRMustacheRenderingObject)
+#pragma mark - GRMustacheNil
 
 static IMP nilRenderingObjectImplementation;
 
