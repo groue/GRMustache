@@ -31,6 +31,7 @@
 @implementation GRMustacheTemplate
 @synthesize innerElements=_innerElements;
 @synthesize delegate=_delegate;
+@synthesize templateRepository=_templateRepository;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError
 {
@@ -184,7 +185,7 @@
     NSMutableString *buffer = [NSMutableString string];
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextStack:(object ? [NSArray arrayWithObject:object] : nil)];
     runtime = [runtime runtimeByAddingFilterObject:filters];
-    [self renderInBuffer:buffer withRuntime:runtime];
+    [self renderInBuffer:buffer withRuntime:runtime templateRepository:_templateRepository];
     return buffer;
 }
 
@@ -204,14 +205,14 @@
     NSMutableString *buffer = [NSMutableString string];
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self contextStack:contextStack];
     runtime = [runtime runtimeByAddingFilterObject:filters];
-    [self renderInBuffer:buffer withRuntime:runtime];
+    [self renderInBuffer:buffer withRuntime:runtime templateRepository:_templateRepository];
     return buffer;
 }
 
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
         [_delegate templateWillRender:self];
@@ -224,7 +225,7 @@
         element = [runtime resolveRenderingElement:element];
         
         // render
-        [element renderInBuffer:buffer withRuntime:runtime];
+        [element renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
     }
     
     if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
@@ -277,7 +278,7 @@
         // Variable tag {{ template }}
         
         NSMutableString *buffer = [NSMutableString string];
-        [self renderInBuffer:buffer withRuntime:runtime];
+        [self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
         *HTMLEscaped = YES;
         return buffer;
     }

@@ -26,12 +26,22 @@
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheRenderingObject_private.h"
 
+@class GRMustacheTemplateRepository;
+
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
 @private
+    GRMustacheTemplateRepository *_templateRepository;
     NSArray *_innerElements;
     id<GRMustacheTemplateDelegate> _delegate;
 }
+
+#pragma mark TemplateRepository
+
+/**
+ * TODO
+ */
+@property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 #pragma mark Delegate
 

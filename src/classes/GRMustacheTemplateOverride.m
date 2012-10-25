@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheRenderingElement
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     runtime = [runtime runtimeByAddingTemplateOverride:self];
-    [_template renderInBuffer:buffer withRuntime:runtime];
+    [_template renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
 }
 
 - (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element

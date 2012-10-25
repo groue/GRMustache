@@ -34,7 +34,6 @@
  */
 @interface GRMustacheSection: NSObject<GRMustacheRenderingObject> {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
     id _expression;
     NSString *_templateString;
     NSRange _innerRange;

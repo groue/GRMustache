@@ -45,7 +45,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     [buffer appendString:_text];
 }

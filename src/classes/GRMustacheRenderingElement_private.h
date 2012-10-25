@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheRuntime;
+@class GRMustacheTemplateRepository;
 
 /**
  * The protocol for "rendering elements".
@@ -60,12 +61,13 @@
 /**
  * Appends the rendering of the receiver in a buffer.
  * 
- * @param buffer    A mutable string
- * @param runtime   A runtime
+ * @param buffer              A mutable string
+ * @param runtime             A runtime
+ * @param templateRepository  TODO
  *
  * @see GRMustacheRuntime
  */
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the element that should be

@@ -205,9 +205,7 @@
             }
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression
-                                                                              templateRepository:_templateRepository
-                                                                                             raw:NO]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression raw:NO]];
         } break;
             
             
@@ -224,9 +222,7 @@
             }
             
             // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression
-                                                                              templateRepository:_templateRepository
-                                                                                             raw:YES]];
+            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression raw:YES]];
         } break;
             
             
@@ -286,7 +282,6 @@
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     wrapperElement = [GRMustacheSection sectionWithExpression:_currentOpeningToken.expression
-                                                           templateRepository:_templateRepository
                                                                templateString:token.templateString
                                                                    innerRange:innerRange
                                                                      inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)

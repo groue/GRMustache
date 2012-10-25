@@ -29,16 +29,16 @@
 #import "GRMustacheRenderingObject_private.h"
 
 @interface GRMustacheVariableElement()
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
+- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
 - (NSString *)htmlEscape:(NSString *)string;
 @end
 
 
 @implementation GRMustacheVariableElement
 
-+ (id)variableElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw
++ (id)variableElementWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
-    return [[[self alloc] initWithExpression:expression templateRepository:templateRepository raw:raw] autorelease];
+    return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
 }
 
 - (void)dealloc
@@ -51,7 +51,7 @@
 
 #pragma mark <GRMustacheRenderingElement>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime
+- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheVariableTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
@@ -59,7 +59,7 @@
         id<GRMustacheRenderingObject> renderingObject = [GRMustache renderingObjectForValue:value];
         
         BOOL HTMLEscaped = NO;
-        NSString *rendering = [renderingObject renderForSection:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
+        NSString *rendering = [renderingObject renderForSection:nil inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped];
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
@@ -67,67 +67,6 @@
             }
             [buffer appendString:rendering];
         }
-
-//        // Interpret value
-//
-//        if ((value == nil) ||
-//            ([value isKindOfClass:[NSNull class]]))
-//        {
-//            // Missing value
-//        }
-//        else if (![value isKindOfClass:[NSDictionary class]] && [value conformsToProtocol:@protocol(NSFastEnumeration)])
-//        {
-//            // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
-//            
-//            if (_enumerableSection == nil) {
-//                // Build {{#items}}{{.}}{{/items}} or {{#items}}{{{.}}}{{/items}}, depending on _raw
-//                GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
-//                GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
-//                _enumerableSection = [GRMustacheSection sectionWithExpression:_expression
-//                                                                                templateRepository:_templateRepository
-//                                                                                    templateString:_raw ? @"{{{.}}}" : @"{{.}}"
-//                                                                                        innerRange:_raw ? NSMakeRange(0, 7) : NSMakeRange(0, 5)
-//                                                                                          inverted:NO
-//                                                                                       overridable:NO
-//                                                                                     innerElements:[NSArray arrayWithObject:innerElement]];
-//                [_enumerableSection retain];
-//            }
-//            [_enumerableSection renderInBuffer:buffer withRuntime:runtime];
-//        }
-//        else if ([value conformsToProtocol:@protocol(GRMustacheVariableTagHelper)])
-//        {
-//            // Helper
-//            
-//            // helpers enter the runtime
-//            GRMustacheRuntime *helperRuntime = [runtime runtimeByAddingContextObject:value];
-//            
-//            // delegates enter the runtime.
-//            if ([value conformsToProtocol:@protocol(GRMustacheTemplateDelegate)]) {
-//                helperRuntime = [helperRuntime runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)value];
-//            }
-//            
-//            // build variable helper tag context
-//            GRMustacheVariableTagRenderingContext *context = [GRMustacheVariableTagRenderingContext contextWithTemplateRepository:_templateRepository runtime:helperRuntime];
-//            
-//            // render
-//            NSString *rendering = [(id<GRMustacheVariableTagHelper>)value renderForVariableTagInContext:context];
-//            if (rendering) {
-//                // Never HTML escape helpers
-//                [buffer appendString:rendering];
-//            }
-//        }
-//        else
-//        {
-//            // Object
-//            
-//            NSString *rendering = [value description];
-//            if (rendering) {
-//                if (!_raw) {
-//                    rendering = [self htmlEscape:rendering];
-//                }
-//                [buffer appendString:rendering];
-//            }
-//        }
     }];
 }
 
@@ -140,11 +79,10 @@
 
 #pragma mark Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw
+- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
     self = [self init];
     if (self) {
-        _templateRepository = templateRepository; // do not retain, since self is retained by a template, that is retained by the template repository.
         _expression = [expression retain];
         _raw = raw;
     }

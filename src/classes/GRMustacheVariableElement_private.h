@@ -24,7 +24,6 @@
 #import "GRMustacheRenderingElement_private.h"
 
 @class GRMustacheExpression;
-@class GRMustacheTemplateRepository;
 @class GRMustacheSection;
 
 /**
@@ -41,7 +40,6 @@
  */
 @interface GRMustacheVariableElement: NSObject<GRMustacheRenderingElement> {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
     GRMustacheSection *_enumerableSection;
     BOOL _raw;
@@ -57,6 +55,6 @@
  *
  * @see GRMustacheExpression
  */
-+ (id)variableElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
++ (id)variableElementWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
 
 @end

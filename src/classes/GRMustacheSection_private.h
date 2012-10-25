@@ -24,7 +24,6 @@
 #import "GRMustacheRenderingElement_private.h"
 #import "GRMustacheRenderingObject_private.h"
 
-@class GRMustacheTemplateRepository;
 @class GRMustacheExpression;
 
 /**
@@ -35,7 +34,6 @@
  */
 @interface GRMustacheSection: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
     NSString *_templateString;
     NSRange _innerRange;
@@ -49,11 +47,6 @@
 
 // Documented in GRMustacheSection.h
 @property (nonatomic, readonly, getter = isOverridable) BOOL overridable GRMUSTACHE_API_PUBLIC;
-
-/**
- * A template repository, so that helpers can render alternate template strings.
- */
-@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
  * The literal inner content of the section, with unprocessed Mustache
@@ -74,9 +67,6 @@
  * 
  * @param expression          The expression that would evaluate against a
  *                            runtime.
- * @param templateRepository  A Template repository that allows helpers to
- *                            render alternate template strings through
- *                            GRMustacheSectionTagRenderingContext objects.
  * @param templateString      A Mustache template string
  * @param innerRange          The range of the inner template string of the
  *                            section in _templateString_, that allows helpers
@@ -95,20 +85,9 @@
  * @see GRMustacheExpression
  * @see GRMustacheRuntime
  * @see GRMustacheSectionTagRenderingContext
- * @see GRMustacheTemplateRepository
  * @see GRMustacheRuntime
  * @see GRMustacheSectionTagHelper protocol
  */
-+ (id)sectionWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
-
-/**
- * Appends the rendering of inner elements in a buffer.
- *
- * @param buffer    A mutable string
- * @param runtime   A runtime
- *
- * @see GRMustacheRuntime
- */
-- (void)renderInnerElementsInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
++ (id)sectionWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 @end
