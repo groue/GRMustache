@@ -344,47 +344,50 @@
 //
 - (void)testDynamicPartialHelper
 {
-    id helper = [GRMustacheDynamicPartial dynamicPartialWithName:@"partial"];
-    NSDictionary *context = @{@"helper": helper};
     NSDictionary *partials = @{@"partial": @"In partial."};
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{helper}}" error:nil];
+    
+    GRMustacheTemplate *template = [repository templateFromString:@"{{partial}}" error:NULL];
+    id partial = [repository templateNamed:@"partial" error:NULL];
+    NSDictionary *context = @{@"partial": partial};
     NSString *result = [template renderObject:context];
+    
     STAssertEqualObjects(result, @"In partial.", @"");
 }
 
 - (void)testRenderingOfDynamicPartialHelperIsNotHTMLEscaped
 {
-    id helper = [GRMustacheDynamicPartial dynamicPartialWithName:@"partial"];
-    NSDictionary *context = @{@"helper": helper};
     NSDictionary *partials = @{@"partial": @"&<>{{foo}}"};
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{helper}}" error:nil];
+    
+    GRMustacheTemplate *template = [repository templateFromString:@"{{partial}}" error:nil];
+    id partial = [repository templateNamed:@"partial" error:NULL];
+    NSDictionary *context = @{@"partial": partial};
     NSString *result = [template renderObject:context];
+    
     STAssertEqualObjects(result, @"&<>", @"");
 }
 
-//- (void)testDynamicPartialCollectionsCanRenderItemProperties
-//{
-//    GRMustacheSelfRenderingWithPartialVariableTagHelper *item1 = [[[GRMustacheSelfRenderingWithPartialVariableTagHelper alloc] init] autorelease];
-//    item1.partialName = @"partial";
-//    item1.name = @"item1";
-//    GRMustacheSelfRenderingWithPartialVariableTagHelper *item2 = [[[GRMustacheSelfRenderingWithPartialVariableTagHelper alloc] init] autorelease];
-//    item2.partialName = @"partial";
-//    item2.name = @"item2";
-//    NSDictionary *context = @{@"items": @[item1, item2]};
-//    NSDictionary *partials = @{@"partial": @"<{{name}}>"};
-//    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
-//    GRMustacheTemplate *template = [repository templateFromString:@"{{items}}" error:nil];
-//    NSString *result = [template renderObject:context];
-//    STAssertEqualObjects(result, @"<item1><item2>", @"");
-//}
-
-- (void)testMissingDynamicPartialRaisesGRMustacheRenderingException
+- (void)testDynamicPartialCollectionsCanRenderItemProperties
 {
-    id helper = [GRMustacheDynamicPartial dynamicPartialWithName:@"missing_partial"];
-    NSDictionary *context = @{@"helper": helper};
-    STAssertThrowsSpecificNamed([GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:NULL], NSException, GRMustacheRenderingException, nil);
+    NSDictionary *partials = @{@"partial": @"<{{name}}>"};
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{items}}" error:nil];
+    
+    id item1 = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
+        runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item1" }];
+        return [template renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+    }];
+    id item2 = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
+        runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item2" }];
+        return [template renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+    }];
+
+    NSDictionary *context = @{@"items": @[item1, item2]};
+    NSString *result = [template renderObject:context];
+    STAssertEqualObjects(result, @"<item1><item2>", @"");
 }
 
 //- (void)testHelperDoesEnterContextStack
