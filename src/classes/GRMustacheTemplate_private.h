@@ -24,9 +24,10 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheRenderingObject_private.h"
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
 @private
     NSArray *_innerElements;
     id<GRMustacheTemplateDelegate> _delegate;

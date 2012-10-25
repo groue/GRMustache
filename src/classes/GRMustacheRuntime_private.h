@@ -156,34 +156,15 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *
  * @return A GRMustacheRuntime object.
  *
- * @see -[GRMustacheSectionElement renderInBuffer:withRuntime:]
+ * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate GRMUSTACHE_API_INTERNAL;
 
-/**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
- * context stack that is extended with _contextObject_.
- *
- * @param contextObject  A context object
- *
- * @return A GRMustacheRuntime object.
- *
- * @see -[GRMustacheSectionElement renderInBuffer:withRuntime:]
- */
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheRuntime.h
+- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
 
-/**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
- * filter stack that is extended with _filterObject_.
- *
- * @param filterObject  A filter object
- *
- * @return A GRMustacheRuntime object.
- *
- * @see -[GRMustacheTemplate renderObject:withFilters:]
- * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
- */
-- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheRuntime.h
+- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
@@ -241,7 +222,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *                        objects.
  * @param block           The rendering block.
  *
- * @see -[GRMustacheSectionElement renderInBuffer:withRuntime:]
+ * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  * @see -[GRMustacheVariableElement renderInBuffer:withRuntime:]
  */
 - (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;

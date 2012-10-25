@@ -24,10 +24,9 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheSection_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheRenderer_private.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheRenderingObject_private.h"
 
 @interface GRMustacheVariableElement()
 - (id)initWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository raw:(BOOL)raw;
@@ -45,7 +44,7 @@
 - (void)dealloc
 {
     [_expression release];
-    [_enumerableSectionElement release];
+    [_enumerableSection release];
     [super dealloc];
 }
 
@@ -57,13 +56,10 @@
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheVariableTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
         
-        id<GRMustacheRenderingObject> renderingObject = [GRMustacheRenderer renderingObjectForValue:value];
+        id<GRMustacheRenderingObject> renderingObject = [GRMustache renderingObjectForValue:value];
         
         BOOL HTMLEscaped = NO;
-        NSString *rendering = [renderingObject renderInRuntime:runtime
-                                            templateRepository:_templateRepository
-                                            forRenderingObject:nil
-                                                   HTMLEscaped:&HTMLEscaped];
+        NSString *rendering = [renderingObject renderForSection:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
@@ -83,20 +79,20 @@
 //        {
 //            // Enumerable: render {{items}} just as {{#items}}{{.}}{{/items}}
 //            
-//            if (_enumerableSectionElement == nil) {
+//            if (_enumerableSection == nil) {
 //                // Build {{#items}}{{.}}{{/items}} or {{#items}}{{{.}}}{{/items}}, depending on _raw
 //                GRMustacheExpression *expression = [GRMustacheImplicitIteratorExpression expression];
 //                GRMustacheVariableElement *innerElement = [GRMustacheVariableElement variableElementWithExpression:expression templateRepository:_templateRepository raw:_raw];
-//                _enumerableSectionElement = [GRMustacheSectionElement sectionElementWithExpression:_expression
+//                _enumerableSection = [GRMustacheSection sectionWithExpression:_expression
 //                                                                                templateRepository:_templateRepository
 //                                                                                    templateString:_raw ? @"{{{.}}}" : @"{{.}}"
 //                                                                                        innerRange:_raw ? NSMakeRange(0, 7) : NSMakeRange(0, 5)
 //                                                                                          inverted:NO
 //                                                                                       overridable:NO
 //                                                                                     innerElements:[NSArray arrayWithObject:innerElement]];
-//                [_enumerableSectionElement retain];
+//                [_enumerableSection retain];
 //            }
-//            [_enumerableSectionElement renderInBuffer:buffer withRuntime:runtime];
+//            [_enumerableSection renderInBuffer:buffer withRuntime:runtime];
 //        }
 //        else if ([value conformsToProtocol:@protocol(GRMustacheVariableTagHelper)])
 //        {

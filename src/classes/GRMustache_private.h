@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+@protocol GRMustacheRenderingObject;
+
 // Documented in GRMustache.h
 typedef struct {
     int major;
@@ -37,5 +39,8 @@ typedef struct {
 
 // Documented in GRMustache.h
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
++ (id<GRMustacheRenderingObject>)renderingObjectForValue:(id)value;
 
 @end

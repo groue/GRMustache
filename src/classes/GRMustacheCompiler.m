@@ -25,7 +25,7 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTextElement_private.h"
 #import "GRMustacheVariableElement_private.h"
-#import "GRMustacheSectionElement_private.h"
+#import "GRMustacheSection_private.h"
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheExpression_private.h"
@@ -278,20 +278,20 @@
                     }
                     
                     // Nothing prevents tokens to come from different template strings.
-                    // We, however, do not support this case, because GRMustacheSectionElement
+                    // We, however, do not support this case, because GRMustacheSection
                     // builds from a single template string and a single innerRange.
                     NSAssert(_currentOpeningToken.templateString == token.templateString, @"not implemented");
                     
-                    // Success: append GRMustacheSectionElement and shrink stacks
+                    // Success: append GRMustacheSection and shrink stacks
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                    wrapperElement = [GRMustacheSectionElement sectionElementWithExpression:_currentOpeningToken.expression
-                                                                         templateRepository:_templateRepository
-                                                                             templateString:token.templateString
-                                                                                 innerRange:innerRange
-                                                                                   inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                                overridable:(_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening)
-                                                                              innerElements:_currentElements];
+                    wrapperElement = [GRMustacheSection sectionWithExpression:_currentOpeningToken.expression
+                                                           templateRepository:_templateRepository
+                                                               templateString:token.templateString
+                                                                   innerRange:innerRange
+                                                                     inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                  overridable:(_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening)
+                                                                innerElements:_currentElements];
                     
                 } break;
                     

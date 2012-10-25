@@ -23,7 +23,9 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustache.h"
+#import "GRMustacheRenderingObject.h"
+
+@class GRMustacheRuntime;
 
 /**
  * The GRMustacheTemplate class provides with Mustache template rendering
@@ -33,7 +35,7 @@
  * 
  * @since v1.0
  */
-@interface GRMustacheTemplate: NSObject {
+@interface GRMustacheTemplate: NSObject<GRMustacheRenderingObject> {
 @private
     NSArray *_innerElements;
     id<GRMustacheTemplateDelegate> _delegate;
@@ -444,5 +446,10 @@
  * @since v1.0
  */
 - (NSString *)render AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

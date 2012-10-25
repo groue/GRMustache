@@ -24,6 +24,8 @@
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateRepository.h"
 #import "GRMustacheRenderingObject.h"
+#import "GRMustacheRuntime.h"
+#import "GRMustacheSection.h"
 
 @interface GRMustacheDynamicPartial()
 - (id)initWithName:(NSString *)name;
@@ -52,16 +54,16 @@
 }
 
 // =============================================================================
-#pragma mark - <GRMustacheRenderingObject> informal protocol
+#pragma mark - <GRMustacheRenderingObject>
 
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository forRenderingObject:(id<GRMustacheRenderingObject>)renderingObject HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
     NSError *error;
     GRMustacheTemplate *template = [templateRepository templateNamed:_name error:&error];
     if (!template) {
         [NSException raise:GRMustacheRenderingException format:@"%@", [error localizedDescription]];
     }
-    return [template renderInRuntime:runtime templateRepository:templateRepository forRenderingObject:nil HTMLEscaped:HTMLEscaped];
+    return [template renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
 }
 
 @end

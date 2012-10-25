@@ -926,21 +926,4 @@
     STAssertTrue(delegate2HasBeenInvoked, @"");
 }
 
-- (void)testArrayOfDelegatesInVariableTag
-{
-    __block BOOL delegate1HasBeenInvoked = NO;
-    GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate1.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) { delegate1HasBeenInvoked = YES; };
-    
-    __block BOOL delegate2HasBeenInvoked = NO;
-    GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) { delegate2HasBeenInvoked = YES; };
-    
-    id items = @{@"items": @[delegate1, delegate2] };
-    [GRMustacheTemplate renderObject:items fromString:@"{{items}}" error:NULL];
-    
-    STAssertTrue(delegate1HasBeenInvoked, @"");
-    STAssertTrue(delegate2HasBeenInvoked, @"");
-}
-
 @end

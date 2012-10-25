@@ -73,7 +73,7 @@
  * element.
  *
  * All classes conforming to the GRMustacheRenderingElement protocol return
- * _element_, but GRMustacheSectionElement, GRMustacheTemplateOverride, and
+ * _element_, but GRMustacheSection, GRMustacheTemplateOverride, and
  * GRMustacheTemplate.
  *
  * @param element  A rendering element
@@ -81,7 +81,7 @@
  * @return The resolution of the element in the context of Mustache overridable
  *         partials.
  *
- * @see GRMustacheSectionElement
+ * @see GRMustacheSection
  * @see GRMustacheTemplate
  * @see GRMustacheTemplateOverride
  */

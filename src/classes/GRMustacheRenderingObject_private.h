@@ -21,37 +21,18 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheAvailabilityMacros_private.h"
 
-/**
- * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableTagHelper
- * that, given a partial template name, renders this template.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
- *
- * @see GRMustacheVariableTagHelper protocol
- *
- * @since v5.1
- */
-@interface GRMustacheDynamicPartial: NSObject<GRMustacheRenderingObject> {
-    NSString *_name;
-}
+@protocol GRMustacheRenderingObject;
+@class GRMustacheRuntime;
+@class GRMustacheTemplateRepository;
+@class GRMustacheSection;
 
-////////////////////////////////////////////////////////////////////////////////
-/// @name Creating Dynamic Partials
-////////////////////////////////////////////////////////////////////////////////
+@protocol GRMustacheRenderingObject <NSObject>
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped GRMUSTACHE_API_PUBLIC;
+@end
 
-/**
- * Returns a GRMustacheDynamicPartial that renders a partial template named
- * _name_.
- *
- * @param name  A template name
- *
- * @return a GRMustacheDynamicPartial
- *
- * @since v5.1
- */
-+ (id)dynamicPartialWithName:(NSString *)name AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
+@interface GRMustacheRenderingObject : NSObject<GRMustacheRenderingObject>
++ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block GRMUSTACHE_API_PUBLIC;
++ (id)renderingObjectWithObject:(id)object implementation:(IMP)implementation GRMUSTACHE_API_INTERNAL;
 @end

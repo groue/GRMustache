@@ -1,17 +1,17 @@
 // The MIT License
-//
+// 
 // Copyright (c) 2012 Gwendal Roué
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,34 +24,33 @@
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheRenderingObject.h"
 
+@class GRMustacheTemplateRepository;
+
 /**
- * The GRMustacheDynamicPartial is a specific kind of GRMustacheVariableTagHelper
- * that, given a partial template name, renders this template.
+ * A GRMustacheSection is a rendering element that renders sections
+ * such as `{{#name}}...{{/name}}`.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/variable_tag_helpers.md
- *
- * @see GRMustacheVariableTagHelper protocol
- *
- * @since v5.1
+ * @see GRMustacheRenderingElement
  */
-@interface GRMustacheDynamicPartial: NSObject<GRMustacheRenderingObject> {
-    NSString *_name;
+@interface GRMustacheSection: NSObject<GRMustacheRenderingObject> {
+@private
+    GRMustacheTemplateRepository *_templateRepository;
+    id _expression;
+    NSString *_templateString;
+    NSRange _innerRange;
+    BOOL _overridable;
+    BOOL _inverted;
+    NSArray *_innerElements;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-/// @name Creating Dynamic Partials
-////////////////////////////////////////////////////////////////////////////////
+/**
+ * TODO
+ */
+@property (nonatomic, readonly, getter = isInverted) BOOL inverted;
 
 /**
- * Returns a GRMustacheDynamicPartial that renders a partial template named
- * _name_.
- *
- * @param name  A template name
- *
- * @return a GRMustacheDynamicPartial
- *
- * @since v5.1
+ * TODO
  */
-+ (id)dynamicPartialWithName:(NSString *)name AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, readonly, getter = isOverridable) BOOL overridable;
 
 @end

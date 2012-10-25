@@ -23,7 +23,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheSection_private.h"
 
 @interface GRMustacheTemplate()
 @end
@@ -217,6 +217,8 @@
         [_delegate templateWillRender:self];
     }
     
+    runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
+    
     for (id<GRMustacheRenderingElement> element in _innerElements) {
         // element may be overriden by a GRMustacheTemplateOverride: resolve it.
         element = [runtime resolveRenderingElement:element];
@@ -252,14 +254,33 @@
     return element;
 }
 
-#pragma mark <GRMustacheRenderingObject> informal protocol
+#pragma mark <GRMustacheRenderingObject>
 
-- (NSString *)renderInRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository forRenderingObject:(id<GRMustacheRenderingObject>)renderingObject HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
-    NSMutableString *buffer = [NSMutableString string];
-    [self renderInBuffer:buffer withRuntime:runtime];
-    *HTMLEscaped = YES;
-    return buffer;
+    if (section) {
+        // Section tag {{# template }}...{{/}}
+        
+        // We behave as a true object: the section renders if and only if it is not inverted
+        if (section.isInverted)
+        {
+            return nil;
+        }
+        else
+        {
+            runtime = [runtime runtimeByAddingContextObject:self];
+            return [section renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+        }
+    }
+    else
+    {
+        // Variable tag {{ template }}
+        
+        NSMutableString *buffer = [NSMutableString string];
+        [self renderInBuffer:buffer withRuntime:runtime];
+        *HTMLEscaped = YES;
+        return buffer;
+    }
 }
 
 @end

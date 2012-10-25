@@ -22,18 +22,18 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheRenderingElement_private.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheRenderingObject_private.h"
 
 @class GRMustacheTemplateRepository;
 @class GRMustacheExpression;
 
 /**
- * A GRMustacheSectionElement is a rendering element that renders sections
+ * A GRMustacheSection is a rendering element that renders sections
  * such as `{{#name}}...{{/name}}`.
  *
  * @see GRMustacheRenderingElement
  */
-@interface GRMustacheSectionElement: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
+@interface GRMustacheSection: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     GRMustacheExpression *_expression;
@@ -43,6 +43,12 @@
     BOOL _inverted;
     NSArray *_innerElements;
 }
+
+// Documented in GRMustacheSection.h
+@property (nonatomic, readonly, getter = isInverted) BOOL inverted GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheSection.h
+@property (nonatomic, readonly, getter = isOverridable) BOOL overridable GRMUSTACHE_API_PUBLIC;
 
 /**
  * A template repository, so that helpers can render alternate template strings.
@@ -57,7 +63,7 @@
 
 
 /**
- * Builds a GRMustacheSectionElement.
+ * Builds a GRMustacheSection.
  * 
  * The rendering of Mustache sections depend on the value they are attached to,
  * whether they are truthy, falsey, enumerable, or helpers. The value is fetched
@@ -84,7 +90,7 @@
  * @param innerElements       An array of GRMustacheRenderingElement that make
  *                            the section.
  *
- * @return A GRMustacheSectionElement
+ * @return A GRMustacheSection
  * 
  * @see GRMustacheExpression
  * @see GRMustacheRuntime
@@ -93,7 +99,7 @@
  * @see GRMustacheRuntime
  * @see GRMustacheSectionTagHelper protocol
  */
-+ (id)sectionElementWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
++ (id)sectionWithExpression:(GRMustacheExpression *)expression templateRepository:(GRMustacheTemplateRepository *)templateRepository templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
 
 /**
  * Appends the rendering of inner elements in a buffer.
