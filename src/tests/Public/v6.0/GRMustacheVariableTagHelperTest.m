@@ -148,7 +148,7 @@
 - (void)testHelperPerformsRendering
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         return @"---";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -159,7 +159,7 @@
 - (void)testHelperRenderingIsHTMLEscaped
 {
     {
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             *HTMLEscaped = NO;
             return @"&<>{{foo}}";
         }];
@@ -168,7 +168,7 @@
         STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             *HTMLEscaped = NO;
             return @"&<>{{foo}}";
         }];
@@ -177,7 +177,7 @@
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             *HTMLEscaped = YES;
             return @"&<>{{foo}}";
         }];
@@ -186,7 +186,7 @@
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             *HTMLEscaped = YES;
             return @"&<>{{foo}}";
         }];
@@ -198,7 +198,7 @@
 
 - (void)testHelperRenderingIsHTMLEscapedByDefault
 {
-    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         return @"&<>{{foo}}";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -209,7 +209,7 @@
 - (void)testHelperCanRenderNil
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -222,7 +222,7 @@
     // [GRMustacheVariableTagHelper helperWithBlock:]
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             if (!section) {
                 invocationCount++;
             }
@@ -234,7 +234,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             if (!section) {
                 invocationCount++;
             }
@@ -246,7 +246,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             if (!section) {
                 invocationCount++;
             }
@@ -258,7 +258,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
             if (!section) {
                 invocationCount++;
             }
@@ -272,7 +272,7 @@
 
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplate
 //{
-//    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -284,7 +284,7 @@
 //
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplateContainingPartial
 //{
-//    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
@@ -297,7 +297,7 @@
 //
 //- (void)testHelperRenderingOfCurrentContextInDistinctTemplateContainingPartialIsNotHTMLEscaped
 //{
-//    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
@@ -310,7 +310,7 @@
 //
 //- (void)testTemplateDelegateCallbacksAreCalledDuringAlternateTemplateStringRendering
 //{
-//    id helper = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    
@@ -360,12 +360,12 @@
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
     GRMustacheTemplate *template = [repository templateFromString:@"{{items}}" error:nil];
     
-    id item1 = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
         runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item1" }];
         return [template renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
     }];
-    id item2 = [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
         runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item2" }];
         return [template renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];

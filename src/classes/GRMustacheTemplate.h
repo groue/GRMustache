@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheRendering.h"
 
 @class GRMustacheRuntime;
 @class GRMustacheTemplateRepository;
@@ -36,7 +36,7 @@
  * 
  * @since v1.0
  */
-@interface GRMustacheTemplate: NSObject<GRMustacheRenderingObject> {
+@interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;

@@ -1,8 +1,6 @@
 - document migration path from all previous versions to latest version
 - document the wrapping technique of GRMustacheIndexes sample code in the section tag helper guide.
 
-- Rename GRMustacheRenderingObject GRMustacheRendering
-
 - Virer GRMustacheProxy
 
 - Implement {{#..}}...{{/}}

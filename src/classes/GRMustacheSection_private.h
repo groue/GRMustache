@@ -22,7 +22,7 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheRenderingObject_private.h"
+#import "GRMustacheRendering.h"
 
 @class GRMustacheExpression;
 
@@ -32,7 +32,7 @@
  *
  * @see GRMustacheTemplateComponent
  */
-@interface GRMustacheSection: NSObject<GRMustacheTemplateComponent, GRMustacheRenderingObject> {
+@interface GRMustacheSection: NSObject<GRMustacheTemplateComponent, GRMustacheRendering> {
 @private
     GRMustacheExpression *_expression;
     NSString *_templateString;

@@ -26,7 +26,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheRenderingObject_private.h"
+#import "GRMustacheRendering.h"
 #import "GRMustache_private.h"
 
 @interface GRMustacheSection()
@@ -63,7 +63,7 @@
 }
 
 
-#pragma mark - <GRMustacheRenderingObject>
+#pragma mark - <GRMustacheRendering>
 
 - (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
@@ -89,7 +89,7 @@
     id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
     [runtime delegateValue:value interpretation:GRMustacheSectionTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
 
-        id<GRMustacheRenderingObject> renderingObject = [GRMustache renderingObjectForValue:value];
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
         
         BOOL HTMLEscaped = NO;
         NSString *rendering = [renderingObject renderForSection:self

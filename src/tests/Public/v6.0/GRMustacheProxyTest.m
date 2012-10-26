@@ -33,7 +33,7 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         
         if (section && !section.isInverted) {
             
@@ -54,7 +54,7 @@
             
             // Genuine Mustache rendering otherwise
             
-            id<GRMustacheRenderingObject> original = [GRMustache renderingObjectForValue:array];
+            id<GRMustacheRendering> original = [GRMustache renderingObjectForObject:array];
             return [original renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
         }
     }];

@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheRenderingObject.h"
+#import "GRMustacheRendering.h"
 
 @class GRMustacheTemplateRepository;
 
@@ -32,7 +32,7 @@
  *
  * @see GRMustacheTemplateComponent
  */
-@interface GRMustacheSection: NSObject<GRMustacheRenderingObject> {
+@interface GRMustacheSection: NSObject<GRMustacheRendering> {
 @private
     id _expression;
     NSString *_templateString;

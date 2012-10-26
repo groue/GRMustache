@@ -255,7 +255,7 @@
     return component;
 }
 
-#pragma mark <GRMustacheRenderingObject>
+#pragma mark <GRMustacheRendering>
 
 - (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {

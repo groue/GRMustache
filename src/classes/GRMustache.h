@@ -23,7 +23,10 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-@protocol GRMustacheRenderingObject;
+@protocol GRMustacheRendering;
+@class GRMustacheSection;
+@class GRMustacheRuntime;
+@class GRMustacheTemplateRepository;
 
 /**
  * A C struct that hold GRMustache version information
@@ -93,7 +96,12 @@ typedef struct {
 /**
  * TODO
  */
-+ (id<GRMustacheRenderingObject>)renderingObjectForValue:(id)value;
++ (id<GRMustacheRendering>)renderingObjectForObject:(id)value AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * TODO
+ */
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 

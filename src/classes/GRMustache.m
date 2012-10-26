@@ -23,31 +23,51 @@
 #import "GRMustache_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheVersion.h"
-#import "GRMustacheRenderingObject_private.h"
+#import "GRMustacheRendering.h"
 #import "GRMustacheSection_private.h"
 #import "GRMustacheError.h"
 
-static CFMutableDictionaryRef renderingObjectImplementationForProtocol = nil;
-static IMP defaultRenderingObjectImplementation;
 
-static NSString *GRMustacheRenderingObjectNil(id self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderingObjectNSNull(NSNull *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderingObjectNSNumber(NSNumber *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderingObjectNSString(NSString *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderingObjectNSObject(NSObject *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static CFMutableDictionaryRef renderingImplementationForProtocol = nil;
+static IMP defaultRenderingImplementation;
 
-@interface GRMustacheNil : NSObject<GRMustacheRenderingObject>
-+ (void)setRenderingObjectImplementation:(IMP)imp;
+
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+
+
+@interface GRMustacheRenderingNil : NSObject<GRMustacheRendering>
++ (void)setRenderingImplementation:(IMP)imp;
 + (id)instance;
 @end
 
-@interface GRMustache()
-+ (void)registerDefaultRenderingObjectImplementation:(IMP)imp;
-+ (void)registerNilRenderingObjectImplementation:(IMP)imp;
-+ (void)registerClass:(Class)aClass renderingObjectImplementation:(IMP)imp;
-+ (void)registerProtocol:(Protocol *)aProtocol renderingObjectImplementation:(IMP)imp;
+
+@interface GRMustacheRenderingWithBlock:NSObject<GRMustacheRendering> {
+    NSString *(^_block)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+}
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block;
 @end
+
+
+@interface GRMustacheRenderingWithIMP:NSObject<GRMustacheRendering> {
+    id _object;
+    IMP _implementation;
+}
+- (id)initWithObject:(id)object implementation:(IMP)implementation;
+@end
+
+
+@interface GRMustache()
++ (void)registerDefaultRenderingImplementation:(IMP)imp;
++ (void)registerNilRenderingImplementation:(IMP)imp;
++ (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp;
++ (void)registerProtocol:(Protocol *)aProtocol renderingImplementation:(IMP)imp;
+@end
+
 
 @implementation GRMustache
 
@@ -64,31 +84,31 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
         .patch = GRMUSTACHE_PATCH_VERSION };
 }
 
-+ (id<GRMustacheRenderingObject>)renderingObjectForValue:(id)value
++ (id<GRMustacheRendering>)renderingObjectForObject:(id)object
 {
-    if (value == nil) {
-        return [GRMustacheNil instance];
+    if (object == nil) {
+        return [GRMustacheRenderingNil instance];
     }
     
     SEL renderSelector = @selector(renderForSection:inRuntime:templateRepository:HTMLEscaped:);
     
-    if ([value respondsToSelector:renderSelector]) {
-        return value;
+    if ([object respondsToSelector:renderSelector]) {
+        return object;
     }
 
     // look by protocol
     
     IMP implementation = nil;
-    if (renderingObjectImplementationForProtocol) {
+    if (renderingImplementationForProtocol) {
         
-        CFIndex count = CFDictionaryGetCount(renderingObjectImplementationForProtocol);
+        CFIndex count = CFDictionaryGetCount(renderingImplementationForProtocol);
         const void **protocols = malloc(count * sizeof(void *));
         const void **imps = malloc(count * sizeof(void *));
         
-        CFDictionaryGetKeysAndValues(renderingObjectImplementationForProtocol, protocols, imps);
+        CFDictionaryGetKeysAndValues(renderingImplementationForProtocol, protocols, imps);
         for (CFIndex i=0; i<count; ++i) {
             Protocol *protocol = protocols[i];
-            if ([value conformsToProtocol:protocol]) {
+            if ([object conformsToProtocol:protocol]) {
                 implementation = (IMP)imps[i];
                 break;  // TODO: look for a more precise protocol
             }
@@ -99,15 +119,25 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
     }
     
     if (!implementation) {
-        implementation = defaultRenderingObjectImplementation;
+        implementation = defaultRenderingImplementation;
     }
     
-    Class aClass = [value class];
+    Class aClass = [object class];
     if (aClass != [NSObject class]) {
-        [self registerClass:aClass renderingObjectImplementation:implementation];
+        [self registerClass:aClass renderingImplementation:implementation];
     }
     
-    return [GRMustacheRenderingObject renderingObjectWithObject:value implementation:implementation];
+    return [self renderingObjectWithObject:object implementation:implementation];
+}
+
++ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block
+{
+    return [[[GRMustacheRenderingWithBlock alloc] initWithBlock:block] autorelease];
+}
+
++ (id)renderingObjectWithObject:(id)object implementation:(IMP)implementation
+{
+    return [[[GRMustacheRenderingWithIMP alloc] initWithObject:object implementation:implementation] autorelease];
 }
 
 + (NSString *)htmlEscape:(NSString *)string
@@ -126,26 +156,26 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
 
 + (void)load
 {
-    [self registerDefaultRenderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSObject];
-    [self registerNilRenderingObjectImplementation:(IMP)GRMustacheRenderingObjectNil];
-    [self registerClass:[NSNull class] renderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSNull];
-    [self registerClass:[NSNumber class] renderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSNumber];
-    [self registerClass:[NSString class] renderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSString];
-    [self registerClass:[NSDictionary class] renderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSObject];
-    [self registerProtocol:@protocol(NSFastEnumeration) renderingObjectImplementation:(IMP)GRMustacheRenderingObjectNSFastEnumeration];
+    [self registerDefaultRenderingImplementation:(IMP)GRMustacheRenderNSObject];
+    [self registerNilRenderingImplementation:(IMP)GRMustacheRenderNil];
+    [self registerClass:[NSNull class] renderingImplementation:(IMP)GRMustacheRenderNSNull];
+    [self registerClass:[NSNumber class] renderingImplementation:(IMP)GRMustacheRenderNSNumber];
+    [self registerClass:[NSString class] renderingImplementation:(IMP)GRMustacheRenderNSString];
+    [self registerClass:[NSDictionary class] renderingImplementation:(IMP)GRMustacheRenderNSObject];
+    [self registerProtocol:@protocol(NSFastEnumeration) renderingImplementation:(IMP)GRMustacheRenderNSFastEnumeration];
 }
 
-+ (void)registerDefaultRenderingObjectImplementation:(IMP)imp
++ (void)registerDefaultRenderingImplementation:(IMP)imp
 {
-    defaultRenderingObjectImplementation = imp;
+    defaultRenderingImplementation = imp;
 }
 
-+ (void)registerNilRenderingObjectImplementation:(IMP)imp
++ (void)registerNilRenderingImplementation:(IMP)imp
 {
-    [GRMustacheNil setRenderingObjectImplementation:imp];
+    [GRMustacheRenderingNil setRenderingImplementation:imp];
 }
 
-+ (void)registerClass:(Class)aClass renderingObjectImplementation:(IMP)imp
++ (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp
 {
     SEL renderSelector = @selector(renderForSection:inRuntime:templateRepository:HTMLEscaped:);
     if (!class_addMethod(aClass, renderSelector, imp, "@@:@@@^c")) {
@@ -154,33 +184,33 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
     }
 }
 
-+ (void)registerProtocol:(Protocol *)aProtocol renderingObjectImplementation:(IMP)imp
++ (void)registerProtocol:(Protocol *)aProtocol renderingImplementation:(IMP)imp
 {
-    if (renderingObjectImplementationForProtocol == nil) {
-        renderingObjectImplementationForProtocol = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+    if (renderingImplementationForProtocol == nil) {
+        renderingImplementationForProtocol = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
     }
     
-    CFDictionaryAddValue(renderingObjectImplementationForProtocol, aProtocol, imp);
+    CFDictionaryAddValue(renderingImplementationForProtocol, aProtocol, imp);
 }
 
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheNil
+#pragma mark - GRMustacheRenderingNil
 
-static IMP nilRenderingObjectImplementation;
+static IMP nilRenderingImplementation;
 
-@implementation GRMustacheNil
+@implementation GRMustacheRenderingNil
 
-+ (void)setRenderingObjectImplementation:(IMP)imp
++ (void)setRenderingImplementation:(IMP)imp
 {
-    nilRenderingObjectImplementation = imp;
+    nilRenderingImplementation = imp;
 }
 
 + (id)instance
 {
-    static GRMustacheNil *instance = nil;
+    static GRMustacheRenderingNil *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[self alloc] init];
@@ -190,16 +220,76 @@ static IMP nilRenderingObjectImplementation;
 
 - (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
-    return nilRenderingObjectImplementation(nil, @selector(renderForSection:inRuntime:templateRepository:HTMLEscaped:), section, runtime, templateRepository, HTMLEscaped);
+    return nilRenderingImplementation(nil, @selector(renderForSection:inRuntime:templateRepository:HTMLEscaped:), section, runtime, templateRepository, HTMLEscaped);
 }
 
 @end
 
 
 // =============================================================================
-#pragma mark - nil(GRMustacheRenderingObject)
+#pragma mark - GRMustacheRenderingWithBlock
 
-static NSString *GRMustacheRenderingObjectNil(id self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+@implementation GRMustacheRenderingWithBlock
+
+- (void)dealloc
+{
+    [_block release];
+    [super dealloc];
+}
+
+- (id)initWithBlock:(NSString *(^)(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block
+{
+    self = [super init];
+    if (self) {
+        _block = [block copy];
+    }
+    return self;
+}
+
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    if (!_block) {
+        return nil;
+    }
+    return _block(section, runtime, templateRepository, HTMLEscaped);
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheRenderingWithIMP
+
+@implementation GRMustacheRenderingWithIMP
+
+- (void)dealloc
+{
+    [_object release];
+    [super dealloc];
+}
+
+- (id)initWithObject:(id)object implementation:(IMP)implementation
+{
+    self = [super init];
+    if (self) {
+        _object = [object retain];
+        _implementation = implementation;
+    }
+    return self;
+}
+
+- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    return _implementation(_object, @selector(renderForSection:inRuntime:templateRepository:HTMLEscaped:), section, runtime, templateRepository, HTMLEscaped);
+}
+
+@end
+
+
+// =============================================================================
+#pragma mark - nil(GRMustacheRendering)
+
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -227,9 +317,9 @@ static NSString *GRMustacheRenderingObjectNil(id self, SEL _cmd, GRMustacheSecti
 
 
 // =============================================================================
-#pragma mark - NSNull(GRMustacheRenderingObject)
+#pragma mark - NSNull(GRMustacheRendering)
 
-static NSString *GRMustacheRenderingObjectNSNull(NSNull *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -257,9 +347,9 @@ static NSString *GRMustacheRenderingObjectNSNull(NSNull *self, SEL _cmd, GRMusta
 
 
 // =============================================================================
-#pragma mark - NSNumber(GRMustacheRenderingObject)
+#pragma mark - NSNumber(GRMustacheRendering)
 
-static NSString *GRMustacheRenderingObjectNSNumber(NSNumber *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -289,9 +379,9 @@ static NSString *GRMustacheRenderingObjectNSNumber(NSNumber *self, SEL _cmd, GRM
 
 
 // =============================================================================
-#pragma mark - NSString(GRMustacheRenderingObject)
+#pragma mark - NSString(GRMustacheRendering)
 
-static NSString *GRMustacheRenderingObjectNSString(NSString *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -321,9 +411,9 @@ static NSString *GRMustacheRenderingObjectNSString(NSString *self, SEL _cmd, GRM
 
 
 // =============================================================================
-#pragma mark - NSObject(GRMustacheRenderingObject)
+#pragma mark - NSObject(GRMustacheRendering)
 
-static NSString *GRMustacheRenderingObjectNSObject(NSObject *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -353,9 +443,9 @@ static NSString *GRMustacheRenderingObjectNSObject(NSObject *self, SEL _cmd, GRM
 
 
 // =============================================================================
-#pragma mark - NSFastEnumeration(GRMustacheRenderingObject)
+#pragma mark - NSFastEnumeration(GRMustacheRendering)
 
-static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
 {
     if (section)
     {
@@ -409,7 +499,7 @@ static NSString *GRMustacheRenderingObjectNSFastEnumeration(id<NSFastEnumeration
             GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
             
             // render item
-            id<GRMustacheRenderingObject> itemRenderingObject = [GRMustache renderingObjectForValue:item];
+            id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
             BOOL itemHasRenderedHTMLEscaped = NO;
             NSString *rendering = [itemRenderingObject renderForSection:nil inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:&itemHasRenderedHTMLEscaped];
             

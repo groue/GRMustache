@@ -24,12 +24,12 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheRenderingObject_private.h"
+#import "GRMustacheRendering.h"
 
 @class GRMustacheTemplateRepository;
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent, GRMustacheRenderingObject> {
+@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent, GRMustacheRendering> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;
