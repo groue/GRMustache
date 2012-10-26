@@ -21,33 +21,39 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheTemplateComponent_private.h"
+
+@class GRMustacheExpression;
+@class GRMustacheSection;
 
 /**
- * A GRMustacheTextElement is a rendering element that renders raw template
- * text.
+ * A GRMustacheVariableComponent is a template component that renders variable
+ * tags such as `{{name}}` and `{{{name}}}`.
  *
- * For instance, the template string "hello {{name}}!" would give two
- * GRMustacheTextElement instances:
+ * For instance, the template string "{{name}} is {{age}} years old." would give
+ * two GRMustacheVariableComponent instances:
  *
- * - a GRMustacheTextElement that renders "hello ".
- * - a GRMustacheTextElement that renders "!".
+ * - a GRMustacheVariableComponent that renders the `name` key in a context.
+ * - a GRMustacheVariableComponent that renders the `age` key in a context.
  *
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  */
-@interface GRMustacheTextElement: NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheVariableComponent: NSObject<GRMustacheTemplateComponent> {
 @private
-    NSString *_text;
+    GRMustacheExpression *_expression;
+    BOOL _raw;
 }
 
 /**
- * Builds and returns a GRMustacheTextElement.
+ * Builds and returns a GRMustacheVariableComponent.
  *
- * @param string  The string that should be rendered.
- * @return a GRMustacheTextElement
+ * @param expression  The expression that would evaluate against a runtime.
+ * @param raw         NO if the value should be rendered HTML-escaped.
+ *
+ * @return a GRMustacheVariableComponent
+ *
+ * @see GRMustacheExpression
  */
-+ (id)textElementWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
++ (id)variableComponentWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
 
 @end
-
-

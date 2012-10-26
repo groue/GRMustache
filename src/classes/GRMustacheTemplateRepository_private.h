@@ -26,7 +26,7 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
-@protocol GRMustacheRenderingElement;
+@protocol GRMustacheTemplateComponent;
 
 // Documented in GRMustacheTemplateRepository.h
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>

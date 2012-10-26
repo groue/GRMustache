@@ -25,25 +25,25 @@
 #import "GRMustacheRuntime_private.h"
 
 @interface GRMustacheTemplateOverride()
-- (id)initWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements;
+- (id)initWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components;
 @end
 
 @implementation GRMustacheTemplateOverride
 @synthesize template=_template;
 
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
 {
-    return [[[self alloc] initWithTemplate:template innerElements:innerElements] autorelease];
+    return [[[self alloc] initWithTemplate:template components:components] autorelease];
 }
 
 - (void)dealloc
 {
     [_template release];
-    [_innerElements release];
+    [_components release];
     [super dealloc];
 }
 
-#pragma mark - GRMustacheRenderingElement
+#pragma mark - GRMustacheTemplateComponent
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
@@ -51,24 +51,24 @@
     [_template renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // look for the last overriding element in inner elements
-    for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
-        element = [innerElement resolveRenderingElement:element];
+    // look for the last overriding component in inner components
+    for (id<GRMustacheTemplateComponent> innerComponent in _components) {
+        component = [innerComponent resolveTemplateComponent:component];
     }
-    return element;
+    return component;
 }
 
 
 #pragma mark - Private
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements
+- (id)initWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
 {
     self = [super init];
     if (self) {
         _template = [template retain];
-        _innerElements = [innerElements retain];
+        _components = [components retain];
     }
     return self;
 }

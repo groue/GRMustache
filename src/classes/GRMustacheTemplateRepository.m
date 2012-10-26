@@ -113,7 +113,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError;
 
 /**
- * Parses templateString and returns rendering elements.
+ * Parses templateString and returns template components.
  * 
  * @param templateString  A Mustache template string.
  * @param templateID      The template ID of the template, or nil if the
@@ -121,11 +121,11 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * @param outError        If there is an error, upon return contains an NSError
  *                        object that describes the problem.
  *
- * @return an array of objects conforming to the GRMustacheRenderingElement protocol.
+ * @return an array of objects conforming to the GRMustacheTemplateComponent protocol.
  * 
  * @see GRMustacheTemplateRepository
  */
-- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
+- (NSArray *)templateComponentsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError;
 
 @end
 
@@ -209,22 +209,22 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError
 {
-    NSArray *renderingElements = [self renderingElementsFromString:templateString templateID:nil error:outError];
-    if (!renderingElements) {
+    NSArray *templateComponents = [self templateComponentsFromString:templateString templateID:nil error:outError];
+    if (!templateComponents) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.innerElements = renderingElements;
+    template.components = templateComponents;
     return template;
 }
 
 #pragma mark Private
 
-- (NSArray *)renderingElementsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError
+- (NSArray *)templateComponentsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)outError
 {
-    NSArray *renderingElements = nil;
+    NSArray *templateComponents = nil;
     @autoreleasepool {
         // Create a Mustache compiler
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
@@ -241,14 +241,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // Parse
         [parser parseTemplateString:templateString templateID:templateID];
         
-        // Extract rendering elements from the compiler
-        renderingElements = [[compiler renderingElementsReturningError:outError] retain];
+        // Extract template components from the compiler
+        templateComponents = [[compiler templateComponentsReturningError:outError] retain];
         
         // make sure outError is not released by autoreleasepool
-        if (!renderingElements && outError != NULL) [*outError retain];
+        if (!templateComponents && outError != NULL) [*outError retain];
     }
-    if (!renderingElements && outError != NULL) [*outError autorelease];
-    return [renderingElements autorelease];
+    if (!templateComponents && outError != NULL) [*outError autorelease];
+    return [templateComponents autorelease];
 }
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)outError
@@ -306,19 +306,19 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // And since partials may embed other partials, we need to handle the
         // currently parsed template ID in a recursive way.
         
-        NSArray *renderingElements = nil;
+        NSArray *templateComponents = nil;
         {
             id previousParsedTemplateID = _currentlyParsedTemplateID;
             _currentlyParsedTemplateID = templateID;
-            renderingElements = [self renderingElementsFromString:templateString templateID:templateID error:outError];
+            templateComponents = [self templateComponentsFromString:templateString templateID:templateID error:outError];
             _currentlyParsedTemplateID = previousParsedTemplateID;
         }
         
         
         // compiling done
         
-        if (renderingElements) {
-            template.innerElements = renderingElements;
+        if (templateComponents) {
+            template.components = templateComponents;
         } else {
             // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];

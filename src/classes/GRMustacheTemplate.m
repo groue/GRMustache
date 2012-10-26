@@ -29,7 +29,7 @@
 @end
 
 @implementation GRMustacheTemplate
-@synthesize innerElements=_innerElements;
+@synthesize components=_components;
 @synthesize delegate=_delegate;
 @synthesize templateRepository=_templateRepository;
 
@@ -71,7 +71,7 @@
 
 - (void)dealloc
 {
-    [_innerElements release];
+    [_components release];
     [super dealloc];
 }
 
@@ -210,7 +210,7 @@
 }
 
 
-#pragma mark <GRMustacheRenderingElement>
+#pragma mark <GRMustacheTemplateComponent>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
@@ -220,12 +220,12 @@
     
     runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
     
-    for (id<GRMustacheRenderingElement> element in _innerElements) {
-        // element may be overriden by a GRMustacheTemplateOverride: resolve it.
-        element = [runtime resolveRenderingElement:element];
+    for (id<GRMustacheTemplateComponent> component in _components) {
+        // component may be overriden by a GRMustacheTemplateOverride: resolve it.
+        component = [runtime resolveTemplateComponent:component];
         
         // render
-        [element renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+        [component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
     }
     
     if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
@@ -233,9 +233,9 @@
     }
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // look for the last overriding element in inner elements.
+    // look for the last overriding component in inner components.
     //
     // This allows a partial do define an overriding section:
     //
@@ -249,10 +249,10 @@
     //            partial2: "{{$overridable}}ignored{{/overridable}}";
     //        },
     //    }
-    for (id<GRMustacheRenderingElement> innerElement in _innerElements) {
-        element = [innerElement resolveRenderingElement:element];
+    for (id<GRMustacheTemplateComponent> innerComponent in _components) {
+        component = [innerComponent resolveTemplateComponent:component];
     }
-    return element;
+    return component;
 }
 
 #pragma mark <GRMustacheRenderingObject>

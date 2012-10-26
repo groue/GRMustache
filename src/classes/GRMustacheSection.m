@@ -22,7 +22,7 @@
 
 #import "GRMustacheSection_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheRuntime_private.h"
@@ -33,9 +33,9 @@
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
 
 /**
- * @see +[GRMustacheSection sectionWithExpression:templateString:innerRange:inverted:overridable:innerElements:]
+ * @see +[GRMustacheSection sectionWithExpression:templateString:innerRange:inverted:overridable:components:]
  */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components;
 @end
 
 
@@ -44,16 +44,16 @@
 @synthesize overridable=_overridable;
 @synthesize inverted=_inverted;
 
-+ (id)sectionWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
++ (id)sectionWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components
 {
-    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable innerElements:innerElements] autorelease];
+    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable components:components] autorelease];
 }
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
-    [_innerElements release];
+    [_components release];
     [super dealloc];
 }
 
@@ -69,12 +69,12 @@
 {
     NSMutableString *buffer = [NSMutableString string];
     
-    for (id<GRMustacheRenderingElement> element in _innerElements) {
-        // element may be overriden by a GRMustacheTemplateOverride: resolve it.
-        element = [runtime resolveRenderingElement:element];
+    for (id<GRMustacheTemplateComponent> component in _components) {
+        // component may be overriden by a GRMustacheTemplateOverride: resolve it.
+        component = [runtime resolveTemplateComponent:component];
         
         // render
-        [element renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+        [component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
     }
     
     *HTMLEscaped = YES;
@@ -82,7 +82,7 @@
 }
 
 
-#pragma mark - <GRMustacheRenderingElement>
+#pragma mark - <GRMustacheTemplateComponent>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
@@ -106,18 +106,18 @@
     }];
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // Only {{$...}} section can override elements
+    // Only {{$...}} section can override components
     if (!_overridable) {
-        return element;
+        return component;
     }
     
     // {{$...}} sections can only override other sections
-    if (![element isKindOfClass:[GRMustacheSection class]]) {
-        return element;
+    if (![component isKindOfClass:[GRMustacheSection class]]) {
+        return component;
     }
-    GRMustacheSection *otherSection = (GRMustacheSection *)element;
+    GRMustacheSection *otherSection = (GRMustacheSection *)component;
 
     // {{$...}} sections can only override other overridable sections
     if (!otherSection.isOverridable) {
@@ -134,7 +134,7 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable innerElements:(NSArray *)innerElements
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components
 {
     self = [self init];
     if (self) {
@@ -143,7 +143,7 @@
         _innerRange = innerRange;
         _inverted = inverted;
         _overridable = overridable;
-        _innerElements = [innerElements retain];
+        _components = [components retain];
     }
     return self;
 }

@@ -23,16 +23,16 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheRenderingObject_private.h"
 
 @class GRMustacheTemplateRepository;
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheRenderingElement, GRMustacheRenderingObject> {
+@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent, GRMustacheRenderingObject> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
-    NSArray *_innerElements;
+    NSArray *_components;
     id<GRMustacheTemplateDelegate> _delegate;
 }
 
@@ -49,14 +49,14 @@
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
 
 
-#pragma mark Template innerElements
+#pragma mark Template components
 
 /**
- * The GRMustacheRenderingElement objects that make the template.
+ * The GRMustacheTemplateComponent objects that make the template.
  *
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  */
-@property (nonatomic, retain) NSArray *innerElements GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
 
 #pragma mark String template
 

@@ -20,19 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTextElement_private.h"
+#import "GRMustacheTextComponent_private.h"
 
 
-@interface GRMustacheTextElement()
+@interface GRMustacheTextComponent()
 @property (nonatomic, retain) NSString *text;
 - (id)initWithString:(NSString *)text;
 @end
 
 
-@implementation GRMustacheTextElement
+@implementation GRMustacheTextComponent
 @synthesize text=_text;
 
-+ (id)textElementWithString:(NSString *)text
++ (id)textComponentWithString:(NSString *)text
 {
     return [[[self alloc] initWithString:text] autorelease];
 }
@@ -43,17 +43,17 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheRenderingElement>
+#pragma mark <GRMustacheTemplateComponent>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     [buffer appendString:_text];
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // text elements can not override any other element
-    return element;
+    // text components can not override any other component
+    return component;
 }
 
 #pragma mark Private

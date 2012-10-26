@@ -27,35 +27,35 @@
 @class GRMustacheTemplateRepository;
 
 /**
- * The protocol for "rendering elements".
+ * The protocol for "template components".
  * 
- * When parsing a Mustache template, GRMustacheCompiler builds a syntax
+ * When parsing a Mustache template, GRMustacheCompiler builds an abstract
  * tree of objects representing raw text and various mustache tags.
  * 
- * This syntax tree is made of objects conforming to the
- * GRMustacheRenderingElement.
+ * This abstract tree is made of objects conforming to the
+ * GRMustacheTemplateComponent.
  * 
  * Their responsability is to render, provided with a Mustache runtime, through
  * their `renderInBuffer:withRuntime:` implementation.
  * 
- * For instance, the template string "hello {{name}}!" would give four rendering
- * elements:
+ * For instance, the template string "hello {{name}}!" would give four template
+ * components:
  *
- * - a GRMustacheTextElement that renders "hello ".
- * - a GRMustacheVariableElement that renders the value of the `name` key in the
+ * - a GRMustacheTextComponent that renders "hello ".
+ * - a GRMustacheVariableComponent that renders the value of the `name` key in the
  *   runtime.
- * - a GRMustacheTextElement that renders "!".
- * - a GRMustacheTemplate that would contain the three previous elements, and
+ * - a GRMustacheTextComponent that renders "!".
+ * - a GRMustacheTemplate that would contain the three previous components, and
  *   render the concatenation of their renderings.
  * 
- * Rendering elements are able to override other rendering elements, in the
+ * Template components are able to override other template components, in the
  * context of Mustache overridable partials. This feature is backed on the
- * `resolveRenderingElement:` method.
+ * `resolveTemplateComponent:` method.
  *
  * @see GRMustacheCompiler
  * @see GRMustacheRuntime
  */
-@protocol GRMustacheRenderingElement<NSObject>
+@protocol GRMustacheTemplateComponent<NSObject>
 @required
 
 /**
@@ -70,22 +70,22 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of overridable partials, return the element that should be
- * rendered in lieu of _element_, should _element_ be overriden by another
- * element.
+ * In the context of overridable partials, return the component that should be
+ * rendered in lieu of _component_, should _component_ be overriden by another
+ * component.
  *
- * All classes conforming to the GRMustacheRenderingElement protocol return
- * _element_, but GRMustacheSection, GRMustacheTemplateOverride, and
+ * All classes conforming to the GRMustacheTemplateComponent protocol return
+ * _component_, but GRMustacheSection, GRMustacheTemplateOverride, and
  * GRMustacheTemplate.
  *
- * @param element  A rendering element
+ * @param component  A template component
  *
- * @return The resolution of the element in the context of Mustache overridable
- *         partials.
+ * @return The resolution of the component in the context of Mustache
+ *         overridable partials.
  *
  * @see GRMustacheSection
  * @see GRMustacheTemplate
  * @see GRMustacheTemplateOverride
  */
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 @end

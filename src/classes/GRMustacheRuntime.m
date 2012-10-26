@@ -214,13 +214,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
     // top of the stack is first object
     for (GRMustacheTemplateOverride *templateOverride in _templateOverrideStack) {
-        element = [templateOverride resolveRenderingElement:element];
+        component = [templateOverride resolveTemplateComponent:component];
     }
-    return element;
+    return component;
 }
 
 #pragma mark - Private

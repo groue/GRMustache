@@ -26,7 +26,7 @@
 #import "GRMustacheTemplateDelegate.h"
 
 @protocol GRMustacheTemplateDelegate;
-@protocol GRMustacheRenderingElement;
+@protocol GRMustacheTemplateComponent;
 @class GRMustacheTemplate;
 @class GRMustacheToken;
 @class GRMustacheTemplateOverride;
@@ -53,7 +53,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * - perform a key lookup in the context stack.
  * - perform a key lookup in the filter stack.
  * - let template and tag delegates interpret rendered values.
- * - let partial templates override rendering elements.
+ * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_template;
@@ -199,20 +199,20 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @param block           The rendering block.
  *
  * @see -[GRMustacheSection renderInBuffer:withRuntime:]
- * @see -[GRMustacheVariableElement renderInBuffer:withRuntime:]
+ * @see -[GRMustacheVariableComponent renderInBuffer:withRuntime:]
  */
 - (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of overridable partials, return the element that should be
- * rendered in lieu of _element_, should _element_ be overriden by another
- * element.
+ * In the context of overridable partials, return the component that should be
+ * rendered in lieu of _component_, should _component_ be overriden by another
+ * component.
  *
- * @param element  A rendering element
+ * @param component  A template component
  *
- * @return The resolution of the element in the context of Mustache overridable
- *         partials.
+ * @return The resolution of the component in the context of Mustache
+ *         overridable partials.
  */
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 
 @end

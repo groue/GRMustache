@@ -23,8 +23,8 @@
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheTextElement_private.h"
-#import "GRMustacheVariableElement_private.h"
+#import "GRMustacheTextComponent_private.h"
+#import "GRMustacheVariableComponent_private.h"
 #import "GRMustacheSection_private.h"
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheError.h"
@@ -35,9 +35,9 @@
 
 /**
  * The fatal error that should be returned by the public method
- * renderingElementsReturningError:.
+ * templateComponentsReturningError:.
  * 
- * @see currentElements
+ * @see currentComponents
  */
 @property (nonatomic, retain) NSError *fatalError;
 
@@ -53,31 +53,31 @@
 @property (nonatomic, retain) GRMustacheToken *currentOpeningToken;
 
 /**
- * An array where rendering elements are appended as tokens are yielded
+ * An array where template components are appended as tokens are yielded
  * by a parser.
  * 
  * This array is also the one that would be returned by the public method
- * renderingElementsReturningError:.
+ * templateComponentsReturningError:.
  * 
  * As such, it is nil whenever an error occurs.
  * 
- * This object is always identical to [self.elementsStack lastObject].
+ * This object is always identical to [self.componentsStack lastObject].
  * 
- * @see elementsStack
+ * @see componentsStack
  * @see fatalError
  */
-@property (nonatomic, retain) NSMutableArray *currentElements;
+@property (nonatomic, retain) NSMutableArray *currentComponents;
 
 /**
- * The stack of arrays where rendering elements should be appended as tokens are
+ * The stack of arrays where template components should be appended as tokens are
  * yielded by a parser.
  * 
  * This stack grows with section opening tokens, and shrinks with section
  * closing tokens.
  * 
- * @see currentElements
+ * @see currentComponents
  */
-@property (nonatomic, retain) NSMutableArray *elementsStack;
+@property (nonatomic, retain) NSMutableArray *componentsStack;
 
 /**
  * This stack grows with section opening tokens, and shrinks with section
@@ -114,27 +114,27 @@
 @synthesize fatalError=_fatalError;
 @synthesize currentOpeningToken=_currentOpeningToken;
 @synthesize templateRepository=_templateRepository;
-@synthesize currentElements=_currentElements;
-@synthesize elementsStack=_elementsStack;
+@synthesize currentComponents=_currentComponents;
+@synthesize componentsStack=_componentsStack;
 @synthesize openingTokenStack=_openingTokenStack;
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        _currentElements = [[NSMutableArray alloc] initWithCapacity:20];
-        _elementsStack = [[NSMutableArray alloc] initWithCapacity:20];
-        [_elementsStack addObject:_currentElements];
+        _currentComponents = [[NSMutableArray alloc] initWithCapacity:20];
+        _componentsStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [_componentsStack addObject:_currentComponents];
         _openingTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
     }
     return self;
 }
 
-- (NSArray *)renderingElementsReturningError:(NSError **)outError
+- (NSArray *)templateComponentsReturningError:(NSError **)outError
 {
     // Has a fatal error occurred?
-    if (_currentElements == nil) {
-        NSAssert(_fatalError, @"We should have an error when _currentElements is nil");
+    if (_currentComponents == nil) {
+        NSAssert(_fatalError, @"We should have an error when _currentComponents is nil");
         if (outError != NULL) {
             *outError = [[_fatalError retain] autorelease];
         }
@@ -150,15 +150,15 @@
     }
     
     // Success
-    return [[_currentElements retain] autorelease];
+    return [[_currentComponents retain] autorelease];
 }
 
 - (void)dealloc
 {
     [_fatalError release];
     [_currentOpeningToken release];
-    [_currentElements release];
-    [_elementsStack release];
+    [_currentComponents release];
+    [_componentsStack release];
     [_openingTokenStack release];
     [super dealloc];
 }
@@ -169,7 +169,7 @@
 - (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
     // Refuse tokens after a fatal error has occurred.
-    if (_currentElements == nil) {
+    if (_currentComponents == nil) {
         return NO;
     }
     
@@ -187,8 +187,8 @@
             // Parser validation
             NSAssert(token.text.length > 0, @"WTF parser?");
             
-            // Success: append GRMustacheTextElement
-            [_currentElements addObject:[GRMustacheTextElement textElementWithString:token.text]];
+            // Success: append GRMustacheTextComponent
+            [_currentComponents addObject:[GRMustacheTextComponent textComponentWithString:token.text]];
             break;
             
             
@@ -204,8 +204,8 @@
                 }
             }
             
-            // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression raw:NO]];
+            // Success: append GRMustacheVariableComponent
+            [_currentComponents addObject:[GRMustacheVariableComponent variableComponentWithExpression:token.expression raw:NO]];
         } break;
             
             
@@ -221,8 +221,8 @@
                 }
             }
             
-            // Success: append GRMustacheVariableElement
-            [_currentElements addObject:[GRMustacheVariableElement variableElementWithExpression:token.expression raw:YES]];
+            // Success: append GRMustacheVariableComponent
+            [_currentComponents addObject:[GRMustacheVariableComponent variableComponentWithExpression:token.expression raw:YES]];
         } break;
             
             
@@ -242,9 +242,9 @@
             
             // Expand stacks
             self.currentOpeningToken = token;
-            self.currentElements = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
             [_openingTokenStack addObject:token];
-            [_elementsStack addObject:_currentElements];
+            [_componentsStack addObject:_currentComponents];
         } break;
             
             
@@ -256,7 +256,7 @@
             
             // What are we closing?
             
-            id<GRMustacheRenderingElement> wrapperElement = nil;
+            id<GRMustacheTemplateComponent> wrapperComponent = nil;
             switch (_currentOpeningToken.type) {
                 case GRMustacheTokenTypeSectionOpening:
                 case GRMustacheTokenTypeInvertedSectionOpening:
@@ -281,12 +281,12 @@
                     // Success: append GRMustacheSection and shrink stacks
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                    wrapperElement = [GRMustacheSection sectionWithExpression:_currentOpeningToken.expression
+                    wrapperComponent = [GRMustacheSection sectionWithExpression:_currentOpeningToken.expression
                                                                templateString:token.templateString
                                                                    innerRange:innerRange
                                                                      inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
                                                                   overridable:(_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening)
-                                                                innerElements:_currentElements];
+                                                                   components:_currentComponents];
                     
                 } break;
                     
@@ -305,7 +305,7 @@
                         return NO;
                     }
                     
-                    wrapperElement = [GRMustacheTemplateOverride templateOverrideWithTemplate:template innerElements:_currentElements];
+                    wrapperComponent = [GRMustacheTemplateOverride templateOverrideWithTemplate:template components:_currentComponents];
                 } break;
                     
                 default:
@@ -313,12 +313,12 @@
                     break;
             }
             
-            NSAssert(wrapperElement, @"WTF");
+            NSAssert(wrapperComponent, @"WTF");
             [_openingTokenStack removeLastObject];
-            [_elementsStack removeLastObject];
+            [_componentsStack removeLastObject];
             self.currentOpeningToken = [_openingTokenStack lastObject];
-            self.currentElements = [_elementsStack lastObject];
-            [_currentElements addObject:wrapperElement];
+            self.currentComponents = [_componentsStack lastObject];
+            [_currentComponents addObject:wrapperComponent];
         } break;
             
             
@@ -337,8 +337,8 @@
                 return NO;
             }
             
-            // Success: append template element
-            [_currentElements addObject:template];
+            // Success: append template component
+            [_currentComponents addObject:template];
         } break;
         
         
@@ -351,9 +351,9 @@
             
             // Expand stacks
             self.currentOpeningToken = token;
-            self.currentElements = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
             [_openingTokenStack addObject:token];
-            [_elementsStack addObject:_currentElements];
+            [_componentsStack addObject:_currentComponents];
         } break;
             
     }
@@ -369,13 +369,13 @@
 
 - (void)failWithFatalError:(NSError *)fatalError
 {
-    // Make sure renderingElementsReturningError: returns correct results:
+    // Make sure templateComponentsReturningError: returns correct results:
     self.fatalError = fatalError;
-    self.currentElements = nil;
+    self.currentComponents = nil;
     
     // All those objects are useless, now
     self.currentOpeningToken = nil;
-    self.elementsStack = nil;
+    self.componentsStack = nil;
     self.openingTokenStack = nil;
 }
 

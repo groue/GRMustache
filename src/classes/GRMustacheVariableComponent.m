@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableElement_private.h"
+#import "GRMustacheVariableComponent_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
@@ -29,14 +29,14 @@
 #import "GRMustacheRenderingObject_private.h"
 #import "GRMustache_private.h"
 
-@interface GRMustacheVariableElement()
+@interface GRMustacheVariableComponent()
 - (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
 @end
 
 
-@implementation GRMustacheVariableElement
+@implementation GRMustacheVariableComponent
 
-+ (id)variableElementWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
++ (id)variableComponentWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
     return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
 }
@@ -44,12 +44,11 @@
 - (void)dealloc
 {
     [_expression release];
-    [_enumerableSection release];
     [super dealloc];
 }
 
 
-#pragma mark <GRMustacheRenderingElement>
+#pragma mark <GRMustacheTemplateComponent>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
@@ -70,10 +69,10 @@
     }];
 }
 
-- (id<GRMustacheRenderingElement>)resolveRenderingElement:(id<GRMustacheRenderingElement>)element
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // variable tags can not override any other element
-    return element;
+    // variable tags can not override any other component
+    return component;
 }
 
 

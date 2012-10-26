@@ -27,10 +27,10 @@
 @class GRMustacheTemplateRepository;
 
 /**
- * A GRMustacheSection is a rendering element that renders sections
+ * A GRMustacheSection is a template component that renders sections
  * such as `{{#name}}...{{/name}}`.
  *
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  */
 @interface GRMustacheSection: NSObject<GRMustacheRenderingObject> {
 @private
@@ -39,7 +39,7 @@
     NSRange _innerRange;
     BOOL _overridable;
     BOOL _inverted;
-    NSArray *_innerElements;
+    NSArray *_components;
 }
 
 /**

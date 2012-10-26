@@ -22,23 +22,23 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheRenderingElement_private.h"
+#import "GRMustacheTemplateComponent_private.h"
 
 @class GRMustacheTemplate;
 
 /**
- * A GRMustacheTemplateOverride is a rendering element that renders overridable
+ * A GRMustacheTemplateOverride is a template component that renders overridable
  * partials as `{{<name}}...{{/name}}`.
  *
- * It collaborates with runtimes for the resolving of rendering elements in the
+ * It collaborates with runtimes for the resolving of template components in the
  * context of Mustache overridable partials.
  *
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  * @see GRMustacheRuntime
  */
-@interface GRMustacheTemplateOverride : NSObject<GRMustacheRenderingElement> {
+@interface GRMustacheTemplateOverride : NSObject<GRMustacheTemplateComponent> {
     GRMustacheTemplate *_template;
-    NSArray *_innerElements;
+    NSArray *_components;
 }
 
 /**
@@ -53,12 +53,12 @@
 /**
  * Builds a GRMustacheTemplateOverride.
  *
- * @param template       The partial template that is overriden
- * @param innerElements  The elements that may override elements of the
- *                       overriden partial template.
+ * @param template    The partial template that is overriden
+ * @param components  The components that may override components of the overriden
+ *                    partial template.
  *
  * @return A GRMustacheTemplateOverride
  */
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template innerElements:(NSArray *)innerElements GRMUSTACHE_API_INTERNAL;
++ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end

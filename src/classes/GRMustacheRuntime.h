@@ -26,7 +26,7 @@
 #import "GRMustacheTemplateDelegate.h"
 
 @protocol GRMustacheTemplateDelegate;
-@protocol GRMustacheRenderingElement;
+@protocol GRMustacheTemplateComponent;
 @class GRMustacheTemplate;
 @class GRMustacheToken;
 @class GRMustacheTemplateOverride;
@@ -46,7 +46,7 @@
  * - perform a key lookup in the context stack.
  * - perform a key lookup in the filter stack.
  * - let template and tag delegates interpret rendered values.
- * - let partial templates override rendering elements.
+ * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_template;

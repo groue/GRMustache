@@ -28,25 +28,25 @@
 
 @class GRMustacheCompiler;
 @class GRMustacheTemplateRepository;
-@protocol GRMustacheRenderingElement;
+@protocol GRMustacheTemplateComponent;
 
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
  * GRMustacheParser, and outputs a syntax tree of objects conforming to the
- * GRMustacheRenderingElement protocol, the rendering elements that make a
+ * GRMustacheTemplateComponent protocol, the template components that make a
  * Mustache template.
  * 
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  * @see GRMustacheToken
  * @see GRMustacheParser
  */
 @interface GRMustacheCompiler : NSObject<GRMustacheParserDelegate> {
 @private
     NSError *_fatalError;
-    NSMutableArray *_elementsStack;
+    NSMutableArray *_componentsStack;
     NSMutableArray *_openingTokenStack;
-    NSMutableArray *_currentElements;
+    NSMutableArray *_currentComponents;
     GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
 }
@@ -62,7 +62,7 @@
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns an NSArray of objects conforming to the GRMustacheRenderingElement
+ * Returns an NSArray of objects conforming to the GRMustacheTemplateComponent
  * protocol.
  * 
  * The array will contain something if a GRMustacheParser has provided
@@ -86,16 +86,16 @@
  *     // Parse some string
  *     [parser parseTemplateString:... templateID:...];
  *     
- *     // Extract rendering elements from the compiler
- *     NSArray *renderingElements = [compiler renderingElementsReturningError:...];
+ *     // Extract template components from the compiler
+ *     NSArray *templateComponents = [compiler templateComponentsReturningError:...];
  *
- * @param outError  If there is an error building rendering elements, upon
+ * @param outError  If there is an error building template components, upon
  *                  return contains an NSError object that describes the
  *                  problem.
  *
- * @return An NSArray containing <GRMustacheRenderingElement> instances
+ * @return An NSArray containing <GRMustacheTemplateComponent> instances
  * 
- * @see GRMustacheRenderingElement
+ * @see GRMustacheTemplateComponent
  */
-- (NSArray *)renderingElementsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
+- (NSArray *)templateComponentsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
 @end
