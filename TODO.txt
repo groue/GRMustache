@@ -1,6 +1,5 @@
 - document migration path from all previous versions to latest version
 - document the wrapping technique of GRMustacheIndexes sample code in the section tag helper guide.
 
-- Virer GRMustacheProxy
-
+- Replace contextStack/filterStack with lowPriorityStack/highPriorityStack
 - Implement {{#..}}...{{/}}
