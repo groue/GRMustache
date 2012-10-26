@@ -76,15 +76,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
-+ (id)runtime
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template
 {
-    return [self runtimeWithTemplate:nil contextStack:nil];
-}
-
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack
-{
-    NSArray *filterStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-    return [[[self alloc] initWithTemplate:template contextStack:contextStack filterStack:filterStack delegateStack:nil templateOverrideStack:nil] autorelease];
+    // TODO: check if we should use filterStack
+    NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
+    return [[[self alloc] initWithTemplate:template contextStack:contextStack filterStack:nil delegateStack:nil templateOverrideStack:nil] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate

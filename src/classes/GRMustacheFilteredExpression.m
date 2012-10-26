@@ -88,7 +88,7 @@
 - (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
 {
     id argument = [_argumentExpression evaluateInRuntime:runtime asFilterValue:NO];
-    id filter = [_filterExpression evaluateInRuntime:runtime asFilterValue:YES];
+    id filter = [_filterExpression evaluateInRuntime:runtime asFilterValue:NO]; // TODO: check if we should keep asFilterValue:YES
 
     if (filter == nil) {
         [NSException raise:GRMustacheRenderingException format:@"Missing filter"];

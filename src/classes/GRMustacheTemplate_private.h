@@ -43,13 +43,8 @@
  */
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
-#pragma mark Delegate
-
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
-
-
-#pragma mark Template components
 
 /**
  * The GRMustacheTemplateComponent objects that make the template.
@@ -58,74 +53,25 @@
  */
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
 
-#pragma mark String template
-
 // Documented in GRMustacheTemplate.h
 + (id)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object withFilters:(id)filters fromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-#pragma mark File template
 
 // Documented in GRMustacheTemplate.h
 + (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-#pragma mark Resource template
++ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object withFilters:(id)filters fromResource:(NSString *)name withExtension:(NSString *)ext bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-#pragma mark URL template
-
-// Documented in GRMustacheTemplate.h
-+ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-+ (NSString *)renderObject:(id)object withFilters:(id)filters fromContentsOfURL:(NSURL *)url error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
-
-#pragma mark Rendering
+- (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
 - (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObject:(id)object withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
 - (NSString *)renderObjectsFromArray:(NSArray *)objects GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-- (NSString *)renderObjectsFromArray:(NSArray *)objects withFilters:(id)filters GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
-- (NSString *)render GRMUSTACHE_API_PUBLIC;
 
 @end

@@ -920,7 +920,7 @@
     delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) { delegate2HasBeenInvoked = YES; };
     
     id items = @{@"items": @[delegate1, delegate2] };
-    [GRMustacheTemplate renderObject:items fromString:@"{{#items}}{{.}}{{/items}}" error:NULL];
+    [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items];
     
     STAssertTrue(delegate1HasBeenInvoked, @"");
     STAssertTrue(delegate2HasBeenInvoked, @"");

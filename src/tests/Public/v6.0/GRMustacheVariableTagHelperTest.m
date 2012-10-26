@@ -152,7 +152,7 @@
         return @"---";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
     STAssertEqualObjects(result, @"---", @"");
 }
 
@@ -164,7 +164,7 @@
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
         STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
@@ -173,7 +173,7 @@
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{{helper}}}" error:nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
@@ -182,7 +182,7 @@
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
@@ -191,7 +191,7 @@
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{{helper}}}" error:nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
 }
@@ -202,7 +202,7 @@
         return @"&<>{{foo}}";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
     STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
 }
 
@@ -213,7 +213,7 @@
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
     STAssertEqualObjects(result, @"", @"");
 }
 
@@ -229,7 +229,7 @@
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+        [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
         STAssertEquals(invocationCount, (NSUInteger)1, @"");
     }
     {
@@ -241,7 +241,7 @@
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [GRMustacheTemplate renderObject:context fromString:@"{{#helper}}{{/helper}}" error:nil];
+        [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
     {
@@ -253,7 +253,7 @@
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [GRMustacheTemplate renderObject:context fromString:@"{{^helper}}{{/helper}}" error:nil];
+        [[GRMustacheTemplate templateFromString:@"{{^helper}}{{/helper}}" error:nil] renderObject:context];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
     {
@@ -265,7 +265,7 @@
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [GRMustacheTemplate renderObject:context fromString:@"{{#false}}{{helper}}{{/false}}" error:nil];
+        [[GRMustacheTemplate templateFromString:@"{{#false}}{{helper}}{{/false}}" error:nil] renderObject:context];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
 }
@@ -278,7 +278,7 @@
 //    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 //                             helper, @"helper",
 //                             @"---", @"subject", nil];
-//    NSString *result = [GRMustacheTemplate renderObject:context fromString:@"{{helper}}" error:nil];
+//    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
 //    STAssertEqualObjects(result, @"---", @"");
 //}
 //
@@ -398,7 +398,7 @@
 //    helper2.rendering = @"2";
 //    
 //    id items = @{@"items": @[helper1, helper2] };
-//    NSString *rendering = [GRMustacheTemplate renderObject:items fromString:@"{{#items}}{{.}}{{/items}}" error:NULL];
+//    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items];
 //    STAssertEqualObjects(rendering, @"12", @"");
 //}
 //
@@ -411,14 +411,14 @@
 //    helper2.rendering = @"2";
 //    
 //    id items = @{@"items": @[helper1, helper2] };
-//    NSString *rendering = [GRMustacheTemplate renderObject:items fromString:@"{{items}}" error:NULL];
+//    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items];
 //    STAssertEqualObjects(rendering, @"12", @"");
 //}
 //
 //- (void)testDelegateInVariableTag
 //{
 //    GRMustacheVariableTagHelperDelegate *helper = [[[GRMustacheVariableTagHelperDelegate alloc] init] autorelease];
-//    NSString *rendering = [GRMustacheTemplate renderObject:@{ @"helper": helper } fromString:@"{{helper}}" error:NULL];
+//    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:NULL] renderObject:@{ @"helper": helper }];
 //    STAssertEqualObjects(rendering, @"<foo>", @"");
 //    STAssertEqualObjects(helper.returnValue, @"foo", @"");
 //}

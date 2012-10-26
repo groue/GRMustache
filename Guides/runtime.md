@@ -20,7 +20,7 @@ For instance, let's consider the following code:
 ```obcj
 NSDictionary *dictionary = @{ @"count": @2 };
 NSString *templateString = @"I have {{count}} arms.";
-NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:templateString error:NULL];
+NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:dictionary];
 ```
 
 1. When GRMustache renders the `{{count}}` tag, it invokes `valueForKey:` with the key `@"count"` on the dictionary. It gets an NSNumber of value 2 as a result.

@@ -35,9 +35,8 @@
         return [[arguments valueForKey:@"description"] componentsJoinedByString:@","];
     }];
     
-    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c" };
-    id filters = @{ @"join": joinFilter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{join(a,b)}} {{join(a,b,c)}}" error:NULL];
+    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"join": joinFilter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{join(a,b)}} {{join(a,b,c)}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"a,b a,b,c", @"");
 }
 
@@ -53,9 +52,8 @@
         return nil;
     }];
     
-    id data = @{ };
-    id filters = @{ @"f": filter };
-    [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{f(a,b,c)}}" error:NULL];
+    id data = @{ @"f": filter };
+    [[GRMustacheTemplate templateFromString:@"{{f(a,b,c)}}" error:NULL] renderObject:data];
     STAssertEquals(NSNullCount, (NSUInteger)3, @"");
 }
 
@@ -67,9 +65,8 @@
         }];
     }];
     
-    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"d": @"d" };
-    id filters = @{ @"f": filter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL];
+    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"d": @"d", @"f": filter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"a+d a,b+d a,b,c+d", @"");
 }
 
@@ -79,9 +76,8 @@
         return @{@"foo": @"bar"};
     }];
     
-    id data = @{ };
-    id filters = @{ @"f": filter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{f(a,b).foo}}" error:NULL];
+    id data = @{ @"f": filter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a,b).foo}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"bar", @"");
 }
 
@@ -91,9 +87,8 @@
         return @{@"foo": @"bar"};
     }];
     
-    id data = @{ };
-    id filters = @{ @"f": filter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{#f(a,b)}}{{foo}}{{/}}" error:NULL];
+    id data = @{ @"f": filter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{foo}}{{/}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"bar", @"");
 }
 
@@ -103,9 +98,8 @@
         return arguments;
     }];
     
-    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c" };
-    id filters = @{ @"f": filter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{#f(a,b)}}{{.}}{{/}} {{#f(a,b,c)}}{{.}}{{/}}" error:NULL];
+    id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"f": filter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{.}}{{/}} {{#f(a,b,c)}}{{.}}{{/}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"ab abc", @"");
 }
 
@@ -115,9 +109,8 @@
         return [arguments objectAtIndex:0];
     }];
     
-    id data = @{ @"yes": @YES, @"no": @NO };
-    id filters = @{ @"f": identityFilter };
-    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL];
+    id data = @{ @"yes": @YES, @"no": @NO, @"f": identityFilter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"YES NO", @"");
 }
 
@@ -127,8 +120,8 @@
         return nil;
     }];
     
-    id filters = @{ @"f": nilFilter };
-    NSString *rendering = [GRMustacheTemplate renderObject:nil withFilters:filters fromString:@"{{^f(x)}}nil{{/}}" error:NULL];
+    id data = @{ @"f": nilFilter };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{^f(x)}}nil{{/}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering, @"nil", @"");
 }
 

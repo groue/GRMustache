@@ -71,7 +71,7 @@ The shortest way to render a template is to mix a literal template string and a 
 
 NSDictionary *person = @{ @"name": @"Arthur" };
 NSString *templateString = @"Hello {{name}}!";
-NSString *rendering = [GRMustacheTemplate renderObject:person fromString:templateString error:NULL];
+NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:person];
 ```
 
 `+[GRMustacheTemplate renderObject:fromString:error:]` is documented in [Guides/templates.md](templates.md).

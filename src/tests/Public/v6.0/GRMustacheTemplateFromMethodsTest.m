@@ -152,43 +152,6 @@
     STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
 }
 
-- (void)test_templateFromResource_withExtension_bundle_error
-{
-    {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.templateName
-                                                                  withExtension:@"json"
-                                                                         bundle:self.testBundle
-                                                                          error:NULL];
-        GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
-        context.stringProperty = @"foo";
-        NSString *rendering = [template renderObject:context];
-        STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
-        STAssertEqualObjects(@"json", [self extensionOfTemplateFileInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.templateName
-                                                                  withExtension:@""
-                                                                         bundle:self.testBundle
-                                                                          error:NULL];
-        GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
-        context.stringProperty = @"foo";
-        NSString *rendering = [template renderObject:context];
-        STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
-        STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-    }
-    {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.templateName
-                                                                  withExtension:nil
-                                                                         bundle:self.testBundle
-                                                                          error:NULL];
-        GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
-        context.stringProperty = @"foo";
-        NSString *rendering = [template renderObject:context];
-        STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
-        STAssertEqualObjects(@"", [self extensionOfTemplateFileInRendering:rendering], nil);
-    }
-}
-
 - (void)testParserError_templateFromString_error
 {
     NSError *error;

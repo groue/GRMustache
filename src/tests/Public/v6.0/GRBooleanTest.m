@@ -102,7 +102,7 @@
 - (BOOL)doesObjectRender:(id)object
 {
     NSDictionary *context = object ? [NSDictionary dictionaryWithObject:object forKey:@"bool"] : [NSDictionary dictionary];
-    NSString *result = [GRMustacheTemplate renderObject:context fromString:@"<{{bool}}>" error:NULL];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"<{{bool}}>" error:NULL] renderObject:context];
     if ([result isEqualToString:@"<>"]) {
         return NO;
     } else {

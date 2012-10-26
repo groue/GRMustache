@@ -92,37 +92,8 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  */
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
-/**
- * Returns a GRMustacheRuntime object with empty stacks, but the filter stack,
- * initialized with the filter library.
- *
- * This method is only used by GRMustacheRuntimeTest.
- *
- * @return A GRMustacheRuntime object.
- *
- * @see GRMustacheFilterLibrary
- */
-+ (id)runtime GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a GRMustacheRuntime object with empty stacks but:
- *
- * - the context stack is initialized with _contextStack_,
- * - the delegate stack is initialized with _template_'s delegate,
- * - the filter stack is initialized with the filter library.
- *
- * Object at index 0 in contextStack is the top of the stack (the first queried
- * object when looking for a key).
- *
- * @param template       a template
- * @param contextStack   a context stack
- *
- * @return A GRMustacheRuntime object.
- *
- * @see GRMustacheFilterLibrary
- * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
- */
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheRuntime.h
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the

@@ -57,6 +57,28 @@
 }
 
 /**
+ * TODO
+ *
+ * Returns a GRMustacheRuntime object with empty stacks but:
+ *
+ * - the context stack is initialized with _contextStack_,
+ * - the delegate stack is initialized with _template_'s delegate,
+ * - the filter stack is initialized with the filter library.
+ *
+ * Object at index 0 in contextStack is the top of the stack (the first queried
+ * object when looking for a key).
+ *
+ * @param template       a template
+ * @param contextStack   a context stack
+ *
+ * @return A GRMustacheRuntime object.
+ *
+ * @see GRMustacheFilterLibrary
+ * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
+ */
++ (id)runtimeWithTemplate:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
  * context stack that is extended with _contextObject_.
  *
