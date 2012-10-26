@@ -44,6 +44,29 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
 + (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
 + (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects;
+
+/**
+ * Sends the `valueForKey:` message to super_data->receiver with the provided
+ * key, using the implementation of super_data->super_class, and returns the
+ * result.
+ *
+ * Should [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack] method have
+ * been called earlier, temporarily swizzle _object_ so that it does not raise
+ * any NSUndefinedKeyException.
+ *
+ * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
+ *
+ * @param key         The searched key
+ * @param super_data  A pointer to a struct objc_super
+ *
+ * @return The result of the implementation of `valueForKey:` in
+ *         super_data->super_class, or nil should an NSUndefinedKeyException be
+ *         raised.
+ *
+ * @see GRMustacheProxy
+ */
++ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
+
 @end
 
 @implementation GRMustacheRuntime

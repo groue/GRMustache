@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheFilter_private.h"
-#import "GRMustacheProxy_private.h"
 
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
@@ -45,7 +44,7 @@
  * Private subclass of GRMustacheFilter that filters an array of arguments by
  * calling a block.
  */
-@interface GRMustacheBlockVariadicFilter: GRMustacheProxy<GRMustacheFilter> {
+@interface GRMustacheBlockVariadicFilter: GRMustacheFilter {
 @private
     NSArray *_arguments;
     id(^_block)(NSArray *arguments);
@@ -134,44 +133,22 @@
     [super dealloc];
 }
 
-#pragma mark GRMustacheProxy
-
-- (void)loadDelegate
-{
-    if (_block) {
-        self.delegate = _block(_arguments) ?: [NSNull null];
-    } else {
-        self.delegate = [NSNull null];
-    }
-}
 
 #pragma mark <GRMustacheFilter>
 
 - (id)transformedValue:(id)object
 {
-    return [self transformedValue:object allowCurrying:YES];
-}
-
-- (id)transformedValue:(id)object allowCurrying:(BOOL)allowCurrying
-{
-    // Append argument (turning nil into [NSNull null]):
-    
-    NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
-    
-    
-    // Curry, or...
-    
-    if (allowCurrying) {
-        return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
-    }
-    
-    
-    // ... evaluate right away
-    
     if (_block) {
+        NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
         return _block(arguments);
     }
     return nil;
+}
+
+- (id<GRMustacheFilter>)curryArgument:(id)object
+{
+    NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
+    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
 }
 
 @end

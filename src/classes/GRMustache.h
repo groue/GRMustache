@@ -104,6 +104,5 @@ typedef struct {
 #import "GRMustacheFilter.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
-#import "GRMustacheProxy.h"
 #import "GRMustacheRuntime.h"
 #import "GRMustacheSection.h"

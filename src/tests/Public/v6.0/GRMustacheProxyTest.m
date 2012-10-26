@@ -23,13 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRPositionFilterItem : GRMustacheProxy {
-    NSUInteger index_;
-}
-@property (nonatomic, readonly) NSUInteger position;
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array;
-@end
-
 @interface GRPositionFilter : NSObject<GRMustacheFilter>
 @end
 
@@ -40,40 +33,31 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    NSMutableArray *replacementArray = [NSMutableArray arrayWithCapacity:array.count];
-    [array enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
-        GRPositionFilterItem *item = [[[GRPositionFilterItem alloc] initWithObjectAtIndex:index fromArray:array] autorelease];
-        [replacementArray addObject:item];
+    return [GRMustacheRenderingObject renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        
+        if (section && !section.isInverted) {
+            
+            // Custom rendering for non-inverted sections
+            
+            NSMutableString *buffer = [NSMutableString string];
+            [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
+                GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
+                itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
+                
+                NSString *rendering = [section renderForSection:section inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                if (rendering) {
+                    [buffer appendString:rendering];
+                }
+            }];
+            return buffer;
+        } else {
+            
+            // Genuine Mustache rendering otherwise
+            
+            id<GRMustacheRenderingObject> original = [GRMustache renderingObjectForValue:array];
+            return [original renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+        }
     }];
-    return replacementArray;
-}
-
-@end
-
-@interface GRPositionFilterItem()
-@property (nonatomic) NSUInteger index_;
-@end
-
-@implementation GRPositionFilterItem
-@synthesize index_;
-
-- (void)dealloc
-{
-    [super dealloc];
-}
-
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array
-{
-    self = [super initWithDelegate:[array objectAtIndex:index]];
-    if (self) {
-        self.index_ = index;
-    }
-    return self;
-}
-
-- (NSUInteger)position
-{
-    return self.index_ + 1;
 }
 
 @end

@@ -32,45 +32,45 @@
 @interface GRMustacheFilteredExpression : GRMustacheExpression {
 @private
     GRMustacheExpression *_filterExpression;
-    GRMustacheExpression *_parameterExpression;
-    BOOL _allowCurrying;
+    GRMustacheExpression *_argumentExpression;
+    BOOL _curry;
 }
 
 /**
+ * TODO
  * Returns a filtered expression, given an expression that returns a filter, and
- * an expression that return the filter parameter.
+ * an expression that return the filter argument.
  *
  * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
  * whose filterExpression is a GRMustacheIdentifierExpression (for the
- * identifier `f`), and whose parameterExpression is a
+ * identifier `f`), and whose argumentExpression is a
  * GRMustacheIdentifierExpression (for the identifier `x`).
  *
- * @param filterExpression     An expression whose value is an object conforming
- *                             to the <GRMustacheFilter> protocol.
- * @param parameterExpression  An expression whose value is the parameter of the
- *                             filter.
+ * @param filterExpression    An expression whose value is an object conforming
+ *                            to the <GRMustacheFilter> protocol.
+ * @param argumentExpression  An expression whose value is the argument of the
+ *                            filter.
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a filtered expression, given an expression that returns a filter, and
- * an expression that return the filter parameter.
+ * an expression that return the filter argument.
  *
  * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
  * whose filterExpression is a GRMustacheIdentifierExpression (for the
- * identifier `f`), and whose parameterExpression is a
+ * identifier `f`), and whose argumentExpression is a
  * GRMustacheIdentifierExpression (for the identifier `x`).
  *
- * @param filterExpression     An expression whose value is an object conforming
- *                             to the <GRMustacheFilter> protocol.
- * @param parameterExpression  An expression whose value is the parameter of the
- *                             filter.
- * @param allowCurrying        If NO, this expressions will evaluate to a
- *                             resolved value, not a curried filter.
+ * @param filterExpression    An expression whose value is an object conforming
+ *                            to the <GRMustacheFilter> protocol.
+ * @param argumentExpression  An expression whose value is the argument of the
+ *                            filter.
+ * @param curry               If YES, this expression must return a a filter.
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression parameterExpression:(GRMustacheExpression *)parameterExpression allowCurrying:(BOOL)allowCurrying GRMUSTACHE_API_INTERNAL;
++ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry GRMUSTACHE_API_INTERNAL;
 @end
