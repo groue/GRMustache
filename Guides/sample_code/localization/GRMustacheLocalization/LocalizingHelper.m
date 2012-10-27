@@ -8,13 +8,13 @@
 
 #import "LocalizingHelper.h"
 
-@interface LocalizingHelper()<GRMustacheTemplateDelegate>
+@interface LocalizingHelper()<GRMustacheRendering, GRMustacheTagDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizingHelper
 
-- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
 {
     /**
      * Let's perform a first rendering of the section, invoking
@@ -26,12 +26,16 @@
      * Normally, it would return "Hello Arthur! Do you know Barbara?", which
      * we could not localize.
      *
-     * But we are also a GRMustacheTemplateDelegate, and as such, GRMustache
-     * will tell us when it is about to render a value.
-     *
-     * In the template:willInterpretReturnValueOfInvocation:as: delegate method,
-     * we'll tell GRMustache to render "%@" instead of the actual values
-     * "Arthur" and "Barbara".
+     * But we are also a GRMustacheTemplateDelegate: let's ask GRMustache to
+     * tell us when it is about to render a value:
+     */
+    
+    context = [context contextByAddingTagDelegate:self];
+    
+    /**
+     * In the mustacheTag:willRenderObject: delegate method, we'll tell
+     * GRMustache to render "%@" instead of the actual values "Arthur" and
+     * "Barbara".
      *
      * The rendering of the section will thus be "Hello %@! Do you know %@?",
      * which is a string that is suitable for localization.
@@ -44,13 +48,10 @@
      */
     
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [context render];
+    NSString *localizableFormat = [tag renderContext:context HTMLSafe:HTMLSafe error:error];
     
     
     /**
-     * [context render] has rendered the localizable format, and has triggered
-     * delegate callbacks: now self.formatArguments is ready.
-     *
      * Let's localize the format.
      */
     
@@ -105,7 +106,7 @@
     return rendering;
 }
 
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
     /**
      * We are only interested in the rendering of variable tags such as
@@ -115,24 +116,25 @@
      * We target variable tags with the interpretation argument:
      */
     
-    if (interpretation == GRMustacheVariableTagInterpretation) {
-        
-        /**
-         * invocation.returnValue is "Arthur" or "Barbara".
-         *
-         * Fill self.formatArguments so that we have arguments for
-         * [NSString stringWithFormat:].
-         */
-        
-        [self.formatArguments addObject:invocation.returnValue ?: [NSNull null]];
-        
-        
-        /**
-         * Render "%@" instead of the value.
-         */
-        
-        invocation.returnValue = @"%@";
+    if (tag.type != GRMustacheTagTypeVariable) {
+        return object;
     }
+
+    /**
+     * invocation.returnValue is "Arthur" or "Barbara".
+     *
+     * Fill self.formatArguments so that we have arguments for
+     * [NSString stringWithFormat:].
+     */
+    
+    [self.formatArguments addObject:object ?: [NSNull null]];
+    
+    
+    /**
+     * Render "%@"
+     */
+    
+    return @"%@";
 }
 
 @end

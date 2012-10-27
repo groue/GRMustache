@@ -23,6 +23,6 @@
 #import <Cocoa/Cocoa.h>
 #import "GRMustache.h"
 
-@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper>
+@interface LocalizingHelper : NSObject
 @end
 

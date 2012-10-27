@@ -34,13 +34,13 @@
          */
         
         id data = @{
-            @"localize": [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
-                return NSLocalizedString(context.innerTemplateString, nil);
+            @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+                return NSLocalizedString(tag.innerTemplateString, nil);
             }]
         };
         
         NSString *templateString = @"{{#localize}}Hello{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }
@@ -52,13 +52,14 @@
         
         id data = @{
             @"greeting": @"Hello",
-            @"localize": [GRMustacheSectionTagHelper helperWithBlock:^NSString *(GRMustacheSectionTagRenderingContext *context) {
-                return NSLocalizedString([context render], nil);
+            @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+                NSString *rendering = [tag renderContext:context HTMLSafe:HTMLSafe error:error];
+                return NSLocalizedString(rendering, nil);
             }]
         };
         
         NSString *templateString = @"{{#localize}}{{greeting}}{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }
@@ -75,7 +76,7 @@
         };
         
         NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }
@@ -85,12 +86,13 @@
          * Localizing a template section with arguments and conditions
          */
         
-        id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+        id localizingHelper = [[LocalizingHelper alloc] init];
+        id isPluralFilter = [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
             if ([count intValue] > 1) {
                 return @YES;
             }
             return @NO;
-        }]};
+        }];
         
         NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
@@ -100,10 +102,11 @@
             @"name1": @"Arthur",
             @"name2": @"Barbara",
             @"count": @(0),
-            @"localize": [[LocalizingHelper alloc] init]
+            @"localize": localizingHelper,
+            @"isPlural": isPluralFilter,
             };
             
-            NSString *rendering = [template renderObject:data withFilters:filters];
+            NSString *rendering = [template renderObject:data error:NULL];
             
             NSLog(@"rendering = %@", rendering);
         }
@@ -113,10 +116,11 @@
             @"name1": @"Craig",
             @"name2": @"Dennis",
             @"count": @(1),
-            @"localize": [[LocalizingHelper alloc] init]
+            @"localize": localizingHelper,
+            @"isPlural": isPluralFilter,
             };
             
-            NSString *rendering = [template renderObject:data withFilters:filters];
+            NSString *rendering = [template renderObject:data error:NULL];
             
             NSLog(@"rendering = %@", rendering);
         }
@@ -126,107 +130,108 @@
             @"name1": @"Eugene",
             @"name2": @"Fiona",
             @"count": @(5),
-            @"localize": [[LocalizingHelper alloc] init]
+            @"localize": localizingHelper,
+            @"isPlural": isPluralFilter,
             };
             
-            NSString *rendering = [template renderObject:data withFilters:filters];
+            NSString *rendering = [template renderObject:data error:NULL];
             
             NSLog(@"rendering = %@", rendering);
         }
     }
     
-    {
-        /**
-         * Encapsulation of the sentence
-         */
-        
-        // In order to render `{{ localizedMutualFriendsSentence(x, y) }}`,
-        // let's write a variadic filter.
-        
-        id localizedMutualFriendsSentence = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
-            
-            // The filter can not access Mustache engine itself. However, it can
-            // return a variable tag helper that can, and will render our
-            // sentence:
-            
-            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
-                
-                // Build local context from filter arguments:
-                
-                id data = @{
-                    @"name1": [arguments objectAtIndex:0],
-                    @"name2": [arguments objectAtIndex:1],
-                    @"count": [arguments objectAtIndex:2],
-                    @"localize": [[LocalizingHelper alloc] init],
-                };
-                
-                
-                // Build local filters
-                
-                id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
-                    if ([count intValue] > 1) {
-                        return @YES;
-                    }
-                    return @NO;
-                }]};
-                
-                // Render
-                
-                NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
-                return [context renderObject:data
-                                 withFilters:filters
-                                  fromString:templateString
-                                       error:NULL];
-            }];
-        }];
-        
-        {
-            id data = @{
-                @"name1": @"Gwendal",
-                @"name2": @"Henry",
-                @"count12": @(20),
-                @"name3": @"Kyle",
-                @"name4": @"Louis",
-                @"count34": @(50),
-            };
-            
-            id filters = @{ @"localizedMutualFriendsSentence": localizedMutualFriendsSentence };
-            
-            NSString *rendering = [GRMustacheTemplate renderObject:data
-                                                       withFilters:filters
-                                                        fromString:@"{{localizedMutualFriendsSentence(name1, name2, count12)}}\n"
-                                                                   @"{{localizedMutualFriendsSentence(name3, name4, count34)}}"
-                                                             error:NULL];
-            
-            NSLog(@"rendering = %@", rendering);
-        }
-    }
-    
-    {
-        id pairFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
-            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
-                id data = @{
-                @"first": [arguments objectAtIndex:0],
-                @"last": [arguments objectAtIndex:1],
-                };
-                return [context renderObject:data fromString:@"({{first}},{{last}})" error:NULL];
-            }];
-        }];
-        
-        id data = @{
-        @"a":@"a",
-        @"b":@"b",
-        @"c":@"c",
-        @"d":@"d",
-        };
-        
-        NSString *rendering = [GRMustacheTemplate renderObject:data
-                                                   withFilters:@{ @"pair": pairFilter }
-                                                    fromString:@"{{pair(a,b)}} {{pair(c,d)}}"
-                                                         error:NULL];
-        
-        NSLog(@"rendering = %@", rendering);
-    }
+//    {
+//        /**
+//         * Encapsulation of the sentence
+//         */
+//        
+//        // In order to render `{{ localizedMutualFriendsSentence(x, y) }}`,
+//        // let's write a variadic filter.
+//        
+//        id localizedMutualFriendsSentence = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+//            
+//            // The filter can not access Mustache engine itself. However, it can
+//            // return a variable tag helper that can, and will render our
+//            // sentence:
+//            
+//            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
+//                
+//                // Build local context from filter arguments:
+//                
+//                id data = @{
+//                    @"name1": [arguments objectAtIndex:0],
+//                    @"name2": [arguments objectAtIndex:1],
+//                    @"count": [arguments objectAtIndex:2],
+//                    @"localize": [[LocalizingHelper alloc] init],
+//                };
+//                
+//                
+//                // Build local filters
+//                
+//                id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+//                    if ([count intValue] > 1) {
+//                        return @YES;
+//                    }
+//                    return @NO;
+//                }]};
+//                
+//                // Render
+//                
+//                NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
+//                return [context renderObject:data
+//                                 withFilters:filters
+//                                  fromString:templateString
+//                                       error:NULL];
+//            }];
+//        }];
+//        
+//        {
+//            id data = @{
+//                @"name1": @"Gwendal",
+//                @"name2": @"Henry",
+//                @"count12": @(20),
+//                @"name3": @"Kyle",
+//                @"name4": @"Louis",
+//                @"count34": @(50),
+//            };
+//            
+//            id filters = @{ @"localizedMutualFriendsSentence": localizedMutualFriendsSentence };
+//            
+//            NSString *rendering = [GRMustacheTemplate renderObject:data
+//                                                       withFilters:filters
+//                                                        fromString:@"{{localizedMutualFriendsSentence(name1, name2, count12)}}\n"
+//                                                                   @"{{localizedMutualFriendsSentence(name3, name4, count34)}}"
+//                                                             error:NULL];
+//            
+//            NSLog(@"rendering = %@", rendering);
+//        }
+//    }
+//    
+//    {
+//        id pairFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+//            return [GRMustacheVariableTagHelper helperWithBlock:^NSString *(GRMustacheVariableTagRenderingContext *context) {
+//                id data = @{
+//                @"first": [arguments objectAtIndex:0],
+//                @"last": [arguments objectAtIndex:1],
+//                };
+//                return [context renderObject:data fromString:@"({{first}},{{last}})" error:NULL];
+//            }];
+//        }];
+//        
+//        id data = @{
+//        @"a":@"a",
+//        @"b":@"b",
+//        @"c":@"c",
+//        @"d":@"d",
+//        };
+//        
+//        NSString *rendering = [GRMustacheTemplate renderObject:data
+//                                                   withFilters:@{ @"pair": pairFilter }
+//                                                    fromString:@"{{pair(a,b)}} {{pair(c,d)}}"
+//                                                         error:NULL];
+//        
+//        NSLog(@"rendering = %@", rendering);
+//    }
 }
 
 @end
