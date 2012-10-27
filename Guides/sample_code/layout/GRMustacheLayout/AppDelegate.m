@@ -44,7 +44,8 @@
     article.author = @"John Doe";
     article.text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam risus, scelerisque et malesuada a, facilisis et lorem.";
     
-    NSString *rendering = [GRMustacheTemplate renderObject:article fromResource:@"article" bundle:nil error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"article" bundle:nil error:NULL];
+    NSString *rendering = [template renderObject:article error:NULL];
     NSLog(@"%@", rendering);
 }
 
