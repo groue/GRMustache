@@ -23,7 +23,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheSection_private.h"
+#import "GRMustacheSectionTag_private.h"
 
 @interface GRMustacheTemplate()
 @end
@@ -80,7 +80,7 @@
     runtime = [runtime runtimeByAddingContextObject:object];
     
     BOOL HTMLEscaped = NO;
-    return [self renderForSection:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
+    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
 }
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects
@@ -91,7 +91,7 @@
     }
     
     BOOL HTMLEscaped = NO;
-    return [self renderForSection:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
+    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
 }
 
 
@@ -135,7 +135,7 @@
 
 #pragma mark <GRMustacheRendering>
 
-- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
     NSMutableString *buffer = [NSMutableString string];
     [self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];

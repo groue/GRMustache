@@ -22,6 +22,8 @@
 
 #import <objc/message.h>
 #import "GRMustacheRuntime_private.h"
+#import "GRMustacheTag_private.h"
+#import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheInvocation_private.h"
 #import "GRMustacheFilterLibrary_private.h"
@@ -160,7 +162,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block
+- (void)renderValue:(id)value withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block
 {
     NSAssert(_template, @"WTF");
     
@@ -171,21 +173,21 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
-    invocation.token = token;
+    invocation.token = tag.expression.token;
     invocation.returnValue = value;
     
     // top of the stack is first object
     for (id<GRMustacheTemplateDelegate> delegate in _delegateStack) {
-        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:as:)]) {
-            [delegate template:_template willInterpretReturnValueOfInvocation:invocation as:interpretation];
+        if ([delegate respondsToSelector:@selector(template:willInterpretReturnValueOfInvocation:forTag:)]) {
+            [delegate template:_template willInterpretReturnValueOfInvocation:invocation forTag:tag];
         }
     }
 
     block(invocation.returnValue);
 
     for (id<GRMustacheTemplateDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
-        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:as:)]) {
-            [delegate template:_template didInterpretReturnValueOfInvocation:invocation as:interpretation];
+        if ([delegate respondsToSelector:@selector(template:didInterpretReturnValueOfInvocation:forTag:)]) {
+            [delegate template:_template didInterpretReturnValueOfInvocation:invocation forTag:tag];
         }
     }
 }

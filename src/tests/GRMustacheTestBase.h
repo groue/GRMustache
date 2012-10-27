@@ -28,10 +28,10 @@
 @end
 
 @interface GRMustacheTestingDelegate : NSObject<GRMustacheTemplateDelegate> {
-    void(^_templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation);
-    void(^_templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation);
+    void(^_templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
+    void(^_templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
 }
-@property (nonatomic, copy) void(^templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation);
-@property (nonatomic, copy) void(^templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation);
+@property (nonatomic, copy) void(^templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
+@property (nonatomic, copy) void(^templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
 @end
 

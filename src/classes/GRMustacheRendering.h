@@ -26,8 +26,8 @@
 @protocol GRMustacheRendering;
 @class GRMustacheRuntime;
 @class GRMustacheTemplateRepository;
-@class GRMustacheSection;
+@class GRMustacheTag;
 
 @protocol GRMustacheRendering <NSObject>
-- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 @end

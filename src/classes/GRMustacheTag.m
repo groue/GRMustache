@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2012 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,43 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplate_private.h"
-#import "GRMustacheTestBase.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheTag_private.h"
 
-@implementation GRMustacheTestBase
-@dynamic testBundle;
-
-- (NSBundle *)testBundle
-{
-    return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
-}
-
-@end
-
-@implementation GRMustacheTestingDelegate
-@synthesize templateWillInterpretBlock=_templateWillInterpretBlock;
-@synthesize templateDidInterpretBlock=_templateDidInterpretBlock;
+@implementation GRMustacheTag
+@synthesize expression=_expression;
 
 - (void)dealloc
 {
-    self.templateWillInterpretBlock = nil;
-    self.templateDidInterpretBlock = nil;
+    [_expression release];
     [super dealloc];
 }
 
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag
+- (id)initWithExpression:(GRMustacheExpression *)expression
 {
-    if (self.templateWillInterpretBlock) {
-        self.templateWillInterpretBlock(template, invocation, tag);
+    self = [super init];
+    if (self) {
+        _expression = [expression retain];
     }
+    return self;
 }
 
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag
+- (GRMustacheTagType)type
 {
-    if (self.templateDidInterpretBlock) {
-        self.templateDidInterpretBlock(template, invocation, tag);
-    }
+    NSAssert(NO, @"Subclasses must override");
+    return 0;
+}
+
+- (NSString *)innerTemplateString
+{
+    return nil;
+}
+
+
+#pragma mark - <GRMustacheRendering>
+
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+{
+    NSAssert(NO, @"Subclasses must override");
+    return nil;
 }
 
 @end
-

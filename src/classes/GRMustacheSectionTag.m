@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSection_private.h"
+#import "GRMustacheSectionTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheTemplate_private.h"
@@ -29,29 +29,25 @@
 #import "GRMustacheRendering.h"
 #import "GRMustache_private.h"
 
-@interface GRMustacheSection()
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression;
+@interface GRMustacheSectionTag()
 
 /**
- * @see +[GRMustacheSection sectionWithExpression:templateString:innerRange:inverted:overridable:components:]
+ * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:overridable:components:]
  */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components;
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
 @end
 
 
-@implementation GRMustacheSection
-@synthesize expression=_expression;
-@synthesize overridable=_overridable;
-@synthesize inverted=_inverted;
+@implementation GRMustacheSectionTag
+@synthesize type=_type;
 
-+ (id)sectionWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components
++ (id)sectionTagWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange inverted:inverted overridable:overridable components:components] autorelease];
+    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange type:type components:components] autorelease];
 }
 
 - (void)dealloc
 {
-    [_expression release];
     [_templateString release];
     [_components release];
     [super dealloc];
@@ -65,7 +61,7 @@
 
 #pragma mark - <GRMustacheRendering>
 
-- (NSString *)renderForSection:(GRMustacheSection *)section inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
 {
     NSMutableString *buffer = [NSMutableString string];
     
@@ -87,15 +83,15 @@
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     id value = [_expression evaluateInRuntime:runtime];
-    [runtime delegateValue:value interpretation:GRMustacheSectionTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
-
+    [runtime renderValue:value withTag:self usingBlock:^(id value){
+        
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
         
         BOOL HTMLEscaped = NO;
-        NSString *rendering = [renderingObject renderForSection:self
-                                                      inRuntime:runtime
-                                             templateRepository:templateRepository
-                                                    HTMLEscaped:&HTMLEscaped];
+        NSString *rendering = [renderingObject renderForTag:self
+                                                  inRuntime:runtime
+                                         templateRepository:templateRepository
+                                                HTMLEscaped:&HTMLEscaped];
         
         if (rendering) {
             if (!HTMLEscaped) {
@@ -109,18 +105,18 @@
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
     // Only {{$...}} section can override components
-    if (!_overridable) {
+    if (_type != GRMustacheTagTypeOverridableSection) {
         return component;
     }
     
     // {{$...}} sections can only override other sections
-    if (![component isKindOfClass:[GRMustacheSection class]]) {
+    if (![component isKindOfClass:[GRMustacheSectionTag class]]) {
         return component;
     }
-    GRMustacheSection *otherSection = (GRMustacheSection *)component;
+    GRMustacheSectionTag *otherSection = (GRMustacheSectionTag *)component;
 
     // {{$...}} sections can only override other overridable sections
-    if (!otherSection.isOverridable) {
+    if (otherSection.type != GRMustacheTagTypeOverridableSection) {
         return otherSection;
     }
 
@@ -134,15 +130,13 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange inverted:(BOOL)inverted overridable:(BOOL)overridable components:(NSArray *)components
+- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    self = [self init];
+    self = [super initWithExpression:expression];
     if (self) {
-        _expression = [expression retain];
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _inverted = inverted;
-        _overridable = overridable;
+        _type = type;
         _components = [components retain];
     }
     return self;

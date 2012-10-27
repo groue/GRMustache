@@ -22,38 +22,35 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
-
-@class GRMustacheExpression;
-@class GRMustacheSection;
+#import "GRMustacheTag_private.h"
 
 /**
- * A GRMustacheVariableComponent is a template component that renders variable
+ * A GRMustacheVariableTag is a template component that renders variable
  * tags such as `{{name}}` and `{{{name}}}`.
  *
  * For instance, the template string "{{name}} is {{age}} years old." would give
- * two GRMustacheVariableComponent instances:
+ * two GRMustacheVariableTag instances:
  *
- * - a GRMustacheVariableComponent that renders the `name` key in a context.
- * - a GRMustacheVariableComponent that renders the `age` key in a context.
+ * - a GRMustacheVariableTag that renders the `name` key in a context.
+ * - a GRMustacheVariableTag that renders the `age` key in a context.
  *
  * @see GRMustacheTemplateComponent
  */
-@interface GRMustacheVariableComponent: NSObject<GRMustacheTemplateComponent> {
+@interface GRMustacheVariableTag: GRMustacheTag<GRMustacheTemplateComponent> {
 @private
-    GRMustacheExpression *_expression;
     BOOL _raw;
 }
 
 /**
- * Builds and returns a GRMustacheVariableComponent.
+ * Builds and returns a GRMustacheVariableTag.
  *
  * @param expression  The expression that would evaluate against a runtime.
  * @param raw         NO if the value should be rendered HTML-escaped.
  *
- * @return a GRMustacheVariableComponent
+ * @return a GRMustacheVariableTag
  *
  * @see GRMustacheExpression
  */
-+ (id)variableComponentWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
++ (id)variableTagWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -67,8 +67,6 @@
  * @param contextObject  A context object
  *
  * @return A GRMustacheRuntime object.
- *
- * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 

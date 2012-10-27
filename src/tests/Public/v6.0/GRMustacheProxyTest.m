@@ -33,9 +33,9 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheSection *section, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
         
-        if (section && !section.isInverted) {
+        if (tag.type & GRMustacheTagTypeMaskNonInvertedSection) {
             
             // Custom rendering for non-inverted sections
             
@@ -44,7 +44,7 @@
                 GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
                 itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
                 
-                NSString *rendering = [section renderForSection:section inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
                 if (rendering) {
                     [buffer appendString:rendering];
                 }
@@ -54,8 +54,7 @@
             
             // Genuine Mustache rendering otherwise
             
-            id<GRMustacheRendering> original = [GRMustache renderingObjectForObject:array];
-            return [original renderForSection:section inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+            return [[GRMustache renderingObjectForObject:array] renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
         }
     }];
 }

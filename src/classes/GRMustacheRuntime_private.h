@@ -107,8 +107,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @param templateDelegate  A delegate
  *
  * @return A GRMustacheRuntime object.
- *
- * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate GRMUSTACHE_API_INTERNAL;
 
@@ -150,16 +148,14 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * Invoke callbacks of all delegates in the delegate stack before and after
  * _value_ is rendered with _block_.
  *
- * @param value           The interpreted value.
- * @param interpretation  The value interpretation.
- * @param token           A token used for building GRMustacheInvocation
- *                        objects.
- * @param block           The rendering block.
+ * @param value  The interpreted value.
+ * @param tag    The tag.
+ * @param block  The rendering block.
  *
- * @see -[GRMustacheSection renderInBuffer:withRuntime:]
- * @see -[GRMustacheVariableComponent renderInBuffer:withRuntime:]
+ * @see -[GRMustacheSectionTag renderInBuffer:withRuntime:]
+ * @see -[GRMustacheVariableTag renderInBuffer:withRuntime:]
  */
-- (void)delegateValue:(id)value interpretation:(GRMustacheInterpretation)interpretation forRenderingToken:(GRMustacheToken *)token usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
+- (void)renderValue:(id)value withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

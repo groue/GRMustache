@@ -52,12 +52,7 @@
 }
 
 /**
- * The template repository that:
- * - provides partial templates to the compiler.
- * - allows helpers to render alternate template strings that contain partials.
- * 
- * @see GRMustacheTemplateRepository
- * @see GRMustacheSectionTagRenderingContext
+ * The template repository that provides partial templates to the compiler.
  */
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 

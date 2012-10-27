@@ -42,7 +42,7 @@
  * components:
  *
  * - a GRMustacheTextComponent that renders "hello ".
- * - a GRMustacheVariableComponent that renders the value of the `name` key in the
+ * - a GRMustacheVariableTag that renders the value of the `name` key in the
  *   runtime.
  * - a GRMustacheTextComponent that renders "!".
  * - a GRMustacheTemplate that would contain the three previous components, and
@@ -75,7 +75,7 @@
  * component.
  *
  * All classes conforming to the GRMustacheTemplateComponent protocol return
- * _component_, but GRMustacheSection, GRMustacheTemplateOverride, and
+ * _component_, but GRMustacheSectionTag, GRMustacheTemplateOverride, and
  * GRMustacheTemplate.
  *
  * @param component  A template component
@@ -83,7 +83,7 @@
  * @return The resolution of the component in the context of Mustache
  *         overridable partials.
  *
- * @see GRMustacheSection
+ * @see GRMustacheSectionTag
  * @see GRMustacheTemplate
  * @see GRMustacheTemplateOverride
  */

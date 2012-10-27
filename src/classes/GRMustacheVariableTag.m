@@ -20,45 +20,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableComponent_private.h"
+#import "GRMustacheVariableTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
-#import "GRMustacheSection_private.h"
+#import "GRMustacheSectionTag_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheRendering.h"
 #import "GRMustache_private.h"
 
-@interface GRMustacheVariableComponent()
+@interface GRMustacheVariableTag()
 - (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
 @end
 
 
-@implementation GRMustacheVariableComponent
+@implementation GRMustacheVariableTag
 
-+ (id)variableComponentWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
++ (id)variableTagWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
     return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
 }
 
-- (void)dealloc
+
+#pragma mark - GRMustacheTag
+
+- (GRMustacheTagType)type
 {
-    [_expression release];
-    [super dealloc];
+    return GRMustacheTagTypeVariable;
 }
 
 
-#pragma mark <GRMustacheTemplateComponent>
+#pragma mark - <GRMustacheTemplateComponent>
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
     id value = [_expression evaluateInRuntime:runtime];
-    [runtime delegateValue:value interpretation:GRMustacheVariableTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
+    [runtime renderValue:value withTag:self usingBlock:^(id value) {
         
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
         
         BOOL HTMLEscaped = NO;
-        NSString *rendering = [renderingObject renderForSection:nil inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped];
+        NSString *rendering = [renderingObject renderForTag:self inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped];
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
@@ -76,13 +78,12 @@
 }
 
 
-#pragma mark Private
+#pragma mark - Private
 
 - (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
-    self = [self init];
+    self = [super initWithExpression:expression];
     if (self) {
-        _expression = [expression retain];
         _raw = raw;
     }
     return self;

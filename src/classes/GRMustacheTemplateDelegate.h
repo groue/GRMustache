@@ -25,38 +25,7 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheInvocation;
-
-/**
- * The various ways GRMustache can render a value.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
- *
- * @see GRMustacheTemplateDelegate
- *
- * @since v4.1
- */
-typedef enum {
-    /**
-     * The value is interpreted by a Mustache section tag such as
-     * `{{#name}}...{{/name}}`. Whether it is a NSNumber, an object conforming
-     * to the NSFastEnumeration protocol, an object conforming to the
-     * GRMustacheSectionTagHelper protocol, or any other value, the section will
-     * render differently.
-     *
-     * @since v5.3
-     */
-    GRMustacheSectionTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER = 0,
-    
-    /**
-     * The value is interpreted by a Mustache variable tag such as `{{name}}`.
-     * Whether it is an object conforming to the GRMustacheVariableTagHelper
-     * protocol, or another object, the tag will render differently.
-     *
-     * @since v5.3
-     */
-    GRMustacheVariableTagInterpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
-    
-} GRMustacheInterpretation;
+@class GRMustacheTag;
 
 /**
  * The protocol for a GRMustacheTemplate's delegate.
@@ -86,7 +55,7 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Sent right after GRMustache has interpreted and rendered a value.
@@ -99,6 +68,6 @@ typedef enum {
  * @see GRMustacheInvocation
  * @since v4.1
  */
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

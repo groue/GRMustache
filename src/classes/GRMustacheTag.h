@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2012 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,37 +24,43 @@
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheRendering.h"
 
-@class GRMustacheTemplateRepository;
+/**
+ * TODO
+ */
+typedef enum {
+    GRMustacheTagTypeVariable = 1 << 1,
+    GRMustacheTagTypeRegularSection = 1 << 2,
+    GRMustacheTagTypeOverridableSection = 1 << 4,
+    GRMustacheTagTypeInvertedSection = 1 << 3,
+} GRMustacheTagType;
 
 /**
- * A GRMustacheSection is a template component that renders sections
- * such as `{{#name}}...{{/name}}`.
- *
- * @see GRMustacheTemplateComponent
+ * TODO
  */
-@interface GRMustacheSection: NSObject<GRMustacheRendering> {
-@private
+typedef enum {
+    GRMustacheTagTypeMaskVariable = GRMustacheTagTypeVariable,
+    GRMustacheTagTypeMaskRegularSection = GRMustacheTagTypeRegularSection,
+    GRMustacheTagTypeMaskInvertedSection = GRMustacheTagTypeInvertedSection,
+    GRMustacheTagTypeMaskOverridableSection = GRMustacheTagTypeOverridableSection,
+    GRMustacheTagTypeMaskNonInvertedSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection,
+    GRMustacheTagTypeMaskSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection | GRMustacheTagTypeInvertedSection,
+} GRMustacheTagTypeMask;
+
+/**
+ * TODO
+ */
+@interface GRMustacheTag: NSObject<GRMustacheRendering> {
     id _expression;
-    NSString *_templateString;
-    NSRange _innerRange;
-    BOOL _overridable;
-    BOOL _inverted;
-    NSArray *_components;
 }
 
 /**
  * TODO
  */
-@property (nonatomic, readonly, getter = isInverted) BOOL inverted AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
- */
-@property (nonatomic, readonly, getter = isOverridable) BOOL overridable AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * The literal inner content of the section, with unprocessed Mustache
- * `{{tags}}`.
+ * The literal inner content of the tag, with unprocessed Mustache `{{tags}}`.
+ * Nil for variable tags.
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 

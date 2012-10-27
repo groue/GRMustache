@@ -33,7 +33,7 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         success = NO;
     };
     
@@ -49,7 +49,7 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         success = NO;
     };
     
@@ -66,20 +66,20 @@
     
     __block GRMustacheTemplate *preRenderingTemplate = nil;
     __block GRMustacheTemplate *postRenderingTemplate = nil;
-    __block GRMustacheInterpretation preRenderingInterpretation = -1;
-    __block GRMustacheInterpretation postRenderingInterpretation = -1;
+    __block GRMustacheTagType preRenderingTagType = -1;
+    __block GRMustacheTagType postRenderingTagType = -1;
     __block id preRenderingValue = nil;
     __block id postRenderingValue = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         preRenderingTemplate = template;
         preRenderingValue = invocation.returnValue;
-        preRenderingInterpretation = interpretation;
+        preRenderingTagType = tag.type;
         invocation.returnValue = @"delegate";
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         postRenderingTemplate = template;
         postRenderingValue = invocation.returnValue;
-        postRenderingInterpretation = interpretation;
+        postRenderingTagType = tag.type;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---{{foo}}---" error:NULL];
@@ -89,8 +89,8 @@
     STAssertEqualObjects(rendering, @"---delegate---", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
+    STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
     STAssertEqualObjects(preRenderingValue, @"value", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }
@@ -101,15 +101,15 @@
     
     __block GRMustacheTemplate *preRenderingTemplate = nil;
     __block GRMustacheTemplate *postRenderingTemplate = nil;
-    __block GRMustacheInterpretation preRenderingInterpretation = -1;
-    __block GRMustacheInterpretation postRenderingInterpretation = -1;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    __block GRMustacheTagType preRenderingTagType = -1;
+    __block GRMustacheTagType postRenderingTagType = -1;
+    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         preRenderingTemplate = template;
-        preRenderingInterpretation = interpretation;
+        preRenderingTagType = tag.type;
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         postRenderingTemplate = template;
-        postRenderingInterpretation = interpretation;
+        postRenderingTagType = tag.type;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
@@ -117,8 +117,8 @@
     NSString *rendering = [template render];
     
     STAssertEqualObjects(rendering, @"<>", @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingTagType, GRMustacheTagTypeRegularSection, @"", @"");
+    STAssertEquals(postRenderingTagType, GRMustacheTagTypeRegularSection, @"", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
 }
@@ -131,47 +131,47 @@
     __block NSUInteger templateDidInterpretCount = 0;
     __block GRMustacheTemplate *preRenderingTemplate1 = nil;
     __block GRMustacheTemplate *postRenderingTemplate1 = nil;
-    __block GRMustacheInterpretation preRenderingInterpretation1 = -1;
-    __block GRMustacheInterpretation postRenderingInterpretation1 = -1;
+    __block GRMustacheTagType preRenderingTagType1 = -1;
+    __block GRMustacheTagType postRenderingTagType1 = -1;
     __block id preRenderingValue1 = nil;
     __block id postRenderingValue1 = nil;
     __block GRMustacheTemplate *preRenderingTemplate2 = nil;
     __block GRMustacheTemplate *postRenderingTemplate2 = nil;
-    __block GRMustacheInterpretation preRenderingInterpretation2 = -1;
-    __block GRMustacheInterpretation postRenderingInterpretation2 = -1;
+    __block GRMustacheTagType preRenderingTagType2 = -1;
+    __block GRMustacheTagType postRenderingTagType2 = -1;
     __block id preRenderingValue2 = nil;
     __block id postRenderingValue2 = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         ++templateWillInterpretCount;
         switch (templateWillInterpretCount) {
             case 1:
                 preRenderingTemplate1 = template;
                 preRenderingValue1 = invocation.returnValue;
-                preRenderingInterpretation1 = interpretation;
+                preRenderingTagType1 = tag.type;
                 invocation.returnValue = @YES;
                 break;
                 
             case 2:
                 preRenderingTemplate2 = template;
                 preRenderingValue2 = invocation.returnValue;
-                preRenderingInterpretation2 = interpretation;
+                preRenderingTagType2 = tag.type;
                 invocation.returnValue = @"delegate";
                 break;
         }
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         ++templateDidInterpretCount;
         switch (templateDidInterpretCount) {
             case 1:
                 postRenderingTemplate1 = template;
                 postRenderingValue1 = invocation.returnValue;
-                postRenderingInterpretation1 = interpretation;
+                postRenderingTagType1 = tag.type;
                 break;
                 
             case 2:
                 postRenderingTemplate2 = template;
                 postRenderingValue2 = invocation.returnValue;
-                postRenderingInterpretation2 = interpretation;
+                postRenderingTagType2 = tag.type;
                 break;
         }
     };
@@ -191,10 +191,10 @@
     STAssertEqualObjects(preRenderingValue2, (id)nil, @"");
     STAssertEqualObjects(postRenderingValue1, @"delegate", @"");
     STAssertEqualObjects(postRenderingValue2, @(YES), @"");
-    STAssertEquals(preRenderingInterpretation1, GRMustacheSectionTagInterpretation, @"", @"");
-    STAssertEquals(preRenderingInterpretation2, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation1, GRMustacheVariableTagInterpretation, @"", @"");
-    STAssertEquals(postRenderingInterpretation2, GRMustacheSectionTagInterpretation, @"", @"");
+    STAssertEquals(preRenderingTagType1, GRMustacheTagTypeRegularSection, @"", @"");
+    STAssertEquals(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
+    STAssertEquals(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
+    STAssertEquals(postRenderingTagType2, GRMustacheTagTypeRegularSection, @"", @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue
@@ -203,7 +203,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -221,7 +221,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -239,7 +239,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -257,7 +257,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -275,7 +275,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -293,7 +293,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -311,7 +311,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -329,7 +329,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
@@ -349,7 +349,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -364,7 +364,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -379,7 +379,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -398,7 +398,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -413,7 +413,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -428,7 +428,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -447,7 +447,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -462,7 +462,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -482,7 +482,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -497,7 +497,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -517,7 +517,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -532,7 +532,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -552,7 +552,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -567,7 +567,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -583,7 +583,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -603,7 +603,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -618,7 +618,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -634,7 +634,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -654,7 +654,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -669,7 +669,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -685,7 +685,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
             description = [invocation description];
         };
         
@@ -705,20 +705,20 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     __block GRMustacheTemplate *preRenderingTemplate = nil;
     __block GRMustacheTemplate *postRenderingTemplate = nil;
-    __block GRMustacheInterpretation preRenderingInterpretation = -1;
-    __block GRMustacheInterpretation postRenderingInterpretation = -1;
+    __block GRMustacheTagType preRenderingTagType = -1;
+    __block GRMustacheTagType postRenderingTagType = -1;
     __block id preRenderingValue = nil;
     __block id postRenderingValue = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         preRenderingTemplate = template;
         preRenderingValue = invocation.returnValue;
-        preRenderingInterpretation = interpretation;
+        preRenderingTagType = tag.type;
         invocation.returnValue = @"delegate";
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         postRenderingTemplate = template;
         postRenderingValue = invocation.returnValue;
-        postRenderingInterpretation = interpretation;
+        postRenderingTagType = tag.type;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#delegate}}{{value}}{{/delegate}}" error:NULL];
@@ -727,8 +727,8 @@
     STAssertEqualObjects(rendering, @"delegate", @"");
     STAssertEquals(preRenderingTemplate, template, @"");
     STAssertEquals(postRenderingTemplate, template, @"");
-    STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
-    STAssertEquals(postRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");
+    STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"");
+    STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"");
     STAssertEqualObjects(preRenderingValue, @"foo", @"");
     STAssertEqualObjects(postRenderingValue, @"delegate", @"");
 }
@@ -736,14 +736,14 @@
 - (void)testSectionsDelegateOrdering
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [[invocation.returnValue description] uppercaseString];
         }
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
         }
@@ -758,21 +758,21 @@
 - (void)testTemplateDelegatePlusSectionDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [[invocation.returnValue description] uppercaseString];
         }
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
         }
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [NSString stringWithFormat:@"%@suffix", invocation.returnValue];
         }
@@ -788,21 +788,21 @@
 - (void)testTemplateDelegatePlusNestedSectionsDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [[invocation.returnValue description] uppercaseString];
         }
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
         }
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
         if ([invocation.returnValue isKindOfClass:[NSString class]]) {
             invocation.returnValue = [NSString stringWithFormat:@"%@suffix", invocation.returnValue];
         }
@@ -819,11 +819,11 @@
 {
     __block BOOL delegate1HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate1.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) { delegate1HasBeenInvoked = YES; };
+    delegate1.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) { delegate1HasBeenInvoked = YES; };
     
     __block BOOL delegate2HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) { delegate2HasBeenInvoked = YES; };
+    delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) { delegate2HasBeenInvoked = YES; };
     
     id items = @{@"items": @[delegate1, delegate2] };
     [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items];
