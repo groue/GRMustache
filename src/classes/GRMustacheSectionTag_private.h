@@ -39,12 +39,6 @@
 }
 
 // Documented in GRMustacheSectionTag.h
-@property (nonatomic, readonly, getter = isInverted) BOOL inverted GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheSectionTag.h
-@property (nonatomic, readonly, getter = isOverridable) BOOL overridable GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheSectionTag.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 

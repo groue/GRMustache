@@ -27,6 +27,7 @@
 
 @implementation GRMustacheTag
 @synthesize expression=_expression;
+@synthesize templateRepository=_templateRepository;
 
 - (void)dealloc
 {
