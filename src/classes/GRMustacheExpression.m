@@ -35,7 +35,7 @@
     [super dealloc];
 }
 
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
 {
     NSAssert(NO, @"Subclasses must override");
     return NO;

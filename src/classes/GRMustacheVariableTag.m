@@ -23,7 +23,7 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheRendering.h"
@@ -49,7 +49,7 @@
     return GRMustacheTagTypeVariable;
 }
 
-- (NSString *)renderWithRuntime:(id)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     return @"";
 }
@@ -57,21 +57,21 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
+- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     id object;
-    if (![_expression evaluateInRuntime:runtime value:&object error:error]) {
+    if (![_expression evaluateInContext:context value:&object error:error]) {
         return NO;
     }
 
     __block BOOL success = YES;
-    [runtime renderObject:object withTag:self usingBlock:^(id object) {
+    [context renderObject:object withTag:self usingBlock:^(id object) {
         
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
         
         BOOL HTMLSafe = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self withRuntime:runtime HTMLSafe:&HTMLSafe error:&renderingError];
+        NSString *rendering = [renderingObject renderForMustacheTag:self withContext:context HTMLSafe:&HTMLSafe error:&renderingError];
         
         if (rendering) {
             if (!_raw && !HTMLSafe) {

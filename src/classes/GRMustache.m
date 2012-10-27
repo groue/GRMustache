@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustache_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheTag.h"
@@ -32,12 +32,12 @@ static CFMutableDictionaryRef renderingImplementationForProtocol = nil;
 static IMP defaultRenderingImplementation;
 
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
-static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
-static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
-static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
-static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
-static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 
 
 @interface GRMustacheRenderingNil : NSObject<GRMustacheRendering>
@@ -47,9 +47,9 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 
 @interface GRMustacheRenderingWithBlock:NSObject<GRMustacheRendering> {
-    NSString *(^_block)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error);
+    NSString *(^_block)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block;
+- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 @end
 
 
@@ -87,7 +87,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack];
+    [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
 }
 
 + (GRMustacheVersion)version
@@ -104,7 +104,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         return [GRMustacheRenderingNil instance];
     }
     
-    if ([object respondsToSelector:@selector(renderForMustacheTag:withRuntime:HTMLSafe:error:)]) {
+    if ([object respondsToSelector:@selector(renderForMustacheTag:withContext:HTMLSafe:error:)]) {
         return object;
     }
 
@@ -143,7 +143,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     return object;
 }
 
-+ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block
++ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
     return [[[GRMustacheRenderingWithBlock alloc] initWithBlock:block] autorelease];
 }
@@ -179,7 +179,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp
 {
-    SEL renderSelector = @selector(renderForMustacheTag:withRuntime:HTMLSafe:error:);
+    SEL renderSelector = @selector(renderForMustacheTag:withContext:HTMLSafe:error:);
     if (!class_addMethod(aClass, renderSelector, imp, "@@:@@^c^@")) {
         Method method = class_getInstanceMethod(aClass, renderSelector);
         method_setImplementation(method, imp);
@@ -220,9 +220,9 @@ static IMP nilRenderingImplementation;
     return instance;
 }
 
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return nilRenderingImplementation(nil, @selector(renderForMustacheTag:withRuntime:HTMLSafe:error:), tag, runtime, HTMLSafe);
+    return nilRenderingImplementation(nil, @selector(renderForMustacheTag:withContext:HTMLSafe:error:), tag, context, HTMLSafe);
 }
 
 @end
@@ -239,7 +239,7 @@ static IMP nilRenderingImplementation;
     [super dealloc];
 }
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block
+- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
     self = [super init];
     if (self) {
@@ -248,12 +248,12 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     if (!_block) {
         return @"";
     }
-    return _block(tag, runtime, HTMLSafe, error);
+    return _block(tag, context, HTMLSafe, error);
 }
 
 @end
@@ -280,9 +280,9 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return _implementation(_object, @selector(renderForMustacheTag:withRuntime:HTMLSafe:error:), tag, runtime, HTMLSafe);
+    return _implementation(_object, @selector(renderForMustacheTag:withContext:HTMLSafe:error:), tag, context, HTMLSafe);
 }
 
 @end
@@ -291,7 +291,7 @@ static IMP nilRenderingImplementation;
 // =============================================================================
 #pragma mark - nil(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -304,7 +304,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
         case GRMustacheTagTypeInvertedSection:
             // {{$ nil }}...{{/}}
             // {{^ nil }}...{{/}}
-            return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             
     }
 }
@@ -313,7 +313,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
 // =============================================================================
 #pragma mark - NSNull(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -326,7 +326,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ null }}...{{/}}
-            return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             
     }
 }
@@ -335,7 +335,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
 // =============================================================================
 #pragma mark - NSNumber(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -348,8 +348,8 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             // {{# number }}...{{/}}
             // {{$ number }}...{{/}}
             if ([self boolValue]) {
-                runtime = [runtime runtimeByAddingContextObject:self];
-                return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                context = [context contextByAddingObject:self];
+                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
@@ -359,7 +359,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             if ([self boolValue]) {
                 return @"";
             } else {
-                return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             }
     }
 }
@@ -368,7 +368,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSString(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -381,8 +381,8 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             // {{# string }}...{{/}}
             // {{$ string }}...{{/}}
             if (self.length > 0) {
-                runtime = [runtime runtimeByAddingContextObject:self];
-                return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                context = [context contextByAddingObject:self];
+                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
@@ -392,7 +392,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             if (self.length > 0) {
                 return @"";
             } else {
-                return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             }
     }
 }
@@ -401,7 +401,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSObject(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -413,8 +413,8 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
         case GRMustacheTagTypeOverridableSection:
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
-            runtime = [runtime runtimeByAddingContextObject:self];
-            return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+            context = [context contextByAddingObject:self];
+            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ object }}...{{/}}
@@ -426,7 +426,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSFastEnumeration(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable: {
@@ -438,14 +438,14 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             BOOL oneItemHasRenderedHTMLUnescaped = NO;
             
             for (id item in self) {
-                // item enters the runtime as a context object
-                GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
+                // item enters the context as a context object
+                GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
                 // render item
                 id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
                 BOOL itemHasRenderedHTMLSafe = NO;
                 NSError *itemRenderingError = nil;
-                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag withRuntime:itemRuntime HTMLSafe:&itemHasRenderedHTMLSafe error:&itemRenderingError];
+                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag withContext:itemContext HTMLSafe:&itemHasRenderedHTMLSafe error:&itemRenderingError];
                 
                 if (rendering)
                 {
@@ -489,10 +489,10 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             
             NSMutableString *buffer = [NSMutableString string];
             for (id item in self) {
-                // item enters the runtime as a context object
-                GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
+                // item enters the context as a context object
+                GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
-                NSString *rendering = [tag renderWithRuntime:itemRuntime HTMLSafe:HTMLSafe error:error];
+                NSString *rendering = [tag renderWithContext:itemContext HTMLSafe:HTMLSafe error:error];
                 NSAssert(*HTMLSafe, @"WTF"); // Assume all tags render HTML-safe strings
                 if (rendering) {
                     [buffer appendString:rendering];
@@ -512,7 +512,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             }
             
             if (empty) {
-                return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }

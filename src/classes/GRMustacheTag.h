@@ -77,6 +77,6 @@ typedef enum {
 /**
  * TODO
  */
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

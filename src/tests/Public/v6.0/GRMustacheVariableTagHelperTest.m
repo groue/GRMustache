@@ -40,7 +40,7 @@
 //    self.rendering = nil;
 //    [super dealloc];
 //}
-//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagContext *)context
 //{
 //    return self.rendering;
 //}
@@ -66,7 +66,7 @@
 //    return @"foo";
 //}
 //
-//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagContext *)context
 //{
 //    return [context renderString:@"<{{foo}}>" error:NULL];
 //}
@@ -95,7 +95,7 @@
 //    self.templateString = nil;
 //    [super dealloc];
 //}
-//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagContext *)context
 //{
 //    return [context renderString:self.templateString error:NULL];
 //}
@@ -118,7 +118,7 @@
 //    self.partialName = nil;
 //    [super dealloc];
 //}
-//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagContext *)context
 //{
 //    return [context renderTemplateNamed:self.partialName error:NULL];
 //}
@@ -136,7 +136,7 @@
 //{
 //    [super dealloc];
 //}
-//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagRenderingContext *)context
+//- (NSString *)renderForVariableTagInContext:(GRMustacheVariableTagContext *)context
 //{
 //    self.invocationCount += 1;
 //    return nil;
@@ -148,7 +148,7 @@
 - (void)testHelperPerformsRendering
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"---";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -159,7 +159,7 @@
 - (void)testHelperRenderingIsHTMLSafe
 {
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = NO;
             return @"&<>{{foo}}";
         }];
@@ -168,7 +168,7 @@
         STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = NO;
             return @"&<>{{foo}}";
         }];
@@ -177,7 +177,7 @@
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"&<>{{foo}}";
         }];
@@ -186,7 +186,7 @@
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"&<>{{foo}}";
         }];
@@ -198,7 +198,7 @@
 
 - (void)testHelperRenderingIsHTMLSafeByDefault
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"&<>{{foo}}";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -209,7 +209,7 @@
 - (void)testHelperCanRenderNil
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -222,7 +222,7 @@
     // [GRMustacheVariableTagHelper helperWithBlock:]
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
@@ -234,7 +234,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
@@ -246,7 +246,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
@@ -258,7 +258,7 @@
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
@@ -272,7 +272,7 @@
 
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplate
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -284,7 +284,7 @@
 //
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplateContainingPartial
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
@@ -297,7 +297,7 @@
 //
 //- (void)testHelperRenderingOfCurrentContextInDistinctTemplateContainingPartialIsNotHTMLSafe
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
@@ -310,7 +310,7 @@
 //
 //- (void)testTagDelegateCallbacksAreCalledDuringAlternateTemplateStringRendering
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    
@@ -360,15 +360,15 @@
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
     GRMustacheTemplate *template = [repository templateFromString:@"{{items}}" error:nil];
     
-    id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateNamed:@"partial" error:NULL];
-        runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item1" }];
-        return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+        context = [context contextByAddingObject:@{ @"name": @"item1" }];
+        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
-    id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateNamed:@"partial" error:NULL];
-        runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item2" }];
-        return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+        context = [context contextByAddingObject:@{ @"name": @"item2" }];
+        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
 
     NSDictionary *context = @{@"items": @[item1, item2]};

@@ -25,7 +25,7 @@
 
 @protocol GRMustacheRendering;
 @class GRMustacheTag;
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 
 // Documented in GRMustache.h
@@ -47,7 +47,7 @@ typedef struct {
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

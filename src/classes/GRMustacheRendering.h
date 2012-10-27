@@ -24,10 +24,10 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @protocol GRMustacheRendering;
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 @class GRMustacheTag;
 
 @protocol GRMustacheRendering <NSObject>
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 @end

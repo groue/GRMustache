@@ -33,7 +33,7 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         success = NO;
         return object;
     };
@@ -69,7 +69,7 @@
     __block GRMustacheTagType postRenderingTagType = -1;
     __block id preRenderedObjet = nil;
     __block id postRenderedObjet = nil;
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         preRenderedObjet = object;
         preRenderingTagType = tag.type;
         return @"delegate";
@@ -96,7 +96,7 @@
     
     __block GRMustacheTagType preRenderingTagType = -1;
     __block GRMustacheTagType postRenderingTagType = -1;
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         preRenderingTagType = tag.type;
         return object;
     };
@@ -127,18 +127,18 @@
     __block GRMustacheTagType postRenderingTagType2 = -1;
     __block id preRenderedObjet2 = nil;
     __block id postRenderedObjet2 = nil;
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         ++templateWillInterpretCount;
         switch (templateWillInterpretCount) {
             case 1:
                 preRenderedObjet1 = object;
                 preRenderingTagType1 = tag.type;
-                return (id)@YES;
+                return @YES;
                 
             case 2:
                 preRenderedObjet2 = object;
                 preRenderingTagType2 = tag.type;
-                return (id)@"delegate";
+                return @"delegate";
         }
         return object;
     };
@@ -180,7 +180,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -199,7 +199,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -218,7 +218,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -237,7 +237,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -256,7 +256,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -275,7 +275,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -294,7 +294,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -313,7 +313,7 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
             renderedObject = object;
             return object;
@@ -334,7 +334,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -350,7 +350,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -366,7 +366,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -386,7 +386,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -402,7 +402,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -418,7 +418,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -438,7 +438,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -454,7 +454,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -475,7 +475,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -491,7 +491,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -512,7 +512,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -528,7 +528,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -549,7 +549,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -565,7 +565,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -582,7 +582,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -603,7 +603,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -619,7 +619,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -636,7 +636,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -657,7 +657,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -673,7 +673,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -690,7 +690,7 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
             description = [tag description];
             return object;
         };
@@ -713,7 +713,7 @@
     __block GRMustacheTagType postRenderingTagType = -1;
     __block id preRenderedObjet = nil;
     __block id postRenderedObjet = nil;
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         preRenderedObjet = object;
         preRenderingTagType = tag.type;
         return @"delegate";
@@ -736,17 +736,17 @@
 - (void)testSectionsDelegateOrdering
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[[object description] uppercaseString];
+            return [[object description] uppercaseString];
         }
         return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[NSString stringWithFormat:@"prefix%@", object];
+            return [NSString stringWithFormat:@"prefix%@", object];
         }
         return object;
     };
@@ -760,25 +760,25 @@
 - (void)testTagDelegatePlusSectionDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[[object description] uppercaseString];
+            return [[object description] uppercaseString];
         }
         return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[NSString stringWithFormat:@"prefix%@", object];
+            return [NSString stringWithFormat:@"prefix%@", object];
         }
         return object;
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    suffixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[NSString stringWithFormat:@"%@suffix", object];
+            return [NSString stringWithFormat:@"%@suffix", object];
         }
         return object;
     };
@@ -793,25 +793,25 @@
 - (void)testTagDelegatePlusNestedSectionsDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[[object description] uppercaseString];
+            return [[object description] uppercaseString];
         }
         return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[NSString stringWithFormat:@"prefix%@", object];
+            return [NSString stringWithFormat:@"prefix%@", object];
         }
         return object;
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    suffixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if ([object isKindOfClass:[NSString class]]) {
-            return (id)[NSString stringWithFormat:@"%@suffix", object];
+            return [NSString stringWithFormat:@"%@suffix", object];
         }
         return object;
     };
@@ -827,11 +827,11 @@
 {
     __block BOOL delegate1HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate1.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { delegate1HasBeenInvoked = YES; return object; };
+    delegate1.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) { delegate1HasBeenInvoked = YES; return object; };
     
     __block BOOL delegate2HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate2.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { delegate2HasBeenInvoked = YES; return object; };
+    delegate2.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) { delegate2HasBeenInvoked = YES; return object; };
     
     id items = @{@"items": @[delegate1, delegate2] };
     [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];

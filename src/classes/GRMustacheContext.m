@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import <objc/message.h>
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
@@ -31,12 +31,12 @@
 #import "JRSwizzle.h"
 
 #if !defined(NS_BLOCK_ASSERTIONS)
-BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
+BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
 
 static BOOL shouldPreventNSUndefinedKeyException = NO;
 
-@interface GRMustacheRuntime()
+@interface GRMustacheContext()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 - (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
@@ -51,7 +51,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
  * key, using the implementation of super_data->super_class, and returns the
  * result.
  *
- * Should [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack] method have
+ * Should [GRMustacheContext preventNSUndefinedKeyExceptionAttack] method have
  * been called earlier, temporarily swizzle _object_ so that it does not raise
  * any NSUndefinedKeyException.
  *
@@ -70,7 +70,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @end
 
-@implementation GRMustacheRuntime
+@implementation GRMustacheContext
 
 - (void)dealloc
 {
@@ -85,13 +85,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
-+ (id)runtime
++ (id)context
 {
     NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
     return [[[self alloc] initWithContextStack:contextStack delegateStack:nil templateOverrideStack:nil] autorelease];
 }
 
-- (GRMustacheRuntime *)runtimeByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
     if (tagDelegate == nil) {
         return self;
@@ -101,10 +101,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     NSArray *delegateStack = [NSArray arrayWithObject:tagDelegate];
     if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
     
-    return [[[GRMustacheRuntime alloc] initWithContextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject
+- (GRMustacheContext *)contextByAddingObject:(id)contextObject
 {
     if (contextObject == nil) {
         return self;
@@ -121,10 +121,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
     }
     
-    return [[[GRMustacheRuntime alloc] initWithContextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
-- (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
+- (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
 {
     if (templateOverride == nil) {
         return self;
@@ -136,7 +136,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     NSArray *templateOverrideStack = [NSArray arrayWithObject:templateOverride];
     if (_templateOverrideStack) { templateOverrideStack = [templateOverrideStack arrayByAddingObjectsFromArray:_templateOverrideStack]; }
     
-    return [[[GRMustacheRuntime alloc] initWithContextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
 }
 
 - (id)currentContextValue
@@ -149,7 +149,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     // top of the stack is first object
     for (id contextObject in _contextStack) {
-        id value = [GRMustacheRuntime valueForKey:key inObject:contextObject];
+        id value = [GRMustacheContext valueForKey:key inObject:contextObject];
         if (value != nil) { return value; }
     }
     return nil;
@@ -258,7 +258,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 #if !defined(NS_BLOCK_ASSERTIONS)
         else {
             // For testing purpose
-            GRMustacheRuntimeDidCatchNSUndefinedKeyException = YES;
+            GRMustacheContextDidCatchNSUndefinedKeyException = YES;
         }
 #endif
     }
@@ -373,7 +373,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         // Swizzle [NSObject valueForUndefinedKey:]
         
         [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                        withMethod:@selector(GRMustacheRuntimeValueForUndefinedKey_NSObject:)
+                        withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSObject:)
                              error:nil];
         
         
@@ -382,7 +382,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
         if (NSManagedObjectClass) {
             [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                                        withMethod:@selector(GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:)
+                                        withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSManagedObject:)
                                              error:nil];
         }
     });
@@ -401,35 +401,35 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 + (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects
 {
-    static NSString const * GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects";
-    NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects];
+    static NSString const * GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects";
+    NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     if (silentObjects == nil) {
         silentObjects = [NSMutableSet set];
-        [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheRuntimePreventionOfNSUndefinedKeyExceptionObjects];
+        [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     }
     return silentObjects;
 }
 
 @end
 
-@implementation NSObject(GRMustacheRuntimePreventionOfNSUndefinedKeyException)
+@implementation NSObject(GRMustacheContextPreventionOfNSUndefinedKeyException)
 
 // NSObject
-- (id)GRMustacheRuntimeValueForUndefinedKey_NSObject:(NSString *)key
+- (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key
 {
-    if ([[GRMustacheRuntime preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+    if ([[GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
         return nil;
     }
-    return [self GRMustacheRuntimeValueForUndefinedKey_NSObject:key];
+    return [self GRMustacheContextValueForUndefinedKey_NSObject:key];
 }
 
 // NSManagedObject
-- (id)GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:(NSString *)key
+- (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key
 {
-    if ([[GRMustacheRuntime preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+    if ([[GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
         return nil;
     }
-    return [self GRMustacheRuntimeValueForUndefinedKey_NSManagedObject:key];
+    return [self GRMustacheContextValueForUndefinedKey_NSManagedObject:key];
 }
 
 @end

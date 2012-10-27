@@ -22,7 +22,7 @@
 
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 
 @interface GRMustacheTemplateOverride()
 - (id)initWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components;
@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
+- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    runtime = [runtime runtimeByAddingTemplateOverride:self];
-    return [_template renderInBuffer:buffer withRuntime:runtime error:error];
+    context = [context contextByAddingTemplateOverride:self];
+    return [_template appendRenderingToString:buffer withContext:context error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

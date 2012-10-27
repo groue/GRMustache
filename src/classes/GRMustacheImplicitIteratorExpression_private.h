@@ -24,9 +24,9 @@
 
 /**
  * The GRMustacheImplicitIteratorExpression is able to return the current
- * context object of a runtime.
+ * context object of a rendering context.
  *
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
  * @see GRMustacheExpression
  */
 @interface GRMustacheImplicitIteratorExpression : GRMustacheExpression

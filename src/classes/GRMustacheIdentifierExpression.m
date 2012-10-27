@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 
 @interface GRMustacheIdentifierExpression()
 @property (nonatomic, copy) NSString *identifier;
@@ -63,9 +63,9 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
 {
-    *value = [runtime contextValueForKey:_identifier];
+    *value = [context contextValueForKey:_identifier];
     return YES;
 }
 

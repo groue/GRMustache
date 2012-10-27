@@ -39,105 +39,201 @@
     self.attribute = nil;
     [super dealloc];
 }
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{attribute}}" error:NULL];
-    return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+    GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"attribute:{{attribute}}" error:NULL];
+    return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 @end
 
 @implementation GRMustacheSectionTagTagHelperTest
 
-- (void)testHelperPerformsRendering
+- (void)testRenderingObjectPerformsVariableRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        *HTMLSafe = NO;
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"---";
     }];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
+    NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
     STAssertEqualObjects(result, @"---", @"");
 }
 
-- (void)testHelperRenderingIsHTMLSafe
+- (void)testRenderingObjectPerformsSectionRendering
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"---";
+    }];
+    NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+    STAssertEqualObjects(result, @"---", @"");
+}
+
+- (void)testRenderingObjectPerformsInvertedSectionRendering
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"---";
+    }];
+    NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{^object}}{{/object}}" error:nil] renderObject:context error:NULL];
+    STAssertEqualObjects(result, @"---", @"");
+}
+
+- (void)testRenderingObjectPerformsOverridableSectionRendering
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"---";
+    }];
+    NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{$object}}{{/object}}" error:nil] renderObject:context error:NULL];
+    STAssertEqualObjects(result, @"---", @"");
+}
+
+- (void)testRenderingObjectPerformsHTMLSafeVariableRendering
 {
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-            *HTMLSafe = NO;
-            return @"&<>{{foo}}";
-        }];
-        NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
-    }
-    {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"&<>{{foo}}";
         }];
-        NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = YES;
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = NO;
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = NO;
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            // implicitly not safe
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            // implicitly not safe
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
 }
 
-- (void)testHelperRenderingIsHTMLSafeByDefault
+- (void)testRenderingObjectPerformsHTMLSafeSectionRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        return @"&<>{{foo}}";
-    }];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = YES;
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = NO;
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            // implicitly not safe
+            return @"&<>{{foo}}";
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+    }
 }
 
-- (void)testHelperCanRenderNil
+- (void)testRenderingObjectCanSetError
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        return nil;
-    }];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"", @"");
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            if (error) {
+                *error = [NSError errorWithDomain:@"GRMustacheRenderingObjectDomain" code:-1 userInfo:nil];
+            }
+            return nil;
+        }];
+        NSError *error;
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:&error];
+        STAssertNil(result, @"");
+        STAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            if (error) {
+                *error = [NSError errorWithDomain:@"GRMustacheRenderingObjectDomain" code:-1 userInfo:nil];
+            }
+            return nil;
+        }];
+        NSError *error;
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:&error];
+        STAssertNil(result, @"");
+        STAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
+    }
 }
 
-- (void)testHelperCanAccessInnerTemplateString
+- (void)testRenderingObjectCanRenderNilWithoutSettingAnyError
 {
-    __block NSString *lastInnerTemplateString = nil;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        [lastInnerTemplateString release];
-        lastInnerTemplateString = [tag.innerTemplateString retain];
-        return nil;
-    }];
-    NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    [[GRMustacheTemplate templateFromString:@"{{#helper}}{{subject}}{{/helper}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
-    [lastInnerTemplateString release];
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            return nil;
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            return nil;
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"", @"");
+    }
 }
 
-- (void)testHelperCanAccessRenderedContent
-{
-    __block NSString *lastRenderedContent = nil;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        [lastRenderedContent release];
-        lastRenderedContent = [[tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error] retain];
-        return nil;
-    }];
-    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             helper, @"helper",
-                             @"---", @"subject", nil];
-    [[GRMustacheTemplate templateFromString:@"{{#helper}}{{subject}}==={{subject}}{{/helper}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(lastRenderedContent, @"---===---", @"");
-    [lastRenderedContent release];
-}
-
-- (void)testHelperCanAccessTagType
+- (void)testRenderingObjectCanAccessTagType
 {
     __block NSUInteger invertedSectionCount = 0;
     __block NSUInteger overridableSectionCount = 0;
     __block NSUInteger regularSectionCount = 0;
     __block NSUInteger variableCount = 0;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         switch (tag.type) {
             case GRMustacheTagTypeInvertedSection:
                 ++invertedSectionCount;
@@ -168,7 +264,7 @@
         regularSectionCount = 0;
         variableCount = 0;
         
-        [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
+        [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
@@ -181,7 +277,7 @@
         regularSectionCount = 0;
         variableCount = 0;
         
-        [[GRMustacheTemplate templateFromString:@"{{#helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
+        [[GRMustacheTemplate templateFromString:@"{{#object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
@@ -194,7 +290,7 @@
         regularSectionCount = 0;
         variableCount = 0;
         
-        [[GRMustacheTemplate templateFromString:@"{{$helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
+        [[GRMustacheTemplate templateFromString:@"{{$object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
         STAssertEquals(overridableSectionCount, (NSUInteger)1, @"");
@@ -207,7 +303,7 @@
         regularSectionCount = 0;
         variableCount = 0;
         
-        [[GRMustacheTemplate templateFromString:@"{{^helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
+        [[GRMustacheTemplate templateFromString:@"{{^object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)1, @"");
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
@@ -216,59 +312,114 @@
     }
 }
 
-- (void)testHelperCanRenderCurrentContextInDistinctTemplate
+- (void)testRenderingObjectCanAccessInnerTemplateString
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error)
     {
-        GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+        __block NSString *lastInnerTemplateString = nil;
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            lastInnerTemplateString = tag.innerTemplateString;
+            return nil;
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertNil(lastInnerTemplateString, @"");
+    }
+    {
+        __block NSString *lastInnerTemplateString = nil;
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            [lastInnerTemplateString release];
+            lastInnerTemplateString = [tag.innerTemplateString retain];
+            return nil;
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObject:object forKey:@"object"];
+        [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
+        [lastInnerTemplateString release];
+    }
+}
+
+- (void)testRenderingObjectCanAccessRenderedContent
+{
+    __block NSString *lastRenderedContent = nil;
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        [lastRenderedContent release];
+        lastRenderedContent = [[tag renderWithContext:context HTMLSafe:HTMLSafe error:error] retain];
+        return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             helper, @"helper",
+                             object, @"object",
                              @"---", @"subject", nil];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"---", @"");
+    [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}==={{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
+    STAssertEqualObjects(lastRenderedContent, @"---===---", @"");
+    [lastRenderedContent release];
 }
 
-- (void)testHelperDoesNotAutomaticallyEntersCurrentContext
+- (void)testRenderingObjectCanRenderCurrentContextInDistinctTemplate
 {
-    // GRMustacheAttributedSectionTagHelper does not modify the runtime
-    GRMustacheAttributedSectionTagHelper *helper = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
-    helper.attribute = @"---";
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:NULL] renderObject:@{ @"helper": helper } error:NULL];
-    STAssertEqualObjects(result, @"", @"");
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+                     {
+                         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
+                         return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                     }];
+        NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 object, @"object",
+                                 @"---", @"subject", nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"---", @"");
+    }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+        {
+            GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
+            return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        }];
+        NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 object, @"object",
+                                 @"---", @"subject", nil];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+        STAssertEqualObjects(result, @"---", @"");
+    }
 }
 
-- (void)testHelperCanExplicitelyExtendCurrentContext
+- (void)testRenderingObjectDoesNotAutomaticallyEntersCurrentContext
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        runtime = [runtime runtimeByAddingContextObject:@{ @"subject": @"---" }];
+    GRMustacheAttributedSectionTagHelper *object = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
+    object.attribute = @"---";
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
+    STAssertEqualObjects(result, @"attribute:", @"");
+}
+
+- (void)testRenderingObjectCanExplicitelyExtendCurrentContext
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        context = [context contextByAddingObject:@{ @"subject": @"---" }];
         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:NULL] renderObject:@{ @"helper": helper } error:NULL];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
     STAssertEqualObjects(result, @"---", @"");
 }
 
 - (void)testTagDelegateCallbacksAreCalledWithinSectionRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
-        return [tag renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
-            return (id)@"delegate";
+            return @"delegate";
         } else {
             return object;
         }
     };
     
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             helper, @"helper",
+                             object, @"object",
                              @"---", @"subject", nil];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#helper}}{{subject}}{{/helper}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:NULL];
     template.tagDelegate = delegate;
     NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"delegate", @"");
@@ -276,24 +427,24 @@
 
 - (void)testTagDelegateCallbacksAreCalledWithinSectionAlternateTemplateStringRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
-            return (id)@"delegate";
+            return @"delegate";
         } else {
             return object;
         }
     };
 
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
-                             helper, @"helper",
+                             object, @"object",
                              @"---", @"subject", nil];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL];
     template.tagDelegate = delegate;
     NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"delegate", @"");
@@ -301,44 +452,44 @@
 
 - (void)testArrayOfHelpersInSectionTag
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"2";
     }];
     
-    id items = @{@"items": @[helper1, helper2] };
+    id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
     STAssertEqualObjects(rendering, @"12", @"");
 }
 
 - (void)testArrayOfHelpersInVariableTag
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"2";
     }];
     
-    id items = @{@"items": @[helper1, helper2] };
+    id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL];
     STAssertEqualObjects(rendering, @"12", @"");
 }
 
 - (void)testArrayOfHelpersInVariableTagWithInconsistentHTMLEscaping
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         *HTMLSafe = YES;
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    id object2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         *HTMLSafe = NO;
         return @"2";
     }];
     
-    id items = @{@"items": @[helper1, helper2] };
+    id items = @{@"items": @[object1, object2] };
     STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, nil);
 }
 

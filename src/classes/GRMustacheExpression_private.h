@@ -23,12 +23,12 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 @class GRMustacheToken;
 
 /**
  * The GRMustacheExpression is the base class for objects that can provide
- * values out of a Mustache runtime.
+ * values out of a Mustache rendering context.
  *
  * GRMustacheExpression instances are built by GRMustacheParser. For instance,
  * the `{{ name }}` tag would yield a GRMustacheIdentifierExpression.
@@ -51,22 +51,22 @@
 @property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 
 /**
- * Evaluates an expression against a runtime, and return the value.
+ * Evaluates an expression against a rendering context, and return the value.
  *
- * @param runtime  A Mustache runtime object
- * @param value    TODO
- * @param error    TODO
+ * @param context  A Mustache rendering context
+ * @param value             TODO
+ * @param error             TODO
  *
  * @return TODO
  */
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
- * Expressions are equal if and only if the result of their `evaluateInRuntime:`
- * implementation would return the same value in a given runtime.
+ * Expressions are equal if and only if the result of their `evaluateInContext:`
+ * implementation would return the same value in a given rendering context.
  *
  * Default implementation is NSObject's one: subclasses must override.
  *

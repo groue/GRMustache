@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheRendering.h"
@@ -76,11 +76,11 @@
 
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
-    runtime = [runtime runtimeByAddingContextObject:object];
+    GRMustacheContext *context = [GRMustacheContext context];
+    context = [context contextByAddingObject:object];
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+    if (![self appendRenderingToString:buffer withContext:context error:error]) {
         return nil;
     }
     return buffer;
@@ -88,22 +88,22 @@
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error
 {
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
+    GRMustacheContext *context = [GRMustacheContext context];
     for (id object in objects) {
-        runtime = [runtime runtimeByAddingContextObject:object];
+        context = [context contextByAddingObject:object];
     }
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+    if (![self appendRenderingToString:buffer withContext:context error:error]) {
         return nil;
     }
     return buffer;
 }
 
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+    if (![self appendRenderingToString:buffer withContext:context error:error]) {
         return nil;
     }
     if (HTMLSafe) {
@@ -115,16 +115,16 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
+- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    runtime = [runtime runtimeByAddingTagDelegate:self.tagDelegate];
+    context = [context contextByAddingTagDelegate:self.tagDelegate];
     
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheTemplateOverride: resolve it.
-        component = [runtime resolveTemplateComponent:component];
+        component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderInBuffer:buffer withRuntime:runtime error:error]) {
+        if (![component appendRenderingToString:buffer withContext:context error:error]) {
             return NO;
         }
     }
@@ -158,9 +158,9 @@
 #pragma mark - <GRMustacheRendering>
 
 // Allows template to render as "dynamic partials"
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
+    return [self renderWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 
 @end

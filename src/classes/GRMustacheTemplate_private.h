@@ -64,5 +64,5 @@
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 @end

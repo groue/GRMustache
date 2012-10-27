@@ -30,11 +30,11 @@
  * A GRMustacheTemplateOverride is a template component that renders overridable
  * partials as `{{<name}}...{{/name}}`.
  *
- * It collaborates with runtimes for the resolving of template components in the
+ * It collaborates with rendering contexts for the resolving of template components in the
  * context of Mustache overridable partials.
  *
  * @see GRMustacheTemplateComponent
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
  */
 @interface GRMustacheTemplateOverride : NSObject<GRMustacheTemplateComponent> {
     GRMustacheTemplate *_template;
@@ -44,9 +44,9 @@
 /**
  * The overridable partial template.
  *
- * This property is used by [GRMustacheRuntime assertAcyclicTemplateOverride:].
+ * This property is used by [GRMustacheContext assertAcyclicTemplateOverride:].
  *
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
  */
 @property (nonatomic, retain, readonly) GRMustacheTemplate *template GRMUSTACHE_API_INTERNAL;
 

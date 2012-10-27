@@ -26,27 +26,26 @@
 #import "GRMustacheTagDelegate.h"
 
 /**
- * The GRMustacheRuntime responsability is to provide a runtime context for
- * Mustache rendering. It internally maintains a context stack, that makes is
- * able to provide the current context object, and to perform a key lookup in
- * the context stack.
+ * The GRMustacheContext internally maintains a context stack  that
+ * makes it able to provide the current context object, and to perform key
+ * lookup.
  */
-@interface GRMustacheRuntime : NSObject {
+@interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
 
 /**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
- * context stack that is extended with _contextObject_.
+ * Returns a GRMustacheContext with extended context stack. The added
+ * object comes to the top of the stack.
  *
  * TODO: talk about delegate stack
  *
- * @param contextObject  A context object
+ * @param object  A context object
  *
- * @return A GRMustacheRuntime object.
+ * @return A GRMustacheContext object.
  */
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

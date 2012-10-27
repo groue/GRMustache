@@ -23,7 +23,7 @@
 #import "GRMustachePrivateAPITest.h"
 #import "GRMustache_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import <CoreData/CoreData.h>
 
 @interface GRPreventNSUndefinedKeyExceptionAttackTest : GRMustachePrivateAPITest {
@@ -65,24 +65,24 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"foo:{{foo}}" error:nil];
     {
-        GRMustacheRuntimeDidCatchNSUndefinedKeyException = NO;
+        GRMustacheContextDidCatchNSUndefinedKeyException = NO;
         id object = [[[NSObject alloc] init] autorelease];
         [template renderObject:object error:NULL];
         
         // make sure object did not raise any exception
-        STAssertEquals(NO, GRMustacheRuntimeDidCatchNSUndefinedKeyException, @"");
+        STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
         
         // make sure object raises exception again
         STAssertThrowsSpecificNamed([object valueForKey:@"foo"], NSException, NSUndefinedKeyException, nil);
     }
     
     {
-        GRMustacheRuntimeDidCatchNSUndefinedKeyException = NO;
+        GRMustacheContextDidCatchNSUndefinedKeyException = NO;
         NSManagedObject *managedObject = [NSEntityDescription insertNewObjectForEntityForName:@"NSManagedObject" inManagedObjectContext:self.managedObjectContext];
         [template renderObject:managedObject error:NULL];
         
         // make sure object did not raise any exception
-        STAssertEquals(NO, GRMustacheRuntimeDidCatchNSUndefinedKeyException, @"");
+        STAssertEquals(NO, GRMustacheContextDidCatchNSUndefinedKeyException, @"");
         
         // make sure object raises exception again
         STAssertThrowsSpecificNamed([managedObject valueForKey:@"foo"], NSException, NSUndefinedKeyException, nil);

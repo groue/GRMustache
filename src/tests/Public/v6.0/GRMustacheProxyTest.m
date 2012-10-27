@@ -33,21 +33,23 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         
         switch (tag.type) {
             case GRMustacheTagTypeSection:
             case GRMustacheTagTypeOverridableSection: {
                 // {{# f(...) }}...{{/}}
                 // {{$ f(...) }}...{{/}}
-                // Custom rendering for non-inverted sections
+                
+                // Custom rendering for non-inverted sections:
                 
                 __block NSMutableString *buffer = [NSMutableString string];
+                
                 [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
-                    GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
-                    itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
+                    GRMustacheContext *itemContext = [context contextByAddingObject:@{ @"position": @(index + 1) }];
+                    itemContext = [itemContext contextByAddingObject:item];
                     
-                    NSString *rendering = [tag renderWithRuntime:itemRuntime HTMLSafe:HTMLSafe error:error];
+                    NSString *rendering = [tag renderWithContext:itemContext HTMLSafe:HTMLSafe error:error];
                     if (rendering) {
                         [buffer appendString:rendering];
                     } else {
@@ -62,7 +64,7 @@
             default:
                 // Genuine Mustache rendering otherwise
                 
-                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withRuntime:runtime HTMLSafe:HTMLSafe error:error];
+                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withContext:context HTMLSafe:HTMLSafe error:error];
         }
     }];
 }

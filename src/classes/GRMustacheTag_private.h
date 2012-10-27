@@ -25,7 +25,7 @@
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 
 // Documented in GRMustacheTag.h
 typedef enum {
@@ -56,7 +56,7 @@ typedef enum {
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

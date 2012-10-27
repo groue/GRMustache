@@ -33,12 +33,11 @@
 /**
  * This global variable is used by GRPreventNSUndefinedKeyExceptionAttackTest.
  */
-extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
+extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
 
 /**
- * The GRMustacheRuntime responsability is to provide a runtime context for
- * Mustache rendering. It internally maintains the following stacks:
+ * The GRMustacheContext maintains the following stacks:
  *
  * - a context stack,
  * - a delegate stack,
@@ -51,7 +50,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * - let template and tag delegates interpret rendered values.
  * - let partial templates override template components.
  */
-@interface GRMustacheRuntime : NSObject {
+@interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
@@ -70,7 +69,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * Sends the `valueForKey:` message to _object_ with the provided _key_, and
  * returns the result.
  *
- * Should [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack] method have
+ * Should [GRMustacheContext preventNSUndefinedKeyExceptionAttack] method have
  * been called earlier, temporarily swizzle _object_ so that most
  * NSUndefinedKeyException are avoided.
  * 
@@ -89,33 +88,33 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 /**
  * TODO
  */
-+ (id)runtime GRMUSTACHE_API_INTERNAL;
++ (id)context GRMUSTACHE_API_INTERNAL;
 
-// Documented in GRMustacheRuntime.h
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
+// Documented in GRMustacheContext.h
+- (GRMustacheContext *)contextByAddingObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
 
 /**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
+ * Returns a GRMustacheContext object identical to the receiver, but for the
  * delegate stack that is extended with _tagDelegate_.
  *
  * @param tagDelegate  A delegate
  *
- * @return A GRMustacheRuntime object.
+ * @return A GRMustacheContext object.
  */
-- (GRMustacheRuntime *)runtimeByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_INTERNAL;
+- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
+ * Returns a GRMustacheContext object identical to the receiver, but for the
  * template override stack that is extended with _templateOverride_.
  *
  * @param templateOverride  A template override object
  *
- * @return A GRMustacheRuntime object.
+ * @return A GRMustacheContext object.
  *
  * @see GRMustacheTemplateOverride
- * @see [GRMustacheTemplateOverride renderInBuffer:withRuntime:error:]
+ * @see [GRMustacheTemplateOverride appendRenderingToString:withContext:error:]
  */
-- (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
+- (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found
@@ -125,7 +124,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *
  * @return The value found in the context stack.
  *
- * @see -[GRMustacheIdentifierExpression evaluateInRuntime:]
+ * @see -[GRMustacheIdentifierExpression evaluateInContext:]
  */
 - (id)contextValueForKey:(NSString *)key GRMUSTACHE_API_INTERNAL;
 
@@ -134,7 +133,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *
  * @return The top object of the receiver's context stack.
  *
- * @see -[GRMustacheImplicitIteratorExpression evaluateInRuntime:]
+ * @see -[GRMustacheImplicitIteratorExpression evaluateInContext:]
  */
 - (id)currentContextValue GRMUSTACHE_API_INTERNAL;
 
@@ -146,8 +145,8 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @param tag    The tag.
  * @param block  The rendering block.
  *
- * @see -[GRMustacheSectionTag renderInBuffer:withRuntime:error:]
- * @see -[GRMustacheVariableTag renderInBuffer:withRuntime:error:]
+ * @see -[GRMustacheSectionTag appendRenderingToString:withContext:error:]
+ * @see -[GRMustacheVariableTag appendRenderingToString:withContext:error:]
  */
 - (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 

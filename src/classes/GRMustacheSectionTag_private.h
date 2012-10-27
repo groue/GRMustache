@@ -47,25 +47,26 @@
  * 
  * The rendering of Mustache sections depend on the value they are attached to.
  * The value is fetched by evaluating the _expression_ parameter against a
- * runtime.
+ * rendering context.
  *
  * The _components_ array contains the GRMustacheTemplateComponent objects
  * that make the section (texts, variables, other sections, etc.)
  * 
- * @param templateRepository    TODO
- * @param expression      The expression that would evaluate against a runtime.
- * @param templateString  A Mustache template string
- * @param innerRange      The range of the inner template string of the section
- *                        in _templateString_.
- * @param type            The type of the section.
- * @param components      An array of GRMustacheTemplateComponent that make the
- *                        section.
+ * @param templateRepository  TODO
+ * @param expression          The expression that would evaluate against a
+ *                            rendering context.
+ * @param templateString      A Mustache template string
+ * @param innerRange          The range of the inner template string of the
+ *                            section in _templateString_.
+ * @param type                The type of the section.
+ * @param components          An array of GRMustacheTemplateComponent that make
+ *                            the section.
  *
  * @return A GRMustacheSectionTag
  * 
  * @see GRMustacheExpression
- * @see GRMustacheRuntime
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
+ * @see GRMustacheContext
  */
 + (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 

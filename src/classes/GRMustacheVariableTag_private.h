@@ -44,9 +44,10 @@
 /**
  * Builds and returns a GRMustacheVariableTag.
  *
- * @param templateRepository    TODO
- * @param expression  The expression that would evaluate against a runtime.
- * @param raw         NO if the value should be rendered HTML-escaped.
+ * @param templateRepository  TODO
+ * @param expression          The expression that would evaluate against a
+ *                            rendering contex.
+ * @param raw                 NO if the value should be rendered HTML-escaped.
  *
  * @return a GRMustacheVariableTag
  *

@@ -24,7 +24,7 @@
 #import "GRMustacheFilter_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheToken_private.h"
 
 @interface GRMustacheFilteredExpression()
@@ -86,15 +86,15 @@
 
 #pragma mark GRMustacheExpression
 
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
 {
     id argument;
     id filter;
     
-    if (![_argumentExpression evaluateInRuntime:runtime value:&argument error:error]) {
+    if (![_argumentExpression evaluateInContext:context value:&argument error:error]) {
         return NO;
     }
-    if (![_filterExpression evaluateInRuntime:runtime value:&filter error:error]) {
+    if (![_filterExpression evaluateInContext:context value:&filter error:error]) {
         return NO;
     }
 

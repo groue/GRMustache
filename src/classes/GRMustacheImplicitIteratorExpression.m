@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
 
 @implementation GRMustacheImplicitIteratorExpression
 
@@ -38,9 +38,9 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
 {
-    *value = [runtime currentContextValue];
+    *value = [context currentContextValue];
     return YES;
 }
 

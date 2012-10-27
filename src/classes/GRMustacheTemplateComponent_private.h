@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 
 /**
@@ -35,15 +35,16 @@
  * This abstract tree is made of objects conforming to the
  * GRMustacheTemplateComponent.
  * 
- * Their responsability is to render, provided with a Mustache runtime, through
- * their `renderInBuffer:withRuntime:error:` implementation.
+ * Their responsability is to render, provided with a Mustache rendering
+ * context, through their `appendRenderingToString:withContext:error:`
+ * implementation.
  * 
  * For instance, the template string "hello {{name}}!" would give four template
  * components:
  *
  * - a GRMustacheTextComponent that renders "hello ".
  * - a GRMustacheVariableTag that renders the value of the `name` key in the
- *   runtime.
+ *   rendering context.
  * - a GRMustacheTextComponent that renders "!".
  * - a GRMustacheTemplate that would contain the three previous components, and
  *   render the concatenation of their renderings.
@@ -53,24 +54,24 @@
  * `resolveTemplateComponent:` method.
  *
  * @see GRMustacheCompiler
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
  */
 @protocol GRMustacheTemplateComponent<NSObject>
 @required
 
 /**
- * Appends the rendering of the receiver in a buffer.
+ * Appends the rendering of the receiver to a buffer.
  * 
  * @param buffer              A mutable string
- * @param runtime             A runtime
+ * @param context    A rendering context
  * @param templateRepository  TODO
  * @param error               TODO
  *
  * @return TODO
  *
- * @see GRMustacheRuntime
+ * @see GRMustacheContext
  */
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheScopedExpression_private.h"
-#import "GRMustacheRuntime_private.h"
-#import "GRMustacheRuntime_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustacheContext_private.h"
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) GRMustacheExpression *baseExpression;
@@ -77,13 +77,13 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context  value:(id *)value error:(NSError **)error
 {
     id scopedValue;
-    if (![_baseExpression evaluateInRuntime:runtime value:&scopedValue error:error]) {
+    if (![_baseExpression evaluateInContext:context value:&scopedValue error:error]) {
         return NO;
     }
-    *value = [GRMustacheRuntime valueForKey:_scopeIdentifier inObject:scopedValue];
+    *value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
     return YES;
 }
 

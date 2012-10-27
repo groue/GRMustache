@@ -25,7 +25,7 @@
 
 @protocol GRMustacheRendering;
 @class GRMustacheTag;
-@class GRMustacheRuntime;
+@class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 
 /**
@@ -101,7 +101,7 @@ typedef struct {
 /**
  * TODO
  */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 
@@ -111,6 +111,6 @@ typedef struct {
 #import "GRMustacheFilter.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
-#import "GRMustacheRuntime.h"
+#import "GRMustacheContext.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheTag.h"

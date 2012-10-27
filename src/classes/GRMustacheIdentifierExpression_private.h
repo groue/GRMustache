@@ -24,7 +24,7 @@
 
 /**
  * The GRMustacheIdentifierExpression is able to perform the deep lookup of an
- * identifier in a runtime.
+ * identifier in a rendering context.
  *
  * @see GRMustacheExpression
  */
