@@ -54,9 +54,4 @@ typedef struct {
  */
 + (id<GRMustacheRendering>)renderingObjectWithObject:(id)object implementation:(IMP)implementation GRMUSTACHE_API_INTERNAL;
 
-/**
- * TODO
- */
-+ (NSString *)htmlEscape:(NSString *)string GRMUSTACHE_API_INTERNAL;
-
 @end
