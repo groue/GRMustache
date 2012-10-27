@@ -52,11 +52,11 @@
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
     template = [repository templateNamed:@"a" error:&error];
-    result = [template render];
+    result = [template renderAndReturnError:NULL];
     STAssertEqualObjects(result, @"ABC", @"");
     
     template = [repository templateFromString:@"{{>a}}" error:&error];
-    result = [template render];
+    result = [template renderAndReturnError:NULL];
     STAssertEqualObjects(result, @"ABC", @"");
 }
 

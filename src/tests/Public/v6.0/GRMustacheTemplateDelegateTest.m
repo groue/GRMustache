@@ -39,7 +39,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
     template.delegate = delegate;
-    [template render];
+    [template renderAndReturnError:NULL];
     
     STAssertEquals(success, YES, @"");
 }
@@ -55,7 +55,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
     template.delegate = delegate;
-    [template render];
+    [template renderAndReturnError:NULL];
     
     STAssertEquals(success, YES, @"");
 }
@@ -84,7 +84,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---{{foo}}---" error:NULL];
     template.delegate = delegate;
-    NSString *rendering = [template renderObject:@{@"foo": @"value"}];
+    NSString *rendering = [template renderObject:@{@"foo": @"value"} error:NULL];
     
     STAssertEqualObjects(rendering, @"---delegate---", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
@@ -114,7 +114,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
     template.delegate = delegate;
-    NSString *rendering = [template render];
+    NSString *rendering = [template renderAndReturnError:NULL];
     
     STAssertEqualObjects(rendering, @"<>", @"");
     STAssertEquals(preRenderingTagType, GRMustacheTagTypeRegularSection, @"", @"");
@@ -178,7 +178,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
     template.delegate = delegate;
-    NSString *rendering = [template render];
+    NSString *rendering = [template renderAndReturnError:NULL];
     
     STAssertEqualObjects(rendering, @"<delegate>", @"");
     STAssertEquals(templateWillInterpretCount, (NSUInteger)2, @"");
@@ -210,7 +210,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template render];
+        NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -228,7 +228,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"foo", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -246,7 +246,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template render];
+        NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -264,7 +264,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -282,7 +282,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}}];
+        NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}} error:NULL];
         
         STAssertEqualObjects(rendering, @"bar", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -300,7 +300,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template render];
+        NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -318,7 +318,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"FOO", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -336,7 +336,7 @@
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject).length}}" error:NULL];
         template.delegate = delegate;
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"3", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -350,12 +350,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{name}}"];
@@ -365,12 +365,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#name}}{{/name}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{#name}}"];
@@ -380,12 +380,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{   name\t}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{   name\t}}"];
@@ -399,12 +399,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 1"];
@@ -414,12 +414,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n {{name}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 2"];
@@ -429,12 +429,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n\n  {{#name}}\n\n{{/name}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 3"];
@@ -448,12 +448,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest" bundle:self.testBundle error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -463,13 +463,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -483,12 +483,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest" withExtension:@"mustache"] error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -498,13 +498,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -518,12 +518,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"] error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -533,13 +533,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -553,12 +553,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest_wrapper" bundle:self.testBundle error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -568,13 +568,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -584,13 +584,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -604,12 +604,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -619,13 +619,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -635,13 +635,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -655,12 +655,12 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -670,13 +670,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -686,13 +686,13 @@
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-            description = [invocation description];
+            description = [tag description];
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
         template.delegate = delegate;
-        [template render];
+        [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
@@ -722,7 +722,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#delegate}}{{value}}{{/delegate}}" error:NULL];
-    NSString *rendering = [template renderObject:@{@"delegate":delegate, @"value":@"foo"}];
+    NSString *rendering = [template renderObject:@{@"delegate":delegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"delegate", @"");
     STAssertEquals(preRenderingTemplate, template, @"");
@@ -750,7 +750,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
-    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"uppercase":uppercaseDelegate, @"value":@"foo"}];
+    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"uppercase":uppercaseDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"prefixfoo prefixFOO FOO PREFIXFOO", @"");
 }
@@ -780,7 +780,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}}{{/prefix}} {{#suffix}}{{value}}{{/suffix}} {{value}}" error:NULL];
     template.delegate = uppercaseDelegate;
-    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"suffix":suffixDelegate, @"value":@"foo"}];
+    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"suffix":suffixDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"PREFIXFOO FOOSUFFIX FOO", @"");
 }
@@ -810,7 +810,7 @@
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
     template.delegate = suffixDelegate;
-    NSString *rendering = [template renderObject:@{@"uppercase":uppercaseDelegate, @"prefix":prefixDelegate, @"value":@"foo"}];
+    NSString *rendering = [template renderObject:@{@"uppercase":uppercaseDelegate, @"prefix":prefixDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"prefixfoosuffix prefixFOOsuffix FOOsuffix PREFIXFOOsuffix", @"");
 }
@@ -826,7 +826,7 @@
     delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) { delegate2HasBeenInvoked = YES; };
     
     id items = @{@"items": @[delegate1, delegate2] };
-    [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items];
+    [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
     
     STAssertTrue(delegate1HasBeenInvoked, @"");
     STAssertTrue(delegate2HasBeenInvoked, @"");

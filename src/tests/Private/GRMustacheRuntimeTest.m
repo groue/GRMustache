@@ -197,7 +197,7 @@
 
 - (void)testOneDepthRuntimeTemplate
 {
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{length}}" error:NULL] renderObject:@"foo"];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{length}}" error:NULL] renderObject:@"foo" error:NULL];
     STAssertEqualObjects(result, @"3", nil);
 }
 
@@ -205,7 +205,7 @@
 {
     NSString *templateString = @"{{#name}}{{length}}{{/name}}";
     id recorder = [GRKVCRecorder recorderWithRecognizedKey:@"name"];
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:recorder];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:recorder error:NULL];
     STAssertEqualObjects(result, @"4", nil);
 }
 
@@ -213,7 +213,7 @@
 {
     NSString *templateString = @"{{#name}}{{name}}{{/name}}";
     NSDictionary *recorder = [NSDictionary dictionaryWithObject:@"foo" forKey:@"name"];
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:recorder];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:recorder error:NULL];
     STAssertEqualObjects(result, @"foo", nil);
 }
 

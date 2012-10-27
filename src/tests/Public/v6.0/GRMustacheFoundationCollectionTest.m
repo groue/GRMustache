@@ -34,19 +34,19 @@
     
     {
         // Content of NSArray should be iterated
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSArray should not be iterated via NSArray's implementation of valueForKey:
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSArray count] should be accessible
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"1", @"");
     }
 }
@@ -57,19 +57,19 @@
     
     {
         // Content of NSSet should be iterated
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSSet should not be iterated via NSSet's implementation of valueForKey:
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSSet count] should be accessible
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"1", @"");
     }
 }
@@ -80,19 +80,19 @@
     
     {
         // Content of NSOrderedSet should be iterated
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSOrderedSet should not be iterated via NSOrderedSet's implementation of valueForKey:
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSOrderedSet count] should be accessible
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"1", @"");
     }
 }

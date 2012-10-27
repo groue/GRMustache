@@ -35,7 +35,7 @@
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 @end
 
 // Documented in GRMustacheTemplateRepository.h
@@ -86,9 +86,9 @@
 + (id)templateRepository GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 @end

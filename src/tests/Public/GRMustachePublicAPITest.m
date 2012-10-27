@@ -161,14 +161,19 @@ static struct {
                                                                             error:&error];
                     
                     if (template) {
-                        NSString *rendering = [template renderObject:data];
-                        
-                        if (![expectedRendering isEqualToString:rendering]) {
+                        NSString *rendering = [template renderObject:data error:&error];
+                        if (rendering) {
+                            if (![expectedRendering isEqualToString:rendering]) {
+                                // Allow Breakpointing failing tests
+                                [template renderObject:data error:&error];
+                            }
+                            
+                            STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
+                        } else {
                             // Allow Breakpointing failing tests
-                            [template renderObject:data];
+                            [template renderObject:data error:&error];
+                            STAssertTrue(NO, @"Error rendering template: %@: %@", [error localizedDescription], testDescription);
                         }
-                        
-                        STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
                     } else {
                         STAssertTrue(NO, @"Error loading template: %@: %@", [error localizedDescription], testDescription);
                     }
@@ -184,14 +189,19 @@ static struct {
                                                                             error:&error];
                     
                     if (template) {
-                        NSString *rendering = [template renderObject:data];
-                        
-                        if (![expectedRendering isEqualToString:rendering]) {
+                        NSString *rendering = [template renderObject:data error:&error];
+                        if (rendering) {
+                            if (![expectedRendering isEqualToString:rendering]) {
+                                // Allow Breakpointing failing tests
+                                [template renderObject:data error:&error];
+                            }
+                            
+                            STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
+                        } else {
                             // Allow Breakpointing failing tests
-                            [template renderObject:data];
+                            [template renderObject:data error:&error];
+                            STAssertTrue(NO, @"Error rendering template: %@: %@", [error localizedDescription], testDescription);
                         }
-                        
-                        STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
                     } else {
                         STAssertTrue(NO, @"Error loading template: %@: %@", [error localizedDescription], testDescription);
                     }
@@ -213,14 +223,19 @@ static struct {
                                                                      error:&error];
             
             if (template) {
-                NSString *rendering = [template renderObject:data];
-                
-                if (![expectedRendering isEqualToString:rendering]) {
+                NSString *rendering = [template renderObject:data error:&error];
+                if (rendering) {
+                    if (![expectedRendering isEqualToString:rendering]) {
+                        // Allow Breakpointing failing tests
+                        [template renderObject:data error:&error];
+                    }
+                    
+                    STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
+                } else {
                     // Allow Breakpointing failing tests
-                    [template renderObject:data];
+                    [template renderObject:data error:&error];
+                    STAssertTrue(NO, @"Error rendering template: %@: %@", [error localizedDescription], testDescription);
                 }
-                
-                STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
             } else {
                 STAssertTrue(NO, @"Error loading template: %@: %@", [error localizedDescription], testDescription);
             }
@@ -228,26 +243,26 @@ static struct {
     }
 }
 
-- (GRMustacheTemplate *)templateForTemplateString:(NSString *)templateString partialsDictionary:(NSDictionary *)partialsDictionary error:(NSError **)outError
+- (GRMustacheTemplate *)templateForTemplateString:(NSString *)templateString partialsDictionary:(NSDictionary *)partialsDictionary error:(NSError **)error
 {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
-    return [repository templateFromString:templateString error:outError];
+    return [repository templateFromString:templateString error:error];
 }
 
-- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesPath:(NSString *)templatesPath encoding:(NSStringEncoding)encoding error:(NSError **)outError
+- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesPath:(NSString *)templatesPath encoding:(NSStringEncoding)encoding error:(NSError **)error
 {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath
                                                                                            templateExtension:[templateName pathExtension]
                                                                                                     encoding:encoding];
-    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:outError];
+    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:error];
 }
 
-- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesURL:(NSURL *)templatesURL encoding:(NSStringEncoding)encoding error:(NSError **)outError
+- (GRMustacheTemplate *)templateForTemplateNamed:(NSString *)templateName templatesURL:(NSURL *)templatesURL encoding:(NSStringEncoding)encoding error:(NSError **)error
 {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:templatesURL
                                                                                          templateExtension:[templateName pathExtension]
                                                                                                   encoding:encoding];
-    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:outError];
+    return [repository templateNamed:[templateName stringByDeletingPathExtension] error:error];
 }
 
 @end

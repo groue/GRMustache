@@ -81,13 +81,13 @@
 {
     NSString *templateString = [NSString stringWithFormat:@"{{#%@}}YES{{/%@}}{{^%@}}NO{{/%@}}", key, key, key, key];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    NSString *result = [template renderObject:object];
+    NSString *result = [template renderObject:object error:NULL];
     if ([result isEqualToString:@"YES"]) {
         return YES;
     } else if ([result isEqualToString:@"NO"]) {
         return NO;
     } else {
-        result = [template renderObject:object];    // allow breakpoint
+        result = [template renderObject:object error:NULL];    // allow breakpoint
         STAssertTrue(NO, @"");
         return NO; // meaningless
     }
@@ -102,7 +102,7 @@
 - (BOOL)doesObjectRender:(id)object
 {
     NSDictionary *context = object ? [NSDictionary dictionaryWithObject:object forKey:@"bool"] : [NSDictionary dictionary];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"<{{bool}}>" error:NULL] renderObject:context];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"<{{bool}}>" error:NULL] renderObject:context error:NULL];
     if ([result isEqualToString:@"<>"]) {
         return NO;
     } else {

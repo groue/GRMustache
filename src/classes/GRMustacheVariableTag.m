@@ -52,23 +52,39 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
 {
-    id value = [_expression evaluateInRuntime:runtime];
+    id value;
+    if (![_expression evaluateInRuntime:runtime value:&value error:error]) {
+        return NO;
+    }
+
+    __block BOOL success = YES;
     [runtime renderValue:value withTag:self usingBlock:^(id value) {
         
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
         
         BOOL HTMLEscaped = NO;
-        NSString *rendering = [renderingObject renderForTag:self inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped];
+        NSError *renderingError = nil;
+        NSString *rendering = [renderingObject renderForTag:self inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped error:&renderingError];
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
                 rendering = [GRMustache htmlEscape:rendering];
             }
             [buffer appendString:rendering];
+        } else if (renderingError) {
+            // If rendering is nil, but rendering error is not set,
+            // assume lazy coder, and the intention to render nothing:
+            // Fail if and only if renderingError is explicitely set.
+            if (error) {
+                *error = renderingError;
+            }
+            success = NO;
         }
     }];
+    
+    return success;
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

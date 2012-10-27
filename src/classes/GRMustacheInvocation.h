@@ -39,7 +39,6 @@
 @interface GRMustacheInvocation : NSObject {
 @private
     id _returnValue;
-    id _token;
 }
 
 /**

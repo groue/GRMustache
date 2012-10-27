@@ -173,7 +173,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheInvocation *invocation = [[[GRMustacheInvocation alloc] init] autorelease];
-    invocation.token = tag.expression.token;
     invocation.returnValue = value;
     
     // top of the stack is first object

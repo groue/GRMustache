@@ -148,72 +148,72 @@
 - (void)testHelperPerformsRendering
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         return @"---";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
     STAssertEqualObjects(result, @"---", @"");
 }
 
 - (void)testHelperRenderingIsHTMLEscaped
 {
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = NO;
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = NO;
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = YES;
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = YES;
             return @"&<>{{foo}}";
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context];
+        NSString *result = [[GRMustacheTemplate templateFromString:@"{{{helper}}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
 }
 
 - (void)testHelperRenderingIsHTMLEscapedByDefault
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         return @"&<>{{foo}}";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
     STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
 }
 
 - (void)testHelperCanRenderNil
 {
     // [GRMustacheVariableTagHelper helperWithBlock:]
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
     STAssertEqualObjects(result, @"", @"");
 }
 
@@ -222,95 +222,95 @@
     // [GRMustacheVariableTagHelper helperWithBlock:]
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+        [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
         STAssertEquals(invocationCount, (NSUInteger)1, @"");
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context];
+        [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [[GRMustacheTemplate templateFromString:@"{{^helper}}{{/helper}}" error:nil] renderObject:context];
+        [[GRMustacheTemplate templateFromString:@"{{^helper}}{{/helper}}" error:nil] renderObject:context error:NULL];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
     {
         __block NSUInteger invocationCount = 0;
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
             if (tag.type == GRMustacheTagTypeVariable) {
                 invocationCount++;
             }
             return nil;
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
-        [[GRMustacheTemplate templateFromString:@"{{#false}}{{helper}}{{/false}}" error:nil] renderObject:context];
+        [[GRMustacheTemplate templateFromString:@"{{#false}}{{helper}}{{/false}}" error:nil] renderObject:context error:NULL];
         STAssertEquals(invocationCount, (NSUInteger)0, @"");
     }
 }
 
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplate
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
 //                             helper, @"helper",
 //                             @"---", @"subject", nil];
-//    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context];
+//    NSString *result = [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:context error:NULL];
 //    STAssertEqualObjects(result, @"---", @"");
 //}
 //
 //- (void)testHelperCanRenderCurrentContextInDistinctTemplateContainingPartial
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
 //    NSDictionary *partials = @{@"partial": @"In partial."};
 //    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
 //    GRMustacheTemplate *template = [repository templateFromString:@"{{helper}}" error:nil];
-//    NSString *result = [template renderObject:context];
+//    NSString *result = [template renderObject:context error:NULL];
 //    STAssertEqualObjects(result, @"In partial.", @"");
 //}
 //
 //- (void)testHelperRenderingOfCurrentContextInDistinctTemplateContainingPartialIsNotHTMLEscaped
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
 //        return [context renderString:@"{{>partial}}" error:NULL];
 //    }];
 //    NSDictionary *context = @{@"helper": helper};
 //    NSDictionary *partials = @{@"partial": @"&<>{{foo}}"};
 //    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
 //    GRMustacheTemplate *template = [repository templateFromString:@"{{helper}}" error:nil];
-//    NSString *result = [template renderObject:context];
+//    NSString *result = [template renderObject:context error:NULL];
 //    STAssertEqualObjects(result, @"&<>", @"");
 //}
 //
 //- (void)testTemplateDelegateCallbacksAreCalledDuringAlternateTemplateStringRendering
 //{
-//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+//    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    
@@ -324,7 +324,7 @@
 //                             @"---", @"subject", nil];
 //    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{helper}}" error:NULL];
 //    template.delegate = delegate;
-//    NSString *result = [template renderObject:context];
+//    NSString *result = [template renderObject:context error:NULL];
 //    STAssertEqualObjects(result, @"delegate", @"");
 //}
 //
@@ -336,7 +336,7 @@
     GRMustacheTemplate *template = [repository templateFromString:@"{{partial}}" error:NULL];
     id partial = [repository templateNamed:@"partial" error:NULL];
     NSDictionary *context = @{@"partial": partial};
-    NSString *result = [template renderObject:context];
+    NSString *result = [template renderObject:context error:NULL];
     
     STAssertEqualObjects(result, @"In partial.", @"");
 }
@@ -349,7 +349,7 @@
     GRMustacheTemplate *template = [repository templateFromString:@"{{partial}}" error:nil];
     id partial = [repository templateNamed:@"partial" error:NULL];
     NSDictionary *context = @{@"partial": partial};
-    NSString *result = [template renderObject:context];
+    NSString *result = [template renderObject:context error:NULL];
     
     STAssertEqualObjects(result, @"&<>", @"");
 }
@@ -360,19 +360,19 @@
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
     GRMustacheTemplate *template = [repository templateFromString:@"{{items}}" error:nil];
     
-    id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
         runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item1" }];
-        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
     }];
-    id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped) {
+    id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         GRMustacheTemplate *template = [templateRepository templateNamed:@"partial" error:NULL];
         runtime = [runtime runtimeByAddingContextObject:@{ @"name": @"item2" }];
-        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
     }];
 
     NSDictionary *context = @{@"items": @[item1, item2]};
-    NSString *result = [template renderObject:context];
+    NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"<item1><item2>", @"");
 }
 
@@ -385,7 +385,7 @@
 //    NSDictionary *partials = @{@"item": @"{{name}}"};
 //    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
 //    GRMustacheTemplate *template = [repository templateFromString:@"{{item}}" error:nil];
-//    NSString *result = [template renderObject:context];
+//    NSString *result = [template renderObject:context error:NULL];
 //    STAssertEqualObjects(result, @"name", @"");
 //}
 //

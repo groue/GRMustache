@@ -116,7 +116,7 @@
                                                                     error:NULL];
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    NSString *rendering = [template renderObject:context];
+    NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
@@ -126,7 +126,7 @@
                                                                             error:NULL];
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    NSString *rendering = [template renderObject:context];
+    NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
@@ -136,7 +136,7 @@
                                                                            error:NULL];
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    NSString *rendering = [template renderObject:context];
+    NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
@@ -147,7 +147,7 @@
                                                                       error:NULL];
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    NSString *rendering = [template renderObject:context];
+    NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
     STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
 }

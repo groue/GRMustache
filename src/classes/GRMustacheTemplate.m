@@ -33,34 +33,34 @@
 @synthesize delegate=_delegate;
 @synthesize templateRepository=_templateRepository;
 
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)outError
++ (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
-    return [templateRepository templateFromString:templateString error:outError];
+    return [templateRepository templateFromString:templateString error:error];
 }
 
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError
++ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
-    return [templateRepository templateNamed:name error:outError];
+    return [templateRepository templateNamed:name error:error];
 }
 
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError
++ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)error
 {
     NSString *directoryPath = [path stringByDeletingLastPathComponent];
     NSString *templateExtension = [path pathExtension];
     NSString *templateName = [[path lastPathComponent] stringByDeletingPathExtension];
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension];
-    return [templateRepository templateNamed:templateName error:outError];
+    return [templateRepository templateNamed:templateName error:error];
 }
 
-+ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError
++ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error
 {
     NSURL *baseURL = [URL URLByDeletingLastPathComponent];
     NSString *templateExtension = [URL pathExtension];
     NSString *templateName = [[URL lastPathComponent] stringByDeletingPathExtension];
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension];
-    return [templateRepository templateNamed:templateName error:outError];
+    return [templateRepository templateNamed:templateName error:error];
 }
 
 - (void)dealloc
@@ -69,21 +69,21 @@
     [super dealloc];
 }
 
-- (NSString *)render
+- (NSString *)renderAndReturnError:(NSError **)error
 {
-    return [self renderObject:nil];
+    return [self renderObject:nil error:error];
 }
 
-- (NSString *)renderObject:(id)object
+- (NSString *)renderObject:(id)object error:(NSError **)error
 {
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
     runtime = [runtime runtimeByAddingContextObject:object];
     
     BOOL HTMLEscaped = NO;
-    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
+    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped error:error];
 }
 
-- (NSString *)renderObjectsFromArray:(NSArray *)objects
+- (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error
 {
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
     for (id object in objects) {
@@ -91,13 +91,13 @@
     }
     
     BOOL HTMLEscaped = NO;
-    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped];
+    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped error:error];
 }
 
 
 #pragma mark <GRMustacheTemplateComponent>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
 {
     runtime = [runtime runtimeWithDelegatingTemplate:self];
     runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
@@ -107,8 +107,12 @@
         component = [runtime resolveTemplateComponent:component];
         
         // render
-        [component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+        if (![component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
+            return NO;
+        }
     }
+    
+    return YES;
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
@@ -135,10 +139,12 @@
 
 #pragma mark <GRMustacheRendering>
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    [self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+    if (![self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
+        return nil;
+    }
     *HTMLEscaped = YES;
     return buffer;
 }

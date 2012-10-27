@@ -44,15 +44,15 @@
     return name;
 }
 
-- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error
 {
     _templateStringForTemplateIDCount++;
     if ([templateID isEqualToString:@"not found"]) {
         return nil;
     }
     if ([templateID isEqualToString:@"error"]) {
-        if (outError != NULL) {
-            *outError = [NSError errorWithDomain:@"GRMustacheTemplateRepositoryTestDataSource" code:0 userInfo:nil];
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:@"GRMustacheTemplateRepositoryTestDataSource" code:0 userInfo:nil];
         }
         return nil;
     }
@@ -74,12 +74,12 @@
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)0, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)0, @"");
     
-    result = [[repository templateNamed:@"foo" error:NULL] render];
+    result = [[repository templateNamed:@"foo" error:NULL] renderAndReturnError:NULL];
     STAssertEqualObjects(result, @"foo", @"");
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)1, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
     
-    result = [[repository templateFromString:@"{{>foo}}" error:NULL] render];
+    result = [[repository templateFromString:@"{{>foo}}" error:NULL] renderAndReturnError:NULL];
     STAssertEqualObjects(result, @"foo", @"");
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)2, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");

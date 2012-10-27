@@ -58,7 +58,7 @@
     };
     
     NSString *templateString = @"<{{name}}> <{{prefix(name)}}> <{{uppercase(name)}}> <{{prefix(uppercase(name))}}> <{{uppercase(prefix(name))}}>";
-    NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
 }
 
@@ -77,7 +77,7 @@
                 return value;
             }],
         };
-        NSString *rendering = [template renderObject:data];
+        NSString *rendering = [template renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"<objectName> <objectName>", nil);
     }
     
@@ -91,7 +91,7 @@
                 return @{ @"name": @"filterName" };
             }],
         };
-        NSString *rendering = [template renderObject:data];
+        NSString *rendering = [template renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"<filterName> <filterName>", nil);
     }
     
@@ -105,7 +105,7 @@
                 return @{};
             }],
         };
-        NSString *rendering = [template renderObject:data];
+        NSString *rendering = [template renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"<> <rootName>", nil);
     }
 }
@@ -122,7 +122,7 @@
     NSString *templateString = @"<{{#uppercase(.)}}{{.}}{{/}}> <{{#uppercase(.)}}{{.}}{{/ }}>";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     STAssertNotNil(template, nil);
-    NSString *rendering = [template renderObject:@"foo"];
+    NSString *rendering = [template renderObject:@"foo" error:NULL];
     STAssertEqualObjects(rendering, @"<FOO> <FOO>", nil);
 }
 
@@ -134,7 +134,7 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testMissingFilterChainRaisesGRMustacheRenderingException
+- (void)testMissingFilterError
 {
     id data = @{
         @"name": @"Name",
@@ -143,13 +143,24 @@
         }],
     };
     
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL] renderObject:data], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL] renderObject:data], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL] renderObject:data], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL] renderObject:data], NSException, GRMustacheRenderingException, nil);
+    NSError *error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL] renderObject:data error:&error], @"");
+    STAssertNotNil(error.domain, @"");
+    
+    error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL] renderObject:data error:&error], @"");
+    STAssertNotNil(error.domain, @"");
+    
+    error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL] renderObject:data error:&error], @"");
+    STAssertNotNil(error.domain, @"");
+    
+    error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL] renderObject:data error:&error], @"");
+    STAssertNotNil(error.domain, @"");
 }
 
-- (void)testNotAFilterRaisesGRMustacheRenderingException
+- (void)testNotAFilterError
 {
     id data = @{
         @"name": @"Name",
@@ -157,7 +168,9 @@
     };
     
     NSString *templateString = @"<{{filter(name)}}>";
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data], NSException, GRMustacheRenderingException, nil);
+    NSError *error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:&error], @"");
+    STAssertNotNil(error.domain, @"");
 }
 
 - (void)testFiltersDoNotEnterContextStack
@@ -185,7 +198,7 @@
         }],
     };
     NSString *templateString = @"{{#filter(filtered)}}<{{test}} instead of {{#filtered}}{{test}}{{/filtered}}>{{/filter(filtered)}}";
-    NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
 }
 
@@ -199,7 +212,7 @@
             }],
         },
     };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{ math.double(x) }}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{ math.double(x) }}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"1", nil);
 }
 
@@ -214,7 +227,7 @@
             }];
         }],
     };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(prefix)(value)}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(prefix)(value)}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"prefixvalue", @"");
 }
 

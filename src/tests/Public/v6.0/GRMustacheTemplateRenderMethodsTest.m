@@ -100,7 +100,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
-    NSString *rendering = [template renderObject:context];
+    NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
 }
 
@@ -113,12 +113,12 @@
     NSDictionary *extraContext = [NSDictionary dictionaryWithObject:@"bar" forKey:@"stringProperty"];
     
     {
-        NSString *rendering = [template renderObjectsFromArray:@[context, extraContext]];
+        NSString *rendering = [template renderObjectsFromArray:@[context, extraContext] error:NULL];
         STAssertEqualObjects(@"bar", [self valueForStringPropertyInRendering:rendering], nil);
         STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
     }
     {
-        NSString *rendering = [template renderObjectsFromArray:@[extraContext, context]];
+        NSString *rendering = [template renderObjectsFromArray:@[extraContext, context] error:NULL];
         STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
     }
 }
@@ -126,7 +126,7 @@
 - (void)testGRMustacheTemplate_render
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
-    NSString *rendering = [template render];
+    NSString *rendering = [template renderAndReturnError:NULL];
     STAssertEqualObjects(@"", [self valueForStringPropertyInRendering:rendering], nil);
     STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
 }

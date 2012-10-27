@@ -84,13 +84,12 @@
  *     // Extract template components from the compiler
  *     NSArray *templateComponents = [compiler templateComponentsReturningError:...];
  *
- * @param outError  If there is an error building template components, upon
- *                  return contains an NSError object that describes the
- *                  problem.
+ * @param error  If there is an error building template components, upon return
+ *               contains an NSError object that describes the problem.
  *
  * @return An NSArray containing <GRMustacheTemplateComponent> instances
  * 
  * @see GRMustacheTemplateComponent
  */
-- (NSArray *)templateComponentsReturningError:(NSError **)outError GRMUSTACHE_API_INTERNAL;
+- (NSArray *)templateComponentsReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
 @end

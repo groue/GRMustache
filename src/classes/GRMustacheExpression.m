@@ -35,9 +35,10 @@
     [super dealloc];
 }
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
+- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
 {
-    return nil;
+    NSAssert(NO, @"Subclasses must override");
+    return NO;
 }
 
 - (BOOL)isEqual:(id)anObject

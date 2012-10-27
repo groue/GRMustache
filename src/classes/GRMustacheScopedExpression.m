@@ -77,10 +77,14 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
+- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
 {
-    id scopedValue = [_baseExpression evaluateInRuntime:runtime];
-    return [GRMustacheRuntime valueForKey:_scopeIdentifier inObject:scopedValue];
+    id scopedValue;
+    if (![_baseExpression evaluateInRuntime:runtime value:&scopedValue error:error]) {
+        return NO;
+    }
+    *value = [GRMustacheRuntime valueForKey:_scopeIdentifier inObject:scopedValue];
+    return YES;
 }
 
 @end

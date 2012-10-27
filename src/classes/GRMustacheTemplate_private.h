@@ -54,24 +54,24 @@
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
++ (id)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
++ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
++ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)outError GRMUSTACHE_API_PUBLIC;
++ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)render GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderAndReturnError:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObject:(id)object error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderObjectsFromArray:(NSArray *)objects GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 @end

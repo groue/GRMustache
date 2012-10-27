@@ -64,10 +64,13 @@
  * @param buffer              A mutable string
  * @param runtime             A runtime
  * @param templateRepository  TODO
+ * @param error               TODO
+ *
+ * @return TODO
  *
  * @see GRMustacheRuntime
  */
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

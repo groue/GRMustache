@@ -30,27 +30,49 @@
 
 - (void)testNullErrorDoesNotCrash
 {
-    STAssertNotNil([[GRMustacheTemplate templateFromString:@"" error:NULL] renderObject:@""], @"");
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{" error:NULL] renderObject:@""], @"");
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:NULL];
+    STAssertNotNil(template, @"");
+    
+    STAssertNotNil([template renderObject:@"" error:NULL], @"");
+    
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:NULL], @"");
+    
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:NULL], @"");
 }
 
 - (void)testNilInitializedErrorDoesNotCrash
 {
     NSError *error = nil;
-    [[GRMustacheTemplate templateFromString:@"" error:&error] renderObject:@""];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:&error];
+    STAssertNotNil(template, @"");
+    
     error = nil;
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{" error:&error] renderObject:@""];
-    STAssertNil(result, nil);
+    STAssertNotNil([template renderObject:@"" error:&error], @"");
+    
+    error = nil;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:&error], @"");
+    STAssertNotNil(error.domain, nil);
+    
+    error = nil;
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
     STAssertNotNil(error.domain, nil);
 }
 
 - (void)testUninitializedErrorDoesNotCrash
 {
-    NSError *error = (NSError *)0xa;   // some awful value
-    [[GRMustacheTemplate templateFromString:@"{{" error:&error] renderObject:@""];
-    error = (NSError *)0xa;   // some awful value
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{" error:&error] renderObject:@""];
-    STAssertNil(result, nil);
+    NSError *error = (NSError *)0xdeadbeef;
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:&error];
+    STAssertNotNil(template, @"");
+    
+    error = (NSError *)0xdeadbeef;
+    STAssertNotNil([template renderObject:@"" error:&error], @"");
+    
+    error = (NSError *)0xdeadbeef;
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:&error], @"");
+    STAssertNotNil(error.domain, nil);
+    
+    error = (NSError *)0xdeadbeef;
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
     STAssertNotNil(error.domain, nil);
 }
 
@@ -176,7 +198,7 @@
 {
     NSString *templateString = @"{{#list}} <li>{{item}}</li>";
     NSError *error;
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil error:NULL];
     STAssertNil(result, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
@@ -194,7 +216,7 @@
 {
     NSString *templateString = @"{{#list}} <li>{{item}}</li> {{/gist}}";
     NSError *error;
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil error:NULL];
     STAssertNil(result, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
@@ -214,7 +236,7 @@
 {
     NSString *templateString = @"hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}";
     NSError *error;
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil error:NULL];
     STAssertNil(result, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
     NSRange range = [error.localizedDescription rangeOfString:@"line 3"];
@@ -234,7 +256,7 @@
 {
     NSString *templateString = @"{{{{foo}}}}";
     NSError *error;
-    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil];
+    NSString *result = [[GRMustacheTemplate templateFromString:templateString error:&error] renderObject:nil error:NULL];
     STAssertNil(result, nil);
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }

@@ -2,5 +2,4 @@
 - document the wrapping technique of GRMustacheIndexes sample code in the section tag helper guide.
 
 - Safe rendering: Introduce lowPriorityStack/protectedStack
-- rendering objects should return an NSError
 - Implement {{#..}}...{{/}}

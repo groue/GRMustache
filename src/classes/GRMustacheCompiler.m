@@ -130,21 +130,21 @@
     return self;
 }
 
-- (NSArray *)templateComponentsReturningError:(NSError **)outError
+- (NSArray *)templateComponentsReturningError:(NSError **)error
 {
     // Has a fatal error occurred?
     if (_currentComponents == nil) {
         NSAssert(_fatalError, @"We should have an error when _currentComponents is nil");
-        if (outError != NULL) {
-            *outError = [[_fatalError retain] autorelease];
+        if (error != NULL) {
+            *error = [[_fatalError retain] autorelease];
         }
         return nil;
     }
     
     // Unclosed section?
     if (_currentOpeningToken) {
-        if (outError != NULL) {
-            *outError = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
+        if (error != NULL) {
+            *error = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
         }
         return nil;
     }

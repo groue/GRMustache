@@ -22,6 +22,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheTag_private.h"
+#import "GRMustacheExpression_private.h"
+#import "GRMustacheToken_private.h"
 
 @implementation GRMustacheTag
 @synthesize expression=_expression;
@@ -52,13 +54,22 @@
     return nil;
 }
 
+- (NSString *)description
+{
+    GRMustacheToken *token = _expression.token;
+    if (token.templateID) {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
+    } else {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
+    }
+}
+
 
 #pragma mark - <GRMustacheRendering>
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    NSAssert(NO, @"Subclasses must override");
-    return nil;
+    return @"";
 }
 
 @end

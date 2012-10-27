@@ -32,12 +32,12 @@ static CFMutableDictionaryRef renderingImplementationForProtocol = nil;
 static IMP defaultRenderingImplementation;
 
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
-static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
 
 
 @interface GRMustacheRenderingNil : NSObject<GRMustacheRendering>
@@ -47,9 +47,9 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 
 @interface GRMustacheRenderingWithBlock:NSObject<GRMustacheRendering> {
-    NSString *(^_block)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped);
+    NSString *(^_block)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block;
+- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error))block;
 @end
 
 
@@ -90,7 +90,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         return [GRMustacheRenderingNil instance];
     }
     
-    SEL renderSelector = @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:);
+    SEL renderSelector = @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:error:);
     
     if ([object respondsToSelector:renderSelector]) {
         return object;
@@ -130,7 +130,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     return [self renderingObjectWithObject:object implementation:implementation];
 }
 
-+ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block
++ (id)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error))block
 {
     return [[[GRMustacheRenderingWithBlock alloc] initWithBlock:block] autorelease];
 }
@@ -177,8 +177,8 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp
 {
-    SEL renderSelector = @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:);
-    if (!class_addMethod(aClass, renderSelector, imp, "@@:@@@^c")) {
+    SEL renderSelector = @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:error:);
+    if (!class_addMethod(aClass, renderSelector, imp, "@@:@@@^c^@")) {
         Method method = class_getInstanceMethod(aClass, renderSelector);
         method_setImplementation(method, imp);
     }
@@ -218,9 +218,9 @@ static IMP nilRenderingImplementation;
     return instance;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    return nilRenderingImplementation(nil, @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:), tag, runtime, templateRepository, HTMLEscaped);
+    return nilRenderingImplementation(nil, @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:error:), tag, runtime, templateRepository, HTMLEscaped);
 }
 
 @end
@@ -237,7 +237,7 @@ static IMP nilRenderingImplementation;
     [super dealloc];
 }
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block
+- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error))block
 {
     self = [super init];
     if (self) {
@@ -246,12 +246,12 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     if (!_block) {
         return nil;
     }
-    return _block(tag, runtime, templateRepository, HTMLEscaped);
+    return _block(tag, runtime, templateRepository, HTMLEscaped, error);
 }
 
 @end
@@ -278,9 +278,9 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    return _implementation(_object, @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:), tag, runtime, templateRepository, HTMLEscaped);
+    return _implementation(_object, @selector(renderForTag:inRuntime:templateRepository:HTMLEscaped:error:), tag, runtime, templateRepository, HTMLEscaped);
 }
 
 @end
@@ -289,7 +289,7 @@ static IMP nilRenderingImplementation;
 // =============================================================================
 #pragma mark - nil(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -302,7 +302,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
         case GRMustacheTagTypeInvertedSection:
             // {{^ nil }}...{{/}}
             // {{$ nil }}...{{/}}
-            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             
     }
 }
@@ -311,7 +311,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
 // =============================================================================
 #pragma mark - NSNull(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -324,7 +324,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ null }}...{{/}}
-            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             
     }
 }
@@ -333,7 +333,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
 // =============================================================================
 #pragma mark - NSNumber(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -347,7 +347,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             // {{$ number }}...{{/}}
             if ([self boolValue]) {
                 runtime = [runtime runtimeByAddingContextObject:self];
-                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             } else {
                 return nil;
             }
@@ -357,7 +357,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             if ([self boolValue]) {
                 return nil;
             } else {
-                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             }
     }
 }
@@ -366,7 +366,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSString(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -380,7 +380,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             // {{$ string }}...{{/}}
             if (self.length > 0) {
                 runtime = [runtime runtimeByAddingContextObject:self];
-                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             } else {
                 return nil;
             }
@@ -390,7 +390,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             if (self.length > 0) {
                 return nil;
             } else {
-                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             }
     }
 }
@@ -399,7 +399,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSObject(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -412,7 +412,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
             runtime = [runtime runtimeByAddingContextObject:self];
-            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+            return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ object }}...{{/}}
@@ -424,7 +424,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
 // =============================================================================
 #pragma mark - NSFastEnumeration(GRMustacheRendering)
 
-static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped)
+static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, SEL _cmd, GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable: {
@@ -442,7 +442,8 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 // render item
                 id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
                 BOOL itemHasRenderedHTMLEscaped = NO;
-                NSString *rendering = [itemRenderingObject renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:&itemHasRenderedHTMLEscaped];
+                NSError *itemRenderingError = nil;
+                NSString *rendering = [itemRenderingObject renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:&itemHasRenderedHTMLEscaped error:&itemRenderingError];
                 
                 if (rendering)
                 {
@@ -462,6 +463,16 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                     
                     [buffer appendString:rendering];
                 }
+                else if (itemRenderingError)
+                {
+                    // If rendering is nil, but rendering error is not set,
+                    // assume lazy coder, and the intention to render nothing:
+                    // Fail if and only if renderingError is explicitely set.
+                    if (error) {
+                        *error = itemRenderingError;
+                    }
+                    return nil;
+                }
             }
             
             *HTMLEscaped = oneItemHasRenderedHTMLEscaped;
@@ -479,7 +490,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 // item enters the runtime as a context object
                 GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:item];
                 
-                NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
                 if (rendering) {
                     [buffer appendString:rendering];
                 }
@@ -498,7 +509,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             }
             
             if (empty) {
-                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped];
+                return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
             } else {
                 return nil;
             }

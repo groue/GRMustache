@@ -61,7 +61,7 @@
 
 #pragma mark - <GRMustacheRendering>
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped
+- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     
@@ -70,7 +70,9 @@
         component = [runtime resolveTemplateComponent:component];
         
         // render
-        [component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
+        if (![component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
+            return nil;
+        }
     }
     
     *HTMLEscaped = YES;
@@ -80,26 +82,43 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
 {
-    id value = [_expression evaluateInRuntime:runtime];
+    id value;
+    if (![_expression evaluateInRuntime:runtime value:&value error:error]) {
+        return NO;
+    }
+    
+    __block BOOL success = YES;
     [runtime renderValue:value withTag:self usingBlock:^(id value){
         
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
         
         BOOL HTMLEscaped = NO;
+        NSError *renderingError = nil;
         NSString *rendering = [renderingObject renderForTag:self
                                                   inRuntime:runtime
                                          templateRepository:templateRepository
-                                                HTMLEscaped:&HTMLEscaped];
+                                                HTMLEscaped:&HTMLEscaped
+                                                      error:&renderingError];
         
         if (rendering) {
             if (!HTMLEscaped) {
                 rendering = [GRMustache htmlEscape:rendering];
             }
             [buffer appendString:rendering];
+        } else if (renderingError) {
+            // If rendering is nil, but rendering error is not set,
+            // assume lazy coder, and the intention to render nothing:
+            // Fail if and only if renderingError is explicitely set.
+            if (error) {
+                *error = renderingError;
+            }
+            success = NO;
         }
     }];
+    
+    return success;
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

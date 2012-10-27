@@ -47,7 +47,7 @@ typedef struct {
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)value GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped))block GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error))block GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

@@ -104,14 +104,14 @@
  * NSString object containing paths to the template, and return the file
  * content.
  * 
- * As usually, whenever this method returns nil, the _outError_ parameter should
+ * As usually, whenever this method returns nil, the _error_ parameter should
  * point to a valid NSError. This NSError would eventually reach the library
  * user.
  * 
  * @param templateRepository  The GRMustacheTemplateRepository asking for a
  *                            Mustache template string.
  * @param templateID          The template ID of the template
- * @param outError            If there is an error returning a template string,
+ * @param error               If there is an error returning a template string,
  *                            upon return contains nil, or an NSError object
  *                            that describes the problem.
  *
@@ -119,7 +119,7 @@
  *
  * @since v1.13
  */
-- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 @end
 
 
@@ -580,7 +580,7 @@
  * repository's data source.
  * 
  * @param name      The template name
- * @param outError  If there is an error loading or parsing template and
+ * @param error     If there is an error loading or parsing template and
  *                  partials, upon return contains an NSError object that
  *                  describes the problem.
  * 
@@ -588,7 +588,7 @@
  *
  * @since v1.13
  */
-- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a template built from the provided Mustache template string.
@@ -598,7 +598,7 @@
  * dictionary, or whatever is relevant to the repository's data source.
  * 
  * @param templateString  A Mustache template string
- * @param outError        If there is an error loading or parsing template and
+ * @param error           If there is an error loading or parsing template and
  *                        partials, upon return contains an NSError object that
  *                        describes the problem.
  * 
@@ -606,5 +606,5 @@
  *
  * @since v1.13
  */
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)outError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 @end

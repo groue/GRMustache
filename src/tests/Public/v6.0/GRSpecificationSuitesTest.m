@@ -65,7 +65,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
         GRMustacheTemplate *template = [repository templateFromString:templateString error:NULL];
-        NSString *rendering = [template renderObject:data];
+        NSString *rendering = [template renderObject:data error:NULL];
         
         // GRMustache3 doesn't care about white space rules of the Mustache specification.
         // Compare rendering and expected rendering, but ignoring white space.

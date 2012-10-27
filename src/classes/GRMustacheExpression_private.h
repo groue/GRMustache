@@ -55,11 +55,13 @@
 /**
  * Evaluates an expression against a runtime, and return the value.
  *
- * @param runtime       A Mustache runtime object
+ * @param runtime  A Mustache runtime object
+ * @param value    TODO
+ * @param error    TODO
  *
- * @return The value of the expression.
+ * @return TODO
  */
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
+- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given

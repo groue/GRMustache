@@ -38,9 +38,10 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
+- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
 {
-    return [runtime currentContextValue];
+    *value = [runtime currentContextValue];
+    return YES;
 }
 
 @end

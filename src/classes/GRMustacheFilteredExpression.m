@@ -25,6 +25,7 @@
 #import "GRMustacheError.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheRuntime_private.h"
+#import "GRMustacheToken_private.h"
 
 @interface GRMustacheFilteredExpression()
 @property (nonatomic, retain) GRMustacheExpression *filterExpression;
@@ -85,24 +86,53 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
+- (BOOL)evaluateInRuntime:(GRMustacheRuntime *)runtime value:(id *)value error:(NSError **)error
 {
-    id argument = [_argumentExpression evaluateInRuntime:runtime];
-    id filter = [_filterExpression evaluateInRuntime:runtime];
+    id argument;
+    id filter;
+    
+    if (![_argumentExpression evaluateInRuntime:runtime value:&argument error:error]) {
+        return NO;
+    }
+    if (![_filterExpression evaluateInRuntime:runtime value:&filter error:error]) {
+        return NO;
+    }
 
     if (filter == nil) {
-        [NSException raise:GRMustacheRenderingException format:@"Missing filter"];
+        if (error) {
+            GRMustacheToken *token = self.token;
+            NSString *localizedDescription = nil;
+            if (token.templateID) {
+                localizedDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
+            } else {
+                localizedDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
+            }
+            *error = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:@"Missing filter" forKey:NSLocalizedDescriptionKey]];
+        }
+        return NO;
     }
     
     if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
-        [NSException raise:GRMustacheRenderingException format:@"Object does not conform to GRMustacheFilter protocol"];
+        if (error) {
+            GRMustacheToken *token = self.token;
+            NSString *localizedDescription = nil;
+            if (token.templateID) {
+                localizedDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
+            } else {
+                localizedDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
+            }
+            *error = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:@"Missing filter" forKey:NSLocalizedDescriptionKey]];
+        }
+        return NO;
     }
     
     if (_curry && [filter respondsToSelector:@selector(curryArgument:)]) {
-        return [(id<GRMustacheFilter>)filter curryArgument:argument];
+        *value = [(id<GRMustacheFilter>)filter curryArgument:argument];
     } else {
-        return [(id<GRMustacheFilter>)filter transformedValue:argument];
+        *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
     }
+    
+    return YES;
 }
 
 @end

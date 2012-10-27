@@ -36,7 +36,7 @@
     }];
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"join": joinFilter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{join(a,b)}} {{join(a,b,c)}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{join(a,b)}} {{join(a,b,c)}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"a,b a,b,c", @"");
 }
 
@@ -53,7 +53,7 @@
     }];
     
     id data = @{ @"f": filter };
-    [[GRMustacheTemplate templateFromString:@"{{f(a,b,c)}}" error:NULL] renderObject:data];
+    [[GRMustacheTemplate templateFromString:@"{{f(a,b,c)}}" error:NULL] renderObject:data error:NULL];
     STAssertEquals(NSNullCount, (NSUInteger)3, @"");
 }
 
@@ -66,7 +66,7 @@
     }];
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"d": @"d", @"f": filter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"a+d a,b+d a,b,c+d", @"");
 }
 
@@ -77,7 +77,7 @@
     }];
     
     id data = @{ @"f": filter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a,b).foo}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a,b).foo}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"bar", @"");
 }
 
@@ -88,7 +88,7 @@
     }];
     
     id data = @{ @"f": filter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{foo}}{{/}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{foo}}{{/}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"bar", @"");
 }
 
@@ -99,7 +99,7 @@
     }];
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"f": filter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{.}}{{/}} {{#f(a,b,c)}}{{.}}{{/}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{.}}{{/}} {{#f(a,b,c)}}{{.}}{{/}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"ab abc", @"");
 }
 
@@ -110,7 +110,7 @@
     }];
     
     id data = @{ @"yes": @YES, @"no": @NO, @"f": identityFilter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"YES NO", @"");
 }
 
@@ -121,7 +121,7 @@
     }];
     
     id data = @{ @"f": nilFilter };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{^f(x)}}nil{{/}}" error:NULL] renderObject:data];
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{^f(x)}}nil{{/}}" error:NULL] renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"nil", @"");
 }
 
