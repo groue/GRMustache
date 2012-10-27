@@ -436,25 +436,26 @@
 
 - (GRMustacheExpression *)parseExpression:(NSString *)string invalid:(BOOL *)outInvalid
 {
-    //    -> ;;sm_parenLevel=0, canFilter=YES -> stateInitial
+    //    -> ;;sm_parenLevel=0 -> stateInitial
     //    stateInitial -> ' ' -> stateInitial
-    //    stateInitial -> ;'.';canFilter=NO -> stateLeadingDot
-    //    stateInitial -> ;'a';canFilter=YES -> stateIdentifier
+    //    stateInitial -> '.' -> stateLeadingDot
+    //    stateInitial -> 'a' -> stateIdentifier
     //    stateInitial -> sm_parenLevel==0;EOF; -> stateEmpty
     //    stateLeadingDot -> 'a' -> stateIdentifier
     //    stateLeadingDot -> ' ' -> stateIdentifierDone
+    //    stateIdentifier -> '(';++sm_parenLevel -> stateInitial
     //    stateLeadingDot -> sm_parenLevel>0;')';--sm_parenLevel -> stateFilterDone
     //    stateLeadingDot -> sm_parenLevel==0;EOF; -> stateValid
     //    stateIdentifier -> 'a' -> stateIdentifier
     //    stateIdentifier -> '.' -> stateWaitingForIdentifier
     //    stateIdentifier -> ' ' -> stateIdentifierDone
-    //    stateIdentifier -> canFilter;'(';++sm_parenLevel -> stateInitial
+    //    stateIdentifier -> '(';++sm_parenLevel -> stateInitial
     //    stateIdentifier -> sm_parenLevel>0;')';--sm_parenLevel -> stateFilterDone
     //    stateIdentifier -> sm_parenLevel==0;EOF; -> stateValid
     //    stateWaitingForIdentifier -> 'a' -> stateIdentifier
     //    stateIdentifierDone -> ' ' -> stateIdentifierDone
     //    stateIdentifierDone -> sm_parenLevel==0;EOF; -> stateValid
-    //    stateIdentifierDone -> canFilter;'(';++sm_parenLevel -> stateInitial
+    //    stateIdentifierDone -> '(';++sm_parenLevel -> stateInitial
     //    stateFilterDone -> ' ' -> stateFilterDone
     //    stateFilterDone -> '.' -> stateWaitingForIdentifier
     //    stateFilterDone -> '(';++sm_parenLevel -> stateInitial
@@ -473,7 +474,6 @@
         stateError,
         stateValid
     } state = stateInitial;
-    BOOL canFilter = NO;
     NSUInteger identifierStart = NSNotFound;
     NSMutableArray *filterExpressionStack = [NSMutableArray array];
     GRMustacheExpression *currentExpression=nil;
@@ -499,7 +499,6 @@
                         
                     case '.':
                         NSAssert(currentExpression == nil, @"WTF");
-                        canFilter = NO;
                         state = stateLeadingDot;
                         currentExpression = [GRMustacheImplicitIteratorExpression expression];
                         break;
@@ -517,7 +516,6 @@
                         break;
                         
                     default:
-                        canFilter = YES;
                         state = stateIdentifier;
                         
                         // enter stateIdentifier
@@ -539,9 +537,12 @@
                         state = stateError;
                         break;
                         
-                    case '(':
-                        state = stateError;
-                        break;
+                    case '(': {
+                        NSAssert(currentExpression, @"WTF");
+                        state = stateInitial;
+                        [filterExpressionStack addObject:currentExpression];
+                        currentExpression = nil;
+                    } break;
                         
                     case ')':
                         if (filterExpressionStack.count > 0) {
@@ -618,14 +619,10 @@
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
                         
-                        if (canFilter) {
-                            NSAssert(currentExpression, @"WTF");
-                            state = stateInitial;
-                            [filterExpressionStack addObject:currentExpression];
-                            currentExpression = nil;
-                        } else {
-                            state = stateError;
-                        }
+                        NSAssert(currentExpression, @"WTF");
+                        state = stateInitial;
+                        [filterExpressionStack addObject:currentExpression];
+                        currentExpression = nil;
                     } break;
                         
                     case ')': {
@@ -724,14 +721,10 @@
                         break;
                         
                     case '(':
-                        if (canFilter) {
-                            NSAssert(currentExpression, @"WTF");
-                            state = stateInitial;
-                            [filterExpressionStack addObject:currentExpression];
-                            currentExpression = nil;
-                        } else {
-                            state = stateError;
-                        }
+                        NSAssert(currentExpression, @"WTF");
+                        state = stateInitial;
+                        [filterExpressionStack addObject:currentExpression];
+                        currentExpression = nil;
                         break;
                         
                     case ')':

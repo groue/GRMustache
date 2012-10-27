@@ -231,4 +231,18 @@
     STAssertEqualObjects(rendering, @"prefixvalue", @"");
 }
 
+- (void)testImplicitIteratorCanReturnFilter
+{
+    {
+        id data = [GRMustacheFilter filterWithBlock:^id(id value) { return @"filter"; }];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{.(a)}}" error:NULL] renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"filter", @"");
+    }
+    {
+        id data = @{ @"f": [GRMustacheFilter filterWithBlock:^id(id value) { return @"filter"; }] };
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{.f(a)}}" error:NULL] renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"filter", @"");
+    }
+}
+
 @end

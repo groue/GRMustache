@@ -335,13 +335,4 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testParsingErrorReportsImplicitIteratorAsFilter
-{
-    NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{.(a)}}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{.f(a)}}" error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
-}
-
 @end
