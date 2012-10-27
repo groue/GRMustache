@@ -188,6 +188,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return component;
 }
 
+
 #pragma mark - Private
 
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)otherTemplateOverride
@@ -360,6 +361,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                 (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]));
     }
 }
+
 
 #pragma mark - NSUndefinedKeyException prevention
 

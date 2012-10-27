@@ -27,29 +27,15 @@
 
 /**
  * The GRMustacheRuntime responsability is to provide a runtime context for
- * Mustache rendering. It internally maintains the following stacks:
- *
- * - a context stack,
- * - a delegate stack,
- * - a template override stack.
- *
- * As such, it is able to:
- *
- * - provide the current context object.
- * - perform a key lookup in the context stack.
- * - let template and tag delegates interpret rendered values.
- * - let partial templates override template components.
+ * Mustache rendering. It internally maintains a context stack, that makes is
+ * able to provide the current context object, and to perform a key lookup in
+ * the context stack.
  */
 @interface GRMustacheRuntime : NSObject {
     NSArray *_contextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
-
-/**
- * TODO
- */
-+ (id)runtime AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the

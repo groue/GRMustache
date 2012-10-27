@@ -86,8 +86,10 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  */
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
-// Documented in GRMustacheRuntime.h
-+ (id)runtime GRMUSTACHE_API_PUBLIC;
+/**
+ * TODO
+ */
++ (id)runtime GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheRuntime.h
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
