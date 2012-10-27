@@ -24,7 +24,7 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheTemplateDelegate.h"
+#import "GRMustacheTagDelegate.h"
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheRendering.h"
 #import "GRMustache_private.h"

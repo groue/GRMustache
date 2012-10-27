@@ -22,18 +22,18 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
-#import "GRMustacheTemplateDelegate.h"
+#import "GRMustacheTagDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
     NSArray *_components;
-    id<GRMustacheTemplateDelegate> _delegate;
+    id<GRMustacheTagDelegate> _tagDelegate;
 }
 
 // Documented in GRMustacheTemplate.h
-@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, assign) id<GRMustacheTagDelegate> tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * The GRMustacheTemplateComponent objects that make the template.

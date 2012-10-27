@@ -34,27 +34,29 @@
 @end
 
 @implementation GRMustacheTestingDelegate
-@synthesize templateWillInterpretBlock=_templateWillInterpretBlock;
-@synthesize templateDidInterpretBlock=_templateDidInterpretBlock;
+@synthesize mustacheTagWillRenderBlock=_mustacheTagWillRenderBlock;
+@synthesize mustacheTagDidRenderBlock=_mustacheTagDidRenderBlock;
 
 - (void)dealloc
 {
-    self.templateWillInterpretBlock = nil;
-    self.templateDidInterpretBlock = nil;
+    self.mustacheTagWillRenderBlock = nil;
+    self.mustacheTagDidRenderBlock = nil;
     [super dealloc];
 }
 
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
-    if (self.templateWillInterpretBlock) {
-        self.templateWillInterpretBlock(template, invocation, tag);
+    if (self.mustacheTagWillRenderBlock) {
+        return self.mustacheTagWillRenderBlock(tag, object);
+    } else {
+        return object;
     }
 }
 
-- (void)template:(GRMustacheTemplate *)template didInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation forTag:(GRMustacheTag *)tag
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object
 {
-    if (self.templateDidInterpretBlock) {
-        self.templateDidInterpretBlock(template, invocation, tag);
+    if (self.mustacheTagDidRenderBlock) {
+        self.mustacheTagDidRenderBlock(tag, object);
     }
 }
 

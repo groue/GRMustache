@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTemplateDelegate.h"
+#import "GRMustacheTagDelegate.h"
 
 @class GRMustacheRuntime;
 
@@ -37,24 +37,24 @@
 @interface GRMustacheTemplate: NSObject {
 @private
     NSArray *_components;
-    id<GRMustacheTemplateDelegate> _delegate;
+    id<GRMustacheTagDelegate> _tagDelegate;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Setting the Delegate
+/// @name Setting the Tag Delegate
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * The template's delegate.
+ * The template's default tag delegate.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
- * @see GRMustacheTemplateDelegate
+ * @see GRMustacheTagDelegate
  * 
  * @since v1.12
  */
  
-@property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, assign) id<GRMustacheTagDelegate> tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

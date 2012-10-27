@@ -21,17 +21,17 @@
 // THE SOFTWARE.
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "GRMustacheTemplateDelegate.h"
+#import "GRMustacheTagDelegate.h"
 
 @interface GRMustacheTestBase: SenTestCase
 @property (nonatomic, readonly) NSBundle *testBundle;
 @end
 
-@interface GRMustacheTestingDelegate : NSObject<GRMustacheTemplateDelegate> {
-    void(^_templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
-    void(^_templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
+@interface GRMustacheTestingDelegate : NSObject<GRMustacheTagDelegate> {
+    id(^_mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
+    void(^_mustacheTagDidRenderBlock)(GRMustacheTag *tag, id object);
 }
-@property (nonatomic, copy) void(^templateWillInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
-@property (nonatomic, copy) void(^templateDidInterpretBlock)(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag);
+@property (nonatomic, copy) id(^mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
+@property (nonatomic, copy) void(^mustacheTagDidRenderBlock)(GRMustacheTag *tag, id object);
 @end
 

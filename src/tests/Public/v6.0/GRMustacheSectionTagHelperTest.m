@@ -250,16 +250,18 @@
     STAssertEqualObjects(result, @"---", @"");
 }
 
-- (void)testTemplateDelegateCallbacksAreCalledWithinSectionRendering
+- (void)testTagDelegateCallbacksAreCalledWithinSectionRendering
 {
     id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return [tag renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
-            invocation.returnValue = @"delegate";
+            return (id)@"delegate";
+        } else {
+            return object;
         }
     };
     
@@ -267,12 +269,12 @@
                              helper, @"helper",
                              @"---", @"subject", nil];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#helper}}{{subject}}{{/helper}}" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"delegate", @"");
 }
 
-- (void)testTemplateDelegateCallbacksAreCalledWithinSectionAlternateTemplateStringRendering
+- (void)testTagDelegateCallbacksAreCalledWithinSectionAlternateTemplateStringRendering
 {
     id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
@@ -280,9 +282,11 @@
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
-            invocation.returnValue = @"delegate";
+            return (id)@"delegate";
+        } else {
+            return object;
         }
     };
 
@@ -290,7 +294,7 @@
                              helper, @"helper",
                              @"---", @"subject", nil];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"delegate", @"");
 }

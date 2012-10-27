@@ -31,7 +31,7 @@
 
 @implementation GRMustacheTemplate
 @synthesize components=_components;
-@synthesize delegate=_delegate;
+@synthesize tagDelegate=_tagDelegate;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -115,8 +115,7 @@
 
 - (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
-    runtime = [runtime runtimeWithDelegatingTemplate:self];
-    runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
+    runtime = [runtime runtimeByAddingTagDelegate:self.tagDelegate];
     
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheTemplateOverride: resolve it.

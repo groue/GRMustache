@@ -3,5 +3,3 @@
 
 - Safe rendering: Introduce contextStack/protectedStack
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
-- Runtime: remove delegating template property
-- TemplateDelegate -> RuntimeDelegate

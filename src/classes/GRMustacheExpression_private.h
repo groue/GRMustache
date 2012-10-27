@@ -47,8 +47,6 @@
  * This property stores a token whose sole purpose is to help the library user
  * debugging his templates, using the token's ability to output its location
  * (`{{ foo }}` at line 23 of /path/to/template).
- *
- * @see GRMustacheInvocation
  */
 @property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 

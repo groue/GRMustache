@@ -23,12 +23,10 @@
 #import <objc/message.h>
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateDelegate.h"
+#import "GRMustacheTagDelegate.h"
 
-@protocol GRMustacheTemplateDelegate;
+@protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateComponent;
-@class GRMustacheTemplate;
-@class GRMustacheToken;
 @class GRMustacheTemplateOverride;
 
 #if !defined(NS_BLOCK_ASSERTIONS)
@@ -54,7 +52,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
-    GRMustacheTemplate *_template;
     NSArray *_contextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
@@ -96,19 +93,14 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
- */
-- (GRMustacheRuntime *)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)template;
-
-/**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
- * delegate stack that is extended with _templateDelegate_.
+ * delegate stack that is extended with _tagDelegate_.
  *
- * @param templateDelegate  A delegate
+ * @param tagDelegate  A delegate
  *
  * @return A GRMustacheRuntime object.
  */
-- (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate GRMUSTACHE_API_INTERNAL;
+- (GRMustacheRuntime *)runtimeByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the

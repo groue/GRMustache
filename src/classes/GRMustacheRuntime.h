@@ -23,13 +23,7 @@
 #import <objc/message.h>
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTemplateDelegate.h"
-
-@protocol GRMustacheTemplateDelegate;
-@protocol GRMustacheTemplateComponent;
-@class GRMustacheTemplate;
-@class GRMustacheToken;
-@class GRMustacheTemplateOverride;
+#import "GRMustacheTagDelegate.h"
 
 /**
  * The GRMustacheRuntime responsability is to provide a runtime context for
@@ -47,7 +41,6 @@
  * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
-    GRMustacheTemplate *_template;
     NSArray *_contextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;

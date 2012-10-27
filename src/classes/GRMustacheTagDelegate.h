@@ -23,36 +23,48 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheTemplate;
+@class GRMustacheInvocation;
+@class GRMustacheTag;
+
 /**
- * The GRMustacheInvocation class gives you information about the values that
- * are rendered.
+ * The protocol for a GRMustacheTemplate's delegate.
  *
- * You'll be given GRMustacheInvocation instances when providing a
- * GRMustacheTemplateDelegate to your templates.
+ * The delegate's can observe, and alter, the rendering of a template.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * 
- * @see GRMustacheTemplateDelegate
- *
  * @since v1.12
  */
-@interface GRMustacheInvocation : NSObject {
-@private
-    id _returnValue;
-}
+@protocol GRMustacheTagDelegate<NSObject>
+@optional
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Observing the Rendering of individual Mustache tags
+////////////////////////////////////////////////////////////////////////////////
 
 /**
- * The return value of the invocation.
+ * Sent right before GRMustache renders an object.
  *
- * For instance, the invocation that you would get for a `{{name}}` tag would
- * have the name in the `returnValue` property.
+ * @param tag             The mustache tag about to render.
+ * @param invocation      The object about to be rendered.
  *
- * In a template's delegate methods, you can set the returnValue of an
- * invocation, and alter a template rendering.
+ * @return the object that should be rendered.
  *
- * @see GRMustacheTemplateDelegate
- *
- * @since v1.12
+ * @since v6.0
  */
-@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Sent right after GRMustache has rendered an object.
+ *
+ * @param tag             The mustache tag that did render.
+ * @param invocation      The rendered object.
+ *
+ * @since v6.0
+ */
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+
 @end

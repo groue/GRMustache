@@ -46,7 +46,7 @@
 //}
 //@end
 //
-//@interface GRMustacheVariableTagHelperDelegate: NSObject<GRMustacheVariableTagHelper, GRMustacheTemplateDelegate> {
+//@interface GRMustacheVariableTagHelperDelegate: NSObject<GRMustacheVariableTagHelper, GRMustacheTagDelegate> {
 //    NSString *_returnValue;
 //}
 //@property (nonatomic, retain) NSString *returnValue;
@@ -308,14 +308,14 @@
 //    STAssertEqualObjects(result, @"&<>", @"");
 //}
 //
-//- (void)testTemplateDelegateCallbacksAreCalledDuringAlternateTemplateStringRendering
+//- (void)testTagDelegateCallbacksAreCalledDuringAlternateTemplateStringRendering
 //{
 //    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
 //        return [context renderString:@"{{subject}}" error:NULL];
 //    }];
 //    
 //    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-//    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
+//    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
 //        invocation.returnValue = @"delegate";
 //    };
 //    

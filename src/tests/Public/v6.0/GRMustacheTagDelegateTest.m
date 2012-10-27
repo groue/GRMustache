@@ -23,22 +23,23 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheTemplateDelegateTest : GRMustachePublicAPITest
+@interface GRMustacheTagDelegateTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheTemplateDelegateTest
+@implementation GRMustacheTagDelegateTest
 
 - (void)testWillInterpretReturnValueOfInvocationIsNotTriggeredByText
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
         success = NO;
+        return object;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     [template renderAndReturnError:NULL];
     
     STAssertEquals(success, YES, @"");
@@ -49,12 +50,12 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
         success = NO;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     [template renderAndReturnError:NULL];
     
     STAssertEquals(success, YES, @"");
@@ -64,63 +65,52 @@
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
-    __block GRMustacheTemplate *preRenderingTemplate = nil;
-    __block GRMustacheTemplate *postRenderingTemplate = nil;
     __block GRMustacheTagType preRenderingTagType = -1;
     __block GRMustacheTagType postRenderingTagType = -1;
-    __block id preRenderingValue = nil;
-    __block id postRenderingValue = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        preRenderingTemplate = template;
-        preRenderingValue = invocation.returnValue;
+    __block id preRenderedObjet = nil;
+    __block id postRenderedObjet = nil;
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        preRenderedObjet = object;
         preRenderingTagType = tag.type;
-        invocation.returnValue = @"delegate";
+        return @"delegate";
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        postRenderingTemplate = template;
-        postRenderingValue = invocation.returnValue;
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+        postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---{{foo}}---" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     NSString *rendering = [template renderObject:@{@"foo": @"value"} error:NULL];
     
     STAssertEqualObjects(rendering, @"---delegate---", @"");
-    STAssertEquals(preRenderingTemplate, template, @"", @"");
-    STAssertEquals(postRenderingTemplate, template, @"", @"");
     STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
     STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEqualObjects(preRenderingValue, @"value", @"");
-    STAssertEqualObjects(postRenderingValue, @"delegate", @"");
+    STAssertEqualObjects(preRenderedObjet, @"value", @"");
+    STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
 - (void)testInterpretReturnValueOfInvocationWithUnrenderedSection
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
-    __block GRMustacheTemplate *preRenderingTemplate = nil;
-    __block GRMustacheTemplate *postRenderingTemplate = nil;
     __block GRMustacheTagType preRenderingTagType = -1;
     __block GRMustacheTagType postRenderingTagType = -1;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        preRenderingTemplate = template;
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
         preRenderingTagType = tag.type;
+        return object;
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        postRenderingTemplate = template;
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
         postRenderingTagType = tag.type;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     NSString *rendering = [template renderAndReturnError:NULL];
     
     STAssertEqualObjects(rendering, @"<>", @"");
     STAssertEquals(preRenderingTagType, GRMustacheTagTypeSection, @"", @"");
     STAssertEquals(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
-    STAssertEquals(preRenderingTemplate, template, @"", @"");
-    STAssertEquals(postRenderingTemplate, template, @"", @"");
 }
 
 - (void)testInterpretReturnValueOfInvocationWithRenderedSectionContainingVariable
@@ -129,68 +119,55 @@
     
     __block NSUInteger templateWillInterpretCount = 0;
     __block NSUInteger templateDidInterpretCount = 0;
-    __block GRMustacheTemplate *preRenderingTemplate1 = nil;
-    __block GRMustacheTemplate *postRenderingTemplate1 = nil;
     __block GRMustacheTagType preRenderingTagType1 = -1;
     __block GRMustacheTagType postRenderingTagType1 = -1;
-    __block id preRenderingValue1 = nil;
-    __block id postRenderingValue1 = nil;
-    __block GRMustacheTemplate *preRenderingTemplate2 = nil;
-    __block GRMustacheTemplate *postRenderingTemplate2 = nil;
+    __block id preRenderedObjet1 = nil;
+    __block id postRenderedObjet1 = nil;
     __block GRMustacheTagType preRenderingTagType2 = -1;
     __block GRMustacheTagType postRenderingTagType2 = -1;
-    __block id preRenderingValue2 = nil;
-    __block id postRenderingValue2 = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    __block id preRenderedObjet2 = nil;
+    __block id postRenderedObjet2 = nil;
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
         ++templateWillInterpretCount;
         switch (templateWillInterpretCount) {
             case 1:
-                preRenderingTemplate1 = template;
-                preRenderingValue1 = invocation.returnValue;
+                preRenderedObjet1 = object;
                 preRenderingTagType1 = tag.type;
-                invocation.returnValue = @YES;
-                break;
+                return (id)@YES;
                 
             case 2:
-                preRenderingTemplate2 = template;
-                preRenderingValue2 = invocation.returnValue;
+                preRenderedObjet2 = object;
                 preRenderingTagType2 = tag.type;
-                invocation.returnValue = @"delegate";
-                break;
+                return (id)@"delegate";
         }
+        return object;
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
         ++templateDidInterpretCount;
         switch (templateDidInterpretCount) {
             case 1:
-                postRenderingTemplate1 = template;
-                postRenderingValue1 = invocation.returnValue;
+                postRenderedObjet1 = object;
                 postRenderingTagType1 = tag.type;
                 break;
                 
             case 2:
-                postRenderingTemplate2 = template;
-                postRenderingValue2 = invocation.returnValue;
+                postRenderedObjet2 = object;
                 postRenderingTagType2 = tag.type;
                 break;
         }
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
-    template.delegate = delegate;
+    template.tagDelegate = delegate;
     NSString *rendering = [template renderAndReturnError:NULL];
     
     STAssertEqualObjects(rendering, @"<delegate>", @"");
     STAssertEquals(templateWillInterpretCount, (NSUInteger)2, @"");
     STAssertEquals(templateDidInterpretCount, (NSUInteger)2, @"");
-    STAssertEquals(preRenderingTemplate1, template, @"", @"");
-    STAssertEquals(preRenderingTemplate2, template, @"", @"");
-    STAssertEquals(postRenderingTemplate1, template, @"", @"");
-    STAssertEquals(postRenderingTemplate2, template, @"", @"");
-    STAssertEqualObjects(preRenderingValue1, (id)nil, @"");
-    STAssertEqualObjects(preRenderingValue2, (id)nil, @"");
-    STAssertEqualObjects(postRenderingValue1, @"delegate", @"");
-    STAssertEqualObjects(postRenderingValue2, @(YES), @"");
+    STAssertEqualObjects(preRenderedObjet1, (id)nil, @"");
+    STAssertEqualObjects(preRenderedObjet2, (id)nil, @"");
+    STAssertEqualObjects(postRenderedObjet1, @"delegate", @"");
+    STAssertEqualObjects(postRenderedObjet2, @(YES), @"");
     STAssertEquals(preRenderingTagType1, GRMustacheTagTypeSection, @"", @"");
     STAssertEquals(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
     STAssertEquals(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
@@ -201,146 +178,154 @@
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(interpretedValue, (id)nil, @"");
+        STAssertEquals(renderedObject, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"foo", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(interpretedValue, @"foo", @"");
+        STAssertEqualObjects(renderedObject, @"foo", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(interpretedValue, (id)nil, @"");
+        STAssertEquals(renderedObject, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(interpretedValue, (id)nil, @"");
+        STAssertEquals(renderedObject, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}} error:NULL];
         
         STAssertEqualObjects(rendering, @"bar", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(interpretedValue, @"bar", @"");
+        STAssertEqualObjects(renderedObject, @"bar", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderAndReturnError:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(interpretedValue, (id)nil, @"");
+        STAssertEquals(renderedObject, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"FOO", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(interpretedValue, @"FOO", @"");
+        STAssertEqualObjects(renderedObject, @"FOO", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        __block id interpretedValue = nil;
+        __block id renderedObject = nil;
         __block NSUInteger templateWillInterpretCount = 0;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             ++templateWillInterpretCount;
-            interpretedValue = invocation.returnValue;
+            renderedObject = object;
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject).length}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"3", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(interpretedValue, @3, @"");
+        STAssertEqualObjects(renderedObject, @3, @"");
     }
 }
 
@@ -349,12 +334,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -364,12 +350,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#name}}{{/name}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -379,12 +366,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{   name\t}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -398,12 +386,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -413,12 +402,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n {{name}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -428,12 +418,13 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n\n  {{#name}}\n\n{{/name}}" error:NULL];
-        template.delegate = delegate;
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
@@ -447,32 +438,34 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest" bundle:self.testBundle error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest" bundle:self.testBundle error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -482,32 +475,34 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest" withExtension:@"mustache"] error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest" withExtension:@"mustache"] error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -517,32 +512,34 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"] error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"] error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -552,48 +549,51 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTemplateDelegateTest_wrapper" bundle:self.testBundle error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest_wrapper" bundle:self.testBundle error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -603,48 +603,51 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTemplateDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -654,48 +657,51 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTemplateDelegateTest_wrapper" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block NSString *description = nil;
-        delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
+        delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
             description = [tag description];
+            return object;
         };
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
-        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
-        template.delegate = delegate;
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
+        template.tagDelegate = delegate;
         [template renderAndReturnError:NULL];
         
         STAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTemplateDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         STAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -703,21 +709,17 @@
 - (void)testSectionDelegate
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    __block GRMustacheTemplate *preRenderingTemplate = nil;
-    __block GRMustacheTemplate *postRenderingTemplate = nil;
     __block GRMustacheTagType preRenderingTagType = -1;
     __block GRMustacheTagType postRenderingTagType = -1;
-    __block id preRenderingValue = nil;
-    __block id postRenderingValue = nil;
-    delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        preRenderingTemplate = template;
-        preRenderingValue = invocation.returnValue;
+    __block id preRenderedObjet = nil;
+    __block id postRenderedObjet = nil;
+    delegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        preRenderedObjet = object;
         preRenderingTagType = tag.type;
-        invocation.returnValue = @"delegate";
+        return @"delegate";
     };
-    delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        postRenderingTemplate = template;
-        postRenderingValue = invocation.returnValue;
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+        postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
     
@@ -725,28 +727,28 @@
     NSString *rendering = [template renderObject:@{@"delegate":delegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"delegate", @"");
-    STAssertEquals(preRenderingTemplate, template, @"");
-    STAssertEquals(postRenderingTemplate, template, @"");
     STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"");
     STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"");
-    STAssertEqualObjects(preRenderingValue, @"foo", @"");
-    STAssertEqualObjects(postRenderingValue, @"delegate", @"");
+    STAssertEqualObjects(preRenderedObjet, @"foo", @"");
+    STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
 - (void)testSectionsDelegateOrdering
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [[invocation.returnValue description] uppercaseString];
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[[object description] uppercaseString];
         }
+        return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
+    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[NSString stringWithFormat:@"prefix%@", object];
         }
+        return object;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
@@ -755,61 +757,67 @@
     STAssertEqualObjects(rendering, @"prefixfoo prefixFOO FOO PREFIXFOO", @"");
 }
 
-- (void)testTemplateDelegatePlusSectionDelegate
+- (void)testTagDelegatePlusSectionDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [[invocation.returnValue description] uppercaseString];
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[[object description] uppercaseString];
         }
+        return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
+    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[NSString stringWithFormat:@"prefix%@", object];
         }
+        return object;
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [NSString stringWithFormat:@"%@suffix", invocation.returnValue];
+    suffixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[NSString stringWithFormat:@"%@suffix", object];
         }
+        return object;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}}{{/prefix}} {{#suffix}}{{value}}{{/suffix}} {{value}}" error:NULL];
-    template.delegate = uppercaseDelegate;
+    template.tagDelegate = uppercaseDelegate;
     NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"suffix":suffixDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"PREFIXFOO FOOSUFFIX FOO", @"");
 }
 
-- (void)testTemplateDelegatePlusNestedSectionsDelegate
+- (void)testTagDelegatePlusNestedSectionsDelegate
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [[invocation.returnValue description] uppercaseString];
+    uppercaseDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[[object description] uppercaseString];
         }
+        return object;
     };
     
     GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [NSString stringWithFormat:@"prefix%@", invocation.returnValue];
+    prefixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[NSString stringWithFormat:@"prefix%@", object];
         }
+        return object;
     };
     
     GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if ([invocation.returnValue isKindOfClass:[NSString class]]) {
-            invocation.returnValue = [NSString stringWithFormat:@"%@suffix", invocation.returnValue];
+    suffixDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return (id)[NSString stringWithFormat:@"%@suffix", object];
         }
+        return object;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
-    template.delegate = suffixDelegate;
+    template.tagDelegate = suffixDelegate;
     NSString *rendering = [template renderObject:@{@"uppercase":uppercaseDelegate, @"prefix":prefixDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"prefixfoosuffix prefixFOOsuffix FOOsuffix PREFIXFOOsuffix", @"");
@@ -819,11 +827,11 @@
 {
     __block BOOL delegate1HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate1.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) { delegate1HasBeenInvoked = YES; };
+    delegate1.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { delegate1HasBeenInvoked = YES; return object; };
     
     __block BOOL delegate2HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate2.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) { delegate2HasBeenInvoked = YES; };
+    delegate2.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { delegate2HasBeenInvoked = YES; return object; };
     
     id items = @{@"items": @[delegate1, delegate2] };
     [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
