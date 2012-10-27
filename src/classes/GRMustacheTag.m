@@ -66,7 +66,7 @@
     }
 }
 
-- (NSString *)renderWithRuntime:(id)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderWithRuntime:(id)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSAssert(NO, @"Subclasses must override");
     return @"";

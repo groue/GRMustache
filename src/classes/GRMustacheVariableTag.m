@@ -49,7 +49,7 @@
     return GRMustacheTagTypeVariable;
 }
 
-- (NSString *)renderWithRuntime:(id)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderWithRuntime:(id)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     return @"";
 }
@@ -69,12 +69,12 @@
         
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
         
-        BOOL HTMLEscaped = NO;
+        BOOL HTMLSafe = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self withRuntime:runtime HTMLEscaped:&HTMLEscaped error:&renderingError];
+        NSString *rendering = [renderingObject renderForMustacheTag:self withRuntime:runtime HTMLSafe:&HTMLSafe error:&renderingError];
         
         if (rendering) {
-            if (!_raw && !HTMLEscaped) {
+            if (!_raw && !HTMLSafe) {
                 rendering = [GRMustache htmlEscape:rendering];
             }
             [buffer appendString:rendering];

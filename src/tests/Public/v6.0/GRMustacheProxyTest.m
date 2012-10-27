@@ -33,7 +33,7 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error) {
         
         switch (tag.type) {
             case GRMustacheTagTypeSection:
@@ -47,7 +47,7 @@
                     GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
                     itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
                     
-                    NSString *rendering = [tag renderWithRuntime:itemRuntime HTMLEscaped:HTMLEscaped error:error];
+                    NSString *rendering = [tag renderWithRuntime:itemRuntime HTMLSafe:HTMLSafe error:error];
                     if (rendering) {
                         [buffer appendString:rendering];
                     } else {
@@ -62,7 +62,7 @@
             default:
                 // Genuine Mustache rendering otherwise
                 
-                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
+                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withRuntime:runtime HTMLSafe:HTMLSafe error:error];
         }
     }];
 }

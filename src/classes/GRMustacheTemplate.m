@@ -100,14 +100,14 @@
     return buffer;
 }
 
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
         return nil;
     }
-    if (HTMLEscaped) {
-        *HTMLEscaped = YES;
+    if (HTMLSafe) {
+        *HTMLSafe = YES;
     }
     return buffer;
 }
@@ -158,9 +158,9 @@
 #pragma mark - <GRMustacheRendering>
 
 // Allows template to render as "dynamic partials"
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
+    return [self renderWithRuntime:runtime HTMLSafe:HTMLSafe error:error];
 }
 
 @end

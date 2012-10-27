@@ -56,7 +56,7 @@ typedef enum {
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
-- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

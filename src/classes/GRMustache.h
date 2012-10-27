@@ -101,7 +101,7 @@ typedef struct {
 /**
  * TODO
  */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 
