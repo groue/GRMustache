@@ -34,16 +34,16 @@
 /**
  * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:overridable:components:]
  */
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
 @end
 
 
 @implementation GRMustacheSectionTag
 @synthesize type=_type;
 
-+ (id)sectionTagWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
++ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    return [[[self alloc] initWithExpression:expression templateString:templateString innerRange:innerRange type:type components:components] autorelease];
+    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression templateString:templateString innerRange:innerRange type:type components:components] autorelease];
 }
 
 - (void)dealloc
@@ -59,9 +59,9 @@
 }
 
 
-#pragma mark - <GRMustacheRendering>
+#pragma mark - GRMustacheTag
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderWithRuntime:(id)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     
@@ -70,7 +70,7 @@
         component = [runtime resolveTemplateComponent:component];
         
         // render
-        if (![component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
+        if (![component renderInBuffer:buffer withRuntime:runtime error:error]) {
             return nil;
         }
     }
@@ -82,7 +82,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
     id value;
     if (![_expression evaluateInRuntime:runtime value:&value error:error]) {
@@ -96,11 +96,7 @@
         
         BOOL HTMLEscaped = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForTag:self
-                                                  inRuntime:runtime
-                                         templateRepository:templateRepository
-                                                HTMLEscaped:&HTMLEscaped
-                                                      error:&renderingError];
+        NSString *rendering = [renderingObject renderForTag:self withRuntime:runtime HTMLEscaped:&HTMLEscaped error:&renderingError];
         
         if (rendering) {
             if (!HTMLEscaped) {
@@ -149,9 +145,9 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    self = [super initWithExpression:expression];
+    self = [super initWithTemplateRepository:templateRepository expression:expression];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;

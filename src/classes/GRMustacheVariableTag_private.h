@@ -44,6 +44,7 @@
 /**
  * Builds and returns a GRMustacheVariableTag.
  *
+ * @param templateRepository    TODO
  * @param expression  The expression that would evaluate against a runtime.
  * @param raw         NO if the value should be rendered HTML-escaped.
  *
@@ -51,6 +52,6 @@
  *
  * @see GRMustacheExpression
  */
-+ (id)variableTagWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
 
 @end

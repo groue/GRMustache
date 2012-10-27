@@ -58,6 +58,7 @@
  * The _components_ array contains the GRMustacheTemplateComponent objects
  * that make the section (texts, variables, other sections, etc.)
  * 
+ * @param templateRepository    TODO
  * @param expression      The expression that would evaluate against a runtime.
  * @param templateString  A Mustache template string
  * @param innerRange      The range of the inner template string of the section
@@ -72,6 +73,6 @@
  * @see GRMustacheRuntime
  * @see GRMustacheRuntime
  */
-+ (id)sectionTagWithExpression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -205,7 +205,7 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:token.expression raw:NO]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression raw:NO]];
         } break;
             
             
@@ -222,7 +222,7 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:token.expression raw:YES]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression raw:YES]];
         } break;
             
             
@@ -282,11 +282,12 @@
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : ((_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening) ? GRMustacheTagTypeOverridableSection : GRMustacheTagTypeRegularSection);
-                    wrapperComponent = [GRMustacheSectionTag sectionTagWithExpression:_currentOpeningToken.expression
-                                                                       templateString:token.templateString
-                                                                           innerRange:innerRange
-                                                                                 type:type
-                                                                           components:_currentComponents];
+                    wrapperComponent = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
+                                                                                   expression:_currentOpeningToken.expression
+                                                                               templateString:token.templateString
+                                                                                   innerRange:innerRange
+                                                                                         type:type
+                                                                                   components:_currentComponents];
                     
                 } break;
                 

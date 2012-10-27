@@ -34,10 +34,11 @@
     [super dealloc];
 }
 
-- (id)initWithExpression:(GRMustacheExpression *)expression
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression
 {
     self = [super init];
     if (self) {
+        _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
     }
     return self;
@@ -64,11 +65,9 @@
     }
 }
 
-
-#pragma mark - <GRMustacheRendering>
-
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderWithRuntime:(id)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
+    NSAssert(NO, @"Subclasses must override");
     return @"";
 }
 

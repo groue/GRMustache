@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
     runtime = [runtime runtimeByAddingTemplateOverride:self];
-    return [_template renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error];
+    return [_template renderInBuffer:buffer withRuntime:runtime error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

@@ -39,10 +39,10 @@
     self.attribute = nil;
     [super dealloc];
 }
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    GRMustacheTemplate *template = [templateRepository templateFromString:@"{{attribute}}" error:NULL];
-    return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+    GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{attribute}}" error:NULL];
+    return [template renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
 }
 @end
 
@@ -50,7 +50,7 @@
 
 - (void)testHelperPerformsRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         *HTMLEscaped = NO;
         return @"---";
     }];
@@ -62,7 +62,7 @@
 - (void)testHelperRenderingIsHTMLEscaped
 {
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = NO;
             return @"&<>{{foo}}";
         }];
@@ -71,7 +71,7 @@
         STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
-        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+        id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
             *HTMLEscaped = YES;
             return @"&<>{{foo}}";
         }];
@@ -83,7 +83,7 @@
 
 - (void)testHelperRenderingIsHTMLEscapedByDefault
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return @"&<>{{foo}}";
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -93,7 +93,7 @@
 
 - (void)testHelperCanRenderNil
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObject:helper forKey:@"helper"];
@@ -104,7 +104,7 @@
 - (void)testHelperCanAccessInnerTemplateString
 {
     __block NSString *lastInnerTemplateString = nil;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         [lastInnerTemplateString release];
         lastInnerTemplateString = [tag.innerTemplateString retain];
         return nil;
@@ -118,9 +118,9 @@
 - (void)testHelperCanAccessRenderedContent
 {
     __block NSString *lastRenderedContent = nil;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         [lastRenderedContent release];
-        lastRenderedContent = [[tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error] retain];
+        lastRenderedContent = [[tag renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error] retain];
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -137,7 +137,7 @@
     __block NSUInteger overridableSectionCount = 0;
     __block NSUInteger regularSectionCount = 0;
     __block NSUInteger variableCount = 0;
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         switch (tag.type) {
             case GRMustacheTagTypeInvertedSection:
                 ++invertedSectionCount;
@@ -214,10 +214,10 @@
 
 - (void)testHelperCanRenderCurrentContextInDistinctTemplate
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error)
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error)
     {
-        GRMustacheTemplate *template = [templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+        GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
+        return [template renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
                              helper, @"helper",
@@ -237,10 +237,10 @@
 
 - (void)testHelperCanExplicitelyExtendCurrentContext
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         runtime = [runtime runtimeByAddingContextObject:@{ @"subject": @"---" }];
-        GRMustacheTemplate *template = [templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+        GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
+        return [template renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
     }];
     NSString *result = [[GRMustacheTemplate templateFromString:@"{{#helper}}{{/helper}}" error:NULL] renderObject:@{ @"helper": helper } error:NULL];
     STAssertEqualObjects(result, @"---", @"");
@@ -248,8 +248,8 @@
 
 - (void)testTemplateDelegateCallbacksAreCalledWithinSectionRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
-        return [tag renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
+        return [tag renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -270,9 +270,9 @@
 
 - (void)testTemplateDelegateCallbacksAreCalledWithinSectionAlternateTemplateStringRendering
 {
-    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
-        GRMustacheTemplate *template = [templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+    id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
+        GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
+        return [template renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -293,10 +293,10 @@
 
 - (void)testArrayOfHelpersInSectionTag
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return @"2";
     }];
     
@@ -307,10 +307,10 @@
 
 - (void)testArrayOfHelpersInVariableTag
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         return @"2";
     }];
     
@@ -321,11 +321,11 @@
 
 - (void)testArrayOfHelpersInVariableTagWithInconsistentHTMLEscaping
 {
-    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         *HTMLEscaped = YES;
         return @"1";
     }];
-    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    id helper2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         *HTMLEscaped = NO;
         return @"2";
     }];

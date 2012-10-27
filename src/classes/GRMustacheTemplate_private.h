@@ -24,12 +24,11 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheRendering.h"
 
 @class GRMustacheTemplateRepository;
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent, GRMustacheRendering> {
+@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;
@@ -74,4 +73,6 @@
 // Documented in GRMustacheTemplate.h
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheTemplate.h
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 @end

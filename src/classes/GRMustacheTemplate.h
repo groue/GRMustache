@@ -23,7 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheTemplateDelegate.h"
-#import "GRMustacheRendering.h"
 
 @class GRMustacheRuntime;
 @class GRMustacheTemplateRepository;
@@ -36,7 +35,7 @@
  * 
  * @since v1.0
  */
-@interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
+@interface GRMustacheTemplate: NSObject {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;
@@ -187,5 +186,10 @@
  * @since v5.3
  */
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

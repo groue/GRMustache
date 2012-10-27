@@ -30,15 +30,15 @@
 #import "GRMustache_private.h"
 
 @interface GRMustacheVariableTag()
-- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw;
 @end
 
 
 @implementation GRMustacheVariableTag
 
-+ (id)variableTagWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
-    return [[[self alloc] initWithExpression:expression raw:raw] autorelease];
+    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression raw:raw] autorelease];
 }
 
 
@@ -49,10 +49,15 @@
     return GRMustacheTagTypeVariable;
 }
 
+- (NSString *)renderWithRuntime:(id)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+{
+    return @"";
+}
+
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
     id value;
     if (![_expression evaluateInRuntime:runtime value:&value error:error]) {
@@ -66,7 +71,7 @@
         
         BOOL HTMLEscaped = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForTag:self inRuntime:runtime templateRepository:templateRepository HTMLEscaped:&HTMLEscaped error:&renderingError];
+        NSString *rendering = [renderingObject renderForTag:self withRuntime:runtime HTMLEscaped:&HTMLEscaped error:&renderingError];
         
         if (rendering) {
             if (!_raw && !HTMLEscaped) {
@@ -96,9 +101,9 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression raw:(BOOL)raw
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw
 {
-    self = [super initWithExpression:expression];
+    self = [super initWithTemplateRepository:templateRepository expression:expression];
     if (self) {
         _raw = raw;
     }

@@ -5,5 +5,3 @@
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
 - Runtime: remove delegating template property
 - TemplateDelegate -> RuntimeDelegate
-- clarify the usage of the templateRepository argument
-- fix this ugliness: [tag renderForTag:tag ...]

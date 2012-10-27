@@ -101,7 +101,7 @@ typedef struct {
 /**
  * TODO
  */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end
 
@@ -113,4 +113,5 @@ typedef struct {
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheRuntime.h"
+#import "GRMustacheRendering.h"
 #import "GRMustacheTag.h"

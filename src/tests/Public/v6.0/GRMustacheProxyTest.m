@@ -33,7 +33,7 @@
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         
         switch (tag.type) {
             case GRMustacheTagTypeRegularSection:
@@ -42,23 +42,27 @@
                 // {{$ f(...) }}...{{/}}
                 // Custom rendering for non-inverted sections
                 
-                NSMutableString *buffer = [NSMutableString string];
+                __block NSMutableString *buffer = [NSMutableString string];
                 [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
                     GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
                     itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
                     
-                    NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+                    NSString *rendering = [tag renderWithRuntime:itemRuntime HTMLEscaped:HTMLEscaped error:error];
                     if (rendering) {
                         [buffer appendString:rendering];
+                    } else {
+                        buffer = nil;
+                        *stop = YES;
                     }
                 }];
+                
                 return buffer;
             }
                 
             default:
                 // Genuine Mustache rendering otherwise
                 
-                return [[GRMustache renderingObjectForObject:array] renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+                return [[GRMustache renderingObjectForObject:array] renderForTag:tag withRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
         }
     }];
 }

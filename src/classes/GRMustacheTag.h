@@ -22,7 +22,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheRendering.h"
+
+@class GRMustacheTemplateRepository;
 
 /**
  * TODO
@@ -37,8 +38,9 @@ typedef enum {
 /**
  * TODO
  */
-@interface GRMustacheTag: NSObject<GRMustacheRendering> {
+@interface GRMustacheTag: NSObject {
     id _expression;
+    GRMustacheTemplateRepository *_templateRepository;
 }
 
 /**
@@ -47,9 +49,19 @@ typedef enum {
 @property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * TODO
+ */
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
  * The literal inner content of the tag, with unprocessed Mustache `{{tags}}`.
  * Nil for variable tags.
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * TODO
+ */
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

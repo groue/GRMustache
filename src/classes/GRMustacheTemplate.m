@@ -24,8 +24,9 @@
 #import "GRMustacheRuntime_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheSectionTag_private.h"
+#import "GRMustacheRendering.h"
 
-@interface GRMustacheTemplate()
+@interface GRMustacheTemplate()<GRMustacheRendering>
 @end
 
 @implementation GRMustacheTemplate
@@ -79,8 +80,11 @@
     GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
     runtime = [runtime runtimeByAddingContextObject:object];
     
-    BOOL HTMLEscaped = NO;
-    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped error:error];
+    NSMutableString *buffer = [NSMutableString string];
+    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+        return nil;
+    }
+    return buffer;
 }
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error
@@ -90,14 +94,27 @@
         runtime = [runtime runtimeByAddingContextObject:object];
     }
     
-    BOOL HTMLEscaped = NO;
-    return [self renderForTag:nil inRuntime:runtime templateRepository:_templateRepository HTMLEscaped:&HTMLEscaped error:error];
+    NSMutableString *buffer = [NSMutableString string];
+    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+        return nil;
+    }
+    return buffer;
+}
+
+- (NSString *)renderWithRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+{
+    NSMutableString *buffer = [NSMutableString string];
+    if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
+        return nil;
+    }
+    *HTMLEscaped = YES;
+    return buffer;
 }
 
 
-#pragma mark <GRMustacheTemplateComponent>
+#pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
     runtime = [runtime runtimeWithDelegatingTemplate:self];
     runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
@@ -107,7 +124,7 @@
         component = [runtime resolveTemplateComponent:component];
         
         // render
-        if (![component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
+        if (![component renderInBuffer:buffer withRuntime:runtime error:error]) {
             return NO;
         }
     }
@@ -137,16 +154,13 @@
     return component;
 }
 
-#pragma mark <GRMustacheRendering>
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag inRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+#pragma mark - <GRMustacheRendering>
+
+// Allows template to render as "dynamic partials"
+- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository error:error]) {
-        return nil;
-    }
-    *HTMLEscaped = YES;
-    return buffer;
+    return [self renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
 }
 
 @end
