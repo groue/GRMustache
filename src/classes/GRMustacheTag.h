@@ -29,11 +29,26 @@
  * TODO
  */
 typedef enum {
-    GRMustacheTagTypeVariable = 1 << 1,
-    GRMustacheTagTypeSection = 1 << 2,
-    GRMustacheTagTypeOverridableSection = 1 << 3,
-    GRMustacheTagTypeInvertedSection = 1 << 4,
-} GRMustacheTagType;
+    /**
+     * Type for variable tags such as {{ name }}
+     */
+    GRMustacheTagTypeVariable = 1 << 1 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    
+    /**
+     * Type for section tags such as {{# name }}...{{/}}
+     */
+    GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    
+    /**
+     * Type for overridable section tags such as {{$ name }}...{{/}}
+     */
+    GRMustacheTagTypeOverridableSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    
+    /**
+     * Type for inverted section tags such as {{^ name }}...{{/}}
+     */
+    GRMustacheTagTypeInvertedSection = 1 << 4 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+} GRMustacheTagType AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * TODO
