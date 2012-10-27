@@ -717,11 +717,14 @@
 				567C1A1715C41F420044C91F /* GRMustacheFilter.m */,
 				56CD619A15C5C77E0067E2E7 /* GRMustacheFilterLibrary_private.h */,
 				56CD619B15C5C7830067E2E7 /* GRMustacheFilterLibrary.m */,
+				56907EEC15FE5D170081BC2A /* GRMustacheInvocation.h */,
+				56907EF215FE5D9E0081BC2A /* GRMustacheInvocation_private.h */,
+				56907EED15FE5D180081BC2A /* GRMustacheInvocation.m */,
 				56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */,
 				56148B501639CADD00ADAF75 /* GRMustacheRuntime.h */,
 				56A4D10E15EA098A00550610 /* GRMustacheRuntime_private.h */,
 				56A4D10F15EA098A00550610 /* GRMustacheRuntime.m */,
-				56F5ECC616330232001B2D59 /* Template delegate */,
+				56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */,
 			);
 			name = Runtime;
 			sourceTree = "<group>";
@@ -808,17 +811,6 @@
 				56DEC3C515263AC80031E8DC /* JSONKit.m */,
 			);
 			path = JSONKit;
-			sourceTree = "<group>";
-		};
-		56F5ECC616330232001B2D59 /* Template delegate */ = {
-			isa = PBXGroup;
-			children = (
-				56907EEC15FE5D170081BC2A /* GRMustacheInvocation.h */,
-				56907EF215FE5D9E0081BC2A /* GRMustacheInvocation_private.h */,
-				56907EED15FE5D180081BC2A /* GRMustacheInvocation.m */,
-				56DEC2AD152631300031E8DC /* GRMustacheTemplateDelegate.h */,
-			);
-			name = "Template delegate";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

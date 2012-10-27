@@ -25,22 +25,12 @@
 #import "GRMustacheTemplateDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
 
-@class GRMustacheTemplateRepository;
-
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;
     id<GRMustacheTemplateDelegate> _delegate;
 }
-
-#pragma mark TemplateRepository
-
-/**
- * TODO
- */
-@property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, assign) id<GRMustacheTemplateDelegate> delegate GRMUSTACHE_API_PUBLIC;

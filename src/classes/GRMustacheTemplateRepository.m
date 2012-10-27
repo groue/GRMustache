@@ -215,7 +215,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
-    template.templateRepository = self;
     template.components = templateComponents;
     return template;
 }
@@ -294,7 +293,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // recursive partials
         
         template = [[[GRMustacheTemplate alloc] init] autorelease];
-        template.templateRepository = self;
         [_templateForTemplateID setObject:template forKey:templateID];
         
         

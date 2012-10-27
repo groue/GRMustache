@@ -32,7 +32,6 @@
 @implementation GRMustacheTemplate
 @synthesize components=_components;
 @synthesize delegate=_delegate;
-@synthesize templateRepository=_templateRepository;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {

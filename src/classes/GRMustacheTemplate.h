@@ -25,7 +25,6 @@
 #import "GRMustacheTemplateDelegate.h"
 
 @class GRMustacheRuntime;
-@class GRMustacheTemplateRepository;
 
 /**
  * The GRMustacheTemplate class provides with Mustache template rendering
@@ -37,7 +36,6 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
-    GRMustacheTemplateRepository *_templateRepository;
     NSArray *_components;
     id<GRMustacheTemplateDelegate> _delegate;
 }
