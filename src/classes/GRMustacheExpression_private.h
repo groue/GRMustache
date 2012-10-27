@@ -56,20 +56,17 @@
  * Evaluates an expression against a runtime, and return the value.
  *
  * @param runtime       A Mustache runtime object
- * @param filterValue   The expression evaluates in the runtime's context stack,
- *                      or filter stack, depending on this boolean.
  *
  * @return The value of the expression.
  */
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue GRMUSTACHE_API_INTERNAL;
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
- * Expressions are equal if and only if the result of their
- * `evaluateInRuntime:asFilterValue:` implementation would return the same value
- * for all runtimes.
+ * Expressions are equal if and only if the result of their `evaluateInRuntime:`
+ * implementation would return the same value in a given runtime.
  *
  * Default implementation is NSObject's one: subclasses must override.
  *

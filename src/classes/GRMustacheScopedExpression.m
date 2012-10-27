@@ -77,9 +77,9 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
 {
-    id scopedValue = [_baseExpression evaluateInRuntime:runtime asFilterValue:filterValue];
+    id scopedValue = [_baseExpression evaluateInRuntime:runtime];
     return [GRMustacheRuntime valueForKey:_scopeIdentifier inObject:scopedValue];
 }
 

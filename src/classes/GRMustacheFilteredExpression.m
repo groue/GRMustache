@@ -85,10 +85,10 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
 {
-    id argument = [_argumentExpression evaluateInRuntime:runtime asFilterValue:NO];
-    id filter = [_filterExpression evaluateInRuntime:runtime asFilterValue:NO]; // TODO: check if we should keep asFilterValue:YES
+    id argument = [_argumentExpression evaluateInRuntime:runtime];
+    id filter = [_filterExpression evaluateInRuntime:runtime];
 
     if (filter == nil) {
         [NSException raise:GRMustacheRenderingException format:@"Missing filter"];

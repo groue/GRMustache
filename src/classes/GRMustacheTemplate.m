@@ -76,7 +76,7 @@
 
 - (NSString *)renderObject:(id)object
 {
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
     runtime = [runtime runtimeByAddingContextObject:object];
     
     BOOL HTMLEscaped = NO;
@@ -85,7 +85,7 @@
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects
 {
-    GRMustacheRuntime *runtime = [GRMustacheRuntime runtimeWithTemplate:self];
+    GRMustacheRuntime *runtime = [GRMustacheRuntime runtime];
     for (id object in objects) {
         runtime = [runtime runtimeByAddingContextObject:object];
     }
@@ -99,10 +99,7 @@
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
-    if ([_delegate respondsToSelector:@selector(templateWillRender:)]) {
-        [_delegate templateWillRender:self];
-    }
-    
+    runtime = [runtime runtimeWithDelegatingTemplate:self];
     runtime = [runtime runtimeByAddingTemplateDelegate:self.delegate];
     
     for (id<GRMustacheTemplateComponent> component in _components) {
@@ -111,10 +108,6 @@
         
         // render
         [component renderInBuffer:buffer withRuntime:runtime templateRepository:templateRepository];
-    }
-    
-    if ([_delegate respondsToSelector:@selector(templateDidRender:)]) {
-        [_delegate templateDidRender:self];
     }
 }
 

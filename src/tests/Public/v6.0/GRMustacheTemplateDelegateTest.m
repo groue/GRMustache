@@ -28,84 +28,6 @@
 
 @implementation GRMustacheTemplateDelegateTest
 
-- (void)testTemplateWillRenderIsCalledForTemplate
-{
-    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    
-    __block NSUInteger templateWillRenderCount = 0;
-    __block GRMustacheTemplate *delegatingTemplate = nil;
-    delegate.templateWillRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateWillRenderCount;
-        delegatingTemplate = template;
-    };
-    
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-    template.delegate = delegate;
-    [template render];
-    
-    STAssertEquals(delegatingTemplate, template, @"");
-    STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
-}
-
-- (void)testTemplateDidRenderIsCalledForTemplate
-{
-    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    
-    __block NSUInteger templateDidRenderCount = 0;
-    __block GRMustacheTemplate *delegatingTemplate = nil;
-    delegate.templateDidRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateDidRenderCount;
-        delegatingTemplate = template;
-    };
-    
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-    template.delegate = delegate;
-    [template render];
-    
-    STAssertEquals(delegatingTemplate, template, @"");
-    STAssertEquals(templateDidRenderCount, (NSUInteger)1, @"");
-}
-
-- (void)testTemplateWillRenderIsNotCalledForPartial
-{
-    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    
-    __block NSUInteger templateWillRenderCount = 0;
-    __block GRMustacheTemplate *delegatingTemplate = nil;
-    delegate.templateWillRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateWillRenderCount;
-        delegatingTemplate = template;
-    };
-    
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
-    template.delegate = delegate;
-    [template render];
-    
-    STAssertEquals(delegatingTemplate, template, @"");
-    STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
-}
-
-- (void)testTemplateDidRenderIsNotCalledForPartial
-{
-    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    
-    __block NSUInteger templateDidRenderCount = 0;
-    __block GRMustacheTemplate *delegatingTemplate = nil;
-    delegate.templateDidRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateDidRenderCount;
-        delegatingTemplate = template;
-    };
-    
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateDelegateTest}}" error:NULL];
-    template.delegate = delegate;
-    [template render];
-    
-    STAssertEquals(delegatingTemplate, template, @"");
-    STAssertEquals(templateDidRenderCount, (NSUInteger)1, @"");
-}
-
 - (void)testWillInterpretReturnValueOfInvocationIsNotTriggeredByText
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -181,17 +103,13 @@
     __block GRMustacheTemplate *postRenderingTemplate = nil;
     __block GRMustacheInterpretation preRenderingInterpretation = -1;
     __block GRMustacheInterpretation postRenderingInterpretation = -1;
-    __block NSUInteger templateWillRenderCount = 0;
-    __block NSUInteger templateDidRenderCount = 0;
     delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
         preRenderingTemplate = template;
         preRenderingInterpretation = interpretation;
-        ++templateWillRenderCount;
     };
     delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
         postRenderingTemplate = template;
         postRenderingInterpretation = interpretation;
-        ++templateDidRenderCount;
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
@@ -199,8 +117,6 @@
     NSString *rendering = [template render];
     
     STAssertEqualObjects(rendering, @"<>", @"");
-    STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
-    STAssertEquals(templateDidRenderCount, (NSUInteger)1, @"");
     STAssertEquals(preRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
     STAssertEquals(postRenderingInterpretation, GRMustacheSectionTagInterpretation, @"", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
@@ -211,8 +127,8 @@
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
-    __block NSUInteger templateWillRenderCount = 0;
-    __block NSUInteger templateDidRenderCount = 0;
+    __block NSUInteger templateWillInterpretCount = 0;
+    __block NSUInteger templateDidInterpretCount = 0;
     __block GRMustacheTemplate *preRenderingTemplate1 = nil;
     __block GRMustacheTemplate *postRenderingTemplate1 = nil;
     __block GRMustacheInterpretation preRenderingInterpretation1 = -1;
@@ -226,8 +142,8 @@
     __block id preRenderingValue2 = nil;
     __block id postRenderingValue2 = nil;
     delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-        ++templateWillRenderCount;
-        switch (templateWillRenderCount) {
+        ++templateWillInterpretCount;
+        switch (templateWillInterpretCount) {
             case 1:
                 preRenderingTemplate1 = template;
                 preRenderingValue1 = invocation.returnValue;
@@ -244,8 +160,8 @@
         }
     };
     delegate.templateDidInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-        ++templateDidRenderCount;
-        switch (templateDidRenderCount) {
+        ++templateDidInterpretCount;
+        switch (templateDidInterpretCount) {
             case 1:
                 postRenderingTemplate1 = template;
                 postRenderingValue1 = invocation.returnValue;
@@ -265,8 +181,8 @@
     NSString *rendering = [template render];
     
     STAssertEqualObjects(rendering, @"<delegate>", @"");
-    STAssertEquals(templateWillRenderCount, (NSUInteger)2, @"");
-    STAssertEquals(templateDidRenderCount, (NSUInteger)2, @"");
+    STAssertEquals(templateWillInterpretCount, (NSUInteger)2, @"");
+    STAssertEquals(templateDidInterpretCount, (NSUInteger)2, @"");
     STAssertEquals(preRenderingTemplate1, template, @"", @"");
     STAssertEquals(preRenderingTemplate2, template, @"", @"");
     STAssertEquals(postRenderingTemplate1, template, @"", @"");
@@ -286,9 +202,9 @@
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -297,16 +213,16 @@
         NSString *rendering = [template render];
         
         STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEquals(interpretedValue, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -315,16 +231,16 @@
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         
         STAssertEqualObjects(rendering, @"foo", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEqualObjects(interpretedValue, @"foo", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -333,16 +249,16 @@
         NSString *rendering = [template render];
         
         STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEquals(interpretedValue, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -351,16 +267,16 @@
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         
         STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEquals(interpretedValue, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -369,16 +285,16 @@
         NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}}];
         
         STAssertEqualObjects(rendering, @"bar", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEqualObjects(interpretedValue, @"bar", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -387,16 +303,16 @@
         NSString *rendering = [template render];
         
         STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEquals(interpretedValue, (id)nil, @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -405,16 +321,16 @@
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         
         STAssertEqualObjects(rendering, @"FOO", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEqualObjects(interpretedValue, @"FOO", @"");
     }
     
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
         __block id interpretedValue = nil;
-        __block NSUInteger templateWillRenderCount = 0;
+        __block NSUInteger templateWillInterpretCount = 0;
         delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
-            ++templateWillRenderCount;
+            ++templateWillInterpretCount;
             interpretedValue = invocation.returnValue;
         };
         
@@ -423,7 +339,7 @@
         NSString *rendering = [template renderObject:@{@"subject":@"foo"}];
         
         STAssertEqualObjects(rendering, @"3", @"");
-        STAssertEquals(templateWillRenderCount, (NSUInteger)1, @"");
+        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
         STAssertEqualObjects(interpretedValue, @3, @"");
     }
 }
@@ -787,20 +703,12 @@
 - (void)testSectionDelegate
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    __block NSUInteger templateWillRenderCount = 0;
-    __block NSUInteger templateDidRenderCount = 0;
     __block GRMustacheTemplate *preRenderingTemplate = nil;
     __block GRMustacheTemplate *postRenderingTemplate = nil;
     __block GRMustacheInterpretation preRenderingInterpretation = -1;
     __block GRMustacheInterpretation postRenderingInterpretation = -1;
     __block id preRenderingValue = nil;
     __block id postRenderingValue = nil;
-    delegate.templateWillRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateWillRenderCount;
-    };
-    delegate.templateDidRenderBlock = ^(GRMustacheTemplate *template) {
-        ++templateDidRenderCount;
-    };
     delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheInterpretation interpretation) {
         preRenderingTemplate = template;
         preRenderingValue = invocation.returnValue;
@@ -817,8 +725,6 @@
     NSString *rendering = [template renderObject:@{@"delegate":delegate, @"value":@"foo"}];
     
     STAssertEqualObjects(rendering, @"delegate", @"");
-    STAssertEquals(templateWillRenderCount, (NSUInteger)0, @"");
-    STAssertEquals(templateDidRenderCount, (NSUInteger)0, @"");
     STAssertEquals(preRenderingTemplate, template, @"");
     STAssertEquals(postRenderingTemplate, template, @"");
     STAssertEquals(preRenderingInterpretation, GRMustacheVariableTagInterpretation, @"");

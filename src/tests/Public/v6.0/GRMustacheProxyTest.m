@@ -80,8 +80,7 @@
 - (void)testGRPositionFilterRendersArrayOfFalseValuesJustAsOriginalArray
 {
     // GRPositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[[NSNull null], @NO] };
-    id filters = @{ @"f": [[[GRPositionFilter alloc] init] autorelease] };
+    id data = @{ @"array": @[[NSNull null], @NO], @"f": [[[GRPositionFilter alloc] init] autorelease] };
     NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data];
     NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data];
     STAssertEqualObjects(rendering1, rendering2, @"");
@@ -90,8 +89,7 @@
 - (void)testGRPositionFilterRendersEmptyArrayJustAsOriginalArray
 {
     // GRPositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[] };
-    id filters = @{ @"f": [[[GRPositionFilter alloc] init] autorelease] };
+    id data = @{ @"array": @[], @"f": [[[GRPositionFilter alloc] init] autorelease] };
     
     {
         NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data];

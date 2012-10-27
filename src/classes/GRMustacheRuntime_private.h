@@ -43,7 +43,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * Mustache rendering. It internally maintains the following stacks:
  *
  * - a context stack,
- * - a filter stack,
  * - a delegate stack,
  * - a template override stack.
  *
@@ -51,14 +50,12 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *
  * - provide the current context object.
  * - perform a key lookup in the context stack.
- * - perform a key lookup in the filter stack.
  * - let template and tag delegates interpret rendered values.
  * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_template;
     NSArray *_contextStack;
-    NSArray *_filterStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
@@ -93,7 +90,15 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheRuntime.h
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_PUBLIC;
++ (id)runtime GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheRuntime.h
+- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
+
+/**
+ * TODO
+ */
+- (GRMustacheRuntime *)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)template;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
@@ -106,12 +111,6 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate GRMUSTACHE_API_INTERNAL;
-
-// Documented in GRMustacheRuntime.h
-- (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheRuntime.h
-- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
@@ -134,28 +133,16 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  *
  * @return The value found in the context stack.
  *
- * @see -[GRMustacheIdentifierExpression evaluateInRuntime:asFilterValue:]
+ * @see -[GRMustacheIdentifierExpression evaluateInRuntime:]
  */
 - (id)contextValueForKey:(NSString *)key GRMUSTACHE_API_INTERNAL;
-
-/**
- * Performs a key lookup in the receiver's filter stack, and returns the found
- * value.
- *
- * @param key  The searched key.
- *
- * @return The value found in the filter stack.
- *
- * @see -[GRMustacheIdentifierExpression evaluateInRuntime:asFilterValue:]
- */
-- (id)filterValueForKey:(NSString *)key GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns the top object of the receiver's context stack.
  *
  * @return The top object of the receiver's context stack.
  *
- * @see -[GRMustacheImplicitIteratorExpression evaluateInRuntime:asFilterValue:]
+ * @see -[GRMustacheImplicitIteratorExpression evaluateInRuntime:]
  */
 - (id)currentContextValue GRMUSTACHE_API_INTERNAL;
 

@@ -35,7 +35,7 @@
     [super dealloc];
 }
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
 {
     return nil;
 }

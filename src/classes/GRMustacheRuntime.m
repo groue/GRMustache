@@ -37,7 +37,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheRuntime()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
-- (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack filterStack:(NSArray *)filterStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
+- (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 - (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
 
 + (void)setupPreventionOfNSUndefinedKeyException;
@@ -76,11 +76,15 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template
++ (id)runtime
 {
-    // TODO: check if we should use filterStack
     NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-    return [[[self alloc] initWithTemplate:template contextStack:contextStack filterStack:nil delegateStack:nil templateOverrideStack:nil] autorelease];
+    return [[[self alloc] initWithTemplate:nil contextStack:contextStack delegateStack:nil templateOverrideStack:nil] autorelease];
+}
+
+- (GRMustacheRuntime *)runtimeWithDelegatingTemplate:(GRMustacheTemplate *)template
+{
+    return [[[GRMustacheRuntime alloc] initWithTemplate:template contextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingTemplateDelegate:(id<GRMustacheTemplateDelegate>)templateDelegate
@@ -93,7 +97,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     NSArray *delegateStack = [NSArray arrayWithObject:templateDelegate];
     if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
     
-    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:_contextStack filterStack:_filterStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject
@@ -113,20 +117,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
     }
     
-    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:contextStack filterStack:_filterStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
-}
-
-- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject;
-{
-    if (filterObject == nil) {
-        return self;
-    }
-    
-    // top of the stack is first object
-    NSArray *filterStack = [NSArray arrayWithObject:filterObject];
-    if (_filterStack) { filterStack = [filterStack arrayByAddingObjectsFromArray:_filterStack]; }
-    
-    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:_contextStack filterStack:filterStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
@@ -141,14 +132,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     NSArray *templateOverrideStack = [NSArray arrayWithObject:templateOverride];
     if (_templateOverrideStack) { templateOverrideStack = [templateOverrideStack arrayByAddingObjectsFromArray:_templateOverrideStack]; }
     
-    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:_contextStack filterStack:_filterStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
+    return [[[GRMustacheRuntime alloc] initWithTemplate:_template contextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
 }
 
 - (void)dealloc
 {
     [_template release];
     [_contextStack release];
-    [_filterStack release];
     [_delegateStack release];
     [_templateOverrideStack release];
     [super dealloc];
@@ -165,16 +155,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     // top of the stack is first object
     for (id contextObject in _contextStack) {
         id value = [GRMustacheRuntime valueForKey:key inObject:contextObject];
-        if (value != nil) { return value; }
-    }
-    return nil;
-}
-
-- (id)filterValueForKey:(NSString *)key
-{
-    // top of the stack is first object
-    for (id filterObject in _filterStack) {
-        id value = [GRMustacheRuntime valueForKey:key inObject:filterObject];
         if (value != nil) { return value; }
     }
     return nil;
@@ -302,13 +282,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack filterStack:(NSArray *)filterStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
+- (id)initWithTemplate:(GRMustacheTemplate *)template contextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
 {
     self = [super init];
     if (self) {
         _template = [template retain];
         _contextStack = [contextStack retain];
-        _filterStack = [filterStack retain];
         _delegateStack = [delegateStack retain];
         _templateOverrideStack = [templateOverrideStack retain];
     }

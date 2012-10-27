@@ -36,7 +36,6 @@
  * Mustache rendering. It internally maintains the following stacks:
  *
  * - a context stack,
- * - a filter stack,
  * - a delegate stack,
  * - a template override stack.
  *
@@ -44,39 +43,20 @@
  *
  * - provide the current context object.
  * - perform a key lookup in the context stack.
- * - perform a key lookup in the filter stack.
  * - let template and tag delegates interpret rendered values.
  * - let partial templates override template components.
  */
 @interface GRMustacheRuntime : NSObject {
     GRMustacheTemplate *_template;
     NSArray *_contextStack;
-    NSArray *_filterStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
 
 /**
  * TODO
- *
- * Returns a GRMustacheRuntime object with empty stacks but:
- *
- * - the context stack is initialized with _contextStack_,
- * - the delegate stack is initialized with _template_'s delegate,
- * - the filter stack is initialized with the filter library.
- *
- * Object at index 0 in contextStack is the top of the stack (the first queried
- * object when looking for a key).
- *
- * @param template       a template
- * @param contextStack   a context stack
- *
- * @return A GRMustacheRuntime object.
- *
- * @see GRMustacheFilterLibrary
- * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
  */
-+ (id)runtimeWithTemplate:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id)runtime AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheRuntime object identical to the receiver, but for the
@@ -91,18 +71,5 @@
  * @see -[GRMustacheSection renderInBuffer:withRuntime:]
  */
 - (GRMustacheRuntime *)runtimeByAddingContextObject:(id)contextObject AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheRuntime object identical to the receiver, but for the
- * filter stack that is extended with _filterObject_.
- *
- * @param filterObject  A filter object
- *
- * @return A GRMustacheRuntime object.
- *
- * @see -[GRMustacheTemplate renderObject:withFilters:]
- * @see -[GRMustacheTemplate renderObjectsFromArray:withFilters:]
- */
-- (GRMustacheRuntime *)runtimeByAddingFilterObject:(id)filterObject AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

@@ -63,13 +63,9 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime asFilterValue:(BOOL)filterValue
+- (id)evaluateInRuntime:(GRMustacheRuntime *)runtime
 {
-    if (filterValue) {
-        return [runtime filterValueForKey:_identifier];
-    } else {
-        return [runtime contextValueForKey:_identifier];
-    }
+    return [runtime contextValueForKey:_identifier];
 }
 
 @end

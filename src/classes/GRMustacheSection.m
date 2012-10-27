@@ -86,7 +86,7 @@
 
 - (void)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime templateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
-    id value = [_expression evaluateInRuntime:runtime asFilterValue:NO];
+    id value = [_expression evaluateInRuntime:runtime];
     [runtime delegateValue:value interpretation:GRMustacheSectionTagInterpretation forRenderingToken:_expression.token usingBlock:^(id value) {
 
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];

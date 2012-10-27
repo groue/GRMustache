@@ -70,28 +70,6 @@ typedef enum {
 @protocol GRMustacheTemplateDelegate<NSObject>
 @optional
 
-////////////////////////////////////////////////////////////////////////////////
-/// @name Observing the Full Template Rendering
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Sent right before a template starts rendering.
- *
- * @param template  The template that is about to render.
- *
- * @since v1.12
- */
-- (void)templateWillRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Sent right after a template has finished rendering.
- *
- * @param template  The template that did render.
- *
- * @since v1.12
- */
-- (void)templateDidRender:(GRMustacheTemplate *)template AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Observing the Rendering of individual Mustache tags

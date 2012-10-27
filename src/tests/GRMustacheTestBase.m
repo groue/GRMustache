@@ -34,32 +34,14 @@
 @end
 
 @implementation GRMustacheTestingDelegate
-@synthesize templateWillRenderBlock=_templateWillRenderBlock;
-@synthesize templateDidRenderBlock=_templateDidRenderBlock;
 @synthesize templateWillInterpretBlock=_templateWillInterpretBlock;
 @synthesize templateDidInterpretBlock=_templateDidInterpretBlock;
 
 - (void)dealloc
 {
-    self.templateWillRenderBlock = nil;
-    self.templateDidRenderBlock = nil;
     self.templateWillInterpretBlock = nil;
     self.templateDidInterpretBlock = nil;
     [super dealloc];
-}
-
-- (void)templateWillRender:(GRMustacheTemplate *)template
-{
-    if (self.templateWillRenderBlock) {
-        self.templateWillRenderBlock(template);
-    }
-}
-
-- (void)templateDidRender:(GRMustacheTemplate *)template
-{
-    if (self.templateDidRenderBlock) {
-        self.templateDidRenderBlock(template);
-    }
 }
 
 - (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
