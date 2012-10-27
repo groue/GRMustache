@@ -55,44 +55,28 @@
     
     
     /**
-     * Now we have to define this filter. The PositionFilter class is already
-     * there, ready to be instanciated:
-     */
-    
-    PositionFilter *positionFilter = [[PositionFilter alloc] init];
-    
-    
-    /**
-     * GRMustache does not load filters from the rendered data, but from a
-     * specific filters container.
-     *
-     * We'll use a NSDictionary for attaching positionFilter to the
-     * "withPosition" key, but you can use any other KVC-compliant container.
-     */
-    
-    NSDictionary *filters = [NSDictionary dictionaryWithObject:positionFilter forKey:@"withPosition"];
-    
-    
-    /**
      * Now we need an array of people that will be sequentially rendered by the
      * `{{# withPosition(people) }}...{{/ withPosition(people) }}` section.
      * 
-     * We'll use a NSDictionary for storing the array, but as always you can use
-     * any other KVC-compliant container.
+     * We'll use a NSDictionary for storing the array and the filter. As always
+     * you can use any other KVC-compliant container.
      */
     
     Person *alice = [Person personWithName:@"Alice"];
     Person *bob = [Person personWithName:@"Bob"];
     Person *craig = [Person personWithName:@"Craig"];
-    NSArray *people = [NSArray arrayWithObjects: alice, bob, craig, nil];
-    NSDictionary *data = [NSDictionary dictionaryWithObject:people forKey:@"people"];
+    NSArray *people = @[alice, bob, craig];
+    NSDictionary *data = @{
+        @"people": people,
+        @"withPosition": [[PositionFilter alloc] init]
+    };
     
     
     /**
      * Render.
      */
     
-    return [template renderObject:data withFilters:filters];
+    return [template renderObject:data error:NULL];
 }
 
 @end

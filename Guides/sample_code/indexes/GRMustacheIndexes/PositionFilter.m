@@ -22,120 +22,83 @@
 
 #import "PositionFilter.h"
 
-#pragma mark - PositionFilterItem declaration
-
-/**
- * PositionFilterItem's responsability is, given an array item and an index, to
- * render just as the item, but for the extra following keys;
- *
- * - position: returns the 1-based index of the item
- * - isOdd: returns YES if the position of the item is odd
- * - isFirst: returns YES if the item is at position 1
- *
- * Since it renders just as the array item, it is a subclass of the
- * GRMustacheProxy class, that is suited for this exact job.
- */
-@interface PositionFilterItem : GRMustacheProxy
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array;
-@end
-
-
 #pragma mark - PositionFilter implementation
 
 // Documented in PositionFilter.h
 @implementation PositionFilter
 
 /**
- * GRMustacheFilter protocol required method
+ * The method required by the GRMustacheFilter protocol
  */
 - (id)transformedValue:(id)object
 {
-    /**
-     * Let's first validate the input: we can only filter arrays.
-     */
+    // Input validation: we can only filter arrays.
     
     NSAssert([object isKindOfClass:[NSArray class]], @"Not an NSArray");
     NSArray *array = (NSArray *)object;
     
+    // Let's return a object that provides custom rendering:
     
-    /**
-     * Let's return a new array made of PositionFilterItem instances.
-     * They will provide the `position`, `isOdd` and `isFirst` keys while
-     * letting original array items provide the other keys.
-     */
-    
-    NSMutableArray *replacementArray = [NSMutableArray arrayWithCapacity:array.count];
-    [array enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
-        PositionFilterItem *item = [[PositionFilterItem alloc] initWithObjectAtIndex:index fromArray:array];
-        [replacementArray addObject:item];
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error)
+    {
+        // We only provide custom rendering for sections (and overridable
+        // sections, since they are supposed to render in the same way.
+        
+        switch (tag.type)
+        {
+            case GRMustacheTagTypeSection:
+            case GRMustacheTagTypeOverridableSection:
+            {
+                // {{# withPosition(items) }}...{{/}}
+                // {{$ withPosition(items) }}...{{/}}
+                //
+                // Let's render the section tag as many times as we have items.
+                
+                NSMutableString *buffer = [NSMutableString string];
+                NSUInteger position = 1;
+                for (id item in array)
+                {
+                    
+                    // For each item, extend the context stack twice:
+                    //
+                    // - once with our special keys, `position`, `isFirst` and `isOdd`,
+                    // - once with the item itself, so that it can provide its own keys:
+                    
+                    NSDictionary *special = @{
+                        @"position": @(position),
+                        @"isFirst":  @(position == 1),
+                        @"isOdd":    @(position % 2 == 1),
+                    };
+                    GRMustacheContext *itemContext = [context contextByAddingObject:special];
+                    itemContext = [itemContext contextByAddingObject:item];
+                    
+                    // Append the rendering to our buffer. Don't forget to handle errors:
+                    
+                    NSString *rendering = [tag renderContext:itemContext HTMLSafe:HTMLSafe error:error];
+                    if (!rendering) {
+                        // Some error occurred.
+                        return nil;
+                    }
+                    
+                    [buffer appendString:rendering];
+                    ++position;
+                }
+                return buffer;
+            } break;
+                
+            default:
+            {
+                // {{ withPosition(items) }}
+                // {{^ withPosition(items) }}...{{/}}
+                
+                // For other tags, use the default Mustache rendering:
+
+                id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:array];
+                return [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            } break;
+        }
     }];
-    return replacementArray;
 }
 
 @end
-
-
-#pragma mark - PositionFilterItem implementation
-
-/**
- * Let's declare a private property that stored the index: `index_`, and allows
- * us to implement the `position`, `isFirst` and `isOdd` keys.
- *
- * The underscore suffix avoids the property to pollute Mustache context:
- * your templates may contain a {{position}} tag, but it's unlikely they embed
- * any {{index_}} tags.
- */
-@interface PositionFilterItem()
-@property (nonatomic) NSUInteger index_;
-@end
-
-@implementation PositionFilterItem
-
-/**
- * PositionFilterItem is a subclass of GRMustacheProxy, so that it behaves
- * just as the array item. The array item is the "delegate" of the proxy.
- *
- * Let's also store the index, so that we can compute values for `position`,
- * `isFirst`, and `isOdd`.
- */
-- (id)initWithObjectAtIndex:(NSUInteger)index fromArray:(NSArray *)array
-{
-    // Initialize as a GRMustacheProxy with delegate:
-    self = [super initWithDelegate:[array objectAtIndex:index]];
-    
-    // Store the index:
-    if (self) {
-        self.index_ = index;
-    }
-    return self;
-}
-
-/**
- * Support for {{position}}: returns the 1-based index of the object.
- */
-- (NSUInteger)position
-{
-    return self.index_ + 1;
-}
-
-/**
- * Support for `{{#isFirst}}...{{/isFirst}}`: return YES if element is the
- * first.
- */
-- (BOOL)isFirst
-{
-    return self.index_ == 0;
-}
-
-/**
- * Support for `{{#isOdd}}...{{/isOdd}}`: return YES if element's position is
- * odd.
- */
-- (BOOL)isOdd
-{
-    return (self.index_ % 2) == 0;
-}
-
-@end
-
 
