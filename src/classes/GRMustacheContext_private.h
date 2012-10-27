@@ -112,7 +112,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @return A GRMustacheContext object.
  *
  * @see GRMustacheTemplateOverride
- * @see [GRMustacheTemplateOverride appendRenderingToString:withContext:error:]
+ * @see [GRMustacheTemplateOverride renderContext:inBuffer:error:]
  */
 - (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
@@ -145,8 +145,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @param tag    The tag.
  * @param block  The rendering block.
  *
- * @see -[GRMustacheSectionTag appendRenderingToString:withContext:error:]
- * @see -[GRMustacheVariableTag appendRenderingToString:withContext:error:]
+ * @see -[GRMustacheSectionTag renderContext:inBuffer:error:]
+ * @see -[GRMustacheVariableTag renderContext:inBuffer:error:]
  */
 - (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 

@@ -36,7 +36,7 @@
  * GRMustacheTemplateComponent.
  * 
  * Their responsability is to render, provided with a Mustache rendering
- * context, through their `appendRenderingToString:withContext:error:`
+ * context, through their `renderContext:inBuffer:error:`
  * implementation.
  * 
  * For instance, the template string "hello {{name}}!" would give four template
@@ -63,7 +63,7 @@
  * Appends the rendering of the receiver to a buffer.
  * 
  * @param buffer              A mutable string
- * @param context    A rendering context
+ * @param context   A rendering context
  * @param templateRepository  TODO
  * @param error               TODO
  *
@@ -71,7 +71,7 @@
  *
  * @see GRMustacheContext
  */
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

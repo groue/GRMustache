@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
     context = [context contextByAddingTemplateOverride:self];
-    return [_template appendRenderingToString:buffer withContext:context error:error];
+    return [_template renderContext:context inBuffer:buffer error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

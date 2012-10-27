@@ -205,7 +205,7 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression raw:NO]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression escapesHTML:YES]];
         } break;
             
             
@@ -222,7 +222,7 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression raw:YES]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression escapesHTML:NO]];
         } break;
             
             

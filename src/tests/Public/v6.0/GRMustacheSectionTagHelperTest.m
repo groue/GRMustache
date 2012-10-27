@@ -39,10 +39,10 @@
     self.attribute = nil;
     [super dealloc];
 }
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"attribute:{{attribute}}" error:NULL];
-    return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+    return [template renderContext:context HTMLSafe:HTMLSafe error:error];
 }
 @end
 
@@ -343,7 +343,7 @@
     __block NSString *lastRenderedContent = nil;
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         [lastRenderedContent release];
-        lastRenderedContent = [[tag renderWithContext:context HTMLSafe:HTMLSafe error:error] retain];
+        lastRenderedContent = [[tag renderContext:context HTMLSafe:HTMLSafe error:error] retain];
         return nil;
     }];
     NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -360,7 +360,7 @@
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
                      {
                          GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-                         return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                         return [template renderContext:context HTMLSafe:HTMLSafe error:error];
                      }];
         NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
                                  object, @"object",
@@ -372,7 +372,7 @@
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
         {
             GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-            return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+            return [template renderContext:context HTMLSafe:HTMLSafe error:error];
         }];
         NSDictionary *context = [NSDictionary dictionaryWithObjectsAndKeys:
                                  object, @"object",
@@ -395,7 +395,7 @@
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         context = [context contextByAddingObject:@{ @"subject": @"---" }];
         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [template renderContext:context HTMLSafe:HTMLSafe error:error];
     }];
     NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
     STAssertEqualObjects(result, @"---", @"");
@@ -404,7 +404,7 @@
 - (void)testTagDelegateCallbacksAreCalledWithinSectionRendering
 {
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [tag renderContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -429,7 +429,7 @@
 {
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{subject}}" error:NULL];
-        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [template renderContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];

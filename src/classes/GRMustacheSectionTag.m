@@ -39,7 +39,6 @@
 
 
 @implementation GRMustacheSectionTag
-@synthesize type=_type;
 
 + (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
@@ -53,15 +52,12 @@
     [super dealloc];
 }
 
-- (NSString *)innerTemplateString
-{
-    return [_templateString substringWithRange:_innerRange];
-}
-
 
 #pragma mark - GRMustacheTag
 
-- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+@synthesize type=_type;
+
+- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     
@@ -70,7 +66,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component appendRenderingToString:buffer withContext:context error:error]) {
+        if (![component renderContext:context inBuffer:buffer error:error]) {
             return nil;
         }
     }
@@ -81,43 +77,18 @@
     return buffer;
 }
 
+- (BOOL)escapesHTML
+{
+    return YES;
+}
+
+- (NSString *)innerTemplateString
+{
+    return [_templateString substringWithRange:_innerRange];
+}
+
 
 #pragma mark - <GRMustacheTemplateComponent>
-
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
-{
-    id object;
-    if (![_expression evaluateInContext:context value:&object error:error]) {
-        return NO;
-    }
-    
-    __block BOOL success = YES;
-    [context renderObject:object withTag:self usingBlock:^(id object){
-        
-        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        
-        BOOL HTMLSafe = NO;
-        NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self withContext:context HTMLSafe:&HTMLSafe error:&renderingError];
-        
-        if (rendering) {
-            if (!HTMLSafe) {
-                rendering = [GRMustache htmlEscape:rendering];
-            }
-            [buffer appendString:rendering];
-        } else if (renderingError) {
-            // If rendering is nil, but rendering error is not set,
-            // assume lazy coder, and the intention to render nothing:
-            // Fail if and only if renderingError is explicitely set.
-            if (error) {
-                *error = renderingError;
-            }
-            success = NO;
-        }
-    }];
-    
-    return success;
-}
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {

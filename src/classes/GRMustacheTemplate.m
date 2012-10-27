@@ -80,7 +80,7 @@
     context = [context contextByAddingObject:object];
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self appendRenderingToString:buffer withContext:context error:error]) {
+    if (![self renderContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     return buffer;
@@ -94,16 +94,16 @@
     }
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self appendRenderingToString:buffer withContext:context error:error]) {
+    if (![self renderContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     return buffer;
 }
 
-- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self appendRenderingToString:buffer withContext:context error:error]) {
+    if (![self renderContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     if (HTMLSafe) {
@@ -115,7 +115,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
     context = [context contextByAddingTagDelegate:self.tagDelegate];
     
@@ -124,7 +124,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component appendRenderingToString:buffer withContext:context error:error]) {
+        if (![component renderContext:context inBuffer:buffer error:error]) {
             return NO;
         }
     }
@@ -158,9 +158,9 @@
 #pragma mark - <GRMustacheRendering>
 
 // Allows template to render as "dynamic partials"
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderWithContext:context HTMLSafe:HTMLSafe error:error];
+    return [self renderContext:context HTMLSafe:HTMLSafe error:error];
 }
 
 @end

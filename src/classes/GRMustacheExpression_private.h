@@ -53,7 +53,7 @@
 /**
  * Evaluates an expression against a rendering context, and return the value.
  *
- * @param context  A Mustache rendering context
+ * @param context A Mustache rendering context
  * @param value             TODO
  * @param error             TODO
  *

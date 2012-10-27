@@ -45,7 +45,7 @@
 
 #pragma mark <GRMustacheTemplateComponent>
 
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
     [buffer appendString:_text];
     return YES;

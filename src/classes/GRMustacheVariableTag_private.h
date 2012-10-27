@@ -38,7 +38,7 @@
  */
 @interface GRMustacheVariableTag: GRMustacheTag<GRMustacheTemplateComponent> {
 @private
-    BOOL _raw;
+    BOOL _escapesHTML;
 }
 
 /**
@@ -47,12 +47,12 @@
  * @param templateRepository  TODO
  * @param expression          The expression that would evaluate against a
  *                            rendering contex.
- * @param raw                 NO if the value should be rendered HTML-escaped.
+ * @param escapesHTML         YES if the value should be rendered HTML-escaped.
  *
  * @return a GRMustacheVariableTag
  *
  * @see GRMustacheExpression
  */
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw GRMUSTACHE_API_INTERNAL;
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
 
 @end

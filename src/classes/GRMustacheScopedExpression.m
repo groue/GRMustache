@@ -77,7 +77,7 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)evaluateInContext:(GRMustacheContext *)context  value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
 {
     id scopedValue;
     if (![_baseExpression evaluateInContext:context value:&scopedValue error:error]) {

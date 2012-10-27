@@ -30,82 +30,40 @@
 #import "GRMustache_private.h"
 
 @interface GRMustacheVariableTag()
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML;
 @end
 
 
 @implementation GRMustacheVariableTag
 
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
 {
-    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression raw:raw] autorelease];
+    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression escapesHTML:escapesHTML] autorelease];
 }
 
 
 #pragma mark - GRMustacheTag
+
+@synthesize escapesHTML=_escapesHTML;
 
 - (GRMustacheTagType)type
 {
     return GRMustacheTagTypeVariable;
 }
 
-- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     return @"";
 }
 
 
-#pragma mark - <GRMustacheTemplateComponent>
-
-- (BOOL)appendRenderingToString:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
-{
-    id object;
-    if (![_expression evaluateInContext:context value:&object error:error]) {
-        return NO;
-    }
-
-    __block BOOL success = YES;
-    [context renderObject:object withTag:self usingBlock:^(id object) {
-        
-        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        
-        BOOL HTMLSafe = NO;
-        NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self withContext:context HTMLSafe:&HTMLSafe error:&renderingError];
-        
-        if (rendering) {
-            if (!_raw && !HTMLSafe) {
-                rendering = [GRMustache htmlEscape:rendering];
-            }
-            [buffer appendString:rendering];
-        } else if (renderingError) {
-            // If rendering is nil, but rendering error is not set,
-            // assume lazy coder, and the intention to render nothing:
-            // Fail if and only if renderingError is explicitely set.
-            if (error) {
-                *error = renderingError;
-            }
-            success = NO;
-        }
-    }];
-    
-    return success;
-}
-
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
-{
-    // variable tags can not override any other component
-    return component;
-}
-
-
 #pragma mark - Private
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression raw:(BOOL)raw
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
 {
     self = [super initWithTemplateRepository:templateRepository expression:expression];
     if (self) {
-        _raw = raw;
+        _escapesHTML = escapesHTML;
     }
     return self;
 }

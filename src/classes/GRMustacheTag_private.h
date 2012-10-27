@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTemplateComponent_private.h"
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
@@ -36,7 +37,7 @@ typedef enum {
 } GRMustacheTagType;
 
 // Documented in GRMustacheTag.h
-@interface GRMustacheTag: NSObject {
+@interface GRMustacheTag: NSObject<GRMustacheTemplateComponent> {
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
 }
@@ -53,10 +54,15 @@ typedef enum {
 /**
  * TODO
  */
+@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
-- (NSString *)renderWithContext:(GRMustacheContext *)context  HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

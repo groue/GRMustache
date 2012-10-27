@@ -363,12 +363,12 @@
     id item1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateNamed:@"partial" error:NULL];
         context = [context contextByAddingObject:@{ @"name": @"item1" }];
-        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [template renderContext:context HTMLSafe:HTMLSafe error:error];
     }];
     id item2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         GRMustacheTemplate *template = [tag.templateRepository templateNamed:@"partial" error:NULL];
         context = [context contextByAddingObject:@{ @"name": @"item2" }];
-        return [template renderWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [template renderContext:context HTMLSafe:HTMLSafe error:error];
     }];
 
     NSDictionary *context = @{@"items": @[item1, item2]};

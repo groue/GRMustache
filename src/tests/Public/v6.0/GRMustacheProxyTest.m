@@ -49,7 +49,7 @@
                     GRMustacheContext *itemContext = [context contextByAddingObject:@{ @"position": @(index + 1) }];
                     itemContext = [itemContext contextByAddingObject:item];
                     
-                    NSString *rendering = [tag renderWithContext:itemContext HTMLSafe:HTMLSafe error:error];
+                    NSString *rendering = [tag renderContext:itemContext HTMLSafe:HTMLSafe error:error];
                     if (rendering) {
                         [buffer appendString:rendering];
                     } else {
@@ -64,7 +64,7 @@
             default:
                 // Genuine Mustache rendering otherwise
                 
-                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withContext:context HTMLSafe:HTMLSafe error:error];
+                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
         }
     }];
 }

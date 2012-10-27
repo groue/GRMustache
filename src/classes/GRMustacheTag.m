@@ -24,6 +24,9 @@
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustache_private.h"
+#import "GRMustacheRendering.h"
 
 @implementation GRMustacheTag
 @synthesize expression=_expression;
@@ -51,6 +54,12 @@
     return 0;
 }
 
+- (BOOL)escapesHTML
+{
+    NSAssert(NO, @"Subclasses must override");
+    return YES;
+}
+
 - (NSString *)innerTemplateString
 {
     return nil;
@@ -66,10 +75,55 @@
     }
 }
 
-- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSAssert(NO, @"Subclasses must override");
     return @"";
 }
+
+
+#pragma mark - <GRMustacheTemplateComponent>
+
+- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
+{
+    id object;
+    if (![_expression evaluateInContext:context value:&object error:error]) {
+        return NO;
+    }
+    
+    __block BOOL success = YES;
+    [context renderObject:object withTag:self usingBlock:^(id object){
+        
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        
+        BOOL HTMLSafe = NO;
+        NSError *renderingError = nil;
+        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
+        
+        if (rendering) {
+            if (self.escapesHTML && !HTMLSafe) {
+                rendering = [GRMustache htmlEscape:rendering];
+            }
+            [buffer appendString:rendering];
+        } else if (renderingError) {
+            // If rendering is nil, but rendering error is not set,
+            // assume lazy coder, and the intention to render nothing:
+            // Fail if and only if renderingError is explicitely set.
+            if (error) {
+                *error = renderingError;
+            }
+            success = NO;
+        }
+    }];
+    
+    return success;
+}
+
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+{
+    // default implementation does not override any other component
+    return component;
+}
+
 
 @end
