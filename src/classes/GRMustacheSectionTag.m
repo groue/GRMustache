@@ -75,7 +75,9 @@
         }
     }
     
-    *HTMLEscaped = YES;
+    if (HTMLEscaped) {
+        *HTMLEscaped = YES;
+    }
     return buffer;
 }
 

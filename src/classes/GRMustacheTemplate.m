@@ -106,7 +106,9 @@
     if (![self renderInBuffer:buffer withRuntime:runtime error:error]) {
         return nil;
     }
-    *HTMLEscaped = YES;
+    if (HTMLEscaped) {
+        *HTMLEscaped = YES;
+    }
     return buffer;
 }
 
