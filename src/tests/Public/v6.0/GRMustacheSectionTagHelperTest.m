@@ -39,7 +39,7 @@
     self.attribute = nil;
     [super dealloc];
 }
-- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     GRMustacheTemplate *template = [tag.templateRepository templateFromString:@"{{attribute}}" error:NULL];
     return [template renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
@@ -147,12 +147,16 @@
                 ++overridableSectionCount;
                 break;
                 
-            case GRMustacheTagTypeRegularSection:
+            case GRMustacheTagTypeSection:
                 ++regularSectionCount;
                 break;
                 
             case GRMustacheTagTypeVariable:
                 ++variableCount;
+                break;
+                
+            default:
+                STAssertTrue(NO, @"");
                 break;
         }
         return nil;
@@ -254,7 +258,7 @@
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if (tag.type != GRMustacheTagTypeRegularSection) {
+        if (tag.type != GRMustacheTagTypeSection) {
             invocation.returnValue = @"delegate";
         }
     };
@@ -277,7 +281,7 @@
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     delegate.templateWillInterpretBlock = ^(GRMustacheTemplate *template, GRMustacheInvocation *invocation, GRMustacheTag *tag) {
-        if (tag.type != GRMustacheTagTypeRegularSection) {
+        if (tag.type != GRMustacheTagTypeSection) {
             invocation.returnValue = @"delegate";
         }
     };

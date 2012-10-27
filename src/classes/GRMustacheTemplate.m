@@ -157,7 +157,7 @@
 #pragma mark - <GRMustacheRendering>
 
 // Allows template to render as "dynamic partials"
-- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     return [self renderWithRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
 }

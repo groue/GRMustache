@@ -117,8 +117,8 @@
     NSString *rendering = [template renderAndReturnError:NULL];
     
     STAssertEqualObjects(rendering, @"<>", @"");
-    STAssertEquals(preRenderingTagType, GRMustacheTagTypeRegularSection, @"", @"");
-    STAssertEquals(postRenderingTagType, GRMustacheTagTypeRegularSection, @"", @"");
+    STAssertEquals(preRenderingTagType, GRMustacheTagTypeSection, @"", @"");
+    STAssertEquals(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
     STAssertEquals(preRenderingTemplate, template, @"", @"");
     STAssertEquals(postRenderingTemplate, template, @"", @"");
 }
@@ -191,10 +191,10 @@
     STAssertEqualObjects(preRenderingValue2, (id)nil, @"");
     STAssertEqualObjects(postRenderingValue1, @"delegate", @"");
     STAssertEqualObjects(postRenderingValue2, @(YES), @"");
-    STAssertEquals(preRenderingTagType1, GRMustacheTagTypeRegularSection, @"", @"");
+    STAssertEquals(preRenderingTagType1, GRMustacheTagTypeSection, @"", @"");
     STAssertEquals(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
     STAssertEquals(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEquals(postRenderingTagType2, GRMustacheTagTypeRegularSection, @"", @"");
+    STAssertEquals(postRenderingTagType2, GRMustacheTagTypeSection, @"", @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue

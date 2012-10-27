@@ -30,20 +30,10 @@
 // Documented in GRMustacheTag.h
 typedef enum {
     GRMustacheTagTypeVariable = 1 << 1,
-    GRMustacheTagTypeRegularSection = 1 << 2,
-    GRMustacheTagTypeOverridableSection = 1 << 4,
-    GRMustacheTagTypeInvertedSection = 1 << 3,
+    GRMustacheTagTypeSection = 1 << 2,
+    GRMustacheTagTypeOverridableSection = 1 << 3,
+    GRMustacheTagTypeInvertedSection = 1 << 4,
 } GRMustacheTagType;
-
-// Documented in GRMustacheTag.h
-typedef enum {
-    GRMustacheTagTypeMaskVariable = GRMustacheTagTypeVariable,
-    GRMustacheTagTypeMaskRegularSection = GRMustacheTagTypeRegularSection,
-    GRMustacheTagTypeMaskInvertedSection = GRMustacheTagTypeInvertedSection,
-    GRMustacheTagTypeMaskOverridableSection = GRMustacheTagTypeOverridableSection,
-    GRMustacheTagTypeMaskNonInvertedSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection,
-    GRMustacheTagTypeMaskSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection | GRMustacheTagTypeInvertedSection,
-} GRMustacheTagTypeMask;
 
 // Documented in GRMustacheTag.h
 @interface GRMustacheTag: NSObject {

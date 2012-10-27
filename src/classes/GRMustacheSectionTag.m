@@ -96,7 +96,7 @@
         
         BOOL HTMLEscaped = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForTag:self withRuntime:runtime HTMLEscaped:&HTMLEscaped error:&renderingError];
+        NSString *rendering = [renderingObject renderForMustacheTag:self withRuntime:runtime HTMLEscaped:&HTMLEscaped error:&renderingError];
         
         if (rendering) {
             if (!HTMLEscaped) {

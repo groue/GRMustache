@@ -36,7 +36,7 @@
     return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, BOOL *HTMLEscaped, NSError **error) {
         
         switch (tag.type) {
-            case GRMustacheTagTypeRegularSection:
+            case GRMustacheTagTypeSection:
             case GRMustacheTagTypeOverridableSection: {
                 // {{# f(...) }}...{{/}}
                 // {{$ f(...) }}...{{/}}
@@ -62,7 +62,7 @@
             default:
                 // Genuine Mustache rendering otherwise
                 
-                return [[GRMustache renderingObjectForObject:array] renderForTag:tag withRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
+                return [[GRMustache renderingObjectForObject:array] renderForMustacheTag:tag withRuntime:runtime HTMLEscaped:HTMLEscaped error:error];
         }
     }];
 }

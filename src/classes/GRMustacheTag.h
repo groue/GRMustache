@@ -30,9 +30,9 @@
  */
 typedef enum {
     GRMustacheTagTypeVariable = 1 << 1,
-    GRMustacheTagTypeRegularSection = 1 << 2,
-    GRMustacheTagTypeOverridableSection = 1 << 4,
-    GRMustacheTagTypeInvertedSection = 1 << 3,
+    GRMustacheTagTypeSection = 1 << 2,
+    GRMustacheTagTypeOverridableSection = 1 << 3,
+    GRMustacheTagTypeInvertedSection = 1 << 4,
 } GRMustacheTagType;
 
 /**

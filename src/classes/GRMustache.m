@@ -90,7 +90,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         return [GRMustacheRenderingNil instance];
     }
     
-    SEL renderSelector = @selector(renderForTag:withRuntime:HTMLEscaped:error:);
+    SEL renderSelector = @selector(renderForMustacheTag:withRuntime:HTMLEscaped:error:);
     
     if ([object respondsToSelector:renderSelector]) {
         return object;
@@ -177,7 +177,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp
 {
-    SEL renderSelector = @selector(renderForTag:withRuntime:HTMLEscaped:error:);
+    SEL renderSelector = @selector(renderForMustacheTag:withRuntime:HTMLEscaped:error:);
     if (!class_addMethod(aClass, renderSelector, imp, "@@:@@^c^@")) {
         Method method = class_getInstanceMethod(aClass, renderSelector);
         method_setImplementation(method, imp);
@@ -218,9 +218,9 @@ static IMP nilRenderingImplementation;
     return instance;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    return nilRenderingImplementation(nil, @selector(renderForTag:withRuntime:HTMLEscaped:error:), tag, runtime, HTMLEscaped);
+    return nilRenderingImplementation(nil, @selector(renderForMustacheTag:withRuntime:HTMLEscaped:error:), tag, runtime, HTMLEscaped);
 }
 
 @end
@@ -246,7 +246,7 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
     if (!_block) {
         return @"";
@@ -278,9 +278,9 @@ static IMP nilRenderingImplementation;
     return self;
 }
 
-- (NSString *)renderForTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag withRuntime:(GRMustacheRuntime *)runtime HTMLEscaped:(BOOL *)HTMLEscaped error:(NSError **)error
 {
-    return _implementation(_object, @selector(renderForTag:withRuntime:HTMLEscaped:error:), tag, runtime, HTMLEscaped);
+    return _implementation(_object, @selector(renderForMustacheTag:withRuntime:HTMLEscaped:error:), tag, runtime, HTMLEscaped);
 }
 
 @end
@@ -293,7 +293,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
             // {{ nil }}
             // {{# nil }}...{{/}}
             return @"";
@@ -315,7 +315,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
         case GRMustacheTagTypeOverridableSection:
             // {{ null }}
             // {{# null }}...{{/}}
@@ -341,7 +341,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             *HTMLEscaped = NO;
             return [self description];
             
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
         case GRMustacheTagTypeOverridableSection:
             // {{# number }}...{{/}}
             // {{$ number }}...{{/}}
@@ -374,7 +374,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             *HTMLEscaped = NO;
             return self;
             
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
         case GRMustacheTagTypeOverridableSection:
             // {{# string }}...{{/}}
             // {{$ string }}...{{/}}
@@ -407,7 +407,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
             *HTMLEscaped = NO;
             return [self description];
             
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
         case GRMustacheTagTypeOverridableSection:
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
@@ -443,7 +443,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
                 BOOL itemHasRenderedHTMLEscaped = NO;
                 NSError *itemRenderingError = nil;
-                NSString *rendering = [itemRenderingObject renderForTag:tag withRuntime:itemRuntime HTMLEscaped:&itemHasRenderedHTMLEscaped error:&itemRenderingError];
+                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag withRuntime:itemRuntime HTMLEscaped:&itemHasRenderedHTMLEscaped error:&itemRenderingError];
                 
                 if (rendering)
                 {
@@ -479,7 +479,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             return buffer;
         }
             
-        case GRMustacheTagTypeRegularSection:
+        case GRMustacheTagTypeSection:
         case GRMustacheTagTypeOverridableSection: {
             // {{# list }}...{{/}}
             // {{$ list }}...{{/}}
