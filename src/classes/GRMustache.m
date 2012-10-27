@@ -71,6 +71,20 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 @implementation GRMustache
 
++ (void)load
+{
+    // At the beginning of the program, register Mustache rendering
+    // implementations for common classes:
+    
+    [self registerClass:[NSNull class] renderingImplementation:(IMP)GRMustacheRenderNSNull];
+    [self registerClass:[NSNumber class] renderingImplementation:(IMP)GRMustacheRenderNSNumber];
+    [self registerClass:[NSString class] renderingImplementation:(IMP)GRMustacheRenderNSString];
+    [self registerClass:[NSDictionary class] renderingImplementation:(IMP)GRMustacheRenderNSObject];
+    [self registerProtocol:@protocol(NSFastEnumeration) renderingImplementation:(IMP)GRMustacheRenderNSFastEnumeration];
+    [self registerNilRenderingImplementation:(IMP)GRMustacheRenderNil];
+    [self registerDefaultRenderingImplementation:(IMP)GRMustacheRenderNSObject];
+}
+
 + (void)preventNSUndefinedKeyExceptionAttack
 {
     [GRMustacheRuntime preventNSUndefinedKeyExceptionAttack];
@@ -110,7 +124,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             Protocol *protocol = protocols[i];
             if ([object conformsToProtocol:protocol]) {
                 implementation = (IMP)imps[i];
-                break;  // TODO: look for a more precise protocol
+                break;
             }
         }
         
@@ -153,17 +167,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 
 #pragma mark Private
-
-+ (void)load
-{
-    [self registerDefaultRenderingImplementation:(IMP)GRMustacheRenderNSObject];
-    [self registerNilRenderingImplementation:(IMP)GRMustacheRenderNil];
-    [self registerClass:[NSNull class] renderingImplementation:(IMP)GRMustacheRenderNSNull];
-    [self registerClass:[NSNumber class] renderingImplementation:(IMP)GRMustacheRenderNSNumber];
-    [self registerClass:[NSString class] renderingImplementation:(IMP)GRMustacheRenderNSString];
-    [self registerClass:[NSDictionary class] renderingImplementation:(IMP)GRMustacheRenderNSObject];
-    [self registerProtocol:@protocol(NSFastEnumeration) renderingImplementation:(IMP)GRMustacheRenderNSFastEnumeration];
-}
 
 + (void)registerDefaultRenderingImplementation:(IMP)imp
 {
