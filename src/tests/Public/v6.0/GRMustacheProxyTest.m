@@ -35,26 +35,30 @@
     
     return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         
-        if (tag.type & GRMustacheTagTypeMaskNonInvertedSection) {
-            
-            // Custom rendering for non-inverted sections
-            
-            NSMutableString *buffer = [NSMutableString string];
-            [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
-                GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
-                itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
+        switch (tag.type) {
+            case GRMustacheTagTypeRegularSection:
+            case GRMustacheTagTypeOverridableSection: {
+                // {{# f(...) }}...{{/}}
+                // {{$ f(...) }}...{{/}}
+                // Custom rendering for non-inverted sections
                 
-                NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
-                if (rendering) {
-                    [buffer appendString:rendering];
-                }
-            }];
-            return buffer;
-        } else {
-            
-            // Genuine Mustache rendering otherwise
-            
-            return [[GRMustache renderingObjectForObject:array] renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+                NSMutableString *buffer = [NSMutableString string];
+                [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
+                    GRMustacheRuntime *itemRuntime = [runtime runtimeByAddingContextObject:@{ @"position": @(index + 1) }];
+                    itemRuntime = [itemRuntime runtimeByAddingContextObject:item];
+                    
+                    NSString *rendering = [tag renderForTag:tag inRuntime:itemRuntime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
+                    if (rendering) {
+                        [buffer appendString:rendering];
+                    }
+                }];
+                return buffer;
+            }
+                
+            default:
+                // Genuine Mustache rendering otherwise
+                
+                return [[GRMustache renderingObjectForObject:array] renderForTag:tag inRuntime:runtime templateRepository:templateRepository HTMLEscaped:HTMLEscaped error:error];
         }
     }];
 }

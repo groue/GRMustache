@@ -37,18 +37,6 @@ typedef enum {
 /**
  * TODO
  */
-typedef enum {
-    GRMustacheTagTypeMaskVariable = GRMustacheTagTypeVariable,
-    GRMustacheTagTypeMaskRegularSection = GRMustacheTagTypeRegularSection,
-    GRMustacheTagTypeMaskInvertedSection = GRMustacheTagTypeInvertedSection,
-    GRMustacheTagTypeMaskOverridableSection = GRMustacheTagTypeOverridableSection,
-    GRMustacheTagTypeMaskNonInvertedSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection,
-    GRMustacheTagTypeMaskSection = GRMustacheTagTypeRegularSection | GRMustacheTagTypeOverridableSection | GRMustacheTagTypeInvertedSection,
-} GRMustacheTagTypeMask;
-
-/**
- * TODO
- */
 @interface GRMustacheTag: NSObject<GRMustacheRendering> {
     id _expression;
 }

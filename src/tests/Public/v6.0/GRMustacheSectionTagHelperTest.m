@@ -137,12 +137,6 @@
     __block NSUInteger overridableSectionCount = 0;
     __block NSUInteger regularSectionCount = 0;
     __block NSUInteger variableCount = 0;
-    __block NSUInteger maskInvertedSectionCount = 0;
-    __block NSUInteger maskNonInvertedSectionCount = 0;
-    __block NSUInteger maskOverridableSectionCount = 0;
-    __block NSUInteger maskRegularSectionCount = 0;
-    __block NSUInteger maskSectionCount = 0;
-    __block NSUInteger maskVariableCount = 0;
     id helper = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheRuntime *runtime, GRMustacheTemplateRepository *templateRepository, BOOL *HTMLEscaped, NSError **error) {
         switch (tag.type) {
             case GRMustacheTagTypeInvertedSection:
@@ -161,24 +155,6 @@
                 ++variableCount;
                 break;
         }
-        if (tag.type & GRMustacheTagTypeMaskInvertedSection) {
-            maskInvertedSectionCount++;
-        }
-        if (tag.type & GRMustacheTagTypeMaskNonInvertedSection) {
-            maskNonInvertedSectionCount++;
-        }
-        if (tag.type & GRMustacheTagTypeMaskOverridableSection) {
-            maskOverridableSectionCount++;
-        }
-        if (tag.type & GRMustacheTagTypeMaskRegularSection) {
-            maskRegularSectionCount++;
-        }
-        if (tag.type & GRMustacheTagTypeMaskSection) {
-            maskSectionCount++;
-        }
-        if (tag.type & GRMustacheTagTypeMaskVariable) {
-            maskVariableCount++;
-        }
         return nil;
     }];
     
@@ -187,12 +163,6 @@
         overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
-        maskInvertedSectionCount = 0;
-        maskNonInvertedSectionCount = 0;
-        maskOverridableSectionCount = 0;
-        maskRegularSectionCount = 0;
-        maskSectionCount = 0;
-        maskVariableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
         
@@ -200,24 +170,12 @@
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)1, @"");
-        STAssertEquals(maskInvertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskNonInvertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskOverridableSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskRegularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskVariableCount, (NSUInteger)1, @"");
     }
     {
         invertedSectionCount = 0;
         overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
-        maskInvertedSectionCount = 0;
-        maskNonInvertedSectionCount = 0;
-        maskOverridableSectionCount = 0;
-        maskRegularSectionCount = 0;
-        maskSectionCount = 0;
-        maskVariableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{#helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
         
@@ -225,24 +183,12 @@
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)1, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
-        STAssertEquals(maskInvertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskNonInvertedSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskOverridableSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskRegularSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskVariableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
         overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
-        maskInvertedSectionCount = 0;
-        maskNonInvertedSectionCount = 0;
-        maskOverridableSectionCount = 0;
-        maskRegularSectionCount = 0;
-        maskSectionCount = 0;
-        maskVariableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{$helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
         
@@ -250,24 +196,12 @@
         STAssertEquals(overridableSectionCount, (NSUInteger)1, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
-        STAssertEquals(maskInvertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskNonInvertedSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskOverridableSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskRegularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskVariableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
         overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
-        maskInvertedSectionCount = 0;
-        maskNonInvertedSectionCount = 0;
-        maskOverridableSectionCount = 0;
-        maskRegularSectionCount = 0;
-        maskSectionCount = 0;
-        maskVariableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{^helper}}...{{/helper}}" error:nil] renderObject:@{ @"helper": helper } error:NULL];
         
@@ -275,12 +209,6 @@
         STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
-        STAssertEquals(maskInvertedSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskNonInvertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskOverridableSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskRegularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(maskSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(maskVariableCount, (NSUInteger)0, @"");
     }
 }
 
@@ -298,7 +226,7 @@
     STAssertEqualObjects(result, @"---", @"");
 }
 
-- (void)testHelperDoNotAutomaticallyEntersCurrentContext
+- (void)testHelperDoesNotAutomaticallyEntersCurrentContext
 {
     // GRMustacheAttributedSectionTagHelper does not modify the runtime
     GRMustacheAttributedSectionTagHelper *helper = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
