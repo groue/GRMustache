@@ -36,7 +36,7 @@
  * GRMustacheTemplateComponent.
  * 
  * Their responsability is to render, provided with a Mustache runtime, through
- * their `renderInBuffer:withRuntime:` implementation.
+ * their `renderInBuffer:withRuntime:error:` implementation.
  * 
  * For instance, the template string "hello {{name}}!" would give four template
  * components:

@@ -155,26 +155,26 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (void)renderValue:(id)value withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block
+- (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block
 {
     // fast path
     if (_delegateStack == nil) {
-        block(value);
+        block(object);
         return;
     }
     
     // top of the stack is first object
     for (id<GRMustacheTagDelegate> delegate in _delegateStack) {
         if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-            value = [delegate mustacheTag:tag willRenderObject:value];
+            object = [delegate mustacheTag:tag willRenderObject:object];
         }
     }
 
-    block(value);
+    block(object);
 
     for (id<GRMustacheTagDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
         if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
-            [delegate mustacheTag:tag didRenderObject:value];
+            [delegate mustacheTag:tag didRenderObject:object];
         }
     }
 }

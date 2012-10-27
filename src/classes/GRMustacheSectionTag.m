@@ -84,15 +84,15 @@
 
 - (BOOL)renderInBuffer:(NSMutableString *)buffer withRuntime:(GRMustacheRuntime *)runtime error:(NSError **)error
 {
-    id value;
-    if (![_expression evaluateInRuntime:runtime value:&value error:error]) {
+    id object;
+    if (![_expression evaluateInRuntime:runtime value:&object error:error]) {
         return NO;
     }
     
     __block BOOL success = YES;
-    [runtime renderValue:value withTag:self usingBlock:^(id value){
+    [runtime renderObject:object withTag:self usingBlock:^(id object){
         
-        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:value];
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
         
         BOOL HTMLEscaped = NO;
         NSError *renderingError = nil;

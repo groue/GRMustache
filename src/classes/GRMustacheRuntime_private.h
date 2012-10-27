@@ -111,7 +111,7 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
  * @return A GRMustacheRuntime object.
  *
  * @see GRMustacheTemplateOverride
- * @see [GRMustacheTemplateOverride renderInBuffer:withRuntime:]
+ * @see [GRMustacheTemplateOverride renderInBuffer:withRuntime:error:]
  */
 - (GRMustacheRuntime *)runtimeByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
@@ -138,16 +138,16 @@ extern BOOL GRMustacheRuntimeDidCatchNSUndefinedKeyException;
 
 /**
  * Invoke callbacks of all delegates in the delegate stack before and after
- * _value_ is rendered with _block_.
+ * _object_ is rendered with _block_.
  *
- * @param value  The interpreted value.
+ * @param object The rendered object
  * @param tag    The tag.
  * @param block  The rendering block.
  *
- * @see -[GRMustacheSectionTag renderInBuffer:withRuntime:]
- * @see -[GRMustacheVariableTag renderInBuffer:withRuntime:]
+ * @see -[GRMustacheSectionTag renderInBuffer:withRuntime:error:]
+ * @see -[GRMustacheVariableTag renderInBuffer:withRuntime:error:]
  */
-- (void)renderValue:(id)value withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
+- (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be
