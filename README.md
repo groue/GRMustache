@@ -17,7 +17,7 @@ How To
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 5.5'` to your Podfile.
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 6'` to your Podfile.
 
 GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
 
@@ -29,15 +29,12 @@ GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and
 #import "GRMustache.h"
 
 // Renders "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
-                                            fromString:@"Hello {{name}}!"
-                                                 error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"Hello {{name}}!" error:NULL];
+NSString *rendering = [template renderObject:[Person personWithName:@"Arthur"] error:NULL];
 
 // Renders a document from the `Profile.mustache` resource
-NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
-                                          fromResource:@"Profile"
-                                                bundle:nil
-                                                 error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
+NSString *rendering = [template renderObject:[Person personWithName:@"Arthur"] error:NULL];
 ```
 
 
@@ -69,11 +66,9 @@ Rendering templates:
 
 Advanced Mustache:
 
-- [section_tag_helpers.md](GRMustache/blob/master/Guides/section_tag_helpers.md): how to process the template canvas before it is rendered with Mustache "lambda sections".
-- [variable_tag_helpers.md](GRMustache/blob/master/Guides/variable_tag_helpers.md): how to perform rich rendering out of a simple `{{name}}` tag.
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
+- [rendering_objects.md](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
 - [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
-- [proxies.md](GRMustache/blob/master/Guides/proxies.md): how to extend the behavior of regular objects, and write robust and reusable filters and helpers.
 
 ### Sample code
 
