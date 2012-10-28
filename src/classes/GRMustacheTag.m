@@ -96,30 +96,33 @@
     }
     
     __block BOOL success = YES;
-    [context renderObject:object withTag:self usingBlock:^(id object){
-        
-        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        
-        BOOL HTMLSafe = NO;
-        NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
-        
-        if (rendering) {
-            if (self.escapesHTML && !HTMLSafe) {
-                rendering = [self escapeHTML:rendering];
+    @autoreleasepool {
+        [context renderObject:object withTag:self usingBlock:^(id object){
+            
+            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+            
+            BOOL HTMLSafe = NO;
+            NSError *renderingError = nil;
+            NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
+            
+            if (rendering) {
+                if (self.escapesHTML && !HTMLSafe) {
+                    rendering = [self escapeHTML:rendering];
+                }
+                [buffer appendString:rendering];
+            } else if (renderingError) {
+                // If rendering is nil, but rendering error is not set,
+                // assume lazy coder, and the intention to render nothing:
+                // Fail if and only if renderingError is explicitely set.
+                if (error) {
+                    *error = [renderingError retain];
+                }
+                success = NO;
             }
-            [buffer appendString:rendering];
-        } else if (renderingError) {
-            // If rendering is nil, but rendering error is not set,
-            // assume lazy coder, and the intention to render nothing:
-            // Fail if and only if renderingError is explicitely set.
-            if (error) {
-                *error = renderingError;
-            }
-            success = NO;
-        }
-    }];
+        }];
+    }
     
+    if (!success && error) [*error autorelease];
     return success;
 }
 
