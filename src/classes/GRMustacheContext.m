@@ -36,11 +36,113 @@ BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 
 static BOOL shouldPreventNSUndefinedKeyException = NO;
 
+GRMustacheTree GRMustacheTreeCreate(id object)
+{
+    if (object == nil) {
+        return (GRMustacheTree){ .own = NO, .treeRef = NULL };
+    } else {
+        CFTreeContext ctx;
+        ctx.version = 0;
+        ctx.info = object;
+        ctx.retain = CFRetain;
+        ctx.release = CFRelease;
+        ctx.copyDescription = NULL;
+        CFTreeRef treeRef = CFTreeCreate(NULL, &ctx);
+        return (GRMustacheTree){ .own = YES, .treeRef = treeRef };
+    }
+}
+
+GRMustacheTree GRMustacheTreeDerive(GRMustacheTree *tree, id object)
+{
+    if (tree->treeRef) {
+        if (object) {
+            CFTreeContext ctx;
+            ctx.version = 0;
+            ctx.info = object;
+            ctx.retain = CFRetain;
+            ctx.release = CFRelease;
+            ctx.copyDescription = NULL;
+            CFTreeRef treeRef = CFTreeCreate(NULL, &ctx);
+            CFTreeAppendChild(tree->treeRef, treeRef);
+            return (GRMustacheTree){ .own = YES, .treeRef = treeRef };
+        } else {
+            return (GRMustacheTree){ .own = NO, .treeRef = tree->treeRef };
+        }
+    } else {
+        return GRMustacheTreeCreate(object);
+    }
+}
+
+void GRMustacheTreeRelease(GRMustacheTree *tree)
+{
+    if (tree->own) {
+        CFTreeRemove(tree->treeRef);
+        CFRelease(tree->treeRef);
+    }
+}
+
+id GRMustacheTreeGetValue(GRMustacheTree *tree)
+{
+    if (tree->treeRef) {
+        CFTreeContext ctx;
+        ctx.version = 0;
+        ctx.info = nil;
+        ctx.retain = CFRetain;
+        ctx.release = CFRelease;
+        ctx.copyDescription = NULL;
+        CFTreeGetContext(tree->treeRef, &ctx);
+        return ctx.info;
+    } else {
+        return nil;
+    }
+}
+
+void GRMustacheTreeEnumerateValuesUpToRoot(GRMustacheTree *tree, void(^block)(id value, BOOL *stop))
+{
+    CFTreeContext ctx;
+    ctx.version = 0;
+    ctx.info = nil;
+    ctx.retain = CFRetain;
+    ctx.release = CFRelease;
+    ctx.copyDescription = NULL;
+    
+    BOOL stop = NO;
+    for (CFTreeRef treeRef = tree->treeRef; treeRef; treeRef = CFTreeGetParent(treeRef)) {
+        CFTreeGetContext(treeRef, &ctx);
+        block(ctx.info, &stop);
+        if (stop) { break; }
+    }
+}
+
+void GRMustacheTreeEnumerateValuesFromCFTreeRef(CFTreeRef treeRef, void *context, void(^block)(void *context, id value, void(^next)(void *context)))
+{
+    if (!treeRef) {
+        block(context, nil, NULL);
+        return;
+    }
+    
+    CFTreeContext ctx;
+    ctx.version = 0;
+    ctx.info = nil;
+    ctx.retain = CFRetain;
+    ctx.release = CFRelease;
+    ctx.copyDescription = NULL;
+
+    CFTreeGetContext(treeRef, &ctx);
+    CFTreeRef parent = CFTreeGetParent(treeRef);
+    void(^next)(void *context) = nil;
+    if (parent) {
+        next = ^(void *context){ GRMustacheTreeEnumerateValuesFromCFTreeRef(parent, context, block); };
+    }
+    block(context, ctx.info, next);
+}
+
+
 @interface GRMustacheContext()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)objectIsTagDelegate:(id)object;
 
-- (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
+- (id)initWithContextTree:(GRMustacheTree)contextTree delegateTree:(GRMustacheTree)delegateTree templateOverrideTree:(GRMustacheTree)templateOverrideTree;
 
 + (void)setupPreventionOfNSUndefinedKeyException;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
@@ -75,9 +177,9 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (void)dealloc
 {
-    [_contextStack release];
-    [_delegateStack release];
-    [_templateOverrideStack release];
+    GRMustacheTreeRelease(&_contextTree);
+    GRMustacheTreeRelease(&_delegateTree);
+    GRMustacheTreeRelease(&_templateOverrideTree);
     [super dealloc];
 }
 
@@ -91,8 +193,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     static GRMustacheContext *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-        instance = [[self alloc] initWithContextStack:contextStack delegateStack:nil templateOverrideStack:nil];
+        GRMustacheTree contextTree = GRMustacheTreeCreate([GRMustacheFilterLibrary filterLibrary]);
+        GRMustacheTree delegateTree = GRMustacheTreeCreate(nil);
+        GRMustacheTree templateOverrideTree = GRMustacheTreeCreate(nil);
+        instance = [[GRMustacheContext alloc] initWithContextTree:contextTree delegateTree:delegateTree templateOverrideTree:templateOverrideTree];
     });
     return instance;
 }
@@ -103,9 +207,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    NSArray *delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:tagDelegate] : [NSArray arrayWithObject:tagDelegate];
+    GRMustacheTree contextTree = GRMustacheTreeDerive(&_contextTree, nil);
+    GRMustacheTree delegateTree = GRMustacheTreeDerive(&_delegateTree, tagDelegate);
+    GRMustacheTree templateOverrideTree = GRMustacheTreeDerive(&_templateOverrideTree, nil);
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextTree:contextTree delegateTree:delegateTree templateOverrideTree:templateOverrideTree] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingObject:(id)contextObject
@@ -114,14 +220,17 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    NSArray *contextStack = _contextStack ? [_contextStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
+    GRMustacheTree contextTree = GRMustacheTreeDerive(&_contextTree, contextObject);
+    GRMustacheTree templateOverrideTree = GRMustacheTreeDerive(&_templateOverrideTree, nil);
     
-    NSArray *delegateStack = _delegateStack;
+    GRMustacheTree delegateTree;
     if ([GRMustacheContext objectIsTagDelegate:contextObject]) {
-        delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
+        delegateTree = GRMustacheTreeDerive(&_delegateTree, contextObject);
+    } else {
+        delegateTree = GRMustacheTreeDerive(&_delegateTree, nil);
     }
     
-    return [[[GRMustacheContext alloc] initWithContextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextTree:contextTree delegateTree:delegateTree templateOverrideTree:templateOverrideTree] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
@@ -130,58 +239,54 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    NSArray *templateOverrideStack = _templateOverrideStack ? [_templateOverrideStack arrayByAddingObject:templateOverride] : [NSArray arrayWithObject:templateOverride];
+    GRMustacheTree contextTree = GRMustacheTreeDerive(&_contextTree, nil);
+    GRMustacheTree delegateTree = GRMustacheTreeDerive(&_delegateTree, nil);
+    GRMustacheTree templateOverrideTree = GRMustacheTreeDerive(&_templateOverrideTree, templateOverride);
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextTree:contextTree delegateTree:delegateTree templateOverrideTree:templateOverrideTree] autorelease];
 }
 
 - (id)currentContextValue
 {
-    // top of the stack is first object
-    return [_contextStack lastObject];
+    return GRMustacheTreeGetValue(&_contextTree);
 }
 
 - (id)contextValueForKey:(NSString *)key
 {
-    // top of the stack is first object
-    for (id contextObject in [_contextStack reverseObjectEnumerator]) {
-        id value = [GRMustacheContext valueForKey:key inObject:contextObject];
-        if (value != nil) { return value; }
-    }
-    return nil;
+    __block id contextValue = nil;
+    GRMustacheTreeEnumerateValuesUpToRoot(&_contextTree, ^(id contextObject, BOOL *stop){
+        contextValue = [GRMustacheContext valueForKey:key inObject:contextObject];
+        if (contextValue != nil) { *stop = YES; }
+    });
+    return contextValue;
 }
 
 - (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block
 {
-    // fast path
-    if (_delegateStack == nil) {
-        block(object);
-        return;
-    }
-    
-    // top of the stack is first object
-    for (id<GRMustacheTagDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
+    GRMustacheTreeEnumerateValuesFromCFTreeRef(_delegateTree.treeRef, object, ^(void *object, id<GRMustacheTagDelegate> delegate, void (^next)(void *object)) {
         if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
             object = [delegate mustacheTag:tag willRenderObject:object];
         }
-    }
+        
+        if (next) {
+            next(object);
+        } else {
+            block(object);
+        }
 
-    block(object);
-
-    for (id<GRMustacheTagDelegate> delegate in _delegateStack) {
         if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
             [delegate mustacheTag:tag didRenderObject:object];
         }
-    }
+    });
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // top of the stack is first object
-    for (GRMustacheTemplateOverride *templateOverride in [_templateOverrideStack reverseObjectEnumerator]) {
-        component = [templateOverride resolveTemplateComponent:component];
-    }
-    return component;
+    __block id<GRMustacheTemplateComponent> resolvedComponent = component;
+    GRMustacheTreeEnumerateValuesUpToRoot(&_templateOverrideTree, ^(GRMustacheTemplateOverride *templateOverride, BOOL *stop){
+        resolvedComponent = [templateOverride resolveTemplateComponent:resolvedComponent];
+    });
+    return resolvedComponent;
 }
 
 
@@ -259,13 +364,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
+- (id)initWithContextTree:(GRMustacheTree)contextTree delegateTree:(GRMustacheTree)delegateTree templateOverrideTree:(GRMustacheTree)templateOverrideTree
 {
     self = [super init];
     if (self) {
-        _contextStack = [contextStack retain];
-        _delegateStack = [delegateStack retain];
-        _templateOverrideStack = [templateOverrideStack retain];
+        _contextTree = contextTree;
+        _delegateTree = delegateTree;
+        _templateOverrideTree = templateOverrideTree;
     }
     return self;
 }
