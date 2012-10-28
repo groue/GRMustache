@@ -36,11 +36,6 @@
 extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
 
-typedef struct {
-    BOOL own;
-    CFTreeRef treeRef;
-} GRMustacheTree;
-
 /**
  * The GRMustacheContext maintains the following stacks:
  *
@@ -56,9 +51,9 @@ typedef struct {
  * - let partial templates override template components.
  */
 @interface GRMustacheContext : NSObject {
-    GRMustacheTree _contextTree;
-    GRMustacheTree _delegateTree;
-    GRMustacheTree _templateOverrideTree;
+    NSArray *_contextStack;
+    NSArray *_delegateStack;
+    NSArray *_templateOverrideStack;
 }
 
 /**

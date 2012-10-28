@@ -25,11 +25,6 @@
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheTagDelegate.h"
 
-typedef struct {
-    BOOL own;
-    CFTreeRef treeRef;
-} GRMustacheTree;
-
 /**
  * The GRMustacheContext internally maintains a context stack that
  * makes it able to provide the current context object, and to perform key
@@ -38,9 +33,9 @@ typedef struct {
  * TODO tag delegates
  */
 @interface GRMustacheContext : NSObject {
-    GRMustacheTree _contextTree;
-    GRMustacheTree _delegateTree;
-    GRMustacheTree _templateOverrideTree;
+    NSArray *_contextStack;
+    NSArray *_delegateStack;
+    NSArray *_templateOverrideStack;
 }
 
 /**
