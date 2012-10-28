@@ -50,6 +50,8 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
+### An example NSString rendering
+
 Let's see, for example, how NSString does it. Remember: strings render themselves in variable tags as `{{ name }}`, and, depending on their length, they trigger or omit section tags as `{{# name }}...{{/}}` and `{{^ name }}...{{/}}`.
 
 ```objc
@@ -93,6 +95,8 @@ Let's see, for example, how NSString does it. Remember: strings render themselve
 See how the [context stack](runtime/context_stack.md) is *explicitely* extended, with the `-[GRMustacheContext contextByAddingObject:]` method. Without it, it would be impossible to perform conditional rendering such as `{{#title}}<h1>{{.}}</h1>{{/title}}`.
 
 See also how the section tags provide the `-[GRMustacheTag renderWithContext:HTMLSafe:error:]` method, that renders their inner content, and set the `HTMLSafe` and `error` arguments for you.
+
+### GRMustacheTag, GRMustacheContext
 
 Below is the full APIs that are available to your rendering objects. We'll see a few examples next after.
 
