@@ -49,7 +49,7 @@
                     GRMustacheContext *itemContext = [context contextByAddingObject:@{ @"position": @(index + 1) }];
                     itemContext = [itemContext contextByAddingObject:item];
                     
-                    NSString *rendering = [tag renderContext:itemContext HTMLSafe:HTMLSafe error:error];
+                    NSString *rendering = [tag renderWithContext:itemContext HTMLSafe:HTMLSafe error:error];
                     if (rendering) {
                         [buffer appendString:rendering];
                     } else {

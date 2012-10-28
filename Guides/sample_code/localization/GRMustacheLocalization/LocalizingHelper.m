@@ -24,17 +24,9 @@
      * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
      *
      * Normally, it would return "Hello Arthur! Do you know Barbara?", which
-     * we could not localize.
-     *
-     * But we are also a GRMustacheTemplateDelegate: let's ask GRMustache to
-     * tell us when it is about to render a value:
-     */
-    
-    context = [context contextByAddingTagDelegate:self];
-    
-    /**
-     * In the mustacheTag:willRenderObject: delegate method, we'll tell
-     * GRMustache to render "%@" instead of the actual values "Arthur" and
+     * we could not localize. But we conform to the GRMustacheTemplateDelegate
+     * protocol: in our mustacheTag:willRenderObject: delegate method, we'll
+     * tell GRMustache to render "%@" instead of the actual values "Arthur" and
      * "Barbara".
      *
      * The rendering of the section will thus be "Hello %@! Do you know %@?",
@@ -43,12 +35,13 @@
      * We still need the format arguments to fill the format: "Arthur", and
      * "Barbara".
      *
-     * They also be gathered in the delegate method, that will fill the
+     * They also be gathered in the tag delegate method, that will fill the
      * self.formatArguments array, here initialized as an empty array.
      */
     
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [tag renderContext:context HTMLSafe:HTMLSafe error:error];
+    context = [context contextByAddingTagDelegate:self];
+    NSString *localizableFormat = [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
     /**

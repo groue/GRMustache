@@ -57,7 +57,7 @@
 
 @synthesize type=_type;
 
-- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     
@@ -66,7 +66,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderContext:context inBuffer:buffer error:error]) {
+        if (![component renderWithContext:context inBuffer:buffer error:error]) {
             return nil;
         }
     }

@@ -79,7 +79,7 @@
     }
 }
 
-- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSAssert(NO, @"Subclasses must override");
     return @"";
@@ -88,7 +88,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
+- (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
     id object;
     if (![_expression evaluateInContext:context value:&object error:error]) {

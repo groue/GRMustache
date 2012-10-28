@@ -80,7 +80,7 @@
     context = [context contextByAddingObject:object];
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderContext:context inBuffer:buffer error:error]) {
+    if (![self renderWithContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     return buffer;
@@ -94,16 +94,16 @@
     }
     
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderContext:context inBuffer:buffer error:error]) {
+    if (![self renderWithContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     return buffer;
 }
 
-- (NSString *)renderContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderContext:context inBuffer:buffer error:error]) {
+    if (![self renderWithContext:context inBuffer:buffer error:error]) {
         return nil;
     }
     if (HTMLSafe) {
@@ -115,7 +115,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
+- (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
     context = [context contextByAddingTagDelegate:self.tagDelegate];
     
@@ -124,7 +124,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderContext:context inBuffer:buffer error:error]) {
+        if (![component renderWithContext:context inBuffer:buffer error:error]) {
             return NO;
         }
     }
@@ -160,7 +160,7 @@
 // Allows template to render as "dynamic partials"
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderContext:context HTMLSafe:HTMLSafe error:error];
+    return [self renderWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 
 @end
