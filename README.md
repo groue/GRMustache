@@ -14,8 +14,8 @@ How To
 
     $ git clone https://github.com/groue/GRMustache.git
 
-- For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache5-MacOS.a` to your project.
-- For iOS development, add `include/GRMustache.h` and `lib/libGRMustache5-iOS.a` to your project.
+- For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
+- For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
 
 Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 5.5'` to your Podfile.
 
