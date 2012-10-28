@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](proxies.md)
+[up](../../../../GRMustache#documentation), [next](rendering_objects.md)
 
 GRMustacheTagDelegate protocol
 ==============================
@@ -216,4 +216,4 @@ Sample code
 The [localization.md](sample_code/localization.md) sample code uses tag delegate for localizing portions of a template.
 
 
-[up](../../../../GRMustache#documentation), [next](proxies.md)
+[up](../../../../GRMustache#documentation), [next](rendering_objects.md)
