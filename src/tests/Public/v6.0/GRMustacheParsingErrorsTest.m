@@ -35,7 +35,10 @@
     
     STAssertNotNil([template renderObject:@"" error:NULL], @"");
     
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:NULL], @"");
+    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    }];
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:NULL], @"");
     
     STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:NULL], @"");
 }
@@ -50,7 +53,10 @@
     STAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:&error], @"");
+    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    }];
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
     STAssertNotNil(error.domain, nil);
     
     error = nil;
@@ -68,7 +74,10 @@
     STAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = (NSError *)0xdeadbeef;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{missingFilter(x)}}" error:NULL] renderAndReturnError:&error], @"");
+    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    }];
+    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
     STAssertNotNil(error.domain, nil);
     
     error = (NSError *)0xdeadbeef;

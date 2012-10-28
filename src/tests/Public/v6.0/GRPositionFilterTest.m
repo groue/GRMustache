@@ -134,7 +134,7 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testMissingFilterError
+- (void)testMissingFilterException
 {
     id data = @{
         @"name": @"Name",
@@ -142,35 +142,21 @@
             return @"replace";
         }],
     };
-    
-    NSError *error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL] renderObject:data error:&error], @"");
-    STAssertNotNil(error.domain, @"");
-    
-    error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL] renderObject:data error:&error], @"");
-    STAssertNotNil(error.domain, @"");
-    
-    error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL] renderObject:data error:&error], @"");
-    STAssertNotNil(error.domain, @"");
-    
-    error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL] renderObject:data error:&error], @"");
-    STAssertNotNil(error.domain, @"");
+
+    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
+    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
+    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
+    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
 }
 
-- (void)testNotAFilterError
+- (void)testNotAFilterException
 {
     id data = @{
         @"name": @"Name",
         @"filter": @"filter",
     };
     
-    NSString *templateString = @"<{{filter(name)}}>";
-    NSError *error = nil;
-    STAssertNil([[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:&error], @"");
-    STAssertNotNil(error.domain, @"");
+    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{filter(name)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
 }
 
 - (void)testFiltersDoNotEnterContextStack
