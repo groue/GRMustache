@@ -90,7 +90,7 @@
     
     // Regression test: until 1.7.2, NSUndefinedKeyException prevention would fail with nil object
     
-    STAssertEqualObjects([template renderAndReturnError:NULL], @"foo:", nil);
+    STAssertEqualObjects([template renderObject:nil error:NULL], @"foo:", nil);
     STAssertEqualObjects([template renderObject:nil error:NULL], @"foo:", nil);
 }
 

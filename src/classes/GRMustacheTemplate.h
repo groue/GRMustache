@@ -152,16 +152,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Renders a template without any context object for interpreting Mustache tags.
- *
- * @return A string containing the rendered template.
- * @param error   TODO
- *
- * @since v1.0
- */
-- (NSString *)renderAndReturnError:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
  * Renders a template with a context stack initialized with a single object.
  * 
  * @param object  An object used for interpreting Mustache tags.

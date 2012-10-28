@@ -126,7 +126,7 @@
 - (void)testGRMustacheTemplate_render
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
-    NSString *rendering = [template renderAndReturnError:NULL];
+    NSString *rendering = [template renderObject:nil error:NULL];
     STAssertEqualObjects(@"", [self valueForStringPropertyInRendering:rendering], nil);
     STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
 }

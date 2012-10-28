@@ -69,11 +69,6 @@
     [super dealloc];
 }
 
-- (NSString *)renderAndReturnError:(NSError **)error
-{
-    return [self renderObject:nil error:error];
-}
-
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
     GRMustacheContext *context = [GRMustacheContext context];

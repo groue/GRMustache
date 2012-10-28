@@ -26,7 +26,7 @@
 #import "GRMustacheTagDelegate.h"
 
 /**
- * The GRMustacheContext internally maintains a context stack  that
+ * The GRMustacheContext internally maintains a context stack that
  * makes it able to provide the current context object, and to perform key
  * lookup.
  *

@@ -55,9 +55,6 @@
 + (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-- (NSString *)renderAndReturnError:(NSError **)error GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplate.h
 - (NSString *)renderObject:(id)object error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h

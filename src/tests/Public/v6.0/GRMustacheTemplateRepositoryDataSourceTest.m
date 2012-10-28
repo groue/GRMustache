@@ -74,12 +74,12 @@
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)0, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)0, @"");
     
-    result = [[repository templateNamed:@"foo" error:NULL] renderAndReturnError:NULL];
+    result = [[repository templateNamed:@"foo" error:NULL] renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"foo", @"");
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)1, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
     
-    result = [[repository templateFromString:@"{{>foo}}" error:NULL] renderAndReturnError:NULL];
+    result = [[repository templateFromString:@"{{>foo}}" error:NULL] renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"foo", @"");
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)2, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");

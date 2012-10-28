@@ -44,15 +44,15 @@
     STAssertNotNil(error, @"");
     
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
 
     template = [repository templateFromString:@"{{>dir/file1}}" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"dir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n", @"");
     
     template = [repository templateFromString:@"{{>dir/dir/file1}}" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"dir/dir/é1.mustache\ndir/dir/é2.mustache\n\n", @"");
 }
 
@@ -66,25 +66,25 @@
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache"];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt"];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@""];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
 }
 
@@ -98,49 +98,49 @@
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
     directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" ofType:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderAndReturnError:NULL];
+    result = [template renderObject:nil error:NULL];
     STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
 }
 
@@ -149,7 +149,7 @@
     NSString *directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest" ofType:nil];
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath];
     GRMustacheTemplate *template = [repository templateNamed:@"base" error:NULL];
-    NSString *rendering = [template renderAndReturnError:NULL];
+    NSString *rendering = [template renderObject:nil error:NULL];
     
     STAssertEqualObjects(rendering, @"success", @"");
 }
