@@ -29,6 +29,8 @@
  * The GRMustacheContext internally maintains a context stack  that
  * makes it able to provide the current context object, and to perform key
  * lookup.
+ *
+ * TODO tag delegates
  */
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
@@ -37,6 +39,8 @@
 }
 
 /**
+ * TODO
+ *
  * Returns a GRMustacheContext with extended context stack. The added
  * object comes to the top of the stack.
  *
@@ -47,5 +51,17 @@
  * @return A GRMustacheContext object.
  */
 - (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * TODO
+ *
+ * Returns a GRMustacheContext object identical to the receiver, but for the
+ * delegate stack that is extended with _tagDelegate_.
+ *
+ * @param tagDelegate  A delegate
+ *
+ * @return A GRMustacheContext object.
+ */
+- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 @end

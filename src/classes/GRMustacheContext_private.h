@@ -93,15 +93,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 // Documented in GRMustacheContext.h
 - (GRMustacheContext *)contextByAddingObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
 
-/**
- * Returns a GRMustacheContext object identical to the receiver, but for the
- * delegate stack that is extended with _tagDelegate_.
- *
- * @param tagDelegate  A delegate
- *
- * @return A GRMustacheContext object.
- */
-- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_INTERNAL;
+// Documented in GRMustacheContext.h
+- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
