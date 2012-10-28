@@ -181,6 +181,8 @@ Below is the full APIs that are available to your rendering objects. We'll see a
  */
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
 
+@end
+
 
 typedef enum {
     // The type for variable tags such as {{ name }}
@@ -195,8 +197,6 @@ typedef enum {
     // The type for inverted section tags such as {{^ name }}...{{/}}
     GRMustacheTagTypeInvertedSection = 1 << 4,
 } GRMustacheTagType;
-
-@end
 
 ```
 
