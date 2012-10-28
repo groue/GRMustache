@@ -10,9 +10,9 @@ Let's first confess a lie: here and there in this documentation, you have been r
 
 This is plain wrong. Actually, objects render themselves.
 
-`NSNumber` does render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render.
+`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render.
 
-`NSArray` renders the `{{# items }}...{{/}}` tag for each of its items.
+`NSArray` *does* render the `{{# items }}...{{/}}` tag for each of its items.
 
 etc.
 
@@ -29,7 +29,7 @@ You see that from the start, your application code decides what will be eventull
 GRMustacheRendering protocol
 ----------------------------
 
-This protocol declares the method that all rendering objects must implement. NSArray does implement it, so does NSNumber, and NSString. You can, too:
+This protocol declares the method that all rendering objects must implement. NSArray does implement it, so does NSNumber, and NSString. Your objects can, as well:
 
 ```objc
 @protocol GRMustacheRendering <NSObject>
@@ -42,13 +42,13 @@ This protocol declares the method that all rendering objects must implement. NSA
 @end
 ```
 
-The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
+- The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
 
-The _context_ represents the [context stack](runtime/context_stack.md), and all information that tags need to render.
+- The _context_ represents the [context stack](runtime/context_stack.md), and all information that tags need to render.
 
-_HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO.
+- _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO.
 
-_error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
+- _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
 Let's see, for example, how NSString does it. Remember: strings render themselves in variable tags as `{{ name }}`, and, depending on their length, they trigger or omit section tags as `{{# name }}...{{/}}` and `{{^ name }}...{{/}}`.
 
