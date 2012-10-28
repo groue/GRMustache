@@ -50,9 +50,9 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
-### An example NSString rendering
+### An example: NSString rendering
 
-Let's see, for example, how NSString does it. Remember: strings render themselves in variable tags as `{{ name }}`, and, depending on their length, they trigger or omit section tags as `{{# name }}...{{/}}` and `{{^ name }}...{{/}}`.
+Let's see, for example, the actual NSString rendering code. You remember that strings simply render themselves in variable tags as `{{ name }}`. Depending on their length, they trigger or omit section tags as `{{# name }}...{{/}}` and `{{^ name }}...{{/}}`.
 
 ```objc
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
