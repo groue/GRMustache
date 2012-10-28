@@ -77,10 +77,8 @@
 		567C1A1915C41F420044C91F /* GRMustacheFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 567C1A1615C41F420044C91F /* GRMustacheFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		567C1A1A15C41F420044C91F /* GRMustacheFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 567C1A1715C41F420044C91F /* GRMustacheFilter.m */; };
 		567C1A1B15C41F420044C91F /* GRMustacheFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 567C1A1715C41F420044C91F /* GRMustacheFilter.m */; };
-		568140D9163659CC00310B7F /* GRMustacheSectionTagHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D7163659CB00310B7F /* GRMustacheSectionTagHelperTest.m */; };
-		568140DA163659CC00310B7F /* GRMustacheSectionTagHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D7163659CB00310B7F /* GRMustacheSectionTagHelperTest.m */; };
-		568140DB163659CC00310B7F /* GRMustacheVariableTagHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D8163659CC00310B7F /* GRMustacheVariableTagHelperTest.m */; };
-		568140DC163659CC00310B7F /* GRMustacheVariableTagHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D8163659CC00310B7F /* GRMustacheVariableTagHelperTest.m */; };
+		568140D9163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D7163659CB00310B7F /* GRMustacheRenderingObjectTest.m */; };
+		568140DA163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140D7163659CB00310B7F /* GRMustacheRenderingObjectTest.m */; };
 		568140DE16365CF500310B7F /* GRMustacheTemplateRepositoryTest in Resources */ = {isa = PBXBuildFile; fileRef = 568140DD16365CF500310B7F /* GRMustacheTemplateRepositoryTest */; };
 		568140DF16365CF500310B7F /* GRMustacheTemplateRepositoryTest in Resources */ = {isa = PBXBuildFile; fileRef = 568140DD16365CF500310B7F /* GRMustacheTemplateRepositoryTest */; };
 		568140E216365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 568140E016365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m */; };
@@ -290,8 +288,7 @@
 		567C1A0915C403500044C91F /* GRMustacheExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheExpression_private.h; sourceTree = "<group>"; };
 		567C1A1615C41F420044C91F /* GRMustacheFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilter.h; sourceTree = "<group>"; };
 		567C1A1715C41F420044C91F /* GRMustacheFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilter.m; sourceTree = "<group>"; };
-		568140D7163659CB00310B7F /* GRMustacheSectionTagHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSectionTagHelperTest.m; sourceTree = "<group>"; };
-		568140D8163659CC00310B7F /* GRMustacheVariableTagHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheVariableTagHelperTest.m; sourceTree = "<group>"; };
+		568140D7163659CB00310B7F /* GRMustacheRenderingObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheRenderingObjectTest.m; sourceTree = "<group>"; };
 		568140DD16365CF500310B7F /* GRMustacheTemplateRepositoryTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheTemplateRepositoryTest; sourceTree = "<group>"; };
 		568140E016365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithBaseURLTest.m; sourceTree = "<group>"; };
 		568140E116365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithDirectoryTest.m; sourceTree = "<group>"; };
@@ -779,8 +776,7 @@
 				563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */,
 				5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */,
 				568140E616365D6000310B7F /* GRMustacheProxyTest.m */,
-				568140D7163659CB00310B7F /* GRMustacheSectionTagHelperTest.m */,
-				568140D8163659CC00310B7F /* GRMustacheVariableTagHelperTest.m */,
+				568140D7163659CB00310B7F /* GRMustacheRenderingObjectTest.m */,
 				568140E716365D6100310B7F /* GRMustacheVariadicFilterTest.m */,
 				5682B47A1528392300ADD123 /* GRMustacheSuitesTest */,
 				5682B47B1528393200ADD123 /* GRMustacheTagDelegateTest */,
@@ -1142,8 +1138,7 @@
 				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
 				56907F191604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
 				563A5EA7163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
-				568140D9163659CC00310B7F /* GRMustacheSectionTagHelperTest.m in Sources */,
-				568140DB163659CC00310B7F /* GRMustacheVariableTagHelperTest.m in Sources */,
+				568140D9163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				568140E216365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 				568140E416365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E816365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
@@ -1203,8 +1198,7 @@
 				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
 				56907F1A1604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
 				563A5EA8163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
-				568140DA163659CC00310B7F /* GRMustacheSectionTagHelperTest.m in Sources */,
-				568140DC163659CC00310B7F /* GRMustacheVariableTagHelperTest.m in Sources */,
+				568140DA163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				568140E316365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 				568140E516365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E916365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
