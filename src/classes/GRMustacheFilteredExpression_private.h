@@ -37,7 +37,6 @@
 }
 
 /**
- * TODO
  * Returns a filtered expression, given an expression that returns a filter, and
  * an expression that return the filter argument.
  *
@@ -68,7 +67,7 @@
  *                            to the <GRMustacheFilter> protocol.
  * @param argumentExpression  An expression whose value is the argument of the
  *                            filter.
- * @param curry               If YES, this expression must return a a filter.
+ * @param curry               If YES, this expression must evaluate to a filter.
  *
  * @return A GRMustacheFilteredExpression.
  */

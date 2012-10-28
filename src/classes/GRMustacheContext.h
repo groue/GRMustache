@@ -26,11 +26,18 @@
 #import "GRMustacheTagDelegate.h"
 
 /**
- * The GRMustacheContext internally maintains a context stack that
- * makes it able to provide the current context object, and to perform key
- * lookup.
+ * The GRMustacheContext represents a Mustache rendering context: it internally
+ * maintains two stacks:
  *
- * TODO tag delegates
+ * - a *context stack*, that makes it able to provide the current context
+ *   object, and to perform key lookup.
+ * - a *tag delegate stack*, so that tag delegates are notified when a Mustache
+ *   tag is rendered.
+ *
+ * You may derive new rendering contexts when you implement *rendering objects*,
+ * using the contextByAddingObject: and contextByAddingTagDelegate: methods.
+ *
+ * @see GRMustacheRendering protocol
  */
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
@@ -39,28 +46,29 @@
 }
 
 /**
- * TODO
+ * Returns a new rendering context that is the copy of the receiver, and the
+ * given object added at the top of the context stack.
  *
- * Returns a GRMustacheContext with extended context stack. The added
- * object comes to the top of the stack.
+ * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
+ * added at the top of the tag delegate stack.
  *
- * TODO: talk about delegate stack
+ * @param object  An object
  *
- * @param object  A context object
+ * @return A new rendering context.
  *
- * @return A GRMustacheContext object.
+ * @since v6.0
  */
 - (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Returns a new rendering context that is the copy of the receiver, and the
+ * given object added at the top of the tag delegate stack.
  *
- * Returns a GRMustacheContext object identical to the receiver, but for the
- * delegate stack that is extended with _tagDelegate_.
+ * @param object  An object
  *
- * @param tagDelegate  A delegate
+ * @return A new rendering context.
  *
- * @return A GRMustacheContext object.
+ * @since v6.0
  */
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 

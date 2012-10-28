@@ -94,12 +94,34 @@ typedef struct {
 + (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Returns a rendering object that is able to render the argument _object_ for
+ * the various Mustache tags.
+ *
+ * If _object_ already conforms to the GRMustacheRendering protocol, this method
+ * returns _object_ itself: it is already able to render.
+ *
+ * For other values, including `nil`, this method returns a rendering object
+ * that provides the default GRMustache rendering.
+ *
+ * @param object  An object.
+ *
+ * @return A rendering object able to render the argument.
+ *
+ * @see GRMustacheRendering protocol
+ *
+ * @since v6.0
  */
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Returns a rendering object that renders with the provided block.
+ *
+ * @param block  A block that returns a tag rendering, provided with a rendering
+ *               context.
+ *
+ * @return A rendering object
+ *
+ * @since v6.0
  */
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 

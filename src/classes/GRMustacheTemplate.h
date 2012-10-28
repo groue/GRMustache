@@ -155,11 +155,13 @@
  * Renders a template with a context stack initialized with a single object.
  * 
  * @param object  An object used for interpreting Mustache tags.
- * @param error   TODO
+ * @param error   If there is an error rendering the template and its
+ *                partials, upon return contains an NSError object that
+ *                describes the problem.
  *
  * @return A string containing the rendered template.
  *
- * @since v1.0
+ * @since v6.0
  */
 - (NSString *)renderObject:(id)object error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
@@ -167,16 +169,25 @@
  * Renders a template with a context stack initialized with an array of objects.
  *
  * @param objects  An array of context objects for interpreting Mustache tags.
- * @param error   TODO
+ * @param error    If there is an error rendering the template and its
+ *                 partials, upon return contains an NSError object that
+ *                 describes the problem.
  *
  * @return A string containing the rendered template.
  *
- * @since v5.3
+ * @since v6.0
  */
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Returns the rendering of the receiver, given a rendering context.
+ *
+ * @param context   A rendering context.
+ * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param error     If there is an error rendering the tag, upon return contains
+ *                  an NSError object that describes the problem.
+ *
+ * @return The rendering of the tag.
  */
 - (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 

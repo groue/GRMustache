@@ -52,7 +52,8 @@
  * The _components_ array contains the GRMustacheTemplateComponent objects
  * that make the section (texts, variables, other sections, etc.)
  * 
- * @param templateRepository  TODO
+ * @param templateRepository  The template repository that did provide the
+ *                            template string.
  * @param expression          The expression that would evaluate against a
  *                            rendering context.
  * @param templateString      A Mustache template string

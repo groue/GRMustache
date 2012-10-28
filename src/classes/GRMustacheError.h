@@ -43,11 +43,7 @@ typedef enum {
      * @since v1.0
      */
     GRMustacheErrorCodeTemplateNotFound AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
-    
-    /**
-     * TODO
-     */
-    GRMustacheErrorCodeRenderingError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+
 } GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 

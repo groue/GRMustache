@@ -26,32 +26,44 @@
 @class GRMustacheTemplateRepository;
 
 /**
- * TODO
+ * The types of Mustache tags
+ *
+ * @since v6.0
  */
 typedef enum {
     /**
-     * Type for variable tags such as {{ name }}
+     * The type for variable tags such as {{ name }}
+     *
+     * @since v6.0
      */
     GRMustacheTagTypeVariable = 1 << 1 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
     /**
-     * Type for section tags such as {{# name }}...{{/}}
+     * The type for section tags such as {{# name }}...{{/}}
+     *
+     * @since v6.0
      */
     GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
     /**
-     * Type for overridable section tags such as {{$ name }}...{{/}}
+     * The type for overridable section tags such as {{$ name }}...{{/}}
+     *
+     * @since v6.0
      */
     GRMustacheTagTypeOverridableSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
     /**
-     * Type for inverted section tags such as {{^ name }}...{{/}}
+     * The type for inverted section tags such as {{^ name }}...{{/}}
+     *
+     * @since v6.0
      */
     GRMustacheTagTypeInvertedSection = 1 << 4 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
 } GRMustacheTagType AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
+
 /**
- * TODO
+ * GRMustacheTag instances represent Mustache tags that render values, such as
+ * a variable tag {{ name }}, or a section tag {{# name }}...{{/}).
  */
 @interface GRMustacheTag: NSObject {
     id _expression;
@@ -59,23 +71,35 @@ typedef enum {
 }
 
 /**
- * TODO
+ * The type of the tag
  */
 @property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * The template repository that did provide the template string from which the
+ * receiver has been extracted.
+ *
+ * @see GRMustacheTemplateRepository
  */
 @property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * The literal inner content of the tag, with unprocessed Mustache `{{tags}}`.
- * Nil for variable tags.
+ * The literal and unprocessed inner content of the tag, the `...` in
+ * `{{# name }}...{{/}}`.
+ *
+ * Is is nil for variable tags such as `{{ name }}`.
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Returns the rendering of the receiver, given a rendering context.
+ *
+ * @param context   A rendering context.
+ * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param error     If there is an error rendering the tag, upon return contains
+ *                  an NSError object that describes the problem.
+ *
+ * @return The rendering of the tag.
  */
 - (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
