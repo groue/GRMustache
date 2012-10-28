@@ -38,8 +38,9 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheContext()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
++ (BOOL)objectIsTagDelegate:(id)object;
+
 - (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
-- (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)templateOverride;
 
 + (void)setupPreventionOfNSUndefinedKeyException;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
@@ -87,8 +88,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 + (id)context
 {
-    NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-    return [[[self alloc] initWithContextStack:contextStack delegateStack:nil templateOverrideStack:nil] autorelease];
+    static GRMustacheContext *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
+        instance = [[self alloc] initWithContextStack:contextStack delegateStack:nil templateOverrideStack:nil];
+    });
+    return instance;
 }
 
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
@@ -97,9 +103,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // top of the stack is first object
-    NSArray *delegateStack = [NSArray arrayWithObject:tagDelegate];
-    if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
+    NSArray *delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:tagDelegate] : [NSArray arrayWithObject:tagDelegate];
     
     return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
@@ -110,15 +114,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // top of the stack is first object
-    NSArray *contextStack = [NSArray arrayWithObject:contextObject];
-    if (_contextStack) { contextStack = [contextStack arrayByAddingObjectsFromArray:_contextStack]; }
+    NSArray *contextStack = _contextStack ? [_contextStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
     
     NSArray *delegateStack = _delegateStack;
-    if ([contextObject conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
-        // top of the stack is first object
-        delegateStack = [NSArray arrayWithObject:contextObject];
-        if (_delegateStack) { delegateStack = [delegateStack arrayByAddingObjectsFromArray:_delegateStack]; }
+    if ([GRMustacheContext objectIsTagDelegate:contextObject]) {
+        delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
     }
     
     return [[[GRMustacheContext alloc] initWithContextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
@@ -130,11 +130,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    [self assertAcyclicTemplateOverride:templateOverride];
-    
-    // top of the stack is first object
-    NSArray *templateOverrideStack = [NSArray arrayWithObject:templateOverride];
-    if (_templateOverrideStack) { templateOverrideStack = [templateOverrideStack arrayByAddingObjectsFromArray:_templateOverrideStack]; }
+    NSArray *templateOverrideStack = _templateOverrideStack ? [_templateOverrideStack arrayByAddingObject:templateOverride] : [NSArray arrayWithObject:templateOverride];
     
     return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
 }
@@ -142,13 +138,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 - (id)currentContextValue
 {
     // top of the stack is first object
-    return [_contextStack objectAtIndex:0];
+    return [_contextStack lastObject];
 }
 
 - (id)contextValueForKey:(NSString *)key
 {
     // top of the stack is first object
-    for (id contextObject in _contextStack) {
+    for (id contextObject in [_contextStack reverseObjectEnumerator]) {
         id value = [GRMustacheContext valueForKey:key inObject:contextObject];
         if (value != nil) { return value; }
     }
@@ -164,7 +160,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     // top of the stack is first object
-    for (id<GRMustacheTagDelegate> delegate in _delegateStack) {
+    for (id<GRMustacheTagDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
         if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
             object = [delegate mustacheTag:tag willRenderObject:object];
         }
@@ -172,7 +168,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
     block(object);
 
-    for (id<GRMustacheTagDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
+    for (id<GRMustacheTagDelegate> delegate in _delegateStack) {
         if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
             [delegate mustacheTag:tag didRenderObject:object];
         }
@@ -182,7 +178,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
     // top of the stack is first object
-    for (GRMustacheTemplateOverride *templateOverride in _templateOverrideStack) {
+    for (GRMustacheTemplateOverride *templateOverride in [_templateOverrideStack reverseObjectEnumerator]) {
         component = [templateOverride resolveTemplateComponent:component];
     }
     return component;
@@ -190,15 +186,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 
 #pragma mark - Private
-
-- (void)assertAcyclicTemplateOverride:(GRMustacheTemplateOverride *)otherTemplateOverride
-{
-    for (GRMustacheTemplateOverride *templateOverride in _templateOverrideStack) {
-        if (templateOverride.template == otherTemplateOverride.template) {
-            [NSException raise:GRMustacheRenderingException format:@"Override cycle"];
-        }
-    }
-}
 
 + (id)valueForKey:(NSString *)key inObject:(id)object
 {
@@ -362,6 +349,23 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
 }
 
++ (BOOL)objectIsTagDelegate:(id)object
+{
+    static CFMutableDictionaryRef cache = nil;
+    if (cache == nil) {
+        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+    }
+    
+    Class aClass = [object class];
+    NSNumber *isDelegate = CFDictionaryGetValue(cache, aClass);
+    
+    if (!isDelegate) {
+        isDelegate = [NSNumber numberWithBool:[object conformsToProtocol:@protocol(GRMustacheTagDelegate)]];
+        CFDictionaryAddValue(cache, aClass, isDelegate);
+    }
+    
+    return [isDelegate boolValue];
+}
 
 #pragma mark - NSUndefinedKeyException prevention
 
