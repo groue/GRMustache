@@ -28,27 +28,21 @@
 @class GRMustacheTag;
 
 /**
- * The protocol for a GRMustacheTemplate's delegate.
- *
- * The delegate's can observe, and alter, the rendering of a template.
+ * Objects conforming to the GRMustacheTagDelegate protocol can observe and
+ * alter, the rendering of Mustache tags.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * 
- * @since v1.12
+ * @since v6.0
  */
 @protocol GRMustacheTagDelegate<NSObject>
 @optional
 
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Observing the Rendering of individual Mustache tags
-////////////////////////////////////////////////////////////////////////////////
-
 /**
- * Sent right before GRMustache renders an object.
+ * Sent right before a Mustache tag renders.
  *
- * @param tag             The mustache tag about to render.
- * @param invocation      The object about to be rendered.
+ * @param tag     The Mustache tag about to render.
+ * @param object  The object about to be rendered.
  *
  * @return the object that should be rendered.
  *
@@ -57,10 +51,10 @@
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * Sent right after GRMustache has rendered an object.
+ * Sent right after a Mustache tag has rendered.
  *
- * @param tag             The mustache tag that did render.
- * @param invocation      The rendered object.
+ * @param tag     The Mustache tag that has just rendered.
+ * @param object  The rendered object.
  *
  * @since v6.0
  */

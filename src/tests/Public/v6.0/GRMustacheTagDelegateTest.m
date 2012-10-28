@@ -728,7 +728,7 @@
     }
 }
 
-- (void)testSectionDelegate
+- (void)testTagDelegateOnSection
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     __block GRMustacheTagType preRenderingTagType = -1;
@@ -755,7 +755,7 @@
     STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
-- (void)testSectionsDelegateOrdering
+- (void)testTagDelegateOrdering
 {
     GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
@@ -773,79 +773,44 @@
         return object;
     };
     
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
+    GRMustacheTestingDelegate *wrapDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    wrapDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return [NSString stringWithFormat:@"(%@)", object];
+        }
+        return object;
+    };
+    
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}} {{value}}" error:NULL];
+    template.tagDelegate = wrapDelegate;
     NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"uppercase":uppercaseDelegate, @"value":@"foo"} error:NULL];
     
-    STAssertEqualObjects(rendering, @"prefixfoo prefixFOO FOO PREFIXFOO", @"");
+    STAssertEqualObjects(rendering, @"(prefixfoo) (prefixFOO) (FOO) (PREFIXFOO) (foo)", @"");
 }
 
-- (void)testTagDelegatePlusSectionDelegate
+- (void)testTagDelegatePreAndPostHooksConsistency
 {
-    GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [[object description] uppercaseString];
-        }
-        return object;
+    GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate1.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        return @"1";
+    };
+    delegate1.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+        STAssertEqualObjects(object, @"1", @"");
+    };
+
+    GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate2.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        return @"2";
+    };
+    delegate2.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+        STAssertEqualObjects(object, @"2", @"");
     };
     
-    GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"prefix%@", object];
-        }
-        return object;
-    };
-    
-    GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"%@suffix", object];
-        }
-        return object;
-    };
-    
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}}{{/prefix}} {{#suffix}}{{value}}{{/suffix}} {{value}}" error:NULL];
-    template.tagDelegate = uppercaseDelegate;
-    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"suffix":suffixDelegate, @"value":@"foo"} error:NULL];
-    
-    STAssertEqualObjects(rendering, @"PREFIXFOO FOOSUFFIX FOO", @"");
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#d1}}{{#d2}}{{value}}{{/}}{{/}} {{#d2}}{{#d1}}{{value}}{{/}}{{/}}" error:NULL];
+    [template renderObject:@{@"d1":delegate1, @"d2":delegate2} error:NULL];
 }
 
-- (void)testTagDelegatePlusNestedSectionsDelegate
-{
-    GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [[object description] uppercaseString];
-        }
-        return object;
-    };
-    
-    GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"prefix%@", object];
-        }
-        return object;
-    };
-    
-    GRMustacheTestingDelegate *suffixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    suffixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"%@suffix", object];
-        }
-        return object;
-    };
-    
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}}" error:NULL];
-    template.tagDelegate = suffixDelegate;
-    NSString *rendering = [template renderObject:@{@"uppercase":uppercaseDelegate, @"prefix":prefixDelegate, @"value":@"foo"} error:NULL];
-    
-    STAssertEqualObjects(rendering, @"prefixfoosuffix prefixFOOsuffix FOOsuffix PREFIXFOOsuffix", @"");
-}
-
-- (void)testArrayOfDelegatesInSectionTag
+- (void)testArrayOfTagDelegatesInSectionTag
 {
     __block BOOL delegate1HasBeenInvoked = NO;
     GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
