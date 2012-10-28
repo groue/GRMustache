@@ -438,21 +438,23 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 
                 if (rendering)
                 {
-                    // check consistency of HTML escaping before appending the rendering to the buffer
-                    
-                    if (itemHasRenderedHTMLSafe) {
-                        oneItemHasRenderedHTMLSafe = YES;
-                        if (oneItemHasRenderedHTMLUnescaped) {
-                            [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                    if (rendering.length > 0) {
+                        // check consistency of HTML escaping before appending the rendering to the buffer
+                        
+                        if (itemHasRenderedHTMLSafe) {
+                            oneItemHasRenderedHTMLSafe = YES;
+                            if (oneItemHasRenderedHTMLUnescaped) {
+                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                            }
+                        } else {
+                            oneItemHasRenderedHTMLUnescaped = YES;
+                            if (oneItemHasRenderedHTMLSafe) {
+                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                            }
                         }
-                    } else {
-                        oneItemHasRenderedHTMLUnescaped = YES;
-                        if (oneItemHasRenderedHTMLSafe) {
-                            [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
-                        }
+                        
+                        [buffer appendString:rendering];
                     }
-                    
-                    [buffer appendString:rendering];
                 }
                 else if (itemRenderingError)
                 {
