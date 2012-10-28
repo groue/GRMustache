@@ -64,7 +64,7 @@
  * Returns a new rendering context that is the copy of the receiver, and the
  * given object added at the top of the tag delegate stack.
  *
- * @param object  An object
+ * @param tagDelegate  A tag delegate
  *
  * @return A new rendering context.
  *

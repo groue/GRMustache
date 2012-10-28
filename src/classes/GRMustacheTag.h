@@ -92,7 +92,10 @@ typedef enum {
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * Returns the rendering of the receiver, given a rendering context.
+ * Returns the rendering of the inner content of the receiver, given a rendering
+ * context.
+ *
+ * Is is empty for variable tags such as `{{ name }}`.
  *
  * @param context   A rendering context.
  * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
