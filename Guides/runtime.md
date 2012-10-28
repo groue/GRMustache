@@ -5,7 +5,7 @@ GRMustache runtime
 
 ## Overview
 
-Basically, there are only two methods and one protocol that you have to care about when providing data to GRMustache:
+Basically, there are only two methods and two protocol that you have to care about when providing data to GRMustache:
 
 - `valueForKey:` is the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) method, that GRMustache invokes when looking for the data that will be rendered. Basically, for a `{{name}}` tag to be rendered, all you need to provide is an NSDictionary with the `@"name"` key, or an object declaring the `name` property.
 
@@ -14,6 +14,11 @@ Basically, there are only two methods and one protocol that you have to care abo
 - `NSFastEnumeration` is the standard protocol for [enumerable objects](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html). The most obvious enumerable is NSArray. There are others, and you may provide your own. Objects that conform to the `NSFastEnumeration` protocol are the base of GRMustache loops.
     
     Both variable tags `{{items}}` and section tags `{{#items}}...{{/items}}` can loop. You'll read more on this topic in the [loops.md](runtime/loops.md) guide.
+
+- `GRMustacheRendering` is the protocol for objects that take full control of their rendering. This is how you implement the "Mustache lambdas" of http://mustache.github.com/mustache.5.html, for example. *Rendering objects* have their dedicated guide, the [Rendering Objets Guide](rendering_objects.md).
+
+
+## A simple example
 
 For instance, let's consider the following code:
 
@@ -27,20 +32,12 @@ NSString *rendering = [[GRMustacheTemplate templateFromString:templateString err
 2. The `description` method of the NSNumber returns a string: `@"2"`.
 3. This string is inserted into the rendering: `@"I have 2 arms"`.
 
-Two other "advanced" protocols let you implement some custom rendering:
-
-- `GRMustacheVariableTagHelper`: when a value provided with `valueForKey:` conforms to this protocol, variable tags lets the value perform its own custom rendering. See [variable_tag_helpers.md](variable_tag_helpers.md).
-
-- `GRMustacheSectionTagHelper`: when a value provided with `valueForKey:` conforms to this protocol, section tags lets the value perform its own custom rendering. See [section_tag_helpers.md](section_tag_helpers.md).
-
 
 ## In Detail
 
-Mustache does a little more than rendering plain `{{name}}` tags. Let's review Mustache features and how GRMustache help you leverage them.
-
 - [context_stack.md](runtime/context_stack.md)
 
-    This guide digs into Mustache section tags such as `{{#section}}...{{/section}}`, and the key lookup mechanism.
+    This guide digs in the key lookup mechanism: how does Mustache find the object that should be rendered by a `{{ name }}` tag?
     
 - [loops.md](runtime/loops.md)
     
