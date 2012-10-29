@@ -54,8 +54,8 @@ You may declare and implement your own conforming classes. The `+[GRMustache ren
 
 ```objc
 id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return @"I'm rendered!";
-    }];
+    return @"I'm rendered!";
+}];
 ```
 
 Examples
