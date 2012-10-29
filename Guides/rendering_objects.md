@@ -50,6 +50,72 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
+You may declare and implement your own conforming classes. The `+[GRMustache renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
+
+```objc
+id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"I'm rendered!";
+    }];
+```
+
+Examples
+--------
+
+### Wrapping the content of a section tag
+
+Let's write a rendering object which wraps a section in a `<strong>` HTML tag.
+
+We will use the `-[GRMustacheTag renderContentWithContext:HTMLSafe:error]` method:
+
+```objc
+@interface GRMustacheTag: NSObject
+
+/**
+ * Returns the rendering of the tag's inner content, rendering all inner
+ * Mustache tags with the rendering context argument.
+ *
+ * Note that variable tags such as `{{ name }}` have no inner content, and
+ * return the empty string.
+ *
+ * @param context   A context for rendering inner tags.
+ * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param error     If there is an error rendering the tag, upon return contains
+ *                  an NSError object that describes the problem.
+ *
+ * @return The rendering of the tag's inner content.
+ */
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+
+@end
+```
+
+Perfect: we'll ask the section tag to render its content, and simply wrap it:
+
+```objc
+NSString *templateString = @"{{#strong}}"
+                           @"{{name}} is awesome."
+                           @"{{/strong}}";
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+
+id strongRenderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+    NSString *rawRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    if (!rawRendering) return nil;  // let errors out
+    return [NSString stringWithFormat:@"<strong>%@</strong>", rawRendering];
+}];
+
+id data = @{
+    @"name": @"Arthur",
+    @"strong": strongRenderingObject,
+};
+
+// <b>Arthur is awesome.</b>
+NSString *rendering = [template renderObject:data error:NULL];
+```
+
+`strongRenderingObject` performs a *double-pass rendering*: it first has the section tag render its inner content (that is to say: `Arthur is awesome.`), and then wraps the result.
+
+
+
 ### An example: NSString rendering
 
 Let's see, for example, the actual NSString rendering code. You remember that strings simply render themselves in variable tags as `{{ name }}`. Depending on their length, they trigger or omit section tags as `{{# name }}...{{/}}` and `{{^ name }}...{{/}}`.
@@ -72,7 +138,7 @@ Let's see, for example, the actual NSString rendering code. You remember that st
             // {{$ string }}...{{/}}
             if (self.length > 0) {
                 context = [context contextByAddingObject:self];
-                return [tag renderWithContext:context
+                return [tag renderContentWithContext:context
                                      HTMLSafe:HTMLSafe
                                         error:error];
             } else {
@@ -84,7 +150,7 @@ Let's see, for example, the actual NSString rendering code. You remember that st
             if (self.length > 0) {
                 return @"";
             } else {
-                return [tag renderWithContext:context
+                return [tag renderContentWithContext:context
                                      HTMLSafe:HTMLSafe
                                         error:error];
             }
@@ -94,7 +160,7 @@ Let's see, for example, the actual NSString rendering code. You remember that st
 
 See how the [context stack](runtime/context_stack.md) is *explicitely* extended, with the `-[GRMustacheContext contextByAddingObject:]` method. Without it, it would be impossible to perform conditional rendering such as `{{#title}}<h1>{{.}}</h1>{{/title}}`.
 
-See also how the section tags provide the `-[GRMustacheTag renderWithContext:HTMLSafe:error:]` method, that renders their inner content, and set the `HTMLSafe` and `error` arguments for you.
+See also how the section tags provide the `-[GRMustacheTag renderContentWithContext:HTMLSafe:error:]` method, that renders their inner content, and set the `HTMLSafe` and `error` arguments for you.
 
 ### GRMustacheTag, GRMustacheContext
 
@@ -139,7 +205,7 @@ Below is the full APIs that are available to your rendering objects. We'll see a
  *
  * @return The rendering of the tag.
  */
-- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
 
 @end
 
