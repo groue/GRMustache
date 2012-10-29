@@ -63,6 +63,18 @@
     return [templateRepository templateNamed:templateName error:error];
 }
 
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)error
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:error];
+    return [template renderObject:object error:error];
+}
+
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:name bundle:bundle error:error];
+    return [template renderObject:object error:error];
+}
+
 - (void)dealloc
 {
     [_components release];

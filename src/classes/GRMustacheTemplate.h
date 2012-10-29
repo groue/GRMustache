@@ -152,6 +152,43 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Renders an object from a template string.
+ *
+ * @param object          An object used for interpreting Mustache tags.
+ * @param templateString  The template string.
+ * @param error           If there is an error during rendering, upon return
+ *                        contains an NSError object that describes the problem.
+ *
+ * @return A string containing the rendered template.
+ *
+ * @since v1.0
+ */
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Renders an object from a bundle resource template.
+ *
+ * If you provide nil as a bundle, the resource will be looked in the main
+ * bundle, with a "mustache" extension.
+ *
+ * The template resource must be encoded in UTF8. See the
+ * GRMustacheTemplateRepository class for more encoding options.
+ *
+ * @param object  An object used for interpreting Mustache tags.
+ * @param name    The name of a bundle resource of extension "mustache".
+ * @param bundle  The bundle where to look for the template resource.
+ * @param error   If there is an error during rendering, upon return contains an
+ *                NSError object that describes the problem.
+ *
+ * @return A string containing the rendered template.
+ *
+ * @see GRMustacheTemplateRepository
+ *
+ * @since v1.0
+ */
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
  * Renders a template with a context stack initialized with a single object.
  *
  * @param object  An object used for interpreting Mustache tags.
