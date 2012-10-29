@@ -91,12 +91,17 @@ We will use the `-[GRMustacheTag renderContentWithContext:HTMLSafe:error]` metho
 
 Perfect: we'll ask the section tag to render its content, and simply wrap it:
 
-```objc
-NSString *templateString = @"{{#strong}}"
-                           @"{{name}} is awesome."
-                           @"{{/strong}}";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+`base.mustache`:
 
+```mustache
+{{#strong}}
+    {{name}} is awesome.
+{{/strong}}
+```
+
+`render.m`:
+
+```objc
 id strongRenderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
     NSString *rawRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     if (!rawRendering) return nil;  // let errors out
@@ -108,11 +113,64 @@ id data = @{
     @"strong": strongRenderingObject,
 };
 
-// <b>Arthur is awesome.</b>
-NSString *rendering = [template renderObject:data error:NULL];
+// <strong>Arthur is awesome.</strong>
+NSString *rendering = [GRMustacheTemplate renderObject:data fromResource:@"base" bundle:nil error:NULL];
 ```
 
 `strongRenderingObject` performs a *double-pass rendering*: it first has the section tag render its inner content (that is to say: `Arthur is awesome.`), and then wraps the result.
+
+
+### Have a section render an alternate template string
+
+For the purpose of demonstration, we'll implement a helper that turns a portion of a template into a HTML link.
+
+Template:
+    
+    {{#movie}}
+      {{#link}}{{title}}{{/link}}
+      {{#director}}
+          by {{#link}}{{firstName}} {{lastName}}{{/link}}
+      {{/director}}
+    {{/movie}}
+
+Data:
+
+```objc
+id data = @{
+    @"movie": @{
+        @"url": @"/movies/123",
+        @"title": @"Citizen Kane",
+        @"director": @{
+            @"url": @"/people/321",
+            @"firstName": @"Orson",
+            @"lastName": @"Welles",
+        }
+    },
+    @"link": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
+        NSString *format = @"<a href=\"{{url}}\">%@</a>";
+        NSString *templateString = [NSString stringWithFormat:format, context.innerTemplateString];
+        return [context renderString:templateString error:NULL];
+    }]
+}
+```
+
+Render:
+
+    <a href="/movies/123">Citizen Kane</a>
+    by <a href="/people/321">Orson Welles</a>
+
+```objc
+NSString *rendering = [template renderObject:data];
+```
+
+This helper again performs a *double-pass rendering*:
+
+It first wraps the inner template string (`{{title}}`, or `{{firstName}} {{lastName}}`) inside a HTML link, whose url is *also expressed* as a Mustache tag. This gives the two alternate template strings: `<a href="{{url}}">{{title}}</a>` and `<a href="{{url}}">{{firstName}} {{lastName}}</a>`.
+
+Since both movie and director data objects contain values for the `url` key, the renderings of those alternate template string embed the URL of Citizen Kane and of its director.
+
+
+
 
 
 
