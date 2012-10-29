@@ -31,11 +31,6 @@ Loading templates and partials from the file system
 + (id)templateRepositoryWithBaseURL:(NSURL *)url;
 
 // Loads templates and partials from a directory, with provided extension,
-// encoded in UTF8.
-+ (id)templateRepositoryWithBaseURL:(NSURL *)url
-                  templateExtension:(NSString *)ext;
-
-// Loads templates and partials from a directory, with provided extension,
 // encoded in provided encoding.
 + (id)templateRepositoryWithBaseURL:(NSURL *)url
                   templateExtension:(NSString *)ext
@@ -46,11 +41,6 @@ Loading templates and partials from the file system
 + (id)templateRepositoryWithDirectory:(NSString *)path;
 
 // Loads templates and partials from a directory, with provided extension,
-// encoded in UTF8.
-+ (id)templateRepositoryWithDirectory:(NSString *)path
-                    templateExtension:(NSString *)ext;
-
-// Loads templates and partials from a directory, with provided extension,
 // encoded in provided encoding.
 + (id)templateRepositoryWithDirectory:(NSString *)path
                     templateExtension:(NSString *)ext
@@ -59,11 +49,6 @@ Loading templates and partials from the file system
 // Loads templates and partials from a bundle, with "mustache" extension,
 // encoded in UTF8.
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle;  // nil stands for the main bundle
-
-// Loads templates and partials from a bundle, with provided extension, encoded
-// in UTF8.
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle   // nil stands for the main bundle
-                 templateExtension:(NSString *)ext;
 
 // Loads templates and partials from a bundle, with provided extension, encoded
 // in provided encoding.
@@ -154,7 +139,7 @@ When your template and partial strings are stored in memory, store them in a dic
 
 // _partialsDictionary_ is a dictionary whose keys are partial names, and values
 // template strings.
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary;
++ (id)templateRepositoryWithDictionary:(NSDictionary *)templates;
 
 @end
 ```
@@ -163,7 +148,7 @@ Now we may instanciate one:
     
 ```objc
 NSDictionary *templates = @{ @"partial": @"It works!" }
-GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:templates];
+GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
 ```
 
 Then load templates from it:

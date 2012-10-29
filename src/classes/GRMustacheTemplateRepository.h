@@ -386,21 +386,21 @@
  * 
  * For instance:
  * 
- *     NSDictionary *partialsDictionary = [NSDictionary dictionaryWithObject:@"It works." forKey:@"partial"];
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
+ *     NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works." forKey:@"partial"];
+ *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
  *     
  *     // Two templates that would render "It works."
  *     GRMustacheTemplate *template1 = [repository templateNamed:@"partial" error:NULL];
  *     GRMustacheTemplate *template2 = [repository templateFromString:@"{{>partial}}" error:NULL];
  * 
- * @param partialsDictionary  A dictionary of whose keys are template names, and
- *                              values Mustache template strings.
+ * @param templates  A dictionary whose keys are template names, and values
+ *                   Mustache template strings.
  *
  * @return a GRMustacheTemplateRepository
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
