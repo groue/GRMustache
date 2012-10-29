@@ -322,7 +322,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertNil(lastInnerTemplateString, @"");
+        STAssertEqualObjects(lastInnerTemplateString, @"", @"");
     }
     {
         __block NSString *lastInnerTemplateString = nil;

@@ -51,11 +51,6 @@
     return GRMustacheTagTypeVariable;
 }
 
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    return @"";
-}
-
 
 #pragma mark - Private
 

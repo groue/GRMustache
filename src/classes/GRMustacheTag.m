@@ -52,23 +52,6 @@
     return self;
 }
 
-- (GRMustacheTagType)type
-{
-    NSAssert(NO, @"Subclasses must override");
-    return 0;
-}
-
-- (BOOL)escapesHTML
-{
-    NSAssert(NO, @"Subclasses must override");
-    return YES;
-}
-
-- (NSString *)innerTemplateString
-{
-    return nil;
-}
-
 - (NSString *)description
 {
     GRMustacheToken *token = _expression.token;
@@ -79,9 +62,27 @@
     }
 }
 
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (GRMustacheTagType)type
 {
     NSAssert(NO, @"Subclasses must override");
+    return 0;
+}
+
+- (BOOL)escapesHTML
+{
+    // default
+    return YES;
+}
+
+- (NSString *)innerTemplateString
+{
+    // default
+    return @"";
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    // default
     return @"";
 }
 
