@@ -59,10 +59,8 @@ id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustache
 }];
 ```
 
-Examples
---------
-
-### Wrapping the content of a section tag
+Example: Wrapping the content of a section tag
+----------------------------------------------
 
 Let's write a rendering object which wraps a section in a `<strong>` HTML tag:
 
@@ -104,7 +102,7 @@ Final rendering:
 
     <b>Arthur is awesome.</b>
 
-**What have we learnt here?**
+### What have we learnt here?
 
 Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
 
@@ -142,7 +140,8 @@ Final rendering:
     Mustache is awesome!
 
 
-### Have a section render an alternate template string
+Example: Have a section render an alternate template string
+-----------------------------------------------------------
 
 Let's write a rendering object that wraps a section in a HTML link. The URL of the link will be fetched with the `url` key:
 
@@ -187,7 +186,7 @@ Final rendering:
 
     <a href="/people/123">Orson Welles</a>
 
-**What have we learnt here?**
+### What have we learnt here?
 
 Again, variable tags such as `{{ name }}` don't have much inner content, but section tags do: `{{# name }} inner content {{/ name }}`.
 
@@ -197,7 +196,9 @@ You can derive new template strings from this raw content, even by appending new
 
 From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context (and sets the `HTMLSafe` boolean for you, so that you do definitely not have to worry about it).
 
-### Dynamic partials, take 1
+
+Example: Dynamic partials, take 1
+---------------------------------
 
 When a `{{> name }}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
 
@@ -251,12 +252,13 @@ Final rendering:
 
 We haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
 
-**What have we learnt here?**
+### What have we learnt here?
 
 Let's say a handy technique.
 
 
-### Dynamic partials, take 2: objects that "render themselves"
+Example: Dynamic partials, take 2: objects that "render themselves"
+-------------------------------------------------------------------
 
 Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
 
@@ -345,7 +347,7 @@ Final rendering:
 
     Citizen Kane by Orson Welles
 
-**What have we learnt here?**
+### What have we learnt here?
 
 Many useful things.
 
@@ -365,7 +367,9 @@ Many useful things.
     
     There is also a `contextByAddingTagDelegate:` method, that is demonstrated in the [Localization Sample Code](sample_code/localization.md). You may need to have a look to the [Delegates Guide](delegate.md) before.
 
-### Render collections of objects
+
+Example: Render collections of objects
+--------------------------------------
 
 Using the same Movie and Person class introduced above, we can easily render a list of movies:
 
@@ -404,7 +408,7 @@ Final rendering:
     Citizen Kane by Orson Welles
     Some Like It Hot by Billy Wilder
 
-**What have we learnt here?**
+### What have we learnt here?
 
 A new perspective on the fact that arrays render the concatenation of their items.
 
