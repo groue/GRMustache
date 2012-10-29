@@ -61,11 +61,8 @@ extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_6_0_AN
  *
  * - a filter is missing.
  * - an object expected to conform to the <GRMustacheFilter> protocol does not.
- * - a GRMustacheDynamicPartial instance can't be rendered because the partial
- *   template is missing.
  *
  * @see GRMustacheFilter protocol
- * @see GRMustacheDynamicPartial
  *
  * @since v5.1
  */
