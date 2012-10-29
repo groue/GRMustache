@@ -250,14 +250,69 @@ Final rendering:
     - <a href="/movies/123">Citizen Kane</a>
     - <a href="">Orson Welles</a>
 
-We haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
+### What have we learnt here?
+
+Let's say a handy technique: we haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
+
+
+Example: Dynamic partials, take 2
+---------------------------------
+
+`Document.mustache`:
+
+    {{# items }}
+    - {{ render(partial) }}
+    {{/ items }}
+
+`Movie.mustache`:
+
+    <a href="{{url}}">{{title}}</a>
+
+`Person.mustache`:
+
+    <a href="{{url}}">{{firstName}} {{lastName}}</a>
+
+`Render.m`
+
+```objc
+id data = @{
+    @"items": @[
+        @{
+            @"title": @"Citizen Kane",
+            @"url":@"/movies/321",
+            @"partial": @"Movie",
+        },
+        @{
+            @"firstName": @"Orson",
+            @"lastName": @"Welles",
+            @"url":@"/people/123",
+            @"partial": @"Person",
+        },
+    ],
+    @"render": [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [GRMustacheTemplate templateFromResource:value bundle:nil error:NULL];
+    }],
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    - <a href="/movies/123">Citizen Kane</a>
+    - <a href="">Orson Welles</a>
 
 ### What have we learnt here?
 
-Let's say a handy technique.
+Well, filters that return rendering objects are awesome.
+
+The above example is somewhat contrived, but you'll see a much more useful example in the [Indexes Sample Code](sample_code/indexes.md).
 
 
-Example: Dynamic partials, take 2: objects that "render themselves"
+Example: Dynamic partials, take 3: objects that "render themselves"
 -------------------------------------------------------------------
 
 Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
