@@ -1,1 +1,1 @@
-This document has [moved](variable_tag_helpers.md).
+This document has been [superseded](rendering_objects.md).
