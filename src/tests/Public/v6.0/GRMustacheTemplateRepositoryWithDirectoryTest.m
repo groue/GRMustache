@@ -56,38 +56,6 @@
     STAssertEqualObjects(result, @"dir/dir/é1.mustache\ndir/dir/é2.mustache\n\n", @"");
 }
 
-- (void)testTemplateRepositoryWithDirectory_templateExtension
-{
-    NSString *directoryPath;
-    GRMustacheTemplateRepository *repository;
-    GRMustacheTemplate *template;
-    NSString *result;
-    
-    directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"mustache"];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
-    
-    directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@"txt"];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
-    
-    directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:@""];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
-    
-    directoryPath = [self.testBundle pathForResource:@"GRMustacheTemplateRepositoryTest_UTF8" ofType:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:nil];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
-}
-
 - (void)testTemplateRepositoryWithDirectory_templateExtension_encoding
 {
     NSString *directoryPath;

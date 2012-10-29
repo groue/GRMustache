@@ -23,12 +23,12 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheTemplateRepositoryWithPartialsDictionaryTest : GRMustachePublicAPITest
+@interface GRMustacheTemplateRepositoryWithDictionaryTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheTemplateRepositoryWithPartialsDictionaryTest
+@implementation GRMustacheTemplateRepositoryWithDictionaryTest
 
-- (void)testTemplateRepositoryWithPartialsDictionary
+- (void)testTemplateRepositoryWithDictionary
 {
     GRMustacheTemplate *template;
     NSString *result;
@@ -39,7 +39,7 @@
                               @"B{{>c}}", @"b",
                               @"C",       @"c",
                               nil];
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
     
     template = [repository templateNamed:@"not found" error:&error];
     STAssertNil(template, @"");

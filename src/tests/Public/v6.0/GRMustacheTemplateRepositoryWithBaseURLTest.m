@@ -60,38 +60,6 @@
     STAssertEqualObjects(result, @"dir/dir/é1.mustache\ndir/dir/é2.mustache\n\n", @"");
 }
 
-- (void)testTemplateRepositoryWithBaseURL_templateExtension
-{
-    NSURL *URL;
-    GRMustacheTemplateRepository *repository;
-    GRMustacheTemplate *template;
-    NSString *result;
-    
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache"];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
-    
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt"];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
-    
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@""];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
-    
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
-    repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil];
-    template = [repository templateNamed:@"file1" error:NULL];
-    result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
-}
-
 - (void)testTemplateRepositoryWithBaseURL_templateExtension_encoding
 {
     NSURL *URL;

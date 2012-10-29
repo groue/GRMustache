@@ -63,7 +63,7 @@
         NSDictionary *partialsDictionary = [test objectForKey:@"partials"];
         NSString *expected = [test objectForKey:@"expected"];
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
         GRMustacheTemplate *template = [repository templateFromString:templateString error:NULL];
         NSString *rendering = [template renderObject:data error:NULL];
         

@@ -50,7 +50,7 @@
     NSString *directoryPath = [path stringByDeletingLastPathComponent];
     NSString *templateExtension = [path pathExtension];
     NSString *templateName = [[path lastPathComponent] stringByDeletingPathExtension];
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directoryPath templateExtension:templateExtension encoding:NSUTF8StringEncoding];
     return [templateRepository templateNamed:templateName error:error];
 }
 
@@ -59,7 +59,7 @@
     NSURL *baseURL = [URL URLByDeletingLastPathComponent];
     NSString *templateExtension = [URL pathExtension];
     NSString *templateName = [[URL lastPathComponent] stringByDeletingPathExtension];
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL templateExtension:templateExtension encoding:NSUTF8StringEncoding];
     return [templateRepository templateNamed:templateName error:error];
 }
 

@@ -53,19 +53,10 @@
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
@@ -74,13 +65,10 @@
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
++ (id)templateRepositoryWithDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepository GRMUSTACHE_API_PUBLIC;

@@ -191,47 +191,6 @@
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
- * from files of provided extension, encoded in UTF8, stored in the provided
- * base URL.
- * 
- * For instance:
- * 
- *     // Creates a repository for templates of extension `.txt` stored in
- *     // /path/to/templates
- *     NSURL *baseURL = [NSURL fileURLWithPath:@"/path/to/templates"];
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:baseURL
- *                                                                                          templateExtension:@"txt"];
- *     
- *     // Returns a template for the file stored in
- *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
- * 
- * A partial tag `{{>partial}}` loads a partial template stored in a file named
- * `partial.txt`, located in the enclosing template's directory.
- * 
- * You may use the slash `/`, and `..`, in order to navigate the URL
- * hierarchical system: `{{>partials/achievements}}` would load
- * /path/to/templates/partials/achievements.txt, if invoked from
- * /path/to/templates/profile.txt.
- * 
- * When you ask the repository to parse a raw template string, partials are
- * loaded from the base URL:
- * 
- *     // The partial would be loaded from
- *     // /path/to/templates/partials/achievements.txt
- *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
- * 
- * @param URL   The base URL where to look templates from.
- * @param ext   The extension of template files.
- *
- * @return a GRMustacheTemplateRepository
- *
- * @since v1.13
- */
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from files of provided extension, encoded in the provided encoding, stored in
  * the provided base URL.
  * 
@@ -312,46 +271,6 @@
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
- * from files of provided extension, encoded in UTF8, stored in the provided
- * directory.
- * 
- * For instance:
- * 
- *     // Creates a repository for templates of extension `.txt` stored in
- *     // /path/to/templates
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"
- *                                                                                            templateExtension:@"txt"];
- *     
- *     // Returns a template for the file stored in
- *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
- * 
- * A partial tag `{{>partial}}` loads a partial template stored in a file named
- * `partial.txt`, located in the enclosing template's directory.
- * 
- * You may use the slash `/`, and `..`, in order to navigate the hierarchical
- * file system: `{{>partials/achievements}}` would load
- * /path/to/templates/partials/achievements.txt, if invoked from
- * /path/to/templates/profile.txt.
- * 
- * When you ask the repository to parse a raw template string, partials are
- * loaded from the base directory:
- * 
- *     // The partial would be loaded from
- *     // /path/to/templates/partials/achievements.txt
- *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
- * 
- * @param path  The path of the directory that stores templates.
- * @param ext   The extension of template files.
- *
- * @return a GRMustacheTemplateRepository
- *
- * @since v1.13
- */
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from files of provided extension, encoded in the provided encoding, stored in
  * the provided directory.
  * 
@@ -426,36 +345,6 @@
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
- * from resources of provided extension, encoded in UTF8, stored in the provided
- * bundle.
- * 
- * For instance:
- * 
- *     // Creates a repository for templates of extension `.txt` stored in the
- *     // main bundle:
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]
- *                                                                                         templateExtension:@"txt"];
- *     
- *     // Returns a template for the resource profile.txt
- *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
- * 
- * You may provide nil for the bundle parameter: the repository will use the
- * main bundle.
- * 
- * A partial tag `{{>partial}}` loads a partial template from the `partial.txt`
- * resource in the bundle.
- * 
- * @param bundle  The bundle that stores templates as resources.
- * @param ext     The extension of template files.
- * 
- * @return a GRMustacheTemplateRepository
- *
- * @since v1.13
- */
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from resources of provided extension, encoded in the provided encoding,
  * stored in the provided bundle.
  * 
@@ -498,7 +387,7 @@
  * For instance:
  * 
  *     NSDictionary *partialsDictionary = [NSDictionary dictionaryWithObject:@"It works." forKey:@"partial"];
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
+ *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
  *     
  *     // Two templates that would render "It works."
  *     GRMustacheTemplate *template1 = [repository templateNamed:@"partial" error:NULL];
@@ -511,7 +400,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithPartialsDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id)templateRepositoryWithDictionary:(NSDictionary *)partialsDictionary AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -245,7 +245,7 @@ static struct {
 
 - (GRMustacheTemplate *)templateForTemplateString:(NSString *)templateString partialsDictionary:(NSDictionary *)partialsDictionary error:(NSError **)error
 {
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partialsDictionary];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
     return [repository templateFromString:templateString error:error];
 }
 

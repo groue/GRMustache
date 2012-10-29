@@ -50,12 +50,13 @@
     }
 }
 
-- (void)testTemplateRepositoryWithBundle_templateExtension
+- (void)testTemplateRepositoryWithBundle_templateExtension_encoding
 {
     NSError *error;
     {
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
-                                                                                            templateExtension:@"text"];
+                                                                                            templateExtension:@"text"
+                                                                                                     encoding:NSUTF8StringEncoding];
         {
             GRMustacheTemplate *template = [repository templateNamed:@"notFound" error:&error];
             STAssertNil(template, @"");
@@ -74,7 +75,8 @@
     }
     {
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
-                                                                                            templateExtension:@""];
+                                                                                            templateExtension:@""
+                                                                                                     encoding:NSUTF8StringEncoding];
         {
             GRMustacheTemplate *template = [repository templateNamed:@"notFound" error:&error];
             STAssertNil(template, @"");
@@ -93,7 +95,8 @@
     }
     {
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
-                                                                                            templateExtension:nil];
+                                                                                            templateExtension:nil
+                                                                                                     encoding:NSUTF8StringEncoding];
         {
             GRMustacheTemplate *template = [repository templateNamed:@"notFound" error:&error];
             STAssertNil(template, @"");

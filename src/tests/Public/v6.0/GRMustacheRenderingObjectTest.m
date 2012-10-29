@@ -382,7 +382,7 @@
             return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         }];
         NSDictionary *partials = @{@"partial": @"{{subject}}"};
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[repository templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"---", @"");
@@ -393,7 +393,7 @@
             return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         }];
         NSDictionary *partials = @{@"partial": @"{{subject}}"};
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[repository templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
         STAssertEqualObjects(result, @"---", @"");
@@ -719,7 +719,7 @@
 - (void)testRenderingFacetOfTemplate
 {
     NSDictionary *partials = @{ @"partial": @"In partial." };
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
     
     NSDictionary *context = @{ @"partial": [repository templateNamed:@"partial" error:NULL] };
     NSString *result = [[repository templateFromString:@"{{partial}}" error:NULL] renderObject:context error:NULL];
@@ -730,7 +730,7 @@
 - (void)testTemplateAreNotHTMLEscaped
 {
     NSDictionary *partials = @{ @"partial": @"&<>{{foo}}" };
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithPartialsDictionary:partials];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
     
     NSDictionary *context = @{ @"partial": [repository templateNamed:@"partial" error:NULL] };
     NSString *result = [[repository templateFromString:@"{{partial}}{{{partial}}}" error:NULL] renderObject:context error:NULL];

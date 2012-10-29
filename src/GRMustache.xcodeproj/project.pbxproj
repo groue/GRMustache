@@ -109,8 +109,8 @@
 		5682B48C1528473200ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B4821528472900ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m */; };
 		5682B48F1528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B4861528472C00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m */; };
 		5682B4901528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B4861528472C00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m */; };
-		5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m */; };
-		5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m */; };
+		5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m */; };
+		5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m */; };
 		5682B4971528486C00ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4951528486900ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 */; };
 		5682B4981528486C00ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4951528486900ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 */; };
 		5682B4991528486C00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4961528486A00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 */; };
@@ -304,7 +304,7 @@
 		5682B4731528371F00ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRenderMethodsTest.mustache; sourceTree = "<group>"; };
 		5682B4821528472900ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryDataSourceTest.m; sourceTree = "<group>"; };
 		5682B4861528472C00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithBundleTest.m; sourceTree = "<group>"; };
-		5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m; sourceTree = "<group>"; };
+		5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryWithDictionaryTest.m; sourceTree = "<group>"; };
 		5682B4951528486900ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheTemplateRepositoryTest_ISOLatin1; sourceTree = "<group>"; };
 		5682B4961528486A00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheTemplateRepositoryTest_UTF8; sourceTree = "<group>"; };
 		5682B49C152849FD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTemplateRepositoryWithBundleTest.mustache; sourceTree = "<group>"; };
@@ -549,7 +549,7 @@
 			isa = PBXGroup;
 			children = (
 				5682B4821528472900ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m */,
-				5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m */,
+				5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m */,
 				5682B4AE15284AC800ADD123 /* GRMustacheTemplateRepositoryWithBundleTest */,
 				5682B4AF15284B8E00ADD123 /* GRMustacheTemplateRepositoryWithFileSystemTest */,
 			);
@@ -1135,7 +1135,7 @@
 				5682B46C1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */,
 				5682B48B1528473200ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */,
 				5682B48F1528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
-				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
+				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */,
 				56907F191604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
 				563A5EA7163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				568140D9163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
@@ -1195,7 +1195,7 @@
 				5682B46D1528342D00ADD123 /* GRMustacheTemplateRenderMethodsTest.m in Sources */,
 				5682B48C1528473200ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */,
 				5682B4901528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
-				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithPartialsDictionaryTest.m in Sources */,
+				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */,
 				56907F1A1604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
 				563A5EA8163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				568140DA163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
