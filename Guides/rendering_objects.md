@@ -104,6 +104,43 @@ Final rendering:
 
     <b>Arthur is awesome.</b>
 
+**What have we learnt here?**
+
+Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
+
+The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context.
+
+Your rendering objects can thus delegate their rendering to the tag they are given. They can render the tag once or many times:
+
+`Document.mustache`
+
+    {{#twice}}
+        Mustache is awesome!
+    {{/twice}}
+
+`Render.m`
+
+```objc
+id data = @{
+    @"twice": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+        NSMutableString *buffer = [NSMutableString string];
+        [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
+        [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
+        return buffer;
+    }]
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    Mustache is awesome!
+    Mustache is awesome!
+
 
 ### Have a section render an alternate template string
 
@@ -243,8 +280,6 @@ Oops. GRMustache is written in Objective-C, not Ruby: there is no built-in autom
 
 We have to explicitely have our Movie and Person classes render with their dedicated Movie.mustache and Person.mustache partials:
 
-(Of course, you can write automagic code in your own application.)
-
 ```objc
 // Declare categories on our classes so that they conform to the
 // GRMustacheRendering protocol:
@@ -262,11 +297,11 @@ We have to explicitely have our Movie and Person classes render with their dedic
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // Extract the "Movie.mustache" partial from the original templateRepository
+    // Extract the "Movie.mustache" partial from the original templateRepository:
     GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Movie" error:NULL];
 
-    // Add self to the top of the context stack, so that the partial can access
-    // our keys
+    // Add self to the top of the context stack, so that the partial
+    // can access our keys:
     context = [context contextByAddingObject:self];
 
     // Return the rendering of the partial
@@ -279,11 +314,11 @@ We have to explicitely have our Movie and Person classes render with their dedic
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // Extract the "Movie.mustache" partial from the original templateRepository
+    // Extract the "Person.mustache" partial from the original templateRepository:
     GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Person" error:NULL];
 
-    // Add self to the top of the context stack, so that the partial can access
-    // our keys
+    // Add self to the top of the context stack, so that the partial
+    // can access our keys:
     context = [context contextByAddingObject:self];
 
     // Return the rendering of the partial
@@ -296,6 +331,10 @@ We have to explicitely have our Movie and Person classes render with their dedic
 Final rendering:
 
     Citizen Kane by Orson Welles
+
+We have seen an important technique here: the *tag* argument provides a *template repository*. These objects provide templates (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
+
+A rendering object can 
 
 ### Render collections of objects
 
