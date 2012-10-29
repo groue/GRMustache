@@ -29,12 +29,15 @@ GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and
 #import "GRMustache.h"
 
 // Renders "Hello Arthur!"
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"Hello {{name}}!" error:NULL];
-NSString *rendering = [template renderObject:[Person personWithName:@"Arthur"] error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
+                                            fromString:@"Hello {{name}}!"
+                                                 error:NULL];
 
 // Renders a document from the `Profile.mustache` resource
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
-NSString *rendering = [template renderObject:[Person personWithName:@"Arthur"] error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
+                                          fromResource:@"Profile"
+                                                bundle:nil
+                                                 error:NULL];
 ```
 
 
@@ -67,8 +70,8 @@ Rendering templates:
 Advanced Mustache:
 
 - [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
+- [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
 - [rendering_objects.md](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
-- [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to hook into template rendering.
 
 ### Sample code
 
