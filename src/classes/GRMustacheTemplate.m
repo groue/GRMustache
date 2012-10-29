@@ -95,7 +95,7 @@
     return buffer;
 }
 
-- (NSString *)renderWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
     if (![self renderWithContext:context inBuffer:buffer error:error]) {
@@ -155,7 +155,7 @@
 // Allows template to render as "dynamic partials"
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderWithContext:context HTMLSafe:HTMLSafe error:error];
+    return [self renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 
 @end

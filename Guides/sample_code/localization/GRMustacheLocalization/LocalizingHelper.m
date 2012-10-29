@@ -41,7 +41,7 @@
     
     self.formatArguments = [NSMutableArray array];
     context = [context contextByAddingTagDelegate:self];
-    NSString *localizableFormat = [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+    NSString *localizableFormat = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
     /**

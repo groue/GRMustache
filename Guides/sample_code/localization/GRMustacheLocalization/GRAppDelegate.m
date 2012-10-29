@@ -53,7 +53,7 @@
         id data = @{
             @"greeting": @"Hello",
             @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
-                NSString *rendering = [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
                 return NSLocalizedString(rendering, nil);
             }]
         };

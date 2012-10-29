@@ -293,7 +293,7 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
         case GRMustacheTagTypeInvertedSection:
             // {{$ nil }}...{{/}}
             // {{^ nil }}...{{/}}
-            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             
     }
 }
@@ -315,7 +315,7 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ null }}...{{/}}
-            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             
     }
 }
@@ -338,7 +338,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             // {{$ number }}...{{/}}
             if ([self boolValue]) {
                 context = [context contextByAddingObject:self];
-                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
@@ -348,7 +348,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             if ([self boolValue]) {
                 return @"";
             } else {
-                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             }
     }
 }
@@ -371,7 +371,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             // {{$ string }}...{{/}}
             if (self.length > 0) {
                 context = [context contextByAddingObject:self];
-                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
@@ -381,7 +381,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             if (self.length > 0) {
                 return @"";
             } else {
-                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             }
     }
 }
@@ -403,7 +403,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
             context = [context contextByAddingObject:self];
-            return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ object }}...{{/}}
@@ -438,7 +438,8 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 
                 if (rendering)
                 {
-                    if (rendering.length > 0) {
+                    if (rendering.length > 0)
+                    {
                         // check consistency of HTML escaping before appending the rendering to the buffer
                         
                         if (itemHasRenderedHTMLSafe) {
@@ -483,7 +484,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 // item enters the context as a context object
                 GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
-                NSString *rendering = [tag renderWithContext:itemContext HTMLSafe:HTMLSafe error:error];
+                NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
                 NSAssert(*HTMLSafe, @"WTF"); // Assume all tags render HTML-safe strings
                 if (rendering) {
                     [buffer appendString:rendering];
@@ -503,7 +504,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             }
             
             if (empty) {
-                return [tag renderWithContext:context HTMLSafe:HTMLSafe error:error];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
