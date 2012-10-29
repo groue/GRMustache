@@ -426,7 +426,8 @@ Many useful things.
 Example: Render collections of objects
 --------------------------------------
 
-Using the same Movie and Person class introduced above, we can easily render a list of movies:
+Using the same Movie and Person class introduced above, we can easily render a list of movies, just as Ruby on Rails's <%= render @movies %>:
+
 
 `Document.mustache`
 
