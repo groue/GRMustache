@@ -253,7 +253,7 @@ We haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTempl
 
 **What have we learnt here?**
 
-Not much. Let's say a handy technique.
+Let's say a handy technique.
 
 
 ### Dynamic partials, take 2: objects that "render themselves"
@@ -345,9 +345,25 @@ Final rendering:
 
     Citizen Kane by Orson Welles
 
-We have seen an important technique here: the *tag* argument provides a *template repository*. These objects provide templates (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
+**What have we learnt here?**
 
-A rendering object can 
+Many useful things.
+
+1. *`GRMustacheRendering` is a protocol*.
+    
+    Surely `+[GRMustache renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the protocol is available for you to use on your custom classes.
+
+2. *The tag provides a template repository*.
+    
+    This object lets you load partials from the same set of templates as the "main" rendering template, the one that did provide the rendered tag (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
+
+    This does not make much difference when all templates are loaded from your main bundle. But some of you manage their sets of templates differently.
+
+3. *Rendering objects manage the context stack*.
+    
+    When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime/context_stack.md). For the title and names of our movies and people to render, movies and people must then enter the context stack. That is why before rendering their partials, they derive new contexts using the `contextByAddingObject:` method.
+    
+    There is also a `contextByAddingTagDelegate:` method, that is demonstrated in the [Localization Sample Code](sample_code/localization.md). You may need to have a look to the [Delegates Guide](delegate.md) before.
 
 ### Render collections of objects
 
@@ -388,7 +404,9 @@ Final rendering:
     Citizen Kane by Orson Welles
     Some Like It Hot by Billy Wilder
 
-We have simply used the fact that arrays render the concatenation of their items.
+**What have we learnt here?**
+
+A new perspective on the fact that arrays render the concatenation of their items.
 
 
 Compatibility with other Mustache implementations
