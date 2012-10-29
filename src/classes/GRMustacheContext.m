@@ -72,6 +72,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 @end
 
 @implementation GRMustacheContext
+@synthesize delegateStack=_delegateStack;
 
 - (void)dealloc
 {
@@ -149,30 +150,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         if (value != nil) { return value; }
     }
     return nil;
-}
-
-- (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block
-{
-    // fast path
-    if (_delegateStack == nil) {
-        block(object);
-        return;
-    }
-    
-    // top of the stack is first object
-    for (id<GRMustacheTagDelegate> delegate in [_delegateStack reverseObjectEnumerator]) {
-        if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-            object = [delegate mustacheTag:tag willRenderObject:object];
-        }
-    }
-
-    block(object);
-
-    for (id<GRMustacheTagDelegate> delegate in _delegateStack) {
-        if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
-            [delegate mustacheTag:tag didRenderObject:object];
-        }
-    }
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

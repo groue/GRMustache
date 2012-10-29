@@ -99,7 +99,7 @@ typedef enum {
  * return the empty string.
  *
  * @param context   A context for rendering inner tags.
- * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param HTMLSafe  Upon return contains YES (tag render HTML-safe strings).
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
  *

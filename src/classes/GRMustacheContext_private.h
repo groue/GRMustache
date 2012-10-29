@@ -57,6 +57,11 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 }
 
 /**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) NSArray *delegateStack;
+
+/**
  * Avoids most NSUndefinedException to be raised by the invocation of
  * `valueForKey:inObject:` and `valueForKey:inSuper:`.
  *
@@ -129,19 +134,6 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @see -[GRMustacheImplicitIteratorExpression evaluateInContext:]
  */
 - (id)currentContextValue GRMUSTACHE_API_INTERNAL;
-
-/**
- * Invoke callbacks of all delegates in the delegate stack before and after
- * _object_ is rendered with _block_.
- *
- * @param object The rendered object
- * @param tag    The tag.
- * @param block  The rendering block.
- *
- * @see -[GRMustacheSectionTag renderWithContext:inBuffer:error:]
- * @see -[GRMustacheVariableTag renderWithContext:inBuffer:error:]
- */
-- (void)renderObject:(id)object withTag:(GRMustacheTag *)tag usingBlock:(void(^)(id value))block GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be
