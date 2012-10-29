@@ -52,23 +52,6 @@
     return self;
 }
 
-- (GRMustacheTagType)type
-{
-    NSAssert(NO, @"Subclasses must override");
-    return 0;
-}
-
-- (BOOL)escapesHTML
-{
-    NSAssert(NO, @"Subclasses must override");
-    return YES;
-}
-
-- (NSString *)innerTemplateString
-{
-    return nil;
-}
-
 - (NSString *)description
 {
     GRMustacheToken *token = _expression.token;
@@ -79,9 +62,30 @@
     }
 }
 
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (GRMustacheTagType)type
 {
     NSAssert(NO, @"Subclasses must override");
+    return 0;
+}
+
+- (BOOL)escapesHTML
+{
+    // default
+    return YES;
+}
+
+- (NSString *)innerTemplateString
+{
+    // default
+    return @"";
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    // default
+    if (HTMLSafe) {
+        *HTMLSafe = YES;
+    }
     return @"";
 }
 
@@ -90,39 +94,62 @@
 
 - (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
-    id object;
-    if (![_expression evaluateInContext:context value:&object error:error]) {
-        return NO;
-    }
+    BOOL success = YES;
     
-    __block BOOL success = YES;
     @autoreleasepool {
-        [context renderObject:object withTag:self usingBlock:^(id object){
-            
-            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-            
-            BOOL HTMLSafe = NO;
-            NSError *renderingError = nil;
-            NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
-            
-            if (rendering) {
+        
+        // 1. Evaluate expression
+        
+        id object;
+        if (![_expression evaluateInContext:context value:&object error:error]) {
+            return NO;
+        }
+        
+        
+        // 2. Let tagDelegates observe and alter the object
+        
+        for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
+            if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
+                object = [delegate mustacheTag:self willRenderObject:object];
+            }
+        }
+        
+        
+        // 3. Render
+    
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        BOOL HTMLSafe = NO;
+        NSError *renderingError = nil;
+        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
+        
+        if (rendering) {
+            if (rendering.length > 0) {
                 if (self.escapesHTML && !HTMLSafe) {
                     rendering = [self escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];
-            } else if (renderingError) {
-                // If rendering is nil, but rendering error is not set,
-                // assume lazy coder, and the intention to render nothing:
-                // Fail if and only if renderingError is explicitely set.
-                if (error) {
-                    *error = [renderingError retain];
-                }
-                success = NO;
             }
-        }];
+        } else if (renderingError) {
+            // If rendering is nil, but rendering error is not set,
+            // assume lazy coder, and the intention to render nothing:
+            // Fail if and only if renderingError is explicitely set.
+            if (error) {
+                *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+            }
+            success = NO;
+        }
+        
+        
+        // 4. tagDelegates clean up
+        
+        for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
+            if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
+                [delegate mustacheTag:self didRenderObject:object];
+            }
+        }
     }
     
-    if (!success && error) [*error autorelease];
+    if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
     return success;
 }
 

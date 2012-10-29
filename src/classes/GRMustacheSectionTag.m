@@ -77,11 +77,6 @@
     return buffer;
 }
 
-- (BOOL)escapesHTML
-{
-    return YES;
-}
-
 - (NSString *)innerTemplateString
 {
     return [_templateString substringWithRange:_innerRange];
