@@ -31,16 +31,16 @@ GRMustacheRendering protocol
 
 This protocol declares the method that all rendering objects must implement. NSArray does implement it, so does NSNumber, and NSString. Your objects can, as well:
 
-    ```objc
-    @protocol GRMustacheRendering <NSObject>
+```objc
+@protocol GRMustacheRendering <NSObject>
 
-    - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
-                               context:(GRMustacheContext *)context
-                              HTMLSafe:(BOOL *)HTMLSafe
-                                 error:(NSError **)error;
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
+                           context:(GRMustacheContext *)context
+                          HTMLSafe:(BOOL *)HTMLSafe
+                             error:(NSError **)error;
 
-    @end
-    ```
+@end
+```
 
 - The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
 
@@ -52,12 +52,12 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 You may declare and implement your own conforming classes. The `+[GRMustache renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
 
-    ```objc
-    id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
-    {
-        return @"I'm rendered!";
-    }];
-    ```
+```objc
+id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    return @"I'm rendered!";
+}];
+```
 
 Examples
 --------
@@ -74,31 +74,31 @@ Let's write a rendering object which wraps a section in a `<strong>` HTML tag:
 
 `Render.m`:
 
-    ```objc
-    id strong = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
-    {
-        // First perform a raw rendering of the tag, using its
-        // `renderContentWithContext:HTMLSafe:error` method.
-        //
-        // We'll get `Arthur is awesome.`
-        
-        NSString *rawRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+```objc
+id strong = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    // First perform a raw rendering of the tag, using its
+    // `renderContentWithContext:HTMLSafe:error` method.
+    //
+    // We'll get `Arthur is awesome.`
     
-        // Return the raw rendering, wrapped in a <strong> HTML tag:
-        
-        return [NSString stringWithFormat:@"<strong>%@</strong>", rawRendering];
-    }];
+    NSString *rawRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
 
-    id data = @{
-        @"name": @"Arthur",
-        @"strong": strong,
-    };
+    // Return the raw rendering, wrapped in a <strong> HTML tag:
+    
+    return [NSString stringWithFormat:@"<strong>%@</strong>", rawRendering];
+}];
 
-    NSString *rendering = [GRMustacheTemplate renderObject:data
-                                              fromResource:@"Document"
-                                                    bundle:nil
-                                                     error:NULL];
-    ```
+id data = @{
+    @"name": @"Arthur",
+    @"strong": strong,
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
 
 Final rendering:
 
@@ -115,36 +115,247 @@ Let's write a rendering object that wraps a section in a HTML link. The URL of t
 
 `Render.m`:
 
-    ```objc
-    id link = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error)
-    {
-        // Build an alternate template string by wrapping the inner content of
-        // the section in a `<a>` HTML tag:
-        //
-        // We'll get `<a href="{{url}}">{{firstName}} {{lastName}}</a>`
-        
-        NSString *innerTemplateString = tag.innerTemplateString;
-        NSString *format = @"<a href=\"{{url}}\">%@</a>";
-        NSString *templateString = [NSString stringWithFormat:format, innerTemplateString];
-        
-        // Build a new template, and return its rendering:
-        
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-        return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-    }];
+```objc
+id link = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    // Build an alternate template string by wrapping the inner content of
+    // the section in a `<a>` HTML tag:
+    //
+    // We'll get `<a href="{{url}}">{{firstName}} {{lastName}}</a>`
     
-    id data = @{
-        @"firstName": @"Orson",
-        @"lastName": @"Welles",
-        @"url": @"/people/1",
-        @"link": link,
-    };
+    NSString *innerTemplateString = tag.innerTemplateString;
+    NSString *format = @"<a href=\"{{url}}\">%@</a>";
+    NSString *templateString = [NSString stringWithFormat:format, innerTemplateString];
     
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromResource:@"Document" bundle:nil error:NULL];
-    ```
+    // Build a new template, and return its rendering:
+    
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+}];
+
+id data = @{
+    @"firstName": @"Orson",
+    @"lastName": @"Welles",
+    @"url": @"/people/123",
+    @"link": link,
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
 
 Final rendering:
 
-    <a href="/people/1">Orson Welles</a>
+    <a href="/people/123">Orson Welles</a>
+
+
+### Dynamic partials, take 1
+
+When a `{{> name }}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
+
+Such partials are *hard-coded*.
+
+You can still choose the rendered partial at runtime, with simple variable tags:
+
+`Document.mustache`:
+
+    {{#items}}
+    - {{link}}
+    {{/items}}
+
+`Movie.mustache`:
+
+    <a href="{{url}}">{{title}}</a>
+
+`Person.mustache`:
+
+    <a href="{{url}}">{{firstName}} {{lastName}}</a>
+
+`Render.m`
+
+```objc
+id data = @{
+    @"items": @[
+        @{
+            @"title": @"Citizen Kane",
+            @"url":@"/movies/321",
+            @"link": [GRMustacheTemplate templateFromResource:@"Movie" bundle:nil error:nil],
+        },
+        @{
+            @"firstName": @"Orson",
+            @"lastName": @"Welles",
+            @"url":@"/people/123",
+            @"link": [GRMustacheTemplate templateFromResource:@"Person" bundle:nil error:nil],
+        },
+    ],
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    - <a href="/movies/123">Citizen Kane</a>
+    - <a href="">Orson Welles</a>
+
+We haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
+
+
+### Dynamic partials, take 2: objects that "render themselves"
+
+Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
+
+`Document.mustache`
+
+    {{movie}}
+
+`Movie.mustache`
+
+    {{title}} by {{director}}
+    
+`Person.mustache`
+
+    {{firstName}} {{lastName}}
+
+`Render.m`
+
+```objc
+Person *director = [Person personWithFirstName:@"Orson" lastName:@"Welles"];
+Movie *movie = [Movie movieWithTitle:@"Citizen Kane" director:director];
+id data = @{ @"movie": movie };
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    &lt;Movie: 0x1011052a0&gt;
+
+Oops. GRMustache is written in Objective-C, not Ruby: there is no built-in automagic rendering of an object with a partial, through some conversion from a class name to a partial name.
+
+We have to explicitely have our Movie and Person classes render with their dedicated Movie.mustache and Person.mustache partials:
+
+(Of course, you can write automagic code in your own application.)
+
+```objc
+// Declare categories on our classes so that they conform to the
+// GRMustacheRendering protocol:
+
+@interface Movie(GRMustache)<GRMustacheRendering>
+@end
+
+@interface Person(GRMustache)<GRMustacheRendering>
+@end
+
+
+// Now implement the protocol:
+
+@implementation Movie(GRMustache)
+
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    // Extract the "Movie.mustache" partial from the original templateRepository
+    GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Movie" error:NULL];
+
+    // Add self to the top of the context stack, so that the partial can access
+    // our keys
+    context = [context contextByAddingObject:self];
+
+    // Return the rendering of the partial
+    return [partial renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+}
+
+@end
+
+@implementation Person(GRMustache)
+
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    // Extract the "Movie.mustache" partial from the original templateRepository
+    GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Person" error:NULL];
+
+    // Add self to the top of the context stack, so that the partial can access
+    // our keys
+    context = [context contextByAddingObject:self];
+
+    // Return the rendering of the partial
+    return [partial renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+}
+
+@end
+```
+
+Final rendering:
+
+    Citizen Kane by Orson Welles
+
+### Render collections of objects
+
+Using the same Movie and Person class introduced above, we can easily render a list of movies:
+
+`Document.mustache`
+
+    {{movies}}  {{! one movie is not enough }}
+
+`Movie.mustache`
+
+    {{title}} by {{director}}
+    
+`Person.mustache`
+
+    {{firstName}} {{lastName}}
+
+`Render.m`
+
+```objc
+id data = @{
+    @"movies": @[
+        [Movie movieWithTitle:@"Citizen Kane"
+                     director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
+        [Movie movieWithTitle:@"Some Like It Hot"
+                     director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
+    ]
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    Citizen Kane by Orson Welles
+    Some Like It Hot by Billy Wilder
+
+We have simply used the fact that arrays render the concatenation of their items.
+
+
+Compatibility with other Mustache implementations
+-------------------------------------------------
+
+The [Mustache specification](https://github.com/mustache/spec) does not have the concept of "rendering objects".
+
+However, many of the techniques seen above can be compared to "Mustache lambdas".
+
+You *can* write specification-compliant "Mustache lambdas" with rendering objects. However those are more versatile.
+
+**As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use `GRMustacheRendering` with great care.**
+
+
+Sample code
+-----------
+
+The [localization.md](sample_code/localization.md) sample code uses the `GRMustacheRendering` protocol for localizing portions of template.
+
+The [indexes.md](sample_code/indexes.md) sample code uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 
 [up](../../../../GRMustache#documentation), [next](delegate.md)
