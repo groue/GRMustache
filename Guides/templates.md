@@ -3,7 +3,7 @@
 Templates
 =========
 
-You'll learn here how to load, and render templates. [Guides/runtime.md](runtime.md) will talk about about what happens *during* the rendering itself.
+You'll learn here how to load, and render templates. The [Runtime Guide](runtime.md) talks about what happens *during* the rendering itself.
 
 Errors
 ------
@@ -13,7 +13,7 @@ Not funny, but those happens.
 Once and for all: GRMustache methods may return errors whose domain is `GRMustacheErrorDomain`, and error codes interpreted with the `GRMustacheErrorCode` enumeration:
 
 ```objc
-extern NSString* const GRMustacheErrorDomain;
+extern NSString * const GRMustacheErrorDomain;
 
 typedef enum {
     GRMustacheErrorCodeParseError,
