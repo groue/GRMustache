@@ -67,15 +67,12 @@ The shortest way to render a template is to mix a literal template string and a 
 #import "GRMustache.h"
 
 // Render "Hello Arthur!"
-
-NSString *templateString = @"Hello {{name}}!";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-
-NSDictionary *person = @{ @"name": @"Arthur" };
-NSString *rendering = [template renderObject:person error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:@{ @"name": @"Arthur" }
+                                            fromString:@"Hello {{name}}!"
+                                                 error:NULL];
 ```
 
-`+[GRMustacheTemplate templateFromString:error:]` and `-[GRMustacheTemplate renderObject:error:]` are documented in the [Templates Guide](templates.md).
+`+[GRMustacheTemplate renderObject:fromString:error:]` is documented in the [Templates Guide](templates.md).
 
 ### Rendering model objects from template resources
 
@@ -85,18 +82,18 @@ However, your templates will often be stored as *resources* in your application 
 #import "GRMustache.h"
 
 // Render a profile document from the `Profile.mustache` resource:
-
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
-
 Person *person = [Person personWithName:@"Arthur"];
-NSString *profile = [template renderObject:person error:NULL];
+NSString *profile = [GRMustacheTemplate renderObject:person
+                                        fromResource:@"Profile"
+                                              bundle:nil
+                                               error:NULL];
 ```
 
-`+[GRMustacheTemplate templateFromResource:bundle:error:]` and `-[GRMustacheTemplate renderObject:error:]` are documented in the [Templates Guide](templates.md).
+`+[GRMustacheTemplate renderObject:fromResource:bundle:error:]` is documented in the [Templates Guide](templates.md).
 
 ### Reusing templates
 
-You will spare CPU cycles by reusing template objects:
+You will spare CPU cycles by creating and reusing template objects:
 
 ```objc
 #import "GRMustache.h"
@@ -104,9 +101,8 @@ You will spare CPU cycles by reusing template objects:
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
 
 // Render ad nauseam
-NSString *arthurProfile = [template renderObject:arthur];
-NSString *barbieProfile = [template renderObject:barbie];
-NSString *craigProfile = [template renderObject:craig];
+NSString *arthurProfile = [template renderObject:arthur error:NULL];
+NSString *barbaraProfile = [template renderObject:barbara error:NULL];
 ```
 
 `+[GRMustacheTemplate templateFromResource:bundle:error:]` and `-[GRMustacheTemplate renderObject:error:]` are documented in the [Templates Guide](templates.md).
