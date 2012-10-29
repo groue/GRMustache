@@ -5,7 +5,7 @@ GRMustache runtime
 
 ## Overview
 
-Basically, there are only two methods and two protocol that you have to care about when providing data to GRMustache:
+Basically, there are only two methods and two protocols that you have to care about when providing data to GRMustache:
 
 - `valueForKey:` is the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) method, that GRMustache invokes when looking for the data that will be rendered. Basically, for a `{{name}}` tag to be rendered, all you need to provide is an NSDictionary with the `@"name"` key, or an object declaring the `name` property.
 
@@ -35,15 +35,15 @@ NSString *rendering = [[GRMustacheTemplate templateFromString:templateString err
 
 ## In Detail
 
-- [context_stack.md](runtime/context_stack.md)
+- [Context Stack Guide](runtime/context_stack.md)
 
     This guide digs in the key lookup mechanism: how does Mustache find the object that should be rendered by a `{{ name }}` tag?
     
-- [loops.md](runtime/loops.md)
+- [Loops Guide](runtime/loops.md)
     
     Learn how to render template sections as many times as there are objects in enumerable objects such as arrays.
     
-- [booleans.md](runtime/booleans.md)
+- [Booleans Guide](runtime/booleans.md)
 
     Control whether a Mustache section should render or not.
 

@@ -152,10 +152,11 @@ You can, for instance, provide default rendering for missing values:
 
 As stated above, when a section renders an object that conforms to the `GRMustacheTagDelegate` protocol, this object observes the rendering of all tags inside the section.
 
-The [localization.md](sample_code/localization.md) sample code will give us an example, but let's have fun with numbers, and have Mustache format all numbers in a section attached to a `NSNumberFormatter` instance:
+The [Localization Sample Code](sample_code/localization.md) will give us an example, but let's have fun with numbers, and have Mustache format all numbers in a section attached to a `NSNumberFormatter` instance:
 
 ```objc
-// Have NSNumberFormatter conform to the GRMustacheTagDelegate protocol, so that // an instance can format all numbers in a section:
+// Have NSNumberFormatter conform to the GRMustacheTagDelegate protocol, so that
+// an instance can format all numbers in a section:
 @interface NSNumberFormatter(Document)<GRMustacheTagDelegate>
 @end
 
@@ -213,7 +214,7 @@ The [Mustache specification](https://github.com/mustache/spec) does not have the
 Sample code
 -----------
 
-The [localization.md](sample_code/localization.md) sample code uses tag delegate for localizing portions of a template.
+The [Localization Sample Code](sample_code/localization.md) uses tag delegates for localizing portions of a template.
 
 
 [up](../../../../GRMustache#documentation), [next](rendering_objects.md)
