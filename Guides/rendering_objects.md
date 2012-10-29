@@ -108,7 +108,7 @@ Final rendering:
 
 Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
 
-The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context.
+The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context. It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it.
 
 Your rendering objects can thus delegate their rendering to the tag they are given. They can render the tag once or many times:
 
@@ -187,6 +187,15 @@ Final rendering:
 
     <a href="/people/123">Orson Welles</a>
 
+**What have we learnt here?**
+
+Again, variable tags such as `{{ name }}` don't have much inner content, but section tags do: `{{# name }} inner content {{/ name }}`.
+
+The `innerTemplateString` property returns the raw content of the section, with Mustache tags left untouched.
+
+You can derive new template strings from this raw content, even by appending new tags to it (the `{{url}}` tag, above).
+
+From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context (and sets the `HTMLSafe` boolean for you, so that you do definitely not have to worry about it).
 
 ### Dynamic partials, take 1
 
@@ -241,6 +250,10 @@ Final rendering:
     - <a href="">Orson Welles</a>
 
 We haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
+
+**What have we learnt here?**
+
+Not much. Let's say a handy technique.
 
 
 ### Dynamic partials, take 2: objects that "render themselves"
