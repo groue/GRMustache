@@ -87,7 +87,8 @@ typedef enum {
  * The literal and unprocessed inner content of the tag, the `...` in
  * `{{# name }}...{{/}}`.
  *
- * Is is nil for variable tags such as `{{ name }}`.
+ * Variable tags such as `{{ name }}` have no inner content: their inner
+ * template string is the empty string.
  */
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
