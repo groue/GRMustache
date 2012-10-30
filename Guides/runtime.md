@@ -57,7 +57,7 @@ The section `{{# condition }}...{{/ condition }}` renders or not, depending on t
 
 GRMustache considers as false the following values, and only those:
 
-- `nil` and missing KVC keys
+- `nil` and missing [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) keys
 - `[NSNull null]`
 - `NSNumber` instances whose `boolValue` method returns `NO`
 - the empty string `@""`
