@@ -19,7 +19,7 @@ GRMustache has recently been suffering of overengineering and API bloat. GRMusta
 
 **New rendering engine behavior**:
 
-- The sections of overridable partials behave more like Ruby on Rails' `<%= content_for(:foo) do %>...<% end %>`: multiple overriding sections are now concatenated, when GRMustache 5 used to render the last one only. See the [Partials Guide](Guides/partials.md).
+- The sections of overridable partials behave more like Ruby on Rails' `<% content_for(:foo) do %>...<% end %>`: multiple overriding sections are now concatenated, when GRMustache 5 used to render the last one only. See the [Partials Guide](Guides/partials.md).
 
 - [Filters](Guides/filters.md) are no longer provided in a separate container (the `renderObject:withFilters:` method is removed). All objects that enter the context stack can now provide filters (and supersede filters defined in parent contexts). You may want to check the [Protected Contexts Guide](Guides/protected_contexts.md) if you want to protect your filter keys.
 
