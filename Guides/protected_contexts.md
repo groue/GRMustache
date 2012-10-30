@@ -59,4 +59,13 @@ template.baseContext = [template.baseContext contextByAddingProtectedObject:prot
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
+
+Compatibility with other Mustache implementations
+-------------------------------------------------
+
+The [Mustache specification](https://github.com/mustache/spec) does not have any concept of "protected objects".
+
+**If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use protected objects with great care.**
+
+
 [up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
