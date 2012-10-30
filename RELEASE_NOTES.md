@@ -3,6 +3,26 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.0.0
+
+### Major refactoring and simplification
+
+GRMustache has recently been suffering of overengineering and API bloat. GRMustache 6 drastically reduces the surface of the interface.
+
+Removed APIs:
+
+- `GRMustacheDynamicPartial`, `GRMustacheProxy`, `GRMustacheSectionTagRenderingContext`, `GRMustacheVariableTagHelper`, and their companion classes have all been replaced by `GRMustacheRendering`, covered in the [Rendering Objects Guide](Guides/rendering_objects.md).
+
+- `GRMustacheInvocation` and `GRMustacheTemplateDelegate` have been replaced by `GRMustacheTagDelegate`, covered in the [Tag Delegates Guide](Guides/rendering_objects.md).
+
+- The `GRMustacheTemplate` and `GRMustacheTemplateRepository` classes have lost many methods that used to cripple the autocompletion menu of Xcode. All removed shortcut are still eventually available through template repositories.
+
+New rendering engine behavior:
+
+- The sections of overridable partials behave more like Ruby on Rails' `<%= content_for(:foo) do %>...<% end %>`: multiple overriding sections are now concatenated, when GRMustache 5 used to render the last one only. See the [Partials Guide](Guides/partials.md).
+
+- [Filters](Guides/filters.md) are no longer provided in a separate container (the `renderObject:withFilters:` method is removed). All objects that enter the context stack can now provide filters (and supersede filters defined in parent contexts). You may want to check the [Protected Contexts Guide](Guides/protected_contexts.md) if you want to protect your filter keys.
+
 
 ## v5.5.2
 
