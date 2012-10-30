@@ -40,6 +40,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * The GRMustacheContext maintains the following stacks:
  *
  * - a context stack,
+ * - a protected context stack,
  * - a delegate stack,
  * - a template override stack.
  *
@@ -52,6 +53,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  */
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
+    NSArray *_protectedContextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
@@ -96,7 +98,10 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 + (id)context GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheContext.h
-- (GRMustacheContext *)contextByAddingObject:(id)contextObject GRMUSTACHE_API_PUBLIC;
+- (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheContext.h
+- (GRMustacheContext *)contextByAddingProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;

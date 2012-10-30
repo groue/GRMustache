@@ -41,6 +41,7 @@
  */
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
+    NSArray *_protectedContextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
@@ -59,6 +60,21 @@
  * @since v6.0
  */
 - (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Returns a new rendering context that is the copy of the receiver, and the
+ * given object added at the top of the protected context stack.
+ *
+ * Unlike contextByAddingObject:, this method does not add the object to the
+ * tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.
+ *
+ * @param object  An object
+ *
+ * @return A new rendering context.
+ *
+ * @since v6.0
+ */
+- (GRMustacheContext *)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the

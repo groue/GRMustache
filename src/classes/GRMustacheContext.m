@@ -40,7 +40,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)objectIsTagDelegate:(id)object;
 
-- (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
+- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 
 + (void)setupPreventionOfNSUndefinedKeyException;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
@@ -77,6 +77,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 - (void)dealloc
 {
     [_contextStack release];
+    [_protectedContextStack release];
     [_delegateStack release];
     [_templateOverrideStack release];
     [super dealloc];
@@ -89,13 +90,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 + (id)context
 {
-    static GRMustacheContext *instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-        instance = [[self alloc] initWithContextStack:contextStack delegateStack:nil templateOverrideStack:nil];
-    });
-    return instance;
+    NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
+    return [[[self alloc] initWithContextStack:contextStack protectedContextStack:nil delegateStack:nil templateOverrideStack:nil] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
@@ -106,23 +102,34 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     NSArray *delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:tagDelegate] : [NSArray arrayWithObject:tagDelegate];
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
-- (GRMustacheContext *)contextByAddingObject:(id)contextObject
+- (GRMustacheContext *)contextByAddingObject:(id)object
 {
-    if (contextObject == nil) {
+    if (object == nil) {
         return self;
     }
     
-    NSArray *contextStack = _contextStack ? [_contextStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
+    NSArray *contextStack = _contextStack ? [_contextStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     
     NSArray *delegateStack = _delegateStack;
-    if ([GRMustacheContext objectIsTagDelegate:contextObject]) {
-        delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:contextObject] : [NSArray arrayWithObject:contextObject];
+    if ([GRMustacheContext objectIsTagDelegate:object]) {
+        delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     }
     
-    return [[[GRMustacheContext alloc] initWithContextStack:contextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:contextStack protectedContextStack:_protectedContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+}
+
+- (GRMustacheContext *)contextByAddingProtectedObject:(id)object
+{
+    if (object == nil) {
+        return self;
+    }
+    
+    NSArray *protectedContextStack = _protectedContextStack ? [_protectedContextStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
+    
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:protectedContextStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
@@ -133,7 +140,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     NSArray *templateOverrideStack = _templateOverrideStack ? [_templateOverrideStack arrayByAddingObject:templateOverride] : [NSArray arrayWithObject:templateOverride];
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
 }
 
 - (id)currentContextValue
@@ -145,6 +152,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 - (id)contextValueForKey:(NSString *)key
 {
     // top of the stack is first object
+    for (id contextObject in [_protectedContextStack reverseObjectEnumerator]) {
+        id value = [GRMustacheContext valueForKey:key inObject:contextObject];
+        if (value != nil) { return value; }
+    }
     for (id contextObject in [_contextStack reverseObjectEnumerator]) {
         id value = [GRMustacheContext valueForKey:key inObject:contextObject];
         if (value != nil) { return value; }
@@ -236,11 +247,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (id)initWithContextStack:(NSArray *)contextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
+- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
 {
     self = [super init];
     if (self) {
         _contextStack = [contextStack retain];
+        _protectedContextStack = [protectedContextStack retain];
         _delegateStack = [delegateStack retain];
         _templateOverrideStack = [templateOverrideStack retain];
     }
