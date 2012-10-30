@@ -62,10 +62,7 @@ Loading templates:
 
 Rendering templates:
 
-- [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates: an overview
-- [runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md): the key lookup in detail.
-- [runtime/booleans.md](GRMustache/blob/master/Guides/runtime/booleans.md): boolean sections.
-- [runtime/loops.md](GRMustache/blob/master/Guides/runtime/loops.md): enumerable sections.
+- [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
 
 Advanced Mustache:
 
@@ -117,11 +114,11 @@ FAQ
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
+    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
 
 - **Q: Why does GRMustache need JRSwizzle?**
 
-    A: GRMustache does not need it. However, *you* may happy having GRMustache [swizzle](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) `valueForUndefinedKey:` in the NSObject and NSManagedObject classes when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`. The use case is described in [Guides/runtime/context_stack.md](GRMustache/blob/master/Guides/runtime/context_stack.md).
+    A: GRMustache does not need it. However, *you* may happy having GRMustache [swizzle](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) `valueForUndefinedKey:` in the NSObject and NSManagedObject classes when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
 
 What other people say
 ---------------------

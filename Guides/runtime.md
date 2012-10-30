@@ -25,9 +25,7 @@ Let's have a precise look at the rendering of the `{{ count }}` tag.
 
 1. First the `count` expression is evaluated. This evaluation is based on a key lookup mechanism based on the invocation of `valueForKey:` on your data object. Here we get an NSNumber of value 2.
 
-2. Tag delegates enter the game.
-    
-    Those objects are covered in the [Tag Delegates Guide](delegate.md).
+2. Tag delegates enter the game. Those objects are covered in the [Tag Delegates Guide](delegate.md).
 
     Here, our pirate unilateraly decides that "arrr, lost my" should be rendered instead of the number 2.
 
