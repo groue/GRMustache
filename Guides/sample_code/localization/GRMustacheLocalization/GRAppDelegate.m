@@ -40,7 +40,7 @@
         };
         
         NSString *templateString = @"{{#localize}}Hello{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }
@@ -59,7 +59,7 @@
         };
         
         NSString *templateString = @"{{#localize}}{{greeting}}{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }
@@ -76,7 +76,7 @@
         };
         
         NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
-        NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
         NSLog(@"rendering = %@", rendering);
     }

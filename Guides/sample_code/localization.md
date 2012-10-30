@@ -8,7 +8,7 @@ Overview
 
 Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localizes its input.
 
-[Section tag helpers](../section_tag_helpers.md) are our vector. We'll eventually render the following template:
+[Rendering objects](../rendering_objects.md) are our vector. We'll eventually render the following template:
 
     {{#localize}}
         {{name1}} and {{name2}}
@@ -61,36 +61,31 @@ Localizing a template section
 
 **[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
-Let's localize the following template:
+`Document.mustache`:
 
     {{#localize}}Hello{{/localize}}
 
-And render, depending on the current locale:
-
-    Hello
-    Bonjour
-    Hola
-
-We'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionTagHelper` protocol.
-
-The shortest way to build a helper is the `[GRMustacheSectionTagHelper helperWithBlock:]` method. Its block is given a `GRMustacheSectionTagRenderingContext` object whose `innerTemplateString` property perfectly suits our needs:
+`Render.m`:
 
 ```objc
 id data = @{
-    @"localize": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
-        return NSLocalizedString(context.innerTemplateString, nil);
+    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+        return NSLocalizedString(tag.innerTemplateString, nil);
     }]
 };
 
-NSString *templateString = @"{{#localize}}Hello{{/localize}}";
-
-// Bonjour, Hola, Hello
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
                                                  error:NULL];
 ```
 
-`GRMustacheSectionTagHelper` and `innerTemplateString` are documented in the [section_tag_helpers.md](../section_tag_helpers.md) guide.
+Final rendering depends on the current locale:
+
+    Hello
+    Bonjour
+    Hola
+
+`+[GRMustache renderingObjectWithBlock:]` and `-[GRMustacheTag innerTemplateString]` are documented in the [Rendering Objects Guide](../rendering_objects.md).
 
 
 Localizing a value
@@ -98,13 +93,25 @@ Localizing a value
 
 **[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
-Template:
+`Document.mustache`:
 
     {{#localize}}{{greeting}}{{/localize}}
 
-Data:
+`Render.m`:
 
-    { greeting: "Hello" }
+```objc
+id data = @{
+    @"greeting": @"Hello",
+    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+        NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        return NSLocalizedString(rendering, nil);
+    }]
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
 
 Rendering:
 
@@ -112,31 +119,7 @@ Rendering:
     Bonjour
     Hola
 
-Again, we'll execute our localizing code by attaching to the `localize` section an object that conforms to the `GRMustacheSectionTagHelper` protocol.
-
-However, this time, we are not localizing a raw portion of the template. Instead, we are localizing a value that comes from the rendered data.
-
-Fortunately, `GRMustacheSectionTagRenderingContext` objects are able to provide helpers with the rendering of their inner content, `"Hello"` in our case, with their `render` method:
-
-```objc
-id data = @{
-    @"greeting": @"Hello",
-    @"localize": [GRMustacheSectionTagHelper helperWithBlock:^(GRMustacheSectionTagRenderingContext *context) {
-        return NSLocalizedString([context render], nil);
-    }]
-};
-
-NSString *templateString = @"{{#localize}}{{greeting}}{{/localize}}";
-
-// Bonjour, Hola, Hello
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:templateString
-                                                 error:NULL];
-```
-
-You can see this as a "double-pass" rendering: the section is rendered once, in order to turn `{{greeting}}` into `Hello`, and the localization of this string is eventually inserted in the final rendering.
-
-`GRMustacheSectionTagHelper` and `[GRMustacheSectionTagRenderingContext render]` are documented in the [section_tag_helpers.md](../section_tag_helpers.md) guide.
+`+[GRMustache renderingObjectWithBlock:]` and `-[GRMustacheTag renderContentWithContext:HTMLSafe:error:]` are documented in the [Rendering Objects Guide](../rendering_objects.md).
 
 
 Localizing a template section with arguments
