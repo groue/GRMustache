@@ -51,7 +51,7 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 
 All the nice Objective-C classes you know allow for observation and customization through delegates: check out the [Tag Delegates Guide](delegate.md).
 
-Also do not miss the [Rendering Objects Guide](rendering_objects.md) and [Filters Guide](filters.md).
+Also do not miss the [Rendering Objects](rendering_objects.md), [Filters](filters.md), and [Protected Contexts](protected_contexts.md) Guides.
 
 
 Getting started
