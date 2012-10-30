@@ -87,7 +87,7 @@ typedef struct {
  *     [GRMustache preventNSUndefinedKeyExceptionAttack];
  *     #endif
  * 
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime.md
  * 
  * @since v1.7
  */

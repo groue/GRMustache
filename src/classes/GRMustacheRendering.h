@@ -26,10 +26,34 @@
 @class GRMustacheContext;
 @class GRMustacheTag;
 
+/**
+ * The protocol for your own objects that perform custom rendering.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
+ */
 @protocol GRMustacheRendering <NSObject>
 
 /**
- * TODO
+ * This method is invoked when the receiver should be rendered by a Mustache
+ * tag.
+ *
+ * It returns three values: the rendering itself, a boolean that says whether
+ * the rendering is HTML-safe or not, and an eventual error.
+ *
+ * Input values are the tag that should be rendered, and the context object that
+ * represents the current context stack.
+ *
+ * @param tag       The tag to be rendered
+ * @param context   A context for rendering inner tags.
+ * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param error     If there is an error performing the rendering, upon return
+ *                  contains an NSError object that describes the problem.
+ *
+ * @return The rendering of the receiver for the given tag, in the given
+ *         context.
+ *
+ * @see GRMustacheTag
+ * @see GRMustacheContext
  */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
                            context:(GRMustacheContext *)context

@@ -225,7 +225,7 @@
  * Returns the rendering of the receiver, given a rendering context.
  *
  * @param context   A rendering context.
- * @param HTMLSafe  Upon return contains YES if the result is HTML-safe.
+ * @param HTMLSafe  Upon return contains YES (templates renders HTML-safe strings).
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
  *
