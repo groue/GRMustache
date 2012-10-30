@@ -155,8 +155,8 @@ As stated above, when a section renders an object that conforms to the `GRMustac
 The [Localization Sample Code](sample_code/localization.md) will give us an example, but let's have fun with numbers, and have Mustache format all numbers in a section attached to a `NSNumberFormatter` instance:
 
 ```objc
-// Have NSNumberFormatter conform to the GRMustacheTagDelegate protocol, so that
-// an instance can format all numbers in a section:
+// Have NSNumberFormatter conform to the GRMustacheTagDelegate protocol,
+// so that a formatter can format all numbers in a section:
 @interface NSNumberFormatter(Document)<GRMustacheTagDelegate>
 @end
 
