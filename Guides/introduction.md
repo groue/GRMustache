@@ -14,7 +14,7 @@ Features
 - **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
 - **partial tags**, as `{{> partial}}`
 - **comment tag**, as `{{! comment }}`
-- "**set delimiter tags**", as `{{=<% %>=}}`
+- **"set delimiter tags"**, as `{{=<% %>=}}`
 
 ### Overlooked Mustache
 
