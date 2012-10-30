@@ -136,25 +136,14 @@ Actually, writing [filters](../filters.md) that return [rendering objects](../re
      * So let's provide an object that does custom rendering.
      */
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
-       
-        /**
-         * We are going to render the tag once for each item. We need a buffer
-         * to store all those renderings:
-         */
-        
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error)
+    {
         NSMutableString *buffer = [NSMutableString string];
-        
-        
-        /**
-         * For each item...
-         */
         
         [array enumerateObjectsUsingBlock:^(id item, NSUInteger index, BOOL *stop) {
             
-            /**
-             * Have our "specials" keys enter the context stack:
-             */
+            // Have our "specials" keys enter the context stack,
+            // so that the `{{ position }}` tags etc. can render:
             
             id specials = @{
                 @"position": @(index + 1),
@@ -164,26 +153,17 @@ Actually, writing [filters](../filters.md) that return [rendering objects](../re
             GRMustacheContext *itemContext = [context contextByAddingObject:specials];
             
             
-            /**
-             * Have the item itself enter the context stack (so that the `name`
-             * key can render):
-             */
+            // Have the item itself enter the context stack,
+            // so that the `{{ name }}` tag can render:
             
             itemContext = [itemContext contextByAddingObject:item];
             
             
-            /**
-             * Append the item rendering to our buffer:
-             */
+            // Render the item:
             
             NSString *itemRendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
             [buffer appendString:itemRendering];
         }];
-        
-        
-        /**
-         * Done
-         */
         
         return buffer;
     }];
