@@ -57,6 +57,6 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 template.baseContext = [template.baseContext contextByAddingProtectedObject:protectedData];
 ```
 
-Now the `safe` key can not be shadowed: it will always evaluate to the @"important" value.
+Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
 [up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
