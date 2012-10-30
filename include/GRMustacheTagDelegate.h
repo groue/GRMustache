@@ -23,49 +23,53 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheTemplate;
+@class GRMustacheInvocation;
+@class GRMustacheTag;
+
 /**
- * The GRMustacheInvocation class gives you information about the values that
- * are rendered.
- *
- * You'll be given GRMustacheInvocation instances when providing a
- * GRMustacheTemplateDelegate to your templates.
+ * Objects conforming to the GRMustacheTagDelegate protocol can observe and
+ * alter, the rendering of Mustache tags.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * 
- * @see GRMustacheTemplateDelegate
- *
- * @since v1.12
+ * @since v6.0
  */
-@interface GRMustacheInvocation : NSObject {
-@private
-    id _returnValue;
-    id _token;
-}
+@protocol GRMustacheTagDelegate<NSObject>
+@optional
 
 /**
- * Returns a string that describes the invocation.
+ * Sent right before a Mustache tag renders.
  *
- * It contains the original Mustache tag, the line number, and the path, URL, or
- * name of the template, if any.
+ * @param tag     The Mustache tag about to render.
+ * @param object  The object about to be rendered.
  *
- * @return a string that describes the invocation.
+ * @return the object that should be rendered.
  *
- * @since v1.12
+ * @since v6.0
  */
-- (NSString *)description;
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * The return value of the invocation.
+ * Sent right after a Mustache tag has rendered.
  *
- * For instance, the invocation that you would get for a `{{name}}` tag would
- * have the name in the `returnValue` property.
+ * @param tag        The Mustache tag that has just rendered.
+ * @param object     The rendered object.
+ * @param rendering  The actual rendering
  *
- * In a template's delegate methods, you can set the returnValue of an
- * invocation, and alter a template rendering.
- *
- * @see GRMustacheTemplateDelegate
- *
- * @since v1.12
+ * @since v6.0
  */
-@property (nonatomic, retain) id returnValue AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Sent right after a Mustache tag has failed rendering.
+ *
+ * @param tag     The Mustache tag that has just failed rendering.
+ * @param object  The rendered object.
+ * @param error   The error.
+ *
+ * @since v6.0
+ */
+- (void)mustacheTag:(GRMustacheTag *)tag didFailRenderingObject:(id)object withError:(NSError *)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
 @end

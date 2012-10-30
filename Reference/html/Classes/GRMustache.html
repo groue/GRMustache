@@ -12,7 +12,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 5.5 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.0 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -43,6 +43,10 @@
 	<option value="class_methods">Class Methods</option>
 	
 	<option value="//api/name/preventNSUndefinedKeyExceptionAttack">&nbsp;&nbsp;&nbsp;&nbsp;+ preventNSUndefinedKeyExceptionAttack</option>
+	
+	<option value="//api/name/renderingObjectForObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectForObject:</option>
+	
+	<option value="//api/name/renderingObjectWithBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectWithBlock:</option>
 	
 	<option value="//api/name/version">&nbsp;&nbsp;&nbsp;&nbsp;+ version</option>
 	
@@ -79,6 +83,10 @@
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/preventNSUndefinedKeyExceptionAttack">preventNSUndefinedKeyExceptionAttack</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectForObject:">renderingObjectForObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectWithBlock:">renderingObjectWithBlock:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/version">version</a></span></li>
 	
@@ -161,6 +169,21 @@ templates.</p></span>
 	</span>
 	
 	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderingObjectForObject:">+&nbsp;renderingObjectForObject:</a></code>
+		<span class="tooltip"><p>Returns a rendering object that is able to render the argument <em>object</em> for
+the various Mustache tags.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderingObjectWithBlock:">+&nbsp;renderingObjectWithBlock:</a></code>
+		<span class="tooltip"><p>Returns a rendering object that renders with the provided block.</p></span>
+	</span>
+	
+	
 </li>
 						</ul>
 						
@@ -228,8 +251,140 @@ your development configuration, and to wrap the
 
 <h1>endif</h1>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime/context_stack.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime.md</a></p>
 	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustache.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderingObjectForObject:" title="renderingObjectForObject:"></a>
+	<h3 class="subsubtitle method-title">renderingObjectForObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a rendering object that is able to render the argument <em>object</em> for
+the various Mustache tags.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (id&lt;GRMustacheRendering&gt;)renderingObjectForObject:(id)<em>object</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering object able to render the argument.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.0</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If <em>object</em> already conforms to the <a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol, this method
+returns <em>object</em> itself: it is already able to render.</p>
+
+<p>For other values, including <code>nil</code>, this method returns a rendering object
+that provides the default GRMustache rendering.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol</p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustache.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderingObjectWithBlock:" title="renderingObjectWithBlock:"></a>
+	<h3 class="subsubtitle method-title">renderingObjectWithBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a rendering object that renders with the provided block.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (id&lt;GRMustacheRendering&gt;)renderingObjectWithBlock:(NSString *( ^ ) ( GRMustacheTag *tag , GRMustacheContext *context , BOOL *HTMLSafe , NSError **error ))<em>block</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>block</em></dt>
+			<dd><p>A block that returns a tag rendering, provided with a rendering
+context.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering object</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.0</p>
+	</div>
+	
+	
 	
 	
 	
@@ -306,7 +461,7 @@ your development configuration, and to wrap the
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-10-20)</span><br />
+						<p><span class="copyright">&copy; 2012 Gwendal Roué. All rights reserved. (Last updated: 2012-10-30)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
 						

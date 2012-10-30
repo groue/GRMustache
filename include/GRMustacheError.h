@@ -35,15 +35,16 @@ typedef enum {
      *
      * @since v1.0
      */
-    GRMustacheErrorCodeParseError AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER,
+    GRMustacheErrorCodeParseError AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
     /**
      * The error code for not found templates and partials.
      *
      * @since v1.0
      */
-    GRMustacheErrorCodeTemplateNotFound AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER,
-} GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+    GRMustacheErrorCodeTemplateNotFound AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+
+} GRMustacheErrorCode AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 /**
@@ -51,7 +52,7 @@ typedef enum {
  *
  * @since v1.0
  */
-extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER;
+extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 /**
@@ -60,20 +61,10 @@ extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_5_0_AN
  *
  * - a filter is missing.
  * - an object expected to conform to the <GRMustacheFilter> protocol does not.
- * - a GRMustacheDynamicPartial instance can't be rendered because the partial
- *   template is missing.
  *
  * @see GRMustacheFilter protocol
- * @see GRMustacheDynamicPartial
  *
  * @since v5.1
  */
-extern NSString * const GRMustacheRenderingException AVAILABLE_GRMUSTACHE_VERSION_5_1_AND_LATER;
+extern NSString * const GRMustacheRenderingException AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
-/**
- * Deprecated. Use GRMustacheRenderingException instead.
- *
- * @since v4.3
- * @deprecated v5.1
- */
-extern NSString * GRMustacheFilterException AVAILABLE_GRMUSTACHE_VERSION_5_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_5_1;
