@@ -21,14 +21,14 @@ Features
 Those features are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
-- "**Implicit iterator**", aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
-- "**Mustache lambdas**", allow tags such as `{{name}}` and `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at [rendering_objects.md](rendering_objects.md).
+- **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
+- **"Mustache lambdas"**, allow tags such as `{{name}}` and `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at [rendering_objects.md](rendering_objects.md).
 
 ### Language extensions
 
 Genuine Mustache falls short on a few topics. GRMustache implements features that are not in the specification:
 
-- "**filters**", as `{{ uppercase(name) }}`.
+- **"filters"**, as `{{ uppercase(name) }}`.
     
     Filters are documented in the [Filters Guide](filters.md).
 
@@ -36,13 +36,13 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
     
     Use relative or absolute paths to your partial templates in your partial tags: see the [Partials Guide](partials.md).
 
-- "**overridable partials**", aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+- **"overridable partials"**, aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
     Overridable partials are documented in the [Partials Guide](partials.md).
 
 - **loops in variable tags**: in GRMustache, a simple variable tag `{{items}}` renders as the concatenation of the rendering of each individual items. You may think of Ruby on Rails' `<%= render @items %>`.
 
-- "**anchored key paths**", as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
+- **"anchored key paths"**, as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
     If you are not familiar with the "context stack" and the key lookup mechanism, check the [Context Stack Guide](runtime/context_stack.md).
     
