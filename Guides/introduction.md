@@ -44,7 +44,7 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 
 - **"Anchored key paths"**, as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
-    If you are not familiar with the "context stack" and the key lookup mechanism, check the [Context Stack Guide](runtime/context_stack.md).
+    If you are not familiar with the "context stack" and the key lookup mechanism, check the [Runtime Guide](runtime.md).
     
 
 ### Powerful APIs
