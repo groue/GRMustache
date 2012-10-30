@@ -427,14 +427,12 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             BOOL oneItemHasRenderedHTMLUnescaped = NO;
             
             for (id item in self) {
-                // item enters the context as a context object
-                GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
                 // render item
                 id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
                 BOOL itemHasRenderedHTMLSafe = NO;
                 NSError *itemRenderingError = nil;
-                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag context:itemContext HTMLSafe:&itemHasRenderedHTMLSafe error:&itemRenderingError];
+                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag context:context HTMLSafe:&itemHasRenderedHTMLSafe error:&itemRenderingError];
                 
                 if (rendering)
                 {
