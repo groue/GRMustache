@@ -52,30 +52,30 @@ Documentation
 
 Introduction:
 
-- [introduction.md](GRMustache/blob/master/Guides/introduction.md): a tour of the library features, and most common use cases.
+- [Introduction](GRMustache/blob/master/Guides/introduction.md): a tour of the library features, and most common use cases.
 
 Loading templates:
 
-- [templates.md](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
-- [partials.md](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
-- [templates_repositories.md](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
+- [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
+- [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
+- [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
 
 Rendering templates:
 
-- [runtime.md](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
+- [Runtime](GRMustache/blob/master/Guides/runtime.md): how to provide data to templates
 
 Advanced Mustache:
 
-- [filters.md](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
-- [delegate.md](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
-- [rendering_objects.md](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
+- [Filters](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
+- [Tag Delegates](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
+- [Rendering Objects](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
 
 ### Sample code
 
-- [layout template](GRMustache/tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
-- [number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
-- [indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- [localization.md](GRMustache/blob/master/Guides/sample_code/localization.md): how to localize portions of your templates
+- [Layout](GRMustache/tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
+- [Number Formatting](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
+- [Collection Indexes](GRMustache/blob/master/Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
+- [Localization](GRMustache/blob/master/Guides/sample_code/localization.md): how to localize portions of your templates
 
 ### Reference
 
@@ -83,34 +83,34 @@ Advanced Mustache:
 
 ### Internals
 
-- [forking.md](GRMustache/blob/master/Guides/forking.md): the forking guide tells you everything about GRMustache organization.
+- [Forking](GRMustache/blob/master/Guides/forking.md): the forking guide tells you everything about GRMustache organization.
 
 FAQ
 ---
 
 - **Q: How do I render array indexes?**
     
-    A: Check [Guides/sample_code/indexes.md](GRMustache/blob/master/Guides/sample_code/indexes.md)
+    A: Check the [Collection Indexes Sample Code](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
 - **Q: How do I format numbers and dates?**
     
-    A: Check [Guides/sample_code/number_formatting.md](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+    A: Check the [Number Formatting Sample Code](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
 - **Q: How do I render partial templates whose name is only known at runtime?**
 
-    A: Check [Guides/variable_tag_helpers.md](GRMustache/blob/master/Guides/variable_tag_helpers.md)
+    A: Check the [Rendering Objects Guide](GRMustache/blob/master/Guides/variable_tag_helpers.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: Check [Guides/partials.md](GRMustache/blob/master/Guides/partials.md), and the [sample Xcode project](GRMustache/tree/master/Guides/sample_code/layout).
+    A: Check the [Partials Guide](GRMustache/blob/master/Guides/partials.md), and the [Layout Sample Code](GRMustache/tree/master/Guides/sample_code/layout).
 
 - **Q: How do I localize templates?**
 
-    A: Check [Guides/sample_code/localization.md](GRMustache/blob/master/Guides/sample_code/localization.md)
+    A: Check the [Localization Sample Code](GRMustache/blob/master/Guides/sample_code/localization.md)
 
 - **Q: How do I render default values for missing keys?**
 
-    A: Check [Guides/delegate.md](GRMustache/blob/master/Guides/delegate.md).
+    A: Check the [Tag Delegate Guide](GRMustache/blob/master/Guides/delegate.md).
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
@@ -150,7 +150,7 @@ I wish somebody would review my non-native English, and clean up the guides, if 
 Forking
 -------
 
-Please fork. You'll learn useful information in [Guides/forking.md](GRMustache/blob/master/Guides/forking.md).
+Please fork. You'll learn useful information in the [Forking Guide](GRMustache/blob/master/Guides/forking.md).
 
 
 License
