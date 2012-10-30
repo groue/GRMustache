@@ -84,9 +84,6 @@ id percentFilters = [[PercentFilter alloc] init];
 The protocol comes with a `GRMustacheFilter` class, which provides a convenient method for building a filter without implementing a full class that conforms to the protocol:
 
 ```objc
-NSString *templateString = @"Enjoy your {{ percent(gain) }} productivity bump!";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-
 id data = @{
     @"gain": @0.5,
     @"percent": [GRMustacheFilter filterWithBlock:^id(id object) {
@@ -97,7 +94,10 @@ id data = @{
 };
 
 // Enjoy your 50% productivity bump!
-NSString *rendering = [template renderObject:data error:NULL];
+NSString *templateString = @"Enjoy your {{ percent(gain) }} productivity bump!";
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
 ```
 
 Variadic filters
@@ -107,15 +107,18 @@ A *variadic filter* is a filter that accepts a variable number of arguments.
 
 You create a variadic filter with the `variadicFilterWithBlock:` method:
 
-```objc
-NSString *templateString = @"{{#object1}}"
-                           @"    {{ dateFormat(date, format) }}"
-                           @"{{/object1}}\n"
-                           @"{{#object2}}"
-                           @"    {{ dateFormat(date, format) }}"
-                           @"{{/object2}}";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+`Document.mustache`:
 
+    {{#object1}}
+        {{ dateFormat(date, format) }}
+    {{/object1}}
+    {{#object2}}
+        {{ dateFormat(date, format) }}
+    {{/object2}}
+
+`Render.m`:
+
+```objc
 id data = @{
     @"object1": @{
         @"format": @"yyyy-MM-dd 'at' HH:mm",
@@ -138,10 +141,17 @@ id data = @{
     }]
 };
 
-// 2012-10-28 at 17:10
-// 2012-10-28
-NSString *rendering = [template renderObject:data error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
 ```
+
+Final rendering:
+
+    2012-10-28 at 17:10
+    2012-10-28
+
 
 Filters namespaces
 ------------------
