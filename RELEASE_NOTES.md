@@ -11,7 +11,7 @@ GRMustache has recently been suffering of overengineering and API bloat. GRMusta
 
 **Removed APIs**:
 
-- `GRMustacheDynamicPartial`, `GRMustacheProxy`, `GRMustacheSectionTagRenderingContext`, `GRMustacheVariableTagHelper`, and their companion classes have all been replaced by `GRMustacheRendering`, covered in the [Rendering Objects Guide](Guides/rendering_objects.md).
+- `GRMustacheDynamicPartial`, `GRMustacheProxy`, `GRMustacheSectionTagHelper`, `GRMustacheVariableTagHelper`, and their companion classes have all been gathered in the `GRMustacheRendering` protocol, covered in the [Rendering Objects Guide](Guides/rendering_objects.md).
 
 - `GRMustacheInvocation` and `GRMustacheTemplateDelegate` have been replaced by `GRMustacheTagDelegate`, covered in the [Tag Delegates Guide](Guides/rendering_objects.md).
 
