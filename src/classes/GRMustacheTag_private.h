@@ -68,4 +68,10 @@ typedef enum {
  * TODO
  */
 - (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag GRMUSTACHE_API_INTERNAL;
+
 @end

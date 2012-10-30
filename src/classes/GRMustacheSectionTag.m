@@ -24,6 +24,7 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheAccumulatorTag_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering.h"
@@ -82,34 +83,40 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-
-#pragma mark - <GRMustacheTemplateComponent>
-
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
 {
-    // Only {{$...}} section can override components
-    if (_type != GRMustacheTagTypeOverridableSection) {
-        return component;
-    }
-    
-    // {{$...}} sections can only override other sections
-    if (![component isKindOfClass:[GRMustacheSectionTag class]]) {
-        return component;
-    }
-    GRMustacheSectionTag *otherSection = (GRMustacheSectionTag *)component;
+    // In the following situation, the overriden section (self) is replaced by
+    // an accumulator tag initialized with the overriding section:
+    //
+    // layout.mustache:
+    //
+    //   {{$head}}overriden{{/head}}            <- overriden section (self)
+    //
+    // base.mustache:
+    //
+    //   {{<layout}}
+    //     {{>partial1}}
+    //     {{>partial2}}
+    //   {{/}}
+    //
+    // partial1.mustache:
+    //
+    //   {{$head}}head for partial 1{{/head}}   <- overriding section
+    //
+    // partial2.mustache:
+    //
+    //   {{$head}}head for partial 2{{/head}}
+    //
+    // Rendering:
+    //
+    //   head for partial 1
+    //   head for partial 2
+    //
+    // Later, the accumulatorTag will itself be overriden by the section in
+    // partial2. See [GRMustacheAccumulatorTag tagWithOverridingTag:]
 
-    // {{$...}} sections can only override other overridable sections
-    if (otherSection.type != GRMustacheTagTypeOverridableSection) {
-        return otherSection;
-    }
-
-    // {{$...}} sections can only override other sections with the same expression
-    if ([otherSection.expression isEqual:_expression]) {
-        return self;
-    }
-    return otherSection;
+    return [GRMustacheAccumulatorTag accumulatorTagWithTag:overridingTag];
 }
-
 
 #pragma mark - Private
 

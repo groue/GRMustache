@@ -163,8 +163,35 @@
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // default implementation does not override any other component
-    return component;
+    // Only overridable tags can override components
+    if (self.type != GRMustacheTagTypeOverridableSection) {
+        return component;
+    }
+    
+    // Overridable tags can only override other tags
+    if (![component isKindOfClass:[GRMustacheTag class]]) {
+        return component;
+    }
+    GRMustacheTag *otherTag = (GRMustacheTag *)component;
+    
+    // Overridable tags can only override other overridable tags
+    if (otherTag.type != GRMustacheTagTypeOverridableSection) {
+        return otherTag;
+    }
+    
+    // Overridable tags can only override other sections with the same expression
+    if (![otherTag.expression isEqual:_expression]) {
+        return otherTag;
+    }
+    
+    // OK, override otherTag with self
+    return [otherTag tagWithOverridingTag:self];
+}
+
+- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
+{
+    // default: overridingTag replaces self
+    return overridingTag;
 }
 
 
