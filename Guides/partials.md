@@ -155,7 +155,7 @@ In Ruby on Rails, multiple `<% content_for :foo do %>...<% end %>` provide multi
     </body>
     </html>
 
-`Render.m`
+`Render.m`:
 
     NSString *rendering = [GRMustacheTemplate renderObject:nil fromResource:@"article_page" bundle:nil error:NULL];
 
