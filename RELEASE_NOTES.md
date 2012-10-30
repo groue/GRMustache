@@ -9,7 +9,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 GRMustache has recently been suffering of overengineering and API bloat. GRMustache 6 drastically reduces the surface of the interface.
 
-Removed APIs:
+**Removed APIs**:
 
 - `GRMustacheDynamicPartial`, `GRMustacheProxy`, `GRMustacheSectionTagRenderingContext`, `GRMustacheVariableTagHelper`, and their companion classes have all been replaced by `GRMustacheRendering`, covered in the [Rendering Objects Guide](Guides/rendering_objects.md).
 
@@ -17,7 +17,7 @@ Removed APIs:
 
 - The `GRMustacheTemplate` and `GRMustacheTemplateRepository` classes have lost many methods that used to cripple the autocompletion menu of Xcode. All removed shortcut are still eventually available through template repositories.
 
-New rendering engine behavior:
+**New rendering engine behavior**:
 
 - The sections of overridable partials behave more like Ruby on Rails' `<%= content_for(:foo) do %>...<% end %>`: multiple overriding sections are now concatenated, when GRMustache 5 used to render the last one only. See the [Partials Guide](Guides/partials.md).
 
