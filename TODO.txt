@@ -2,4 +2,9 @@
 - document the wrapping technique of GRMustacheIndexes sample code in the section tag helper guide.
 
 - Safe rendering: Introduce contextStack/protectedStack
+- Overridable sections should accumulate content as Rail's content_for.
+- {{#condition}} if {{^condition}} else {{/condition}}
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
+
+- test mustacheTag:didRenderObject:as:
+- test mustacheTag:didFailRenderingObject:withError:
