@@ -191,7 +191,7 @@ The topic is under [discussion](http://github.com/mustache/spec/issues/41) with 
 Sample code
 -----------
 
-Custom filters are the core tool used by the [formatted numbers](sample_code/number_formatting.md) and [collection indexes](sample_code/indexes.md) sample codes. Go check inspiration there.
+Custom filters are used by the [Formatted Numbers](sample_code/number_formatting.md) and [Collection Indexes](sample_code/indexes.md) sample codes. Go check inspiration there.
 
 
 [up](../../../../GRMustache#documentation), [next](delegate.md)
