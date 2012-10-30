@@ -102,13 +102,13 @@ The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of t
 
 Your rendering objects can thus delegate their rendering to the tag they are given. They can render the tag once or many times:
 
-`Document.mustache`
+`Document.mustache`:
 
     {{#twice}}
         Mustache is awesome!
     {{/twice}}
 
-`Render.m`
+`Render.m`:
 
 ```objc
 id data = @{
@@ -212,7 +212,7 @@ You can still choose the rendered partial at runtime, with simple variable tags:
 
     <a href="{{url}}">{{firstName}} {{lastName}}</a>
 
-`Render.m`
+`Render.m`:
 
 ```objc
 id data = @{
@@ -264,7 +264,7 @@ Example: Dynamic partials, take 2
 
     <a href="{{url}}">{{firstName}} {{lastName}}</a>
 
-`Render.m`
+`Render.m`:
 
 ```objc
 id data = @{
@@ -309,19 +309,19 @@ Example: Dynamic partials, take 3: objects that "render themselves"
 
 Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
 
-`Document.mustache`
+`Document.mustache`:
 
     {{movie}}
 
-`Movie.mustache`
+`Movie.mustache`:
 
     {{title}} by {{director}}
     
-`Person.mustache`
+`Person.mustache`:
 
     {{firstName}} {{lastName}}
 
-`Render.m`
+`Render.m`:
 
 ```objc
 Person *director = [Person personWithFirstName:@"Orson" lastName:@"Welles"];
@@ -421,19 +421,19 @@ Example: Render collections of objects
 Using the same Movie and Person class introduced above, we can easily render a list of movies, just as Ruby on Rails's <%= render @movies %>:
 
 
-`Document.mustache`
+`Document.mustache`:
 
     {{movies}}  {{! one movie is not enough }}
 
-`Movie.mustache`
+`Movie.mustache`:
 
     {{title}} by {{director}}
     
-`Person.mustache`
+`Person.mustache`:
 
     {{firstName}} {{lastName}}
 
-`Render.m`
+`Render.m`:
 
 ```objc
 id data = @{

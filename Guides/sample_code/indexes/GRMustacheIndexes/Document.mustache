@@ -1,0 +1,7 @@
+<ul>
+{{# withPosition(people) }}
+  <li class="{{# isOdd }}odd{{/ isOdd }} {{# isFirst }}first{{/ isFirst }}">
+    {{ position }}:{{ name }}
+  </li>
+{{/ withPosition(people) }}
+</ul>

@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2012 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,8 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+#import "GRMustache.h"
+#import "PositionFilter.h"
 
-@interface Document : NSObject
-- (NSString *)render;
+@implementation AppDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    id data = @{
+    @"people": @[
+    @{ @"name": @"Alice" },
+    @{ @"name": @"Bob" },
+    @{ @"name": @"Craig" },
+    ],
+    @"withPosition": [PositionFilter new]
+    };
+    
+    NSString *rendering = [GRMustacheTemplate renderObject:data
+                                              fromResource:@"Document"
+                                                    bundle:nil
+                                                     error:NULL];
+    
+    NSLog(@"rendering = %@", rendering);
+}
+
 @end

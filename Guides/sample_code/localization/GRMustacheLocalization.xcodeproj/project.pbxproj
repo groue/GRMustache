@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5632EF1315E0D55D009EA316 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5632EF1215E0D55D009EA316 /* Cocoa.framework */; };
-		5632EF1D15E0D55D009EA316 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5632EF1B15E0D55D009EA316 /* InfoPlist.strings */; };
 		5632EF1F15E0D55D009EA316 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5632EF1E15E0D55D009EA316 /* main.m */; };
 		5632EF2615E0D55D009EA316 /* GRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5632EF2515E0D55D009EA316 /* GRAppDelegate.m */; };
 		5632EF2915E0D55D009EA316 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5632EF2715E0D55D009EA316 /* MainMenu.xib */; };
@@ -24,7 +23,6 @@
 		5632EF1615E0D55D009EA316 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5632EF1715E0D55D009EA316 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5632EF1A15E0D55D009EA316 /* GRMustacheLocalization-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustacheLocalization-Info.plist"; sourceTree = "<group>"; };
-		5632EF1C15E0D55D009EA316 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5632EF1E15E0D55D009EA316 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5632EF2015E0D55D009EA316 /* GRMustacheLocalization-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GRMustacheLocalization-Prefix.pch"; sourceTree = "<group>"; };
 		5632EF2415E0D55D009EA316 /* GRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRAppDelegate.h; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 			children = (
 				5632EF2715E0D55D009EA316 /* MainMenu.xib */,
 				5632EF1A15E0D55D009EA316 /* GRMustacheLocalization-Info.plist */,
-				5632EF1B15E0D55D009EA316 /* InfoPlist.strings */,
 				5632EF1E15E0D55D009EA316 /* main.m */,
 				5632EF2015E0D55D009EA316 /* GRMustacheLocalization-Prefix.pch */,
 			);
@@ -174,7 +171,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5632EF1D15E0D55D009EA316 /* InfoPlist.strings in Resources */,
 				5632EF2915E0D55D009EA316 /* MainMenu.xib in Resources */,
 				56BF7C5615E0E08F0067308D /* Localizable.strings in Resources */,
 			);
@@ -196,14 +192,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5632EF1B15E0D55D009EA316 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5632EF1C15E0D55D009EA316 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		5632EF2715E0D55D009EA316 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

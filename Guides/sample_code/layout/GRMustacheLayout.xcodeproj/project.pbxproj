@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5667CC4915A1B95F0096B183 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5667CC4815A1B95F0096B183 /* Cocoa.framework */; };
-		5667CC5315A1B95F0096B183 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5667CC5115A1B95F0096B183 /* InfoPlist.strings */; };
 		5667CC5515A1B95F0096B183 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5667CC5415A1B95F0096B183 /* main.m */; };
-		5667CC5915A1B95F0096B183 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 5667CC5715A1B95F0096B183 /* Credits.rtf */; };
 		5667CC5C15A1B95F0096B183 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5667CC5B15A1B95F0096B183 /* AppDelegate.m */; };
 		5667CC5F15A1B95F0096B183 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5667CC5D15A1B95F0096B183 /* MainMenu.xib */; };
 		5667CC6A15A1B99C0096B183 /* layout.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5667CC6915A1B99C0096B183 /* layout.mustache */; };
@@ -27,10 +25,8 @@
 		5667CC4C15A1B95F0096B183 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5667CC4D15A1B95F0096B183 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5667CC5015A1B95F0096B183 /* GRMustacheLayout-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustacheLayout-Info.plist"; sourceTree = "<group>"; };
-		5667CC5215A1B95F0096B183 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5667CC5415A1B95F0096B183 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5667CC5615A1B95F0096B183 /* GRMustacheLayout-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GRMustacheLayout-Prefix.pch"; sourceTree = "<group>"; };
-		5667CC5815A1B95F0096B183 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		5667CC5A15A1B95F0096B183 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5667CC5B15A1B95F0096B183 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5667CC5E15A1B95F0096B183 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -109,11 +105,9 @@
 			isa = PBXGroup;
 			children = (
 				5667CC5015A1B95F0096B183 /* GRMustacheLayout-Info.plist */,
-				5667CC5115A1B95F0096B183 /* InfoPlist.strings */,
 				5667CC5415A1B95F0096B183 /* main.m */,
 				5667CC5D15A1B95F0096B183 /* MainMenu.xib */,
 				5667CC5615A1B95F0096B183 /* GRMustacheLayout-Prefix.pch */,
-				5667CC5715A1B95F0096B183 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -197,8 +191,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5667CC5315A1B95F0096B183 /* InfoPlist.strings in Resources */,
-				5667CC5915A1B95F0096B183 /* Credits.rtf in Resources */,
 				5667CC5F15A1B95F0096B183 /* MainMenu.xib in Resources */,
 				5667CC6A15A1B99C0096B183 /* layout.mustache in Resources */,
 				5667CC6C15A1B9B40096B183 /* header.mustache in Resources */,
@@ -222,22 +214,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		5667CC5115A1B95F0096B183 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5667CC5215A1B95F0096B183 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		5667CC5715A1B95F0096B183 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5667CC5815A1B95F0096B183 /* en */,
-			);
-			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
 		5667CC5D15A1B95F0096B183 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
