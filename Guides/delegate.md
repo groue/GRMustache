@@ -59,7 +59,9 @@ Also: if a section tag `{{# name }}...{{/}}` is provided with an array, its cont
 
 ### Observing the rendering of all tags in a template
 
-Tag delegates can observe the rendering of all tags rendered by a template. Templates have a `tagDelegate` property that you set on this purpose:
+In order to observe the rendering of all tags rendered by a template, you have your tag delegate enter the *base context* of the template.
+
+The base context contains values and tag delegates that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example. Contexts are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
 ```objc
 @interface Document : NSObject<GRMustacheTagDelegate>
@@ -72,7 +74,7 @@ Tag delegates can observe the rendering of all tags rendered by a template. Temp
 {
     NSString *templateString = @"{{greeting}} {{#person}}{{name}}{{/}}!";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.tagDelegate = self;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:self];
     
     id data = @{
         @"greeting": @"Hello",
@@ -121,7 +123,7 @@ You can, for instance, provide default rendering for missing values:
 {
     NSString *templateString = @"{{greeting}} {{#person}}{{name}}{{/}}!";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.tagDelegate = self;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:self];
     
     id data = @{
         @"greeting": @"Hello",
