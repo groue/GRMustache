@@ -10,9 +10,11 @@ Errors
 
 Not funny, but those happens.
 
-Once and for all: GRMustache methods may return errors whose domain is `GRMustacheErrorDomain`, and error codes interpreted with the `GRMustacheErrorCode` enumeration:
+Once and for all: GRMustache methods may return errors, or throw exceptions:
 
 ```objc
+extern NSString * const GRMustacheRenderingException;
+
 extern NSString * const GRMustacheErrorDomain;
 
 typedef enum {
@@ -21,15 +23,9 @@ typedef enum {
 } GRMustacheErrorCode;
 ```
 
-That means that the only errors you'll ever get from GRMustache are parse errors and missing templates errors.
+Errors are returned when templates are missing or could not be parsed.
 
-There are rendering exceptions as well:
-
-```objc
-extern NSString * const GRMustacheRenderingException;
-```
-
-Those exceptions are raised for missing or invalid [filters](filters.md).
+Exceptions are raised for missing or invalid [filters](filters.md).
 
 On-the-fly rendering methods
 ----------------------------
@@ -39,12 +35,13 @@ There are methods for rendering from strings and bundle resources:
 ```objc
 @interface GRMustacheTemplate
 
-// Renders the provided template string.
+// Renders an object with the template string.
 + (NSString *)renderObject:(id)object
                 fromString:(NSString *)templateString
                      error:(NSError **)error;
 
-// Renders the template loaded from a bundle resource of extension "mustache".
+// Renders an object with the template loaded from a bundle resource
+// of extension "mustache".
 + (NSString *)renderObject:(id)object
               fromResource:(NSString *)name
                     bundle:(NSBundle *)bundle   // nil stands for the main bundle
@@ -59,25 +56,25 @@ Error handling follows [Cocoa conventions](https://developer.apple.com/library/i
 Parse-once-and-render-many-times methods
 ----------------------------------------
 
-It's efficient to parse a template once, and then render it as often as needed. There are methods for loading templates from strings, bundle resources, and files:
+You will spare CPU cycles by creating and reusing template objects:
 
 ```objc
 @interface GRMustacheTemplate
 
-// Parses a template string.
+// Loads a template from a template string.
 + (id)templateFromString:(NSString *)templateString
                    error:(NSError **)error;
 
-// Parses a resource of extension "mustache".
+// Loads a template from a resource of extension "mustache".
 + (id)templateFromResource:(NSString *)name
                     bundle:(NSBundle *)bundle  // nil stands for the main bundle
                      error:(NSError **)error;
 
-// Parses a URL
+// Loads a template from a URL
 + (id)templateFromContentsOfURL:(NSURL *)url
                           error:(NSError **)error;
 
-// Parses a file
+// Loads a template from a file
 + (id)templateFromContentsOfFile:(NSString *)path
                            error:(NSError **)error;
 
@@ -105,8 +102,6 @@ The latter method, which takes an array of objects, is helpful when several obje
 More loading options
 --------------------
 
-All methods above load UTF8-encoded templates from disk, with extension "mustache".
-
-They are handy shortcuts. If you have more needs, check the [Template Repositories Guide](template_repositories.md).
+All methods above cover the most common use cases. If you have more needs, check the [Template Repositories Guide](template_repositories.md).
 
 [up](../../../../GRMustache#documentation), [next](partials.md)
