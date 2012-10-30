@@ -6,4 +6,3 @@
 
 - test mustacheTag:didRenderObject:as:
 - test mustacheTag:didFailRenderingObject:withError:
-- test contextByAddingProtectedObject:

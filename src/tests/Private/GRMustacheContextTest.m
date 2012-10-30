@@ -242,4 +242,17 @@
     STAssertNoThrow([context contextValueForKey:@"SelfNSUndefinedKeyException"], nil);
 }
 
+- (void)testContextByAddingProtectedObject
+{
+    GRMustacheContext *context = [GRMustacheContext context];
+    context = [context contextByAddingProtectedObject:@{ @"safe": @"important" }];
+    STAssertEqualObjects([context contextValueForKey:@"safe"], @"important", @"");
+    context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"A" }];
+    STAssertEqualObjects([context contextValueForKey:@"safe"], @"important", @"");
+    STAssertEqualObjects([context contextValueForKey:@"fragile"], @"A", @"");
+    context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"B" }];
+    STAssertEqualObjects([context contextValueForKey:@"safe"], @"important", @"");
+    STAssertEqualObjects([context contextValueForKey:@"fragile"], @"B", @"");
+}
+
 @end
