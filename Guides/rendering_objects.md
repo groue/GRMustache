@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](delegate.md)
+[up](../../../../GRMustache#documentation), [next](protected_contexts.md)
 
 Rendering Objects
 =================
@@ -480,4 +480,4 @@ The [Localization Sample Code](sample_code/localization.md) uses the `GRMustache
 
 The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 
-[up](../../../../GRMustache#documentation), [next](delegate.md)
+[up](../../../../GRMustache#documentation), [next](protected_contexts.md)

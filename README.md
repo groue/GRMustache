@@ -69,6 +69,7 @@ Advanced Mustache:
 - [Filters](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [Tag Delegates](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
 - [Rendering Objects](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
+- [Protected Contexts](GRMustache/blob/master/Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
 
 ### Sample code
 
