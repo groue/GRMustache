@@ -17,47 +17,47 @@
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
 {
     /**
-     * Let's perform a first rendering of the section, invoking
-     * [context render].
+     * Add self as a tag delegate, so that we know when tag will and did render.
+     */
+    context = [context contextByAddingTagDelegate:self];
+    
+    
+    /**
+     * Perform a first rendering of the section tag, that will set
+     * localizableFormat to "Hello %@! Do you know %@?".
      *
-     * This method returns the rendering of the section:
-     * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
-     *
-     * Normally, it would return "Hello Arthur! Do you know Barbara?", which
-     * we could not localize. But we conform to the GRMustacheTemplateDelegate
-     * protocol: in our mustacheTag:willRenderObject: delegate method, we'll
-     * tell GRMustache to render "%@" instead of the actual values "Arthur" and
-     * "Barbara".
-     *
-     * The rendering of the section will thus be "Hello %@! Do you know %@?",
-     * which is a string that is suitable for localization.
-     *
-     * We still need the format arguments to fill the format: "Arthur", and
-     * "Barbara".
-     *
-     * They also be gathered in the tag delegate method, that will fill the
-     * self.formatArguments array, here initialized as an empty array.
+     * Our mustacheTag:willRenderObject: implementation will tell the tags to
+     * render "%@" instead of the regular values, "Arthur" or "Barbara". This
+     * behavior is trigerred by the nil value of self.formatArguments.
      */
     
-    self.formatArguments = [NSMutableArray array];
-    context = [context contextByAddingTagDelegate:self];
+    self.formatArguments = nil;
     NSString *localizableFormat = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
     /**
-     * Let's localize the format.
+     * Perform a second rendering that will fill our formatArguments array with
+     * HTML-escaped tag renderings.
+     *
+     * Our mustacheTag:willRenderObject: implementation will now let the regular
+     * values through ("Arthur" or "Barbara"), so that our
+     * mustacheTag:didRenderObject:as: method can fill self.formatArguments.
+     * This behavior is not the same as the previous one, and is trigerred by
+     * the non-nil value of self.formatArguments.
      */
     
-    NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
+    self.formatArguments = [NSMutableArray array];
+    [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
     /**
-     * Render!
+     * Localize the format, and render.
      *
-     * [NSString stringWithFormat:] unfortunately does not accept an array of
+     * Unfortunately, [NSString stringWithFormat:] does not accept an array of
      * formatArguments to fill the format. Let's support up to 3 arguments:
      */
     
+    NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
     NSString *rendering = nil;
     switch (self.formatArguments.count) {
         case 0:
@@ -92,7 +92,7 @@
     
     
     /**
-     * Cleanup and return the rendering
+     * Cleanup and return
      */
     
     self.formatArguments = nil;
@@ -105,29 +105,37 @@
      * We are only interested in the rendering of variable tags such as
      * {{name}}. We do not want to mess with Mustache handling of boolean
      * sections such as {{#count}}...{{/}}.
-     *
-     * We target variable tags with the interpretation argument:
      */
     
     if (tag.type != GRMustacheTagTypeVariable) {
         return object;
     }
+    
+    /**
+     * We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
+     */
+    
+    if (self.formatArguments) {
+        return object;
+    }
 
-    /**
-     * invocation.returnValue is "Arthur" or "Barbara".
-     *
-     * Fill self.formatArguments so that we have arguments for
-     * [NSString stringWithFormat:].
-     */
-    
-    [self.formatArguments addObject:object ?: [NSNull null]];
-    
-    
-    /**
-     * Render "%@"
-     */
-    
     return @"%@";
+}
+
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
+{
+    /**
+     * Without messing with section tags...
+     */
+    
+    if (tag.type == GRMustacheTagTypeVariable) {
+        
+        /**
+         * ... we behave as stated in renderForMustacheTag:context:HTMLSafe:error:
+         */
+        
+        [self.formatArguments addObject:rendering];
+    }
 }
 
 @end

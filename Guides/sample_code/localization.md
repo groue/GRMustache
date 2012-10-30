@@ -69,7 +69,7 @@ Localizing a template section
 
 ```objc
 id data = @{
-    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return NSLocalizedString(tag.innerTemplateString, nil);
     }]
 };
@@ -103,7 +103,7 @@ Localizing a value
 ```objc
 id data = @{
     @"greeting": @"Hello",
-    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         return NSLocalizedString(rendering, nil);
     }]
@@ -115,7 +115,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-Rendering:
+Final rendering depends on the current locale:
 
     Hello
     Bonjour
@@ -129,20 +129,28 @@ Localizing a template section with arguments
 
 **[Download the code](../../../../tree/master/Guides/sample_code/localization)**
 
-Template:
+`Document.mustache`:
 
     {{#localize}}
         Hello {{name1}}, do you know {{name2}}?
     {{/localize}}
 
-Data:
+`Rendering.m`:
 
-    {
-      name1: "Arthur",
-      name2: "Barbara"
-    }
+```objc
+id data = @{
+    @"name1": @"Arthur",
+    @"name2": @"Barbara",
+    @"localize": [LocalizingHelper new],
+};
 
-Rendering:
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering depends on the current locale:
 
     Hello Arthur, do you know Barbara?
     Bonjour Arthur, est-ce que tu connais Barbara ?
@@ -150,11 +158,11 @@ Rendering:
 
 Before diving in the sample code, let's first describe out strategy:
 
-1. We'll build the following string, the *localizable format*:
+1. When rendering the section, we'll build the *localizable format*:
 
     `Hello %@, do you know %@?`
 
-2. We'll gather the *format arguments*:
+2. We'll also gather the *format arguments*:
     - `Arthur`
     - `Barbara`
     
@@ -170,78 +178,69 @@ Before diving in the sample code, let's first describe out strategy:
 
 The tricky part is building the *localizable format* and extracting the *format arguments*. We could most certainly "manually" parse the inner template string of the section, `Hello {{name1}}, do you know {{name2}}?`. However, we'll take a more robust and reusable path.
 
-The [GRMustacheDelegate](../delegate.md) protocol is a nifty tool: it lets you know what GRMustache is about to render, and replace it with whatever value you want.
+The [GRMustacheTagDelegate](../delegate.md) protocol is a nifty tool: not only does it tell you know what value GRMustache is about to render, but you can also decide what value should eventually be rendered.
 
-This looks like a nice way to build our format arguments and the localizable format in a single strike: instead of letting GRMustache render `Arthur` and `Barbara`, we'll put those values away, and tell the library to render `%@` instead.
+This looks like a nice way to build our format arguments and the localizable format in a single strike: instead of letting `Arthur` and `Barbara` render, we'll instead put those values away, and tell the library to render `%@`.
 
-We'll thus now attach to the `localize` section an object that conforms to *both* the `GRMustacheSectionTagHelper` and `GRMustacheTemplateDelegate` protocols. As in the previous example, we'll perform a "double-pass" rendering: the first rendering will use the delegate facet, build the localizable format, and fill the format arguments. The second rendering will simply mix the format and the arguments.
-
-Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not enough. Let's go for a full class:
+Our `LocalizingHelper` class will thus conform to *both* the `GRMustacheRendering` and `GRMustacheTemplateDelegate` protocols. Now the convenient `[GRMustache renderingObjectWithBlock:]` method is not enough. Let's go for a full class:
 
 ```objc
-@interface LocalizingHelper : NSObject<GRMustacheSectionTagHelper, GRMustacheTemplateDelegate>
-@property (nonatomic, strong) NSMutableArray *formatArguments;
+@interface LocalizingHelper: NSObject<GRMustacheRendering, GRMustacheTagDelegate>
+@property (nonatomic) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizingHelper
 
-/**
- * GRMustacheSectionTagHelper method
- */
-
-- (NSString *)renderForSectionTagInContext:(GRMustacheSectionTagRenderingContext *)context
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
 {
     /**
-     * Let's perform a first rendering of the section, invoking
-     * [context render].
-     *
-     * This method returns the rendering of the section:
-     * "Hello {{name1}}! Do you know {{name2}}?" in our specific example.
-     *
-     * Normally, it would return "Hello Arthur! Do you know Barbara?", which
-     * we could not localize.
-     *
-     * But we are also a GRMustacheTemplateDelegate, and as such, GRMustache
-     * will tell us when it is about to render a value.
-     *
-     * In the template:willInterpretReturnValueOfInvocation:as: delegate method,
-     * we'll tell GRMustache to render "%@" instead of the actual values
-     * "Arthur" and "Barbara".
-     *
-     * The rendering of the section will thus be "Hello %@! Do you know %@?",
-     * which is a string that is suitable for localization.
-     *
-     * We still need the format arguments to fill the format: "Arthur", and
-     * "Barbara".
-     *
-     * They also be gathered in the delegate method, that will fill the
-     * self.formatArguments array, here initialized as an empty array.
+     * Add self as a tag delegate, so that we know when tag will and did render.
      */
-
+    context = [context contextByAddingTagDelegate:self];
+    
+    
+    /**
+     * Perform a first rendering of the section tag, that will set
+     * localizableFormat to "Hello %@! Do you know %@?".
+     *
+     * Our mustacheTag:willRenderObject: implementation will tell the tags to
+     * render "%@" instead of the regular values, "Arthur" or "Barbara". This
+     * behavior is trigerred by the nil value of self.formatArguments.
+     */
+    
+    self.formatArguments = nil;
+    NSString *localizableFormat = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    
+    
+    /**
+     * Perform a second rendering that will fill our formatArguments array with
+     * HTML-escaped tag renderings.
+     *
+     * Our mustacheTag:willRenderObject: implementation will now let the regular
+     * values through ("Arthur" or "Barbara"), so that our
+     * mustacheTag:didRenderObject:as: method can fill self.formatArguments.
+     * This behavior is not the same as the previous one, and is trigerred by
+     * the non-nil value of self.formatArguments.
+     */
+    
     self.formatArguments = [NSMutableArray array];
-    NSString *localizableFormat = [context render]; // triggers delegate callbacks
-
-
+    [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    
+    
     /**
-     * Now localize the format.
-     */
-
-    NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
-
-
-    /**
-     * Render!
+     * Localize the format, and render.
      *
-     * [NSString stringWithFormat:] unfortunately does not accept an array of
+     * Unfortunately, [NSString stringWithFormat:] does not accept an array of
      * formatArguments to fill the format. Let's support up to 3 arguments:
      */
     
+    NSString *localizedFormat = NSLocalizedString(localizableFormat, nil);
     NSString *rendering = nil;
     switch (self.formatArguments.count) {
         case 0:
             rendering = localizedFormat;
             break;
-        
+            
         case 1:
             rendering = [NSString stringWithFormat:
                          localizedFormat,
@@ -262,62 +261,44 @@ Now the convenient `[GRMustacheSectionTagHelper helperWithBlock:]` method is not
                          [self.formatArguments objectAtIndex:1],
                          [self.formatArguments objectAtIndex:2]];
             break;
+            
+        default:
+            NSAssert(NO, @"Not implemented");
+            break;
     }
-
-
+    
+    
     /**
-     * Cleanup and return the rendering
+     * Cleanup and return
      */
-
+    
     self.formatArguments = nil;
     return rendering;
 }
 
-
-/**
- * GRMustacheTemplateDelegate method
- */
-
-- (void)template:(GRMustacheTemplate *)template willInterpretReturnValueOfInvocation:(GRMustacheInvocation *)invocation as:(GRMustacheInterpretation)interpretation
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
     /**
-     * invocation.returnValue is "Arthur" or "Barbara".
-     *
-     * Fill self.formatArguments so that we have arguments for
-     * [NSString stringWithFormat:].
+     * We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
      */
+    
+    if (self.formatArguments) {
+        return object;
+    }
 
-    [self.formatArguments addObject:invocation.returnValue ?: [NSNull null]];
+    return @"%@";
+}
 
-
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
+{
     /**
-     * Render "%@" instead of the value.
+     * We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
      */
-
-    invocation.returnValue = @"%@";
+    
+    [self.formatArguments addObject:rendering];
 }
 
 @end
-```
-
-With such a helper, the rendering is easy:
-
-```objc
-id data = @{
-    @"name1": @"Arthur",
-    @"name2": @"Barbara",
-    @"localize": [[LocalizingHelper alloc] init]
-};
-
-NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
-
-// Hello Arthur, do you know Barbara?
-// Bonjour Arthur, est-ce que tu connais Barbara ?
-// Hola Arthur, sabes Barbara?
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                          fromResource:@"Document"
-                                                bundle:nil
-                                                 error:NULL];
 ```
 
 **[Download the code](../../../../tree/master/Guides/sample_code/localization)**
@@ -326,25 +307,27 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 Localizing a template section with arguments and conditions
 -----------------------------------------------------------
 
-Download the [GRMustacheLocalization Xcode project](../../../../tree/master/Guides/sample_code/localization): it provides tiny modifications to the `LocalizingHelper` class, in order to have the following code work:
+Download the [GRMustacheLocalization Xcode project](../../../../tree/master/Guides/sample_code/localization): it provides tiny modifications to the `LocalizingHelper` class, in order to deal with Mustache boolean sections, and have the following code work:
 
 ```objc
-id filters = @{ @"isPlural" : [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
+id localizingHelper = [LocalizingHelper new];
+id isPluralFilter = [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
     if ([count intValue] > 1) {
         return @YES;
     }
     return @NO;
-}]};
+}];
 
 NSString *templateString = @"{{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}";
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
 
 {
     id data = @{
-    @"name1": @"Arthur",
-    @"name2": @"Barbara",
-    @"count": @(0),
-    @"localize": [[LocalizingHelper alloc] init]
+        @"name1": @"Arthur",
+        @"name2": @"Barbara",
+        @"count": @(0),
+        @"localize": localizingHelper,
+        @"isPlural": isPluralFilter,
     };
     
     // Arthur and Barbara have no mutual friend.
@@ -356,12 +339,12 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
 
 {
     id data = @{
-    @"name1": @"Craig",
-    @"name2": @"Dennis",
-    @"count": @(1),
-    @"localize": [[LocalizingHelper alloc] init]
+        @"name1": @"Craig",
+        @"name2": @"Dennis",
+        @"count": @(1),
+        @"localize": localizingHelper,
+        @"isPlural": isPluralFilter,
     };
-    
     
     // Craig and Dennis have one mutual friend.
     // Craig et Dennis ont un ami commun.
@@ -372,10 +355,11 @@ GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateSt
 
 {
     id data = @{
-    @"name1": @"Eugene",
-    @"name2": @"Fiona",
-    @"count": @(5),
-    @"localize": [[LocalizingHelper alloc] init]
+        @"name1": @"Eugene",
+        @"name2": @"Fiona",
+        @"count": @(5),
+        @"localize": localizingHelper,
+        @"isPlural": isPluralFilter,
     };
     
     // Eugene and Fiona have 5 mutual friends.
