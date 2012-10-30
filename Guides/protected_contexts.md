@@ -3,6 +3,9 @@
 Protected Contexts
 ==================
 
+The Mustache key shadowing
+--------------------------
+
 As Mustache sections get nested, the [context stack](runtime.md) expands:
 
     {{#person}}
@@ -24,19 +27,25 @@ Some will say: "Mustache needs a syntax that lets me access outer contexts!".
 
 It would surely help. However this is not the main trouble.
 
+Robust code in an untrusted environment
+---------------------------------------
+
 The main trouble is that you may want to write robust and/or reusable [partials](partials.md), [filters](filters.md), [rendering objects](rendering_objects.md) that process *untrusted data* in *untrusted templates*.
 
 Because of untrusted data, you can not be sure that your precious keys won't be shadowed.
 
 Because of untrusted templates, you can not be sure that your precious keys will be invoked with the correct syntax, should a syntax for navigating the context stack exist.
 
-Untrusted data and templates do exist, I've seen them: at the minimum they are the data and the templates that your application will render in the future.
+Untrusted data and templates do exist, I've seen them: at the minimum they are the data and the templates built by the [future you](http://xkcd.com/302/).
 
-GRMustache addresses this concern by letting you change the *base context* of the template.
+Protected contexts
+------------------
+
+GRMustache addresses this concern by letting you store *protected objects* in the *base context* of a template.
 
 The base context contains [context stack values](runtime.md) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
-You can derive a new context that contain *protected keys* with the `contextByAddingProtectedObject:` method:
+You can derive a new context that contain protected objects with the `contextByAddingProtectedObject:` method:
 
 ```objc
 
