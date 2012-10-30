@@ -7,15 +7,13 @@ You use the `GRMustacheTemplateRepository` class when you want to choose a speci
 
 This may happen in these two particular cases:
 
-- when the `[GRMustacheTemplate templateFrom...]` methods do not fit your needs (see [templates.md](templates.md)).
+- when the `[GRMustacheTemplate templateFrom...]` methods do not fit your needs (see the [Templates Guide](templates.md)).
 
     For example, your templates are not stored in the file system, or they are not encoded as UTF8.
     
 - when your templates are stored in a hierarchy of directories, and you want to specify an absolute path in a [partial tag](partials.md).
 
-    `{{> header}}` loads a `header` partial template stored next to its enclosing template, but `{{> /partials/header}}`, with a leading slash, loads a template located at the absolute path `/partials/header` from the root of the template repository.
-    
-    This absolute reference to a partial template reveals useful when implementing robust [variable tag helpers](variable_tag_helpers.md) that use partial templates.
+    `{{> header }}` loads a `header` partial template stored next to its enclosing template, but `{{> /partials/header }}`, with a leading slash, loads a template located at the absolute path `/partials/header` from the root of the template repository.
 
 Both use cases are covered by the `GRMustacheTemplateRepository` methods documented below.
 
@@ -80,7 +78,7 @@ GRMustacheTemplate *template = [repository templateFromString:@"...{{> partials/
 ```
 
 
-The rendering is done as usual (see [templates.md](templates.md)):
+The rendering is done as usual (see the [Templates Guide](templates.md)):
 
 ```objc
 NSString *rendering = [template renderObject:...];
@@ -121,12 +119,6 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 GRMustacheTemplate aTemplate = [repository templateNamed:@"a"];
 NSString *rendering = [aTemplate renderObject:...];
 ```
-
-### Absolute paths to partials and helpers
-
-When you implement a variable or section tag helper that uses a partial, you want it to always include the same partial, regardless of the hierarchical position of the templates that use it. Again, absolute paths to partials are the solution.
-
-See [variable_tag_helpers.md](variable_tag_helpers.md) and [section_tag_helpers.md](section_tag_helpers.md) for more information about tag helpers.
 
 
 Loading templates and partials from a dictionary of template strings
