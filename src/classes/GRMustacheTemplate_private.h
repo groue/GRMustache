@@ -29,11 +29,8 @@
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
     NSArray *_components;
-    id<GRMustacheTagDelegate> _tagDelegate;
+    GRMustacheContext *_baseContext;
 }
-
-// Documented in GRMustacheTemplate.h
-@property (nonatomic, assign) id<GRMustacheTagDelegate> tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * The GRMustacheTemplateComponent objects that make the template.
@@ -41,6 +38,9 @@
  * @see GRMustacheTemplateComponent
  */
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
+
+// Documented in GRMustacheTemplate.h
+@property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;

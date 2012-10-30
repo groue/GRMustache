@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTagDelegate.h"
 
 @class GRMustacheContext;
 
@@ -37,24 +36,30 @@
 @interface GRMustacheTemplate: NSObject {
 @private
     NSArray *_components;
-    id<GRMustacheTagDelegate> _tagDelegate;
+    GRMustacheContext *_baseContext;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Setting the Tag Delegate
+/// @name Setting the Base Context
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * The template's default tag delegate.
+ * The template's base context: all rendering start from this context.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * Its default value is a context containing the GRMustache filter library.
  *
- * @see GRMustacheTagDelegate
- * 
- * @since v1.12
+ * You can set it to another context derived from the GRMustacheContext methods
+ * such as `contextByAddingObject:`, `contextByAddingProtectedObject:` or
+ * `contextByAddingTagDelegate:`.
+ *
+ * If you set it to nil, it is restored to its default value.
+ *
+ * @see GRMustacheContext
+ *
+ * @since v6.0
  */
- 
-@property (nonatomic, assign) id<GRMustacheTagDelegate> tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

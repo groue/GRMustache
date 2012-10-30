@@ -39,7 +39,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     [template renderObject:nil error:NULL];
     
     STAssertEquals(success, YES, @"");
@@ -55,7 +55,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     [template renderObject:nil error:NULL];
     
     STAssertEquals(success, YES, @"");
@@ -80,7 +80,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"---{{foo}}---" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:@{@"foo": @"value"} error:NULL];
     
     STAssertEqualObjects(rendering, @"---delegate---", @"");
@@ -105,7 +105,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:nil error:NULL];
     
     STAssertEqualObjects(rendering, @"<>", @"");
@@ -158,7 +158,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#foo}}{{bar}}{{/foo}}>" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:nil error:NULL];
     
     STAssertEqualObjects(rendering, @"<delegate>", @"");
@@ -187,7 +187,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:nil error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
@@ -206,7 +206,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"foo", @"");
@@ -225,7 +225,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:nil error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
@@ -244,7 +244,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
@@ -263,7 +263,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject.foo}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}} error:NULL];
         
         STAssertEqualObjects(rendering, @"bar", @"");
@@ -282,7 +282,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:nil error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
@@ -302,7 +302,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"FOO", @"");
@@ -321,7 +321,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject).length}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
         STAssertEqualObjects(rendering, @"3", @"");
@@ -342,7 +342,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -359,7 +359,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#name}}{{/name}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -376,7 +376,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{   name\t}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -397,7 +397,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -414,7 +414,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n {{name}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -431,7 +431,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"\n\n  {{#name}}\n\n{{/name}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -452,7 +452,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest" bundle:self.testBundle error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -470,7 +470,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -491,7 +491,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest" withExtension:@"mustache"] error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -509,7 +509,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -530,7 +530,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"] error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -548,7 +548,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -569,7 +569,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest_wrapper" bundle:self.testBundle error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -587,7 +587,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -605,7 +605,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -626,7 +626,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -644,7 +644,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -662,7 +662,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -683,7 +683,7 @@
         };
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -701,7 +701,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -719,7 +719,7 @@
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         STAssertNotNil(description, @"");
@@ -782,7 +782,7 @@
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}} {{value}}" error:NULL];
-    template.tagDelegate = wrapDelegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:wrapDelegate];
     NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"uppercase":uppercaseDelegate, @"value":@"foo"} error:NULL];
     
     STAssertEqualObjects(rendering, @"(prefixfoo) (prefixFOO) (FOO) (PREFIXFOO) (foo)", @"");

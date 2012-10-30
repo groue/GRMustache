@@ -495,7 +495,7 @@
     
     NSDictionary *context = @{ @"object": object, @"subject": @"---" };
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:NULL];
-    template.tagDelegate = delegate;
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *result = [template renderObject:context error:NULL];
     STAssertEqualObjects(result, @"delegate", @"");
 }
@@ -519,7 +519,7 @@
         
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{object}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *result = [template renderObject:context error:NULL];
         STAssertEqualObjects(result, @"delegate", @"");
     }
@@ -540,7 +540,7 @@
         
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL];
-        template.tagDelegate = delegate;
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *result = [template renderObject:context error:NULL];
         STAssertEqualObjects(result, @"delegate", @"");
     }

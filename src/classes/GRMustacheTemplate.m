@@ -31,7 +31,6 @@
 
 @implementation GRMustacheTemplate
 @synthesize components=_components;
-@synthesize tagDelegate=_tagDelegate;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -78,13 +77,29 @@
 - (void)dealloc
 {
     [_components release];
+    [_baseContext release];
     [super dealloc];
+}
+
+- (GRMustacheContext *)baseContext
+{
+    if (_baseContext == nil) {
+        _baseContext = [[GRMustacheContext context] retain];
+    }
+    return [[_baseContext retain] autorelease];
+}
+
+- (void)setBaseContext:(GRMustacheContext *)baseContext
+{
+    if (_baseContext != baseContext) {
+        [_baseContext release];
+        _baseContext = [baseContext retain];
+    }
 }
 
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
-    GRMustacheContext *context = [GRMustacheContext context];
-    context = [context contextByAddingObject:object];
+    GRMustacheContext *context = [self.baseContext contextByAddingObject:object];
     
     NSMutableString *buffer = [NSMutableString string];
     if (![self renderWithContext:context inBuffer:buffer error:error]) {
@@ -95,7 +110,7 @@
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error
 {
-    GRMustacheContext *context = [GRMustacheContext context];
+    GRMustacheContext *context = self.baseContext;
     for (id object in objects) {
         context = [context contextByAddingObject:object];
     }
@@ -124,8 +139,6 @@
 
 - (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
 {
-    context = [context contextByAddingTagDelegate:self.tagDelegate];
-    
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheTemplateOverride: resolve it.
         component = [context resolveTemplateComponent:component];
