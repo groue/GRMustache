@@ -36,7 +36,7 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
     
     Use relative or absolute paths to your partial templates in your partial tags: see the [Partials Guide](partials.md).
 
-- **"Overridable partials"**, aka "template inheritance", as in [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
     Overridable partials are documented in the [Partials Guide](partials.md).
 
