@@ -476,8 +476,8 @@ You *can* write specification-compliant "Mustache lambdas" with rendering object
 Sample code
 -----------
 
-The [localization.md](sample_code/localization.md) sample code uses the `GRMustacheRendering` protocol for localizing portions of template.
+The [Localization Sample Code](sample_code/localization.md) uses the `GRMustacheRendering` protocol for localizing portions of template.
 
-The [indexes.md](sample_code/indexes.md) sample code uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
+The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 
 [up](../../../../GRMustache#documentation), [next](delegate.md)

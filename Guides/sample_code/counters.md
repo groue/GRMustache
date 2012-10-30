@@ -1,1 +1,1 @@
-**This guide has been replaced by [indexes.md](indexes.md).**
+This document has been [superseded](indexes.md).
