@@ -8,11 +8,11 @@ Overview
 
 Let's first confess a lie: here and there in this documentation, you have been reading that Mustache tags renders objects in a way or another: variable tags output values HTML-escaped, sections tags loop over arrays, etc.
 
-This is plain wrong. Actually, objects render themselves.
-
-`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render.
+This is an illusion. Actually, data objects render themselves.
 
 `NSArray` *does* render the `{{# items }}...{{/}}` tag for each of its items.
+
+`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render.
 
 etc.
 
