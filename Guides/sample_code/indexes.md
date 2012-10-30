@@ -115,7 +115,9 @@ We have already seen above its declaration: it's simply a class that conforms to
 
 As such, it must implement the `transformedValue:` method, that returns the result of the filter. That result will perform a custom rendering of its array argument.
 
-You provide custom rendering with objects that conform to the `GRMustacheRendering` protocol (see the [Rendering Objects Guide](../rendering_objects.md)). Our custom rendering object will render the section tag as many times as it has items, extending the [context stack](../runtime.md) with both a dictionary containing the special keys, and the array items that will provide the `name` key:
+You provide custom rendering with objects that conform to the `GRMustacheRendering` protocol (see the [Rendering Objects Guide](../rendering_objects.md)). Our custom rendering object will render the section tag as many times as it has items, extending the [context stack](../runtime.md) with both a dictionary containing the special keys, and the array items that will provide the `name` key.
+
+Actually, writing [filters](../filters.md) that return [rendering objects](../rendering_objects.md) lead to code that is pretty close to the [Handlebars.js block helpers](http://handlebarsjs.com/block_helpers.html). You may enjoy comparing the code below to the [`each_with_index` Handlebars helper](https://gist.github.com/1048968).
 
 ```objc
 @implementation PositionFilter
