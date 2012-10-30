@@ -53,10 +53,10 @@
     }
 }
 
-- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
 {
     if (self.mustacheTagDidRenderBlock) {
-        self.mustacheTagDidRenderBlock(tag, object);
+        self.mustacheTagDidRenderBlock(tag, object, rendering);
     }
 }
 

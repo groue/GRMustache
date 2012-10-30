@@ -28,7 +28,7 @@
 
 @implementation GRMustacheTagDelegateTest
 
-- (void)testWillInterpretReturnValueOfInvocationIsNotTriggeredByText
+- (void)testMustacheTagWillRenderIsNotTriggeredByText
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
@@ -45,12 +45,12 @@
     STAssertEquals(success, YES, @"");
 }
 
-- (void)testDidInterpretReturnValueOfInvocationIsNotTriggeredByText
+- (void)testMustacheTagDidRenderIsNotTriggeredByText
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         success = NO;
     };
     
@@ -61,7 +61,7 @@
     STAssertEquals(success, YES, @"");
 }
 
-- (void)testInterpretReturnValueOfInvocationWithVariable
+- (void)testVariableTagDelegate
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
@@ -74,7 +74,7 @@
         preRenderingTagType = tag.type;
         return @"delegate";
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
@@ -90,7 +90,7 @@
     STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
-- (void)testInterpretReturnValueOfInvocationWithUnrenderedSection
+- (void)testSectionTagDelegate
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
@@ -100,7 +100,7 @@
         preRenderingTagType = tag.type;
         return object;
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderingTagType = tag.type;
     };
     
@@ -113,7 +113,7 @@
     STAssertEquals(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
 }
 
-- (void)testInterpretReturnValueOfInvocationWithRenderedSectionContainingVariable
+- (void)testMultipleTagsDelegate
 {
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
@@ -142,7 +142,7 @@
         }
         return object;
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         ++templateDidInterpretCount;
         switch (templateDidInterpretCount) {
             case 1:
@@ -330,7 +330,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsTag
+- (void)testTagDescriptionContainsTag
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -385,7 +385,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsLineNumber
+- (void)testTagDescriptionContainsLineNumber
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -440,7 +440,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsResourceBasedTemplatePath
+- (void)testTagDescriptionContainsResourceBasedTemplatePath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -479,7 +479,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsURLBasedTemplatePath
+- (void)testTagDescriptionContainsURLBasedTemplatePath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -518,7 +518,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsPathBasedTemplatePath
+- (void)testTagDescriptionContainsPathBasedTemplatePath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -557,7 +557,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsResourceBasedPartialPath
+- (void)testTagDescriptionContainsResourceBasedPartialPath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -614,7 +614,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsURLBasedPartialPath
+- (void)testTagDescriptionContainsURLBasedPartialPath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -671,7 +671,7 @@
     }
 }
 
-- (void)testInvocationDescriptionContainsPathBasedPartialPath
+- (void)testTagDescriptionContainsPathBasedPartialPath
 {
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -740,7 +740,7 @@
         preRenderingTagType = tag.type;
         return @"delegate";
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
@@ -794,7 +794,7 @@
     delegate1.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         return @"1";
     };
-    delegate1.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate1.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         STAssertEqualObjects(object, @"1", @"");
     };
 
@@ -802,7 +802,7 @@
     delegate2.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         return @"2";
     };
-    delegate2.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object) {
+    delegate2.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         STAssertEqualObjects(object, @"2", @"");
     };
     

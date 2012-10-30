@@ -142,9 +142,17 @@
         
         // 4. tagDelegates clean up
         
-        for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
-            if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:)]) {
-                [delegate mustacheTag:self didRenderObject:object];
+        if (success) {
+            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
+                if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
+                    [delegate mustacheTag:self didRenderObject:object as:rendering];
+                }
+            }
+        } else {
+            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
+                if ([delegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                    [delegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
+                }
             }
         }
     }
