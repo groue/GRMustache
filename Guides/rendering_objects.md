@@ -12,19 +12,11 @@ This is an illusion. Actually, data objects render themselves.
 
 `NSArray` *does* render the `{{# items }}...{{/}}` tag for each of its items.
 
-`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render.
+`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render or not.
 
 etc.
 
-Let's have a precise look at the rendering of a tag, say: `{{ uppercase(person.name) }}`.
-
-First the `uppercase(person.name)` expression is evaluated. This evaluation is based on the invocation of `valueForKey:` on your data object (see the [Runtime Guide](runtime.md) for details). Eventually, *you* decide who is the person, what is his name, and which filter should apply. Let's say the expression evaluates to "ARTHUR".
-
-Second, [tag delegates](delegate.md) enter the game. Tag delegates can change the value before it is rendered. For the purpose of demonstration, let's admit that a pirate delegate was there: "ARRRRRRRTHUR".
-
-Finally, the "ARRRRRRRTHUR" string is asked to render for the `{{ uppercase(person.name) }}` tag. It is a variable tag, so the string simply renders itself.
-
-You see that from the start, your application code decides what will be eventully be rendered. Let's imagine that instead of "ARRRRRRRTHUR", you had provided an object that conforms to the `GRMustacheRendering` protocol:
+Your objects that conform to the `GRMustacheRendering` protocol take full control of their rendering.
 
 GRMustacheRendering protocol
 ----------------------------
