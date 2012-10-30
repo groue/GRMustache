@@ -14,7 +14,7 @@ NSString *templateString = @"I have {{ count }} arms.";
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
 
 // A pirate
-template.tagDelegate = pirate;
+template.baseContext = [template.baseContext contextByAddingTagDelegate:pirate];
 
 // Rendering
 id data = @{ @"count": @2 };
