@@ -20,8 +20,8 @@ Observing the rendering of Mustache tags
 @protocol GRMustacheTagDelegate<NSObject>
 @optional
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object;
-- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object;
-@end
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering;
+- (void)mustacheTag:(GRMustacheTag *)tag didFailRenderingObject:(id)object withError:(NSError *)error;
 ```
 
 The _object_ argument is the rendered value: a string, a number, an array, depending on the data you provided.
@@ -83,16 +83,16 @@ Tag delegates can observe the rendering of all tags rendered by a template. Temp
     return [template renderObject:data error:NULL];
 }
 
-- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object
+- (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
 {
-    NSLog(@"%@ did render %@", tag, object);
+    NSLog(@"%@ did render %@ as %@", tag, object, rendering);
 }
 
 @end
 
-// <GRMustacheVariableTag `{{greeting}}` at line 1> did render Hello
-// <GRMustacheVariableTag `{{name}}` at line 1> did render Arthur
-// <GRMustacheSectionTag `{{#person}}` at line 1> did render { name = Arthur; }
+// <GRMustacheVariableTag `{{greeting}}` at line 1> did render Hello as Hello
+// <GRMustacheVariableTag `{{name}}` at line 1> did render Arthur as Arthur
+// <GRMustacheSectionTag `{{#person}}` at line 1> did render { name = Arthur } as Arthur
 [[Document new] render];
 ```
 
@@ -143,8 +143,8 @@ You can, for instance, provide default rendering for missing values:
 
 @end
 
+// Missing value for <GRMustacheVariableTag `{{name}}` at line 1>
 // Renders "Hello DEFAULT!"
-// Logs "Missing value for <GRMustacheVariableTag `{{name}}` at line 1>"
 [[Document new] render];
 ```
 
