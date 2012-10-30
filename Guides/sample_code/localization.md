@@ -75,7 +75,8 @@ id data = @{
 };
 
 NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:templateString
+                                          fromResource:@"Document"
+                                                bundle:nil
                                                  error:NULL];
 ```
 
@@ -109,7 +110,8 @@ id data = @{
 };
 
 NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:templateString
+                                          fromResource:@"Document"
+                                                bundle:nil
                                                  error:NULL];
 ```
 
@@ -313,7 +315,8 @@ NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}
 // Bonjour Arthur, est-ce que tu connais Barbara ?
 // Hola Arthur, sabes Barbara?
 NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:templateString
+                                          fromResource:@"Document"
+                                                bundle:nil
                                                  error:NULL];
 ```
 
