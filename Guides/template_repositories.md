@@ -81,7 +81,7 @@ GRMustacheTemplate *template = [repository templateFromString:@"...{{> partials/
 The rendering is done as usual (see the [Templates Guide](templates.md)):
 
 ```objc
-NSString *rendering = [template renderObject:...];
+NSString *rendering = [template renderObject:... error:...];
 ```
 
 ### Absolute paths to partial templates
@@ -117,7 +117,7 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 // Loads path/to/templates/a.mustache, and provides a root for
 // absolute partial tags: 
 GRMustacheTemplate aTemplate = [repository templateNamed:@"a"];
-NSString *rendering = [aTemplate renderObject:...];
+NSString *rendering = [aTemplate renderObject:... error:...];
 ```
 
 
@@ -129,8 +129,8 @@ When your template and partial strings are stored in memory, store them in a dic
 ```objc
 @interface GRMustacheTemplateRepository : NSObject
 
-// _partialsDictionary_ is a dictionary whose keys are partial names, and values
-// template strings.
+// _templates_ is a dictionary whose keys are partial names, and
+// values template strings.
 + (id)templateRepositoryWithDictionary:(NSDictionary *)templates;
 
 @end
