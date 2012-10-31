@@ -73,7 +73,6 @@ Advanced Mustache:
 
 ### Sample code
 
-- [Layout](GRMustache/tree/master/Guides/sample_code/layout): how to wrap a template in a "layout" template
 - [Number Formatting](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
 - [Collection Indexes](GRMustache/blob/master/Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
 - [Localization](GRMustache/blob/master/Guides/sample_code/localization.md): how to localize portions of your templates
@@ -103,7 +102,7 @@ FAQ
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: Check the [Partials Guide](GRMustache/blob/master/Guides/partials.md), and the [Layout Sample Code](GRMustache/tree/master/Guides/sample_code/layout).
+    A: Check the [Partials Guide](GRMustache/blob/master/Guides/partials.md).
 
 - **Q: How do I localize templates?**
 

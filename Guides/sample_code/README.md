@@ -3,10 +3,6 @@
 Sample code
 ===========
 
-- [layout](sample_code/layout)
-    
-    It is a common pattern to use a template as a wrapper for other templates: *downloadable Xcode project*.
-
 - [Number Formatting](../../../blob/master/Guides/sample_code/number_formatting.md)
 
     How to format numbers: *discussion, downloadable Xcode project*.
