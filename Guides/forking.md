@@ -42,49 +42,50 @@ The library features are described in the [guides](introduction.md). This sectio
 
 - **Compiling**
     - `GRMustacheCompiler`
-    - `GRMustacheRenderingElement`
+    - `GRMustacheTemplateComponent`
     
-    The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *rendering elements*.
+    The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *template components*.
     
-    Rendering elements are actually able to provide the rendering expected by the library user:
+    Template components are actually able to provide the rendering expected by the library user:
 
     - `GRMustacheTemplate`
-    - `GRMustacheSectionElement`
-    - `GRMustacheTextElement`
-    - `GRMustacheVariableElement`
     - `GRMustacheTemplateOverride`
+    - `GRMustacheTextComponent`
+    - `GRMustacheTag`
     
-    *Templates* render full templates and partials, *section elements* render Mustache section tags, *text elements* render raw text, *variable elements* render Mustache variable tags, and *template overrides* render overridable partial tags.
+    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, and *template overrides* render overridable partial tags.
     
-    For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a variable element.
+    For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a tag element.
+    
+    There are three subclasses of GRMustacheTag:
+    
+    - `GRMustacheSectionTag`
+    - `GRMustacheVariableTag`
+    - `GRMustacheAccumulatorTag`
+    
+    *Section tags* and *Variable tags* represent their "physical" counterpart `{{#^$ name}}...{{/name}}` and `{{name}}` respectively.
+    
+    *Accumulator tags* are actually created during the rendering, not during the compilation phase. They are involved in the concatenation of multiple overridable sections `{{$name}}...{{/name}}`.
 
 - **Runtime**
-    - `GRMustacheRuntime`
+    - `GRMustacheContext`
     
-    A *runtime* implements a state of four different stacks:
+    A *rendering context* implements a state of four different stacks:
     
-    - a *context stack*, initialized with the initial object that the library user provides in order to "fill" the template. Section elements create new runtime objects with an extended context stack.
-    - a *filter stack*, that is initialized with the *filter library* (see below). It is extended with user's custom filters.
-    - a *delegate stack*, initialized with a template's delegate. Section and variable elements create new runtime objects with an extended delegate stack whenever they render objects that conform to the GRMustacheTemplateDelegate protocol.
+    - a *context stack*.
+    - a *protected context stack*.
+    - a *tag delegate stack*.
     - a *template override stack*, that grows when a template override element renders.
     
-    A runtime is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the runtime in order to compute their values.
+    A rendering context is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not directly responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the context in order to compute their values.
 
-    - `GRMustacheInvocation`
-    - `GRMustacheTemplateDelegate`
+    - `GRMustacheTagDelegate`
 
-    *Invocations* are created by runtime objects, and exposed to *delegates*, so that the library user inspect or override rendered values.
+    Tags iterate all *tag delegates* in a rendering context and let them observe or alter their rendering.
     
-    - `GRMustacheSectionTagHelper`
-    - `GRMustacheSectionTagRenderingContext`
+    - `GRMustacheRendering`
 
-    The library user can implement *section tag helpers* in order to have some section tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools.
-
-    - `GRMustacheDynamicPartial`
-    - `GRMustacheVariableTagHelper`
-    - `GRMustacheVariableTagRenderingContext`
-
-    The library user can implement *variable tag helpers* in order to have some variable tags behave as "Mustache lambdas". In order to be able to perform the job described by the Mustache specification, they are provided with *rendering context* objects that provide the required information and tools. *Dynamic partials* are variable tag helpers dedicated to rendering partials.
+    The library user can implement his own *rendering objects* in order to perform custom rendering.
 
     - `GRMustacheFilter`
     - `GRMustacheFilterLibrary`
