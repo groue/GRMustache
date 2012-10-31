@@ -14,10 +14,6 @@ How To
 
     $ git submodule add git://github.com/groue/GRMustache.git
 
-OR with <a href="https://github.com/defunkt/hub">hub</a> installed:
-
-    $ git submodule add groue/GRMustache
-
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
 - To update, run: `git submodule update`
