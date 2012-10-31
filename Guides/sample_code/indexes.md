@@ -77,7 +77,7 @@ You may just skip the rest of this document, and [download the `PositionFilter` 
 
 Let's see how it is implemented.
 
-Due to the parenthesis in the `withPosition(people)` expressio, we know that it is a [filter](../filters.md), an object that conforms to the `GRMustacheFilter` protocol:
+Due to the parenthesis in the `withPosition(people)` expression, we know that it is a [filter](../filters.md), an object that conforms to the `GRMustacheFilter` protocol:
 
 ```objc
 /**
