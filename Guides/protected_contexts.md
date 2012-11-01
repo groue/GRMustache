@@ -63,7 +63,7 @@ Now the `safe` key can not be shadowed: it will always evaluate to the `importan
 Protected namespaces
 --------------------
 
-In order to explain how GRMustache behaves when you protect an object than contain other objects, let's use a metaphor:
+In order to explain how GRMustache behaves when you protect an object than contains other objects, let's use a metaphor:
 
 Think of a protected object as a module in a programming language. Let's consider this Python snippet:
 
