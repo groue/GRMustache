@@ -92,7 +92,10 @@ id modules = @{
 };
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+
+// "import string"
 template.baseContext = [template.baseContext contextByAddingProtectedObject:modules];
+
 NSString *rendering = [template renderObject:nil error:NULL];
 ```
 
