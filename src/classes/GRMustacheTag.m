@@ -111,10 +111,40 @@
         
         if (isProtected) {
             // Object is protected: it may enter the context stack, and provide
-            // value for `.` and `.key`. However, it must not expose its keys.
+            // value for `.` and `.name`. However, it must not expose its keys.
             //
-            // The goal is to have `{{ safe.key }}` and `{{#safe}}{{.key}}{{/safe}}`
-            // work, but not `{{#safe}}{{key}}{{/safe}}`.
+            // The goal is to have `{{ safe.name }}` and `{{#safe}}{{.name}}{{/safe}}`
+            // work, but not `{{#safe}}{{name}}{{/safe}}`.
+            //
+            // Rationale:
+            //
+            // Let's look at `{{#safe}}{{#hacker}}{{name}}{{/hacker}}{{/safe}}`:
+            //
+            // The protected context stack contains the "protected root":
+            // { safe : { name: "important } }.
+            //
+            // Since the user has used the key `safe`, he expects `name` to be
+            // safe as well, even if `hacker` has defined its own `name`.
+            //
+            // So we need to have `name` come from `safe`, not from `hacker`.
+            // We should thus start looking in `safe` first. But `safe` was
+            // not initially in the protected context stack. Only the protected
+            // root was. Hence somebody had `safe` in the protected context
+            // stack.
+            //
+            // Who has objects enter the context stack? Rendering objects do. So
+            // rendering objects have to know that values are protected or not,
+            // and choose the correct bucket accordingly.
+            //
+            // Who can write his own rendering objects? The end user does. So
+            // the end user must carefully read a documentation about safety,
+            // and then carefully code his rendering objects so that they
+            // conform to this safety notice.
+            //
+            // Of course this is not what we want. So `name` can not be
+            // protected. Since we don't want to let the user think he is data
+            // is protected when it is not, we prevent this whole pattern, and
+            // forbid `{{#safe}}{{name}}{{/safe}}`.
             context = [context contextByAddingHiddenObject:object];
         }
         
