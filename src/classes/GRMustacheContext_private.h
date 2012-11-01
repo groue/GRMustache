@@ -54,7 +54,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
     NSArray *_protectedContextStack;
-    NSArray *_forbiddenContextStack;
+    NSArray *_hiddenContextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
@@ -110,7 +110,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 /**
  * TODO
  */
-- (GRMustacheContext *)contextByAddingForbiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
+- (GRMustacheContext *)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the

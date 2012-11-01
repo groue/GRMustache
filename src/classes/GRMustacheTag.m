@@ -106,17 +106,20 @@
             return NO;
         }
         
+        
+        // 2. Hide object if it is protected
+        
         if (isProtected) {
-            // object is protected: it must not enter the context stack
-            // and expose its keys.
+            // Object is protected: it may enter the context stack, and provide
+            // value for `.` and `.key`. However, it must not expose its keys.
             //
-            // The goal is to have `{{ safe.key }}` work, but not
-            // `{{# safe }}{{ key }}{{/ safe }}`.
-            context = [context contextByAddingForbiddenObject:object];
+            // The goal is to have `{{ safe.key }}` and `{{#safe}}{{.key}}{{/safe}}`
+            // work, but not `{{#safe}}{{key}}{{/safe}}`.
+            context = [context contextByAddingHiddenObject:object];
         }
         
         
-        // 2. Let tagDelegates observe and alter the object
+        // 3. Let tagDelegates observe and alter the object
         
         for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
             if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
@@ -125,7 +128,7 @@
         }
         
         
-        // 3. Render
+        // 4. Render
     
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
         BOOL HTMLSafe = NO;
@@ -150,7 +153,7 @@
         }
         
         
-        // 4. tagDelegates clean up
+        // 5. tagDelegates clean up
         
         if (success) {
             for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {

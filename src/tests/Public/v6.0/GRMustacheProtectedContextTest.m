@@ -61,20 +61,28 @@
     STAssertEqualObjects(rendering, @"important", @"");
 }
 
-- (void)testDeepProtectedObjectMustBeAccessedViaFullKeyPath
+- (void)testDeepProtectedObjectCanBeAccessedViaScope
 {
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe.name}}, {{#safe}}{{name}}{{/safe}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{.name}}{{/safe}}" error:NULL];
     template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"important, ", @"");
+    STAssertEqualObjects(rendering, @"important", @"");
 }
 
-- (void)testDeepProtectedObjectNotAccessedViaFullKeyPathCanBeShadowed
+- (void)testDeepProtectedObjectCanNotBeAccessedViaIdentifier
 {
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe.name}}, {{#safe}}{{name}}{{/safe}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{name}}{{/safe}}" error:NULL];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
+    NSString *rendering = [template renderObject:nil error:NULL];
+    STAssertEqualObjects(rendering, @"", @"");
+}
+
+- (void)testUnreachableDeepProtectedObjectCanBeShadowed
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{name}}{{/safe}}" error:NULL];
     template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:@{ @"name": @"not important" } error:NULL];
-    STAssertEqualObjects(rendering, @"important, not important", @"");
+    STAssertEqualObjects(rendering, @"not important", @"");
 }
 
 @end
