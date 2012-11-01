@@ -73,7 +73,7 @@ print string.digits # 0123456789
 print digits        # NameError: "name 'digits' is not defined"
 ```
 
-In python, you need to provide the full path to an object inside a module, or you get an error. With GRMustache, access to objects inside protected objects is similar. Deep protected objects must be accessed via their full path:
+In Python, you need to provide the full path to an object inside a module, or you get an error. With GRMustache, access to objects inside protected objects is similar. Deep protected objects must be accessed via their full path:
 
 `Document.mustache`
 
