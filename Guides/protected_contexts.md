@@ -38,8 +38,8 @@ Because of untrusted templates, you can not be sure that your precious keys will
 
 Untrusted data and templates do exist, I've seen them: at the minimum they are the data and the templates built by the [future you](http://xkcd.com/302/).
 
-Protected contexts
-------------------
+Protected objects
+-----------------
 
 GRMustache addresses this concern by letting you store *protected objects* in the *base context* of a template.
 
@@ -59,6 +59,53 @@ template.baseContext = [template.baseContext contextByAddingProtectedObject:prot
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
+
+Protected namespaces
+--------------------
+
+In order to explain how GRMustache behaves when you protect an object than contain other objects, let's use a metaphor:
+
+Think of a protected object as a module in a programming language. Let's consider this Python snippet:
+
+```python
+import string
+print string.digits # 0123456789
+print digits        # NameError: "name 'digits' is not defined"
+```
+
+In python, you need to provide the full path to an object inside a module, or you get an error. With GRMustache, access to objects inside protected objects is similar. Deep protected objects must be accessed via their full path:
+
+`Document.mustache`
+
+    - {{string.digits}}                     {{! full path }}
+    - {{#string}}{{.digits}}{{/string}}     {{! another kind of full path }}
+    - {{digits}}                            {{! digits? which digits? }}
+    - {{#string}}{{digits}}{{/string}}      {{! digits? which digits? }}
+
+`Render.m`:
+
+```objc
+id module = @{
+    @"string": @{
+        @"digits": @"0123456789"
+    },
+};
+
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+template.baseContext = [template.baseContext contextByAddingProtectedObject:module];
+NSString *rendering = [template renderObject:nil error:NULL];
+```
+
+Final rendering:
+
+    - 0123456789
+    - 0123456789
+    - 
+    - 
+
+See how the `digits` key, alone on the third and fourth line, has not been rendered.
+
+Conclusion: you must use full paths to your deep protected objects, or they won't be found.
 
 Compatibility with other Mustache implementations
 -------------------------------------------------

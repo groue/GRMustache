@@ -42,6 +42,7 @@
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
     NSArray *_protectedContextStack;
+    NSArray *_hiddenContextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
