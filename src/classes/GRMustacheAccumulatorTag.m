@@ -63,9 +63,17 @@
     for (GRMustacheTag *tag in _tags) {
         @autoreleasepool {
             // Consistency of HTML safety is asserted in tagWithOverridingTag:
-            [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
+            NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            if (!rendering) {
+                // make sure error is not released by autoreleasepool
+                if (error != NULL) [*error retain];
+                buffer = nil;
+                break;
+            }
+            [buffer appendString:rendering];
         }
     }
+    if (!buffer && error != NULL) [*error autorelease];
     return buffer;
 }
 
