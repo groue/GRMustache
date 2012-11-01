@@ -85,14 +85,14 @@ In Python, you need to provide the full path to an object inside a module, or yo
 `Render.m`:
 
 ```objc
-id module = @{
+id modules = @{
     @"string": @{
         @"digits": @"0123456789"
     },
 };
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
-template.baseContext = [template.baseContext contextByAddingProtectedObject:module];
+template.baseContext = [template.baseContext contextByAddingProtectedObject:modules];
 NSString *rendering = [template renderObject:nil error:NULL];
 ```
 
