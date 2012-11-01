@@ -98,7 +98,7 @@ FAQ
 
 - **Q: How do I render partial templates whose name is only known at runtime?**
 
-    A: Check the [Rendering Objects Guide](GRMustache/blob/master/Guides/variable_tag_helpers.md)
+    A: Check the [Rendering Objects Guide](GRMustache/blob/master/Guides/rendering_objects.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
