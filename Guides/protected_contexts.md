@@ -65,7 +65,7 @@ Protected namespaces
 
 In order to explain how GRMustache behaves when you protect an object than contains other objects, let's use a metaphor:
 
-Think of a protected object as a module in a programming language. Let's consider this Python snippet:
+Think of a protected object as a module in a programming language, and consider this Python snippet:
 
 ```python
 import string
