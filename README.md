@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is a production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-**October 30th, 2012: GRMustache 6.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**November 1st, 2012: GRMustache 6.0.1 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
