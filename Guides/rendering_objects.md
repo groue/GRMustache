@@ -8,7 +8,7 @@ Overview
 
 Let's first confess a lie: here and there in this documentation, you have been reading that Mustache tags renders objects in a way or another: variable tags output values HTML-escaped, sections tags loop over arrays, etc.
 
-This is an illusion. Actually, data objects render themselves.
+This is an illusion. Data objects actually have full control on their rendering:
 
 `NSArray` *does* render the `{{# items }}...{{/}}` tag for each of its items.
 
@@ -16,7 +16,8 @@ This is an illusion. Actually, data objects render themselves.
 
 etc.
 
-Your objects that conform to the `GRMustacheRendering` protocol take full control of their rendering.
+Your objects that conform to the GRMustacheRendering protocol also take full control of their rendering.
+
 
 GRMustacheRendering protocol
 ----------------------------
