@@ -40,7 +40,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)objectIsTagDelegate:(id)object;
 
-- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
+- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack forbiddenContextStack:(NSArray *)forbiddenContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 
 + (void)setupPreventionOfNSUndefinedKeyException;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
@@ -78,6 +78,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     [_contextStack release];
     [_protectedContextStack release];
+    [_forbiddenContextStack release];
     [_delegateStack release];
     [_templateOverrideStack release];
     [super dealloc];
@@ -91,7 +92,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (id)context
 {
     NSArray *contextStack = [NSArray arrayWithObject:[GRMustacheFilterLibrary filterLibrary]];
-    return [[[self alloc] initWithContextStack:contextStack protectedContextStack:nil delegateStack:nil templateOverrideStack:nil] autorelease];
+    return [[[self alloc] initWithContextStack:contextStack protectedContextStack:nil forbiddenContextStack:nil delegateStack:nil templateOverrideStack:nil] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
@@ -102,12 +103,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     NSArray *delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:tagDelegate] : [NSArray arrayWithObject:tagDelegate];
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack forbiddenContextStack:_forbiddenContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingObject:(id)object
 {
-    if (object == nil) {
+    if (object == nil || [_forbiddenContextStack containsObject:object]) {
         return self;
     }
     
@@ -118,7 +119,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     }
     
-    return [[[GRMustacheContext alloc] initWithContextStack:contextStack protectedContextStack:_protectedContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:contextStack protectedContextStack:_protectedContextStack forbiddenContextStack:_forbiddenContextStack delegateStack:delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingProtectedObject:(id)object
@@ -129,7 +130,18 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     NSArray *protectedContextStack = _protectedContextStack ? [_protectedContextStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:protectedContextStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:protectedContextStack forbiddenContextStack:_forbiddenContextStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
+}
+
+- (GRMustacheContext *)contextByAddingForbiddenObject:(id)object
+{
+    if (object == nil) {
+        return self;
+    }
+    
+    NSArray *forbiddenContextStack = _forbiddenContextStack ? [_forbiddenContextStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
+    
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack forbiddenContextStack:forbiddenContextStack delegateStack:_delegateStack templateOverrideStack:_templateOverrideStack] autorelease];
 }
 
 - (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
@@ -140,7 +152,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     NSArray *templateOverrideStack = _templateOverrideStack ? [_templateOverrideStack arrayByAddingObject:templateOverride] : [NSArray arrayWithObject:templateOverride];
     
-    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
+    return [[[GRMustacheContext alloc] initWithContextStack:_contextStack protectedContextStack:_protectedContextStack forbiddenContextStack:_forbiddenContextStack delegateStack:_delegateStack templateOverrideStack:templateOverrideStack] autorelease];
 }
 
 - (id)currentContextValue
@@ -149,16 +161,26 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return [_contextStack lastObject];
 }
 
-- (id)contextValueForKey:(NSString *)key
+- (id)contextValueForKey:(NSString *)key isProtected:(BOOL *)isProtected
 {
     // top of the stack is first object
     for (id contextObject in [_protectedContextStack reverseObjectEnumerator]) {
         id value = [GRMustacheContext valueForKey:key inObject:contextObject];
-        if (value != nil) { return value; }
+        if (value != nil) {
+            if (isProtected) {
+                *isProtected = YES;
+            }
+            return value;
+        }
     }
     for (id contextObject in [_contextStack reverseObjectEnumerator]) {
         id value = [GRMustacheContext valueForKey:key inObject:contextObject];
-        if (value != nil) { return value; }
+        if (value != nil) {
+            if (isProtected) {
+                *isProtected = NO;
+            }
+            return value;
+        }
     }
     return nil;
 }
@@ -247,12 +269,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
+- (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack forbiddenContextStack:(NSArray *)forbiddenContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack
 {
     self = [super init];
     if (self) {
         _contextStack = [contextStack retain];
         _protectedContextStack = [protectedContextStack retain];
+        _forbiddenContextStack = [forbiddenContextStack retain];
         _delegateStack = [delegateStack retain];
         _templateOverrideStack = [templateOverrideStack retain];
     }

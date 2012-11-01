@@ -86,15 +86,15 @@
 
 #pragma mark GRMustacheExpression
 
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error
 {
     id argument;
     id filter;
     
-    if (![_argumentExpression evaluateInContext:context value:&argument error:error]) {
+    if (![_argumentExpression evaluateInContext:context value:&argument isProtected:NULL error:error]) {
         return NO;
     }
-    if (![_filterExpression evaluateInContext:context value:&filter error:error]) {
+    if (![_filterExpression evaluateInContext:context value:&filter isProtected:NULL error:error]) {
         return NO;
     }
 
@@ -122,6 +122,9 @@
         *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
     }
     
+    if (isProtected) {
+        *isProtected = NO;
+    }
     return YES;
 }
 

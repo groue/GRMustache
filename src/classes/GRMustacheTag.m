@@ -101,8 +101,18 @@
         // 1. Evaluate expression
         
         id object;
-        if (![_expression evaluateInContext:context value:&object error:error]) {
+        BOOL isProtected;
+        if (![_expression evaluateInContext:context value:&object isProtected:&isProtected error:error]) {
             return NO;
+        }
+        
+        if (isProtected) {
+            // object is protected: it must not enter the context stack
+            // and expose its keys.
+            //
+            // The goal is to have `{{ safe.key }}` work, but not
+            // `{{# safe }}{{ key }}{{/ safe }}`.
+            context = [context contextByAddingForbiddenObject:object];
         }
         
         

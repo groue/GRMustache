@@ -54,6 +54,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 @interface GRMustacheContext : NSObject {
     NSArray *_contextStack;
     NSArray *_protectedContextStack;
+    NSArray *_forbiddenContextStack;
     NSArray *_delegateStack;
     NSArray *_templateOverrideStack;
 }
@@ -107,6 +108,11 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
+ * TODO
+ */
+- (GRMustacheContext *)contextByAddingForbiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
+
+/**
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * template override stack that is extended with _templateOverride_.
  *
@@ -123,13 +129,15 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * Performs a key lookup in the receiver's context stack, and returns the found
  * value.
  *
- * @param key  The searched key.
+ * @param key          The searched key.
+ * @param isProtected  Upon return, is YES if the value comes from the protected
+ *                     context stack.
  *
  * @return The value found in the context stack.
  *
  * @see -[GRMustacheIdentifierExpression evaluateInContext:]
  */
-- (id)contextValueForKey:(NSString *)key GRMUSTACHE_API_INTERNAL;
+- (id)contextValueForKey:(NSString *)key isProtected:(BOOL *)isProtected GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns the top object of the receiver's context stack.

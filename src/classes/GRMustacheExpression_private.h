@@ -53,13 +53,14 @@
 /**
  * Evaluates an expression against a rendering context, and return the value.
  *
- * @param context A Mustache rendering context
- * @param value   TODO
- * @param error   TODO
+ * @param context    A Mustache rendering context
+ * @param value      TODO
+ * @param protected  TODO
+ * @param error      TODO
  *
  * @return TODO
  */
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given
