@@ -20,7 +20,7 @@ You apply a filter just like calling a function, with parentheses:
     
     For brevity's sake, closing section tags can be empty: `{{^ isEmpty(people) }}...{{/}}` is valid.
 
-- Filters can take several arguments: `{{ formatDate(date, format) }}`.
+- Filters can take several arguments: `{{ localize(date, format) }}`.
 
 - Filters can return filers: `{{ f(x)(y) }}`.
 
