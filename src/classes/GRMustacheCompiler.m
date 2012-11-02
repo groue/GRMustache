@@ -88,12 +88,6 @@
 @property (nonatomic, retain) NSMutableArray *openingTokenStack;
 
 /**
- * When parsing the last closing tag of `{{#foo}}...{{^}}...{{/}}`,
- * anonymousSectionExpression will be `foo`.
- */
-@property (nonatomic, retain) GRMustacheExpression *anonymousSectionExpression;
-
-/**
  * This method is called whenever an error has occurred beyond any repair hope.
  * 
  * @param fatalError  The fatal error
@@ -166,7 +160,6 @@
     [_currentComponents release];
     [_componentsStack release];
     [_openingTokenStack release];
-    [_anonymousSectionExpression release];
     [super dealloc];
 }
 
@@ -253,14 +246,12 @@
                                                                                                      type:GRMustacheTagTypeInvertedSection
                                                                                                components:_currentComponents];
                 
-                self.anonymousSectionExpression = _currentOpeningToken.expression;
-                
                 [_openingTokenStack removeLastObject];
                 [_componentsStack removeLastObject];
                 [[_componentsStack lastObject] addObject:sectionTag];
-                self.currentOpeningToken = token;
+                self.currentOpeningToken = [token tokenWithExpression:_currentOpeningToken.expression]; // copy the expression for the closing tag of `{{^foo}}...{{#}}...{{/}}`
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_openingTokenStack addObject:token];
+                [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
                 
             } else {
@@ -281,7 +272,7 @@
                 
                 self.currentOpeningToken = token;
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_openingTokenStack addObject:token];
+                [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
             }
         } break;
@@ -306,7 +297,7 @@
             
             self.currentOpeningToken = token;
             self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_openingTokenStack addObject:token];
+            [_openingTokenStack addObject:_currentOpeningToken];
             [_componentsStack addObject:_currentComponents];
         } break;
             
@@ -333,14 +324,12 @@
                                                                                                      type:GRMustacheTagTypeSection
                                                                                                components:_currentComponents];
                 
-                self.anonymousSectionExpression = _currentOpeningToken.expression;
-                
                 [_openingTokenStack removeLastObject];
                 [_componentsStack removeLastObject];
                 [[_componentsStack lastObject] addObject:sectionTag];
-                self.currentOpeningToken = token;
+                self.currentOpeningToken = [token tokenWithExpression:_currentOpeningToken.expression]; // copy the expression for the closing tag of `{{#foo}}...{{^}}...{{/}}`
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_openingTokenStack addObject:token];
+                [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
                 
             } else {
@@ -361,7 +350,7 @@
                 
                 self.currentOpeningToken = token;
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_openingTokenStack addObject:token];
+                [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
             }
         } break;
@@ -388,17 +377,10 @@
                         return NO;
                     }
                     
-                    // We may close `{{#foo}}...{{^}}...{{/}}`.
-                    // In this case, _currentOpeningToken is `{{^}}`, which has
-                    // no expression. But self.anonymousSectionExpression has
-                    // been previously set to foo.
-                    GRMustacheExpression *openingExpression = _currentOpeningToken.expression;
-                    if (openingExpression == nil) {
-                        openingExpression = self.anonymousSectionExpression;
+                    if (_currentOpeningToken.expression == nil) {
+                        NSAssert(_currentOpeningToken.expression, @"WTF");
                     }
-                    
-                    NSAssert(openingExpression, @"WTF");
-                    if (token.expression && ![token.expression isEqual:openingExpression]) {
+                    if (token.expression && ![token.expression isEqual:_currentOpeningToken.expression]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
                         return NO;
                     }
@@ -413,7 +395,7 @@
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : ((_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening) ? GRMustacheTagTypeOverridableSection : GRMustacheTagTypeSection);
                     wrapperComponent = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
-                                                                                   expression:openingExpression
+                                                                                   expression:_currentOpeningToken.expression
                                                                                templateString:token.templateString
                                                                                    innerRange:innerRange
                                                                                          type:type
@@ -484,7 +466,7 @@
             // Expand stacks
             self.currentOpeningToken = token;
             self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_openingTokenStack addObject:token];
+            [_openingTokenStack addObject:_currentOpeningToken];
             [_componentsStack addObject:_currentComponents];
         } break;
             

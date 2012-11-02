@@ -195,6 +195,12 @@ typedef enum {
 @property (nonatomic, readonly) NSString *templateSubstring GRMUSTACHE_API_INTERNAL;
 
 /**
+ * Return a new token that is a copy of the receiving token, but for the
+ * expression.
+ */
+- (id)tokenWithExpression:(GRMustacheExpression *)expression;
+
+/**
  * Builds and return a token.
  * 
  * The caller is responsible for honoring the template properties semantics and

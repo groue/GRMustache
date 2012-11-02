@@ -56,6 +56,10 @@
     return [[[self alloc] initWithType:type templateString:templateString templateID:templateID line:line range:range text:text expression:expression invalidExpression:invalidExpression partialName:partialName pragma:pragma] autorelease];
 }
 
+- (id)tokenWithExpression:(GRMustacheExpression *)expression
+{
+    return [[[GRMustacheToken alloc] initWithType:_type templateString:_templateString templateID:_templateID line:_line range:_range text:_text expression:expression invalidExpression:_invalidExpression partialName:_partialName pragma:_pragma] autorelease];
+}
 
 #pragma mark Private
 
