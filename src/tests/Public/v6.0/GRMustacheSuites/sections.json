@@ -124,6 +124,140 @@
       "expected": "<1abc>"
     },
     
+    // 'else' sections
+    
+    {
+      "name": "Missing key should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "Null should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { "subject": null },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "False should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "Empty string should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { "subject": "" },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "Empty list should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { "subject": [] },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "Zero should trigger the section omission, and the rendering of the 'else' section.",
+      "data": { "subject": 0 },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    {
+      "name": "True should trigger the section rendering, and the omission of the 'else' section.",
+      "data": { "subject": true },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Object should trigger the section rendering, and the omission of the 'else' section.",
+      "data": { "subject": { } },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Non-empty string should trigger the section rendering, and the omission of the 'else' section.",
+      "data": { "subject": "---" },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Non-empty blank string should trigger the section rendering, and the omission of the 'else' section.",
+      "data": { "subject": " " },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "List made of an empty list should trigger the section rendering, and the omission of the 'else' section.",
+      "data": { "subject": [[]] },
+      "template": "<{{#subject}}---{{^subject}}+++{{/subject}}>",
+      "expected": "<--->"
+    },
+    
+    {
+      "name": "Non-empty lists should be iterated and the 'else' section omitted",
+      "data": { "list": [ 1, 2, 3 ] },
+      "template": "<{{#list}}-{{^list}}+{{/list}}>",
+      "expected": "<--->"
+    },
+    
+    // Empty 'else' and closing tags
+    
+    {
+      "name": "Closing tag may be empty.",
+      "data": { "subject": true },
+      "template": "<{{#subject}}---{{/}}>",
+      "expected": "<--->"
+    },
+        
+    {
+      "name": "Closing tag may be blank.",
+      "data": { "subject": true },
+      "template": "<{{#subject}}---{{/ }}>",
+      "expected": "<--->"
+    },
+        
+    {
+      "name": "Closing tag after 'else' tag may be empty.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^subject}}+++{{/}}>",
+      "expected": "<+++>"
+    },
+        
+    {
+      "name": "Closing tag after 'else' tag may be blank.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^subject}}+++{{/ }}>",
+      "expected": "<+++>"
+    },
+    
+    {
+      "name": "'Else' tag may be empty.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^}}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+        
+    {
+      "name": "'Else' tag may be blank.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^ }}+++{{/subject}}>",
+      "expected": "<+++>"
+    },
+    
+    {
+      "name": "Both 'else' and closing tags may be empty.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^}}+++{{/}}>",
+      "expected": "<+++>"
+    },
+        
+    {
+      "name": "Both 'else' and closing tags may be blank.",
+      "data": { "subject": false },
+      "template": "<{{#subject}}---{{^ }}+++{{/ }}>",
+      "expected": "<+++>"
+    },
+    
     // Whitespace Insensitivity
     
     {
