@@ -198,7 +198,7 @@ typedef enum {
  * Return a new token that is a copy of the receiving token, but for the
  * expression.
  */
-- (id)tokenWithExpression:(GRMustacheExpression *)expression;
+- (id)tokenWithExpression:(GRMustacheExpression *)expression GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds and return a token.
