@@ -111,13 +111,7 @@ Filters
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
-You may ask yourself, is it worth declaring dozens of stub properties just for formatting numbers?
-
-[Filters](../filters.md) are quite helpful, here. However, **it may be impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
-
-So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
-
-Let's first rewrite our template so that it uses filters:
+Let's first rewrite our initial template so that it uses filters:
 
     raw: {{ value }}
     percent: {{ percent(value) }}
