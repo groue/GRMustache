@@ -229,7 +229,6 @@ static struct {
                         // Allow Breakpointing failing tests
                         [template renderObject:data error:&error];
                     }
-                    
                     STAssertEqualObjects(rendering, expectedRendering, @"Failed test: %@", testDescription);
                 } else {
                     // Allow Breakpointing failing tests
@@ -237,6 +236,10 @@ static struct {
                     STAssertTrue(NO, @"Error rendering template: %@: %@", [error localizedDescription], testDescription);
                 }
             } else {
+                // Allow Breakpointing failing tests
+                template = [self templateForTemplateString:templateString
+                                        partialsDictionary:templatesDictionary
+                                                     error:&error];
                 STAssertTrue(NO, @"Error loading template: %@: %@", [error localizedDescription], testDescription);
             }
         }
