@@ -12,10 +12,11 @@ How To
 
 ### 1. Download and add to your Xcode project
 
-    $ git clone https://github.com/groue/GRMustache.git
+    $ git submodule add git://github.com/groue/GRMustache.git
 
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
+- To update, run: `git submodule update`
 
 Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 6.1'` to your Podfile.
 
