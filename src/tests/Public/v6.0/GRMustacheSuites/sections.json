@@ -257,6 +257,13 @@
       "template": "<{{#subject}}---{{^ }}+++{{/ }}>",
       "expected": "<+++>"
     },
+        
+    {
+      "name": "Empty 'else' and closing tags can be nested.",
+      "data": { "subject1": false, "subject2": false },
+      "template": "<{{#subject1}}{{#foo}}---{{^ }}+++{{/ }}{{^ }}{{#subject2}}---{{^ }}+++{{/ }}{{/ }}>",
+      "expected": "<+++>"
+    },
     
     // Whitespace Insensitivity
     
