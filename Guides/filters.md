@@ -14,7 +14,7 @@ You apply a filter just like calling a function, with parentheses:
 
 - Filters can apply to compound key paths: `{{ uppercase(person.name) }}`.
 
-- You can extract values from filtered values: `{{ last(persons).name }}`.
+- You can extract values from filtered values: `{{ last(people).name }}`.
 
 - You can filter sections as well : `{{^ isEmpty(people) }}...{{/ isEmpty(people) }}` renders if the people collection is not empty.
     
