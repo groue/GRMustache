@@ -91,14 +91,29 @@ model.value = 0.5;
 NSString *rendering = [template renderObject:model];
 ```
 
-GRMustache solution: filters
-----------------------------
+Tag delegates
+-------------
+
+[Tag delegates](delegate.md) allow all numbers in a section to be formatted. For instance, in the following template, all numbers would be formatted as currencies:
+
+    {{#currency}}
+        {{#items}}
+            {{name}}: {{price}}
+        {{/items}}
+        total: {{total}}
+        taxes: {{taxes}}
+    {{/currency}}
+
+You'll find the code in the [Tag Delegates Guide](delegate.md#altering-the-rendering-of-tags-in-a-section).
+
+Filters
+-------
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
 
 You may ask yourself, is it worth declaring dozens of stub properties just for formatting numbers?
 
-[Filters](../filters.md) are quite helpful, here. However, **it may be tedious or impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
+[Filters](../filters.md) are quite helpful, here. However, **it may be impossible for [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) to produce the same rendering.**
 
 So check again the genuine Mustache way, above. Or keep on reading, now that you are warned.
 
@@ -169,5 +184,6 @@ After we have told GRMustache how the `percent` and `decimal` filters should pro
 ```
 
 **[Download the code](../../../../tree/master/Guides/sample_code/number_formatting)**
+
 
 [up](../../../../tree/master/Guides/sample_code), [next](indexes.md)
