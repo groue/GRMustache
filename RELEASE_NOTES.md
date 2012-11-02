@@ -3,6 +3,15 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.1
+
+### "Else"
+
+You don't have to close a regular section if it is immediately followed by its inverted form: `{{#name}}...{{^name}}...{{/name}}`
+    
+The short form `{{#name}}...{{^}}...{{/}}` is accepted, as well as the "unless" form `{{^name}}...{{#}}...{{/}}`.
+
+
 ## v6.0.1
 
 Robustness of protected contexts. Check the ["Protected namespaces"](Guides/protected_contexts.md#protected-namespaces) section of the Protected Contexts Guide.

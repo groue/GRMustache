@@ -3,7 +3,7 @@ GRMustache
 
 GRMustache is a production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-**November 1st, 2012: GRMustache 6.0.1 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**November 2nd, 2012: GRMustache 6.1 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -17,7 +17,7 @@ How To
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 6'` to your Podfile.
+Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 6.1'` to your Podfile.
 
 GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
 
