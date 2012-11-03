@@ -42,7 +42,7 @@ Genuine Mustache falls short on a few topics. GRMustache implements syntaxes tha
 
 - **"Anchored key paths"**, as `{{ .name }}` which prevents the lookup of the `name` key in the context stack built by Mustache sections, and guarantees that the `name` key will be fetched from the very current context.
     
-    If you are not familiar with the "context stack" and the key lookup mechanism, check the [Runtime Guide](runtime.md).
+    If you are not familiar with the "context stack" and the Mustache key lookup mechanism, check the [Runtime Guide](runtime.md).
 
 - **Loops in variable tags**: a simple variable tag `{{items}}` renders as the concatenation of the rendering of each individual items. You may think of Ruby on Rails' `<%= render @items %>`: check the [Rendering Objects Guide](rendering_objects.md).
 
