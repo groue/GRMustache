@@ -16,6 +16,7 @@ Features
 - **comment tag**, as `{{! comment }}`
 - **"set delimiter tags"**, as `{{=<% %>=}}`
 
+
 ### Overlooked Mustache
 
 Those features are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
@@ -24,9 +25,10 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
 - **"Mustache lambdas"**, allow tags such as `{{name}}` and `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at the [Rendering Objects Guide](rendering_objects.md).
 
-### Language extensions
 
-Genuine Mustache falls short on a few topics. GRMustache implements features that are not in the specification:
+### Mustache Language Extensions
+
+Genuine Mustache falls short on a few topics. GRMustache implements syntaxes that are not in the specification:
 
 - **Empty closing tags**, as in `{{#name}}...{{/}}`
 
@@ -56,13 +58,16 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
     
     Overridable partials are documented in the [Partials Guide](partials.md).
 
-    
 
 ### Powerful APIs
 
-All the nice Objective-C classes you know allow for observation and customization through delegates: check out the [Tag Delegates Guide](delegate.md).
+GRMustache is a Mustache engine that you can hack in.
 
-Also do not miss the [Rendering Objects](rendering_objects.md), [Filters](filters.md), and [Protected Contexts](protected_contexts.md) Guides.
+- [Rendering objects](rendering_objects.md) provide their own custom rendering.
+- [Tag delegates](delegate.md) observe and alter objects rendered by tags.
+- [Filters](filters.md) transform your raw data.
+
+Should you eventually build a library of reusable code snippets, you'll find [Protected Contexts](protected_contexts.md) useful.
 
 
 Getting started
