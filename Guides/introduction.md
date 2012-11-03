@@ -50,7 +50,7 @@ Genuine Mustache falls short on a few topics. GRMustache implements features tha
 
 - **Support for partial templates in a file system hierarchy**.
     
-    Use relative or absolute paths to your partial templates: see the [Partials Guide](partials.md).
+    Use relative `{{> header }}` or absolute paths `{{> /shared/header }}` to your partial templates: see the [Partials Guide](partials.md).
 
 - **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
     
