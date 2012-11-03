@@ -220,23 +220,23 @@
         return component;
     }
     
-    // Overridable tags can only override other tags
+    // Tag can only override other tag
     if (![component isKindOfClass:[GRMustacheTag class]]) {
         return component;
     }
     GRMustacheTag *otherTag = (GRMustacheTag *)component;
     
-    // Overridable tags can only override other overridable tags
+    // Tag can only override other overridable tag
     if (otherTag.type != GRMustacheTagTypeOverridableSection) {
         return otherTag;
     }
     
-    // Overridable tags can only override other sections with the same expression
+    // Tag can only override other tag with the same expression
     if (![otherTag.expression isEqual:_expression]) {
         return otherTag;
     }
     
-    // OK, override otherTag with self
+    // OK, override tag with self
     return [otherTag tagWithOverridingTag:self];
 }
 
