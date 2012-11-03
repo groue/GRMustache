@@ -98,7 +98,7 @@
     
     @autoreleasepool {
         
-        // 1. Evaluate expression
+        // Evaluate expression
         
         id object;
         BOOL isProtected;
@@ -107,7 +107,7 @@
         }
         
         
-        // 2. Hide object if it is protected
+        // Hide object if it is protected
         
         if (isProtected) {
             // Object is protected: it may enter the context stack, and provide
@@ -149,7 +149,7 @@
         }
         
         
-        // 3. Let tagDelegates observe and alter the object
+        // Tag delegates pre-rendering callbacks
         
         for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
             if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
@@ -165,36 +165,45 @@
         NSError *renderingError = nil;
         NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
         
-        if (rendering) {
+        // If rendering is nil, but rendering error is not set,
+        // assume lazy coder, and the intention to render nothing:
+        // fail if and only if rendering is nil and renderingError is
+        // explicitely set.
+        
+        if (!rendering && renderingError) {
+            
+            // Error
+            
+            if (error) {
+                *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+            }
+            success = NO;
+            
+            // Tag delegates post-rendering callbacks
+
+            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
+                if ([delegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                    [delegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
+                }
+            }
+            
+        } else {
+            
+            // Success
+            
             if (rendering.length > 0) {
                 if (self.escapesHTML && !HTMLSafe) {
                     rendering = [self escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];
             }
-        } else if (renderingError) {
-            // If rendering is nil, but rendering error is not set,
-            // assume lazy coder, and the intention to render nothing:
-            // Fail if and only if renderingError is explicitely set.
-            if (error) {
-                *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
-            }
-            success = NO;
-        }
-        
-        
-        // 5. tagDelegates clean up
-        
-        if (success) {
+            
+            // Tag delegates post-rendering callbacks
+            
+            if (rendering == nil) { rendering = @""; }  // Don't expose nil as a success
             for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
                 if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
                     [delegate mustacheTag:self didRenderObject:object as:rendering];
-                }
-            }
-        } else {
-            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
-                if ([delegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                    [delegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
                 }
             }
         }
