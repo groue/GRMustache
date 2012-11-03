@@ -8,51 +8,47 @@ Overview
 
 Mustache and GRMustache have no built-in localization feature. It is thus a matter of injecting our own application code into the template rendering, some code that localizes its input.
 
-[Rendering objects](../rendering_objects.md) are our vector. We'll eventually render the following template:
-
-    {{#localize}}
-        {{name1}} and {{name2}}
-        {{#count}}
-            {{! at least one mutual friend }}
-            have
-            {{#isPlural(count)}}
-                {{! several mutual friend }}
-                {{count}} mutual friends
-            {{/}}
-            {{^isPlural(count)}}
-                {{! single mutual friend }}
-                one mutual friend
-            {{/}}
-        {{/}}
-        {{^count}}
-            {{! no mutual friend }}
-            have no mutual friend
-        {{/}}.
-    {{/localize}}
-
-Into the various renderings below, depending on the current locale:
-
-    Arthur and Barbara have no mutual friend.
-    Craig et Dennis ont un ami commun.
-    Eugene y Fiona tiene 5 amigos en común.
-
-Yet this will be quite a smartish sample code, and it's better starting with simpler cases. We'll see how to localize:
+We'll see below how to localize:
 
 1. a section of a template
     
         {{#localize}}Hello{{/localize}}
     
+    into:
+    
+        Hello
+        Bonjour
+        Hola
+        
 2. a value
     
         {{#localize}}{{greeting}}{{/localize}}
     
+    into:
+    
+        Hello
+        Bonjour
+        Hola
+        
 3. a portion of a template *with arguments*, as above:
     
         {{#localize}}Hello {{name1}}, do you know {{name2}}?{{/localize}}
+    
+    into:
+    
+        Hello Arthur, do you know Barbara?
+        Bonjour Arthur, est-ce que tu connais Barbara ?
+        Hola Arthur, sabes Barbara?
 
 4. a portion of a template with arguments and *conditions*, as above:
     
         {{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}
+    
+    into:
+    
+        Arthur and Barbara have no mutual friend.
+        Craig et Dennis ont un ami commun.
+        Eugene y Fiona tiene 5 amigos en común.
 
 Of course, we'll always eventually use the standard `NSLocalizedString` function.
 
