@@ -67,7 +67,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderWithContext:context inBuffer:buffer error:error]) {
+        if (![component renderInBuffer:buffer withContext:context error:error]) {
             return nil;
         }
     }

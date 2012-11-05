@@ -100,12 +100,7 @@
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
     GRMustacheContext *context = [self.baseContext contextByAddingObject:object];
-    
-    NSMutableString *buffer = [NSMutableString string];
-    if (![self renderWithContext:context inBuffer:buffer error:error]) {
-        return nil;
-    }
-    return buffer;
+    return [self renderContentWithContext:context HTMLSafe:NULL error:error];
 }
 
 - (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error
@@ -114,18 +109,13 @@
     for (id object in objects) {
         context = [context contextByAddingObject:object];
     }
-    
-    NSMutableString *buffer = [NSMutableString string];
-    if (![self renderWithContext:context inBuffer:buffer error:error]) {
-        return nil;
-    }
-    return buffer;
+    return [self renderContentWithContext:context HTMLSafe:NULL error:error];
 }
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderWithContext:context inBuffer:buffer error:error]) {
+    if (![self renderInBuffer:buffer withContext:context error:error]) {
         return nil;
     }
     if (HTMLSafe) {
@@ -137,14 +127,14 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheTemplateOverride: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderWithContext:context inBuffer:buffer error:error]) {
+        if (![component renderInBuffer:buffer withContext:context error:error]) {
             return NO;
         }
     }

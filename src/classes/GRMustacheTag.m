@@ -92,7 +92,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderWithContext:(GRMustacheContext *)context inBuffer:(NSMutableString *)buffer error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     BOOL success = YES;
     
