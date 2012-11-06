@@ -40,7 +40,7 @@ We'll see below how to localize:
         Bonjour Arthur, est-ce que tu connais Barbara ?
         Hola Arthur, sabes Barbara?
 
-4. a portion of a template with arguments and *conditions*, as above:
+4. a portion of a template with arguments and *conditions*:
     
         {{#localize}}{{name1}} and {{name2}} {{#count}}have {{#isPlural(count)}}{{count}} mutual friends{{/}}{{^isPlural(count)}}one mutual friend{{/}}{{/count}}{{^count}}have no mutual friend{{/count}}.{{/localize}}
     
