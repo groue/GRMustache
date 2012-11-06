@@ -30,7 +30,7 @@ We'll see below how to localize:
         Bonjour
         Hola
         
-3. a portion of a template *with arguments*, as above:
+3. a portion of a template *with arguments*:
     
         {{#localize}}Hello {{name1}}, do you know {{name2}}?{{/localize}}
     
