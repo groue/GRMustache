@@ -141,8 +141,8 @@
 		5682B4C51528E0C600ADD123 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4C41528E0C500ADD123 /* CoreData.framework */; };
 		56907EE615FC752F0081BC2A /* GRMustacheExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907EE515FC752E0081BC2A /* GRMustacheExpression.m */; };
 		56907EE715FC752F0081BC2A /* GRMustacheExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907EE515FC752E0081BC2A /* GRMustacheExpression.m */; };
-		56907F191604B5C50081BC2A /* GRPositionFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRPositionFilterTest.m */; };
-		56907F1A1604B5C50081BC2A /* GRPositionFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRPositionFilterTest.m */; };
+		56907F191604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */; };
+		56907F1A1604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */; };
 		569EB2E5164030E300C09632 /* GRMustacheAccumulatorTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569EB2E3164030E000C09632 /* GRMustacheAccumulatorTag_private.h */; };
 		569EB2E6164030E300C09632 /* GRMustacheAccumulatorTag_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 569EB2E3164030E000C09632 /* GRMustacheAccumulatorTag_private.h */; };
 		569EB2E7164030E300C09632 /* GRMustacheAccumulatorTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 569EB2E4164030E100C09632 /* GRMustacheAccumulatorTag.m */; };
@@ -327,7 +327,7 @@
 		5682B4BF1528DF4900ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5682B4C41528E0C500ADD123 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		56907EE515FC752E0081BC2A /* GRMustacheExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExpression.m; sourceTree = "<group>"; };
-		56907F161604B5C50081BC2A /* GRPositionFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPositionFilterTest.m; sourceTree = "<group>"; };
+		56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilterTest.m; sourceTree = "<group>"; };
 		569EB2E3164030E000C09632 /* GRMustacheAccumulatorTag_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheAccumulatorTag_private.h; sourceTree = "<group>"; };
 		569EB2E4164030E100C09632 /* GRMustacheAccumulatorTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheAccumulatorTag.m; sourceTree = "<group>"; };
 		56A8D48B15279F8A00D9C718 /* GRMustacheTagDelegateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTagDelegateTest.m; sourceTree = "<group>"; };
@@ -799,7 +799,7 @@
 			isa = PBXGroup;
 			children = (
 				560CE88E1526EEF4004F935E /* GRBooleanTest.m */,
-				56907F161604B5C50081BC2A /* GRPositionFilterTest.m */,
+				56907F161604B5C50081BC2A /* GRMustacheFilterTest.m */,
 				563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */,
 				5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */,
 				568140E616365D6000310B7F /* GRMustacheProxyTest.m */,
@@ -1167,7 +1167,7 @@
 				5682B48B1528473200ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */,
 				5682B48F1528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
 				5682B4931528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */,
-				56907F191604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
+				56907F191604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */,
 				563A5EA7163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				568140D9163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				568140E216365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
@@ -1229,7 +1229,7 @@
 				5682B48C1528473200ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */,
 				5682B4901528473200ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m in Sources */,
 				5682B4941528473200ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m in Sources */,
-				56907F1A1604B5C50081BC2A /* GRPositionFilterTest.m in Sources */,
+				56907F1A1604B5C50081BC2A /* GRMustacheFilterTest.m in Sources */,
 				563A5EA8163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				568140DA163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				568140E316365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
