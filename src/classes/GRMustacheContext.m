@@ -38,7 +38,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheContext()
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
-+ (BOOL)objectIsTagDelegate:(id)object;
 
 - (id)initWithContextStack:(NSArray *)contextStack protectedContextStack:(NSArray *)protectedContextStack hiddenContextStack:(NSArray *)hiddenContextStack delegateStack:(NSArray *)delegateStack templateOverrideStack:(NSArray *)templateOverrideStack;
 
@@ -115,7 +114,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     NSArray *contextStack = _contextStack ? [_contextStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     
     NSArray *delegateStack = _delegateStack;
-    if ([GRMustacheContext objectIsTagDelegate:object]) {
+    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
         delegateStack = _delegateStack ? [_delegateStack arrayByAddingObject:object] : [NSArray arrayWithObject:object];
     }
     
@@ -364,23 +363,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
 }
 
-+ (BOOL)objectIsTagDelegate:(id)object
-{
-    static CFMutableDictionaryRef cache = nil;
-    if (cache == nil) {
-        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-    }
-    
-    Class aClass = [object class];
-    NSNumber *isDelegate = CFDictionaryGetValue(cache, aClass);
-    
-    if (!isDelegate) {
-        isDelegate = [NSNumber numberWithBool:[object conformsToProtocol:@protocol(GRMustacheTagDelegate)]];
-        CFDictionaryAddValue(cache, aClass, isDelegate);
-    }
-    
-    return [isDelegate boolValue];
-}
 
 #pragma mark - NSUndefinedKeyException prevention
 
