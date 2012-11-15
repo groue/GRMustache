@@ -162,8 +162,9 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (id)contextValueForKey:(NSString *)key isProtected:(BOOL *)isProtected
 {
-    // top of the stack is first object
-    for (id contextObject in [_protectedContextStack reverseObjectEnumerator]) {
+    NSUInteger count = [_protectedContextStack count];
+    for (NSUInteger index = 0; index < count; ++index) {
+        id contextObject = [_protectedContextStack objectAtIndex:count-1-index];
         id value = [GRMustacheContext valueForKey:key inObject:contextObject];
         if (value != nil) {
             if (isProtected) {
@@ -172,7 +173,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             return value;
         }
     }
-    for (id contextObject in [_contextStack reverseObjectEnumerator]) {
+    
+    count = [_contextStack count];
+    for (NSUInteger index = 0; index < count; ++index) {
+        id contextObject = [_contextStack objectAtIndex:count-1-index];
         if ([_hiddenContextStack containsObject:contextObject]) {
             continue;
         }
