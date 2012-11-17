@@ -8,9 +8,9 @@ Overview
 
 This protocol lets you observe, and possibly alter the rendering of the Mustache tags that are provided with your own data: `{{ name }}`, `{{# name }}...{{/}}`, `{{^ name }}...{{/}}` and `{{$ name }}...{{/}}`, respectively *variable tags*, *section tags*, *inverted section tags*, and *overridable section tags*.
 
-The first three are abundantly documented at http://mustache.github.com/mustache.5.html.
+The first three are documented in the [Runtime Guide](runtime.md).
 
-Overridable sections are documented in the [Partials guide](partials.md).
+Overridable sections are documented in the [Partials Guide](partials.md).
 
 
 Observing the rendering of Mustache tags
