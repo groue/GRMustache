@@ -290,6 +290,34 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
+### Expressions in sections
+
+Just as variable tags, section tags render any well-formed expressions:
+
+```objc
+id data = @{
+    @"person": @{
+        @"friends": @[
+            [Person personWithName:@"José"],
+            [Person personWithName:@"Karl"],
+            [Person personWithName:@"Lubitza"]]
+    }
+};
+
+NSString *templateString = @"{{# withPosition(person.friends) }}"
+                           @"    {{ position }}: {{ name }}"
+                           @"{{/}}";
+
+// 1: José
+// 2: karl
+// 3: Lubitza
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+The `withPosition` filter, that makes the `position` key available inside the section, is described in the [Collection Indexes Sample Code](sample_code/indexes.md).
+
 
 The Context Stack
 -----------------
