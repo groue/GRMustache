@@ -93,7 +93,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 Final rendering:
 
-    <b>Arthur is awesome.</b>
+    <strong>Arthur is awesome.</strong>
 
 ### What have we learnt here?
 
