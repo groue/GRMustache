@@ -10,7 +10,7 @@ Features
 
 ### Core Mustache
 
-- **variable tags**, as `{{name}}` and `{{{name}}}` (HTML-escaped or not)
+- **variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
 - **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
 - **partial tags**, as `{{> partial}}`
 - **comment tag**, as `{{! comment }}`
