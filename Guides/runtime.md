@@ -32,7 +32,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-Any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object that respond to the `valueForKey:` method can be used.
+Any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object that responds to the `valueForKey:` method can be used.
 
 Dictionaries are such objects. So are, generally speaking, your custom models:
 
