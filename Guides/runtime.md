@@ -324,7 +324,7 @@ NSString *templateString = @"{{# withPosition(person.friends) }}"
                            @"{{/}}";
 
 // 1: José
-// 2: karl
+// 2: Karl
 // 3: Lubitza
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
@@ -411,7 +411,7 @@ This is very handy, but this clashes with the [rule of least surprise](http://ww
 
 First, `{{collection.count}}` would not render the number of objects in the collection. `{{#collection.count}}...{{/}}` would not conditionally render if and only if the array is not empty. This has bitten at least [one GRMustache user](https://github.com/groue/GRMustache/issues/21), and this should not happen again.
 
-Second, `{{#collection.name}}{{.}}{{/}}` would render the same as `{{#collection}}{{name}}{{/}}`. No sane user would ever try to use the convoluted first syntax. But sane users want a clean and clear failure when their code has a bug, leading to GRMustache not render the object they expect. When `object` resolves to an unexpected collection, `object.name` should behave like a missing key, not like a key that returns a unexpected collection with weird and hard-to-debug side effects.
+Second, `{{#collection.name}}{{.}}{{/}}` would render the same as `{{#collection}}{{name}}{{/}}`. No sane user would ever try to use the convoluted first syntax. But sane users want a clean and clear failure when their code has a bug, leading to GRMustache not render the object they expect. When `object` resolves to an unexpected collection, `object.name` should behave like a missing key, not like a key that returns an unexpected collection with weird and hard-to-debug side effects.
 
 Based on this rationale, GRMustache uses the implementation of `valueForKey:` of `NSObject` for arrays, sets, and ordered sets. As a consequence, the `count` key can be used in templates, and no unexpected collections comes messing with the rendering.
 
