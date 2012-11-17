@@ -112,7 +112,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 ```
 
-When an inverted sections follows a regular section with the same expression, you can use the short `{{# name }}...{{^ name }}...{{/ name }}` form, avoiding the closing tag for `{{# name }}`. Think of "if ... else ... end". For brevity's sake, you can also omit the expression after the opening tag: `{{#name}}...{{^}}...{{/}}`
+When an inverted sections follows a regular section with the same expression, you can use the short `{{# name }}...{{^ name }}...{{/ name }}` form, avoiding the closing tag for `{{# name }}`. Think of "if ... else ... end". For brevity's sake, you can also omit the expression after the opening tag: `{{#name}}...{{^}}...{{/}}` is valid.
 
 The full list of false values are:
 
