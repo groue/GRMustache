@@ -353,7 +353,7 @@ An example should make this clearer. Let's consider the template below:
 
 In the first section, the `length` key will be fetched from the `title` string which has just entered the context stack: it will be rendered as "6" if the title is "Hamlet".
 
-In the last section, the inner `title` key is missing in the title string. Thus GRMustache looks for it in the enclosing context, finds again the title string, and renders it:
+In the last section, the title string is still the context. However it has no `title` key. Thus GRMustache looks for it in the enclosing context, finds again the title string, and renders it:
 
     6
     Hamlet
