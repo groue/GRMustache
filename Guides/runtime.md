@@ -3,136 +3,340 @@
 GRMustache runtime
 ==================
 
-Anatomy of a tag rendering
---------------------------
+Overview
+--------
 
-Let's consider the following code:
+Mustache defines a few tag types:
+
+- `{{> partial }}` and `{{< partial }}...{{/}}` partial tags, documented in the [Partials Guide](partials.md)
+- `{{! comment }}` comment tags, which are not rendered
+- `{{ name }}` HTML-escaped variable tags
+- `{{{ name }}}` and `{{& name }}` unescaped variable tags
+- `{{# name }}...{{/ name }}` regular section tags
+- `{{^ name }}...{{/ name }}` inverted section tags
+- `{{$ name }}...{{/ name }}` overridable section tags, documented in the [Partials Guide](partials.md)
+
+This guide describes how `{{ name }}`, `{{{ name }}}`, `{{# name }}...{{/ name }}` and `{{^ name }}...{{/ name }}` tags load and render your data.
+
+Variable tags
+-------------
+
+Variable tags `{{ name }}` and `{{{ name }}}` look for the `name` key in the object you provide:
 
 ```objc
-// A template
-NSString *templateString = @"I have {{ count }} arms.";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+id data = @{ @"name": @"Arthur" };
 
-// A pirate
-template.baseContext = [template.baseContext contextByAddingTagDelegate:pirate];
-
-// Rendering
-id data = @{ @"count": @2 };
-NSString *rendering = [template renderObject:data];
+// Renders "Hello Arthur!"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"Hello {{name}}!"
+                                                 error:NULL];
 ```
 
-Let's have a precise look at the rendering of the `{{ count }}` tag.
+Any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object that respond to the `valueForKey:` method can be used.
 
-1. First the `count` expression is evaluated. This evaluation is based on a key lookup mechanism based on the invocation of `valueForKey:` on your data object. Here we get an NSNumber of value 2.
+Dictionaries are such objects. So are, generally speaking, your custom models:
 
-2. Tag delegates enter the game. Those objects are covered in the [Tag Delegates Guide](delegate.md).
+```objc
+// The Person class defines the `name` property:
+Person *barbara = [Person personWithName:@"Barbara"];
 
-    Here, our pirate unilateraly decides that "arrr, lost my" should be rendered instead of the number 2.
+// Renders "Hello Barbara!"
+NSString *rendering = [GRMustacheTemplate renderObject:barbara
+                                            fromString:@"Hello {{name}}!"
+                                                 error:NULL];
+```
 
-3. the "arrr, lost my" string is asked to render for the `{{ count }}` tag. It is a string, so it simply renders itself.
+Remember that `{{ name }}` render HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values.
 
-Eventually, the final rendering is `I have arrr, lost my arms.`
+Objects are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
+
+- Some of your custom objects. See the [Rendering Objects Guide](rendering_objects.md) for further details.
+- objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol:
+
+Variable tags render each of the enumerable objects:
+
+```objc
+id data = @{ @"voyels": @[@"A", @"E", @"I", @"O", @"U"] };
+
+// Renders "AEIOU"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{voyels}}"
+                                                 error:NULL];
+```
+
+Expressions
+-----------
+
+Variable tags render simple keys as seen above, and, more generally, *expressions*, such as the key path `person.name` and the filtered expression `uppercase(person.name)`.
+
+```objc
+Person *craig = [Person personWithName:@"Craig"];
+id data = @{ @"person": craig };
+
+// Renders "Hello CRAIG!"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"Hello {{ uppercase(person.name) }}!"
+                                                 error:NULL];
+```
+
+GRMustache first looks for the `person` key, extracts its `name`, and applies the `uppercase` built-in [filter](filters.md). The variable tag eventually renders the resulting string.
 
 
-Core methods and protocols
---------------------------
+Section tags
+------------
 
-There are two methods and two protocols that you have to care about when providing data to GRMustache:
+The rendering of section tags such as `{{# name }}...{{/ name }}` and `{{^ name }}...{{/ name }}` depend on the value attached to the `name` expression.
 
-- `valueForKey:` is the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) method, that GRMustache invokes when looking for the data that will be rendered. Basically, for a `{{name}}` tag to be rendered, all you need to provide is an NSDictionary with the `@"name"` key, or an object declaring the `name` property.
+Generally speaking, *inverted sections* `{{^ name }}...{{/ name }}` render when *regular sections* `{{# name }}...{{/ name }}` do not. You can think of the caret `^` as the Mustache "else".
 
-- `description` is the standard [NSObject](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) method, that GRMustache invokes when rendering the data it has fetched from `valueForKey:`. Most classes of Apple frameworks already have sensible implementations of `description`: NSString, NSNumber, etc. You generally won't have to think a lot about it.
+Precisely speaking:
 
-- `NSFastEnumeration` is the standard protocol for [enumerable objects](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html). The most obvious enumerable is NSArray. There are others, and you may provide your own. Objects that conform to the `NSFastEnumeration` protocol are the base of GRMustache loops.
-    
-    Both variable tags `{{items}}` and section tags `{{#items}}...{{/items}}` can loop. They render as many times as there are items in the collection.
+### False sections
 
-- `GRMustacheRendering` is the protocol for objects that take full control of their rendering. This is how you implement the "Mustache lambdas" of http://mustache.github.com/mustache.5.html, for example. *Rendering objects* have their dedicated guide, the [Rendering Objets Guide](rendering_objects.md).
+If the value is *false*, regular sections are omitted, and inverted sections rendered:
 
+```objc
+id data = @{ @"red": @NO, @"blue": @YES };
 
-Mustache boolean sections
--------------------------
+// Renders "Not red"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#red}}Red{{/red}}{{^red}}Not red{{/red}}"
+                                                 error:NULL];
 
-The section `{{# condition }}...{{/ condition }}` renders or not, depending on the boolean value of the `condition` key.
+// Renders "Blue"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#blue}}Blue{{/blue}}{{^blue}}Not blue{{/blue}}"
+                                                 error:NULL];
 
-GRMustache considers as false the following values, and only those:
+```
 
-- `nil` and missing [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) keys
+When an inverted sections follows a regular section with the same expression, you can use the short `{{# name }}...{{^ name }}...{{/ name }}` form, avoiding the closing tag for the `{{# name }}`. Think of "if ... else ... end":
+
+```objc
+id data = @{ @"red": @NO };
+
+// Renders "Not red"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#red}}Red{{^red}}Not red{{/red}}"
+                                                 error:NULL];
+
+```
+
+For brevity's sake, you can also omit the expression after the opening tag:
+
+```objc
+id data = @{ @"red": @NO };
+
+// Renders "Not red"
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#red}}Red{{^}}Not red{{/}}"
+                                                 error:NULL];
+
+```
+
+The full list of false values are:
+
+- `nil` and missing keys
 - `[NSNull null]`
 - `NSNumber` instances whose `boolValue` method returns `NO`
 - the empty string `@""`
-- empty enumerables (all objects conforming to the NSFastEnumeration protocol, but NSDictionary -- the most obvious enumerable is NSArray).
+- empty enumerables.
 
-They all prevent Mustache sections `{{#name}}...{{/name}}` rendering.
+They all prevent Mustache sections `{{# name }}...{{/ name }}` rendering.
 
-They all trigger inverted sections `{{^name}}...{{/name}}` rendering.
+They all trigger inverted sections `{{^ name }}...{{/ name }}` rendering.
+
+### Enumerable sections
+
+If the value attached to a section conforms to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol, regular sections are rendered as many times as there are items in the enumerable object:
+
+```objc
+NSArray *friends = @[
+    [Person personWithName:@"Dennis"],
+    [Person personWithName:@"Eugene"],
+    [Person personWithName:@"Fiona"]];
+id data = @{ @"friends": friends };
+
+NSString *templateString = @"My friends are:\n"
+                           @"{{# friends }}"
+                           @"- {{ name }}\n"
+                           @"{{/ friends }}";
+
+// Renders: My friends are:
+// - Dennis
+// - Eugene
+// - Fiona
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+Each item in the collection gets, each on its turn, available for the key lookup: that is how the `{{ name }}` tag renders each of my friend's name.
+
+Inverted sections render if and only if the collection is empty:
+
+```objc
+id data = @{ @"friends": @[] }; // empty array
+
+NSString *templateString = @"My friends are:\n"
+                           @"{{# friends }}"
+                           @"- {{ name }}\n"
+                           @"{{/ friends }}"
+                           @"{{^ friends }}"
+                           @"I have no friend, sob."
+                           @"{{/ friends }}";
+
+// Renders: I have no friend, sob.
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+#### Rendering a section once when a collection contains several items
+
+Sections render as many times as they contain items.
+
+However, you may want to render a section *once* if and only if a collection is not empty. For example, when rendering a single `<ul>` HTML elements that wraps several `<li>`.
+
+A template that is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) is to define a boolean key that states whether the collection is empty or not:
+
+```objc
+NSArray *friends = ...;
+id data = @{
+    @"hasFriends": @(friends.length > 0),
+    @"friends": friends };
+
+NSString *templateString = @"{{# hasFriends }}"
+                           @"<ul>"
+                           @"  {{# friends }}"
+                           @"  <li>{{ name }}</li>"
+                           @"  {{/ friends }}";
+                           @"</ul>"
+                           @"{{/ hasFriends }}";
+
+// <ul>
+//   <li>Dennis</li>
+//   <li>Eugene</li>
+//   <li>Fiona</li>
+// </ul>
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+If you do not care about compatibility, you can simply use the `count` property of NSArray: GRMustache will not render the section if it returns zero (see false sections above):
+
+```objc
+NSArray *friends = ...;
+id data = @{ @"friends": friends };
+
+NSString *templateString = @"{{# friends.count }}"
+                           @"<ul>"
+                           @"  {{# friends }}"
+                           @"  <li>{{ name }}</li>"
+                           @"  {{/ friends }}";
+                           @"</ul>"
+                           @"{{/ friends.count }}";
+
+// <ul>
+//   <li>Dennis</li>
+//   <li>Eugene</li>
+//   <li>Fiona</li>
+// </ul>
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
 
 
-The context stack
+### Lambda sections
+
+Mustache defines [lambda sections](http://mustache.github.com/mustache.5.html), that is, sections that execute your own application code, and allow you to extend the core Mustache engine.
+
+Such sections are fully documented in the [Rendering Objects Guide](rendering_objects.md), but here is a preview:
+
+```objc
+id data = @{
+    @"localize": [LocalizingHelper new],
+    @"name1": @"Gustave",
+    @"name2": @"Henriett" };
+
+NSString *templateString = @"{{#localize}}Hello {{name1}}, do you know {{name2}}?{{/localize}}";
+
+// Assuming a Spanish locale:
+// Hola Gustave, sabes Henriett?
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+This fancy `LocalizingHelper` class is described in the [Localization Sample Code](sample_code/localization.md).
+
+
+### Other sections
+
+When a section renders an object that is not false, not enumerable, not a lambda, it renders once, making the objet available for the key lookup inside the section:
+
+```objc
+Person *ignacio = [Person personWithName:@"Ignacio"];
+id data = @{ @"person": ignacio };
+
+// Renders "Hello Ignacio!"
+NSString *templateString = @"{{# person }}Hello {{ name }}!{{/ person }}";
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
+
+The Context Stack
 -----------------
 
-For Mustache to render a `{{ name }}` tag, it performs a lookup of the key `name`. This mechanism is detailed below.
+We have seen that values rendered by sections are made available for the key lookup inside the section.
+
+As a matter of fact, objects that were the context of enclosing sections are still available: the latest object has just entered the top of the *context stack*.
+
+An example should make this clearer. Let's consider the template below:
+
+    {{# title }}
+        {{ length }}
+    {{/ title }}
+    
+    {{# title }}
+        {{ title }}
+    {{/ title }}
+
+In the first section, the `length` key will be fetched from the `title` string which has just entered the context stack: it will be rendered as "6" if the title is "Hamlet".
+
+In the last section, the inner `title` key is missing in the title string. Thus GRMustache looks for it in the enclosing context, finds again the title string, and renders it:
+
+    6
+    Hamlet
+
+This technique allows, for example, the conditional rendering of a `<h1>` HTML tag if and only if the title is not empty (empty strings are considered false, see "false sections" above):
+
+    {{# title }}
+      <h1>{{ title }}</h1>  {{! rendered if there is a title }}
+    {{/ title }}
 
 
-### Mustache sections open new contexts
+### Limiting the scope of the key lookup
 
-Mustache sections allow you digging inside an object:
+These three template snippets are quite similar, but not stricly equivalent:
 
-    {{#person}}
-      {{#pet}}
-          My pet is named {{name}}.
-      {{/pet}}
-    {{/person}}
-
-Suppose this template is provided this object:
-
-    { person: { pet: { name: 'Plato' }}}
-
-The `person` key will return a person.
-
-This person becomes the context in the `person` section: the `pet` key will be looked in that person.
-
-Finally, the `name` key will be looked in the pet.
-
-
-### Context stack and missing keys
-
-GRMustache uses the standard [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method when performing key lookup.
-
-GRMustache considers a key to be missing if and only if this method returns nil or throws an `NSUndefinedKeyException`.
-
-When a key is missing, GRMustache looks for it in the enclosing contexts, the values that populated the enclosing sections, one after the other, until it finds a non-nil value.
-
-For instance, when rendering the above template, the `name` key will be asked to the pet first. In case of failure, GRMustache will then check the `person` object. Eventually, when all previous objects have failed providing the key, the lookup will stop.
-
-This is the context stack: it starts with the object initially provided, grows when GRMustache enters a section, and shrinks on section leaving.
-
-A pratical use of this feature is the conditional rendering of a string:
-
-```
-{{#title}}
-  <h1>{{title}}</h1>
-{{/title}}
-```
-
-The `{{#title}}` section renders only if the title is not empty. In the section, the current context is the title string itself. Since this string fails providing the `title` key, the key loopup hence goes on, and finds again the title in the enclosing context, so that it can be rendered.
-
-### Sections vs. Key paths
-
-You should be aware that these three template snippets are quite similar, but not stricly equivalent:
-
-- `...{{#foo}}{{bar}}{{/foo}}...`
-- `...{{#foo}}{{.bar}}{{/foo}}...`
-- `...{{foo.bar}}...`
+- `...{{# foo }}{{ bar  }}{{/ foo }}...`
+- `...{{# foo }}{{ .bar }}{{/ foo }}...`
+- `...{{ foo.bar }}...`
 
 The first will look for `bar` anywhere in the context stack, starting with the `foo` object.
 
-The two others are identical: they ensure the `bar` key comes from the `foo` object.
+The two others are identical: they ensure the `bar` key comes from the very `foo` object. If `foo` is not found, the `bar` lookup will fail as well, regardless of `bar` keys defined by enclosing contexts.
 
 
-### Detailed description of GRMustache handling of `valueForKey:`
+Detailed description of GRMustache handling of `valueForKey:`
+-------------------------------------------------------------
 
-When GRMustache looks for a key in your data objects, it invokes their implementation of `valueForKey:`. With some extra bits.
+As seen above, GRMustache looks for a key in your data objects with the `valueForKey:` method. With some extra bits.
 
 **NSUndefinedKeyException handling**
 
