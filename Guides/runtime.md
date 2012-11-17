@@ -378,6 +378,14 @@ The first will look for `bar` anywhere in the context stack, starting with the `
 The two others are identical: they ensure the `bar` key comes from the very `foo` object. If `foo` is not found, the `bar` lookup will fail as well, regardless of `bar` keys defined by enclosing contexts.
 
 
+Fine tuning of key lookup
+-------------------------
+
+Values extracted from the context stack are directly rendered unless you had some *tag delegates* enter the game. They help you render default values for missing keys, for example. See the [Tag Delegates Guide](delegate.md) for a full discussion.
+
+Protected contexts let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Protected Contexts Guide](protected_contexts.md).
+
+
 Detailed description of GRMustache handling of `valueForKey:`
 -------------------------------------------------------------
 
