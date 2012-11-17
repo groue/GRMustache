@@ -220,7 +220,7 @@ A template that is compatible with [other Mustache implementations](https://gith
 ```objc
 NSArray *friends = ...;
 id data = @{
-    @"hasFriends": @(friends.length > 0),
+    @"hasFriends": @(friends.count > 0),
     @"friends": friends };
 
 NSString *templateString = @"{{# hasFriends }}"
