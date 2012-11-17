@@ -387,9 +387,7 @@ As seen above, GRMustache looks for a key in your data objects with the `valueFo
 
 NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` raises an `NSUndefinedKeyException`.
 
-*GRMustache catches those exceptions*.
-
-For instance, if the pet above has to `name` property, it will raise an `NSUndefinedKeyException` that will be caught by GRMustache so that the key lookup can continue with the `person` object.
+*GRMustache catches those exceptions*, so that the key lookup can continue down the context stack.
 
 When debugging your project, those exceptions may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
 
