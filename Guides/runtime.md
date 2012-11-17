@@ -50,7 +50,7 @@ Remember that `{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and 
 
 Objects are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
 
-- Some of your custom objects. See the [Rendering Objects Guide](rendering_objects.md) for further details.
+- Your custom objects that take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
 - Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol:
 
 Variable tags render each of the enumerable objects:
