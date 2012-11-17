@@ -46,12 +46,12 @@ NSString *rendering = [GRMustacheTemplate renderObject:barbara
                                                  error:NULL];
 ```
 
-Remember that `{{ name }}` render HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values.
+Remember that `{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values.
 
 Objects are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
 
 - Some of your custom objects. See the [Rendering Objects Guide](rendering_objects.md) for further details.
-- objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol:
+- Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol:
 
 Variable tags render each of the enumerable objects:
 
@@ -63,6 +63,8 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:@"{{voyels}}"
                                                  error:NULL];
 ```
+
+This especially comes handy with your custom [rendering objects](rendering_objects.md): you may think of Ruby on Rails' `<%= render @items %>`.
 
 Expressions
 -----------
@@ -162,7 +164,7 @@ NSString *templateString = @"My friends are:\n"
                            @"- {{ name }}\n"
                            @"{{/ friends }}";
 
-// Renders: My friends are:
+// My friends are:
 // - Dennis
 // - Eugene
 // - Fiona
@@ -186,7 +188,7 @@ NSString *templateString = @"My friends are:\n"
                            @"I have no friend, sob."
                            @"{{/ friends }}";
 
-// Renders: I have no friend, sob.
+// I have no friend, sob.
 NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
                                                  error:NULL];
@@ -198,7 +200,7 @@ Sections render as many times as they contain items.
 
 However, you may want to render a section *once* if and only if a collection is not empty. For example, when rendering a single `<ul>` HTML elements that wraps several `<li>`.
 
-A template that is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) is to define a boolean key that states whether the collection is empty or not:
+A template that is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) needs an extra boolean key that states whether the collection is empty or not:
 
 ```objc
 NSArray *friends = ...;
