@@ -180,11 +180,7 @@ Inverted sections render if and only if the collection is empty:
 ```objc
 id data = @{ @"friends": @[] }; // empty array
 
-NSString *templateString = @"My friends are:\n"
-                           @"{{# friends }}"
-                           @"- {{ name }}\n"
-                           @"{{/ friends }}"
-                           @"{{^ friends }}"
+NSString *templateString = @"{{^ friends }}"
                            @"I have no friend, sob."
                            @"{{/ friends }}";
 
@@ -193,6 +189,25 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                             fromString:templateString
                                                  error:NULL];
 ```
+
+#### Rendering a collection of strings
+
+You may render a collection of strings with the dot expression `.`, aka "implicit iterator":
+
+```objc
+id data = @{ @"items": @[@"Ham", @"Jam"] };
+
+NSString *templateString = @"{{# items }}"
+                           @"- {{ . }}"
+                           @"{{/ items }}";
+
+// - Ham
+// - Jam
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:templateString
+                                                 error:NULL];
+```
+
 
 #### Rendering a section once when a collection contains several items
 
