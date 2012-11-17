@@ -241,7 +241,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-If you do not care about compatibility, you can simply use the `count` property of NSArray: GRMustache will not render the section if it returns zero (see false sections above):
+If you do not care about compatibility, you can simply use the `count` property of NSArray, and use the fact that GRMustache considers zero numbers as false:
 
 ```objc
 NSArray *friends = ...;
