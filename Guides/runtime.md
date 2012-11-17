@@ -89,7 +89,7 @@ Section tags
 
 The rendering of section tags such as `{{# name }}...{{/ name }}` and `{{^ name }}...{{/ name }}` depend on the value attached to the `name` expression.
 
-Generally speaking, *inverted sections* `{{^ name }}...{{/ name }}` render when *regular sections* `{{# name }}...{{/ name }}` do not. You can think of the caret `^` as the Mustache "else".
+Generally speaking, *inverted sections* `{{^ name }}...{{/ name }}` render when *regular sections* `{{# name }}...{{/ name }}` do not. You can think of the caret `^` as the Mustache "unless".
 
 Precisely speaking:
 
