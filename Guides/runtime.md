@@ -112,29 +112,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 ```
 
-When an inverted sections follows a regular section with the same expression, you can use the short `{{# name }}...{{^ name }}...{{/ name }}` form, avoiding the closing tag for the `{{# name }}`. Think of "if ... else ... end":
-
-```objc
-id data = @{ @"red": @NO };
-
-// Renders "Not red"
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:@"{{#red}}Red{{^red}}Not red{{/red}}"
-                                                 error:NULL];
-
-```
-
-For brevity's sake, you can also omit the expression after the opening tag:
-
-```objc
-id data = @{ @"red": @NO };
-
-// Renders "Not red"
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:@"{{#red}}Red{{^}}Not red{{/}}"
-                                                 error:NULL];
-
-```
+When an inverted sections follows a regular section with the same expression, you can use the short `{{# name }}...{{^ name }}...{{/ name }}` form, avoiding the closing tag for `{{# name }}`. Think of "if ... else ... end". For brevity's sake, you can also omit the expression after the opening tag: `{{#name}}...{{^}}...{{/}}`
 
 The full list of false values are:
 
