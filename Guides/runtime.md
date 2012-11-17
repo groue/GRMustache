@@ -343,7 +343,10 @@ This technique allows, for example, the conditional rendering of a `<h1>` HTML t
     {{/ title }}
 
 
-### Limiting the scope of the key lookup
+Fine tuning of key lookup
+-------------------------
+
+### Focus on the current context
 
 These three template snippets are quite similar, but not stricly equivalent:
 
@@ -355,13 +358,13 @@ The first will look for `bar` anywhere in the context stack, starting with the `
 
 The two others are identical: they ensure the `bar` key comes from the very `foo` object. If `foo` is not found, the `bar` lookup will fail as well, regardless of `bar` keys defined by enclosing contexts.
 
+### Protected contexts
 
-Fine tuning of key lookup
--------------------------
+*Protected contexts* let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Protected Contexts Guide](protected_contexts.md).
+
+### Tag delegates
 
 Values extracted from the context stack are directly rendered unless you had some *tag delegates* enter the game. They help you render default values for missing keys, for example. See the [Tag Delegates Guide](delegate.md) for a full discussion.
-
-Protected contexts let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Protected Contexts Guide](protected_contexts.md).
 
 
 Detailed description of GRMustache handling of `valueForKey:`
