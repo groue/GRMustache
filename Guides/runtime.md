@@ -191,7 +191,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 Sections render as many times as they contain items.
 
-However, you may want to render a section *once* if and only if a collection is not empty. For example, when rendering a single `<ul>` HTML elements that wraps several `<li>`.
+However, you may want to render a section *once* if and only if a collection is not empty. For example, when rendering a single `<ul>` HTML element that wraps several `<li>`.
 
 A template that is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) needs an extra boolean key that states whether the collection is empty or not:
 
