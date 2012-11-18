@@ -100,7 +100,7 @@
         
         // Evaluate expression
         
-        id object;
+        __block id object;
         BOOL isProtected;
         if (![_expression evaluateInContext:context value:&object isProtected:&isProtected error:error]) {
             return NO;
@@ -151,11 +151,11 @@
         
         // Tag delegates pre-rendering callbacks
         
-        for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
-            if ([delegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-                object = [delegate mustacheTag:self willRenderObject:object];
+        [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
+            if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
+                object = [tagDelegate mustacheTag:self willRenderObject:object];
             }
-        }
+        }];
         
         
         // 4. Render
@@ -181,11 +181,11 @@
             
             // Tag delegates post-rendering callbacks
 
-            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
-                if ([delegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                    [delegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
+            [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
+                if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                    [tagDelegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
                 }
-            }
+            }];
             
         } else {
             
@@ -201,11 +201,11 @@
             // Tag delegates post-rendering callbacks
             
             if (rendering == nil) { rendering = @""; }  // Don't expose nil as a success
-            for (id<GRMustacheTagDelegate> delegate in [context.delegateStack reverseObjectEnumerator]) {
-                if ([delegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
-                    [delegate mustacheTag:self didRenderObject:object as:rendering];
+            [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
+                if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
+                    [tagDelegate mustacheTag:self didRenderObject:object as:rendering];
                 }
-            }
+            }];
         }
     }
     

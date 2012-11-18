@@ -52,17 +52,17 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * - let partial templates override template components.
  */
 @interface GRMustacheContext : NSObject {
-    NSArray *_contextStack;
-    NSArray *_protectedContextStack;
-    NSArray *_hiddenContextStack;
-    NSArray *_delegateStack;
-    NSArray *_templateOverrideStack;
+    GRMustacheContext *_contextParent;
+    id _contextObject;
+    GRMustacheContext *_protectedContextParent;
+    id _protectedContextObject;
+    GRMustacheContext *_hiddenContextParent;
+    id _hiddenContextObject;
+    GRMustacheContext *_tagDelegateParent;
+    id<GRMustacheTagDelegate> _tagDelegate;
+    GRMustacheContext *_templateOverrideParent;
+    GRMustacheTemplateOverride *_templateOverride;
 }
-
-/**
- * TODO
- */
-@property (nonatomic, retain, readonly) NSArray *delegateStack;
 
 /**
  * Avoids most NSUndefinedException to be raised by the invocation of
@@ -160,4 +160,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  */
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 
+/**
+ * TODO
+ */
+- (void)enumerateTagDelegatesUsingBlock:(void(^)(id<GRMustacheTagDelegate> tagDelegate))block GRMUSTACHE_API_INTERNAL;
 @end

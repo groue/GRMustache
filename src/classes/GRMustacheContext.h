@@ -40,11 +40,16 @@
  * @see GRMustacheRendering protocol
  */
 @interface GRMustacheContext : NSObject {
-    NSArray *_contextStack;
-    NSArray *_protectedContextStack;
-    NSArray *_hiddenContextStack;
-    NSArray *_delegateStack;
-    NSArray *_templateOverrideStack;
+    GRMustacheContext *_contextParent;
+    id _contextObject;
+    GRMustacheContext *_protectedContextParent;
+    id _protectedContextObject;
+    GRMustacheContext *_hiddenContextParent;
+    id _hiddenContextObject;
+    GRMustacheContext *_tagDelegateParent;
+    id<GRMustacheTagDelegate> _tagDelegate;
+    GRMustacheContext *_templateOverrideParent;
+    id _templateOverride;
 }
 
 /**
