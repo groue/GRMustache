@@ -237,7 +237,7 @@
         @"f": [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
             NSMutableString *buffer = [NSMutableString string];
             for (NSDictionary *dictionary in arguments) {
-                [buffer appendFormat:@"%d", [dictionary count]];
+                [buffer appendFormat:@"%ld", [dictionary count]];
             }
             return buffer;
         }],
