@@ -52,6 +52,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * - let partial templates override template components.
  */
 @interface GRMustacheContext : NSObject {
+@private
     GRMustacheContext *_contextParent;
     id _contextObject;
     GRMustacheContext *_protectedContextParent;

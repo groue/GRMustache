@@ -38,6 +38,7 @@ typedef enum {
 
 // Documented in GRMustacheTag.h
 @interface GRMustacheTag: NSObject<GRMustacheTemplateComponent> {
+@private
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
 }

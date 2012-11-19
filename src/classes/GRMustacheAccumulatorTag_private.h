@@ -27,6 +27,7 @@
  * A tag that accumulates other tags in the context of overridable partials.
  */
 @interface GRMustacheAccumulatorTag : GRMustacheTag {
+@private
     NSArray *_tags;
 }
 + (id)accumulatorTagWithTag:(GRMustacheTag *)tag GRMUSTACHE_API_INTERNAL;

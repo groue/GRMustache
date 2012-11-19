@@ -37,6 +37,7 @@
  * @see GRMustacheContext
  */
 @interface GRMustacheTemplateOverride : NSObject<GRMustacheTemplateComponent> {
+@private
     GRMustacheTemplate *_template;
     NSArray *_components;
 }
