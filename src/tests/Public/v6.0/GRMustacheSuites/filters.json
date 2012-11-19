@@ -5,6 +5,12 @@
       "data": { "name": "EDGAR allan poE" },
       "template": "{{ capitalized(name) }}",
       "expected": "Edgar Allan Poe"
+    },
+    {
+      "name": "Implicit iterator can be filtered.",
+      "data": "EDGAR allan poE",
+      "template": "{{ capitalized(.) }}",
+      "expected": "Edgar Allan Poe"
     }
   ]
 }
