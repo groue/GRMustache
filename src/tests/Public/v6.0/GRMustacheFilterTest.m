@@ -231,4 +231,20 @@
     }
 }
 
+- (void)testImplicitIteratorCanBeVariadicFilterArgument
+{
+    id data = @{
+        @"f": [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+            NSMutableString *buffer = [NSMutableString string];
+            for (NSDictionary *dictionary in arguments) {
+                [buffer appendFormat:@"%d", [dictionary count]];
+            }
+            return buffer;
+        }],
+        @"foo": @{ @"a":@"a", @"b":@"b", @"c":@"c" },
+    };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(foo,.)}} {{f(.,foo)}}" error:NULL] renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"32 23", @"");
+}
+
 @end
