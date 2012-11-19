@@ -571,6 +571,7 @@
                         } else {
                             state = stateError;
                         }
+                        break;
                         
                     default:
                         state = stateIdentifier;
