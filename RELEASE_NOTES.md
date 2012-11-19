@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.1.1
+
+**[Performance improvements](https://github.com/groue/GRMustacheBenchmark)**
+
 ## v6.1
 
 ### "Else"
