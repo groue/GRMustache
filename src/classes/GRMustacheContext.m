@@ -37,18 +37,30 @@ BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheContext()
+
+// Context stack:
+// If _contextObject is nil, the stack is empty.
+// If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
 @property (nonatomic, retain) GRMustacheContext *contextParent;
 @property (nonatomic, retain) id contextObject;
+
+// Protected context stack
 @property (nonatomic, retain) GRMustacheContext *protectedContextParent;
 @property (nonatomic, retain) id protectedContextObject;
+
+// Hidden context stack
 @property (nonatomic, retain) GRMustacheContext *hiddenContextParent;
 @property (nonatomic, retain) id hiddenContextObject;
+
+// Tag delegate stack
 @property (nonatomic, retain) GRMustacheContext *tagDelegateParent;
 @property (nonatomic, retain) id<GRMustacheTagDelegate> tagDelegate;
+
+// Template override stack
 @property (nonatomic, retain) GRMustacheContext *templateOverrideParent;
 @property (nonatomic, retain) id templateOverride;
-+ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 
++ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (void)setupPreventionOfNSUndefinedKeyException;
 + (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
 + (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
