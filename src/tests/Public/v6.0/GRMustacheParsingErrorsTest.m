@@ -344,4 +344,23 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
+- (void)testParsingReportsCommaOutOfFilterArguments
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{a,}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{,a}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{.,}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{,.}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{a(b,)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{a(,b)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    STAssertNil([GRMustacheTemplate templateFromString:@"{{a(b,,c)}}" error:&error], nil);
+    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+}
+
 @end
