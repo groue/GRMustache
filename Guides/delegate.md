@@ -222,7 +222,7 @@ With such a common template, it's now a matter of providing different data, depe
     // data for GRMustache
     {
       "x": 0.5,
-      "percent": theFormatingTagDelegate
+      "percent": the_formating_tag_delegate
     }
 
     // data for other Mustache implementations
