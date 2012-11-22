@@ -199,6 +199,8 @@ The topic is under [discussion](http://github.com/mustache/spec/issues/41) with 
 
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), do NOT use filters.**
 
+Instead, have a look at tag delegates, especially the [Tag Delegates as Cross-Platform Filters](delegates.md#tag-delegates-as-cross-platform-filters) section of the Tag Delegates Guide.
+
 
 Sample code
 -----------

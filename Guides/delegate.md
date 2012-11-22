@@ -205,6 +205,62 @@ NSString *rendering = [template renderObject:data error:NULL];
 ```
 
 
+Tag Delegates as Cross-Platform Filters
+---------------------------------------
+
+Let's consider again the number formatting example above. We were able to render `{{#percent}}x = {{x}}{{/percent}}` as `50 %`: The tag delegate attached to the `percent` has formatted the number `x` as a percentage.
+
+You could also use [filters](filters.md) in order to format numbers: `x = {{ percent(x) }}` would render just as well.
+
+However, `{{#percent}}x = {{x}}{{/percent}}` has one advantage over `x = {{ percent(x) }}`: it uses plain Mustache syntax, and is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations).
+
+With such a common template, it's now a matter of providing different data, depending on the platform:
+
+    // common template
+    {{#percent}}x = {{x}}{{/percent}}
+    
+    // data for GRMustache
+    {
+      "x": 0.5,
+      "percent": theFormatingTagDelegate
+    }
+
+    // data for other Mustache implementations
+    {
+      "percent": {
+        "x": "50 %"
+      }
+    }
+
+See? When you, GRMustache user, can provide your raw model data and have tag delegates do the formatting, users of the other implementations can still *prepare* their data and build a "view model" that contains the values that should be rendered. Eventually both renderings are identical.
+
+Let's have a closer look at how you would convert a filter-based template to a tag delegate-based template: let's convert `{{ uppercase(name) }}`.
+
+In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and to attach a tag delegate to the `uppercase` key:
+
+```objc
+@interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate>
+@end
+
+@implementation UppercaseTagDelegate
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    return [[object description] uppercaseString];
+}
+@end
+
+id data = @{
+  @"name": @"Johannes Kepler",
+  @"uppercase": [[UppercaseTagDelegate alloc] init],
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#uppercase}}{{name}}{{/uppercase}}"
+                                                 error:NULL];
+```
+
+The final rendering is, as expected: "JOHANNES KEPLER".
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
