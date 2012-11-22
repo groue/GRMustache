@@ -208,7 +208,7 @@ NSString *rendering = [template renderObject:data error:NULL];
 Tag Delegates as Cross-Platform Filters
 ---------------------------------------
 
-Let's consider again the number formatting example above. We were able to render `{{#percent}}x = {{x}}{{/percent}}` as `50 %`: The tag delegate attached to the `percent` has formatted the number `x` as a percentage.
+Let's consider again the number formatting example above. We were able to render `{{#percent}}x = {{x}}{{/percent}}` as `x = 50 %`: The tag delegate attached to the `percent` has formatted the number `x` as a percentage.
 
 You could also use [filters](filters.md) in order to format numbers: `x = {{ percent(x) }}` would render just as well.
 
