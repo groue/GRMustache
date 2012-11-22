@@ -236,7 +236,7 @@ See? When you, GRMustache user, can provide your raw model data and have tag del
 
 Let's have a closer look at how you would convert a filter-based template to a tag delegate-based template: let's convert `{{ uppercase(name) }}`.
 
-In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and to attach a tag delegate to the `uppercase` key:
+In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and a tag delegate attached to the `uppercase` key:
 
 ```objc
 @interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate>
