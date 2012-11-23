@@ -22,7 +22,7 @@ You apply a filter just like calling a function, with parentheses:
 
 - Filters can take several arguments: `{{ localize(date, format) }}`.
 
-- Filters can return filers: `{{ f(x)(y) }}`.
+- Filters can return filters: `{{ f(x)(y) }}`.
 
 
 Standard filters library
