@@ -140,6 +140,14 @@ What other people say
 > Thank fucking christ for decent iOS developers who ship .lib files in their Github repos. #GRMustache
 
 
+Popular apps using GRMustache
+-----------------------------
+
+* [AutoLib](http://www.autolib.eu)
+* [CinéObs](http://cinema.nouvelobs.com)
+* [Fotopedia](http://www.fotopedia.com)
+* [FunGolf GPS](http://www.fungolf.com)
+
 
 Contribution wish-list
 ----------------------
