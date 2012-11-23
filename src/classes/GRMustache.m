@@ -460,8 +460,10 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                     // If rendering is nil, but rendering error is not set,
                     // assume lazy coder, and the intention to render nothing:
                     // Fail if and only if renderingError is explicitely set.
-                    if (error) {
+                    if (error != NULL) {
                         *error = itemRenderingError;
+                    } else {
+                        NSLog(@"GRMustache error: %@", itemRenderingError.localizedDescription);
                     }
                     return @"";
                 }

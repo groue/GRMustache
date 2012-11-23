@@ -174,8 +174,10 @@
             
             // Error
             
-            if (error) {
+            if (error != NULL) {
                 *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+            } else {
+                NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
             }
             success = NO;
             

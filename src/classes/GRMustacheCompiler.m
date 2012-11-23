@@ -137,14 +137,19 @@
         NSAssert(_fatalError, @"We should have an error when _currentComponents is nil");
         if (error != NULL) {
             *error = [[_fatalError retain] autorelease];
+        } else {
+            NSLog(@"GRMustache error: %@", _fatalError.localizedDescription);
         }
         return nil;
     }
     
     // Unclosed section?
     if (_currentOpeningToken) {
+        NSError *parseError = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
         if (error != NULL) {
-            *error = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
+            *error = parseError;
+        } else {
+            NSLog(@"GRMustache error: %@", parseError.localizedDescription);
         }
         return nil;
     }
@@ -381,7 +386,7 @@
                         NSAssert(_currentOpeningToken.expression, @"WTF");
                     }
                     if (token.expression && ![token.expression isEqual:_currentOpeningToken.expression]) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ section closing tag", token.templateSubstring]]];
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
                     }
                     
@@ -406,7 +411,7 @@
                 case GRMustacheTokenTypeOverridablePartial: {
                     // Validate token: overridable template ending should be missing, or match overridable template opening
                     if (token.partialName && ![token.partialName isEqual:_currentOpeningToken.partialName]) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ super template closing tag", token.templateSubstring]]];
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
                     }
                     
@@ -459,7 +464,7 @@
         case GRMustacheTokenTypeOverridablePartial: {
             // Template name validation
             if (token.partialName == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing super template name"]]];
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing partial name"]]];
                 return NO;
             }
             

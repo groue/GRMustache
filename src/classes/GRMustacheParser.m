@@ -207,7 +207,7 @@
         
         // ctag was not found
         if (crange.location == NSNotFound) {
-            [self failWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Unclosed Mustache tag" templateID:templateID];
             return;
         }
         
@@ -216,13 +216,13 @@
         
         // empty tag is not allowed
         if (tag.length == 0) {
-            [self failWithParseErrorAtLine:line description:@"Empty tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Empty Mustache tag" templateID:templateID];
             return;
         }
         
         // tag must not contain otag
         if ([tag rangeOfString:_otag].location != NSNotFound) {
-            [self failWithParseErrorAtLine:line description:@"Unmatched opening tag" templateID:templateID];
+            [self failWithParseErrorAtLine:line description:@"Unclosed Mustache tag" templateID:templateID];
             return;
         }
         

@@ -242,11 +242,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
        templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
     }
     if (templateID == nil) {
+        NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                            code:GRMustacheErrorCodeTemplateNotFound
+                                                        userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                             forKey:NSLocalizedDescriptionKey]];
         if (error != NULL) {
-            *error = [NSError errorWithDomain:GRMustacheErrorDomain
-                                         code:GRMustacheErrorCodeTemplateNotFound
-                                     userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
-                                                                          forKey:NSLocalizedDescriptionKey]];
+            *error = missingTemplateError;
+        } else {
+            NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
         }
         return nil;
     }
@@ -260,15 +263,16 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         NSError *templateStringError = nil;
         NSString *templateString = [self.dataSource templateRepository:self templateStringForTemplateID:templateID error:&templateStringError];
         if (!templateString) {
+            if (templateStringError == nil) {
+                templateStringError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                          code:GRMustacheErrorCodeTemplateNotFound
+                                                      userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                           forKey:NSLocalizedDescriptionKey]];
+            }
             if (error != NULL) {
-                // make sure we return an error
-                if (templateStringError == nil) {
-                    templateStringError = [NSError errorWithDomain:GRMustacheErrorDomain
-                                                              code:GRMustacheErrorCodeTemplateNotFound
-                                                          userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: %@", name, nil]
-                                                                                               forKey:NSLocalizedDescriptionKey]];
-                }
                 *error = templateStringError;
+            } else {
+                NSLog(@"GRMustache error: %@", templateStringError.localizedDescription);
             }
             return nil;
         }
