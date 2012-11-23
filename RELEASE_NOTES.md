@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.1.2
+
+Improved template debugging: errors are logged when you do not handle them.
+
 ## v6.1.1
 
 **[Performance improvements](https://github.com/groue/GRMustacheBenchmark)**
