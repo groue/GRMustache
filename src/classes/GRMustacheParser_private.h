@@ -108,4 +108,17 @@
  * @param templateID      A template ID (see GRMustacheTemplateRepository)
  */
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns an expression from a string.
+ *
+ * @param string        A string.
+ * @param outInvalid    If the string contains an invalid expression, upon
+ *                      return contains YES.
+ *
+ * @return An expression, or nil if the parsing fails or if the expression is
+ * empty.
+ */
++ (GRMustacheExpression *)parseExpression:(NSString *)string invalid:(BOOL *)outInvalid GRMUSTACHE_API_INTERNAL;
+
 @end

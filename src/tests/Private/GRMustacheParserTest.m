@@ -38,6 +38,7 @@
 
 @interface GRMustacheTokenRecorder : NSObject<GRMustacheParserDelegate> {
     NSError *_error;
+    GRMustacheToken *_lastToken;
     NSMutableArray *_tokenTypes;
     NSMutableArray *_tokenTexts;
     NSMutableArray *_tokenExpressions;
@@ -45,6 +46,7 @@
     NSMutableArray *_tokenPragmas;
 }
 @property (nonatomic, retain, readonly) NSError *error;
+@property (nonatomic, retain, readonly) GRMustacheToken *lastToken;
 @property (readonly) NSUInteger tokenCount;
 - (GRMustacheTokenType)tokenTypeAtIndex:(NSUInteger)index;
 - (id)tokenTextAtIndex:(NSUInteger)index;
@@ -55,6 +57,7 @@
 
 @implementation GRMustacheTokenRecorder
 @synthesize error=_error;
+@synthesize lastToken=_lastToken;
 @dynamic tokenCount;
 
 - (id)init
@@ -72,6 +75,7 @@
 
 - (void)dealloc
 {
+    [_lastToken release];
     [_tokenTypes release];
     [_tokenTexts release];
     [_tokenExpressions release];
@@ -113,6 +117,9 @@
 
 - (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
+    [_lastToken release];
+    _lastToken = [token retain];
+    
     [_tokenTypes addObject:[NSNumber numberWithInt:token.type]];
     
     if (token.text) {
@@ -800,4 +807,21 @@
     STAssertEqualObjects(tokenRecorder.error.domain, GRMustacheErrorDomain, nil);
     STAssertEquals(tokenRecorder.error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
+
+
+- (void)testIdentifiersCanNotStartWithMustacheTagCharacters
+{
+    NSArray *mustacheTagCharacters = @[@"{", @"}", @"<", @">", @"&", @"#", @"^", @"$", @"/"];
+    
+    // Identifiers can't start with a forbidden character
+    
+    for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
+        STAssertNil(([GRMustacheParser parseExpression:[NSString stringWithFormat:@"%@", mustacheTagCharacter] invalid:NULL]), nil);
+        STAssertNil(([GRMustacheParser parseExpression:[NSString stringWithFormat:@"%@a", mustacheTagCharacter] invalid:NULL]), nil);
+        STAssertNil(([GRMustacheParser parseExpression:[NSString stringWithFormat:@".%@a", mustacheTagCharacter] invalid:NULL]), nil);
+        STAssertNil(([GRMustacheParser parseExpression:[NSString stringWithFormat:@"a.%@b", mustacheTagCharacter] invalid:NULL]), nil);
+        STAssertNil(([GRMustacheParser parseExpression:[NSString stringWithFormat:@"a(%@b)", mustacheTagCharacter] invalid:NULL]), nil);
+    }
+}
+
 @end

@@ -363,4 +363,53 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
+- (void)testIdentifiersCanNotStartWithMustacheTagCharacters
+{
+    NSArray *mustacheTagCharacters = @[@"{", @"}", @"<", @">", @"&", @"#", @"^", @"$", @"/"];
+    
+    // Identifiers can't start with a forbidden character
+    
+    NSError *error;
+    
+    for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@ }}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@}}}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@}}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@}}{{/%@}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@a }}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@a}}}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@a}}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@a}}{{/%@a}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+    }
+    
+    // Identifiers can have forbidden characters *inside*
+    
+    for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
+        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ a%@ }}", mustacheTagCharacter] error:NULL]), nil);
+        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{a%@}}}", mustacheTagCharacter] error:NULL]), nil);
+        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&a%@}}", mustacheTagCharacter] error:NULL]), nil);
+        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#a%@}}{{/a%@}}", mustacheTagCharacter, mustacheTagCharacter] error:NULL]), nil);
+    }
+    
+    // Partial names can start with a forbidden character
+    
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:@{ }];
+    for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
+        STAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{> %@ }}", mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);    // expect template not found, not parse error
+        STAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{< %@ }}{{/ %@ }}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
+        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);    // expect template not found, not parse error
+    }
+
+}
+
 @end
