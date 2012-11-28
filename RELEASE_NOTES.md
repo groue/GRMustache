@@ -7,7 +7,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 The parser now rejects expressions identifiers that start with a reserved Mustache character: `{}<>&#^$/` (those are the characters that start Mustache tags).
 
-This will prevent the most daring of you to push GRMustache farther than it can:
+This will help the most daring of you who try to push Mustache off limits:
 
 - `{{ >foo }}` looks a lot like a partial tag, but is not. It will now yield a parse error (because `>foo` turns out to be an invalid expression for a variable tag).
 - `{{{#foo}}}...{{{/foo}}}` looks a lot like an "unescaped section tag", but there is no such tag in Mustache. This string will now yield a parse error (because `#foo` and `/foo` turn out to be invalid expressions for triple-mustache unescaped variable tags).
