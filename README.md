@@ -145,10 +145,10 @@ Popular projects & apps using GRMustache
 
 * [tomaz/appledoc](https://github.com/tomaz/appledoc)
 * [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk)
-* [AutoLib](http://www.autolib.eu)
-* [CinéObs](http://cinema.nouvelobs.com)
-* [Fotopedia](http://www.fotopedia.com)
-* [FunGolf GPS](http://www.fungolf.com)
+* [AutoLib](http://itunes.com/apps/autolib)
+* [CinéObs](http://itunes.com/apps/cineobs)
+* [Fotopedia](http://itunes.com/apps/fotonautsinc)
+* [FunGolf GPS](http://itunes.com/apps/fungolf)
 
 
 Contribution wish-list
