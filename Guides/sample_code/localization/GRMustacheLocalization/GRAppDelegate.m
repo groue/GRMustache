@@ -33,6 +33,9 @@
          * Localizing a template section
          */
         
+        NSLog(@"-----------------------------");
+        NSLog(@"Localizing a template section");
+        
         id data = @{
             @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
                 return NSLocalizedString(tag.innerTemplateString, nil);
@@ -42,7 +45,15 @@
         NSString *templateString = @"{{#localize}}Hello{{/localize}}";
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
-        NSLog(@"rendering = %@", rendering);
+        NSLog(@"%@", rendering);
+        
+        // With LocalizingHelper class
+        
+        data = @{
+            @"localize": [[LocalizingHelper alloc] init]
+        };
+        rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        NSLog(@"With LocalizingHelper: %@", rendering);
     }
     
     {
@@ -50,24 +61,38 @@
          * Localizing a value
          */
         
+        NSLog(@"------------------");
+        NSLog(@"Localizing a value");
+        
         id data = @{
             @"greeting": @"Hello",
-            @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
-                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                return NSLocalizedString(rendering, nil);
+            @"localize": [GRMustacheFilter filterWithBlock:^id(id value) {
+                return NSLocalizedString([value description], nil);
             }]
         };
         
-        NSString *templateString = @"{{#localize}}{{greeting}}{{/localize}}";
+        NSString *templateString = @"{{ localize(greeting) }}";
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
-        NSLog(@"rendering = %@", rendering);
+        NSLog(@"%@", rendering);
+        
+        // With LocalizingHelper class
+        
+        data = @{
+            @"greeting": @"Hello",
+            @"localize": [[LocalizingHelper alloc] init]
+        };
+        rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        NSLog(@"With LocalizingHelper: %@", rendering);
     }
     
     {
         /**
          * Localizing a template section with arguments
          */
+        
+        NSLog(@"--------------------------------------------");
+        NSLog(@"Localizing a template section with arguments");
         
         id data = @{
         @"name1": @"Arthur",
@@ -78,13 +103,16 @@
         NSString *templateString = @"{{#localize}}Hello {{name1}}! Do you know {{name2}}?{{/localize}}";
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
         
-        NSLog(@"rendering = %@", rendering);
+        NSLog(@"With LocalizingHelper: %@", rendering);
     }
     
     {
         /**
          * Localizing a template section with arguments and conditions
          */
+        
+        NSLog(@"-----------------------------------------------------------");
+        NSLog(@"Localizing a template section with arguments and conditions");
         
         id localizingHelper = [[LocalizingHelper alloc] init];
         id isPluralFilter = [GRMustacheFilter filterWithBlock:^id(NSNumber *count) {
@@ -108,7 +136,7 @@
             
             NSString *rendering = [template renderObject:data error:NULL];
             
-            NSLog(@"rendering = %@", rendering);
+            NSLog(@"With LocalizingHelper: %@", rendering);
         }
         
         {
@@ -122,7 +150,7 @@
             
             NSString *rendering = [template renderObject:data error:NULL];
             
-            NSLog(@"rendering = %@", rendering);
+            NSLog(@"With LocalizingHelper: %@", rendering);
         }
         
         {
@@ -136,7 +164,7 @@
             
             NSString *rendering = [template renderObject:data error:NULL];
             
-            NSLog(@"rendering = %@", rendering);
+            NSLog(@"With LocalizingHelper: %@", rendering);
         }
     }
 }

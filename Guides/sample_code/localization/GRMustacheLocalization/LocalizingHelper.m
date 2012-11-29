@@ -8,11 +8,20 @@
 
 #import "LocalizingHelper.h"
 
-@interface LocalizingHelper()<GRMustacheRendering, GRMustacheTagDelegate>
+@interface LocalizingHelper()<GRMustacheTagDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 @end
 
 @implementation LocalizingHelper
+
+#pragma mark - GRMustacheFilter
+
+- (id)transformedValue:(id)object
+{
+    return NSLocalizedString([object description], nil);
+}
+
+#pragma mark - GRMustacheRendering
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
 {
@@ -98,6 +107,8 @@
     self.formatArguments = nil;
     return rendering;
 }
+
+#pragma mark GRMustacheTagDelegate
 
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {

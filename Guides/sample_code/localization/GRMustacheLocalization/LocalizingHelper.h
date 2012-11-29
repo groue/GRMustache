@@ -24,28 +24,34 @@
 #import "GRMustache.h"
 
 /**
- * LocalizingHelper localizes the content of a Mustache section, using
- * NSLocalizedString.
+ * LocalizingHelper can localize the content of a Mustache section, using
+ * NSLocalizedString. It also has a filter facet that localizes your data.
  *
- * It can localize simple sections:
+ * Localizing data:
  *
- * `{{localize}}Hello{{/localize}}` renders
+ * `{{ localize(greeting) }}` renders
+ * `NSLocalizedString(@"Hello", nil)`, assuming the `greeting`key resolves to
+ * the @"Hello" string.
+ *
+ * Localizing sections:
+ *
+ * `{{#localize}}Hello{{/localize}}` renders
  * `NSLocalizedString(@"Hello", nil)`.
  *
- * It can localize sections with arguments:
+ * Localizing sections with arguments:
  *
- * `{{localize}}Hello {{name}}{{/localize}}` builds the format string
+ * `{{#localize}}Hello {{name}}{{/localize}}` builds the format string
  * `NSLocalizedString(@"Hello %@", nil)` and injects the name with
  * `[NSString stringWithFormat:]`.
  *
- * It can localize sections with arguments and conditions:
+ * Localize sections with arguments and conditions:
  *
- * `{{localize}}Good morning {{#title}}{{title}}{{/title}} {{name}}{{/localize}}`
+ * `{{#localize}}Good morning {{#title}}{{title}}{{/title}} {{name}}{{/localize}}`
  * build the format string `NSLocalizedString(@"Good morning %@", nil)` or
  * `NSLocalizedString(@"Good morning %@ %@", nil)`, depending on the presence of
  * the `title` key, and injects the name, or both title and name,  with
  * `[NSString stringWithFormat:]`.
  */
-@interface LocalizingHelper : NSObject
+@interface LocalizingHelper : NSObject<GRMustacheRendering, GRMustacheFilter>
 @end
 

@@ -22,7 +22,7 @@ We'll see below how to localize:
         
 2. a value
     
-        {{#localize}}{{greeting}}{{/localize}}
+        {{ localize(greeting) }}
     
     into:
     
@@ -92,16 +92,15 @@ Localizing a value
 
 `Document.mustache`:
 
-    {{#localize}}{{greeting}}{{/localize}}
+    {{ localize(greeting) }}
 
 `Render.m`:
 
 ```objc
 id data = @{
     @"greeting": @"Hello",
-    @"localize": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        return NSLocalizedString(rendering, nil);
+    @"localize": [GRMustacheFilter filterWithBlock:^id(id value) {
+        return NSLocalizedString([value description], nil);
     }]
 };
 
@@ -118,6 +117,8 @@ Final rendering depends on the current locale:
     Hola
 
 `+[GRMustache renderingObjectWithBlock:]` and `-[GRMustacheTag renderContentWithContext:HTMLSafe:error:]` are documented in the [Rendering Objects Guide](../rendering_objects.md).
+
+`+[GRMustacheFilter filterWithBlock:]` is documented in the [Filters Guide](../filters.md).
 
 
 Localizing a template section with arguments
