@@ -38,9 +38,9 @@ Remember that `{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and 
 Objects are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
 
 - Your custom objects that take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
-- Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol:
+- Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (but NSDictionary):
 
-Variable tags render each of the enumerable objects:
+A variable tag renders all items of enumerable objects:
 
 ```objc
 id data = @{ @"voyels": @[@"A", @"E", @"I", @"O", @"U"] };
@@ -115,7 +115,7 @@ They all trigger inverted sections `{{^ name }}...{{/ name }}` rendering.
 
 ### Enumerable sections
 
-If the value attached to a section conforms to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol, regular sections are rendered as many times as there are items in the enumerable object:
+If the value attached to a section conforms to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (except NSDictionary), regular sections are rendered as many times as there are items in the enumerable object:
 
 ```objc
 NSArray *friends = @[
