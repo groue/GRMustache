@@ -359,7 +359,7 @@ Detailed description of GRMustache handling of `valueForKey:`
 
 As seen above, GRMustache looks for a key in your data objects with the `valueForKey:` method. With some extra bits.
 
-**NSUndefinedKeyException handling**
+### NSUndefinedKeyException handling
 
 NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` raises an `NSUndefinedKeyException`.
 
@@ -377,7 +377,7 @@ You can avoid that: add the `-ObjC` linker flag to your target (http://developer
 
 You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration. This is the purpose of the conditional compilation based on the `NS_BLOCK_ASSERTIONS` preprocessor macro (see http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html).
 
-**NSArray, NSSet, NSOrderedSet**
+### NSArray, NSSet, NSOrderedSet
 
 *GRMustache shunts the valueForKey: implementation of Foundation collections to NSObject's one*.
 
