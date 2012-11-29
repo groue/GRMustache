@@ -143,10 +143,11 @@ What other people say
 Popular projects & apps using GRMustache
 ----------------------------------------
 
-* [tomaz/appledoc](https://github.com/tomaz/appledoc)
-* [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk)
-* [AutoLib](http://itunes.com/apps/autolib)
-* [CinéObs](http://itunes.com/apps/cineobs)
+* [tomaz/appledoc](https://github.com/tomaz/appledoc): Objective-c code Apple style documentation set generator
+* [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk): MapBox iOS SDK, an open source alternative to MapKit
+* [CarterA/Tribo](https://github.com/CarterA/Tribo): Extremely fast static site generator written in Objective-C
+* [AutoLib](http://itunes.com/apps/autolib) uses GRMustache and [spullara/mustache.java](https://github.com/spullara/mustache.java) for rendering an identical set of Mustache templates on iOS and Android.
+* [CinéObs](http://itunes.com/apps/cineobs) uses GRMustache for RSS feeds rendering
 * [Fotopedia](http://itunes.com/apps/fotonautsinc)
 * [FunGolf GPS](http://itunes.com/apps/fungolf)
 
