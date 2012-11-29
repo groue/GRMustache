@@ -3,20 +3,7 @@
 GRMustache runtime
 ==================
 
-Overview
---------
-
-Mustache defines a few tag types:
-
-- `{{> partial }}` and `{{< partial }}...{{/}}` partial tags, documented in the [Partials Guide](partials.md)
-- `{{! comment }}` comment tags, which are not rendered
-- `{{ name }}` HTML-escaped variable tags
-- `{{{ name }}}` and `{{& name }}` unescaped variable tags
-- `{{# name }}...{{/ name }}` regular section tags
-- `{{^ name }}...{{/ name }}` inverted section tags
-- `{{$ name }}...{{/ name }}` overridable section tags, documented in the [Partials Guide](partials.md)
-
-This guide describes how `{{ name }}`, `{{{ name }}}`, `{{# name }}...{{/ name }}` and `{{^ name }}...{{/ name }}` tags load and render your data.
+You'll learn here how to provide data to Mustache templates. The loading of templates is covered in the [Templates Guide](templates.md).
 
 Variable tags
 -------------
