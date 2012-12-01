@@ -236,46 +236,9 @@ See? When you, GRMustache user, can provide your raw model data and have tag del
 
 Let's have a closer look at how you would convert a filter-based template to a tag delegate-based template: let's convert `{{ uppercase(name) }}`.
 
-In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and a tag delegate attached to the `uppercase` key:
+In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and a tag delegate attached to the `uppercase` key.
 
-```objc
-@interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate>
-@end
-
-@implementation UppercaseTagDelegate
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
-{
-    return [[object description] uppercaseString];
-}
-@end
-
-id data = @{
-  @"name": @"Johannes Kepler",
-  @"uppercase": [[UppercaseTagDelegate alloc] init],
-};
-
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:@"{{#uppercase}}{{name}}{{/uppercase}}"
-                                                 error:NULL];
-```
-
-The final rendering is, as expected: "JOHANNES KEPLER".
-
-However, we have to fix a bug in this code:
-
-### Avoiding Context Stack Pollution
-
-Just like the person in `{{#person}}{{name}}{{/person}}`, our tag delegate enters the *context stack* (see the [Runtime Guide](runtime.md) for more details).
-
-As a consequence, its own properties and methods may shadow your data. In the previous example, replace the `name` key by `description`: you will get an unexpected rendering:
-
-    &lt;UPPERCASETAGDELEGATE: 0X100121EB0&gt;
-
-You recognize the result of the `description` method, applied to your tag delegate.
-
-Our tag delegate must thus avoid entering the context stack, so that it does not pollute the environment.
-
-Let's have it conform to the [GRMustacheRendering protocol](rendering_objects.md), so that it can take full responsibility of its rendering:
+We also have to make sure our tag delegate does not enter the [context stack](runtime.md), so that its own methods and properties do not shadow your data: `{{#uppercase}}{{description}}{{/uppercase}}` for instance should render without invoking the `description` method of the tag delegate. This involves the [GRMustacheRendering protocol](rendering_objects.md), which allows the tag delegate to take full responsibility of its rendering:
 
 ```objc
 @interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate, GRMustacheRendering>
