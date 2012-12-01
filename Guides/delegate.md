@@ -261,6 +261,45 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 The final rendering is, as expected: "JOHANNES KEPLER".
 
+### Polishing
+
+Just like the person in `{{#person}}{{name}}{{/person}}`, our tag delegate enters the *context stack* (see the [Runtime Guide](runtime.md) for more details).
+
+As a consequence, its own properties and methods may shadow your data. In the previous example, replace the `name` key by `description`: you will get an unexpected rendering:
+
+    &lt;UPPERCASETAGDELEGATE: 0X100121EB0&gt;
+
+You recognize the result of the `description` method, applied to your tag delegate.
+
+Our tag delegate must thus avoid entering the context stack, so that it does not pollute the environment.
+
+Let's have it conform to the [GRMustacheRendering protocol](rendering_objects.md), so that it can take full responsibility of its rendering:
+
+```objc
+@interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate, GRMustacheRendering>
+@end
+
+@implementation UppercaseTagDelegate
+
+// The tag delegate facet
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    return [[object description] uppercaseString];
+}
+
+// The rendering object facet
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
+{
+    // Have self enter the context as a tag delegate - but not in the context stack
+    context = [context contextByAddingTagDelegate:self];
+    
+    // Render the Mustache tag.
+    return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+}
+
+@end
+```
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
