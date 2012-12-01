@@ -263,6 +263,15 @@ We also have to make sure our tag delegate does not enter the [context stack](ru
 }
 
 @end
+
+id data = @{
+  @"name": @"Johannes Kepler",
+  @"uppercase": [[UppercaseTagDelegate alloc] init],
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                            fromString:@"{{#uppercase}}{{name}}{{/uppercase}}"
+                                                 error:NULL];
 ```
 
 The final rendering is "JOHANNES KEPLER".
