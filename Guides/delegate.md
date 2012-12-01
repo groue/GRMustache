@@ -261,7 +261,9 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 The final rendering is, as expected: "JOHANNES KEPLER".
 
-### Polishing
+However, we have to fix a bug in this code:
+
+### Avoiding Context Stack Pollution
 
 Just like the person in `{{#person}}{{name}}{{/person}}`, our tag delegate enters the *context stack* (see the [Runtime Guide](runtime.md) for more details).
 
