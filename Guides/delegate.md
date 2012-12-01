@@ -265,6 +265,8 @@ We also have to make sure our tag delegate does not enter the [context stack](ru
 @end
 ```
 
+The final rendering is "JOHANNES KEPLER".
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
