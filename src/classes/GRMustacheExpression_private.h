@@ -54,19 +54,17 @@
  * Evaluates an expression against a rendering context, and return the value.
  *
  * @param context    A Mustache rendering context
- * @param value      TODO
  * @param protected  TODO
- * @param error      TODO
  *
  * @return TODO
  */
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
- * Expressions are equal if and only if the result of their `evaluateInContext:`
+ * Expressions are equal if and only if the result of their `valueWithContext:`
  * implementation would return the same value in a given rendering context.
  *
  * Default implementation is NSObject's one: subclasses must override.

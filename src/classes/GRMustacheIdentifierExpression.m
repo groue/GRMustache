@@ -63,10 +63,9 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error
+- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
 {
-    *value = [context contextValueForKey:_identifier isProtected:isProtected];
-    return YES;
+    return [context contextValueForKey:_identifier protected:protected];
 }
 
 @end

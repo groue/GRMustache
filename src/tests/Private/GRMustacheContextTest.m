@@ -125,7 +125,7 @@
     GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:recorder];
-    [context contextValueForKey:@"foo" isProtected:NULL];
+    [context contextValueForKey:@"foo" protected:NULL];
     STAssertEqualObjects(recorder.lastAccessedKey, @"foo", nil);
 }
 
@@ -136,7 +136,7 @@
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context contextValueForKey:@"top" isProtected:NULL], @"top", nil);
+    STAssertEqualObjects([context contextValueForKey:@"top" protected:NULL], @"top", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"top", nil);
     STAssertNil(rootRecorder.lastAccessedKey, nil);
 }
@@ -148,7 +148,7 @@
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertEqualObjects([context contextValueForKey:@"root" isProtected:NULL], @"root", nil);
+    STAssertEqualObjects([context contextValueForKey:@"root" protected:NULL], @"root", nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"root", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"root", nil);
 }
@@ -160,7 +160,7 @@
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    STAssertNil([context contextValueForKey:@"foo" isProtected:NULL], nil);
+    STAssertNil([context contextValueForKey:@"foo" protected:NULL], nil);
     STAssertEqualObjects(topRecorder.lastAccessedKey, @"foo", nil);
     STAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo", nil);
 }
@@ -172,7 +172,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionary];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextValueForKey:@"key" isProtected:NULL], @"foo", nil);
+    STAssertEqualObjects([context contextValueForKey:@"key" protected:NULL], @"foo", nil);
 }
 
 - (void)testNSNullDoesStopExploration
@@ -182,7 +182,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextValueForKey:@"key" isProtected:NULL], [NSNull null], nil);
+    STAssertEqualObjects([context contextValueForKey:@"key" protected:NULL], [NSNull null], nil);
 }
 
 - (void)testNSNumberWithBoolNODoesStopExploration
@@ -192,7 +192,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    STAssertEqualObjects([context contextValueForKey:@"key" isProtected:NULL], [NSNumber numberWithBool:NO], nil);
+    STAssertEqualObjects([context contextValueForKey:@"key" protected:NULL], [NSNumber numberWithBool:NO], nil);
 }
 
 - (void)testOneDepthRuntimeTemplate
@@ -222,7 +222,7 @@
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:throwingObject];
-    STAssertThrows([context contextValueForKey:@"NonNSUndefinedKeyException" isProtected:NULL], nil);
+    STAssertThrows([context contextValueForKey:@"NonNSUndefinedKeyException" protected:NULL], nil);
 }
 
 - (void)testRuntimeSwallowsNonSelfNSUndefinedKeyException
@@ -231,7 +231,7 @@
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:throwingObject];
-    STAssertNoThrow([context contextValueForKey:@"NonSelfNSUndefinedKeyException" isProtected:NULL], nil);
+    STAssertNoThrow([context contextValueForKey:@"NonSelfNSUndefinedKeyException" protected:NULL], nil);
 }
 
 - (void)testRuntimeSwallowsSelfNSUndefinedKeyException
@@ -239,20 +239,20 @@
     ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingObject:throwingObject];
-    STAssertNoThrow([context contextValueForKey:@"SelfNSUndefinedKeyException" isProtected:NULL], nil);
+    STAssertNoThrow([context contextValueForKey:@"SelfNSUndefinedKeyException" protected:NULL], nil);
 }
 
 - (void)testContextByAddingProtectedObject
 {
     GRMustacheContext *context = [GRMustacheContext context];
     context = [context contextByAddingProtectedObject:@{ @"safe": @"important" }];
-    STAssertEqualObjects([context contextValueForKey:@"safe" isProtected:NULL], @"important", @"");
+    STAssertEqualObjects([context contextValueForKey:@"safe" protected:NULL], @"important", @"");
     context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"A" }];
-    STAssertEqualObjects([context contextValueForKey:@"safe" isProtected:NULL], @"important", @"");
-    STAssertEqualObjects([context contextValueForKey:@"fragile" isProtected:NULL], @"A", @"");
+    STAssertEqualObjects([context contextValueForKey:@"safe" protected:NULL], @"important", @"");
+    STAssertEqualObjects([context contextValueForKey:@"fragile" protected:NULL], @"A", @"");
     context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"B" }];
-    STAssertEqualObjects([context contextValueForKey:@"safe" isProtected:NULL], @"important", @"");
-    STAssertEqualObjects([context contextValueForKey:@"fragile" isProtected:NULL], @"B", @"");
+    STAssertEqualObjects([context contextValueForKey:@"safe" protected:NULL], @"important", @"");
+    STAssertEqualObjects([context contextValueForKey:@"fragile" protected:NULL], @"B", @"");
 }
 
 @end

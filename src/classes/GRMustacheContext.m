@@ -254,14 +254,14 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return [[_contextObject retain] autorelease];
 }
 
-- (id)contextValueForKey:(NSString *)key isProtected:(BOOL *)isProtected
+- (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected
 {
     if (_protectedContextObject) {
         for (GRMustacheContext *context = self; context; context = context.protectedContextParent) {
             id value = [GRMustacheContext valueForKey:key inObject:context.protectedContextObject];
             if (value != nil) {
-                if (isProtected) {
-                    *isProtected = YES;
+                if (protected != NULL) {
+                    *protected = YES;
                 }
                 return value;
             }
@@ -283,8 +283,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             if (hidden) { continue; }
             id value = [GRMustacheContext valueForKey:key inObject:contextObject];
             if (value != nil) {
-                if (isProtected) {
-                    *isProtected = NO;
+                if (protected != NULL) {
+                    *protected = NO;
                 }
                 return value;
             }

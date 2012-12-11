@@ -130,22 +130,22 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * Performs a key lookup in the receiver's context stack, and returns the found
  * value.
  *
- * @param key          The searched key.
- * @param isProtected  Upon return, is YES if the value comes from the protected
- *                     context stack.
+ * @param key        The searched key.
+ * @param protected  Upon return, is YES if the value comes from the protected
+ *                   context stack.
  *
  * @return The value found in the context stack.
  *
- * @see -[GRMustacheIdentifierExpression evaluateInContext:]
+ * @see -[GRMustacheIdentifierExpression valueWithContext:]
  */
-- (id)contextValueForKey:(NSString *)key isProtected:(BOOL *)isProtected GRMUSTACHE_API_INTERNAL;
+- (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns the top object of the receiver's context stack.
  *
  * @return The top object of the receiver's context stack.
  *
- * @see -[GRMustacheImplicitIteratorExpression evaluateInContext:]
+ * @see -[GRMustacheImplicitIteratorExpression valueWithContext:]
  */
 - (id)currentContextValue GRMUSTACHE_API_INTERNAL;
 

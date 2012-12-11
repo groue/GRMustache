@@ -35,10 +35,10 @@
     [super dealloc];
 }
 
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error
+- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
 {
     NSAssert(NO, @"Subclasses must override");
-    return NO;
+    return nil;
 }
 
 - (BOOL)isEqual:(id)anObject

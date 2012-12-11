@@ -100,16 +100,13 @@
         
         // Evaluate expression
         
-        __block id object;
-        BOOL isProtected;
-        if (![_expression evaluateInContext:context value:&object isProtected:&isProtected error:error]) {
-            return NO;
-        }
+        BOOL protected;
+        __block id object = [_expression valueWithContext:context protected:&protected];
         
         
         // Hide object if it is protected
         
-        if (isProtected) {
+        if (protected) {
             // Object is protected: it may enter the context stack, and provide
             // value for `.` and `.name`. However, it must not expose its keys.
             //

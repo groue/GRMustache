@@ -86,17 +86,10 @@
 
 #pragma mark GRMustacheExpression
 
-- (BOOL)evaluateInContext:(GRMustacheContext *)context value:(id *)value isProtected:(BOOL *)isProtected error:(NSError **)error
+- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
 {
-    id argument;
-    id filter;
-    
-    if (![_argumentExpression evaluateInContext:context value:&argument isProtected:NULL error:error]) {
-        return NO;
-    }
-    if (![_filterExpression evaluateInContext:context value:&filter isProtected:NULL error:error]) {
-        return NO;
-    }
+    id argument = [_argumentExpression valueWithContext:context protected:NULL];
+    id filter = [_filterExpression valueWithContext:context protected:NULL];
 
     if (filter == nil) {
         GRMustacheToken *token = self.token;
@@ -116,16 +109,15 @@
         }
     }
     
-    if (_curry && [filter respondsToSelector:@selector(curryArgument:)]) {
-        *value = [(id<GRMustacheFilter>)filter curryArgument:argument];
-    } else {
-        *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
+    if (protected != NULL) {
+        *protected = NO;
     }
     
-    if (isProtected) {
-        *isProtected = NO;
+    if (_curry && [filter respondsToSelector:@selector(curryArgument:)]) {
+        return [(id<GRMustacheFilter>)filter curryArgument:argument];
+    } else {
+        return [(id<GRMustacheFilter>)filter transformedValue:argument];
     }
-    return YES;
 }
 
 @end
