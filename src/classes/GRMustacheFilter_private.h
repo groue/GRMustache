@@ -34,7 +34,7 @@
 @optional
 
 /**
- * TOOD
+ * TODO
  */
 - (id<GRMustacheFilter>)curryArgument:(id)object GRMUSTACHE_API_INTERNAL;
 @end
