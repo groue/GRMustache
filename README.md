@@ -155,7 +155,9 @@ Popular projects & apps using GRMustache
 Contribution wish-list
 ----------------------
 
-I wish somebody would review my non-native English, and clean up the guides, if you ask.
+Please look for an [open issue](GRMustache/issues) that smiles at you!
+
+... And I wish somebody would review the non-native English of the documentation and guides.
 
 
 Forking
