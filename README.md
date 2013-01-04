@@ -3,6 +3,8 @@ GRMustache
 
 GRMustache is a flexible and production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
+GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
+
 **November 28, 2012: GRMustache 6.1.3 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
@@ -10,16 +12,32 @@ Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache)
 How To
 ------
 
-### 1. Download and add to your Xcode project
+### 1. Setup your Xcode project
 
-    $ git clone https://github.com/groue/GRMustache.git
+**Option 1: CocoaPods**
+
+Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRMustache', '~> 6.1'` to your Podfile.
+
+**Option 2: Static Library**
+
+The distribution includes pre-built static libraries:
+
+Clone the repository with the `git clone https://github.com/groue/GRMustache.git` command.
 
 - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
 - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
 
-Alternatively, you may use [CocoaPods](https://github.com/CocoaPods/CocoaPods): append `pod 'GRMustache', '~> 6.1'` to your Podfile.
+If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
 
-GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
+**Option 3: Compiling the raw sources**
+
+You may also embed the raw GRMustache sources in your project:
+
+    $ git clone https://github.com/groue/GRMustache.git
+    $ cd GRMustache
+    $ git submodule update --init src/vendor/groue/jrswizzle
+
+Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project. In your own sources, avoid importing header files whose name ends with `_private.h`: those are private headers that may change, without notice, in future releases.
 
 **armv6 architecture**: The last GRMustache static library that embeds the armv6 slice is [GRMustache 5.0.1](https://github.com/groue/GRMustache/tree/v5.0.1). You now have to compile GRMustache yourself, or to use [CocoaPods](https://github.com/CocoaPods/CocoaPods).
 
