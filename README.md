@@ -29,6 +29,8 @@ Clone the repository with the `git clone https://github.com/groue/GRMustache.git
 
 If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
 
+The armv6 slice is not included. In order to target this architecture, you now have to compile GRMustache yourself (see below), or to use CocoaPods (see above).
+
 **Option 3: Compiling the raw sources**
 
 You may also embed the raw GRMustache sources in your project:
@@ -37,9 +39,11 @@ You may also embed the raw GRMustache sources in your project:
     $ cd GRMustache
     $ git submodule update --init src/vendor/groue/jrswizzle
 
-Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project. In your own sources, avoid importing header files whose name ends with `_private.h`: those are private headers that may change, without notice, in future releases.
+Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project.
 
-**armv6 architecture**: The last GRMustache static library that embeds the armv6 slice is [GRMustache 5.0.1](https://github.com/groue/GRMustache/tree/v5.0.1). You now have to compile GRMustache yourself, or to use [CocoaPods](https://github.com/CocoaPods/CocoaPods).
+If you project uses ARC, flag the source files with the `-fno-objc-arc` compiler flag ([how to](http://stackoverflow.com/questions/6646052/how-can-i-disable-arc-for-a-single-file-in-a-project)).
+
+In your own sources, avoid importing header files whose name ends with `_private.h`: those are private headers that may change, without notice, in future releases.
 
 ### 2. Start rendering templates
 
