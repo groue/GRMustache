@@ -41,7 +41,7 @@ You may also embed the raw GRMustache sources in your project:
 
 Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project.
 
-If you project uses ARC, flag the source files with the `-fno-objc-arc` compiler flag ([how to](http://stackoverflow.com/questions/6646052/how-can-i-disable-arc-for-a-single-file-in-a-project)).
+If your project uses ARC, flag the source files with the `-fno-objc-arc` compiler flag ([how to](http://stackoverflow.com/questions/6646052/how-can-i-disable-arc-for-a-single-file-in-a-project)).
 
 In your own sources, avoid importing header files whose name ends with `_private.h`: those are private headers that may change, without notice, in future releases.
 
