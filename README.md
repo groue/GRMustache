@@ -29,7 +29,7 @@ Clone the repository with the `git clone https://github.com/groue/GRMustache.git
 
 If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
 
-The armv6 slice is not included. In order to target this architecture, you now have to compile GRMustache yourself (see below), or to use CocoaPods (see above).
+The armv6 slice is not included. In order to target this architecture, you have to compile GRMustache yourself (see below), or to use CocoaPods (see above).
 
 **Option 3: Compiling the raw sources**
 
