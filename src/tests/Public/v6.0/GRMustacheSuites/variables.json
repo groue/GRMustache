@@ -56,7 +56,7 @@
       "expected": "<&\"<>012>"
     },
     
-    // Boolean interpretation
+
     
     {
       "name": "Missing key should not be rendered.",
@@ -71,7 +71,7 @@
       "expected": "<>"
     },
 
-    // Whitespace Insensitivity
+
 
     {
       "name": "Whitespace in double mustache tag should be ignored.",
@@ -92,7 +92,7 @@
       "expected": "<--->"
     },
 
-    // Whitespace Sensitivity
+
 
     {
       "name": "Single left outer whitespace should be honored.",

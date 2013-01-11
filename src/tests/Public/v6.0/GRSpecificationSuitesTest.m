@@ -50,7 +50,13 @@
     STAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
     if (!testSuiteData) return;
     
+
+#ifdef GRMUSTACHE_USE_JSONKIT
     NSDictionary *testSuite = [testSuiteData objectFromJSONDataWithParseOptions:JKParseOptionComments error:&error];
+#else
+    NSDictionary *testSuite = [NSJSONSerialization JSONObjectWithData:testSuiteData options:0 error:&error];
+#endif
+    
     STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
     if (!testSuite) return;
     
