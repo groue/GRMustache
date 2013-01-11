@@ -22,7 +22,10 @@
 
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
+
+#ifdef GRMUSTACHE_USE_JSONKIT
 #import "JSONKit.h"
+#endif
 
 @interface GRMustacheTemplateFromMethodsTest : GRMustachePublicAPITest
 @end
@@ -94,7 +97,13 @@
 - (id)valueForKey:(NSString *)key inRendering:(NSString *)rendering
 {
     NSError *error;
+
+#ifdef GRMUSTACHE_USE_JSONKIT
     id object = [rendering objectFromJSONStringWithParseOptions:JKParseOptionNone error:&error];
+#else
+    NSData *data = [rendering dataUsingEncoding:NSUTF8StringEncoding];
+    id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+#endif
     STAssertNotNil(object, @"%@", error);
     return [object valueForKey:key];
 }
