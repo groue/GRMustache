@@ -19,7 +19,7 @@
       "expected": "<1234>"
     },
   
-    // Whitespace Insensitivity
+    
     
     {
       "name": "Whitespace in tag should be ignored.",
@@ -28,7 +28,7 @@
       "expected": "<--->"
     },
 
-    // Whitespace Sensitivity
+    
 
     {
       "name": "Single left outer whitespace should be honored.",

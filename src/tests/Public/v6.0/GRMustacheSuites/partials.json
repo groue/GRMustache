@@ -22,7 +22,7 @@
       "expected": "<X<Y<>>>"
     },
     
-    // File system
+
 
     {
       "name": "Partials loaded from a template with .mustache extension should have the extension .mustache",
@@ -230,7 +230,7 @@
       "expected": "file1.txt dir/file1.txt dir/dir/file1.txt dir/dir/file2.txt dir/file2.txt file2.txt "
     },
 
-    // Whitespace Insensitivity
+
 
     {
       "name": "Whitespace in tag should be ignored.",
@@ -240,7 +240,7 @@
       "expected": "<=>"
     },
 
-    // Whitespace Sensitivity
+
     
     {
       "name": "Single left outer whitespace should be honored.",
