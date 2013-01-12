@@ -23,12 +23,25 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTestBase.h"
 
+#ifdef GRMUSTACHE_USE_JSONKIT
+#import "JSONKit.h"
+#endif
+
 @implementation GRMustacheTestBase
 @dynamic testBundle;
 
 - (NSBundle *)testBundle
 {
     return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
+}
+
+- (id)JSONObjectWithData:(NSData *)data error:(NSError **)error
+{
+#ifdef GRMUSTACHE_USE_JSONKIT
+    return [data objectFromJSONDataWithParseOptions:JKParseOptionComments error:error];
+#else
+    return [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
+#endif
 }
 
 @end

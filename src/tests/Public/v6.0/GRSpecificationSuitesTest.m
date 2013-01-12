@@ -22,7 +22,6 @@
 
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
-#import "JSONKit.h"
 
 @interface GRSpecificationSuitesTest : GRMustachePublicAPITest
 @end
@@ -50,13 +49,7 @@
     STAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
     if (!testSuiteData) return;
     
-
-#ifdef GRMUSTACHE_USE_JSONKIT
-    NSDictionary *testSuite = [testSuiteData objectFromJSONDataWithParseOptions:JKParseOptionComments error:&error];
-#else
-    NSDictionary *testSuite = [NSJSONSerialization JSONObjectWithData:testSuiteData options:0 error:&error];
-#endif
-    
+    NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
     STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
     if (!testSuite) return;
     
