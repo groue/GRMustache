@@ -293,8 +293,6 @@
 		ABAF869E16A0A65A001ADE96 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B61528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache */; };
 		ABAF869F16A0A65A001ADE96 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 5682B4B71528D0F900ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache */; };
 		ABAF86A016A0A65A001ADE96 /* GRMustacheTemplateRepositoryTest in Resources */ = {isa = PBXBuildFile; fileRef = 568140DD16365CF500310B7F /* GRMustacheTemplateRepositoryTest */; };
-		ABAF86A916A0A852001ADE96 /* GRMustache6Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABAF86A816A0A852001ADE96 /* GRMustache6Tests-Info.plist */; };
-		ABAF86AB16A0A863001ADE96 /* GRMustache6Tests-GC-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABAF86AA16A0A863001ADE96 /* GRMustache6Tests-GC-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1145,7 +1143,6 @@
 				5682B4B81528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */,
 				5682B4BA1528D0FA00ADD123 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */,
 				568140DE16365CF500310B7F /* GRMustacheTemplateRepositoryTest in Resources */,
-				ABAF86A916A0A852001ADE96 /* GRMustache6Tests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1216,7 +1213,6 @@
 				ABAF869E16A0A65A001ADE96 /* GRMustacheTemplateFromMethodsTest_compilerError.mustache in Resources */,
 				ABAF869F16A0A65A001ADE96 /* GRMustacheTemplateFromMethodsTest_compilerErrorWrapper.mustache in Resources */,
 				ABAF86A016A0A65A001ADE96 /* GRMustacheTemplateRepositoryTest in Resources */,
-				ABAF86AB16A0A863001ADE96 /* GRMustache6Tests-GC-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1589,6 +1585,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "tests/GRMustache6Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DGRMUSTACHE_USE_JSONKIT";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1607,6 +1604,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "tests/GRMustache6Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DGRMUSTACHE_USE_JSONKIT";
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
