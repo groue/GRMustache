@@ -7,7 +7,7 @@
       "expected": "<123>"
     },
     
-
+    // Boolean interpretation
     
     {
       "name": "Missing key should trigger the section omission.",
@@ -76,7 +76,7 @@
       "expected": "<--->"
     },
     
-
+    // Context stack
     
     {
       "name": "Object should become the current context.",
@@ -97,7 +97,7 @@
       "expected": "<1a>"
     },
     
-
+    // Lists
     
     {
       "name": "Lists should be iterated.",
@@ -124,7 +124,7 @@
       "expected": "<1abc>"
     },
     
-
+    // 'else' sections
     
     {
       "name": "Missing key should trigger the section omission, and the rendering of the 'else' section.",
@@ -200,7 +200,7 @@
       "expected": "<--->"
     },
     
-
+    // Empty 'else' and closing tags
     
     {
       "name": "Closing tag may be empty.",
@@ -265,7 +265,7 @@
       "expected": "<+++>"
     },
     
-
+    // Whitespace Insensitivity
     
     {
       "name": "Whitespace in tag should be ignored.",
@@ -274,7 +274,7 @@
       "expected": "<--->"
     },
     
-
+    // Whitespace Sensitivity
     
     {
       "name": "Single left outer whitespace should be honored when section is rendered.",

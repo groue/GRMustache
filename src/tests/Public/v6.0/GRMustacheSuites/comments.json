@@ -13,7 +13,7 @@
       "expected": "<>"
     },
     
-    
+    // Whitespace Sensitivity
     
     {
       "name": "Single left outer whitespace should be honored.",
