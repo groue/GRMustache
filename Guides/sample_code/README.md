@@ -7,7 +7,7 @@ Sample code
 
     How to format numbers: *discussion, downloadable Xcode project*.
 
-- [Collecton Indexes](../../../blob/master/Guides/sample_code/indexes.md)
+- [Collection Indexes](../../../blob/master/Guides/sample_code/indexes.md)
     
     How to have GRMustache render array indexes, render sections for the first or the last element, for odd or even elements, etc.: *discussion, downloadable Xcode project*.
 
