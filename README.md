@@ -3,9 +3,9 @@ GRMustache
 
 GRMustache is a flexible and production-ready implementation of [Mustache](http://mustache.github.com/) templates for MacOS Cocoa and iOS.
 
-GRMustache targets MacOS down to 10.6 Snow Leopard, iOS down to version 4.3, and only depends on the Foundation framework.
+GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
-**November 28, 2012: GRMustache 6.1.3 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**January 12, 2013: GRMustache 6.1.4 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -37,7 +37,7 @@ You may also embed the raw GRMustache sources in your project:
 
     $ git clone https://github.com/groue/GRMustache.git
     $ cd GRMustache
-    $ git checkout v6.1.3  # checkout the latest stable release
+    $ git checkout v6.1.4  # checkout the latest stable release
     $ git submodule update --init src/vendor/groue/jrswizzle
 
 Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project.

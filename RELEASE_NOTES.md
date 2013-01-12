@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.1.4
+
+Garbage collection support.
+
 ## v6.1.3
 
 The parser now rejects expressions identifiers that start with a reserved Mustache character: `{}<>&#^$/` (those are the characters that start Mustache tags).
