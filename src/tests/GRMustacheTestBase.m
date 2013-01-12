@@ -41,7 +41,7 @@
     return [data objectFromJSONDataWithParseOptions:JKParseOptionComments error:error];
 #else
     // Naive support for single line comments "// ..."
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     NSMutableString *commentLessString = [NSMutableString string];
     NSScanner *scanner = [NSScanner scannerWithString:string];
     [scanner setCharactersToBeSkipped:nil]; // Keep newlines
