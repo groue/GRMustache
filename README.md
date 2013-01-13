@@ -171,8 +171,9 @@ Popular projects & apps using GRMustache
 * [CarterA/Tribo](https://github.com/CarterA/Tribo): Extremely fast static site generator written in Objective-C
 * [AutoLib](http://itunes.com/apps/autolib) uses GRMustache and [spullara/mustache.java](https://github.com/spullara/mustache.java) for rendering an identical set of Mustache templates on iOS and Android.
 * [CinéObs](http://itunes.com/apps/cineobs) uses GRMustache for RSS feeds rendering
-* [Fotopedia](http://itunes.com/apps/fotonautsinc)
-* [FunGolf GPS](http://itunes.com/apps/fungolf)
+* [Fotopedia](http://itunes.com/apps/fotonautsinc), the first collaborative photo encyclopedia
+* [FunGolf GPS](http://itunes.com/apps/fungolf), a golf app with 3D maps
+* [KosmicTask](http://www.mugginsoft.com/kosmictask), an integrated scripting environment for OS X that supports more than 20 scripting languages.
 
 
 Contribution wish-list
