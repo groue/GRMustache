@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](filters.md)
+[up](../../../../GRMustache#documentation), [next](runtime_patterns.md)
 
 GRMustache runtime
 ==================
@@ -392,4 +392,4 @@ Second, `{{#collection.name}}{{.}}{{/}}` would render the same as `{{#collection
 Based on this rationale, GRMustache uses the implementation of `valueForKey:` of `NSObject` for arrays, sets, and ordered sets. As a consequence, the `count` key can be used in templates, and no unexpected collections comes messing with the rendering.
 
 
-[up](../../../../GRMustache#documentation), [next](filters.md)
+[up](../../../../GRMustache#documentation), [next](runtime_patterns.md)

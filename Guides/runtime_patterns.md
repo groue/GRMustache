@@ -1,5 +1,7 @@
-Patterns for feeding GRMustache
-===============================
+[up](../../../../GRMustache#documentation), [next](filters.md)
+
+Patterns For Feeding GRMustache Templates
+=========================================
 
 Summary
 -------
@@ -99,7 +101,7 @@ If hell doesn't burn too much, here is how you could do it:
 The rendering code still reads:
 
 ```objc
-    [self.template renderObject:self.user error:NULL];
+[self.template renderObject:self.user error:NULL];
 ```
 
 Filters
@@ -114,8 +116,6 @@ Obviously, if the Pet class doesn't help, the template has to help itself: below
         <li>{{name}}, {{ age(birthDate) }} year(s)</li>
     {{/ pets }}
     ...
-
-.
 
 The rendering code now reads:
 
@@ -140,11 +140,11 @@ ViewModel
 
 This technique is compatible with other Mustache implementations. It is also more verbose. And heartfully supported by GRMustache.
 
-You setup *ViewModel* objects that fit your templates, and gets rendered by GRMustache instead of the raw model objects.
+You set up *ViewModel* objects that fit your templates, and get rendered by GRMustache instead of the raw model objects.
 
 The role of those ViewModel objects is to encapsulate the template interface, the set of Mustache tags that should be fed, and to translate raw model values into values that get rendered.
 
-This ViewModel can be a set of classes, or a dedicated dictionary built by some specific method. Let's look at how it can be done with whole classes.
+ViewModel objects can be defined by a set of regular classes, or a dedicated dictionary built by some specific method. Let's look at how it can be done with whole classes.
 
 Everything starts from the `{{age}}` tag. This is the tag that can not be fed by model objects. So let's first build the `PetMustache` class, which provides data for the `{{age}}` and `{{name}}` pet tags:
 
@@ -270,4 +270,4 @@ Of course, it's hard to believe that the age of a pet can have you write so much
 
 **ViewModel Drawbacks**: Not done in five minutes. Quickly looks overdesigned, especially in a tutorial like this Guide.
 
-
+[up](../../../../GRMustache#documentation), [next](filters.md)
