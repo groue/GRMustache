@@ -127,8 +127,29 @@ id filters = @{
     }]
 };
 
+// Render user with filters
 [self.template renderObjectsFromArray:@[filters, self.user] error:NULL];
 ```
+
+You may want to "hide" the `age` filter in your template. This is the case, for example, when the template is shared between several objects, and that you don't want them to take care of feeding the template with filters. The code now reads:
+
+```objc
+// Extend the base context of our template, so that the `age` filter is
+// always available:
+id filters = @{
+    @"age": [GRMustacheFilter filterWithBlock:^id(NSDate* date) {
+        return /* clever calculation based on the date */;
+    }]
+};
+self.template.baseContext = [self.template.baseContext contextByAddingObject:filters];
+
+// Render the user
+[self.template renderObject:self.user error:NULL];
+```
+
+The base context of a template contains provides keys that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example, and now our `age` filter.
+
+Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
 
 **Filter Benefits**: Done in five minutes. Conceptually clean.
 
