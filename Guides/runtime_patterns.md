@@ -6,7 +6,7 @@ Patterns For Feeding GRMustache Templates
 Summary
 -------
 
-GRMustache is a Mustache engine, with a few extra features, and a strong focus on flexibility. A template engine is a tool: it should help you having the job done, without falling short right at the moment your application leaves the trivial zone.
+GRMustache is a Mustache engine, with a few extra features, and a strong focus on flexibility. A template engine is a tool: it should help you get the job done, without falling short right at the moment your application leaves the trivial zone.
 
 GRMustache supports different techniques for rendering your data.
 
