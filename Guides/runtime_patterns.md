@@ -1,14 +1,28 @@
 Patterns for feeding GRMustache
 ===============================
 
+Summary
+-------
+
 GRMustache is a Mustache engine, with a few extra features, and a strong focus on flexibility. A template engine is a tool: it should help you having the job done, without falling short right at the moment your application leaves the trivial zone.
 
-This guide describes a few usage patterns.
+GRMustache supports different techniques for rendering your data.
+
+**Rendering your raw model objects is fine.**
+
+Objective-C categories, GRMustache filters and [rendering objects](rendering_objects.md) (not covered here but quite useful as well) are there to help you render complex graphs of model objects.
+
+GRMustache ships with [sample code](../../../tree/master/Guides/sample_code) that covers common developer needs. Don't miss them, and run the sample projects.
+
+**Ambitious templates may need ViewModel objects.**
+
+When templates render data that can not be extracted from the model in a straightforward manner, ViewModel objects will act as a clean interface, keeping your application modular and testable.
+
 
 Rendering raw application models
 --------------------------------
 
-Quite often, your templates can render your models directly. Given the following template:
+If you are lucky, your templates can render your models directly. Given the following template:
 
     {{< page }}
     {{$ page_content }}
@@ -29,14 +43,14 @@ It's likely that your `User` class has the `firstName`, `lastName` and `pets` pr
 
 (side note: this template uses a common `page` layout partial. Check the [Partials Guide](partials.md) for more information.)
 
-Leaving the trivial zone
-------------------------
+On the edge of the trivial zone
+-------------------------------
 
-Now the template should render the pets' age:
+Now the template should render the age of each pet:
 
     ...
     {{# pets }}
-        <li>{{name}}, {{age}}</li>
+        <li>{{name}}, {{age}} year(s)</li>
     {{/ pets }}
     ...
 
@@ -48,11 +62,12 @@ How should we feed this `{{age}}` tag?
 
 We'll see several options below. Each one has its advantages, and its drawbacks. The goal of this guide is to show that GRMustache supports many patterns. So let's start the journey.
 
-### Ad-Hoc Properties
+Ad-Hoc Properties
+-----------------
 
 Quickly done, quite efficient, is the technique that adds an `age` property to the Pet class.
 
-**Ad-Hoc Properties Benefits**: Done in five minutes.
+**Ad-Hoc Properties Benefits**: Done in five minutes, mostly spent in Xcode user interface.
 
 **Ad-Hoc Properties Drawbacks**: The template can not be tested without a full-blown Person and Pet object graph. The Pet class now has a property dedicated to a Mustache template it should know nothing about, the separation of concerns advocated by MVC has been trampled over.
 
@@ -87,7 +102,8 @@ The rendering code still reads:
     [self.template renderObject:self.user error:NULL];
 ```
 
-### Filters
+Filters
+-------
 
 If the dedicated property doesn't fit your coding standards, let us introduce GRMustache [filters](filters.md). Filters are a nice way to transform data. They do not cross the MVC barriers, and the Pet class can remain pristine.
 
@@ -95,7 +111,7 @@ Obviously, if the Pet class doesn't help, the template has to help itself: below
 
     ...
     {{# pets }}
-        <li>{{name}}, {{ age(birthDate) }}</li>
+        <li>{{name}}, {{ age(birthDate) }} year(s)</li>
     {{/ pets }}
     ...
 
@@ -119,34 +135,18 @@ id filters = @{
 **Filter Drawbacks**: The template can not be tested without a full-blown Person and Pet object graph. The template is not compatible with other Mustache implementations, because filters are a GRMustache-specific addition. Help developers of other platforms: [spread the good news](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations)!
 
 
-### ViewModel
+ViewModel
+---------
 
 This technique is compatible with other Mustache implementations. It is also more verbose. And heartfully supported by GRMustache.
 
-You setup *ViewModel* objects that fit our particular template, and gets rendered by GRMustache instead of the raw model.
+You setup *ViewModel* objects that fit your templates, and gets rendered by GRMustache instead of the raw model objects.
 
 The role of those ViewModel objects is to encapsulate the template interface, the set of Mustache tags that should be fed, and to translate raw model values into values that get rendered.
 
 This ViewModel can be a set of classes, or a dedicated dictionary built by some specific method. Let's look at how it can be done with whole classes.
 
-`PersonMustache.h`
-
-```objc
-@class Person;
-
-// The PersonMustache class is dedicated at feeding the person-related tags
-// of a Mustache template with person-related data.
-@interface PersonMustache:NSObject
-
-@property (nonatomic) NSString *firstName;
-@property (nonatomic) NSString *lastName;
-@property (nonatomic) NSArray *pets;    // array of PetMustache objects
-
-// Convenience method for filling a PersonMustache object from a Person.
-- (void)updateFromPerson:(Person *)person;
-
-@end
-```
+Everything starts from the `{{age}}` tag. This is the tag that can not be fed by model objects. So let's first build the `PetMustache` class, which provides data for the `{{age}}` and `{{name}}` pet tags:
 
 `PetMustache.h`
 
@@ -155,14 +155,61 @@ This ViewModel can be a set of classes, or a dedicated dictionary built by some 
 
 // The PetMustache class is dedicated at feeding the pet-related tags
 // of a Mustache template with pet-related data.
-@interface PetMustache:NSObject
+@interface PetMustache : NSObject
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSInteger age;
+- (id)initWithPet:(Pet *)pet;
+@end
+```
 
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSInteger age;
+`PetMustache.m`
 
-// Convenience method for filling a PetMustache object from a Pet.
-- (void)updateFromPet:(Pet *)pet;
+```objc
+#import "PetMustache.h"
+#import "Pet.h"
 
+@interface PetMustache()
+@property (nonatomic) Pet *pet;
+@end
+
+@implementation PetMustache
+
+- (id)initWithPet:(Pet *)pet
+{
+    self = [super init];
+    if (self) {
+        self.pet = pet;
+    }
+    return self;
+}
+
+- (NSString *)name
+{
+    return self.pet.name;
+}
+
+- (NSInteger)age
+{
+    return /* clever calculation based on self.pet.birthDate */;
+}
+
+@end
+```
+
+Our `Person` class does not give any PetMustache objects. That's unfortunate, but we need a `PersonMustache` class as well, for the `{{pets}}`, `{{firstName}}` and `{{lastName}}` person tags:
+
+`PersonMustache.h`
+
+```objc
+@class Person;
+
+// The PersonMustache class is dedicated at feeding the person-related tags
+// of a Mustache template with person-related data.
+@interface PersonMustache : NSObject
+@property (nonatomic, readonly) NSString *firstName;
+@property (nonatomic, readonly) NSString *lastName;
+@property (nonatomic, readonly) NSArray *pets;    // array of PetMustache objects
+- (id)initWithPerson:(Person *)person;
 @end
 ```
 
@@ -173,35 +220,38 @@ This ViewModel can be a set of classes, or a dedicated dictionary built by some 
 #import "PetMustache.h"
 #import "Person.h"
 
+@interface PersonMustache()
+@property (nonatomic) Person *person;
+@end
+
 @implementation PersonMustache
 
-- (void)updateFromPerson:(Person *)person
+- (id)initWithPerson:(Person *)person
 {
-    self.firstName = person.firstName;
-    self.lastName = person.lastName;
-    self.pets = [NSMutableArray array];
-    for (Pet *pet in person.pets) {
-        PetMustache *petMustache = [PetMustache new];
-        [petMustache updateFromPet:pet];
-        [self.pets addObject:petMustache];
+    self = [super init];
+    if (self) {
+        self.person = person;
     }
+    return self;
 }
 
-@end
-```
-
-`PetMustache.m`
-
-```objc
-#import "PetMustache.h"
-#import "Pet.h"
-
-@implementation PetMustache
-
-- (void)updateFromPet:(Pet *)pet
+- (NSString *)firstName
 {
-    self.name = pet.name;
-    self.age = /* clever calculation based on pet.birthDate */;
+    return self.person.firstName;
+}
+
+- (NSString *)lastName
+{
+    return self.person.lastName;
+}
+
+- (NSArray *)pets
+{
+    NSMutableArray *pets = [NSMutableArray array];
+    for (Pet *pet in self.person.pets) {
+        [pets addObject:[[PetMustache alloc] initWithPet:pet]];
+    }
+    return pets;
 }
 
 @end
@@ -210,14 +260,14 @@ This ViewModel can be a set of classes, or a dedicated dictionary built by some 
 Rendering code:
 
 ```objc
-PersonMustache *personMustache = [PersonMustache new];
-[personMustache updateFromPerson:self.user];
+PersonMustache *personMustache = [[PersonMustache alloc] initWithPerson:self.user];
 [self.template renderObject:personMustache error:NULL];
 ```
 
-Of course, it's hard to believe that a simple `{{age}}` tag can have you write so much code. Well, this guide is not here to judge. It's here to show you a few techniques for rendering your data.
+Of course, it's hard to believe that the age of a pet can have you write so much boilerplate. Well, this guide is here to show you some techniques for rendering your data. Style is another topic, left to the reader's conscience.
 
-**ViewModel Benefits**: The template can be tested without creating a full graph of person and pets.
+**ViewModel Benefits**: Conceptually clean. Good base for testing the template without creating a full graph of person and pets.
 
-**ViewModel Drawbacks**: Not done in five minutes. May look overdesigned.
+**ViewModel Drawbacks**: Not done in five minutes. Quickly looks overdesigned, especially in a tutorial like this Guide.
+
 
