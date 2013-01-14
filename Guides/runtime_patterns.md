@@ -69,7 +69,7 @@ Quickly done, quite efficient, is the technique that adds an `age` property to t
 
 **Ad-Hoc Properties Benefits**: Done in five minutes, mostly spent in Xcode user interface.
 
-**Ad-Hoc Properties Drawbacks**: The template can not be tested without a full-blown Person and Pet object graph. The Pet class now has a property dedicated to a Mustache template it should know nothing about, the separation of concerns advocated by MVC has been trampled over.
+**Ad-Hoc Properties Drawbacks**: The template can not be tested without a full-blown Person and Pet object graph. The Pet class now has a property dedicated to a Mustache template it should know nothing about: the separation of concerns advocated by MVC has been trampled over.
 
 If hell doesn't burn too much, here is how you could do it:
 
