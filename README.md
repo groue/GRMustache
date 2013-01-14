@@ -162,6 +162,10 @@ What other people say
 
 > Thank fucking christ for decent iOS developers who ship .lib files in their Github repos. #GRMustache
 
+[@SebastienPeek](https://twitter.com/sebastienpeek/status/290700413152423936)
+
+> @issya should see the HTML template I built, pretty wicked. GRMustache is the best.
+
 
 Popular projects & apps using GRMustache
 ----------------------------------------
