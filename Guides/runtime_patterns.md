@@ -56,7 +56,7 @@ Now the template should render the age of each pet:
 
 Of course, your Pet class has no `age` property.
 
-Instead it has a `birthDate` or type NSDate, or even maybe a `birthDateComponents` of type NSDateComponents, which can't be messed up with any time zone.
+Instead it has a `birthDate` property or type NSDate, or even maybe a `birthDateComponents` property of type NSDateComponents, which can't be messed up with any time zone.
 
 How should we feed this `{{age}}` tag?
 
