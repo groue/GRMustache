@@ -156,7 +156,7 @@ self.template.baseContext = [self.template.baseContext contextByAddingObject:fil
 [self.template renderObject:user error:NULL];
 ```
 
-The base context of a template contains provides keys that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example, and now our `age` filter.
+The base context of a template provides keys that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example, and now our `age` filter.
 
 Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
 
