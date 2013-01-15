@@ -3,7 +3,7 @@
 GRMustache runtime
 ==================
 
-You'll learn here how to provide data to Mustache templates. The loading of templates is covered in the [Templates Guide](templates.md).
+You'll learn here how GRMustache renders your data. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [Feeding Templates Guides](runtime_patterns.md).
 
 Variable tags
 -------------

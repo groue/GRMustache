@@ -3,12 +3,10 @@
 Patterns For Feeding GRMustache Templates
 =========================================
 
+You'll learn here a few practical techniques for feeding your templates. The loading of templates is covered in the [Templates Guide](templates.md). The [Runtime Guide](runtime.md) covers how GRMustache processes your data.
+
 Summary
 -------
-
-GRMustache is a Mustache engine, with a few extra features, and a strong focus on flexibility. A template engine is a tool: it should help you get the job done, without falling short right at the moment your application leaves the trivial zone.
-
-GRMustache supports different techniques for rendering your data.
 
 **Rendering your raw model objects is fine.**
 
