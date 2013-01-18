@@ -23,14 +23,11 @@ This is all good. However, the children contexts shadow their parents: keys get 
         {{/pet}}
     {{/person}}
 
-Some will say: "Mustache needs a syntax that lets me access outer contexts!".
-
-It would surely help. However this is not the main trouble.
 
 Robust code in an untrusted environment
 ---------------------------------------
 
-The main trouble is that you may want to write robust and/or reusable [partials](partials.md), [filters](filters.md), [rendering objects](rendering_objects.md) that process *untrusted data* in *untrusted templates*.
+Key shadowing is a threat on robust and/or reusable [partials](partials.md), [filters](filters.md), [rendering objects](rendering_objects.md) that process *untrusted data* in *untrusted templates*.
 
 Because of untrusted data, you can not be sure that your precious keys won't be shadowed.
 

@@ -134,7 +134,7 @@ id filters = @{
 **Filter Drawbacks**: The template is not compatible with other Mustache implementations, because filters are a GRMustache-specific addition. Help developers of other platforms: [spread the good news](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations)!
 
 
-### Private filters
+### Private and future-proof filters
 
 You may want to "hide" the `age` filter in your template. This is the case, for example, when the template is shared between several objects, and that you don't want them to take care of feeding the template with filters.
 
@@ -148,7 +148,7 @@ id filters = @{
         return /* clever calculation based on the date */;
     }]
 };
-self.template.baseContext = [self.template.baseContext contextByAddingObject:filters];
+self.template.baseContext = [self.template.baseContext contextByAddingProtectedObject:filters];
 
 // Render some users
 [self.template renderObject:user1 error:NULL];
@@ -156,6 +156,8 @@ self.template.baseContext = [self.template.baseContext contextByAddingObject:fil
 ```
 
 The base context of a template provides keys that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example, and now our `age` filter.
+
+Here we have added the `age` filter as a *protected* object. This means that GRMustache will always resolve the `age` identifier to our filter. This makes our template future-proof: if the Pet class eventually gets an `age` property, the template will not suddenly resolve `age` as a number, which could not be used to compute the `age(birthDate)` expression.
 
 Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
 
