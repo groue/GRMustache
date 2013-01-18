@@ -88,7 +88,7 @@ Rendering templates:
 - [Runtime](GRMustache/blob/master/Guides/runtime.md): how GRMustache renders your data
 - [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): how to provide data to templates
 
-Advanced Mustache:
+Advanced GRMustache:
 
 - [Filters](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
 - [Tag Delegates](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
