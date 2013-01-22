@@ -310,6 +310,20 @@
 			remoteGlobalIDString = 56DEC26D1526311B0031E8DC;
 			remoteInfo = "GRMustache6-iOS";
 		};
+		AB3BC0D516AE9D1100CB6036 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB3BC0CC16AE9D1100CB6036 /* GRMustachio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB3BC09116AE955A00CB6036;
+			remoteInfo = GRMustachio;
+		};
+		AB3BC0D716AE9D1100CB6036 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB3BC0CC16AE9D1100CB6036 /* GRMustachio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB3BC0B216AE955B00CB6036;
+			remoteInfo = GRMustachioTests;
+		};
 		ABAF866416A0A65A001ADE96 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 56DEC19C15262FC80031E8DC /* Project object */;
@@ -445,6 +459,7 @@
 		56DEC3C515263AC80031E8DC /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		56EB54C9160ED8AA006A5F57 /* GRMustacheTemplateOverride_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateOverride_private.h; sourceTree = "<group>"; };
 		56EB54D0160EEC2B006A5F57 /* GRMustacheTemplateOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateOverride.m; sourceTree = "<group>"; };
+		AB3BC0CC16AE9D1100CB6036 /* GRMustachio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GRMustachio.xcodeproj; path = ../Applications/GRMustachio.xcodeproj; sourceTree = "<group>"; };
 		ABAF86A516A0A65A001ADE96 /* GRMustache6-MacOSTests-GC.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache6-MacOSTests-GC.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAF86A816A0A852001ADE96 /* GRMustache6Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GRMustache6Tests-Info.plist"; sourceTree = "<group>"; };
 		ABAF86AA16A0A863001ADE96 /* GRMustache6Tests-GC-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GRMustache6Tests-GC-Info.plist"; sourceTree = "<group>"; };
@@ -727,6 +742,7 @@
 		56DEC19A15262FC80031E8DC = {
 			isa = PBXGroup;
 			children = (
+				AB3BC0CC16AE9D1100CB6036 /* GRMustachio.xcodeproj */,
 				5662BA3E15A05268001FD2CA /* AppledocSettings.plist */,
 				567AEC4E15278C9A0009CA61 /* GRMustache */,
 				56DEC3AE152638CD0031E8DC /* Tests */,
@@ -900,6 +916,15 @@
 				56DEC3C515263AC80031E8DC /* JSONKit.m */,
 			);
 			path = JSONKit;
+			sourceTree = "<group>";
+		};
+		AB3BC0CD16AE9D1100CB6036 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC0D616AE9D1100CB6036 /* GRMustachio.app */,
+				AB3BC0D816AE9D1100CB6036 /* GRMustachioTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1099,6 +1124,12 @@
 			mainGroup = 56DEC19A15262FC80031E8DC;
 			productRefGroup = 56DEC1A615262FC90031E8DC /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = AB3BC0CD16AE9D1100CB6036 /* Products */;
+					ProjectRef = AB3BC0CC16AE9D1100CB6036 /* GRMustachio.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				56DEC247152631040031E8DC /* GRMustache6-MacOS */,
@@ -1109,6 +1140,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		AB3BC0D616AE9D1100CB6036 /* GRMustachio.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = GRMustachio.app;
+			remoteRef = AB3BC0D516AE9D1100CB6036 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AB3BC0D816AE9D1100CB6036 /* GRMustachioTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GRMustachioTests.octest;
+			remoteRef = AB3BC0D716AE9D1100CB6036 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		56DEC252152631040031E8DC /* Resources */ = {
