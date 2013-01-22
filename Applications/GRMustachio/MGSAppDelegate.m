@@ -32,18 +32,18 @@
 {
     [self.objectController commitEditing];
     
+    NSString *output = nil;
     NSError *error = nil;
     NSData* data = [self.JSONstring dataUsingEncoding:NSUTF8StringEncoding];
     id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (!error) {
+       output = [GRMustacheTemplate renderObject:object fromString:self.templateString error:&error];
+    }
+    
     if (error) {
         self.renderString = [error description];
     } else {
-        NSString *output = [GRMustacheTemplate renderObject:object fromString:self.templateString error:&error];
-        if (error) {
-            self.renderString = [error description];
-        } else {
-            self.renderString = output;
-        }
+        self.renderString = output;
     }
 }
 
