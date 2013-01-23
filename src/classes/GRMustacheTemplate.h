@@ -37,6 +37,7 @@
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
+    BOOL _HTMLSafe;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

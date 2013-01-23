@@ -31,6 +31,7 @@
 
 @implementation GRMustacheTemplate
 @synthesize components=_components;
+@synthesize HTMLSafe=_HTMLSafe;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -115,11 +116,11 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withContext:context error:error]) {
+    if (![self renderInBuffer:buffer HTMLSafe:self.HTMLSafe withContext:context error:error]) {
         return nil;
     }
     if (HTMLSafe) {
-        *HTMLSafe = YES;
+        *HTMLSafe = self.HTMLSafe;
     }
     return buffer;
 }
@@ -127,16 +128,31 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer HTMLSafe:(BOOL)HTMLSafe withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustacheTemplateOverride: resolve it.
-        component = [context resolveTemplateComponent:component];
-        
-        // render
-        if (![component renderInBuffer:buffer withContext:context error:error]) {
-            return NO;
+    if (!HTMLSafe || self.HTMLSafe) {
+        for (id<GRMustacheTemplateComponent> component in _components) {
+            // component may be overriden by a GRMustacheTemplateOverride: resolve it.
+            component = [context resolveTemplateComponent:component];
+            
+            // render
+            if (![component renderInBuffer:buffer HTMLSafe:self.HTMLSafe withContext:context error:error]) {
+                return NO;
+            }
         }
+    } else {
+        // we must HTML-escape our rendering
+        NSMutableString *textBuffer = [NSMutableString string];
+        for (id<GRMustacheTemplateComponent> component in _components) {
+            // component may be overriden by a GRMustacheTemplateOverride: resolve it.
+            component = [context resolveTemplateComponent:component];
+            
+            // render
+            if (![component renderInBuffer:textBuffer HTMLSafe:self.HTMLSafe withContext:context error:error]) {
+                return NO;
+            }
+        }
+        [buffer appendString:[GRMustache escapeHTML:textBuffer]];
     }
     
     return YES;

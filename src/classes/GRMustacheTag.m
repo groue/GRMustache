@@ -28,13 +28,10 @@
 #import "GRMustache_private.h"
 #import "GRMustacheRendering.h"
 
-@interface GRMustacheTag()
-- (NSString *)escapeHTML:(NSString *)string;
-@end
-
 @implementation GRMustacheTag
 @synthesize expression=_expression;
 @synthesize templateRepository=_templateRepository;
+@synthesize HTMLSafe=_HTMLSafe;
 
 - (void)dealloc
 {
@@ -42,12 +39,13 @@
     [super dealloc];
 }
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression HTMLSafe:(BOOL)HTMLSafe
 {
     self = [super init];
     if (self) {
         _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
+        _HTMLSafe = HTMLSafe;
     }
     return self;
 }
@@ -84,7 +82,7 @@
 {
     // default
     if (HTMLSafe) {
-        *HTMLSafe = YES;
+        *HTMLSafe = self.HTMLSafe;
     }
     return @"";
 }
@@ -92,7 +90,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderInBuffer:(NSMutableString *)buffer HTMLSafe:(BOOL)HTMLSafe withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     BOOL success = YES;
     
@@ -158,9 +156,9 @@
         // 4. Render
     
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        BOOL HTMLSafe = NO;
+        BOOL objectHTMLSafe = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
+        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
         
         // If rendering is nil, but rendering error is not set,
         // assume lazy coder, and the intention to render nothing:
@@ -191,8 +189,8 @@
             // Success
             
             if (rendering.length > 0) {
-                if (self.escapesHTML && !HTMLSafe) {
-                    rendering = [self escapeHTML:rendering];
+                if (HTMLSafe && self.escapesHTML && !objectHTMLSafe) {
+                    rendering = [GRMustache escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];
             }
@@ -243,58 +241,6 @@
 {
     // default: overridingTag replaces self
     return overridingTag;
-}
-
-
-#pragma mark - Private
-
-- (NSString *)escapeHTML:(NSString *)string
-{
-    NSUInteger length = [string length];
-    if (!length) {
-        return string;
-    }
-    
-    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
-    if (!characters) {
-        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
-        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
-        characters = [data bytes];
-    }
-    
-    static const NSString *escapeForCharacter[] = {
-        ['&'] = @"&amp;",
-        ['<'] = @"&lt;",
-        ['>'] = @"&gt;",
-        ['"'] = @"&quot;",
-        ['\''] = @"&apos;",
-    };
-    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    
-    NSMutableString *buffer = nil;
-    const UniChar *unescapedStart = characters;
-    CFIndex unescapedLength = 0;
-    for (NSUInteger i=0; i<length; ++i, ++characters) {
-        const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
-        if (escape) {
-            if (!buffer) {
-                buffer = [NSMutableString stringWithCapacity:length];
-            }
-            CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-            CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
-            unescapedStart = characters+1;
-            unescapedLength = 0;
-        } else {
-            ++unescapedLength;
-        }
-    }
-    if (!buffer) {
-        return string;
-    }
-    if (unescapedLength > 0) {
-        CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-    }
-    return buffer;
 }
 
 @end
