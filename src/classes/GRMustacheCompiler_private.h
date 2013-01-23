@@ -30,6 +30,25 @@
 @class GRMustacheTemplateRepository;
 @protocol GRMustacheTemplateComponent;
 
+/**
+ * TODO
+ */
+@interface GRMustacheAST : NSObject {
+@private
+    NSArray *_templateComponents;
+    BOOL _HTMLSafe;
+}
+
+/**
+ * An NSArray containing <GRMustacheTemplateComponent> instances
+ */
+@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+@property (nonatomic, readonly) BOOL HTMLSafe GRMUSTACHE_API_INTERNAL;
+@end
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
@@ -49,6 +68,8 @@
     NSMutableArray *_currentComponents;
     GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
+    BOOL _HTMLSafe;
+    BOOL _HTMLSafeLocked;
 }
 
 /**
@@ -57,10 +78,9 @@
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns an NSArray of objects conforming to the GRMustacheTemplateComponent
- * protocol.
+ * Returns a Mustache Abstract Syntax Tree.
  * 
- * The array will contain something if a GRMustacheParser has provided
+ * The AST will contain something if a GRMustacheParser has provided
  * GRMustacheToken instances to the compiler.
  * 
  * For instance:
@@ -82,14 +102,14 @@
  *     [parser parseTemplateString:... templateID:...];
  *     
  *     // Extract template components from the compiler
- *     NSArray *templateComponents = [compiler templateComponentsReturningError:...];
+ *     GRMustacheAST *AST = [compiler ASTReturningError:...];
  *
- * @param error  If there is an error building template components, upon return
- *               contains an NSError object that describes the problem.
+ * @param error  If there is an error building the abstract syntax tree, upon
+ *               return contains an NSError object that describes the problem.
  *
- * @return An NSArray containing <GRMustacheTemplateComponent> instances
+ * @return A GRMustacheAST instance
  * 
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheAST
  */
-- (NSArray *)templateComponentsReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (GRMustacheAST *)ASTReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
 @end

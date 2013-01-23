@@ -153,6 +153,55 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     return [[[GRMustacheRenderingWithIMP alloc] initWithObject:object implementation:implementation] autorelease];
 }
 
++ (NSString *)escapeHTML:(NSString *)string
+{
+    NSUInteger length = [string length];
+    if (!length) {
+        return string;
+    }
+    
+    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
+    if (!characters) {
+        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
+        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
+        characters = [data bytes];
+    }
+    
+    static const NSString *escapeForCharacter[] = {
+        ['&'] = @"&amp;",
+        ['<'] = @"&lt;",
+        ['>'] = @"&gt;",
+        ['"'] = @"&quot;",
+        ['\''] = @"&apos;",
+    };
+    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
+    
+    NSMutableString *buffer = nil;
+    const UniChar *unescapedStart = characters;
+    CFIndex unescapedLength = 0;
+    for (NSUInteger i=0; i<length; ++i, ++characters) {
+        const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
+        if (escape) {
+            if (!buffer) {
+                buffer = [NSMutableString stringWithCapacity:length];
+            }
+            CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
+            CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
+            unescapedStart = characters+1;
+            unescapedLength = 0;
+        } else {
+            ++unescapedLength;
+        }
+    }
+    if (!buffer) {
+        return string;
+    }
+    if (unescapedLength > 0) {
+        CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
+    }
+    return buffer;
+}
+
 
 #pragma mark Private
 
@@ -485,7 +534,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
                 NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
-                NSAssert(*HTMLSafe, @"WTF"); // Assume all tags render HTML-safe strings
                 if (rendering) {
                     [buffer appendString:rendering];
                 }

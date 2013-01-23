@@ -69,6 +69,7 @@ typedef enum {
 @private
     id _expression;
     GRMustacheTemplateRepository *_templateRepository;
+    BOOL _HTMLSafe;
 }
 
 /**
