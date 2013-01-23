@@ -69,7 +69,7 @@
 - (void)testRENDERPragmaCanNotFollowPartialTag
 {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:@{@"foo":@"bar"}];
-    GRMustacheTemplate *template = [repository templateFromString:@"{{>foo}}{{% RENDER:TEXT }}{{/foo}}" error:NULL];
+    GRMustacheTemplate *template = [repository templateFromString:@"{{>foo}}{{% RENDER:TEXT }}" error:NULL];
     STAssertNil(template, @"");
 }
 
