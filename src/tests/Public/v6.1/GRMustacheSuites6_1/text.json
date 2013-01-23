@@ -1,0 +1,60 @@
+{
+  "tests": [
+    {
+      "name": "RENDER:HTML pragma has no particular effect",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:HTML }}[{{subject}}{{{subject}}}]",
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "RENDER:TEXT pragma disables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "RENDER:HTML pragma following RENDER:TEXT pragma enables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:TEXT }}{{% RENDER:HTML }}[{{subject}}{{{subject}}}]",
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "RENDER:TEXT pragma following RENDER:HTML pragma disables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:HTML }}{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "RENDER:TEXT pragma can follow text",
+      "data": { "subject" : "&" },
+      "template": "hey {{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "hey [&&]"
+    },
+    {
+      "name": "RENDER:TEXT pragma can follow comment",
+      "data": { "subject" : "&" },
+      "template": "{{! a text template }}{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "RENDER:TEXT pragma can follow set delimiters tag",
+      "data": { "subject" : "&" },
+      "template": "{{=< >=}}<% RENDER:TEXT >[<subject><&subject>]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "Partial containing RENDER:TEXT pragma is HTML-escaped when embedded.",
+      "data": { "subject" : "&" },
+      "template": "{{>partial}}",
+      "partials": { "partial": "{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]" },
+      "expected": "[&amp;&amp;]"
+    },
+    {
+      "name": "Template containing RENDER:TEXT pragma does not process HTML partials.",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:TEXT }}{{>partial}}",
+      "partials": { "partial": "[{{subject}}{{{subject}}}]" },
+      "expected": "[&amp;&]"
+    }
+  ]
+}
