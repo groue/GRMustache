@@ -41,7 +41,7 @@ typedef enum {
 @private
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
-    BOOL _HTMLSafe;
+    BOOL _rendersHTML;
 }
 
 // Documented in GRMustacheTag.h
@@ -61,7 +61,7 @@ typedef enum {
 /**
  * TODO
  */
-@property (nonatomic, readonly) BOOL HTMLSafe GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
@@ -74,7 +74,7 @@ typedef enum {
 /**
  * TODO
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression HTMLSafe:(BOOL)HTMLSafe GRMUSTACHE_API_INTERNAL;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

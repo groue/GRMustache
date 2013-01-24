@@ -47,13 +47,13 @@
  * @param templateRepository  TODO
  * @param expression          The expression that would evaluate against a
  *                            rendering contex.
- * @param HTMLSafe            YES if the tag should render HTML
- * @param escapesHTML         YES if the value should be escaped, if HTMLSafe
+ * @param rendersHTML         YES if the tag renders HTML
+ * @param escapesHTML         YES if the value should be escaped, if rendersHTML
  *
  * @return a GRMustacheVariableTag
  *
  * @see GRMustacheExpression
  */
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression HTMLSafe:(BOOL)HTMLSafe escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
 
 @end

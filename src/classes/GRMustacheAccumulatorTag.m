@@ -120,7 +120,7 @@
 - (id)initWithTags:(NSArray *)tags
 {
     GRMustacheTag *initialTag = [tags objectAtIndex:0];
-    self = [super initWithTemplateRepository:initialTag.templateRepository expression:initialTag.expression HTMLSafe:initialTag.HTMLSafe];
+    self = [super initWithTemplateRepository:initialTag.templateRepository expression:initialTag.expression rendersHTML:initialTag.rendersHTML];
     if (self) {
         _tags = [tags retain];
     }

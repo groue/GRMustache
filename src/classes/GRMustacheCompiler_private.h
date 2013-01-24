@@ -36,7 +36,7 @@
 @interface GRMustacheAST : NSObject {
 @private
     NSArray *_templateComponents;
-    BOOL _HTMLSafe;
+    BOOL _rendersHTML;
 }
 
 /**
@@ -47,7 +47,7 @@
 /**
  * TODO
  */
-@property (nonatomic, readonly) BOOL HTMLSafe GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 @end
 
 /**
@@ -68,8 +68,8 @@
     NSMutableArray *_currentComponents;
     GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
-    BOOL _HTMLSafe;
-    BOOL _HTMLSafeLocked;
+    BOOL _rendersHTML;
+    BOOL _rendersHTMLLocked;
 }
 
 /**
