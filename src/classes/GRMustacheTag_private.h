@@ -54,7 +54,7 @@ typedef enum {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 /**
- * Returns YES if the received renders HTML.
+ * Returns YES if the receiver renders HTML, NO if it renders text.
  *
  * For example:
  *
@@ -107,7 +107,19 @@ typedef enum {
 - (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns a tag that represents the receiver overrided by _overridingTag_.
+ *
+ * This method is used in the context of overridable partials, by the
+ * GRMustacheTag implementation of
+ * [GRMustacheTemplateComponent resolveTemplateComponent:].
+ *
+ * It is declared here so that GRMustacheSectionTag and
+ * GRMustacheAccumulatorTag can override it.
+ *
+ * Default implementation returns _overridingTag_.
+ *
+ * @param overridingTag  The overriding tag
+ * @return A tag that represents the receiver overrided by _overridingTag_.
  */
 - (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag GRMUSTACHE_API_INTERNAL;
 
