@@ -44,11 +44,13 @@
 /**
  * Builds and returns a GRMustacheVariableTag.
  *
- * @param templateRepository  TODO
+ * @param templateRepository  The template repository that owns the template
+ *                            that owns this tag.
  * @param expression          The expression that would evaluate against a
  *                            rendering contex.
  * @param rendersHTML         YES if the tag renders HTML
- * @param escapesHTML         YES if the value should be escaped, if rendersHTML
+ * @param escapesHTML         YES if the value should be escaped. Ignored if
+ *                            rendersHTML is NO.
  *
  * @return a GRMustacheVariableTag
  *
