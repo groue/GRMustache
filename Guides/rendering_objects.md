@@ -408,6 +408,8 @@ Many useful things.
     This object lets you load partials from the same set of templates as the "main" rendering template, the one that did provide the rendered tag (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
 
     This does not make much difference when all templates are loaded from your main bundle. But some of you manage their sets of templates differently.
+    
+    Caveat: Make sure you own (retain) template repositories. Don't use templates returned by methods like `[GRMustacheTemplate templateFrom...]`: they return autoreleased templates with an implicit autoreleased repository that will eventually be deallocated when your rendering object tries to access it.
 
 3. *Rendering objects manage the context stack*.
     
