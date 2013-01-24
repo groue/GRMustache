@@ -68,23 +68,35 @@
 
 - (BOOL)escapesHTML
 {
-    // default
+    // Default YES.
+    // This method is overrided by GRMustacheVariableTag,
+    // and sets the difference between {{name}} and {{{name}}} tags.
     return YES;
 }
 
 - (NSString *)innerTemplateString
 {
-    // default
+    // Default empty string.
+    // This method is overrided by GRMustacheSectionTag,
+    // which returns the content of the section.
     return @"";
 }
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // default
+    // Default empty string.
+    // This method is overrided by GRMustacheSectionTag and
+    // GRMustacheAccumulatorTag.
     if (HTMLSafe) {
         *HTMLSafe = self.rendersHTML;
     }
-    return @"";
+    return @"foo";
+}
+
+- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
+{
+    NSAssert(NO, @"Subclasses must override");
+    return nil;
 }
 
 
@@ -237,12 +249,6 @@
     
     // OK, override tag with self
     return [otherTag tagWithOverridingTag:self];
-}
-
-- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
-{
-    // default: overridingTag replaces self
-    return overridingTag;
 }
 
 @end

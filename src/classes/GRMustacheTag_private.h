@@ -44,6 +44,7 @@ typedef enum {
     BOOL _rendersHTML;
 }
 
+// Abstract method whose default implementation raises an exception.
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
 
@@ -103,20 +104,23 @@ typedef enum {
  * @param expression          The expression to be evaluated when rendering the
  *                            tag.
  * @param rendersHTML         YES if the tag renders HTML.
+ *
+ * @see templateRepository property
+ * @see expression property
+ * @see rendersHTML property
  */
 - (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a tag that represents the receiver overrided by _overridingTag_.
+ * Abstract method that returns a tag that represents the receiver overrided by
+ * _overridingTag_.
  *
  * This method is used in the context of overridable partials, by the
  * GRMustacheTag implementation of
  * [GRMustacheTemplateComponent resolveTemplateComponent:].
  *
- * It is declared here so that GRMustacheSectionTag and
- * GRMustacheAccumulatorTag can override it.
- *
- * Default implementation returns _overridingTag_.
+ * Default implementation raises an exception. GRMustacheSectionTag and
+ * GRMustacheAccumulatorTag override it.
  *
  * @param overridingTag  The overriding tag
  * @return A tag that represents the receiver overrided by _overridingTag_.

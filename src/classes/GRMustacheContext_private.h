@@ -123,6 +123,10 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * Hidden objects can not be queried by the contextValueForKey:protected:
  * method.
  *
+ * For a full discussion of the interaction between the protected and the hidden
+ * stacks, see the implementation of
+ * [GRMustacheTag renderHTML:inBuffer:withContext:error:].
+ *
  * @param object  An object that should be hidden.
  *
  * @return A GRMustacheContext object.
