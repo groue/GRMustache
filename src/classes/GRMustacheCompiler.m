@@ -205,7 +205,7 @@
             }
             if ([token.pragma isEqualToString:@"RENDER:HTML"]) {
                 if (_HTMLSafeLocked) {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"RENDER:TEXT pragma tag must prepend any Mustache variable, section, or partial tag."]]];
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"RENDER:HTML pragma tag must prepend any Mustache variable, section, or partial tag."]]];
                     return NO;
                 }
                 _HTMLSafe = YES;
