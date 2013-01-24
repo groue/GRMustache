@@ -41,15 +41,24 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * - a context stack,
  * - a protected context stack,
- * - a delegate stack,
+ * - a hidden context stack,
+ * - a tag delegate stack,
  * - a template override stack.
  *
  * As such, it is able to:
  *
- * - provide the current context object.
- * - perform a key lookup in the context stack.
- * - let template and tag delegates interpret rendered values.
- * - let partial templates override template components.
+ * - Provide the current context object (the top of the context stack).
+ *
+ * - Perform a key lookup, starting with the protected context stack, then
+ *   looking in the context stack, avoiding objects in the hidden context stack.
+ *
+ *   For a full discussion of the interaction between the protected and the
+ *   hidden stacks, see the implementation of
+ *   [GRMustacheTag renderHTML:inBuffer:withContext:error:].
+ *
+ * - Let tag delegates interpret rendered values.
+ *
+ * - Let partial templates override template components.
  */
 @interface GRMustacheContext : NSObject {
 @private
@@ -94,7 +103,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * @return A new GRMustacheContext instance, prefilled with the filter library.
  */
 + (id)context GRMUSTACHE_API_INTERNAL;
 
@@ -108,7 +117,17 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * Returns a GRMustacheContext object identical to the receiver, but for the
+ * hidden object stack that is extended with _object_.
+ *
+ * Hidden objects can not be queried by the contextValueForKey:protected:
+ * method.
+ *
+ * @param object  An object that should be hidden.
+ *
+ * @return A GRMustacheContext object.
+ *
+ * @see [GRMustacheContext contextValueForKey:protected:]
  */
 - (GRMustacheContext *)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
 
@@ -161,7 +180,9 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Executes a given block using each tag delegate in the tag delegate stack.
+ *
+ * @param block  The block to apply to tag delegates.
  */
 - (void)enumerateTagDelegatesUsingBlock:(void(^)(id<GRMustacheTagDelegate> tagDelegate))block GRMUSTACHE_API_INTERNAL;
 @end

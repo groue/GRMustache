@@ -50,12 +50,15 @@ typedef struct {
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
- */
-+ (id<GRMustacheRendering>)renderingObjectWithObject:(id)object implementation:(IMP)implementation GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
+ * Returns the HTML-escaped version of the string parameter.
+ *
+ * Characters & < > " ' are escaped to &amp; &lt; &gt; &quot; &apos;
+ * respectively.
+ *
+ * Be cautious with mutable string input: this method may return its input.
+ *
+ * @param string  The string to be HTML-escaped
+ * @return An HTML-escaped string
  */
 + (NSString *)escapeHTML:(NSString *)string;
 
