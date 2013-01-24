@@ -4,5 +4,3 @@
 
 - test mustacheTag:didRenderObject:as:
 - test mustacheTag:didFailRenderingObject:withError:
-
-- ship ef8b415c9a529dd68e0b51a34b3332be2286c03f
