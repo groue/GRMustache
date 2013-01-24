@@ -48,7 +48,7 @@
  *                            that owns this tag.
  * @param expression          The expression that would evaluate against a
  *                            rendering contex.
- * @param rendersHTML         YES if the tag renders HTML
+ * @param rendersHTML         YES if the tag renders HTML.
  * @param escapesHTML         YES if the value should be escaped. Ignored if
  *                            rendersHTML is NO.
  *

@@ -36,7 +36,8 @@
 /**
  * Returns a new filter that uses the _object_ parameter.
  *
- * Filter currying is involved in `f(a,...)` expressions.
+ * Filter currying is involved in `f(a,...)` expressions, filters with more than
+ * one argument.
  *
  * The evaluation of `f(a,b)` is implemented as `f(a)(b)`: the filter `f` is
  * asked for a curried filter using argument `a`. This curried filter `g` is

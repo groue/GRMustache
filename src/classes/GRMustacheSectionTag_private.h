@@ -56,8 +56,8 @@
  *                            template string.
  * @param expression          The expression that would evaluate against a
  *                            rendering context.
- * @param rendersHTML         YES if the tag renders HTML
- * @param templateString      A Mustache template string
+ * @param rendersHTML         YES if the tag renders HTML.
+ * @param templateString      A Mustache template string.
  * @param innerRange          The range of the inner template string of the
  *                            section in _templateString_.
  * @param type                The type of the section.
