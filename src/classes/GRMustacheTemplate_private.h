@@ -30,7 +30,7 @@
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
-    BOOL _HTMLSafe;
+    BOOL _rendersHTML;
 }
 
 /**
@@ -43,7 +43,7 @@
 /**
  * TODO
  */
-@property (nonatomic) BOOL HTMLSafe;
+@property (nonatomic) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;

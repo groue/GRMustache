@@ -201,7 +201,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.components = AST.templateComponents;
-    template.HTMLSafe = AST.HTMLSafe;
+    template.rendersHTML = AST.rendersHTML;
     return template;
 }
 
@@ -307,7 +307,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         if (AST) {
             template.components = AST.templateComponents;
-            template.HTMLSafe = AST.HTMLSafe;
+            template.rendersHTML = AST.rendersHTML;
         } else {
             // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];

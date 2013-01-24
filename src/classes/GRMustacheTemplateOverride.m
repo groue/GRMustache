@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer HTMLSafe:(BOOL)HTMLSafe withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     context = [context contextByAddingTemplateOverride:self];
-    return [_template renderInBuffer:buffer HTMLSafe:HTMLSafe withContext:context error:error];
+    return [_template renderHTML:HTMLRequired inBuffer:buffer withContext:context error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

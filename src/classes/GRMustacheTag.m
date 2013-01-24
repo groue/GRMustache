@@ -31,7 +31,7 @@
 @implementation GRMustacheTag
 @synthesize expression=_expression;
 @synthesize templateRepository=_templateRepository;
-@synthesize HTMLSafe=_HTMLSafe;
+@synthesize rendersHTML=_rendersHTML;
 
 - (void)dealloc
 {
@@ -39,13 +39,13 @@
     [super dealloc];
 }
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression HTMLSafe:(BOOL)HTMLSafe
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML
 {
     self = [super init];
     if (self) {
         _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
-        _HTMLSafe = HTMLSafe;
+        _rendersHTML = rendersHTML;
     }
     return self;
 }
@@ -82,7 +82,7 @@
 {
     // default
     if (HTMLSafe) {
-        *HTMLSafe = self.HTMLSafe;
+        *HTMLSafe = self.rendersHTML;
     }
     return @"";
 }
@@ -90,8 +90,10 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer HTMLSafe:(BOOL)HTMLSafe withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
+    NSAssert(HTMLRequired == self.rendersHTML, @"WTF");
+    
     BOOL success = YES;
     
     @autoreleasepool {
@@ -189,7 +191,7 @@
             // Success
             
             if (rendering.length > 0) {
-                if (HTMLSafe && self.escapesHTML && !objectHTMLSafe) {
+                if (HTMLRequired && !objectHTMLSafe && self.escapesHTML) {
                     rendering = [GRMustache escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];

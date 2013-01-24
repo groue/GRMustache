@@ -62,16 +62,16 @@
 /**
  * Appends the rendering of the receiver to a buffer.
  * 
- * @param buffer    A mutable string
- * @param HTMLSafe  TODO
- * @param context   A rendering context
- * @param error     TODO
+ * @param HTMLRequired  TODO
+ * @param buffer        A mutable string
+ * @param context       A rendering context
+ * @param error         TODO
  *
  * @return TODO
  *
  * @see GRMustacheContext
  */
-- (BOOL)renderInBuffer:(NSMutableString *)buffer HTMLSafe:(BOOL)HTMLSafe withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be
