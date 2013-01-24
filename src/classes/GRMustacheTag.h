@@ -78,7 +78,12 @@ typedef enum {
 
 /**
  * The template repository that did provide the template string from which the
- * receiver has been extracted.
+ * receiver tag has been extracted.
+ *
+ * Caveat: Make sure you own (retain) template repositories. Don't use templates
+ * returned by methods like `[GRMustacheTemplate templateFrom...]`: they return
+ * autoreleased templates with an implicit autoreleased repository that will
+ * eventually be deallocated when your rendering object tries to access it.
  *
  * @see GRMustacheTemplateRepository
  */
