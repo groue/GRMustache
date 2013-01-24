@@ -31,7 +31,7 @@
 @protocol GRMustacheTemplateComponent;
 
 /**
- * TODO
+ * The GRMustacheAST represents the abstract syntax tree of a template.
  */
 @interface GRMustacheAST : NSObject {
 @private
@@ -45,7 +45,9 @@
 @property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * If YES, the AST represents a template that outputs HTML.
+ *
+ * If NO, the AST represents a template that outputs text.
  */
 @property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 @end

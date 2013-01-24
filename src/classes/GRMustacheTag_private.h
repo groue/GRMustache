@@ -54,25 +54,55 @@ typedef enum {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
- */
-@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
+ * Returns YES if the received renders HTML.
+ *
+ * For example:
+ *
+ * - `{{name}}`: the variable tag renders HTML.
+ * - `{{{name}}}`: the variable tag renders HTML.
+ * - `{{#name}}...{{/name}}`: the section tag renders HTML.
+ * - `{{%RENDER:TEXT}}{{name}}`: the variable tag renders text.
+ * - `{{%RENDER:TEXT}}{{{name}}}`: the variable tag renders text.
+ * - `{{%RENDER:TEXT}}{{#name}}...{{/name}}`: the section tag renders text.
  */
 @property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns YES if the received HTML-escapes its HTML-unsafe input.
+ *
+ * This property is ignored if the rendersHTML property is NO.
+ *
+ * For example:
+ *
+ * - `{{name}}`: the variable tag escapes HTML-unsafe input.
+ * - `{{{name}}}`: the variable tag does not escape input.
+ * - `{{#name}}...{{/name}}`: the section tag escapes HTML-unsafe input.
+ * - `{{%RENDER:TEXT}}{{name}}`: the escapesHTML property is ignored.
+ * - `{{%RENDER:TEXT}}{{{name}}}`: the escapesHTML property is ignored.
+ * - `{{%RENDER:TEXT}}{{#name}}...{{/name}}`: the escapesHTML property is ignored.
+ */
+@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
+
+/**
+ * The expression evaluated and rendered by the tag.
+ *
+ * For example:
+ *
+ * - `{{name}}` holds the `name` expression.
+ * - `{{uppercase(person.name)}}` holds the `uppercase(person.name)` expression.
  */
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
-// Documented in GRMustacheTag.h
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
-
 /**
- * TODO
+ * Returns a new GRMustacheTag.
+ *
+ * @param templateRepository  The template repository exposed to the library
+ *                            user via the public `templateRepository` property.
+ *                            It is the template repository that provides the
+ *                            template to which the tag belongs.
+ * @param expression          The expression to be evaluated when rendering the
+ *                            tag.
+ * @param rendersHTML         YES if the tag renders HTML.
  */
 - (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML GRMUSTACHE_API_INTERNAL;
 
@@ -80,5 +110,8 @@ typedef enum {
  * TODO
  */
 - (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag GRMUSTACHE_API_INTERNAL;
+
+// Documented in GRMustacheTag.h
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 @end

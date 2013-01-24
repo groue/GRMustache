@@ -66,6 +66,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 + (void)registerNilRenderingImplementation:(IMP)imp;
 + (void)registerClass:(Class)aClass renderingImplementation:(IMP)imp;
 + (void)registerProtocol:(Protocol *)aProtocol renderingImplementation:(IMP)imp;
++ (id<GRMustacheRendering>)renderingObjectWithObject:(id)object implementation:(IMP)implementation;
 @end
 
 

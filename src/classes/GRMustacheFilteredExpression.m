@@ -113,8 +113,8 @@
         *protected = NO;
     }
     
-    if (_curry && [filter respondsToSelector:@selector(curryArgument:)]) {
-        return [(id<GRMustacheFilter>)filter curryArgument:argument];
+    if (_curry && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
+        return [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
     } else {
         return [(id<GRMustacheFilter>)filter transformedValue:argument];
     }

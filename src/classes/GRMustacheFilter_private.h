@@ -34,9 +34,18 @@
 @optional
 
 /**
- * TODO
+ * Returns a new filter that uses the _object_ parameter.
+ *
+ * Filter currying is involved in `f(a,...)` expressions.
+ *
+ * The evaluation of `f(a,b)` is implemented as `f(a)(b)`: the filter `f` is
+ * asked for a curried filter using argument `a`. This curried filter `g` is
+ * then applied to `b`:
+ *
+ * g = f(a)
+ * f(a,b) = g(b)
  */
-- (id<GRMustacheFilter>)curryArgument:(id)object GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheFilter>)filterByCurryingArgument:(id)object GRMUSTACHE_API_INTERNAL;
 @end
 
 
