@@ -41,7 +41,12 @@
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns YES if the receiver renders HTML, NO if it renders text.
+ *
+ * For example:
+ *
+ * - `{{name}}`: renders HTML.
+ * - `{{%RENDER:TEXT}}{{name}}`: renders text.
  */
 @property (nonatomic) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
 

@@ -62,12 +62,14 @@
 /**
  * Appends the rendering of the receiver to a buffer.
  * 
- * @param HTMLRequired  TODO
+ * @param HTMLRequired  YES if the receiver should output HTML
  * @param buffer        A mutable string
  * @param context       A rendering context
- * @param error         TODO
+ * @param error         If there is an error performing the rendering, upon
+ *                      return contains an NSError object that describes the
+ *                      problem.
  *
- * @return TODO
+ * @return YES if the receiver could append its rendering to the buffer.
  *
  * @see GRMustacheContext
  */
