@@ -44,10 +44,59 @@
     },
     {
       "name": "RENDER:TEXT pragma can not follow variable tag.",
-      "data": { "subject" : "&" },
+      "data": null,
       "template": "{{subject}}{{% RENDER:TEXT }}",
-      "partials": { "partial": "[{{subject}}{{{subject}}}]" },
-      "expected_error": "Parse error at line 1: RENDER:TEXT pragma tag must prepend any Mustache variable, section, or partial tag."
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not follow section tag.",
+      "data": null,
+      "template": "{{#foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not follow inverted section tag.",
+      "data": null,
+      "template": "{{^foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not follow overridable section tag.",
+      "data": null,
+      "template": "{{$foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not enter section tag.",
+      "data": null,
+      "template": "{{#foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not enter inverted section tag.",
+      "data": null,
+      "template": "{{^foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not enter overridable section tag.",
+      "data": null,
+      "template": "{{$foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not follow partial tag.",
+      "data": null,
+      "template": "{{>partial}}{{% RENDER:TEXT }}",
+      "partials": { "partial": "" },
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "RENDER:TEXT pragma can not enter overridable partial tag.",
+      "data": null,
+      "template": "{{<layout}}{{% RENDER:TEXT }}{{/layout}}",
+      "partials": { "layout": "{{% RENDER:TEXT }}{{$content}}{{/content}}" },
+      "expected_error": "Parse error"
     },
     {
       "name": "Partial containing RENDER:TEXT pragma is HTML-escaped when embedded.",
@@ -62,6 +111,34 @@
       "template": "{{% RENDER:TEXT }}{{>partial}}",
       "partials": { "partial": "[{{subject}}{{{subject}}}]" },
       "expected": "[&amp;&]"
+    },
+    {
+      "name": "HTML template can override HTML template",
+      "data": { "subject" : "&" },
+      "template": "{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
+      "partials": { "layout": "{{$content}}{{/content}}" },
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "TEXT template can override TEXT template",
+      "data": { "subject" : "&" },
+      "template": "{{% RENDER:TEXT }}{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
+      "partials": { "layout": "{{% RENDER:TEXT }}{{$content}}{{/content}}" },
+      "expected": "[&&]"
+    },
+    {
+      "name": "HTML template can not override TEXT template",
+      "data": null,
+      "template": "{{<layout}}{{/layout}}",
+      "partials": { "layout": "{{% RENDER:TEXT }}" },
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "TEXT template can not override HTML template",
+      "data": null,
+      "template": "{{% RENDER:TEXT }}{{<layout}}{{/layout}}",
+      "partials": { "layout": "" },
+      "expected_error": "Parse error"
     }
   ]
 }
