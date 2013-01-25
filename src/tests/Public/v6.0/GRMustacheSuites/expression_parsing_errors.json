@@ -1,0 +1,77 @@
+{
+  "tests": [
+
+    {
+      "name": "Expression can not end with a dot",
+      "data": null,
+      "template": "{{a.}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Expression can not be made of two dots",
+      "data": null,
+      "template": "{{..}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Expression can not be made of three dots",
+      "data": null,
+      "template": "{{...}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Expression can not be made of two indentifiers separated by a space",
+      "data": null,
+      "template": "{{a b}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "White space can not follow the dot of a scoped expression",
+      "data": null,
+      "template": "{{a. b}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "White space can not lead the dot of a scoped expression",
+      "data": null,
+      "template": "{{a .b}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not be found outside of filter arguments",
+      "data": null,
+      "template": "{{a,}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not be found outside of filter arguments",
+      "data": null,
+      "template": "{{,a}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not follow filter arguments",
+      "data": null,
+      "template": "{{a(b,)}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not lead filter arguments",
+      "data": null,
+      "template": "{{a(,b)}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not follow comma",
+      "data": null,
+      "template": "{{a(b,,c)}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not follow comma",
+      "data": null,
+      "template": "{{a(b, ,c)}}",
+      "expected_error": "Invalid expression"
+    }
+  ]
+}
