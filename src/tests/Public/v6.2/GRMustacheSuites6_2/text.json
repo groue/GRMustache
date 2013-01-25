@@ -43,6 +43,13 @@
       "expected": "[&&]"
     },
     {
+      "name": "RENDER:TEXT pragma can not follow variable tag.",
+      "data": { "subject" : "&" },
+      "template": "{{subject}}{{% RENDER:TEXT }}",
+      "partials": { "partial": "[{{subject}}{{{subject}}}]" },
+      "expected_error": "Parse error at line 1: RENDER:TEXT pragma tag must prepend any Mustache variable, section, or partial tag."
+    },
+    {
       "name": "Partial containing RENDER:TEXT pragma is HTML-escaped when embedded.",
       "data": { "subject" : "&" },
       "template": "{{>partial}}",

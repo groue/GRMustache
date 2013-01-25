@@ -28,12 +28,6 @@
 
 @implementation GRMustacheTextTest
 
-- (void)testRENDERPragmaCanNotFollowVariableTag
-{
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}{{% RENDER:TEXT }}" error:NULL];
-    STAssertNil(template, @"");
-}
-
 - (void)testRENDERPragmaCanNotFollowSectionTag
 {
     {
