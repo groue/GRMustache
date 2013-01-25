@@ -44,6 +44,7 @@
     [self runTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"pragmas.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"text_rendering.json" subdirectory:@"GRMustacheSuites"];
 }
 
 @end
