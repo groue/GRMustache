@@ -23,14 +23,14 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheSuites6_1Test : GRMustachePublicAPISuiteTest
+@interface GRMustacheSuites6_2Test : GRMustachePublicAPISuiteTest
 @end
 
-@implementation GRMustacheSuites6_1Test
+@implementation GRMustacheSuites6_2Test
 
 - (void)testGRMustacheSuites
 {
-    [self runTestsFromResource:@"text.json" subdirectory:@"GRMustacheSuites6_1"];
+    [self runTestsFromResource:@"text.json" subdirectory:@"GRMustacheSuites6_2"];
 }
 
 @end
