@@ -64,7 +64,7 @@ Template Configuration
 
 Templates can also be given a specific content type:
 
-Insert those pragma tags right early in the content of your templates:
+Insert those pragma tags right in the content of your templates:
 
 - `{{% CONTENT_TYPE:TEXT }}` turns a template into a text template.
 - `{{% CONTENT_TYPE:HTML }}` turns a template into a HTML template.
