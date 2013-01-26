@@ -17,7 +17,7 @@ This class helps you solving cases that are not covered by other high-level meth
 
 - when you want a specific set of templates to behave as text or HTML templates, when all other templates of your application belong to the other realm.
 
-The first two use cases are covered by the `GRMustacheTemplateRepository` methods documented below. See the [HTML vs Text Templates Guide](html_vs_text.md) for the latter.
+The first two use cases are covered by this guide. See the [HTML vs Text Templates Guide](html_vs_text.md) for the latter.
 
 
 Loading templates and partials from the file system
