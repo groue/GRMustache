@@ -11,7 +11,7 @@ This class helps you solving cases that are not covered by other high-level meth
 
     For example, your templates are not stored in the file system, or they are not encoded as UTF8.
     
-- when your templates are stored in a hierarchy of directories, and you want to specify an absolute path in a [partial tag](partials.md).
+- when your templates are stored in a hierarchy of directories, and you want to use absolute paths to [partials](partials.md).
 
     `{{> header }}` loads a `header` partial template stored next to its enclosing template, but `{{> /partials/header }}`, with a leading slash, loads a template located at the absolute path `/partials/header` from the root of the template repository.
 
