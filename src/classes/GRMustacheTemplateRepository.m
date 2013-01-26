@@ -179,7 +179,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     self = [super init];
     if (self) {
         _templateForTemplateID = [[NSMutableDictionary alloc] init];
-        _configuration = [[GRMustacheConfiguration defaultConfiguration] retain];
+        self.configuration = [GRMustacheConfiguration defaultConfiguration];    // copy
     }
     return self;
 }
