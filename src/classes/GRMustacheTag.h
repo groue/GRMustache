@@ -103,9 +103,15 @@ typedef enum {
  * return the empty string.
  *
  * @param context   A context for rendering inner tags.
- * @param HTMLSafe  Upon return contains YES (tags render HTML-safe strings).
+ * @param HTMLSafe  Upon return contains YES or NO, depending on the content
+ *                  type of the tag's template, as set by the configuration of
+ *                  the source template repository. HTML templates yield YES,
+ *                  text templates yield NO.
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
+ *
+ * @see GRMustacheConfiguration
+ * @see GRMustacheContentType
  *
  * @return The rendering of the tag's inner content.
  */
