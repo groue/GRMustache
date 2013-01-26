@@ -23,12 +23,12 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_2
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheDefaultConfigurationTest : GRMustachePublicAPITest
+@interface GRMustacheConfigurationTest : GRMustachePublicAPITest
 @end
 
 static BOOL defaultConfigurationHasBeenTouched = NO;
 
-@implementation GRMustacheDefaultConfigurationTest
+@implementation GRMustacheConfigurationTest
 
 - (void)tearDown
 {
@@ -42,7 +42,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     defaultConfigurationHasBeenTouched = YES;
 }
 
-// The digit 1 is there to have this test run first
+// The goal is to have this test run first.
+// It looks that alphabetical order is applied: hence the digit 1 in the method name.
 - (void)test1DefaultConfigurationHasHTMLContentType
 {
     STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
@@ -190,5 +191,118 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertTrue(testedHTMLSafeDefined, @"WTF");
     STAssertFalse(testedHTMLSafe, @"WTF");
 }
+
+- (void)testCONTENT_TYPE_TEXTPragmaTagOverridesDefaultConfigurationContentTypeHTML
+{
+    [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&", @"");
+}
+
+- (void)testCONTENT_TYPE_HTMLPragmaTagOverridesDefaultConfigurationContentTypeText
+{
+    [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:HTML}}{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&amp;", @"");
+}
+
+- (void)testDefaultRepositoryConfigurationHasDefaultConfigurationContentType
+{
+    {
+        [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
+        GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+        STAssertEquals(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
+    }
+    {
+        [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+        GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+        STAssertEquals(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
+    }
+}
+
+- (void)testRepositoryConfigurationContentTypeHTMLHasTemplateEscapeInput
+{
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeHTML;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&amp;", @"");
+}
+
+- (void)testRepositoryConfigurationContentTypeTextHasTemplateEscapeInput
+{
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeText;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&", @"");
+}
+
+- (void)testRepositoryConfigurationContentTypeTextOverridesDefaultConfigurationContentTypeHTML
+{
+    [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
+    
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeText;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&", @"");
+}
+
+- (void)testRepositoryConfigurationContentTypeHTMLOverridesDefaultConfigurationContentTypeText
+{
+    [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+    
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeHTML;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&amp;", @"");
+}
+
+- (void)testCONTENT_TYPE_TEXTPragmaTagOverridesRepositoryConfigurationContentTypeHTML
+{
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeHTML;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&", @"");
+}
+
+- (void)testCONTENT_TYPE_HTMLPragmaTagOverridesRepositoryConfigurationContentTypeText
+{
+    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    configuration.contentType = GRMustacheContentTypeText;
+    
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = configuration;
+    
+    GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:HTML}}{{subject}}" error:NULL];
+    NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
+    STAssertEqualObjects(rendering, @"&amp;", @"");
+}
+
 
 @end
