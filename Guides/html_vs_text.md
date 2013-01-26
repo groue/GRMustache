@@ -74,6 +74,8 @@ For example:
     export LANG={{ENV.LANG}}
     ...
 
+Pragma tags have higher priority than repository and default configurations.
+
 Mixing HTML And Text Templates
 ------------------------------
 
