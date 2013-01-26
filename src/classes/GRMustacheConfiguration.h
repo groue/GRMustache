@@ -57,7 +57,7 @@ typedef enum {
  * The default configuration [GRMustacheConfiguration defaultConfiguration]
  * applies to all GRMustache rendering by default:
  *
- *     // GRMustache templates render text by default,
+ *     // Have GRMustache templates render text by default,
  *     // and do not HTML-escape their input.
  *     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
  *
