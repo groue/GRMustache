@@ -472,7 +472,7 @@
  * repository:
  *
  *     // Create a configuration for text rendering
- *     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
  *     configuration.contentType = GRMustacheContentTypeText;
  *
  *     // All templates loaded from _repo_ will render text,
