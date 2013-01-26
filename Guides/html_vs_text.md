@@ -44,15 +44,11 @@ Template Repository Configuration
 [Template repositories](template_repositories.md) can be given a specific configuration, that will only apply to the templates built by this repository.
 
 ```objc
-// Create a configuration for text rendering
-GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-configuration.contentType = GRMustacheContentTypeText;
-
 // All templates loaded from the bash_script_templates directory will be
 // rendered as text, and will not HTML-escape their input.
 NSString *path = @"/path/to/bash_script_templates";
 GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:path];
-repository.configuration = configuration;
+repository.configuration.contentType = GRMustacheContentTypeText;
 
 // Render
 GRMustacheTemplate *template = [repository templateNamed:...];
