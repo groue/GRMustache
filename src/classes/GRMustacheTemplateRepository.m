@@ -231,23 +231,17 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // It's time to lock the configuration.
         [self.configuration lock];
         
-        // Create a Mustache compiler
+        // Create a Mustache compiler that loads partials from self
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
-        
-        // We tell the compiler who provides the partials
         compiler.templateRepository = self;
         
-        // Create a Mustache parser
+        // Create a Mustache parser that feeds the compiler
         GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
-        
-        // The parser feeds the compiler
         parser.delegate = compiler;
         
-        // Parse
+        // Parse and extract template components from the compiler
         [parser parseTemplateString:templateString templateID:templateID];
-        
-        // Extract template components from the compiler
-        AST = [[compiler ASTReturningError:error] retain];
+        AST = [[compiler ASTReturningError:error] retain];  // make sure AST is not released by autoreleasepool
         
         // make sure error is not released by autoreleasepool
         if (!AST && error != NULL) [*error retain];
