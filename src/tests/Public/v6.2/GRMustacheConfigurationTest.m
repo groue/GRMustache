@@ -98,7 +98,6 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        // API
         NSString *rendering = [testedTemplate renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
