@@ -81,6 +81,8 @@ Mixing HTML And Text Templates
 
 Text templates return text. They get HTML-escaped when they get embedded in HTML templates:
 
+### Embedding via a partial tag
+
 `Document.mustache`:
 
     <pre>
@@ -108,6 +110,35 @@ Rendering code:
 script:
 
     cd /path/ && echo "yeah"
+
+document:
+
+    <pre>
+    cd /path/ &amp;&amp; echo &quot;yeah&quot;
+    </pre>
+
+### Embedding a dynamic partial
+
+`Document.mustache`:
+
+    <pre>
+    {{ bash_script }}
+    </pre>
+
+`BashScript.mustache`:
+
+    {{% CONTENT_TYPE:TEXT }}
+    cd {{path}} && {{command}}
+
+Rendering code:
+
+    id data = @{
+        @"path": @"/path/",
+        @"command": @"echo \"yeah\"" ,
+        @"bash_script": [GRMustacheTemplate templateFromResource:@"BashScript" bundle:nil error:NULL]
+    };
+    
+    NSString *document = [GRMustacheTemplate renderObject:data fromResource:@"Document" bundle:nil error:NULL];
 
 document:
 
