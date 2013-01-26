@@ -3,9 +3,9 @@
 Template repositories
 =====================
 
-You use the `GRMustacheTemplateRepository` class when you want to choose a specific source where your templates and partials are loaded from.
+A `GRMustacheTemplateRepository` instance represents a bunch of templates and partials that can embed each other via partial tags such as `{{> name }}`.
 
-This may happen in these two particular cases:
+You will have to create template repositories in these three cases:
 
 - when the `[GRMustacheTemplate templateFrom...]` methods do not fit your needs (see the [Templates Guide](templates.md)).
 
@@ -15,7 +15,9 @@ This may happen in these two particular cases:
 
     `{{> header }}` loads a `header` partial template stored next to its enclosing template, but `{{> /partials/header }}`, with a leading slash, loads a template located at the absolute path `/partials/header` from the root of the template repository.
 
-Both use cases are covered by the `GRMustacheTemplateRepository` methods documented below.
+- when you want a specific set of templates to behave as text or HTML templates, when all other templates of your application belong to the other realm.
+
+The first two use cases are covered by the `GRMustacheTemplateRepository` methods documented below. See the [HTML vs Text Templates Guide](html_vs_text.md) for the latter.
 
 
 Loading templates and partials from the file system
