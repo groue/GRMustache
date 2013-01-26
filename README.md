@@ -113,33 +113,33 @@ Advanced GRMustache:
 FAQ
 ---
 
-- **Q: Is it possible to render array indexes, customize first, last, odd, even items, play fizzbuzz?**
+- **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
-    A: [YES](GRMustache/blob/master/Guides/sample_code/indexes.md)
+    A: [Yes, yes, and yes](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
 - **Q: Is it possible to format numbers and dates?**
     
-    A: [YES](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+    A: [Yes](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
 - **Q: Is it possible to render partial templates whose name is only known at runtime?**
 
-    A: [YES](GRMustache/blob/master/Guides/rendering_objects.md)
+    A: [Yes](GRMustache/blob/master/Guides/rendering_objects.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: [YES](GRMustache/blob/master/Guides/partials.md)
+    A: [Yes](GRMustache/blob/master/Guides/partials.md)
 
 - **Q: Is it possible to localize templates?**
 
-    A: [YES](GRMustache/blob/master/Guides/sample_code/localization.md)
+    A: [Yes](GRMustache/blob/master/Guides/sample_code/localization.md)
 
 - **Q: Is it possible to render default values for missing keys?**
 
-    A: [YES](GRMustache/blob/master/Guides/delegate.md)
+    A: [Yes](GRMustache/blob/master/Guides/delegate.md)
 
-- **Q: Is it possible to disabling HTML escaping?**
+- **Q: Is it possible to disable HTML escaping?**
 
-    A: [YES](GRMustache/blob/master/Guides/configuration.md)
+    A: [Yes](GRMustache/blob/master/Guides/configuration.md)
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
