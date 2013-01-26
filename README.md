@@ -82,6 +82,7 @@ Loading templates:
 - [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
 - [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
 - [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
+- [Configuration](GRMustache/blob/master/Guides/configuration.md): who said options?
 
 Rendering templates:
 
@@ -112,29 +113,33 @@ Advanced GRMustache:
 FAQ
 ---
 
-- **Q: How do I render array indexes?**
+- **Q: Is is possible to render array indexes, customize first, last, odd, even items, play fizzbuzz?**
     
-    A: Check the [Collection Indexes Sample Code](GRMustache/blob/master/Guides/sample_code/indexes.md)
+    A: [YES](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
-- **Q: How do I format numbers and dates?**
+- **Q: Is is possible to format numbers and dates?**
     
-    A: Check the [Number Formatting Sample Code](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+    A: [YES](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
-- **Q: How do I render partial templates whose name is only known at runtime?**
+- **Q: Is is possible to render partial templates whose name is only known at runtime?**
 
-    A: Check the [Rendering Objects Guide](GRMustache/blob/master/Guides/rendering_objects.md)
+    A: [YES](GRMustache/blob/master/Guides/rendering_objects.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: Check the [Partials Guide](GRMustache/blob/master/Guides/partials.md).
+    A: [YES](GRMustache/blob/master/Guides/partials.md)
 
-- **Q: How do I localize templates?**
+- **Q: Is is possible to localize templates?**
 
-    A: Check the [Localization Sample Code](GRMustache/blob/master/Guides/sample_code/localization.md)
+    A: [YES](GRMustache/blob/master/Guides/sample_code/localization.md)
 
-- **Q: How do I render default values for missing keys?**
+- **Q: Is is possible to render default values for missing keys?**
 
-    A: Check the [Tag Delegate Guide](GRMustache/blob/master/Guides/delegate.md).
+    A: [YES](GRMustache/blob/master/Guides/delegate.md)
+
+- **Q: Is is possible to disabling HTML escaping?**
+
+    A: [YES](GRMustache/blob/master/Guides/configuration.md)
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
