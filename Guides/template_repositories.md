@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](html_vs_text.md)
 
 Template repositories
 =====================
@@ -250,4 +250,4 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 repository.dataSource = mars;
 ```
 
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](html_vs_text.md)

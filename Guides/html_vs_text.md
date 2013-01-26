@@ -1,15 +1,17 @@
 [up](../../../../GRMustache#documentation), [next](runtime.md)
 
-Configuration
-=============
+HTML vs. Text Templates
+=======================
 
-The only configuration available so far is the content type of templates. There are *HTML*, and *text templates*:
+The Mustache language has a big focus on HTML: it provides HTML-escaping of values by default.
+
+However, GRMustache supports both *HTML templates*, and *text templates*.
 
 HTML templates return HTML: their `{{ name }}` variable tags escape their input. Their `{{{ name }}}` triple mustache variable tags assume HTML input, and do not perform HTML-escape.
 
 Text templates return text: their `{{ name }}` and `{{{ name }}}` tags do not escape their input: they have identical rendering.
 
-Let's see how to configure your templates.
+The `GRMustacheConfiguration` class is your vector to text & HTML templates.
 
 
 Global configuration
@@ -59,8 +61,8 @@ NSString *rendering = [template renderObject:...];
 
 Template repository configuration has higher priority than the default configuration.
 
-Template Configuration
-----------------------
+Content Type Of Individual Templates
+------------------------------------
 
 Templates can also be given a specific content type:
 
@@ -76,5 +78,51 @@ For example:
     export LANG={{ENV.LANG}}
     ...
 
+Mixing HTML And Text Templates
+------------------------------
+
+Text templates return text. They get HTML-escaped when they get embedded in HTML templates:
+
+`Document.mustache`:
+
+    <pre>
+    {{> BashScript }}
+    </pre>
+
+`BashScript.mustache`:
+
+    {{% CONTENT_TYPE:TEXT }}
+    cd {{path}} && {{command}}
+
+Rendering code:
+
+    id data = @{
+        @"path": @"/path/",
+        @"command": @"echo \"yeah\"" ,
+    };
+    
+    // the script, alone
+    NSString *script = [GRMustacheTemplate renderObject:data fromResource:@"BashScript" bundle:nil error:NULL];
+    
+    // the document
+    NSString *document = [GRMustacheTemplate renderObject:data fromResource:@"Document" bundle:nil error:NULL];
+
+script:
+
+    cd /path/ && echo "yeah"
+
+document:
+
+    <pre>
+    cd /path/ &amp;&amp; echo &quot;yeah&quot;
+    </pre>
+
+
+Compatibility with other Mustache implementations
+-------------------------------------------------
+
+The [Mustache specification](https://github.com/mustache/spec) does not have any concept of "text template".
+
+**If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use {{{ triple }}} mustache tags.**
 
 [up](../../../../GRMustache#documentation), [next](runtime.md)

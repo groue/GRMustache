@@ -82,7 +82,7 @@ Loading templates:
 - [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
 - [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
 - [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
-- [Configuration](GRMustache/blob/master/Guides/configuration.md): who said options?
+- [HTML vs. Text templates](GRMustache/blob/master/Guides/html_vs_text.md): there's a life outside of HTML
 
 Rendering templates:
 
@@ -139,7 +139,7 @@ FAQ
 
 - **Q: Is it possible to disable HTML escaping?**
 
-    A: [Yes](GRMustache/blob/master/Guides/configuration.md)
+    A: [Yes](GRMustache/blob/master/Guides/html_vs_text.md)
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
