@@ -26,6 +26,7 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
+@class GRMustacheConfiguration;
 
 /**
  * The protocol for a GRMustacheTemplateRepository's dataSource.
@@ -144,6 +145,7 @@
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_templateForTemplateID;
     id _currentlyParsedTemplateID;
+    GRMustacheConfiguration *_configuration;
 }
 
 
@@ -454,6 +456,39 @@
  * @since v1.13
  */
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Configuring Repositories
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * The repository configuration.
+ *
+ * By default, it is identical to [GRMustacheConfiguration defaultConfiguration].
+ *
+ * When you assign a specific configuration to a template repository, the
+ * configuration only applies to the templates built by this template
+ * repository:
+ *
+ *     // Create a configuration for text rendering
+ *     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
+ *     configuration.contentType = GRMustacheContentTypeText;
+ *
+ *     // All templates loaded from _repo_ will render text,
+ *     // and will not HTML-escape their input.
+ *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ *     repo.configuration = configuration;
+ *
+ * The consequences of altering a configuration after it has been set is
+ * *undefined*. In other words, once a repository has been given its own
+ * configuration, don't modify it.
+ *
+ * @see GRMustacheConfiguration
+ *
+ * @since v6.2
+ */
+@property (nonatomic, retain) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

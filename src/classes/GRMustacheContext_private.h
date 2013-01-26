@@ -54,7 +54,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  *   For a full discussion of the interaction between the protected and the
  *   hidden stacks, see the implementation of
- *   [GRMustacheTag renderHTML:inBuffer:withContext:error:].
+ *   [GRMustacheTag renderContentType:inBuffer:withContext:error:].
  *
  * - Let tag delegates interpret rendered values.
  *
@@ -125,7 +125,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * For a full discussion of the interaction between the protected and the hidden
  * stacks, see the implementation of
- * [GRMustacheTag renderHTML:inBuffer:withContext:error:].
+ * [GRMustacheTag renderContentType:inBuffer:withContext:error:].
  *
  * @param object  An object that should be hidden.
  *

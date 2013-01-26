@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheConfiguration.h"
 
 @class GRMustacheContext;
 @class GRMustacheTemplateRepository;
@@ -62,18 +63,18 @@
 /**
  * Appends the rendering of the receiver to a buffer.
  * 
- * @param HTMLRequired  YES if the receiver should output HTML
- * @param buffer        A mutable string
- * @param context       A rendering context
- * @param error         If there is an error performing the rendering, upon
- *                      return contains an NSError object that describes the
- *                      problem.
+ * @param requiredContentType  The required content type of the rendering
+ * @param buffer               A mutable string
+ * @param context              A rendering context
+ * @param error                If there is an error performing the rendering,
+ *                             upon return contains an NSError object that
+ *                             describes the problem.
  *
  * @return YES if the receiver could append its rendering to the buffer.
  *
  * @see GRMustacheContext
  */
-- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

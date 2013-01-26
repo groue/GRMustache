@@ -56,7 +56,7 @@
  *                            template string.
  * @param expression          The expression that would evaluate against a
  *                            rendering context.
- * @param rendersHTML         YES if the tag renders HTML.
+ * @param contentType         The content type of the tag rendering.
  * @param templateString      A Mustache template string.
  * @param innerRange          The range of the inner template string of the
  *                            section in _templateString_.
@@ -70,6 +70,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end

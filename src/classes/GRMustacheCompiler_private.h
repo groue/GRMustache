@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheParser_private.h"
 #import "GRMustache_private.h"
+#import "GRMustacheConfiguration.h"
 
 
 @class GRMustacheCompiler;
@@ -36,7 +37,7 @@
 @interface GRMustacheAST : NSObject {
 @private
     NSArray *_templateComponents;
-    BOOL _rendersHTML;
+    GRMustacheContentType _contentType;
 }
 
 /**
@@ -45,11 +46,9 @@
 @property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
 
 /**
- * If YES, the AST represents a template that outputs HTML.
- *
- * If NO, the AST represents a template that outputs text.
+ * The content type of the AST
  */
-@property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
 @end
 
 /**
@@ -70,14 +69,23 @@
     NSMutableArray *_currentComponents;
     GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
-    BOOL _rendersHTML;
-    BOOL _rendersHTMLLocked;
+    GRMustacheContentType _contentType;
+    BOOL _contentTypeLocked;
 }
 
 /**
  * The template repository that provides partial templates to the compiler.
  */
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns an initialized compiler.
+ *
+ * @param configuration  The GRMustacheConfiguration that affects the
+ *                       compilation phase.
+ * @return a compiler
+ */
+- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Mustache Abstract Syntax Tree.

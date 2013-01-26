@@ -24,13 +24,14 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheConfiguration.h"
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
-    BOOL _rendersHTML;
+    GRMustacheContentType _contentType;
 }
 
 /**
@@ -41,14 +42,14 @@
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns YES if the receiver renders HTML, NO if it renders text.
+ * Returns the content type of the receiver.
  *
  * For example:
  *
- * - `{{name}}`: renders HTML.
- * - `{{%RENDER:TEXT}}{{name}}`: renders text.
+ * - `{{name}}`: GRMustacheContentTypeHTML
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText
  */
-@property (nonatomic) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
+@property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;

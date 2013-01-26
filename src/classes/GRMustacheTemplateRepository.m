@@ -24,6 +24,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheConfiguration.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
 
@@ -131,6 +132,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepository
 @synthesize dataSource=_dataSource;
+@synthesize configuration=_configuration;
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL
 {
@@ -177,6 +179,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     self = [super init];
     if (self) {
         _templateForTemplateID = [[NSMutableDictionary alloc] init];
+        _configuration = [[GRMustacheConfiguration defaultConfiguration] retain];
     }
     return self;
 }
@@ -184,6 +187,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)dealloc
 {
     [_templateForTemplateID release];
+    [_configuration release];
     [super dealloc];
 }
 
@@ -201,7 +205,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.components = AST.templateComponents;
-    template.rendersHTML = AST.rendersHTML;
+    template.contentType = AST.contentType;
     return template;
 }
 
@@ -212,9 +216,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     GRMustacheAST *AST = nil;
     @autoreleasepool {
         // Create a Mustache compiler
-        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
         
-        // We tell the compiler where provide the partials
+        // We tell the compiler who provides the partials
         compiler.templateRepository = self;
         
         // Create a Mustache parser
@@ -307,7 +311,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         if (AST) {
             template.components = AST.templateComponents;
-            template.rendersHTML = AST.rendersHTML;
+            template.contentType = AST.contentType;
         } else {
             // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];

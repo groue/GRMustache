@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheConfiguration.h"
 
 @class GRMustacheContext;
 
@@ -37,7 +38,7 @@
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
-    BOOL _rendersHTML;
+    GRMustacheContentType _contentType;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
