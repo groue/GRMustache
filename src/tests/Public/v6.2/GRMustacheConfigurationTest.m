@@ -51,6 +51,22 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertEquals([GRMustacheConfiguration defaultConfiguration].contentType, GRMustacheContentTypeHTML, @"");
 }
 
+- (void)testFactoryConfigurationHasHTMLContentTypeRegardlessOfDefaultConfiguration
+{
+    {
+        [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
+        GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+        STAssertNotNil(configuration, @"");
+        STAssertEquals(configuration.contentType, GRMustacheContentTypeHTML, @"");
+    }
+    {
+        [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+        GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+        STAssertNotNil(configuration, @"");
+        STAssertEquals(configuration.contentType, GRMustacheContentTypeHTML, @"");
+    }
+}
+
 - (void)testDefaultConfigurationContentTypeHTMLHasTemplateEscapeInput
 {
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
@@ -224,7 +240,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testRepositoryConfigurationContentTypeHTMLHasTemplateEscapeInput
 {
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeHTML;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
@@ -237,7 +253,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testRepositoryConfigurationContentTypeTextHasTemplateEscapeInput
 {
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeText;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
@@ -252,7 +268,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 {
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
     
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeText;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
@@ -267,7 +283,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 {
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
     
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeHTML;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
@@ -280,7 +296,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testCONTENT_TYPE_TEXTPragmaTagOverridesRepositoryConfigurationContentTypeHTML
 {
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeHTML;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
@@ -293,7 +309,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testCONTENT_TYPE_HTMLPragmaTagOverridesRepositoryConfigurationContentTypeText
 {
-    GRMustacheConfiguration *configuration = [[[GRMustacheConfiguration alloc] init] autorelease];
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeText;
     
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];

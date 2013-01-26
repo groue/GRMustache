@@ -66,7 +66,7 @@ typedef enum {
  * repository:
  *
  *     // Create a configuration for text rendering
- *     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
  *     configuration.contentType = GRMustacheContentTypeText;
  *
  *     // All templates loaded from _repo_ will render text,
@@ -84,6 +84,8 @@ typedef enum {
  * repositories can mix HTML and text templates: see the documentation of this
  * property.
  *
+ * @see GRMustacheTemplateRepository
+ *
  * @since v6.2
  */
 @interface GRMustacheConfiguration : NSObject {
@@ -97,12 +99,22 @@ typedef enum {
  * All templates and template repositories use the default configuration unless
  * you specify otherwise by setting the configuration of a template repository.
  *
- * @see GRMustacheTemplateRepository
+ * The "default" defaultConfiguration has GRMustacheContentTypeHTML contentType.
+ *
+ * @returns The default configuration.
  *
  * @since v6.2
  */
 + (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
+/**
+ * @returns A new factory configuration.
+ *
+ * Its contentType is GRMustacheContentTypeHTML.
+ *
+ * @since v6.2
+ */
++ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
 /**
  * The content type of strings rendered by templates.
