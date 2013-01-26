@@ -67,7 +67,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }
 }
 
-- (void)testDefaultConfigurationContentTypeHTMLHasTemplateEscapeInput
+- (void)testDefaultConfigurationContentTypeHTMLHasTemplateRenderEscapedInput
 {
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
@@ -75,7 +75,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertEqualObjects(rendering, @"&amp;", @"");
 }
 
-- (void)testDefaultConfigurationContentTypeTextHasTemplateEscapeInput
+- (void)testDefaultConfigurationContentTypeTextHasTemplateRenderRawInput
 {
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
@@ -238,7 +238,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }
 }
 
-- (void)testRepositoryConfigurationContentTypeHTMLHasTemplateEscapeInput
+- (void)testRepositoryConfigurationContentTypeHTMLHasTemplateRenderEscapedInput
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeHTML;
@@ -251,7 +251,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertEqualObjects(rendering, @"&amp;", @"");
 }
 
-- (void)testRepositoryConfigurationContentTypeTextHasTemplateEscapeInput
+- (void)testRepositoryConfigurationContentTypeTextHasTemplateRenderRawInput
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     configuration.contentType = GRMustacheContentTypeText;
