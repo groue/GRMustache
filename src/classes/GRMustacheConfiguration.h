@@ -88,7 +88,7 @@ typedef enum {
  *
  * @since v6.2
  */
-@interface GRMustacheConfiguration : NSObject {
+@interface GRMustacheConfiguration : NSObject<NSCopying> {
     GRMustacheContentType _contentType;
 }
 
