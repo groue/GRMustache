@@ -24,7 +24,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
-#import "GRMustacheConfiguration.h"
+#import "GRMustacheConfiguration_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
 
@@ -209,12 +209,28 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return template;
 }
 
+- (void)setConfiguration:(GRMustacheConfiguration *)configuration
+{
+    if (_configuration.isLocked) {
+        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
+        return;
+    }
+    
+    if (_configuration != configuration) {
+        [_configuration release];
+        _configuration = [configuration copy];
+    }
+}
+
 #pragma mark Private
 
 - (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error
 {
     GRMustacheAST *AST = nil;
     @autoreleasepool {
+        // It's time to lock the configuration.
+        [self.configuration lock];
+        
         // Create a Mustache compiler
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
         

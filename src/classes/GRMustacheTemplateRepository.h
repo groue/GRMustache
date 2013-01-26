@@ -465,24 +465,23 @@
 /**
  * The configuration for all templates and partials built by the repository.
  *
- * By default, it is identical to [GRMustacheConfiguration defaultConfiguration].
+ * It is initialized to a copy of [GRMustacheConfiguration defaultConfiguration].
  *
- * When you assign a specific configuration to a template repository, the
- * configuration only applies to the templates built by this template
- * repository:
- *
- *     // Create a configuration for text rendering
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
- *     configuration.contentType = GRMustacheContentTypeText;
+ * You can alter the repository's configuration:
  *
  *     // All templates loaded from _repo_ will render text,
  *     // and will not HTML-escape their input.
  *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration = configuration;
+ *     repo.configuration.contentType = GRMustacheContentTypeText;
  *
- * The consequences of altering a configuration after it has been set is
- * *undefined*. In other words, once a repository has been given its own
- * configuration, don't modify it.
+ * You can also create a new configuration, and assign it to the template:
+ *
+ *     // Create a configuration
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+ *     configuration.... // setup
+ *
+ *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ *     repo.configuration = configuration;
  *
  * @see GRMustacheConfiguration
  *

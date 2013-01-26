@@ -29,7 +29,6 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering.h"
 #import "GRMustache_private.h"
-#import "GRMustacheConfiguration.h"
 
 @interface GRMustacheSectionTag()
 

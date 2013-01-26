@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheConfiguration.h"
+#import "GRMustacheConfiguration_private.h"
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
