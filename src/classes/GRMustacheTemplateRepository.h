@@ -463,7 +463,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * The repository configuration.
+ * The configuration for all templates and partials built by the repository.
  *
  * By default, it is identical to [GRMustacheConfiguration defaultConfiguration].
  *
@@ -488,7 +488,7 @@
  *
  * @since v6.2
  */
-@property (nonatomic, retain) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+@property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
