@@ -5,7 +5,7 @@ Template repositories
 
 A `GRMustacheTemplateRepository` instance represents a bunch of templates and partials that can embed each other via partial tags such as `{{> name }}`.
 
-You will have to create template repositories in these three cases:
+This class helps you solving cases that are not covered by other high-level methods:
 
 - when the `[GRMustacheTemplate templateFrom...]` methods do not fit your needs (see the [Templates Guide](templates.md)).
 
