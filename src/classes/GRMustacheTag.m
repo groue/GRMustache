@@ -31,7 +31,7 @@
 @implementation GRMustacheTag
 @synthesize expression=_expression;
 @synthesize templateRepository=_templateRepository;
-@synthesize rendersHTML=_rendersHTML;
+@synthesize contentType=_contentType;
 
 - (void)dealloc
 {
@@ -39,13 +39,13 @@
     [super dealloc];
 }
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
         _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
-        _rendersHTML = rendersHTML;
+        _contentType = contentType;
     }
     return self;
 }
@@ -88,7 +88,7 @@
     // This method is overrided by GRMustacheSectionTag and
     // GRMustacheAccumulatorTag.
     if (HTMLSafe) {
-        *HTMLSafe = self.rendersHTML;
+        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
     return @"foo";
 }
@@ -102,9 +102,9 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    NSAssert(HTMLRequired == self.rendersHTML, @"WTF");
+    NSAssert(requiredContentType == self.contentType, @"Not implemented");
     
     BOOL success = YES;
     
@@ -203,7 +203,7 @@
             // Success
             
             if (rendering.length > 0) {
-                if (HTMLRequired && !objectHTMLSafe && self.escapesHTML) {
+                if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {
                     rendering = [GRMustache escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];

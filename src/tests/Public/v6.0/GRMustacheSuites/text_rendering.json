@@ -1,114 +1,114 @@
 {
   "tests": [
     {
-      "name": "RENDER:HTML pragma has no particular effect",
+      "name": "CONTENT_TYPE:HTML pragma has no particular effect",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:HTML }}[{{subject}}{{{subject}}}]",
+      "template": "{{% CONTENT_TYPE:HTML }}[{{subject}}{{{subject}}}]",
       "expected": "[&amp;&]"
     },
     {
-      "name": "RENDER:TEXT pragma disables HTML-escaping",
+      "name": "CONTENT_TYPE:TEXT pragma disables HTML-escaping",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "template": "{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
       "expected": "[&&]"
     },
     {
-      "name": "RENDER:HTML pragma following RENDER:TEXT pragma enables HTML-escaping",
+      "name": "CONTENT_TYPE:HTML pragma following CONTENT_TYPE:TEXT pragma enables HTML-escaping",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:TEXT }}{{% RENDER:HTML }}[{{subject}}{{{subject}}}]",
+      "template": "{{% CONTENT_TYPE:TEXT }}{{% CONTENT_TYPE:HTML }}[{{subject}}{{{subject}}}]",
       "expected": "[&amp;&]"
     },
     {
-      "name": "RENDER:TEXT pragma following RENDER:HTML pragma disables HTML-escaping",
+      "name": "CONTENT_TYPE:TEXT pragma following CONTENT_TYPE:HTML pragma disables HTML-escaping",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:HTML }}{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "template": "{{% CONTENT_TYPE:HTML }}{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
       "expected": "[&&]"
     },
     {
-      "name": "RENDER:TEXT pragma can follow text",
+      "name": "CONTENT_TYPE:TEXT pragma can follow text",
       "data": { "subject" : "&" },
-      "template": "hey {{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "template": "hey {{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
       "expected": "hey [&&]"
     },
     {
-      "name": "RENDER:TEXT pragma can follow comment",
+      "name": "CONTENT_TYPE:TEXT pragma can follow comment",
       "data": { "subject" : "&" },
-      "template": "{{! a text template }}{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]",
+      "template": "{{! a text template }}{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
       "expected": "[&&]"
     },
     {
-      "name": "RENDER:TEXT pragma can follow set delimiters tag",
+      "name": "CONTENT_TYPE:TEXT pragma can follow set delimiters tag",
       "data": { "subject" : "&" },
-      "template": "{{=< >=}}<% RENDER:TEXT >[<subject><&subject>]",
+      "template": "{{=< >=}}<% CONTENT_TYPE:TEXT >[<subject><&subject>]",
       "expected": "[&&]"
     },
     {
-      "name": "RENDER:TEXT pragma can not follow variable tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow variable tag.",
       "data": null,
-      "template": "{{subject}}{{% RENDER:TEXT }}",
+      "template": "{{subject}}{{% CONTENT_TYPE:TEXT }}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not follow section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow section tag.",
       "data": null,
-      "template": "{{#foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "template": "{{#foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not follow inverted section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow inverted section tag.",
       "data": null,
-      "template": "{{^foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "template": "{{^foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not follow overridable section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow overridable section tag.",
       "data": null,
-      "template": "{{$foo}}{{/foo}}{{% RENDER:TEXT }}",
+      "template": "{{$foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not enter section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter section tag.",
       "data": null,
-      "template": "{{#foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "template": "{{#foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not enter inverted section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter inverted section tag.",
       "data": null,
-      "template": "{{^foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "template": "{{^foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not enter overridable section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable section tag.",
       "data": null,
-      "template": "{{$foo}}{{% RENDER:TEXT }}{{/foo}}",
+      "template": "{{$foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not follow partial tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow partial tag.",
       "data": null,
-      "template": "{{>partial}}{{% RENDER:TEXT }}",
+      "template": "{{>partial}}{{% CONTENT_TYPE:TEXT }}",
       "partials": { "partial": "" },
       "expected_error": "Parse error"
     },
     {
-      "name": "RENDER:TEXT pragma can not enter overridable partial tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable partial tag.",
       "data": null,
-      "template": "{{<layout}}{{% RENDER:TEXT }}{{/layout}}",
-      "partials": { "layout": "{{% RENDER:TEXT }}{{$content}}{{/content}}" },
+      "template": "{{<layout}}{{% CONTENT_TYPE:TEXT }}{{/layout}}",
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },
       "expected_error": "Parse error"
     },
     {
-      "name": "Partial containing RENDER:TEXT pragma is HTML-escaped when embedded.",
+      "name": "Partial containing CONTENT_TYPE:TEXT pragma is HTML-escaped when embedded.",
       "data": { "subject" : "&" },
       "template": "{{>partial}}",
-      "partials": { "partial": "{{% RENDER:TEXT }}[{{subject}}{{{subject}}}]" },
+      "partials": { "partial": "{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]" },
       "expected": "[&amp;&amp;]"
     },
     {
-      "name": "Template containing RENDER:TEXT pragma does not process HTML partials.",
+      "name": "Template containing CONTENT_TYPE:TEXT pragma does not process HTML partials.",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:TEXT }}{{>partial}}",
+      "template": "{{% CONTENT_TYPE:TEXT }}{{>partial}}",
       "partials": { "partial": "[{{subject}}{{{subject}}}]" },
       "expected": "[&amp;&]"
     },
@@ -122,21 +122,21 @@
     {
       "name": "TEXT template can override TEXT template",
       "data": { "subject" : "&" },
-      "template": "{{% RENDER:TEXT }}{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
-      "partials": { "layout": "{{% RENDER:TEXT }}{{$content}}{{/content}}" },
+      "template": "{{% CONTENT_TYPE:TEXT }}{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },
       "expected": "[&&]"
     },
     {
       "name": "HTML template can not override TEXT template",
       "data": null,
       "template": "{{<layout}}{{/layout}}",
-      "partials": { "layout": "{{% RENDER:TEXT }}" },
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}" },
       "expected_error": "Parse error"
     },
     {
       "name": "TEXT template can not override HTML template",
       "data": null,
-      "template": "{{% RENDER:TEXT }}{{<layout}}{{/layout}}",
+      "template": "{{% CONTENT_TYPE:TEXT }}{{<layout}}{{/layout}}",
       "partials": { "layout": "" },
       "expected_error": "Parse error"
     }

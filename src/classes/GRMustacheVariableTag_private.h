@@ -48,7 +48,7 @@
  *                            that owns this tag.
  * @param expression          The expression that would evaluate against a
  *                            rendering contex.
- * @param rendersHTML         YES if the tag renders HTML.
+ * @param contentType         The content type of the tag rendering.
  * @param escapesHTML         YES if the value should be escaped. Ignored if
  *                            rendersHTML is NO.
  *
@@ -56,6 +56,6 @@
  *
  * @see GRMustacheExpression
  */
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
 
 @end

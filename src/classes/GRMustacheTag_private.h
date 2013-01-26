@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheConfiguration.h"
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
@@ -41,7 +42,7 @@ typedef enum {
 @private
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
-    BOOL _rendersHTML;
+    GRMustacheContentType _contentType;
 }
 
 // Abstract method whose default implementation raises an exception.
@@ -55,32 +56,36 @@ typedef enum {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 /**
- * Returns YES if the receiver renders HTML, NO if it renders text.
+ * Returns the content type of the receiver.
  *
  * For example:
  *
- * - `{{name}}`: the variable tag renders HTML.
- * - `{{{name}}}`: the variable tag renders HTML.
- * - `{{#name}}...{{/name}}`: the section tag renders HTML.
- * - `{{%RENDER:TEXT}}{{name}}`: the variable tag renders text.
- * - `{{%RENDER:TEXT}}{{{name}}}`: the variable tag renders text.
- * - `{{%RENDER:TEXT}}{{#name}}...{{/name}}`: the section tag renders text.
+ * - `{{name}}`: GRMustacheContentTypeHTML
+ * - `{{{name}}}`: GRMustacheContentTypeHTML.
+ * - `{{#name}}...{{/name}}`: GRMustacheContentTypeHTML.
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText.
+ * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: GRMustacheContentTypeText
+ * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: GRMustacheContentTypeText.
+ *
+ * @see escapesHTML
  */
-@property (nonatomic, readonly) BOOL rendersHTML GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns YES if the received HTML-escapes its HTML-unsafe input.
  *
- * This property is ignored if the rendersHTML property is NO.
+ * This property is used is and only if contentType is GRMustacheContentTypeHTML.
  *
  * For example:
  *
  * - `{{name}}`: the variable tag escapes HTML-unsafe input.
  * - `{{{name}}}`: the variable tag does not escape input.
  * - `{{#name}}...{{/name}}`: the section tag escapes HTML-unsafe input.
- * - `{{%RENDER:TEXT}}{{name}}`: the escapesHTML property is ignored.
- * - `{{%RENDER:TEXT}}{{{name}}}`: the escapesHTML property is ignored.
- * - `{{%RENDER:TEXT}}{{#name}}...{{/name}}`: the escapesHTML property is ignored.
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: the escapesHTML property is ignored.
+ * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: the escapesHTML property is ignored.
+ * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: the escapesHTML property is ignored.
+ *
+ * @see contentType
  */
 @property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
 
@@ -103,13 +108,13 @@ typedef enum {
  *                            template to which the tag belongs.
  * @param expression          The expression to be evaluated when rendering the
  *                            tag.
- * @param rendersHTML         YES if the tag renders HTML.
+ * @param contentType         The content type of the tag rendering.
  *
  * @see templateRepository property
  * @see expression property
- * @see rendersHTML property
+ * @see contentType property
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression rendersHTML:(BOOL)rendersHTML GRMUSTACHE_API_INTERNAL;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
  * Abstract method that returns a tag that represents the receiver overrided by

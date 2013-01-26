@@ -157,6 +157,10 @@
 		56A9686C1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */; };
 		56AC19BA163852CC009AAC1A /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = 56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56AC19BB163852CC009AAC1A /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = 56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56B11A1516B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; };
+		56B11A1616B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; };
+		56B11A1716B3A581009F184F /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */; };
+		56B11A1816B3A581009F184F /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */; };
 		56CD618F15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */; };
 		56CD619015C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */; };
 		56CD619115C5536F0067E2E7 /* GRMustacheFilteredExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */; };
@@ -397,6 +401,8 @@
 		56A8D4951527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTagDelegateTest_wrapper.mustache; sourceTree = "<group>"; };
 		56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheProtectedContextTest.m; sourceTree = "<group>"; };
 		56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRendering.h; sourceTree = "<group>"; };
+		56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheConfiguration.h; sourceTree = "<group>"; };
+		56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfiguration.m; sourceTree = "<group>"; };
 		56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilteredExpression_private.h; sourceTree = "<group>"; };
 		56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilteredExpression.m; sourceTree = "<group>"; };
 		56CD619A15C5C77E0067E2E7 /* GRMustacheFilterLibrary_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilterLibrary_private.h; sourceTree = "<group>"; };
@@ -724,6 +730,15 @@
 			name = Tags;
 			sourceTree = "<group>";
 		};
+		56B11A1116B3A4F6009F184F /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */,
+				56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */,
+			);
+			name = Configuration;
+			sourceTree = "<group>";
+		};
 		56DEC19A15262FC80031E8DC = {
 			isa = PBXGroup;
 			children = (
@@ -760,6 +775,7 @@
 		56DEC291152631300031E8DC /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				56B11A1116B3A4F6009F184F /* Configuration */,
 				56DEC311152631A30031E8DC /* Parsing */,
 				56DEC310152631830031E8DC /* Compiling */,
 				56DEC312152631DE0031E8DC /* Runtime */,
@@ -943,6 +959,7 @@
 				56148B6F163BEB6400ADAF75 /* GRMustacheTag_private.h in Headers */,
 				5641FD27163C517A0093407A /* GRMustacheContext_private.h in Headers */,
 				569EB2E5164030E300C09632 /* GRMustacheAccumulatorTag_private.h in Headers */,
+				56B11A1516B3A581009F184F /* GRMustacheConfiguration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +1001,7 @@
 				56148B70163BEB6400ADAF75 /* GRMustacheTag_private.h in Headers */,
 				5641FD28163C517A0093407A /* GRMustacheContext_private.h in Headers */,
 				569EB2E6164030E300C09632 /* GRMustacheAccumulatorTag_private.h in Headers */,
+				56B11A1616B3A581009F184F /* GRMustacheConfiguration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,6 +1305,7 @@
 				56148B72163BF17800ADAF75 /* GRMustacheTag.m in Sources */,
 				5641FD2C163C54DA0093407A /* GRMustacheContext.m in Sources */,
 				569EB2E7164030E300C09632 /* GRMustacheAccumulatorTag.m in Sources */,
+				56B11A1716B3A581009F184F /* GRMustacheConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1349,6 +1368,7 @@
 				56148B73163BF17800ADAF75 /* GRMustacheTag.m in Sources */,
 				5641FD2D163C54DA0093407A /* GRMustacheContext.m in Sources */,
 				569EB2E8164030E300C09632 /* GRMustacheAccumulatorTag.m in Sources */,
+				56B11A1816B3A581009F184F /* GRMustacheConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,7 +31,7 @@
 
 @implementation GRMustacheTemplate
 @synthesize components=_components;
-@synthesize rendersHTML=_rendersHTML;
+@synthesize contentType=_contentType;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -116,11 +116,11 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderHTML:self.rendersHTML inBuffer:buffer withContext:context error:error]) {
+    if (![self renderContentType:self.contentType inBuffer:buffer withContext:context error:error]) {
         return nil;
     }
     if (HTMLSafe) {
-        *HTMLSafe = self.rendersHTML;
+        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
     return buffer;
 }
@@ -128,12 +128,12 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderHTML:(BOOL)HTMLRequired inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     NSMutableString *needsEscapingBuffer = nil;
     NSMutableString *renderingBuffer = nil;
     
-    if (HTMLRequired && !self.rendersHTML) {
+    if (requiredContentType == GRMustacheContentTypeHTML && (self.contentType != GRMustacheContentTypeHTML)) {
         // Self renders text, but is asked for HTML.
         // This happens when self is a text partial embedded in a HTML template.
         //
@@ -153,7 +153,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderHTML:self.rendersHTML inBuffer:renderingBuffer withContext:context error:error]) {
+        if (![component renderContentType:self.contentType inBuffer:renderingBuffer withContext:context error:error]) {
             return NO;
         }
     }
