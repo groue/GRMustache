@@ -20,10 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheConfiguration.h"
+#import "GRMustacheConfiguration_private.h"
 
 @implementation GRMustacheConfiguration
 @synthesize contentType=_contentType;
+@synthesize locked=_locked;
 
 + (GRMustacheConfiguration *)defaultConfiguration
 {
@@ -40,6 +41,19 @@
     return [[[GRMustacheConfiguration alloc] init] autorelease];
 }
 
+- (void)lock
+{
+    _locked = YES;
+}
+
+- (void)setContentType:(GRMustacheContentType)contentType
+{
+    if (_locked) {
+        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
+        return;
+    }
+    _contentType = contentType;
+}
 
 #pragma mark - <NSCopying>
 

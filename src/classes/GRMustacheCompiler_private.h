@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheParser_private.h"
 #import "GRMustache_private.h"
-#import "GRMustacheConfiguration.h"
+#import "GRMustacheConfiguration_private.h"
 
 
 @class GRMustacheCompiler;

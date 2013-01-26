@@ -24,7 +24,7 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheConfiguration.h"
+#import "GRMustacheConfiguration_private.h"
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {

@@ -61,24 +61,23 @@ typedef enum {
  *     // and do not HTML-escape their input.
  *     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
  *
- * You can also assign a specific configuration to a template repository: the
- * configuration would then only apply to the templates built by the template
+ * You can also alter the configuration of a specific template repository: its
+ * configuration only applies to the templates built by this very template
  * repository:
- *
- *     // Create a configuration for text rendering
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
- *     configuration.contentType = GRMustacheContentTypeText;
  *
  *     // All templates loaded from _repo_ will render text,
  *     // and will not HTML-escape their input.
  *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ *     repo.configuration.contentType = GRMustacheContentTypeText;
+ *
+ * A third option is to create a new configuration, and assign it to the template:
+ *
+ *     // Create a configuration
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+ *     configuration.... // setup
+ *
+ *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
  *     repo.configuration = configuration;
- *
- * The consequences of altering a configuration after it has been used is
- * *undefined*. In other words:
- *
- * - set up the default configuration early, once and for all.
- * - once a repository has been given its own configuration, don't modify it.
  *
  * The `contentType` option can be specified at the template level, so that your
  * repositories can mix HTML and text templates: see the documentation of this
@@ -90,6 +89,7 @@ typedef enum {
  */
 @interface GRMustacheConfiguration : NSObject<NSCopying> {
     GRMustacheContentType _contentType;
+    BOOL _locked;
 }
 
 

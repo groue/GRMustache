@@ -319,5 +319,32 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertEqualObjects(rendering, @"&amp;", @"");
 }
 
+- (void)testRepositoryConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
+{
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
+    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+}
+
+- (void)testDefaultConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
+{
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    [repo templateFromString:@"" error:NULL];
+    
+    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
+    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeHTML], @"");
+    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
+}
+
+- (void)testRepositoryConfigurationCanNotBeMutatedAfterATemplateHasBeenCompiled
+{
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    [repo templateFromString:@"" error:NULL];
+    STAssertThrows([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+    STAssertThrows([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
+    STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
+}
+
 
 @end
