@@ -157,8 +157,8 @@
 		56A9686C1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */; };
 		56AC19BA163852CC009AAC1A /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = 56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56AC19BB163852CC009AAC1A /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = 56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56B11A1516B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; };
-		56B11A1616B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; };
+		56B11A1516B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56B11A1616B3A581009F184F /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56B11A1716B3A581009F184F /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */; };
 		56B11A1816B3A581009F184F /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B11A1416B3A581009F184F /* GRMustacheConfiguration.m */; };
 		56CD618F15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */; };
