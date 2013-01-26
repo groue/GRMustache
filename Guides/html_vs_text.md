@@ -18,7 +18,7 @@ Global configuration
 --------------------
 
 The default configuration `[GRMustacheConfiguration defaultConfiguration]`
-applies to all GRMustache rendering unless specified otherwize:
+applies to all GRMustache rendering unless specified otherwise:
 
 ```objc
 // Have GRMustache templates render text by default,
