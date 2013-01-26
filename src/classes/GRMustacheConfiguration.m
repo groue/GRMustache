@@ -40,4 +40,14 @@
     return [[[GRMustacheConfiguration alloc] init] autorelease];
 }
 
+
+#pragma mark - <NSCopying>
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
+    configuration.contentType = self.contentType;
+    return configuration;
+}
+
 @end
