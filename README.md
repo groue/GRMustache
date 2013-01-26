@@ -113,15 +113,15 @@ Advanced GRMustache:
 FAQ
 ---
 
-- **Q: Is is possible to render array indexes, customize first, last, odd, even items, play fizzbuzz?**
+- **Q: Is it possible to render array indexes, customize first, last, odd, even items, play fizzbuzz?**
     
     A: [YES](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
-- **Q: Is is possible to format numbers and dates?**
+- **Q: Is it possible to format numbers and dates?**
     
     A: [YES](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
-- **Q: Is is possible to render partial templates whose name is only known at runtime?**
+- **Q: Is it possible to render partial templates whose name is only known at runtime?**
 
     A: [YES](GRMustache/blob/master/Guides/rendering_objects.md)
 
@@ -129,15 +129,15 @@ FAQ
     
     A: [YES](GRMustache/blob/master/Guides/partials.md)
 
-- **Q: Is is possible to localize templates?**
+- **Q: Is it possible to localize templates?**
 
     A: [YES](GRMustache/blob/master/Guides/sample_code/localization.md)
 
-- **Q: Is is possible to render default values for missing keys?**
+- **Q: Is it possible to render default values for missing keys?**
 
     A: [YES](GRMustache/blob/master/Guides/delegate.md)
 
-- **Q: Is is possible to disabling HTML escaping?**
+- **Q: Is it possible to disabling HTML escaping?**
 
     A: [YES](GRMustache/blob/master/Guides/configuration.md)
 
