@@ -30,14 +30,14 @@
     static GRMustacheConfiguration *defaultConfiguration;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        defaultConfiguration = [GRMustacheConfiguration configuration];
+        defaultConfiguration = [[GRMustacheConfiguration configuration] retain];
     });
     return defaultConfiguration;
 }
 
 + (GRMustacheConfiguration *)configuration
 {
-    return [[GRMustacheConfiguration alloc] init];
+    return [[[GRMustacheConfiguration alloc] init] autorelease];
 }
 
 @end
