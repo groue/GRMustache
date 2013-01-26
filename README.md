@@ -167,6 +167,10 @@ What other people say
 
 > @issya should see the HTML template I built, pretty wicked. GRMustache is the best.
 
+[@mugginsoft](https://twitter.com/mugginsoft/status/294758563698597888)
+
+> Using GRMustache (Cocoa) for template processing. Looks like a top quality library. Good developer and good units tests. Get it on GitHub.
+
 
 Popular projects & apps using GRMustache
 ----------------------------------------
