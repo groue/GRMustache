@@ -146,6 +146,7 @@ document:
     cd /path/ &amp;&amp; echo &quot;yeah&quot;
     </pre>
 
+See the [Rendering Objects Guide](rendering_objects.md) for more information about inclusion of partials chosen at runtime.
 
 Compatibility with other Mustache implementations
 -------------------------------------------------
