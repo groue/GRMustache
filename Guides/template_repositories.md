@@ -227,7 +227,7 @@ Finally, you may implement the `GRMustacheTemplateRepositoryDataSource` protocol
  * NSString object containing paths to the template, and return the file
  * content.
  * 
- * As usually, whenever this method returns nil, the _outError_ parameter should
+ * As usual, whenever this method returns nil, the _outError_ parameter should
  * point to a valid NSError. This NSError would eventually reach the library
  * user.
  * 
