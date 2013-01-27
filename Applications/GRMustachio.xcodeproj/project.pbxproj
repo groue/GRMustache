@@ -1,0 +1,478 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AB3BC09616AE955A00CB6036 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB3BC09516AE955A00CB6036 /* Cocoa.framework */; };
+		AB3BC0A016AE955A00CB6036 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AB3BC09E16AE955A00CB6036 /* InfoPlist.strings */; };
+		AB3BC0A216AE955A00CB6036 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3BC0A116AE955A00CB6036 /* main.m */; };
+		AB3BC0A616AE955A00CB6036 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = AB3BC0A416AE955A00CB6036 /* Credits.rtf */; };
+		AB3BC0A916AE955A00CB6036 /* MGSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3BC0A816AE955A00CB6036 /* MGSAppDelegate.m */; };
+		AB3BC0AC16AE955A00CB6036 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB3BC0AA16AE955A00CB6036 /* MainMenu.xib */; };
+		AB3BC0B416AE955B00CB6036 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB3BC0B316AE955B00CB6036 /* SenTestingKit.framework */; };
+		AB3BC0B516AE955B00CB6036 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB3BC09516AE955A00CB6036 /* Cocoa.framework */; };
+		AB3BC0BD16AE955B00CB6036 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AB3BC0BB16AE955B00CB6036 /* InfoPlist.strings */; };
+		AB3BC0C016AE955B00CB6036 /* GRMustachioTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3BC0BF16AE955B00CB6036 /* GRMustachioTests.m */; };
+		AB3BC0DB16AE9D2E00CB6036 /* libGRMustache6-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB3BC0DA16AE9D2E00CB6036 /* libGRMustache6-MacOS.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AB3BC0B616AE955B00CB6036 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB3BC08816AE955A00CB6036 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB3BC09016AE955A00CB6036;
+			remoteInfo = GRMustachio;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AB3BC09116AE955A00CB6036 /* GRMustachio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GRMustachio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB3BC09516AE955A00CB6036 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		AB3BC09816AE955A00CB6036 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		AB3BC09916AE955A00CB6036 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		AB3BC09A16AE955A00CB6036 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AB3BC09D16AE955A00CB6036 /* GRMustachio-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustachio-Info.plist"; sourceTree = "<group>"; };
+		AB3BC09F16AE955A00CB6036 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AB3BC0A116AE955A00CB6036 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AB3BC0A316AE955A00CB6036 /* GRMustachio-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GRMustachio-Prefix.pch"; sourceTree = "<group>"; };
+		AB3BC0A516AE955A00CB6036 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		AB3BC0A716AE955A00CB6036 /* MGSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSAppDelegate.h; sourceTree = "<group>"; };
+		AB3BC0A816AE955A00CB6036 /* MGSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSAppDelegate.m; sourceTree = "<group>"; };
+		AB3BC0AB16AE955A00CB6036 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		AB3BC0B216AE955B00CB6036 /* GRMustachioTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GRMustachioTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB3BC0B316AE955B00CB6036 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		AB3BC0BA16AE955B00CB6036 /* GRMustachioTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GRMustachioTests-Info.plist"; sourceTree = "<group>"; };
+		AB3BC0BC16AE955B00CB6036 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AB3BC0BE16AE955B00CB6036 /* GRMustachioTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustachioTests.h; sourceTree = "<group>"; };
+		AB3BC0BF16AE955B00CB6036 /* GRMustachioTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GRMustachioTests.m; sourceTree = "<group>"; };
+		AB3BC0DA16AE9D2E00CB6036 /* libGRMustache6-MacOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGRMustache6-MacOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/GRMustache-baimzpkmyweaqqfmchqdiedtfcvf/Build/Products/Debug/libGRMustache6-MacOS.a"; sourceTree = "<group>"; };
+		AB3BC0DD16AE9D5D00CB6036 /* GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = GRMustache.h; path = ../../src/classes/GRMustache.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AB3BC08E16AE955A00CB6036 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC09616AE955A00CB6036 /* Cocoa.framework in Frameworks */,
+				AB3BC0DB16AE9D2E00CB6036 /* libGRMustache6-MacOS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB3BC0AE16AE955B00CB6036 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC0B416AE955B00CB6036 /* SenTestingKit.framework in Frameworks */,
+				AB3BC0B516AE955B00CB6036 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AB3BC08616AE955A00CB6036 = {
+			isa = PBXGroup;
+			children = (
+				AB3BC0DA16AE9D2E00CB6036 /* libGRMustache6-MacOS.a */,
+				AB3BC09B16AE955A00CB6036 /* GRMustachio */,
+				AB3BC0B816AE955B00CB6036 /* GRMustachioTests */,
+				AB3BC09416AE955A00CB6036 /* Frameworks */,
+				AB3BC09216AE955A00CB6036 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AB3BC09216AE955A00CB6036 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC09116AE955A00CB6036 /* GRMustachio.app */,
+				AB3BC0B216AE955B00CB6036 /* GRMustachioTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB3BC09416AE955A00CB6036 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC09516AE955A00CB6036 /* Cocoa.framework */,
+				AB3BC0B316AE955B00CB6036 /* SenTestingKit.framework */,
+				AB3BC09716AE955A00CB6036 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AB3BC09716AE955A00CB6036 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC09816AE955A00CB6036 /* AppKit.framework */,
+				AB3BC09916AE955A00CB6036 /* CoreData.framework */,
+				AB3BC09A16AE955A00CB6036 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		AB3BC09B16AE955A00CB6036 /* GRMustachio */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC0DD16AE9D5D00CB6036 /* GRMustache.h */,
+				AB3BC0A716AE955A00CB6036 /* MGSAppDelegate.h */,
+				AB3BC0A816AE955A00CB6036 /* MGSAppDelegate.m */,
+				AB3BC0AA16AE955A00CB6036 /* MainMenu.xib */,
+				AB3BC09C16AE955A00CB6036 /* Supporting Files */,
+			);
+			path = GRMustachio;
+			sourceTree = "<group>";
+		};
+		AB3BC09C16AE955A00CB6036 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC09D16AE955A00CB6036 /* GRMustachio-Info.plist */,
+				AB3BC09E16AE955A00CB6036 /* InfoPlist.strings */,
+				AB3BC0A116AE955A00CB6036 /* main.m */,
+				AB3BC0A316AE955A00CB6036 /* GRMustachio-Prefix.pch */,
+				AB3BC0A416AE955A00CB6036 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AB3BC0B816AE955B00CB6036 /* GRMustachioTests */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC0BE16AE955B00CB6036 /* GRMustachioTests.h */,
+				AB3BC0BF16AE955B00CB6036 /* GRMustachioTests.m */,
+				AB3BC0B916AE955B00CB6036 /* Supporting Files */,
+			);
+			path = GRMustachioTests;
+			sourceTree = "<group>";
+		};
+		AB3BC0B916AE955B00CB6036 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BC0BA16AE955B00CB6036 /* GRMustachioTests-Info.plist */,
+				AB3BC0BB16AE955B00CB6036 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AB3BC09016AE955A00CB6036 /* GRMustachio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB3BC0C316AE955B00CB6036 /* Build configuration list for PBXNativeTarget "GRMustachio" */;
+			buildPhases = (
+				AB3BC08D16AE955A00CB6036 /* Sources */,
+				AB3BC08E16AE955A00CB6036 /* Frameworks */,
+				AB3BC08F16AE955A00CB6036 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GRMustachio;
+			productName = GRMustachio;
+			productReference = AB3BC09116AE955A00CB6036 /* GRMustachio.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AB3BC0B116AE955B00CB6036 /* GRMustachioTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB3BC0C616AE955B00CB6036 /* Build configuration list for PBXNativeTarget "GRMustachioTests" */;
+			buildPhases = (
+				AB3BC0AD16AE955B00CB6036 /* Sources */,
+				AB3BC0AE16AE955B00CB6036 /* Frameworks */,
+				AB3BC0AF16AE955B00CB6036 /* Resources */,
+				AB3BC0B016AE955B00CB6036 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB3BC0B716AE955B00CB6036 /* PBXTargetDependency */,
+			);
+			name = GRMustachioTests;
+			productName = GRMustachioTests;
+			productReference = AB3BC0B216AE955B00CB6036 /* GRMustachioTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AB3BC08816AE955A00CB6036 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = MGS;
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Mugginsoft LLP";
+			};
+			buildConfigurationList = AB3BC08B16AE955A00CB6036 /* Build configuration list for PBXProject "GRMustachio" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AB3BC08616AE955A00CB6036;
+			productRefGroup = AB3BC09216AE955A00CB6036 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AB3BC09016AE955A00CB6036 /* GRMustachio */,
+				AB3BC0B116AE955B00CB6036 /* GRMustachioTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AB3BC08F16AE955A00CB6036 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC0A016AE955A00CB6036 /* InfoPlist.strings in Resources */,
+				AB3BC0A616AE955A00CB6036 /* Credits.rtf in Resources */,
+				AB3BC0AC16AE955A00CB6036 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB3BC0AF16AE955B00CB6036 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC0BD16AE955B00CB6036 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AB3BC0B016AE955B00CB6036 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AB3BC08D16AE955A00CB6036 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC0A216AE955A00CB6036 /* main.m in Sources */,
+				AB3BC0A916AE955A00CB6036 /* MGSAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB3BC0AD16AE955B00CB6036 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB3BC0C016AE955B00CB6036 /* GRMustachioTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AB3BC0B716AE955B00CB6036 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB3BC09016AE955A00CB6036 /* GRMustachio */;
+			targetProxy = AB3BC0B616AE955B00CB6036 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AB3BC09E16AE955A00CB6036 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB3BC09F16AE955A00CB6036 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		AB3BC0A416AE955A00CB6036 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB3BC0A516AE955A00CB6036 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		AB3BC0AA16AE955A00CB6036 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB3BC0AB16AE955A00CB6036 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		AB3BC0BB16AE955B00CB6036 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB3BC0BC16AE955B00CB6036 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AB3BC0C116AE955B00CB6036 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AB3BC0C216AE955B00CB6036 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AB3BC0C416AE955B00CB6036 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GRMustachio/GRMustachio-Prefix.pch";
+				INFOPLIST_FILE = "GRMustachio/GRMustachio-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/GRMustache-baimzpkmyweaqqfmchqdiedtfcvf/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/GRMustache-baimzpkmyweaqqfmchqdiedtfcvf/Build/Products/Debug\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		AB3BC0C516AE955B00CB6036 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GRMustachio/GRMustachio-Prefix.pch";
+				INFOPLIST_FILE = "GRMustachio/GRMustachio-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/GRMustache-baimzpkmyweaqqfmchqdiedtfcvf/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/GRMustache-baimzpkmyweaqqfmchqdiedtfcvf/Build/Products/Debug\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		AB3BC0C716AE955B00CB6036 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GRMustachio.app/Contents/MacOS/GRMustachio";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GRMustachio/GRMustachio-Prefix.pch";
+				INFOPLIST_FILE = "GRMustachioTests/GRMustachioTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		AB3BC0C816AE955B00CB6036 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GRMustachio.app/Contents/MacOS/GRMustachio";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GRMustachio/GRMustachio-Prefix.pch";
+				INFOPLIST_FILE = "GRMustachioTests/GRMustachioTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB3BC08B16AE955A00CB6036 /* Build configuration list for PBXProject "GRMustachio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB3BC0C116AE955B00CB6036 /* Debug */,
+				AB3BC0C216AE955B00CB6036 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB3BC0C316AE955B00CB6036 /* Build configuration list for PBXNativeTarget "GRMustachio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB3BC0C416AE955B00CB6036 /* Debug */,
+				AB3BC0C516AE955B00CB6036 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB3BC0C616AE955B00CB6036 /* Build configuration list for PBXNativeTarget "GRMustachioTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB3BC0C716AE955B00CB6036 /* Debug */,
+				AB3BC0C816AE955B00CB6036 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AB3BC08816AE955A00CB6036 /* Project object */;
+}
