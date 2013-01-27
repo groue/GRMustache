@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheConfiguration.h"
 
 @class GRMustacheContext;
 
@@ -37,6 +38,7 @@
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
+    GRMustacheContentType _contentType;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -225,11 +227,17 @@
  * Returns the rendering of the receiver, given a rendering context.
  *
  * @param context   A rendering context.
- * @param HTMLSafe  Upon return contains YES (templates renders HTML-safe strings).
+ * @param HTMLSafe  Upon return contains YES or NO, depending on the content
+ *                  type of the template, as set by the configuration of the
+ *                  source template repository. HTML templates yield YES, text
+ *                  templates yield NO.
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
  *
- * @return The rendering of the tag.
+ * @return The rendering of the template.
+ *
+ * @see GRMustacheConfiguration
+ * @see GRMustacheContentType
  *
  * @since v6.0
  */
