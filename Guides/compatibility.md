@@ -11,7 +11,18 @@ There is an caveat, though: GRMustache does not honor the white-space rules of t
 
 Now that this is said, you may use GRMustache to its full extent, and build templates that can not be rendered by other Mustache implementations.
 
-This guide is there to tell you where the crossing line is.
+This guide is there to tell you where the crossing line is, topic by topic:
+
+- Syntax extensions
+- Sections and inverted sections
+- Text templates
+- File system hierarchy of template and partials
+- Dynamic partials
+- Template inheritance, layouts, overridable partials
+- Protected contexts
+- Custom rendering objects
+- Filters
+- Tag delegates
 
 
 Syntax extensions
@@ -64,8 +75,8 @@ Some other implementations allow you to disable HTML-escaping. However they may 
 Writing cross-language templates require you to use {{{ triple }}} mustache tags, and to avoid mixing text with HTML.
 
 
-Hierarchy of template and partials
-----------------------------------
+File system hierarchy of template and partials
+----------------------------------------------
 
 You may want to store your templates and partials in a hierarchy of directories.
 
