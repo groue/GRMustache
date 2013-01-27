@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.6 (build 789)" />
+		<meta name="generator" content="appledoc 2.1 (build 840)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.1 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.2 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -39,6 +39,8 @@
 	
 	
 	<option value="properties">Properties</option>
+	
+	<option value="//api/name/configuration">&nbsp;&nbsp;&nbsp;&nbsp;configuration</option>
 	
 	<option value="//api/name/dataSource">&nbsp;&nbsp;&nbsp;&nbsp;dataSource</option>
 	
@@ -96,6 +98,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Building Repositories using a custom Data Source">Building Repositories using a custom Data Source</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Configuring Repositories">Configuring Repositories</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Getting Templates out of a Repository">Getting Templates out of a Repository</a></span></li>
 	
 </ul></li>
@@ -105,6 +109,8 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/configuration">configuration</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dataSource">dataSource</a></span></li>
 	
@@ -305,6 +311,21 @@ from a dictionary whose keys are template names, and values template strings.</p
 						</ul>
 						
 						
+						<a title="Configuring Repositories" name="task_Configuring Repositories"></a>
+						<h3 class="subsubtitle task-title">Configuring Repositories</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/configuration">&nbsp;&nbsp;configuration</a></code>
+		<span class="tooltip"><p>The configuration for all templates and partials built by the repository.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
 						<a title="Getting Templates out of a Repository" name="task_Getting Templates out of a Repository"></a>
 						<h3 class="subsubtitle task-title">Getting Templates out of a Repository</h3>
 
@@ -335,6 +356,77 @@ from a dictionary whose keys are template names, and values template strings.</p
 					<div class="section section-methods">
 						<a title="Properties" name="properties"></a>
 						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/configuration" title="configuration"></a>
+	<h3 class="subsubtitle method-title">configuration</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The configuration for all templates and partials built by the repository.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) GRMustacheConfiguration *configuration</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.2</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>It is initialized to a copy of <a href="../Classes/GRMustacheConfiguration.html#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>.</p>
+
+<p>You can alter the repository&rsquo;s configuration:</p>
+
+<p>// All templates loaded from <em>repo</em> will render text,
+// and will not HTML-escape their input.
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.configuration.contentType = GRMustacheContentTypeText;</p>
+
+<p>You can also create a new configuration, and assign it to the template:</p>
+
+<p>// Create a configuration
+<a href="../Classes/GRMustacheConfiguration.html">GRMustacheConfiguration</a> *configuration = <a href="../Classes/GRMustacheConfiguration.html#//api/name/configuration">[GRMustacheConfiguration configuration]</a>;
+configuration&hellip;. // setup</p>
+
+<p>GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.configuration = configuration;</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheConfiguration.html">GRMustacheConfiguration</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplateRepository.h</code><br />
+	</div>				
+	
+	
+</div>
 						
 						<div class="section-method">
 	<a name="//api/name/dataSource" title="dataSource"></a>
@@ -1242,9 +1334,9 @@ repository&rsquo;s data source.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-12)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-27)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.6 (build 789)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
 						
 					</div>
 				</div>

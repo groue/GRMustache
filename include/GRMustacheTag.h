@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheConfiguration.h"
 
 @class GRMustacheTemplateRepository;
 
@@ -69,6 +70,7 @@ typedef enum {
 @private
     id _expression;
     GRMustacheTemplateRepository *_templateRepository;
+    GRMustacheContentType _contentType;
 }
 
 /**
@@ -78,7 +80,12 @@ typedef enum {
 
 /**
  * The template repository that did provide the template string from which the
- * receiver has been extracted.
+ * receiver tag has been extracted.
+ *
+ * Caveat: Make sure you own (retain) template repositories. Don't use templates
+ * returned by methods like `[GRMustacheTemplate templateFrom...]`: they return
+ * autoreleased templates with an implicit autoreleased repository that will
+ * eventually be deallocated when your rendering object tries to access it.
  *
  * @see GRMustacheTemplateRepository
  */
@@ -101,9 +108,15 @@ typedef enum {
  * return the empty string.
  *
  * @param context   A context for rendering inner tags.
- * @param HTMLSafe  Upon return contains YES (tags render HTML-safe strings).
+ * @param HTMLSafe  Upon return contains YES or NO, depending on the content
+ *                  type of the tag's template, as set by the configuration of
+ *                  the source template repository. HTML templates yield YES,
+ *                  text templates yield NO.
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
+ *
+ * @see GRMustacheConfiguration
+ * @see GRMustacheContentType
  *
  * @return The rendering of the tag's inner content.
  */

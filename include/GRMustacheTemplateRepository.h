@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
+@class GRMustacheConfiguration;
 
 /**
  * The protocol for a GRMustacheTemplateRepository's dataSource.
@@ -104,7 +105,7 @@
  * NSString object containing paths to the template, and return the file
  * content.
  * 
- * As usually, whenever this method returns nil, the _error_ parameter should
+ * As usual, whenever this method returns nil, the _error_ parameter should
  * point to a valid NSError. This NSError would eventually reach the library
  * user.
  * 
@@ -144,6 +145,7 @@
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_templateForTemplateID;
     id _currentlyParsedTemplateID;
+    GRMustacheConfiguration *_configuration;
 }
 
 
@@ -454,6 +456,38 @@
  * @since v1.13
  */
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Configuring Repositories
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * The configuration for all templates and partials built by the repository.
+ *
+ * It is initialized to a copy of [GRMustacheConfiguration defaultConfiguration].
+ *
+ * You can alter the repository's configuration:
+ *
+ *     // All templates loaded from _repo_ will render text,
+ *     // and will not HTML-escape their input.
+ *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ *     repo.configuration.contentType = GRMustacheContentTypeText;
+ *
+ * You can also create a new configuration, and assign it to the template:
+ *
+ *     // Create a configuration
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+ *     configuration.... // setup
+ *
+ *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ *     repo.configuration = configuration;
+ *
+ * @see GRMustacheConfiguration
+ *
+ * @since v6.2
+ */
+@property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
