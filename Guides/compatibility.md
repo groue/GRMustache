@@ -66,7 +66,7 @@ That's unfortunate. Anyway, for the record, here is a reminder of all false valu
 Text templates
 --------------
 
-In GRMustache, [text templates](html_vs_text.md) templates render text, do not HTML-escape their input, and can be safely embedded in HTML templates (they get HTML-escaped).
+In GRMustache, [text templates](html_vs_text.md) render text, do not HTML-escape their input, and can be safely embedded in HTML templates (they get HTML-escaped).
 
 This topic is ignored by the Mustache specification, which only provides you with the triple-mustache `{{{ name }}}` tags (that do not HTML-escape).
 
