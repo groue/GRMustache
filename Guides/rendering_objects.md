@@ -95,7 +95,7 @@ Final rendering:
 
     <strong>Arthur is awesome.</strong>
 
-### What have we learnt here?
+### What did we learn here?
 
 Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
 
@@ -179,7 +179,7 @@ Final rendering:
 
     <a href="/people/123">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Again, variable tags such as `{{ name }}` don't have much inner content, but section tags do: `{{# name }} inner content {{/ name }}`.
 
@@ -243,7 +243,7 @@ Final rendering:
     - <a href="/movies/123">Citizen Kane</a>
     - <a href="">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Let's say a handy technique: we haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
 
@@ -298,7 +298,7 @@ Final rendering:
     - <a href="/movies/123">Citizen Kane</a>
     - <a href="">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Well, filters that return rendering objects are awesome.
 
@@ -395,7 +395,7 @@ Final rendering:
 
     Citizen Kane by Orson Welles
 
-### What have we learnt here?
+### What did we learn here?
 
 Many useful things.
 
@@ -457,7 +457,7 @@ Final rendering:
     Citizen Kane by Orson Welles
     Some Like It Hot by Billy Wilder
 
-### What have we learnt here?
+### What did we learn here?
 
 A new perspective on the fact that arrays render the concatenation of their items.
 
