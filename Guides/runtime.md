@@ -106,7 +106,7 @@ The full list of false values are:
 - `nil` and missing keys
 - `[NSNull null]`
 - `NSNumber` instances whose `boolValue` method returns `NO`
-- the empty string `@""`
+- empty strings `@""`
 - empty enumerables.
 
 They all prevent Mustache sections `{{# name }}...{{/ name }}` rendering.
@@ -391,5 +391,20 @@ Second, `{{#collection.name}}{{.}}{{/}}` would render the same as `{{#collection
 
 Based on this rationale, GRMustache uses the implementation of `valueForKey:` of `NSObject` for arrays, sets, and ordered sets. As a consequence, the `count` key can be used in templates, and no unexpected collections comes messing with the rendering.
 
+
+Compatibility with other Mustache implementations
+-------------------------------------------------
+
+The [Mustache specification](https://github.com/mustache/spec) does not enforce the list of *false* values, the values that trigger or prevent the rendering of sections and inverted sections:
+
+There is *no guarantee* that `{{# value }}...{{/ value }}` and `{{^ value }}...{{/ value }}` will render the same, provided with the exact same input, in all Mustache implementations.
+
+That's unfortunate. Anyway, for the record, here is a reminder of all false values in GRMustache:
+
+- `nil` and missing keys
+- `[NSNull null]`
+- `NSNumber` instances whose `boolValue` method returns `NO`
+- empty strings `@""`
+- empty enumerables.
 
 [up](../../../../GRMustache#documentation), [next](runtime_patterns.md)
