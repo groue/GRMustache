@@ -3,12 +3,12 @@
 GRMustache introduction
 =======================
 
-Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
-
 Features
 --------
 
 ### Core Mustache
+
+Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
 
 - **variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
 - **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
