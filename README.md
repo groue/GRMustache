@@ -87,7 +87,7 @@ Loading templates:
 Rendering templates:
 
 - [Runtime](GRMustache/blob/master/Guides/runtime.md): how GRMustache renders your data
-- [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): how to provide data to templates
+- [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
 Advanced GRMustache:
 
