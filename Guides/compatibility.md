@@ -136,7 +136,7 @@ Filters
 
 Now it's easy: [filters](filters.md), as in `{{ uppercase(name) }}`, are an extension that is simply not in the Mustache specification.
 
-Don't use them if you want to write cross-language templates. Check the [Tag Delegates Guide](delegate.md), you'll find a way to implement filtering in a spec-compliant way.
+Don't use them if you want to write cross-language templates. Check the [Tag Delegates Guide](delegate.md): you'll find a way to implement filtering in a spec-compliant way.
 
 
 Tag delegates
