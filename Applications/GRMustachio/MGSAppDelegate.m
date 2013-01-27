@@ -11,6 +11,8 @@
 
 @implementation MGSAppDelegate
 
+@synthesize contentType = _contentType;
+
 - (void)dealloc
 {
     [super dealloc];
@@ -18,9 +20,9 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    self.JSONstring = @"{ \"value\" : \"proposition\" \n, \"valid?\" : \" \\\"Yes\\\" \" }";
-    self.templateString = @"Thus my {{ value }} is valid, I declared? {{#valid?}}{{{.}}}{{^}}\"No\"{{/}}, she replied, {{#valid?}}raising{{^}}lowering{{/}} her Luger.";
-    [self renderAction:self];
+    self.JSONstring = @"{ \"value\" : \"proposition\" , \n \"valid?\" : \" \\\"Yes\\\" \" ,\n \"outcome\" : \"<& that was that>\"}";
+    self.templateString = @"Thus my {{ value }} is valid, I declared? {{#valid?}}{{.}}{{^}}\"No\"{{/}}, she replied, {{#valid?}}raising{{^}}lowering{{/}} her Luger. {{outcome}}!";
+    self.contentType = GRMustacheContentTypeHTML;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
@@ -47,4 +49,10 @@
     }
 }
 
+- (void)setContentType:(NSUInteger)value
+{
+    _contentType = value;
+    [GRMustacheConfiguration defaultConfiguration].contentType = _contentType;
+    [self renderAction:self];
+}
 @end

@@ -19,6 +19,7 @@
 @property (retain) NSString *JSONstring;
 @property (retain) NSString *templateString;
 @property (retain) NSString *renderString;
+@property (nonatomic) NSUInteger contentType;
 
 - (IBAction)renderAction:(id)sender;
 
