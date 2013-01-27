@@ -149,7 +149,7 @@ FAQ
 
     A: GRMustache does not *need* it, and this [swizzling](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) is a mere convenience that will not ship in your released binary:
     
-    *You* may happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
+    *You* may be happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
 
 What other people say
 ---------------------
