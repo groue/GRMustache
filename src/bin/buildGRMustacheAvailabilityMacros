@@ -1,12 +1,19 @@
 #!/usr/bin/env ruby
+#
+# This script outputs the content of GRMustacheAvailabilityMacros.h.
+#
+# Whenever GRMustache major or minor version changes, update the MAJOR_VERSION
+# and MAX_MINOR_VERSION constants below, and run:
+# 
+#   src/bin/buildGRMustacheAvailabilityMacros > src/classes/GRMustacheAvailabilityMacros.h
 
 MAJOR_VERSION = 6
-MAX_MINOR_VERSION = 1
+MAX_MINOR_VERSION = 2
 
 puts <<-LICENSE
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal

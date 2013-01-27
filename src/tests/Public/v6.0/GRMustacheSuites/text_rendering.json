@@ -1,0 +1,144 @@
+{
+  "tests": [
+    {
+      "name": "CONTENT_TYPE:HTML pragma has no particular effect",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:HTML }}[{{subject}}{{{subject}}}]",
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma disables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "CONTENT_TYPE:HTML pragma following CONTENT_TYPE:TEXT pragma enables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:TEXT }}{{% CONTENT_TYPE:HTML }}[{{subject}}{{{subject}}}]",
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma following CONTENT_TYPE:HTML pragma disables HTML-escaping",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:HTML }}{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can follow text",
+      "data": { "subject" : "&" },
+      "template": "hey {{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "hey [&&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can follow comment",
+      "data": { "subject" : "&" },
+      "template": "{{! a text template }}{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can follow set delimiters tag",
+      "data": { "subject" : "&" },
+      "template": "{{=< >=}}<% CONTENT_TYPE:TEXT >[<subject><&subject>]",
+      "expected": "[&&]"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not follow variable tag.",
+      "data": null,
+      "template": "{{subject}}{{% CONTENT_TYPE:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not follow section tag.",
+      "data": null,
+      "template": "{{#foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not follow inverted section tag.",
+      "data": null,
+      "template": "{{^foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not follow overridable section tag.",
+      "data": null,
+      "template": "{{$foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not enter section tag.",
+      "data": null,
+      "template": "{{#foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not enter inverted section tag.",
+      "data": null,
+      "template": "{{^foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable section tag.",
+      "data": null,
+      "template": "{{$foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not follow partial tag.",
+      "data": null,
+      "template": "{{>partial}}{{% CONTENT_TYPE:TEXT }}",
+      "partials": { "partial": "" },
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable partial tag.",
+      "data": null,
+      "template": "{{<layout}}{{% CONTENT_TYPE:TEXT }}{{/layout}}",
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "Partial containing CONTENT_TYPE:TEXT pragma is HTML-escaped when embedded.",
+      "data": { "subject" : "&" },
+      "template": "{{>partial}}",
+      "partials": { "partial": "{{% CONTENT_TYPE:TEXT }}[{{subject}}{{{subject}}}]" },
+      "expected": "[&amp;&amp;]"
+    },
+    {
+      "name": "Template containing CONTENT_TYPE:TEXT pragma does not process HTML partials.",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:TEXT }}{{>partial}}",
+      "partials": { "partial": "[{{subject}}{{{subject}}}]" },
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "HTML template can override HTML template",
+      "data": { "subject" : "&" },
+      "template": "{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
+      "partials": { "layout": "{{$content}}{{/content}}" },
+      "expected": "[&amp;&]"
+    },
+    {
+      "name": "TEXT template can override TEXT template",
+      "data": { "subject" : "&" },
+      "template": "{{% CONTENT_TYPE:TEXT }}{{<layout}}{{$content}}[{{subject}}{{{subject}}}]{{/content}}{{/layout}}",
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },
+      "expected": "[&&]"
+    },
+    {
+      "name": "HTML template can not override TEXT template",
+      "data": null,
+      "template": "{{<layout}}{{/layout}}",
+      "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}" },
+      "expected_error": "Parse error"
+    },
+    {
+      "name": "TEXT template can not override HTML template",
+      "data": null,
+      "template": "{{% CONTENT_TYPE:TEXT }}{{<layout}}{{/layout}}",
+      "partials": { "layout": "" },
+      "expected_error": "Parse error"
+    }
+  ]
+}

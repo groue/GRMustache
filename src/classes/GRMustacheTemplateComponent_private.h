@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheConfiguration_private.h"
 
 @class GRMustacheContext;
 @class GRMustacheTemplateRepository;
@@ -62,15 +63,18 @@
 /**
  * Appends the rendering of the receiver to a buffer.
  * 
- * @param context  A rendering context
- * @param buffer   A mutable string
- * @param error    TODO
+ * @param requiredContentType  The required content type of the rendering
+ * @param buffer               A mutable string
+ * @param context              A rendering context
+ * @param error                If there is an error performing the rendering,
+ *                             upon return contains an NSError object that
+ *                             describes the problem.
  *
- * @return TODO
+ * @return YES if the receiver could append its rendering to the buffer.
  *
  * @see GRMustacheContext
  */
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be

@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
+@class GRMustacheConfiguration;
 @protocol GRMustacheTemplateComponent;
 
 // Documented in GRMustacheTemplateRepository.h
@@ -44,10 +45,14 @@
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_templateForTemplateID;
     id _currentlyParsedTemplateID;
+    GRMustacheConfiguration *_configuration;
 }
 
 // Documented in GRMustacheTemplateRepository.h
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplateRepository.h
+@property (nonatomic, copy) GRMustacheConfiguration *configuration GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;

@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -113,8 +113,8 @@
         *protected = NO;
     }
     
-    if (_curry && [filter respondsToSelector:@selector(curryArgument:)]) {
-        return [(id<GRMustacheFilter>)filter curryArgument:argument];
+    if (_curry && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
+        return [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
     } else {
         return [(id<GRMustacheFilter>)filter transformedValue:argument];
     }

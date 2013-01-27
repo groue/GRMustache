@@ -3,12 +3,12 @@
 GRMustache introduction
 =======================
 
-Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
-
 Features
 --------
 
 ### Core Mustache
+
+Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
 
 - **variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
 - **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
@@ -23,12 +23,12 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
-- **"Mustache lambdas"**, allow tags such as `{{name}}` and `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at the [Rendering Objects Guide](rendering_objects.md).
+- **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
 
 
-### Mustache Language Extensions
+### Core Engine Extensions
 
-Genuine Mustache falls short on a few topics. GRMustache implements syntaxes that are not in the specification:
+Genuine Mustache falls short on a few topics. GRMustache core engine implements syntaxes and features that are not in the specification:
 
 - **Empty closing tags**, as in `{{#name}}...{{/}}`
 
@@ -54,14 +54,18 @@ Genuine Mustache falls short on a few topics. GRMustache implements syntaxes tha
     
     Use relative `{{> header }}` or absolute paths `{{> /shared/header }}` to your partial templates: see the [Partials Guide](partials.md).
 
-- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts.
     
     Overridable partials are documented in the [Partials Guide](partials.md).
 
+- **Text templates**.
 
-### Powerful APIs
+    The Mustache language focuses on rendering HTML, and safely HTML-escape your data. GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
-GRMustache is a Mustache engine that you can hack in.
+
+### Flexibility
+
+GRMustache's core engine is extensible. Feel free to hook in:
 
 - [Rendering objects](rendering_objects.md) provide their own custom rendering.
 - [Tag delegates](delegate.md) observe and alter objects rendered by tags.

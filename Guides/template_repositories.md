@@ -1,21 +1,23 @@
-[up](../../../../GRMustache#documentation), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](html_vs_text.md)
 
 Template repositories
 =====================
 
-You use the `GRMustacheTemplateRepository` class when you want to choose a specific source where your templates and partials are loaded from.
+A `GRMustacheTemplateRepository` instance represents a bunch of templates and partials that can embed each other via partial tags such as `{{> name }}`.
 
-This may happen in these two particular cases:
+This class helps you solving cases that are not covered by other high-level methods:
 
 - when the `[GRMustacheTemplate templateFrom...]` methods do not fit your needs (see the [Templates Guide](templates.md)).
 
     For example, your templates are not stored in the file system, or they are not encoded as UTF8.
     
-- when your templates are stored in a hierarchy of directories, and you want to specify an absolute path in a [partial tag](partials.md).
+- when your templates are stored in a hierarchy of directories, and you want to use absolute paths to [partials](partials.md).
 
     `{{> header }}` loads a `header` partial template stored next to its enclosing template, but `{{> /partials/header }}`, with a leading slash, loads a template located at the absolute path `/partials/header` from the root of the template repository.
 
-Both use cases are covered by the `GRMustacheTemplateRepository` methods documented below.
+- when you want a specific set of templates to behave as text or HTML templates, when all other templates of your application belong to the other realm.
+
+The first two use cases are covered by this guide. See the [HTML vs Text Templates Guide](html_vs_text.md) for the latter.
 
 
 Loading templates and partials from the file system
@@ -225,7 +227,7 @@ Finally, you may implement the `GRMustacheTemplateRepositoryDataSource` protocol
  * NSString object containing paths to the template, and return the file
  * content.
  * 
- * As usually, whenever this method returns nil, the _outError_ parameter should
+ * As usual, whenever this method returns nil, the _outError_ parameter should
  * point to a valid NSError. This NSError would eventually reach the library
  * user.
  * 
@@ -250,4 +252,4 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 repository.dataSource = mars;
 ```
 
-[up](../../../../GRMustache#documentation), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](html_vs_text.md)

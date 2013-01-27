@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,14 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheConfiguration_private.h"
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
 @private
     NSArray *_components;
     GRMustacheContext *_baseContext;
+    GRMustacheContentType _contentType;
 }
 
 /**
@@ -38,6 +40,16 @@
  * @see GRMustacheTemplateComponent
  */
 @property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns the content type of the receiver.
+ *
+ * For example:
+ *
+ * - `{{name}}`: GRMustacheContentTypeHTML
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText
+ */
+@property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;

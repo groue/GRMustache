@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,19 @@
 @optional
 
 /**
- * TODO
+ * Returns a new filter that uses the _object_ parameter.
+ *
+ * Filter currying is involved in `f(a,...)` expressions, filters with more than
+ * one argument.
+ *
+ * The evaluation of `f(a,b)` is implemented as `f(a)(b)`: the filter `f` is
+ * asked for a curried filter using argument `a`. This curried filter `g` is
+ * then applied to `b`:
+ *
+ * g = f(a)
+ * f(a,b) = g(b)
  */
-- (id<GRMustacheFilter>)curryArgument:(id)object GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheFilter>)filterByCurryingArgument:(id)object GRMUSTACHE_API_INTERNAL;
 @end
 
 

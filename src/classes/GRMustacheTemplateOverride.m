@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,10 +45,10 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     context = [context contextByAddingTemplateOverride:self];
-    return [_template renderInBuffer:buffer withContext:context error:error];
+    return [_template renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component

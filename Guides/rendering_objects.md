@@ -39,7 +39,7 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - The _context_ represents the [context stack](runtime.md), and all information that tags need to render.
 
-- _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO.
+- _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO. Returning NO would have GRMustache HTML-escape the returned string before inserting it in the final rendering of HTML templates (see the [HTML vs. Text Templates Guide](html_vs_text.md) for more information).
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
@@ -95,11 +95,13 @@ Final rendering:
 
     <strong>Arthur is awesome.</strong>
 
-### What have we learnt here?
+### What did we learn here?
 
 Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
 
-The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context. It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it.
+The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context.
+
+It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES. There are also text templates (see the [HTML vs. Text Templates Guide](html_vs_text.md)): in this case, `HTMLSafe` would be NO. Depending on how reusable you want your rendering object to be, you may have to deal with it.
 
 Your rendering objects can thus delegate their rendering to the tag they are given. They can render the tag once or many times:
 
@@ -179,7 +181,7 @@ Final rendering:
 
     <a href="/people/123">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Again, variable tags such as `{{ name }}` don't have much inner content, but section tags do: `{{# name }} inner content {{/ name }}`.
 
@@ -187,7 +189,9 @@ The `innerTemplateString` property returns the raw content of the section, with 
 
 You can derive new template strings from this raw content, even by appending new tags to it (the `{{url}}` tag, above).
 
-From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context (and sets the `HTMLSafe` boolean for you, so that you do definitely not have to worry about it).
+From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context.
+
+It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES. There are also text templates (see the [HTML vs. Text Templates Guide](html_vs_text.md)): in this case, `HTMLSafe` would be NO. Depending on how reusable you want your rendering object to be, you may have to deal with it.
 
 
 Example: Dynamic partials, take 1
@@ -243,7 +247,7 @@ Final rendering:
     - <a href="/movies/123">Citizen Kane</a>
     - <a href="">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Let's say a handy technique: we haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
 
@@ -298,7 +302,7 @@ Final rendering:
     - <a href="/movies/123">Citizen Kane</a>
     - <a href="">Orson Welles</a>
 
-### What have we learnt here?
+### What did we learn here?
 
 Well, filters that return rendering objects are awesome.
 
@@ -395,7 +399,7 @@ Final rendering:
 
     Citizen Kane by Orson Welles
 
-### What have we learnt here?
+### What did we learn here?
 
 Many useful things.
 
@@ -408,6 +412,8 @@ Many useful things.
     This object lets you load partials from the same set of templates as the "main" rendering template, the one that did provide the rendered tag (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
 
     This does not make much difference when all templates are loaded from your main bundle. But some of you manage their sets of templates differently.
+    
+    Caveat: Make sure you own (retain) template repositories. Don't use templates returned by methods like `[GRMustacheTemplate templateFrom...]`: they return autoreleased templates with an implicit autoreleased repository that will eventually be deallocated when your rendering object tries to access it.
 
 3. *Rendering objects manage the context stack*.
     
@@ -457,7 +463,7 @@ Final rendering:
     Citizen Kane by Orson Welles
     Some Like It Hot by Billy Wilder
 
-### What have we learnt here?
+### What did we learn here?
 
 A new perspective on the fact that arrays render the concatenation of their items.
 

@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -120,7 +120,7 @@
 - (id)initWithTags:(NSArray *)tags
 {
     GRMustacheTag *initialTag = [tags objectAtIndex:0];
-    self = [super initWithTemplateRepository:initialTag.templateRepository expression:initialTag.expression];
+    self = [super initWithTemplateRepository:initialTag.templateRepository expression:initialTag.expression contentType:initialTag.contentType];
     if (self) {
         _tags = [tags retain];
     }

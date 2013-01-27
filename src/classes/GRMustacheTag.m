@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +28,10 @@
 #import "GRMustache_private.h"
 #import "GRMustacheRendering.h"
 
-@interface GRMustacheTag()
-- (NSString *)escapeHTML:(NSString *)string;
-@end
-
 @implementation GRMustacheTag
 @synthesize expression=_expression;
 @synthesize templateRepository=_templateRepository;
+@synthesize contentType=_contentType;
 
 - (void)dealloc
 {
@@ -42,12 +39,13 @@
     [super dealloc];
 }
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
         _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
+        _contentType = contentType;
     }
     return self;
 }
@@ -70,30 +68,44 @@
 
 - (BOOL)escapesHTML
 {
-    // default
+    // Default YES.
+    // This method is overrided by GRMustacheVariableTag,
+    // and sets the difference between {{name}} and {{{name}}} tags.
     return YES;
 }
 
 - (NSString *)innerTemplateString
 {
-    // default
+    // Default empty string.
+    // This method is overrided by GRMustacheSectionTag,
+    // which returns the content of the section.
     return @"";
 }
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // default
+    // Default empty string.
+    // This method is overrided by GRMustacheSectionTag and
+    // GRMustacheAccumulatorTag.
     if (HTMLSafe) {
-        *HTMLSafe = YES;
+        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
-    return @"";
+    return @"foo";
+}
+
+- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
+{
+    NSAssert(NO, @"Subclasses must override");
+    return nil;
 }
 
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
+    NSAssert(requiredContentType == self.contentType, @"Not implemented");
+    
     BOOL success = YES;
     
     @autoreleasepool {
@@ -158,9 +170,9 @@
         // 4. Render
     
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        BOOL HTMLSafe = NO;
+        BOOL objectHTMLSafe = NO;
         NSError *renderingError = nil;
-        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&HTMLSafe error:&renderingError];
+        NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
         
         // If rendering is nil, but rendering error is not set,
         // assume lazy coder, and the intention to render nothing:
@@ -191,8 +203,8 @@
             // Success
             
             if (rendering.length > 0) {
-                if (self.escapesHTML && !HTMLSafe) {
-                    rendering = [self escapeHTML:rendering];
+                if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {
+                    rendering = [GRMustache escapeHTML:rendering];
                 }
                 [buffer appendString:rendering];
             }
@@ -237,64 +249,6 @@
     
     // OK, override tag with self
     return [otherTag tagWithOverridingTag:self];
-}
-
-- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
-{
-    // default: overridingTag replaces self
-    return overridingTag;
-}
-
-
-#pragma mark - Private
-
-- (NSString *)escapeHTML:(NSString *)string
-{
-    NSUInteger length = [string length];
-    if (!length) {
-        return string;
-    }
-    
-    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
-    if (!characters) {
-        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
-        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
-        characters = [data bytes];
-    }
-    
-    static const NSString *escapeForCharacter[] = {
-        ['&'] = @"&amp;",
-        ['<'] = @"&lt;",
-        ['>'] = @"&gt;",
-        ['"'] = @"&quot;",
-        ['\''] = @"&apos;",
-    };
-    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    
-    NSMutableString *buffer = nil;
-    const UniChar *unescapedStart = characters;
-    CFIndex unescapedLength = 0;
-    for (NSUInteger i=0; i<length; ++i, ++characters) {
-        const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
-        if (escape) {
-            if (!buffer) {
-                buffer = [NSMutableString stringWithCapacity:length];
-            }
-            CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-            CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
-            unescapedStart = characters+1;
-            unescapedLength = 0;
-        } else {
-            ++unescapedLength;
-        }
-    }
-    if (!buffer) {
-        return string;
-    }
-    if (unescapedLength > 0) {
-        CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-    }
-    return buffer;
 }
 
 @end

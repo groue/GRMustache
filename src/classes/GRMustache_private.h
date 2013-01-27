@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -50,8 +50,16 @@ typedef struct {
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * Returns the HTML-escaped version of the string parameter.
+ *
+ * Characters & < > " ' are escaped to &amp; &lt; &gt; &quot; &apos;
+ * respectively.
+ *
+ * Be cautious with mutable string input: this method may return its input.
+ *
+ * @param string  The string to be HTML-escaped
+ * @return An HTML-escaped string
  */
-+ (id<GRMustacheRendering>)renderingObjectWithObject:(id)object implementation:(IMP)implementation GRMUSTACHE_API_INTERNAL;
++ (NSString *)escapeHTML:(NSString *)string;
 
 @end

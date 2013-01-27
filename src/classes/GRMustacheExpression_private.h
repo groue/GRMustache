@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2012 Gwendal Roué
+// Copyright (c) 2013 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -54,9 +54,12 @@
  * Evaluates an expression against a rendering context, and return the value.
  *
  * @param context    A Mustache rendering context
- * @param protected  TODO
+ * @param protected  Upon return contains YES if the computed value comes from
+ *                   the protected stack of the context, NO otherwise.
  *
- * @return TODO
+ * @return The value of the expression in the provided context.
+ *
+ * @see GRMustacheContext
  */
 - (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
