@@ -7,7 +7,7 @@ There are many [other Mustache implementations](https://github.com/defunkt/musta
 
 GRMustache makes sure you can render templates in a [specification](https://github.com/mustache/spec)-compliant way. **What the specification says is possible, is possible with GRMustache.**
 
-There is an caveat, though: GRMustache does not honor the white-space rules of the spec, line suppression, indentation and other niceties. Your templates are rendered *raw*.
+There is an caveat, though: GRMustache does not honor the white-space rules of the spec, line suppression, indentation and other niceties. Your templates are rendered *raw*. Contributions are welcome ([Forking Guide](GRMustache/blob/master/Guides/forking.md)).
 
 Now that this is said, you may use GRMustache to its full extent, and build templates that can not be rendered by other Mustache implementations.
 
