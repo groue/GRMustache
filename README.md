@@ -82,7 +82,7 @@ Loading templates:
 - [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
 - [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
 - [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
-- [HTML vs. Text templates](GRMustache/blob/master/Guides/html_vs_text.md): there's a life outside of HTML
+- [HTML vs. Text templates](GRMustache/blob/master/Guides/html_vs_text.md): there's a life outside of HTML.
 
 Rendering templates:
 
