@@ -31,6 +31,15 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 
+#pragma mark - GRMustacheAST
+
+@interface GRMustacheAST()
+- (id)initWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType;
+@end
+
+
+#pragma mark - GRMustacheCompiler
+
 @interface GRMustacheCompiler()
 
 /**
@@ -118,7 +127,7 @@
 @synthesize componentsStack=_componentsStack;
 @synthesize openingTokenStack=_openingTokenStack;
 
-- (id)init
+- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration
 {
     self = [super init];
     if (self) {
@@ -126,11 +135,13 @@
         _componentsStack = [[NSMutableArray alloc] initWithCapacity:20];
         [_componentsStack addObject:_currentComponents];
         _openingTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
+        _contentType = configuration.contentType;
+        _contentTypeLocked = NO;
     }
     return self;
 }
 
-- (NSArray *)templateComponentsReturningError:(NSError **)error
+- (GRMustacheAST *)ASTReturningError:(NSError **)error
 {
     // Has a fatal error occurred?
     if (_currentComponents == nil) {
@@ -155,7 +166,7 @@
     }
     
     // Success
-    return [[_currentComponents retain] autorelease];
+    return [[[GRMustacheAST alloc] initWithTemplateComponents:_currentComponents contentType:_contentType] autorelease];
 }
 
 - (void)dealloc
@@ -185,7 +196,20 @@
             break;
             
         case GRMustacheTokenTypePragma:
-            // Ignore
+            if ([token.pragma isEqualToString:@"CONTENT_TYPE:TEXT"]) {
+                if (_contentTypeLocked) {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"CONTENT_TYPE:TEXT pragma tag must prepend any Mustache variable, section, or partial tag."]]];
+                    return NO;
+                }
+                _contentType = GRMustacheContentTypeText;
+            }
+            if ([token.pragma isEqualToString:@"CONTENT_TYPE:HTML"]) {
+                if (_contentTypeLocked) {
+                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"CONTENT_TYPE:HTML pragma tag must prepend any Mustache variable, section, or partial tag."]]];
+                    return NO;
+                }
+                _contentType = GRMustacheContentTypeHTML;
+            }
             break;
             
         case GRMustacheTokenTypeText:
@@ -210,7 +234,10 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression escapesHTML:YES]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression contentType:_contentType escapesHTML:YES]];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
         } break;
             
             
@@ -227,7 +254,10 @@
             }
             
             // Success: append GRMustacheVariableTag
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression escapesHTML:NO]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:token.expression contentType:_contentType escapesHTML:NO]];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
         } break;
             
             
@@ -246,6 +276,7 @@
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
                                                                                                expression:_currentOpeningToken.expression
+                                                                                              contentType:_contentType
                                                                                            templateString:token.templateString
                                                                                                innerRange:innerRange
                                                                                                      type:GRMustacheTagTypeInvertedSection
@@ -279,6 +310,9 @@
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
                 [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
+                
+                // lock _contentType
+                _contentTypeLocked = YES;
             }
         } break;
             
@@ -304,6 +338,9 @@
             self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
             [_openingTokenStack addObject:_currentOpeningToken];
             [_componentsStack addObject:_currentComponents];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
         } break;
             
             
@@ -324,6 +361,7 @@
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
                                                                                                expression:_currentOpeningToken.expression
+                                                                                              contentType:_contentType
                                                                                            templateString:token.templateString
                                                                                                innerRange:innerRange
                                                                                                      type:GRMustacheTagTypeSection
@@ -357,6 +395,9 @@
                 self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
                 [_openingTokenStack addObject:_currentOpeningToken];
                 [_componentsStack addObject:_currentComponents];
+                
+                // lock _contentType
+                _contentTypeLocked = YES;
             }
         } break;
             
@@ -401,6 +442,7 @@
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : ((_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening) ? GRMustacheTagTypeOverridableSection : GRMustacheTagTypeSection);
                     wrapperComponent = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
                                                                                    expression:_currentOpeningToken.expression
+                                                                                  contentType:_contentType
                                                                                templateString:token.templateString
                                                                                    innerRange:innerRange
                                                                                          type:type
@@ -420,6 +462,16 @@
                     GRMustacheTemplate *template = [_templateRepository templateNamed:_currentOpeningToken.partialName error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
+                        return NO;
+                    }
+                    
+                    // Check for consistency of HTML safety
+                    //
+                    // If template.components is nil, this means that we are actually
+                    // compiling it, and that template simply recursively refers to itself.
+                    // Consistency of HTML safety is this guaranteed.
+                    if (template.components && template.contentType != _contentType) {
+                        [self failWithFatalError:[self parseErrorAtToken:_currentOpeningToken description:@"HTML safety mismatch"]];
                         return NO;
                     }
                     
@@ -458,6 +510,9 @@
             
             // Success: append template component
             [_currentComponents addObject:template];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
         } break;
         
         
@@ -473,6 +528,9 @@
             self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
             [_openingTokenStack addObject:_currentOpeningToken];
             [_componentsStack addObject:_currentComponents];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
         } break;
             
     }
@@ -509,6 +567,31 @@
     return [NSError errorWithDomain:GRMustacheErrorDomain
                                code:GRMustacheErrorCodeParseError
                            userInfo:[NSDictionary dictionaryWithObject:localizedDescription forKey:NSLocalizedDescriptionKey]];
+}
+
+@end
+
+
+#pragma mark - GRMustacheAST
+
+@implementation GRMustacheAST
+@synthesize templateComponents=_templateComponents;
+@synthesize contentType=_contentType;
+
+- (void)dealloc
+{
+    [_templateComponents release];
+    [super dealloc];
+}
+
+- (id)initWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType
+{
+    self = [super init];
+    if (self) {
+        _templateComponents = [templateComponents retain];
+        _contentType = contentType;
+    }
+    return self;
 }
 
 @end

@@ -82,11 +82,12 @@ Loading templates:
 - [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
 - [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
 - [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
+- [HTML vs. Text templates](GRMustache/blob/master/Guides/html_vs_text.md): there's a life outside of HTML.
 
 Rendering templates:
 
 - [Runtime](GRMustache/blob/master/Guides/runtime.md): how GRMustache renders your data
-- [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): how to provide data to templates
+- [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
 Advanced GRMustache:
 
@@ -94,6 +95,10 @@ Advanced GRMustache:
 - [Tag Delegates](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
 - [Rendering Objects](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
 - [Protected Contexts](GRMustache/blob/master/Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
+
+Compatibility with other Mustache implementations:
+
+- [Compatibility](GRMustache/blob/master/Guides/compatibility.md): know where you put your feet in.
 
 ### Sample code
 
@@ -112,29 +117,33 @@ Advanced GRMustache:
 FAQ
 ---
 
-- **Q: How do I render array indexes?**
+- **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
-    A: Check the [Collection Indexes Sample Code](GRMustache/blob/master/Guides/sample_code/indexes.md)
+    A: [Yes, yes, and yes](GRMustache/blob/master/Guides/sample_code/indexes.md)
 
-- **Q: How do I format numbers and dates?**
+- **Q: Is it possible to format numbers and dates?**
     
-    A: Check the [Number Formatting Sample Code](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+    A: [Yes](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
 
-- **Q: How do I render partial templates whose name is only known at runtime?**
+- **Q: Is it possible to render partial templates whose name is only known at runtime?**
 
-    A: Check the [Rendering Objects Guide](GRMustache/blob/master/Guides/rendering_objects.md)
+    A: [Yes](GRMustache/blob/master/Guides/rendering_objects.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: Check the [Partials Guide](GRMustache/blob/master/Guides/partials.md).
+    A: [Yes](GRMustache/blob/master/Guides/partials.md)
 
-- **Q: How do I localize templates?**
+- **Q: Is it possible to localize templates?**
 
-    A: Check the [Localization Sample Code](GRMustache/blob/master/Guides/sample_code/localization.md)
+    A: [Yes](GRMustache/blob/master/Guides/sample_code/localization.md)
 
-- **Q: How do I render default values for missing keys?**
+- **Q: Is it possible to render default values for missing keys?**
 
-    A: Check the [Tag Delegate Guide](GRMustache/blob/master/Guides/delegate.md).
+    A: [Yes](GRMustache/blob/master/Guides/delegate.md)
+
+- **Q: Is it possible to disable HTML escaping?**
+
+    A: [Yes](GRMustache/blob/master/Guides/html_vs_text.md)
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
@@ -142,7 +151,9 @@ FAQ
 
 - **Q: Why does GRMustache need JRSwizzle?**
 
-    A: GRMustache does not need it. However, *you* may happy having GRMustache [swizzle](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) `valueForUndefinedKey:` in the NSObject and NSManagedObject classes when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
+    A: GRMustache does not *need* it, and this [swizzling](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) is a mere convenience that will not ship in your released binary:
+    
+    *You* may be happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
 
 What other people say
 ---------------------

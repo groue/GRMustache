@@ -116,10 +116,14 @@ typedef struct {
 /**
  * Returns a rendering object that renders with the provided block.
  *
- * @param block  A block that returns a tag rendering, provided with a rendering
- *               context.
+ * @param block  A block that follows the semantics of the
+ *               renderForMustacheTag:context:HTMLSafe:error: method defined by
+ *               the GRMustacheRendering protocol. See the documentation of this
+ *               method.
  *
  * @return A rendering object
+ *
+ * @see GRMustacheRendering protocol
  *
  * @since v6.0
  */
@@ -136,3 +140,4 @@ typedef struct {
 #import "GRMustacheContext.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheTag.h"
+#import "GRMustacheConfiguration.h"

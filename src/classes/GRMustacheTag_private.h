@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheConfiguration_private.h"
 
 @class GRMustacheExpression;
 @class GRMustacheTemplateRepository;
@@ -41,8 +42,10 @@ typedef enum {
 @private
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
+    GRMustacheContentType _contentType;
 }
 
+// Abstract method whose default implementation raises an exception.
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
 
@@ -53,26 +56,83 @@ typedef enum {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 /**
- * TODO
+ * Returns the content type of the receiver.
+ *
+ * For example:
+ *
+ * - `{{name}}`: GRMustacheContentTypeHTML
+ * - `{{{name}}}`: GRMustacheContentTypeHTML.
+ * - `{{#name}}...{{/name}}`: GRMustacheContentTypeHTML.
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText.
+ * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: GRMustacheContentTypeText
+ * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: GRMustacheContentTypeText.
+ *
+ * @see escapesHTML
+ */
+@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns YES if the received HTML-escapes its HTML-unsafe input.
+ *
+ * This property is used is and only if contentType is GRMustacheContentTypeHTML.
+ *
+ * For example:
+ *
+ * - `{{name}}`: the variable tag escapes HTML-unsafe input.
+ * - `{{{name}}}`: the variable tag does not escape input.
+ * - `{{#name}}...{{/name}}`: the section tag escapes HTML-unsafe input.
+ * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: the escapesHTML property is ignored.
+ * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: the escapesHTML property is ignored.
+ * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: the escapesHTML property is ignored.
+ *
+ * @see contentType
  */
 @property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * The expression evaluated and rendered by the tag.
+ *
+ * For example:
+ *
+ * - `{{name}}` holds the `name` expression.
+ * - `{{uppercase(person.name)}}` holds the `uppercase(person.name)` expression.
  */
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
-// Documented in GRMustacheTag.h
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
-
 /**
- * TODO
+ * Returns a new GRMustacheTag.
+ *
+ * @param templateRepository  The template repository exposed to the library
+ *                            user via the public `templateRepository` property.
+ *                            It is the template repository that provides the
+ *                            template to which the tag belongs.
+ * @param expression          The expression to be evaluated when rendering the
+ *                            tag.
+ * @param contentType         The content type of the tag rendering.
+ *
+ * @see templateRepository property
+ * @see expression property
+ * @see contentType property
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression GRMUSTACHE_API_INTERNAL;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Abstract method that returns a tag that represents the receiver overrided by
+ * _overridingTag_.
+ *
+ * This method is used in the context of overridable partials, by the
+ * GRMustacheTag implementation of
+ * [GRMustacheTemplateComponent resolveTemplateComponent:].
+ *
+ * Default implementation raises an exception. GRMustacheSectionTag and
+ * GRMustacheAccumulatorTag override it.
+ *
+ * @param overridingTag  The overriding tag
+ * @return A tag that represents the receiver overrided by _overridingTag_.
  */
 - (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag GRMUSTACHE_API_INTERNAL;
+
+// Documented in GRMustacheTag.h
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 @end

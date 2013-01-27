@@ -145,7 +145,7 @@
     return nil;
 }
 
-- (id<GRMustacheFilter>)curryArgument:(id)object
+- (id<GRMustacheFilter>)filterByCurryingArgument:(id)object
 {
     NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
     return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];

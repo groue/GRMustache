@@ -24,12 +24,32 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheParser_private.h"
 #import "GRMustache_private.h"
+#import "GRMustacheConfiguration_private.h"
 
 
 @class GRMustacheCompiler;
 @class GRMustacheTemplateRepository;
 @protocol GRMustacheTemplateComponent;
 
+/**
+ * The GRMustacheAST represents the abstract syntax tree of a template.
+ */
+@interface GRMustacheAST : NSObject {
+@private
+    NSArray *_templateComponents;
+    GRMustacheContentType _contentType;
+}
+
+/**
+ * An NSArray containing <GRMustacheTemplateComponent> instances
+ */
+@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
+
+/**
+ * The content type of the AST
+ */
+@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
+@end
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
@@ -49,6 +69,8 @@
     NSMutableArray *_currentComponents;
     GRMustacheToken *_currentOpeningToken;
     GRMustacheTemplateRepository *_templateRepository;
+    GRMustacheContentType _contentType;
+    BOOL _contentTypeLocked;
 }
 
 /**
@@ -57,10 +79,18 @@
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns an NSArray of objects conforming to the GRMustacheTemplateComponent
- * protocol.
+ * Returns an initialized compiler.
+ *
+ * @param configuration  The GRMustacheConfiguration that affects the
+ *                       compilation phase.
+ * @return a compiler
+ */
+- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns a Mustache Abstract Syntax Tree.
  * 
- * The array will contain something if a GRMustacheParser has provided
+ * The AST will contain something if a GRMustacheParser has provided
  * GRMustacheToken instances to the compiler.
  * 
  * For instance:
@@ -82,14 +112,14 @@
  *     [parser parseTemplateString:... templateID:...];
  *     
  *     // Extract template components from the compiler
- *     NSArray *templateComponents = [compiler templateComponentsReturningError:...];
+ *     GRMustacheAST *AST = [compiler ASTReturningError:...];
  *
- * @param error  If there is an error building template components, upon return
- *               contains an NSError object that describes the problem.
+ * @param error  If there is an error building the abstract syntax tree, upon
+ *               return contains an NSError object that describes the problem.
  *
- * @return An NSArray containing <GRMustacheTemplateComponent> instances
+ * @return A GRMustacheAST instance
  * 
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheAST
  */
-- (NSArray *)templateComponentsReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (GRMustacheAST *)ASTReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
 @end

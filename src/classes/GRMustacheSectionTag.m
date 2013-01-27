@@ -35,15 +35,15 @@
 /**
  * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:overridable:components:]
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
 @end
 
 
 @implementation GRMustacheSectionTag
 
-+ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
++ (id)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression templateString:templateString innerRange:innerRange type:type components:components] autorelease];
+    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression contentType:contentType templateString:templateString innerRange:innerRange type:type components:components] autorelease];
 }
 
 - (void)dealloc
@@ -67,13 +67,13 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderInBuffer:buffer withContext:context error:error]) {
+        if (![component renderContentType:self.contentType inBuffer:buffer withContext:context error:error]) {
             return nil;
         }
     }
     
     if (HTMLSafe) {
-        *HTMLSafe = YES;
+        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
     return buffer;
 }
@@ -120,9 +120,9 @@
 
 #pragma mark - Private
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
 {
-    self = [super initWithTemplateRepository:templateRepository expression:expression];
+    self = [super initWithTemplateRepository:templateRepository expression:expression contentType:contentType];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;

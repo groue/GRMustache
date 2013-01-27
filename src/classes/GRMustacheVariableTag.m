@@ -30,15 +30,15 @@
 #import "GRMustache_private.h"
 
 @interface GRMustacheVariableTag()
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML;
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML;
 @end
 
 
 @implementation GRMustacheVariableTag
 
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
++ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
 {
-    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression escapesHTML:escapesHTML] autorelease];
+    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression contentType:contentType escapesHTML:escapesHTML] autorelease];
 }
 
 
@@ -54,9 +54,9 @@
 
 #pragma mark - Private
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
+- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
 {
-    self = [super initWithTemplateRepository:templateRepository expression:expression];
+    self = [super initWithTemplateRepository:templateRepository expression:expression contentType:contentType];
     if (self) {
         _escapesHTML = escapesHTML;
     }

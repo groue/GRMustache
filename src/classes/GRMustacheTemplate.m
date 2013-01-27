@@ -31,6 +31,7 @@
 
 @implementation GRMustacheTemplate
 @synthesize components=_components;
+@synthesize contentType=_contentType;
 
 + (id)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -115,11 +116,11 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderInBuffer:buffer withContext:context error:error]) {
+    if (![self renderContentType:self.contentType inBuffer:buffer withContext:context error:error]) {
         return nil;
     }
     if (HTMLSafe) {
-        *HTMLSafe = YES;
+        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
     return buffer;
 }
@@ -127,16 +128,38 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderInBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
+    NSMutableString *needsEscapingBuffer = nil;
+    NSMutableString *renderingBuffer = nil;
+    
+    if (requiredContentType == GRMustacheContentTypeHTML && (self.contentType != GRMustacheContentTypeHTML)) {
+        // Self renders text, but is asked for HTML.
+        // This happens when self is a text partial embedded in a HTML template.
+        //
+        // We'll have to HTML escape our rendering.
+        needsEscapingBuffer = [NSMutableString string];
+        renderingBuffer = needsEscapingBuffer;
+    } else {
+        // Self renders text and is asked for text,
+        // or self renders HTML and is asked for HTML.
+        //
+        // We won't need any specific processing here.
+        renderingBuffer = buffer;
+    }
+    
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheTemplateOverride: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderInBuffer:buffer withContext:context error:error]) {
+        if (![component renderContentType:self.contentType inBuffer:renderingBuffer withContext:context error:error]) {
             return NO;
         }
+    }
+    
+    if (needsEscapingBuffer) {
+        [buffer appendString:[GRMustache escapeHTML:needsEscapingBuffer]];
     }
     
     return YES;

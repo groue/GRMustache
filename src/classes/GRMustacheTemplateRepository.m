@@ -24,6 +24,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheConfiguration_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
 
@@ -113,7 +114,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error;
 
 /**
- * Parses templateString and returns template components.
+ * Parses templateString and returns an abstract syntax tree.
  * 
  * @param templateString  A Mustache template string.
  * @param templateID      The template ID of the template, or nil if the
@@ -121,16 +122,17 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * @param error           If there is an error, upon return contains an NSError
  *                        object that describes the problem.
  *
- * @return an array of objects conforming to the GRMustacheTemplateComponent protocol.
+ * @return a GRMustacheAST instance.
  * 
  * @see GRMustacheTemplateRepository
  */
-- (NSArray *)templateComponentsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error;
+- (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error;
 
 @end
 
 @implementation GRMustacheTemplateRepository
 @synthesize dataSource=_dataSource;
+@synthesize configuration=_configuration;
 
 + (id)templateRepositoryWithBaseURL:(NSURL *)URL
 {
@@ -177,6 +179,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     self = [super init];
     if (self) {
         _templateForTemplateID = [[NSMutableDictionary alloc] init];
+        self.configuration = [GRMustacheConfiguration defaultConfiguration];    // copy
     }
     return self;
 }
@@ -184,6 +187,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)dealloc
 {
     [_templateForTemplateID release];
+    [_configuration release];
     [super dealloc];
 }
 
@@ -194,45 +198,56 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
 {
-    NSArray *templateComponents = [self templateComponentsFromString:templateString templateID:nil error:error];
-    if (!templateComponents) {
+    GRMustacheAST *AST = [self ASTFromString:templateString templateID:nil error:error];
+    if (!AST) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
-    template.components = templateComponents;
+    template.components = AST.templateComponents;
+    template.contentType = AST.contentType;
     return template;
+}
+
+- (void)setConfiguration:(GRMustacheConfiguration *)configuration
+{
+    if (_configuration.isLocked) {
+        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
+        return;
+    }
+    
+    if (_configuration != configuration) {
+        [_configuration release];
+        _configuration = [configuration copy];
+    }
 }
 
 #pragma mark Private
 
-- (NSArray *)templateComponentsFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error
+- (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error
 {
-    NSArray *templateComponents = nil;
+    GRMustacheAST *AST = nil;
     @autoreleasepool {
-        // Create a Mustache compiler
-        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+        // It's time to lock the configuration.
+        [self.configuration lock];
         
-        // We tell the compiler where provide the partials
+        // Create a Mustache compiler that loads partials from self
+        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
         compiler.templateRepository = self;
         
-        // Create a Mustache parser
+        // Create a Mustache parser that feeds the compiler
         GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
-        
-        // The parser feeds the compiler
         parser.delegate = compiler;
         
-        // Parse
+        // Parse and extract template components from the compiler
         [parser parseTemplateString:templateString templateID:templateID];
-        
-        // Extract template components from the compiler
-        templateComponents = [[compiler templateComponentsReturningError:error] retain];
+        AST = [[compiler ASTReturningError:error] retain];  // make sure AST is not released by autoreleasepool
         
         // make sure error is not released by autoreleasepool
-        if (!templateComponents && error != NULL) [*error retain];
+        if (!AST && error != NULL) [*error retain];
     }
-    if (!templateComponents && error != NULL) [*error autorelease];
-    return [templateComponents autorelease];
+    if (!AST && error != NULL) [*error autorelease];
+    return [AST autorelease];
 }
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
@@ -293,19 +308,20 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // And since partials may embed other partials, we need to handle the
         // currently parsed template ID in a recursive way.
         
-        NSArray *templateComponents = nil;
+        GRMustacheAST *AST = nil;
         {
             id previousParsedTemplateID = _currentlyParsedTemplateID;
             _currentlyParsedTemplateID = templateID;
-            templateComponents = [self templateComponentsFromString:templateString templateID:templateID error:error];
+            AST = [self ASTFromString:templateString templateID:templateID error:error];
             _currentlyParsedTemplateID = previousParsedTemplateID;
         }
         
         
         // compiling done
         
-        if (templateComponents) {
-            template.components = templateComponents;
+        if (AST) {
+            template.components = AST.templateComponents;
+            template.contentType = AST.contentType;
         } else {
             // forget invalid empty template
             [_templateForTemplateID removeObjectForKey:templateID];

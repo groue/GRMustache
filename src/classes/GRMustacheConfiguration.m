@@ -1,17 +1,17 @@
 // The MIT License
-// 
-// Copyright (c) 2012 Gwendal Roué
-// 
+//
+// Copyright (c) 2013 Gwendal Roué
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,53 +20,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTextComponent_private.h"
+#import "GRMustacheConfiguration_private.h"
 
+@implementation GRMustacheConfiguration
+@synthesize contentType=_contentType;
+@synthesize locked=_locked;
 
-@interface GRMustacheTextComponent()
-@property (nonatomic, retain) NSString *text;
-- (id)initWithString:(NSString *)text;
-@end
-
-
-@implementation GRMustacheTextComponent
-@synthesize text=_text;
-
-+ (id)textComponentWithString:(NSString *)text
++ (GRMustacheConfiguration *)defaultConfiguration
 {
-    return [[[self alloc] initWithString:text] autorelease];
+    static GRMustacheConfiguration *defaultConfiguration;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        defaultConfiguration = [[GRMustacheConfiguration configuration] retain];
+    });
+    return defaultConfiguration;
 }
 
-- (void)dealloc
++ (GRMustacheConfiguration *)configuration
 {
-    [_text release];
-    [super dealloc];
+    return [[[GRMustacheConfiguration alloc] init] autorelease];
 }
 
-#pragma mark <GRMustacheTemplateComponent>
-
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (void)lock
 {
-    [buffer appendString:_text];
-    return YES;
+    _locked = YES;
 }
 
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+- (void)setContentType:(GRMustacheContentType)contentType
 {
-    // text components can not override any other component
-    return component;
-}
-
-#pragma mark Private
-
-- (id)initWithString:(NSString *)text
-{
-    NSAssert(text, @"WTF");
-    self = [self init];
-    if (self) {
-        self.text = text;
+    if (_locked) {
+        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
+        return;
     }
-    return self;
+    _contentType = contentType;
+}
+
+#pragma mark - <NSCopying>
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
+    configuration.contentType = self.contentType;
+    return configuration;
 }
 
 @end
