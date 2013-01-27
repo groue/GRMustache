@@ -1,0 +1,516 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>GRMustacheConfiguration Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.1 (build 840)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.2 </a></h1>
+				<a id="developerHome" href="../index.html">Gwendal Roué</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">GRMustacheConfiguration Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/contentType">&nbsp;&nbsp;&nbsp;&nbsp;contentType</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/configuration">&nbsp;&nbsp;&nbsp;&nbsp;+ configuration</option>
+	
+	<option value="//api/name/defaultConfiguration">&nbsp;&nbsp;&nbsp;&nbsp;+ defaultConfiguration</option>
+	
+	
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contentType">contentType</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/configuration">configuration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/defaultConfiguration">defaultConfiguration</a></span></li>
+	
+</ul></li>
+
+
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="GRMustacheConfiguration Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">GRMustacheConfiguration Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value">NSCopying</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">GRMustacheConfiguration.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>A GRMustacheConfiguration instance configures GRMustache rendering.</p>
+
+<p>The default configuration <a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>
+applies to all GRMustache rendering by default:</p>
+
+<p>// Have GRMustache templates render text by default,
+// and do not HTML-escape their input.
+<a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>.<a href="#//api/name/contentType">contentType</a> = GRMustacheContentTypeText;</p>
+
+<p>You can also alter the <a href="#//api/name/configuration">configuration</a> of a specific template repository: its
+<a href="#//api/name/configuration">configuration</a> only applies to the templates built by this very template
+repository:</p>
+
+<p>// All templates loaded from <em>repo</em> will render text,
+// and will not HTML-escape their input.
+<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.<a href="#//api/name/configuration">configuration</a>.<a href="#//api/name/contentType">contentType</a> = GRMustacheContentTypeText;</p>
+
+<p>A third option is to create a new <a href="#//api/name/configuration">configuration</a>, and assign it to the template:</p>
+
+<p>// Create a <a href="#//api/name/configuration">configuration</a>
+GRMustacheConfiguration *<a href="#//api/name/configuration">configuration</a> = <a href="#//api/name/configuration">[GRMustacheConfiguration configuration]</a>;
+<a href="#//api/name/configuration">configuration</a>&hellip;. // setup</p>
+
+<p>GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.<a href="#//api/name/configuration">configuration</a> = <a href="#//api/name/configuration">configuration</a>;</p>
+
+<p>The <a href="#//api/name/contentType"><code>contentType</code></a> option can be specified at the template level, so that your
+repositories can mix HTML and text templates: see the documentation of this
+property.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/defaultConfiguration">+&nbsp;defaultConfiguration</a></code>
+		<span class="tooltip"><p>The default <a href="#//api/name/configuration">configuration</a>.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/configuration">+&nbsp;configuration</a></code>
+		<span class="tooltip"><p>A new factory configuration.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contentType">&nbsp;&nbsp;contentType</a></code>
+		<span class="tooltip"><p>The content type of strings rendered by templates.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/contentType" title="contentType"></a>
+	<h3 class="subsubtitle method-title">contentType</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The content type of strings rendered by templates.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) GRMustacheContentType contentType</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.2</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This property affects the HTML-escaping of your data, and the inclusion
+of templates in other templates.</p>
+
+<p>The <code>GRMustacheContentTypeHTML</code> content type has templates render HTML.
+This is the default behavior. HTML template escape the input of variable tags
+such as <code>{{name}}</code>. Use triple mustache tags <code>{{{content}}}</code> in order to
+avoid the HTML-escaping.</p>
+
+<p>The <code>GRMustacheContentTypeText</code> content type has templates render text.
+They do not HTML-escape their input: <code>{{name}}</code> and <code>{{{name}}}</code> have
+identical renderings.</p>
+
+<p><a href="../Classes/GRMustache.html">GRMustache</a> safely keeps track of the content type of templates: should a HTML
+template embed a text template, the content of the text template would be
+HTML-escaped.</p>
+
+<p>There is no API to specify the content type of individual templates. However,
+you can use pragma tags right in the content of your templates:</p>
+
+<ul>
+<li><code>{{% CONTENT_TYPE:TEXT }}</code> turns a template into a text template.</li>
+<li><code>{{% CONTENT_TYPE:HTML }}</code> turns a template into a HTML template.</li>
+</ul>
+
+
+<p>Insert those pragma tags early in your templates. For example:</p>
+
+<p>{{! This template renders a bash script. }}
+{{% CONTENT_TYPE:TEXT }}
+export LANG={{ENV.LANG}}
+&hellip;</p>
+
+<p>Should two such pragmas be found in a template content, the last one wins.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheConfiguration.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/configuration" title="configuration"></a>
+	<h3 class="subsubtitle method-title">configuration</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>A new factory configuration.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (GRMustacheConfiguration *)configuration</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A new factory configuration.</p>
+
+<p>Its <a href="#//api/name/contentType">contentType</a> is GRMustacheContentTypeHTML.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.2</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheConfiguration.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/defaultConfiguration" title="defaultConfiguration"></a>
+	<h3 class="subsubtitle method-title">defaultConfiguration</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The default <a href="#//api/name/configuration">configuration</a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (GRMustacheConfiguration *)defaultConfiguration</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The default <a href="#//api/name/configuration">configuration</a>.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v6.2</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>All templates and template repositories use the default <a href="#//api/name/configuration">configuration</a> unless
+you specify otherwise by setting the <a href="#//api/name/configuration">configuration</a> of a template repository.</p>
+
+<p>The &ldquo;default&rdquo; defaultConfiguration has GRMustacheContentTypeHTML <a href="#//api/name/contentType">contentType</a>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheConfiguration.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-27)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
