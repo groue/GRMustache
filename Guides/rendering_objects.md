@@ -39,7 +39,7 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - The _context_ represents the [context stack](runtime.md), and all information that tags need to render.
 
-- _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO.
+- _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO. Returning NO would have GRMustache HTML-escape the returned string before inserting it in the final rendering of HTML templates (see the [HTML vs. Text Templates Guide](html_vs_text.md) for more information).
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
