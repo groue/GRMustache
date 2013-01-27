@@ -54,9 +54,13 @@ Genuine Mustache falls short on a few topics. GRMustache implements syntaxes tha
     
     Use relative `{{> header }}` or absolute paths `{{> /shared/header }}` to your partial templates: see the [Partials Guide](partials.md).
 
-- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts.
     
     Overridable partials are documented in the [Partials Guide](partials.md).
+
+- **Text templates**.
+
+    The Mustache language focuses on rendering HTML, and safely HTML-escape your data. GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
 ### Powerful APIs
