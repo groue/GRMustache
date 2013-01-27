@@ -96,6 +96,10 @@ Advanced GRMustache:
 - [Rendering Objects](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
 - [Protected Contexts](GRMustache/blob/master/Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
 
+Compatibility with other Mustache implementations:
+
+- [Compatibility](GRMustache/blob/master/Guides/compatibility.md): know where you put your feet in.
+
 ### Sample code
 
 - [Number Formatting](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
