@@ -23,7 +23,7 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
-- **"Mustache lambdas"**, allow tags such as `{{name}}` and `{{#name}}...{{/name}}` to perform custom rendering. Those are documented at the [Rendering Objects Guide](rendering_objects.md).
+- **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
 
 
 ### Mustache Language Extensions
