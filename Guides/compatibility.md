@@ -1,7 +1,7 @@
 [up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
 
-Compatibility With Other Mustache Implementations
-=================================================
+Compatibility With Other Mustache Engines
+=========================================
 
 There are many [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) out there.
 
