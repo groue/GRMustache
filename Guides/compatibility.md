@@ -102,7 +102,7 @@ Generally speaking, writing cross-language templates requires you to avoid this 
 Template inheritance, layouts, overridable partials
 ---------------------------------------------------
 
-Forgive the name dropping of this section title, but this feature has many names.
+Forgive the name dropping in this section title, but this feature has many names.
 
 This [GRMustache feature](partials.md) is directly inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
 
