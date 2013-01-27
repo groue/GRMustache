@@ -26,9 +26,9 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 - **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
 
 
-### Mustache Language Extensions
+### Core Engine Extensions
 
-Genuine Mustache falls short on a few topics. GRMustache implements syntaxes that are not in the specification:
+Genuine Mustache falls short on a few topics. GRMustache core engine implements syntaxes and features that are not in the specification:
 
 - **Empty closing tags**, as in `{{#name}}...{{/}}`
 
@@ -63,9 +63,9 @@ Genuine Mustache falls short on a few topics. GRMustache implements syntaxes tha
     The Mustache language focuses on rendering HTML, and safely HTML-escape your data. GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
-### Powerful APIs
+### Flexibility
 
-GRMustache is a Mustache engine that you can hack in.
+GRMustache's core engine is extensible. Feel free to hook in:
 
 - [Rendering objects](rendering_objects.md) provide their own custom rendering.
 - [Tag delegates](delegate.md) observe and alter objects rendered by tags.
