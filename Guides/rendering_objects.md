@@ -99,7 +99,9 @@ Final rendering:
 
 Variable tags such as `{{ name }}` don't have much inner content. But section tags do: `{{# name }} inner content {{/ name }}`.
 
-The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context. It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it.
+The `renderContentWithContext:HTMLSafe:error:` method returns the rendering of the inner content, processing all the inner tags with the provided context.
+
+It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES. There are also text templates (see the [HTML vs. Text Templates Guide](html_vs_text.md)): in this case, `HTMLSafe` would be NO. Depending on how reusable you want your rendering object to be, you may have to deal with it.
 
 Your rendering objects can thus delegate their rendering to the tag they are given. They can render the tag once or many times:
 
@@ -187,7 +189,9 @@ The `innerTemplateString` property returns the raw content of the section, with 
 
 You can derive new template strings from this raw content, even by appending new tags to it (the `{{url}}` tag, above).
 
-From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context (and sets the `HTMLSafe` boolean for you, so that you do definitely not have to worry about it).
+From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context.
+
+It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES. There are also text templates (see the [HTML vs. Text Templates Guide](html_vs_text.md)): in this case, `HTMLSafe` would be NO. Depending on how reusable you want your rendering object to be, you may have to deal with it.
 
 
 Example: Dynamic partials, take 1
