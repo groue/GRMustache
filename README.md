@@ -98,7 +98,7 @@ Advanced GRMustache:
 
 Compatibility with other Mustache implementations:
 
-- [Compatibility](GRMustache/blob/master/Guides/compatibility.md): know where you put your feet in.
+- [Compatibility](GRMustache/blob/master/Guides/compatibility.md): know where you put your foot in.
 
 ### Sample code
 
