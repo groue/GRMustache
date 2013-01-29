@@ -25,7 +25,6 @@
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheFilterLibrary_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateOverride_private.h"
 #import "JRSwizzle.h"
@@ -122,11 +121,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
-+ (id)context
+- (id)initWithObject:(id)object
 {
-    GRMustacheContext *context = [[[self alloc] init] autorelease];
-    context.contextObject = [GRMustacheFilterLibrary filterLibrary];
-    return context;
+    self = [super init];
+    if (self) {
+        _contextObject = [object retain];
+    }
+    return self;
 }
 
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate

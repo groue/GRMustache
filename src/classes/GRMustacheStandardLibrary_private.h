@@ -24,12 +24,12 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 /**
- * The GRMustacheFilterLibrary provides all built-in filters.
+ * The GRMustacheStandardLibrary provides all built-in filters and rendering objects.
  */
-@interface GRMustacheFilterLibrary : NSObject
+@interface GRMustacheStandardLibrary : NSObject
 
 /**
- * Returns the shared filter library.
+ * Returns the shared standard library.
  */
-+ (id)filterLibrary GRMUSTACHE_API_INTERNAL;
++ (id)standardLibrary GRMUSTACHE_API_INTERNAL;
 @end

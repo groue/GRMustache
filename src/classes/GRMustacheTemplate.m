@@ -24,6 +24,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheSectionTag_private.h"
+#import "GRMustacheStandardLibrary_private.h"
 #import "GRMustacheRendering.h"
 
 @interface GRMustacheTemplate()<GRMustacheRendering>
@@ -85,7 +86,7 @@
 - (GRMustacheContext *)baseContext
 {
     if (_baseContext == nil) {
-        _baseContext = [[GRMustacheContext context] retain];
+        _baseContext = [[GRMustacheContext alloc] initWithObject:[GRMustacheStandardLibrary standardLibrary]];
     }
     return [[_baseContext retain] autorelease];
 }

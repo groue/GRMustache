@@ -20,8 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheFilterLibrary_private.h"
-#import "GRMustacheFilter_private.h"
+#import "GRMustacheStandardLibrary_private.h"
+#import "GRMustacheFilter.h"
+#import "GRMustacheLocalizeHelper.h"
 
 
 // =============================================================================
@@ -129,24 +130,25 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheFilterLibrary
+#pragma mark - GRMustacheStandardLibrary
 
-@implementation GRMustacheFilterLibrary
+@implementation GRMustacheStandardLibrary
 
-+ (id)filterLibrary
++ (id)standardLibrary
 {
-    static NSDictionary *GRMustacheLibrary = nil;
-    if (GRMustacheLibrary == nil) {
-        GRMustacheLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
-                              [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
-                              [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
-                              [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
-                              [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
-                              [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
-                              nil] retain];
+    static NSDictionary *standardLibrary = nil;
+    if (standardLibrary == nil) {
+        standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                            [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+                            [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                            [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                            [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                            [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
+                            [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                            nil] retain];
     }
     
-    return GRMustacheLibrary;
+    return standardLibrary;
 }
 
 @end
