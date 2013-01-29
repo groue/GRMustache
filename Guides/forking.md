@@ -14,7 +14,7 @@ The library features are described in the [guides](introduction.md). This sectio
 
 - **Parsing**
     - `GRMustacheTemplateRepository`
-    - `GRMustacheTemplateRepositoryDataSource`
+    - `<GRMustacheTemplateRepositoryDataSource>` (protocol)
     
     *Template repositories* are objects that load template strings from various sources.
     
@@ -41,10 +41,12 @@ The library features are described in the [guides](introduction.md). This sectio
     - `{{ uppercase(name) }}` contains a *filtered expression*.
 
 - **Compiling**
+    - `GRMustacheConfiguration`
     - `GRMustacheCompiler`
-    - `GRMustacheTemplateComponent`
+    - `GRMustacheAST`
+    - `<GRMustacheTemplateComponent>` (protocol)
     
-    The *compiler* consumes a parse tree of tokens and outputs an [abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree) of *template components*.
+    The *compiler* consumes a parse tree of tokens and outputs an *AST* ([abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree)) of *template components*. The *configuration* tells the compiler whether the AST should represent a HTML or a text template.
     
     Template components are actually able to provide the rendering expected by the library user:
 
@@ -55,7 +57,7 @@ The library features are described in the [guides](introduction.md). This sectio
     
     *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, and *template overrides* render overridable partial tags.
     
-    For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of one template containing two text elements and a tag element.
+    For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of two text elements and a tag element.
     
     There are three subclasses of GRMustacheTag:
     
@@ -79,15 +81,16 @@ The library features are described in the [guides](introduction.md). This sectio
     
     A rendering context is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not directly responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the context in order to compute their values.
 
-    - `GRMustacheTagDelegate`
+    - `<GRMustacheTagDelegate>` (protocol)
 
     Tags iterate all *tag delegates* in a rendering context and let them observe or alter their rendering.
     
-    - `GRMustacheRendering`
+    - `<GRMustacheRendering>` (protocol)
 
     The library user can implement his own *rendering objects* in order to perform custom rendering.
 
-    - `GRMustacheFilter`
+    - `<GRMustacheFilter>` (protocol)
+    - `GRMustacheFilter` (class)
     - `GRMustacheFilterLibrary`
     
     The *filter library* provides with built-in filters.
