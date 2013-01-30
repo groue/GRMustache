@@ -52,11 +52,11 @@
  * the `title` key, and injects the name, or both title and name,  with
  * `[NSString stringWithFormat:]`.
  */
-#warning Is GRMustacheLocalizeHelper a good name?
 @interface GRMustacheLocalizeHelper : NSObject<GRMustacheRendering, GRMustacheFilter> {
 @private
     NSBundle *_bundle;
     NSString *_tableName;
+    NSMutableArray *_formatArguments;
 }
 
 /**
