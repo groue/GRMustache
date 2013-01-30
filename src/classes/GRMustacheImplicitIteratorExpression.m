@@ -38,12 +38,15 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
     if (protected != NULL) {
         *protected = NO;
     }
-    return [context currentContextValue];
+    if (value != NULL) {
+        *value = [context currentContextValue];
+    }
+    return YES;
 }
 
 @end

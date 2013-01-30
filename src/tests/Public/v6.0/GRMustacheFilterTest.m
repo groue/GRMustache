@@ -134,31 +134,6 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testMissingFilterException
-{
-    id data = @{
-        @"name": @"Name",
-        @"replace": [GRMustacheFilter filterWithBlock:^id(id value) {
-            return @"replace";
-        }],
-    };
-
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
-}
-
-- (void)testNotAFilterException
-{
-    id data = @{
-        @"name": @"Name",
-        @"filter": @"filter",
-    };
-    
-    STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"<{{filter(name)}}>" error:NULL] renderObject:data error:NULL], NSException, GRMustacheRenderingException, nil);
-}
-
 - (void)testFiltersDoNotEnterContextStack
 {
     // TODO
