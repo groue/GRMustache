@@ -109,6 +109,11 @@
     template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizeHelper}];
     id data = @{ @"foo": @"bar" };
     NSString *rendering = [template renderObject:data error:NULL];
+    
+    // test the raw localization
+    STAssertEqualObjects([self.localizeHelper.bundle localizedStringForKey:@"bar" value:nil table:nil], @"translated_bar", @"");
+
+    // test the GRMustache localization
     STAssertEqualObjects(rendering, @"translated_bar", @"");
 }
 
@@ -118,6 +123,11 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizeHelper}];
     NSString *rendering = [template renderObject:nil error:NULL];
+
+    // test the raw localization
+    STAssertEqualObjects([self.localizeHelper.bundle localizedStringForKey:@"..." value:nil table:nil], @"!!!", @"");
+    
+    // test the GRMustache localization
     STAssertEqualObjects(rendering, @"!!!", @"");
 }
 
@@ -128,6 +138,11 @@
     template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizeHelper}];
     id data = @{ @"foo": @"bar" };
     NSString *rendering = [template renderObject:data error:NULL];
+    
+    // test the raw localization
+    STAssertEqualObjects([self.localizeHelper.bundle localizedStringForKey:@"..%@.." value:nil table:nil], @"!!%@!!", @"");
+    
+    // test the GRMustache localization
     STAssertEqualObjects(rendering, @"!!bar!!", @"");
 }
 
@@ -138,6 +153,11 @@
     template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizeHelper}];
     id data = @{ @"foo": @"bar", @"baz": @"truc" };
     NSString *rendering = [template renderObject:data error:NULL];
+    
+    // test the raw localization
+    STAssertEqualObjects([self.localizeHelper.bundle localizedStringForKey:@".%@.%@." value:nil table:nil], @"!%@!%@!", @"");
+    
+    // test the GRMustache localization
     STAssertEqualObjects(rendering, @"!bar!truc!", @"");
 }
 
