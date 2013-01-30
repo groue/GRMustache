@@ -70,8 +70,9 @@
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
- * Expressions are equal if and only if the result of their `valueWithContext:`
- * implementation would return the same value in a given rendering context.
+ * Expressions are equal if and only if the result of their
+ * `hasValue:withContext:protected:error:` implementation would return the same
+ * value in a given rendering context.
  *
  * Default implementation is NSObject's one: subclasses must override.
  *

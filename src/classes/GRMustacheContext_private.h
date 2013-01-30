@@ -158,7 +158,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @return The value found in the context stack.
  *
- * @see -[GRMustacheIdentifierExpression valueWithContext:]
+ * @see -[GRMustacheIdentifierExpression hasValue:withContext:protected:error:]
  */
 - (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
@@ -167,7 +167,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @return The top object of the receiver's context stack.
  *
- * @see -[GRMustacheImplicitIteratorExpression valueWithContext:]
+ * @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
  */
 - (id)currentContextValue GRMUSTACHE_API_INTERNAL;
 
