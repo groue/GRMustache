@@ -24,13 +24,13 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 // Documented in GRMustacheConfiguration.h
-typedef enum {
+typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
     // Documented in GRMustacheConfiguration.h
     GRMustacheContentTypeHTML GRMUSTACHE_API_PUBLIC,
     
     // Documented in GRMustacheConfiguration.h
     GRMustacheContentTypeText GRMUSTACHE_API_PUBLIC,
-} GRMustacheContentType;
+} GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
 @interface GRMustacheConfiguration : NSObject<NSCopying> {

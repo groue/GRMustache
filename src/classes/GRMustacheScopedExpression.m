@@ -77,13 +77,20 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
-    id scopedValue = [_baseExpression valueWithContext:context protected:protected];
+    id scopedValue;
+    if (![_baseExpression hasValue:&scopedValue withContext:context protected:NULL error:error]) {
+        return NO;
+    }
+    
     if (protected != NULL) {
         *protected = NO;
     }
-    return [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+    if (value) {
+        *value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+    }
+    return YES;
 }
 
 @end

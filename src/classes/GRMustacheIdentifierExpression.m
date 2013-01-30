@@ -63,9 +63,12 @@
 
 #pragma mark - GRMustacheExpression
 
-- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
-    return [context contextValueForKey:_identifier protected:protected];
+    if (value != NULL) {
+        *value = [context contextValueForKey:_identifier protected:protected];
+    }
+    return YES;
 }
 
 @end

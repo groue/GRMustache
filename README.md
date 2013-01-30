@@ -5,7 +5,7 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
-**January 27, 2013: GRMustache 6.2.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**January 30, 2013: GRMustache 6.3.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -16,7 +16,7 @@ How To
 
 **Option 1: CocoaPods**
 
-Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRMustache', '~> 6.2'` to your Podfile.
+Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRMustache', '~> 6.3'` to your Podfile.
 
 **Option 2: Static Library**
 
@@ -37,7 +37,7 @@ You may also embed the raw GRMustache sources in your project:
 
     $ git clone https://github.com/groue/GRMustache.git
     $ cd GRMustache
-    $ git checkout v6.2.0  # checkout the latest stable release
+    $ git checkout v6.3.0  # checkout the latest stable release
     $ git submodule update --init src/vendor/groue/jrswizzle
 
 Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project.

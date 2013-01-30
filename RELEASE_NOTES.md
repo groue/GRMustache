@@ -3,6 +3,13 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.3.0
+
+GRMustache does no longer raise an exception when a template can't evaluate a filter expression such as `{{ f(x) }}`.
+
+Instead, an error is returned, with new GRMustache error code `GRMustacheErrorCodeRenderingError`.
+
+
 ## v6.2.0
 
 **Text templates**

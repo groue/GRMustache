@@ -31,7 +31,7 @@
  *
  * @since v6.0
  */
-typedef enum {
+typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     /**
      * The type for variable tags such as {{ name }}
      *
@@ -59,7 +59,7 @@ typedef enum {
      * @since v6.0
      */
     GRMustacheTagTypeInvertedSection = 1 << 4 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
-} GRMustacheTagType AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+} AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 /**

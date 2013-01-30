@@ -86,38 +86,64 @@
 
 #pragma mark GRMustacheExpression
 
-- (id)valueWithContext:(GRMustacheContext *)context protected:(BOOL *)protected
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
-    id argument = [_argumentExpression valueWithContext:context protected:NULL];
-    id filter = [_filterExpression valueWithContext:context protected:NULL];
-
+    id filter;
+    if (![_filterExpression hasValue:&filter withContext:context protected:NULL error:error]) {
+        return NO;
+    }
+    
+    id argument;
+    if (![_argumentExpression hasValue:&argument withContext:context protected:NULL error:error]) {
+        return NO;
+    }
+    
     if (filter == nil) {
         GRMustacheToken *token = self.token;
+        NSString *renderingErrorDescription = nil;
         if (token.templateID) {
-            [NSException raise:GRMustacheRenderingException format:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
+            renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
         } else {
-            [NSException raise:GRMustacheRenderingException format:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
+            renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
         }
+        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
+        if (error != NULL) {
+            *error = renderingError;
+        } else {
+            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+        }
+        return NO;
     }
     
     if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
         GRMustacheToken *token = self.token;
+        NSString *renderingErrorDescription = nil;
         if (token.templateID) {
-            [NSException raise:GRMustacheRenderingException format:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
+            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
         } else {
-            [NSException raise:GRMustacheRenderingException format:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
+            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
         }
+        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
+        if (error != NULL) {
+            *error = renderingError;
+        } else {
+            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+        }
+        return NO;
     }
     
     if (protected != NULL) {
         *protected = NO;
     }
     
-    if (_curry && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
-        return [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
-    } else {
-        return [(id<GRMustacheFilter>)filter transformedValue:argument];
+    if (value != NULL) {
+        if (_curry && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
+            *value = [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
+        } else {
+            *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
+        }
     }
+    return YES;
 }
 
 @end
