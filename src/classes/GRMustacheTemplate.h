@@ -140,7 +140,8 @@
  * GRMustacheTemplateRepository class for more encoding options.
  * 
  * @param name      The name of a bundle resource of extension "mustache".
- * @param bundle    The bundle where to look for the template resource.
+ * @param bundle    The bundle where to look for the template resource. If nil,
+ *                  the main bundle is used.
  * @param error     If there is an error loading or parsing template and
  *                  partials, upon return contains an NSError object that
  *                  describes the problem.
@@ -183,7 +184,8 @@
  *
  * @param object  An object used for interpreting Mustache tags.
  * @param name    The name of a bundle resource of extension "mustache".
- * @param bundle  The bundle where to look for the template resource.
+ * @param bundle  The bundle where to look for the template resource. If nil,
+ *                the main bundle is used.
  * @param error   If there is an error during rendering, upon return contains an
  *                NSError object that describes the problem.
  *

@@ -24,33 +24,40 @@
 #import "GRMustache.h"
 
 /**
- * GRMustacheLocalizeHelper can localize the content of a Mustache section,
- * using NSLocalizedString. It also has a filter facet that localizes your data.
+ * GRMustacheLocalizeHelper can localize the content of a Mustache section.
+ * It also has a filter facet that localizes your data.
+ *
+ * The GRMustache standard library has a `localize` key which returns a
+ * GRMustacheLocalizeHelper that localizes just like the NSLocalizableString
+ * macro does: with the Localizable.strings table of the main bundle.
  *
  * Localizing data:
  *
- * `{{ localize(greeting) }}` renders
- * `NSLocalizedString(@"Hello", nil)`, assuming the `greeting` key resolves to
- * the @"Hello" string.
+ * `{{ localize(greeting) }}` renders `NSLocalizedString(@"Hello", nil)`,
+ * assuming the `greeting` key resolves to the @"Hello" string.
  *
  * Localizing sections:
  *
- * `{{#localize}}Hello{{/localize}}` renders
- * `NSLocalizedString(@"Hello", nil)`.
+ * `{{#localize}}Hello{{/localize}}` renders `NSLocalizedString(@"Hello", nil)`.
  *
  * Localizing sections with arguments:
  *
  * `{{#localize}}Hello {{name}}{{/localize}}` builds the format string
- * `NSLocalizedString(@"Hello %@", nil)` and injects the name with
- * `[NSString stringWithFormat:]`.
+ * @"Hello %@", localizes it with NSLocalizedString, and finally
+ * injects the name with `[NSString stringWithFormat:]`.
  *
  * Localize sections with arguments and conditions:
  *
  * `{{#localize}}Good morning {{#title}}{{title}}{{/title}} {{name}}{{/localize}}`
- * build the format string `NSLocalizedString(@"Good morning %@", nil)` or
- * `NSLocalizedString(@"Good morning %@ %@", nil)`, depending on the presence of
- * the `title` key, and injects the name, or both title and name,  with
- * `[NSString stringWithFormat:]`.
+ * build the format string @"Good morning %@" or @"Good morning %@ %@",
+ * depending on the presence of the `title` key. It then injects the name, or
+ * both title and name, with `[NSString stringWithFormat:]`, to build the final
+ * rendering.
+ *
+ * You can build your own localizing helper with the initWithBundle:tableName:
+ * method. The helper would then localize using the specified table from the
+ * specified bundle.
+ *
  */
 @interface GRMustacheLocalizeHelper : NSObject<GRMustacheRendering, GRMustacheFilter> {
 @private
@@ -60,24 +67,28 @@
 }
 
 /**
- * TODO
+ * The bundle where to look for localized strings.
  */
 @property (nonatomic, retain, readonly) NSBundle *bundle;
 
 /**
- * TODO
+ * The table where to look for localized strings.
+ *
+ * If nil, the default Localizable.strings table would be searched.
  */
 @property (nonatomic, retain, readonly) NSString *tableName;
 
 /**
- * TODO
+ * Returns an initialized localizing helper.
+ *
+ * @param bundle     The bundle where to look for localized strings. If nil, the
+ *                   main bundle is used.
+ * @param tableName  The table where to look for localized strings. If nil, the
+ *                   default Localizable.strings table would be searched.
+ *
+ * @return A newly initialized localizing helper.
  */
 - (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName;
-
-/**
- * TODO
- */
-- (NSString *)localizedStringForKey:(NSString *)key;
 
 @end
 

@@ -337,7 +337,8 @@
  * A partial tag `{{>partial}}` loads a partial template from the
  * `partial.mustache` resource in the bundle.
  * 
- * @param bundle  The bundle that stores templates as resources.
+ * @param bundle  The bundle that stores templates as resources. If nil, the
+ *                main bundle is used.
  *
  * @return a GRMustacheTemplateRepository
  *
