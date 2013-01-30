@@ -31,7 +31,7 @@
  *
  * @since v6.2
  */
-typedef enum {
+typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
     /**
      * The `GRMustacheContentTypeHTML` content type has templates render HTML.
      * HTML template escape the input of variable tags such as `{{name}}`. Use
@@ -49,7 +49,7 @@ typedef enum {
      * @since v6.2
      */
     GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER,
-} GRMustacheContentType;
+} AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
 /**
  * A GRMustacheConfiguration instance configures GRMustache rendering.

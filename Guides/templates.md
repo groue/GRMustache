@@ -20,12 +20,11 @@ extern NSString * const GRMustacheErrorDomain;
 typedef enum {
     GRMustacheErrorCodeParseError,
     GRMustacheErrorCodeTemplateNotFound,
+    GRMustacheErrorCodeRenderingError,
 } GRMustacheErrorCode;
 ```
 
-Errors are returned when templates are missing or could not be parsed.
-
-Exceptions are raised for missing or invalid [filters](filters.md).
+Exceptions are thrown for programming error such as inconsistently rendering both HTML and text in a loop of [rendering objects](rendering_objects.md).
 
 On-the-fly rendering methods
 ----------------------------
