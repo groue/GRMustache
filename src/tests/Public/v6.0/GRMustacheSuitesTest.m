@@ -34,7 +34,7 @@
     [self runTestsFromResource:@"compound_keys.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"delimiters.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"filters.json" subdirectory:@"GRMustacheSuites"];
-    [self runTestsFromResource:@"filter_library.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"standard_library.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites"];
