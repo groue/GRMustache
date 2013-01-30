@@ -60,7 +60,7 @@
  * @param error      If there is an error computing the value, upon return
  *                   contains an NSError object that describes the problem.
  *
- * @return YES if the value could bo computed
+ * @return YES if the value could be computed
  *
  * @see GRMustacheContext
  */
