@@ -30,12 +30,12 @@
 @class GRMustacheContext;
 
 // Documented in GRMustacheTag.h
-typedef enum {
-    GRMustacheTagTypeVariable = 1 << 1,
-    GRMustacheTagTypeSection = 1 << 2,
-    GRMustacheTagTypeOverridableSection = 1 << 3,
-    GRMustacheTagTypeInvertedSection = 1 << 4,
-} GRMustacheTagType;
+typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
+    GRMustacheTagTypeVariable = 1 << 1 GRMUSTACHE_API_PUBLIC,
+    GRMustacheTagTypeSection = 1 << 2 GRMUSTACHE_API_PUBLIC,
+    GRMustacheTagTypeOverridableSection = 1 << 3 GRMUSTACHE_API_PUBLIC,
+    GRMustacheTagTypeInvertedSection = 1 << 4 GRMUSTACHE_API_PUBLIC,
+} GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
 @interface GRMustacheTag: NSObject<GRMustacheTemplateComponent> {

@@ -28,7 +28,7 @@
 /**
  * The kinds of tokens
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
     /**
      * The kind of tokens representing escaped variable tags such as `{{name}}`.
      * 
@@ -95,7 +95,7 @@ typedef enum {
      * `{{$name}}`.
      */
     GRMustacheTokenTypeOverridableSectionOpening,
-} GRMustacheTokenType;
+};
 
 /**
  * A GRMustacheToken is the product of GRMustacheParser. It represents a
