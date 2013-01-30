@@ -44,7 +44,7 @@
     self = [super init];
     if (self) {
         _bundle = [(bundle ?: [NSBundle mainBundle]) retain];
-        _tableName = [_tableName retain];
+        _tableName = [tableName retain];
     }
     return self;
 }
@@ -104,41 +104,23 @@
     /**
      * Localize the format, and render.
      *
-     * Unfortunately, [NSString stringWithFormat:] does not accept an array of
-     * formatArguments to fill the format. Let's support up to 3 arguments:
+     * [NSString stringWithFormat:] does not accept an array of formatArguments
+     * to fill the format.
+     *
+     * Let's fake a va_list (http://stackoverflow.com/questions/688070/is-there-any-way-to-pass-an-nsarray-to-a-method-that-expects-a-variable-number-o)
+     *
+     * Let's hope tests will notice a bug here, since there is no guarantee
+     * that our fake va_list is actually understood.
      */
     
     NSString *localizedFormat = [self localizedStringForKey:localizableFormat];
     NSString *rendering = nil;
-    switch (self.formatArguments.count) {
-        case 0:
-            rendering = localizedFormat;
-            break;
-            
-        case 1:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0]];
-            break;
-            
-        case 2:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0],
-                         [self.formatArguments objectAtIndex:1]];
-            break;
-            
-        case 3:
-            rendering = [NSString stringWithFormat:
-                         localizedFormat,
-                         [self.formatArguments objectAtIndex:0],
-                         [self.formatArguments objectAtIndex:1],
-                         [self.formatArguments objectAtIndex:2]];
-            break;
-            
-        default:
-            NSAssert(NO, @"Not implemented");
-            break;
+
+    id *fake_va_list = malloc(sizeof(id) * [self.formatArguments count]);
+    if (fake_va_list) {
+        [self.formatArguments getObjects:fake_va_list];
+        rendering = [[[NSString alloc] initWithFormat:localizedFormat arguments:(va_list)fake_va_list] autorelease];
+        free(fake_va_list);
     }
     
     

@@ -74,5 +74,10 @@
  */
 - (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName;
 
+/**
+ * TODO
+ */
+- (NSString *)localizedStringForKey:(NSString *)key;
+
 @end
 
