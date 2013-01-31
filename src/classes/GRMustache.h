@@ -142,3 +142,4 @@ typedef struct {
 #import "GRMustacheTag.h"
 #import "GRMustacheConfiguration.h"
 #import "GRMustacheLocalizeHelper.h"
+#import "GRMustacheStandardLibrary.h"
