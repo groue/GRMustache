@@ -1,6 +1,13 @@
+API flaws:
+- remove GRMustacheStandardLibrary class, and expose +(id)[GRMustache standardLibrary]
+
+Nice to have:
 - document migration path from all previous versions to latest version
 
-- {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
-
+Missing tests:
 - test mustacheTag:didRenderObject:as:
 - test mustacheTag:didFailRenderingObject:withError:
+
+Experiments:
+- {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
+
