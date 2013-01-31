@@ -121,13 +121,44 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
-- (id)initWithObject:(id)object
++ (instancetype)context
 {
-    self = [super init];
-    if (self) {
-        _contextObject = [object retain];
+    return [[[self alloc] init] autorelease];
+}
+
++ (instancetype)contextWithObject:(id)object
+{
+    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    
+    // initialize context stack
+    context.contextObject = [object retain];
+        
+    // initialize tag delegate stack
+    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+        context.tagDelegate = [object retain];
     }
-    return self;
+    
+    return context;
+}
+
++ (instancetype)contextWithProtectedObject:(id)object
+{
+    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    
+    // initialize protected context stack
+    context.protectedContextObject = [object retain];
+    
+    return context;
+}
+
++ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+{
+    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    
+    // initialize tag delegate stack
+    context.tagDelegate = [tagDelegate retain];
+    
+    return context;
 }
 
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
@@ -137,16 +168,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    
+    // copy identical stacks
     context.contextParent = _contextParent;
     context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
     context.hiddenContextParent = _hiddenContextParent;
     context.hiddenContextObject = _hiddenContextObject;
-    if (_tagDelegate) { context.tagDelegateParent = self; }
-    context.tagDelegate = tagDelegate;
     context.templateOverrideParent = _templateOverrideParent;
     context.templateOverride = _templateOverride;
+    
+    // update tag delegate stack
+    if (_tagDelegate) { context.tagDelegateParent = self; }
+    context.tagDelegate = tagDelegate;
     
     return context;
 }
@@ -158,12 +193,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
-    if (_contextObject) { context.contextParent = self; }
-    context.contextObject = object;
+    
+    // copy identical stacks
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
     context.hiddenContextParent = _hiddenContextParent;
     context.hiddenContextObject = _hiddenContextObject;
+    context.templateOverrideParent = _templateOverrideParent;
+    context.templateOverride = _templateOverride;
+    
+    // update context stack
+    if (_contextObject) { context.contextParent = self; }
+    context.contextObject = object;
+    
+    // update or copy tag delegate stack
     if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
         if (_tagDelegate) { context.tagDelegateParent = self; }
         context.tagDelegate = object;
@@ -171,8 +214,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.tagDelegateParent = _tagDelegateParent;
         context.tagDelegate = _tagDelegate;
     }
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
     
     return context;
 }
@@ -184,16 +225,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    
+    // copy identical stacks
     context.contextParent = _contextParent;
     context.contextObject = _contextObject;
-    if (_protectedContextObject) { context.protectedContextParent = self; }
-    context.protectedContextObject = object;
     context.hiddenContextParent = _hiddenContextParent;
     context.hiddenContextObject = _hiddenContextObject;
     context.tagDelegateParent = _tagDelegateParent;
     context.tagDelegate = _tagDelegate;
     context.templateOverrideParent = _templateOverrideParent;
     context.templateOverride = _templateOverride;
+    
+    // update protected context stack
+    if (_protectedContextObject) { context.protectedContextParent = self; }
+    context.protectedContextObject = object;
     
     return context;
 }
@@ -205,16 +250,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    
+    // copy identical stacks
     context.contextParent = _contextParent;
     context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
-    if (_hiddenContextObject) { context.hiddenContextParent = self; }
-    context.hiddenContextObject = object;
     context.tagDelegateParent = _tagDelegateParent;
     context.tagDelegate = _tagDelegate;
     context.templateOverrideParent = _templateOverrideParent;
     context.templateOverride = _templateOverride;
+    
+    // update hidden context stack
+    if (_hiddenContextObject) { context.hiddenContextParent = self; }
+    context.hiddenContextObject = object;
     
     return context;
 }
@@ -226,6 +275,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    
+    // copy identical stacks
     context.contextParent = _contextParent;
     context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
@@ -234,6 +285,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     context.hiddenContextObject = _hiddenContextObject;
     context.tagDelegateParent = _tagDelegateParent;
     context.tagDelegate = _tagDelegate;
+    
+    // update template override stack
     if (_templateOverride) { context.templateOverrideParent = self; }
     context.templateOverride = templateOverride;
     

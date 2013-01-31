@@ -54,6 +54,48 @@
 }
 
 /**
+ * @return A empty rendering context.
+ */
+#warning missing availability macro and @since declaration
++ (instancetype)context;
+
+/**
+ * Returns a context with _object_ at the top of the context stack.
+ *
+ * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
+ * made the top of the tag delegate stack.
+ *
+ * @param object  An object
+ *
+ * @return A rendering context.
+ */
+#warning missing availability macro and @since declaration
++ (instancetype)contextWithObject:(id)object;
+
+/**
+ * Returns a context with _object_ at the top of the protected context stack.
+ *
+ * Unlike contextWithObject:, this method does not put the object to the
+ * tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.
+ *
+ * @param object  An object
+ *
+ * @return A rendering context.
+ */
+#warning missing availability macro and @since declaration
++ (instancetype)contextWithProtectedObject:(id)object;
+
+/**
+ * Returns a context with _tagDelegate_ at the top of the tag delegate stack.
+ *
+ * @param tagDelegae  A tag delegate
+ *
+ * @return A rendering context.
+ */
+#warning missing availability macro and @since declaration
++ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
+
+/**
  * Returns a new rendering context that is the copy of the receiver, and the
  * given object added at the top of the context stack.
  *
