@@ -22,9 +22,11 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheTag_private.h"
+#import "GRMustacheStandardLibrary_private.h"
+#import "GRMustacheLocalizeHelper.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheRendering.h"
-#import "GRMustacheTag.h"
 #import "GRMustacheError.h"
 
 
@@ -97,6 +99,23 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         .major = GRMUSTACHE_MAJOR_VERSION,
         .minor = GRMUSTACHE_MINOR_VERSION,
         .patch = GRMUSTACHE_PATCH_VERSION };
+}
+
++ (id)standardLibrary
+{
+    static id standardLibrary = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                            [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+                            [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                            [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                            [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                            [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
+                            [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                            nil] retain];
+    });
+    return standardLibrary;
 }
 
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object

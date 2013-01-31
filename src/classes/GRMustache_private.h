@@ -44,6 +44,9 @@ typedef struct {
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
++ (id)standardLibrary GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h

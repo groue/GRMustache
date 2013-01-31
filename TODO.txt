@@ -1,6 +1,3 @@
-API flaws:
-- remove GRMustacheStandardLibrary class, and expose +(id)[GRMustache standardLibrary]
-
 Nice to have:
 - document migration path from all previous versions to latest version
 

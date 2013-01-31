@@ -21,7 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustache.h"
+#import "GRMustacheRendering.h"
+#import "GRMustacheFilter.h"
 
 /**
  * GRMustacheLocalizeHelper can localize the content of a Mustache section.

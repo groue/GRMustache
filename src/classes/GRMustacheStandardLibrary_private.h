@@ -21,15 +21,40 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheFilter.h"
 
-/**
- * The GRMustacheStandardLibrary provides all built-in filters and rendering objects.
- */
-@interface GRMustacheStandardLibrary : NSObject
 
-/**
- * Returns the shared standard library.
- */
-+ (id)standardLibrary GRMUSTACHE_API_INTERNAL;
+// =============================================================================
+#pragma mark - GRMustacheCapitalizedFilter
+
+@interface GRMustacheCapitalizedFilter: NSObject<GRMustacheFilter>
 @end
+
+
+// =============================================================================
+#pragma mark - GRMustacheLowercaseFilter
+
+@interface GRMustacheLowercaseFilter: NSObject<GRMustacheFilter>
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheUppercaseFilter
+
+@interface GRMustacheUppercaseFilter: NSObject<GRMustacheFilter>
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheBlankFilter
+
+@interface GRMustacheBlankFilter: NSObject<GRMustacheFilter>
+@end
+
+
+// =============================================================================
+#pragma mark - GRMustacheEmptyFilter
+
+@interface GRMustacheEmptyFilter: NSObject<GRMustacheFilter>
+@end
+

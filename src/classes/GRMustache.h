@@ -94,6 +94,12 @@ typedef struct {
 + (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * TODO
+ */
+#warning missing availability macro and @since declaration
++ (id)standardLibrary;
+
+/**
  * Returns a rendering object that is able to render the argument _object_ for
  * the various Mustache tags.
  *
@@ -142,4 +148,3 @@ typedef struct {
 #import "GRMustacheTag.h"
 #import "GRMustacheConfiguration.h"
 #import "GRMustacheLocalizeHelper.h"
-#import "GRMustacheStandardLibrary.h"

@@ -86,7 +86,7 @@
 - (GRMustacheContext *)baseContext
 {
     if (_baseContext == nil) {
-        _baseContext = [[GRMustacheContext contextWithObject:[GRMustacheStandardLibrary standardLibrary]] retain];
+        _baseContext = [[GRMustacheContext contextWithObject:[GRMustache standardLibrary]] retain];
     }
     return [[_baseContext retain] autorelease];
 }
