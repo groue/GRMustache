@@ -560,6 +560,22 @@
     STAssertEqualObjects(rendering, @"12", @"");
 }
 
+- (void)testArrayOfRenderingObjectsInSectionTagNeedsExplicitInvocation
+{
+    id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [NSString stringWithFormat:@"[1:%@]", tagRendering];
+    }];
+    id object2 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [NSString stringWithFormat:@"[2:%@]", tagRendering];
+    }];
+    
+    id items = @{@"items": @[object1, object2] };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}---{{/items}},{{#items}}{{#.}}---{{/.}}{{/items}}" error:NULL] renderObject:items error:NULL];
+    STAssertEqualObjects(rendering, @"------,[1:---][2:---]", @"");
+}
+
 - (void)testArrayOfRenderingObjectsInVariableTag
 {
     id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
