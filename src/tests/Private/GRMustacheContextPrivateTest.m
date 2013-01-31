@@ -24,7 +24,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
 
-@interface GRMustacheContextTest : GRMustachePrivateAPITest
+@interface GRMustacheContextPrivateTest : GRMustachePrivateAPITest
 @end
 
 
@@ -118,7 +118,7 @@
 
 @end
 
-@implementation GRMustacheContextTest
+@implementation GRMustacheContextPrivateTest
 
 - (void)testOneDepthRuntimeForwardsValueForKeyToItsObject
 {
