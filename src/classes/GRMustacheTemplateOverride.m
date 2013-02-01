@@ -31,7 +31,7 @@
 @implementation GRMustacheTemplateOverride
 @synthesize template=_template;
 
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
++ (instancetype)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
 {
     return [[[self alloc] initWithTemplate:template components:components] autorelease];
 }

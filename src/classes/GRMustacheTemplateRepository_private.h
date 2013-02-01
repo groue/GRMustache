@@ -55,28 +55,28 @@
 @property (nonatomic, copy) GRMustacheConfiguration *configuration GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepositoryWithDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)partialsDictionary GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-+ (id)templateRepository GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateRepository GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error GRMUSTACHE_API_PUBLIC;

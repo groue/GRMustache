@@ -28,7 +28,7 @@
 
 @implementation GRMustacheAccumulatorTag
 
-+ (id)accumulatorTagWithTag:(GRMustacheTag *)tag
++ (instancetype)accumulatorTagWithTag:(GRMustacheTag *)tag
 {
     return [[[self alloc] initWithTags:[NSArray arrayWithObject:tag]] autorelease];
 }

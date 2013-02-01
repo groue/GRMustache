@@ -32,7 +32,7 @@
 @implementation GRMustacheTextComponent
 @synthesize text=_text;
 
-+ (id)textComponentWithString:(NSString *)text
++ (instancetype)textComponentWithString:(NSString *)text
 {
     return [[[self alloc] initWithString:text] autorelease];
 }

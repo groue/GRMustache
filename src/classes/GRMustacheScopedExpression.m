@@ -35,7 +35,7 @@
 @synthesize baseExpression=_baseExpression;
 @synthesize scopeIdentifier=_scopeIdentifier;
 
-+ (id)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
++ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
 {
     return [[[self alloc] initWithBaseExpression:baseExpression scopeIdentifier:scopeIdentifier] autorelease];
 }

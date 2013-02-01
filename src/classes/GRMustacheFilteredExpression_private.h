@@ -52,7 +52,7 @@
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a filtered expression, given an expression that returns a filter, and
@@ -71,5 +71,5 @@
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry GRMUSTACHE_API_INTERNAL;
 @end

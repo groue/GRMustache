@@ -55,16 +55,16 @@
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)error GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateFromContentsOfFile:(NSString *)path error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error GRMUSTACHE_API_PUBLIC;
++ (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
 + (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;

@@ -30,5 +30,5 @@
 @private
     NSArray *_tags;
 }
-+ (id)accumulatorTagWithTag:(GRMustacheTag *)tag GRMUSTACHE_API_INTERNAL;
++ (instancetype)accumulatorTagWithTag:(GRMustacheTag *)tag GRMUSTACHE_API_INTERNAL;
 @end

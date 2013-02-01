@@ -189,7 +189,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -232,7 +232,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -269,7 +269,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -311,7 +311,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +344,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -376,7 +376,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -447,7 +447,7 @@
  *
  * @since v1.13
  */
-+ (id)templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * The repository's data source.

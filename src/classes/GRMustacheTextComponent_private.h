@@ -46,7 +46,7 @@
  * @param string  The string that should be rendered.
  * @return a GRMustacheTextComponent
  */
-+ (id)textComponentWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
++ (instancetype)textComponentWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
 
 @end
 

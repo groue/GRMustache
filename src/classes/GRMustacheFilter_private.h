@@ -54,9 +54,9 @@
 @interface GRMustacheFilter : NSObject<GRMustacheFilter>
 
 // Documented in GRMustacheFilter.h
-+ (id)filterWithBlock:(id(^)(id value))block GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheFilter.h
-+ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block GRMUSTACHE_API_PUBLIC;
 
 @end

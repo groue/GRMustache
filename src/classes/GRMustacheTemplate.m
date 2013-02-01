@@ -34,19 +34,19 @@
 @synthesize components=_components;
 @synthesize contentType=_contentType;
 
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)error
++ (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
     return [templateRepository templateFromString:templateString error:error];
 }
 
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
++ (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
 {
     GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
     return [templateRepository templateNamed:name error:error];
 }
 
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)error
++ (instancetype)templateFromContentsOfFile:(NSString *)path error:(NSError **)error
 {
     NSString *directoryPath = [path stringByDeletingLastPathComponent];
     NSString *templateExtension = [path pathExtension];
@@ -55,7 +55,7 @@
     return [templateRepository templateNamed:templateName error:error];
 }
 
-+ (id)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error
++ (instancetype)templateFromContentsOfURL:(NSURL *)URL error:(NSError **)error
 {
     NSURL *baseURL = [URL URLByDeletingLastPathComponent];
     NSString *templateExtension = [URL pathExtension];

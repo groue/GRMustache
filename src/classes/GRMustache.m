@@ -44,7 +44,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 @interface GRMustacheRenderingNil : NSObject<GRMustacheRendering>
 + (void)setRenderingImplementation:(IMP)imp;
-+ (id)instance;
++ (instancetype)instance;
 @end
 
 
@@ -268,7 +268,7 @@ static IMP nilRenderingImplementation;
     nilRenderingImplementation = imp;
 }
 
-+ (id)instance
++ (instancetype)instance
 {
     static GRMustacheRenderingNil *instance = nil;
     static dispatch_once_t onceToken;

@@ -46,5 +46,5 @@
  *
  * @return A GRMustacheScopedExpression.
  */
-+ (id)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier GRMUSTACHE_API_INTERNAL;
 @end

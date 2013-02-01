@@ -39,13 +39,13 @@
 @implementation GRKVCRecorder
 @synthesize lastAccessedKey;
 @synthesize keys;
-+ (id)recorderWithRecognizedKeys:(NSArray *)keys
++ (instancetype)recorderWithRecognizedKeys:(NSArray *)keys
 {
     GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
     recorder.keys = keys;
     return recorder;
 }
-+ (id)recorderWithRecognizedKey:(NSString *)key
++ (instancetype)recorderWithRecognizedKey:(NSString *)key
 {
     GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
     recorder.keys = [NSArray arrayWithObject:key];

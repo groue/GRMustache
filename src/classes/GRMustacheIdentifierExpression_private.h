@@ -43,5 +43,5 @@
  *
  * @return A GRMustacheIdentifierExpression.
  */
-+ (id)expressionWithIdentifier:(NSString *)identifier GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithIdentifier:(NSString *)identifier GRMUSTACHE_API_INTERNAL;
 @end

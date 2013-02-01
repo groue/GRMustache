@@ -37,12 +37,12 @@
 @synthesize filterExpression=_filterExpression;
 @synthesize argumentExpression=_argumentExpression;
 
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression
 {
     return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curry:NO] autorelease];
 }
 
-+ (id)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry
 {
     return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curry:curry] autorelease];
 }

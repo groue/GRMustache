@@ -36,7 +36,7 @@
 
 @implementation GRMustacheVariableTag
 
-+ (id)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
++ (instancetype)variableTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
 {
     return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression contentType:contentType escapesHTML:escapesHTML] autorelease];
 }

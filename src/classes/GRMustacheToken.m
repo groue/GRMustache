@@ -51,7 +51,7 @@
     [super dealloc];
 }
 
-+ (id)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range text:(NSString *)text expression:(GRMustacheExpression *)expression invalidExpression:(BOOL)invalidExpression partialName:(NSString *)partialName pragma:(NSString *)pragma
++ (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range text:(NSString *)text expression:(GRMustacheExpression *)expression invalidExpression:(BOOL)invalidExpression partialName:(NSString *)partialName pragma:(NSString *)pragma
 {
     return [[[self alloc] initWithType:type templateString:templateString templateID:templateID line:line range:range text:text expression:expression invalidExpression:invalidExpression partialName:partialName pragma:pragma] autorelease];
 }

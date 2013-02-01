@@ -60,6 +60,6 @@
  *
  * @return A GRMustacheTemplateOverride
  */
-+ (id)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end

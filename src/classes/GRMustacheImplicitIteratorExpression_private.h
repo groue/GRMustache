@@ -39,5 +39,5 @@
  *
  * @return A GRMustacheImplicitIteratorExpression.
  */
-+ (id)expression GRMUSTACHE_API_INTERNAL;
++ (instancetype)expression GRMUSTACHE_API_INTERNAL;
 @end

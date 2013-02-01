@@ -32,7 +32,7 @@
 @implementation GRMustacheIdentifierExpression
 @synthesize identifier=_identifier;
 
-+ (id)expressionWithIdentifier:(NSString *)identifier
++ (instancetype)expressionWithIdentifier:(NSString *)identifier
 {
     return [[[self alloc] initWithIdentifier:identifier] autorelease];
 }

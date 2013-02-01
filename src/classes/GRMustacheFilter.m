@@ -58,12 +58,12 @@
 
 @implementation GRMustacheFilter
 
-+ (id)filterWithBlock:(id(^)(id value))block
++ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block
 {
     return [[[GRMustacheBlockFilter alloc] initWithBlock:block] autorelease];
 }
 
-+ (id)variadicFilterWithBlock:(id(^)(NSArray *arguments))block
++ (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block
 {
     return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:block arguments:[NSArray array]] autorelease];
 }

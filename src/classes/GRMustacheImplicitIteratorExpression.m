@@ -25,7 +25,7 @@
 
 @implementation GRMustacheImplicitIteratorExpression
 
-+ (id)expression
++ (instancetype)expression
 {
     return [[[self alloc] init] autorelease];
 }
