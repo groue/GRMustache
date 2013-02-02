@@ -161,4 +161,40 @@
     STAssertEqualObjects(rendering, @"!bar!truc!", @"");
 }
 
+- (void)testLocalizeHelperRendersHTMLEscapedValuesOfHTMLTemplates
+{
+    {
+        NSString *templateString = @"{{#localize}}..{{foo}}..{{/}}";
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        id data = @{ @"foo": @"&" };
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"..&amp;..", @"");
+    }
+    {
+        NSString *templateString = @"{{#localize}}..{{{foo}}}..{{/}}";
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        id data = @{ @"foo": @"&" };
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"..&..", @"");
+    }
+}
+
+- (void)testLocalizeHelperRendersUnescapedValuesOfTextTemplates
+{
+    {
+        NSString *templateString = @"{{% CONTENT_TYPE:TEXT }}{{#localize}}..{{foo}}..{{/}}";
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        id data = @{ @"foo": @"&" };
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"..&..", @"");
+    }
+    {
+        NSString *templateString = @"{{% CONTENT_TYPE:TEXT }}{{#localize}}..{{{foo}}}..{{/}}";
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        id data = @{ @"foo": @"&" };
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"..&..", @"");
+    }
+}
+
 @end
