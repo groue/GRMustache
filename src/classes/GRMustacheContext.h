@@ -54,7 +54,7 @@
 }
 
 /**
- * @return A empty rendering context.
+ * @return An empty rendering context.
  */
 #warning missing availability macro and @since declaration
 + (instancetype)context;

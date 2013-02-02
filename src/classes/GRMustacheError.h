@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, GRMustacheErrorCode) {
  *
  * @since v1.0
  */
-extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+extern NSString *const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 /**
@@ -67,5 +67,5 @@ extern NSString* const GRMustacheErrorDomain AVAILABLE_GRMUSTACHE_VERSION_6_0_AN
  *
  * @since v5.1
  */
-extern NSString * const GRMustacheRenderingException AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+extern NSString *const GRMustacheRenderingException AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
