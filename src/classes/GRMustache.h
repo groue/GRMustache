@@ -97,7 +97,7 @@ typedef struct {
  * TODO
  */
 #warning missing availability macro and @since declaration
-+ (id)standardLibrary;
++ (NSObject *)standardLibrary;
 
 /**
  * Returns a rendering object that is able to render the argument _object_ for

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#warning missing GRMUSTACHE_VERSION_MAX_ALLOWED
+#warning Missing GRMUSTACHE_VERSION_MAX_ALLOWED
 #import "GRMustachePublicAPITest.h"
 
 @interface GRMustacheContextTest : GRMustachePublicAPITest

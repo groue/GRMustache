@@ -34,7 +34,7 @@
 #pragma mark - Private declarations
 
 static id<GRMustacheRendering> nilRenderingObject;
-static id standardLibrary = nil;
+static NSObject *standardLibrary = nil;
 
 static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
@@ -124,7 +124,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         .patch = GRMUSTACHE_PATCH_VERSION };
 }
 
-+ (id)standardLibrary
++ (NSObject *)standardLibrary
 {
     return standardLibrary;
 }
