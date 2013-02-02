@@ -24,8 +24,14 @@
 
 static GRMustacheConfiguration *defaultConfiguration;
 
+@interface GRMustacheConfiguration()
+- (void)assertNotLocked;
+@end
+
 @implementation GRMustacheConfiguration
 @synthesize contentType=_contentType;
+@synthesize tagStartDelimiter=_tagStartDelimiter;
+@synthesize tagEndDelimiter=_tagEndDelimiter;
 @synthesize locked=_locked;
 
 + (void)load
@@ -43,6 +49,24 @@ static GRMustacheConfiguration *defaultConfiguration;
     return [[[GRMustacheConfiguration alloc] init] autorelease];
 }
 
+- (void)dealloc
+{
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
+    [super dealloc];
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _contentType = GRMustacheContentTypeHTML;
+        _tagStartDelimiter = @"{{";
+        _tagEndDelimiter = @"}}";
+    }
+    return self;
+}
+
 - (void)lock
 {
     _locked = YES;
@@ -50,12 +74,31 @@ static GRMustacheConfiguration *defaultConfiguration;
 
 - (void)setContentType:(GRMustacheContentType)contentType
 {
-    if (_locked) {
-        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
-        return;
-    }
+    [self assertNotLocked];
+    
     _contentType = contentType;
 }
+
+- (void)setTagStartDelimiter:(NSString *)tagStartDelimiter
+{
+    [self assertNotLocked];
+    
+    if (_tagStartDelimiter != tagStartDelimiter) {
+        [_tagStartDelimiter release];
+        _tagStartDelimiter = [tagStartDelimiter copy];
+    }
+}
+
+- (void)setTagEndDelimiter:(NSString *)tagEndDelimiter
+{
+    [self assertNotLocked];
+    
+    if (_tagEndDelimiter != tagEndDelimiter) {
+        [_tagEndDelimiter release];
+        _tagEndDelimiter = [tagEndDelimiter copy];
+    }
+}
+
 
 #pragma mark - <NSCopying>
 
@@ -63,7 +106,18 @@ static GRMustacheConfiguration *defaultConfiguration;
 {
     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
     configuration.contentType = self.contentType;
+    configuration.tagStartDelimiter = self.tagStartDelimiter;   // property setter does the copy
+    configuration.tagEndDelimiter = self.tagEndDelimiter;       // property setter does the copy
     return configuration;
 }
 
+
+#pragma mark - Private
+
+- (void)assertNotLocked
+{
+    if (_locked) {
+        [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
+    }
+}
 @end

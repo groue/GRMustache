@@ -89,6 +89,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  */
 @interface GRMustacheConfiguration : NSObject<NSCopying> {
     GRMustacheContentType _contentType;
+    NSString *_tagStartDelimiter;
+    NSString *_tagEndDelimiter;
     BOOL _locked;
 }
 
@@ -153,5 +155,24 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @since v6.2
  */
 @property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+
+/**
+ * The opening delimiter for Mustache tags. Its default value is @"{{".
+ *
+ * You can also change the delimiters right in your templates using a "Set
+ * Delimiter tag": {{=<% %>=}} changes start and end delimiters to <% and %>.
+ */
+#warning missing availability macro and @since declaration
+@property (nonatomic, copy) NSString *tagStartDelimiter;
+
+/**
+ * The closing delimiter for Mustache tags. Its default value is @"}}".
+ *
+ * You can also change the delimiters right in your templates using a "Set
+ * Delimiter tag": {{=<% %>=}} changes start and end delimiters to <% and %>.
+ */
+#warning missing availability macro and @since declaration
+@property (nonatomic, copy) NSString *tagEndDelimiter;
+
 
 @end

@@ -25,6 +25,7 @@
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheFilteredExpression_private.h"
+#import "GRMustacheConfiguration_private.h"
 #import "GRMustacheError.h"
 
 
@@ -162,7 +163,7 @@
 - (void)setUp
 {
     tokenRecorder = [[GRMustacheTokenRecorder alloc] init];
-    parser = [[GRMustacheParser alloc] init];
+    parser = [[GRMustacheParser alloc] initWithConfiguration:[GRMustacheConfiguration defaultConfiguration]];
     parser.delegate = tokenRecorder;
 }
 

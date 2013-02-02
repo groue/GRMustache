@@ -26,6 +26,7 @@
 
 
 @class GRMustacheParser;
+@class GRMustacheConfiguration;
 
 
 // =============================================================================
@@ -79,8 +80,8 @@
 @interface GRMustacheParser : NSObject {
 @private
     id<GRMustacheParserDelegate> _delegate;
-    NSString *_otag;
-    NSString *_ctag;
+    NSString *_tagStartDelimiter;
+    NSString *_tagEndDelimiter;
     NSMutableSet *_pragmas;
 }
 
@@ -99,6 +100,15 @@
  * such as `{{% FILTERS }}`.
  */
 @property (nonatomic, strong, readonly) NSMutableSet *pragmas GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns an initialized parser.
+ *
+ * @param configuration  The GRMustacheConfiguration that affects the
+ *                       parsing phase.
+ * @return a compiler
+ */
+- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration GRMUSTACHE_API_INTERNAL;
 
 /**
  * The parser will invoke its delegate as it builds tokens from the template

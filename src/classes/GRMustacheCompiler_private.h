@@ -96,14 +96,14 @@
  * For instance:
  * 
  *     // Create a Mustache compiler
- *     GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] init] autorelease];
+ *     GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:...] autorelease];
  *     
  *     // Some GRMustacheCompilerDataSource tells the compiler where are the
  *     // partials.
  *     compiler.dataSource = ...;
  *     
  *     // Create a Mustache parser
- *     GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
+ *     GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:...] autorelease];
  *     
  *     // The parser feeds the compiler
  *     parser.delegate = compiler;

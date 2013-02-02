@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheParser_private.h"
+#import "GRMustacheConfiguration_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheIdentifierExpression_private.h"
@@ -30,16 +31,14 @@
 @interface GRMustacheParser()
 
 /**
- * The Mustache tag opening delimiter. Initialized with @"{{", it may change
- * with "change delimiter" tags such as `{{=< >=}}`.
+ * The Mustache tag opening delimiter.
  */
-@property (nonatomic, copy) NSString *otag;
+@property (nonatomic, copy) NSString *tagStartDelimiter;
 
 /**
- * The Mustache tag opening delimiter. Initialized with @"}}", it may change
- * with "change delimiter" tags such as `{{=< >=}}`.
+ * The Mustache tag opening delimiter.
  */
-@property (nonatomic, copy) NSString *ctag;
+@property (nonatomic, copy) NSString *tagEndDelimiter;
 
 // Documented in GRMustacheParser_private.h
 @property (nonatomic, strong) NSMutableSet *pragmas;
@@ -95,24 +94,24 @@
 
 @implementation GRMustacheParser
 @synthesize delegate=_delegate;
-@synthesize otag=_otag;
-@synthesize ctag=_ctag;
+@synthesize tagStartDelimiter=_tagStartDelimiter;
+@synthesize tagEndDelimiter=_tagEndDelimiter;
 @synthesize pragmas=_pragmas;
 
-- (id)init
+- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration
 {
     self = [super init];
     if (self) {
-        _otag = [@"{{" retain]; // static strings don't need retain, but static ananlyser may complain :-)
-        _ctag = [@"}}" retain];
+        self.tagStartDelimiter = configuration.tagStartDelimiter;
+        self.tagEndDelimiter = configuration.tagEndDelimiter;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_otag release];
-    [_ctag release];
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
     [_pragmas release];
     [super dealloc];
 }
@@ -146,10 +145,10 @@
     
     
     while (YES) {
-        // look for otag
-        orange = [self rangeOfString:_otag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+        // look for tagStartDelimiter
+        orange = [self rangeOfString:_tagStartDelimiter inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         
-        // otag was not found
+        // tagStartDelimiter was not found
         if (orange.location == NSNotFound) {
             if (p < templateString.length) {
                 [self shouldContinueAfterParsingToken:[GRMustacheToken tokenWithType:GRMustacheTokenTypeText
@@ -188,12 +187,12 @@
         
         // look for close tag
         if (p < templateString.length && [templateString characterAtIndex:p] == '{') {
-            crange = [self rangeOfString:[@"}" stringByAppendingString:_ctag] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+            crange = [self rangeOfString:[@"}" stringByAppendingString:_tagEndDelimiter] inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         } else {
-            crange = [self rangeOfString:_ctag inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
+            crange = [self rangeOfString:_tagEndDelimiter inTemplateString:templateString startingAtIndex:p consumedNewLines:&consumedLines];
         }
         
-        // ctag was not found
+        // tagEndDelimiter was not found
         if (crange.location == NSNotFound) {
             [self failWithParseErrorAtLine:line description:@"Unclosed Mustache tag" templateID:templateID];
             return;
@@ -208,8 +207,8 @@
             return;
         }
         
-        // tag must not contain otag
-        if ([tag rangeOfString:_otag].location != NSNotFound) {
+        // tag must not contain tagStartDelimiter
+        if ([tag rangeOfString:_tagStartDelimiter].location != NSNotFound) {
             [self failWithParseErrorAtLine:line description:@"Unclosed Mustache tag" templateID:templateID];
             return;
         }
@@ -317,8 +316,8 @@
                     }
                 }
                 if (nonBlankNewTags.count == 2) {
-                    self.otag = [nonBlankNewTags objectAtIndex:0];
-                    self.ctag = [nonBlankNewTags objectAtIndex:1];
+                    self.tagStartDelimiter = [nonBlankNewTags objectAtIndex:0];
+                    self.tagEndDelimiter = [nonBlankNewTags objectAtIndex:1];
                 } else {
                     [self failWithParseErrorAtLine:line description:@"Invalid set delimiter tag" templateID:templateID];
                     return;

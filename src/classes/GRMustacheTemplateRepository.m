@@ -236,7 +236,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         compiler.templateRepository = self;
         
         // Create a Mustache parser that feeds the compiler
-        GRMustacheParser *parser = [[[GRMustacheParser alloc] init] autorelease];
+        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:self.configuration] autorelease];
         parser.delegate = compiler;
         
         // Parse and extract template components from the compiler
