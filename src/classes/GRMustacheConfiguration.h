@@ -65,10 +65,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * configuration only applies to the templates built by this very template
  * repository:
  *
- *     // All templates loaded from _repo_ will render text,
- *     // and will not HTML-escape their input.
+ *     // All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
  *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration.contentType = GRMustacheContentTypeText;
+ *     repo.configuration.tagStartDelimiter = @"[[";
+ *     repo.configuration.tagEndDelimiter = @"]]";
  *
  * A third option is to create a new configuration, and assign it to the template:
  *
@@ -82,6 +82,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * The `contentType` option can be specified at the template level, so that your
  * repositories can mix HTML and text templates: see the documentation of this
  * property.
+ *
+ * The `tagStartDelimiter` and `tagEndDelimiter` options can also be specified
+ * at the template level, using a "Set Delimiters tag": see the documentation of
+ * these properties.
  *
  * @see GRMustacheTemplateRepository
  *
@@ -101,7 +105,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * All templates and template repositories use the default configuration unless
  * you specify otherwise by setting the configuration of a template repository.
  *
- * The "default" defaultConfiguration has GRMustacheContentTypeHTML contentType.
+ * The "default" defaultConfiguration has GRMustacheContentTypeHTML contentType,
+ * and {{ and }} as tag delimiters.
  *
  * @returns The default configuration.
  *
@@ -113,6 +118,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @returns A new factory configuration.
  *
  * Its contentType is GRMustacheContentTypeHTML.
+ * Its tag delimiters are {{ and }}.
  *
  * @since v6.2
  */
@@ -160,7 +166,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * The opening delimiter for Mustache tags. Its default value is @"{{".
  *
  * You can also change the delimiters right in your templates using a "Set
- * Delimiter tag": {{=<% %>=}} changes start and end delimiters to <% and %>.
+ * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
  */
 #warning missing availability macro and @since declaration
 @property (nonatomic, copy) NSString *tagStartDelimiter;
@@ -169,7 +175,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * The closing delimiter for Mustache tags. Its default value is @"}}".
  *
  * You can also change the delimiters right in your templates using a "Set
- * Delimiter tag": {{=<% %>=}} changes start and end delimiters to <% and %>.
+ * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
  */
 #warning missing availability macro and @since declaration
 @property (nonatomic, copy) NSString *tagEndDelimiter;
