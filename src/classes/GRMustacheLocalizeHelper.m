@@ -26,6 +26,7 @@
 @interface GRMustacheLocalizeHelper()<GRMustacheTagDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 - (NSString *)localizedStringForKey:(NSString *)key;
+- (NSString *)stringWithFormat:(NSString *)format argumentArray:(NSArray *)arguments;
 @end
 
 @implementation GRMustacheLocalizeHelper
@@ -104,25 +105,10 @@
     
     /**
      * Localize the format, and render.
-     *
-     * [NSString stringWithFormat:] does not accept an array of formatArguments
-     * to fill the format.
-     *
-     * Let's fake a va_list (http://stackoverflow.com/questions/688070/is-there-any-way-to-pass-an-nsarray-to-a-method-that-expects-a-variable-number-o)
-     *
-     * Let's hope tests will notice a bug here, since there is no guarantee
-     * that our fake va_list is actually understood.
      */
     
     NSString *localizedFormat = [self localizedStringForKey:localizableFormat];
-    NSString *rendering = nil;
-
-    id *fake_va_list = malloc(sizeof(id) * [self.formatArguments count]);
-    if (fake_va_list) {
-        [self.formatArguments getObjects:fake_va_list];
-        rendering = [[[NSString alloc] initWithFormat:localizedFormat arguments:(va_list)fake_va_list] autorelease];
-        free(fake_va_list);
-    }
+    NSString *rendering = [self stringWithFormat:localizedFormat argumentArray:self.formatArguments];
     
     
     /**
@@ -133,7 +119,8 @@
     return rendering;
 }
 
-#pragma mark GRMustacheTagDelegate
+
+#pragma mark - GRMustacheTagDelegate
 
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
@@ -172,6 +159,124 @@
         
         [self.formatArguments addObject:rendering];
     }
+}
+
+
+#pragma mark - Private
+
+- (NSString *)stringWithFormat:(NSString *)format argumentArray:(NSArray *)arguments
+{
+    /**
+     * NSString formatting methods do not accept an array of format arguments.
+     *
+     * Faking va_list as in http://stackoverflow.com/questions/688070/is-there-any-way-to-pass-an-nsarray-to-a-method-that-expects-a-variable-number-o
+     * used to compile, but it does no longer:
+     *
+     *     id fake_va_list[arguments.count];
+     *     [arguments getObjects:fake_va_list];
+     *     rendering = [[[NSString alloc] initWithFormat:format arguments:(va_list)fake_va_list] autorelease];
+     *                                                                    ^        ~~~~~~~~~~~~
+     *     error: used type 'va_list' (aka '__builtin_va_list') where arithmetic or pointer type is required
+     *
+     * Removing the (va_list) cast only generates a warning, but the code crashes when run.
+     *
+     * NSInvocation? NSInvocation does not support variadic functions.
+     *
+     * So I guess we have to do it by hand :-(
+     */
+    
+    switch (arguments.count) {
+        case 0:
+            return format;
+            
+        case 1:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0]];
+            
+        case 2:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1]];
+            
+        case 3:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2]];
+            
+        case 4:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3]];
+            
+        case 5:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3],
+                    [arguments objectAtIndex:4]];
+            
+        case 6:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3],
+                    [arguments objectAtIndex:4],
+                    [arguments objectAtIndex:5]];
+            
+        case 7:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3],
+                    [arguments objectAtIndex:4],
+                    [arguments objectAtIndex:5],
+                    [arguments objectAtIndex:6]];
+            
+        case 8:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3],
+                    [arguments objectAtIndex:4],
+                    [arguments objectAtIndex:5],
+                    [arguments objectAtIndex:6],
+                    [arguments objectAtIndex:7]];
+            
+        case 9:
+            return [NSString stringWithFormat:
+                    format,
+                    [arguments objectAtIndex:0],
+                    [arguments objectAtIndex:1],
+                    [arguments objectAtIndex:2],
+                    [arguments objectAtIndex:3],
+                    [arguments objectAtIndex:4],
+                    [arguments objectAtIndex:5],
+                    [arguments objectAtIndex:6],
+                    [arguments objectAtIndex:7],
+                    [arguments objectAtIndex:8]];
+            
+        default:
+            // Sorry. Add more cases above.
+            [NSException raise:NSGenericException format:@"Not implemented: format with %ld parameters", (unsigned long)arguments.count];
+            break;
+    }
+    
+    return nil;
 }
 
 @end
