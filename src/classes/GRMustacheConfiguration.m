@@ -22,17 +22,19 @@
 
 #import "GRMustacheConfiguration_private.h"
 
+static GRMustacheConfiguration *defaultConfiguration;
+
 @implementation GRMustacheConfiguration
 @synthesize contentType=_contentType;
 @synthesize locked=_locked;
 
++ (void)load
+{
+    defaultConfiguration = [[GRMustacheConfiguration alloc] init];
+}
+
 + (GRMustacheConfiguration *)defaultConfiguration
 {
-    static GRMustacheConfiguration *defaultConfiguration;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        defaultConfiguration = [[GRMustacheConfiguration configuration] retain];
-    });
     return defaultConfiguration;
 }
 

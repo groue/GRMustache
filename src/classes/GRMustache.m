@@ -34,6 +34,7 @@
 #pragma mark - Private declarations
 
 static id<GRMustacheRendering> nilRenderingObject;
+static id standardLibrary = nil;
 
 static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
@@ -97,6 +98,17 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNumber forClass:[NSNumber class]];
     [self registerRenderingImplementation:(IMP)GRMustacheRenderNSString forClass:[NSString class]];
     [self registerRenderingImplementation:(IMP)GRMustacheRenderNSObject forClass:[NSDictionary class]];
+    
+    // Prepare standard library
+    
+    standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                        [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+                        [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                        [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                        [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                        [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
+                        [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                        nil] retain];
 }
 
 + (void)preventNSUndefinedKeyExceptionAttack
@@ -114,18 +126,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (id)standardLibrary
 {
-    static id standardLibrary = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
-                            [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
-                            [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
-                            [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
-                            [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
-                            [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
-                            [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
-                            nil] retain];
-    });
     return standardLibrary;
 }
 
