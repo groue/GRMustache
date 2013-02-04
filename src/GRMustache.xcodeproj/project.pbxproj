@@ -254,6 +254,14 @@
 		56E2F2F016BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2EF16BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m */; };
 		56E2F2F116BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2EF16BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m */; };
 		56E2F2F216BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2EF16BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m */; };
+		56E2F2F516C0095800F01DC2 /* NSFormatter+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F2F316C0095800F01DC2 /* NSFormatter+GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56E2F2F616C0095800F01DC2 /* NSFormatter+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F2F316C0095800F01DC2 /* NSFormatter+GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56E2F2F716C0095800F01DC2 /* NSFormatter+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2F416C0095800F01DC2 /* NSFormatter+GRMustache.m */; };
+		56E2F2F816C0095800F01DC2 /* NSFormatter+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2F416C0095800F01DC2 /* NSFormatter+GRMustache.m */; };
+		56E2F2FB16C00B4000F01DC2 /* NSValueTransformer+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F2F916C00B3F00F01DC2 /* NSValueTransformer+GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56E2F2FC16C00B4000F01DC2 /* NSValueTransformer+GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F2F916C00B3F00F01DC2 /* NSValueTransformer+GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56E2F2FD16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2FA16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m */; };
+		56E2F2FE16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F2FA16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m */; };
 		56EB54CB160ED8AB006A5F57 /* GRMustacheTemplateOverride_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56EB54C9160ED8AA006A5F57 /* GRMustacheTemplateOverride_private.h */; };
 		56EB54CC160ED8AB006A5F57 /* GRMustacheTemplateOverride_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56EB54C9160ED8AA006A5F57 /* GRMustacheTemplateOverride_private.h */; };
 		56EB54D1160EEC2B006A5F57 /* GRMustacheTemplateOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 56EB54D0160EEC2B006A5F57 /* GRMustacheTemplateOverride.m */; };
@@ -480,6 +488,10 @@
 		56E2F2E716BAEB6100F01DC2 /* GRMustacheStandardLibrary_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheStandardLibrary_private.h; sourceTree = "<group>"; };
 		56E2F2EB16BB099A00F01DC2 /* GRMustacheContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextTest.m; sourceTree = "<group>"; };
 		56E2F2EF16BD180100F01DC2 /* GRMustacheConfiguration6_3Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfiguration6_3Test.m; sourceTree = "<group>"; };
+		56E2F2F316C0095800F01DC2 /* NSFormatter+GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFormatter+GRMustache.h"; sourceTree = "<group>"; };
+		56E2F2F416C0095800F01DC2 /* NSFormatter+GRMustache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFormatter+GRMustache.m"; sourceTree = "<group>"; };
+		56E2F2F916C00B3F00F01DC2 /* NSValueTransformer+GRMustache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValueTransformer+GRMustache.h"; sourceTree = "<group>"; };
+		56E2F2FA16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+GRMustache.m"; sourceTree = "<group>"; };
 		56EB54C9160ED8AA006A5F57 /* GRMustacheTemplateOverride_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheTemplateOverride_private.h; sourceTree = "<group>"; };
 		56EB54D0160EEC2B006A5F57 /* GRMustacheTemplateOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateOverride.m; sourceTree = "<group>"; };
 		56FAED0116B94FD600B26C6A /* GRMustacheFilter6_3Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilter6_3Test.m; sourceTree = "<group>"; };
@@ -834,7 +846,7 @@
 				56DEC311152631A30031E8DC /* Parsing */,
 				56DEC310152631830031E8DC /* Compiling */,
 				56DEC312152631DE0031E8DC /* Runtime */,
-				56FE26B016B808FD00FECF56 /* StandardLibrary */,
+				56FE26B016B808FD00FECF56 /* Services */,
 				56DEC292152631300031E8DC /* GRMustache.h */,
 				56DEC294152631300031E8DC /* GRMustache_private.h */,
 				56DEC293152631300031E8DC /* GRMustache.m */,
@@ -983,15 +995,19 @@
 			path = v6.3;
 			sourceTree = "<group>";
 		};
-		56FE26B016B808FD00FECF56 /* StandardLibrary */ = {
+		56FE26B016B808FD00FECF56 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				56E2F2E716BAEB6100F01DC2 /* GRMustacheStandardLibrary_private.h */,
 				56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */,
 				56FE26B116B8095400FECF56 /* GRMustacheLocalizeHelper.h */,
 				56FE26B216B8095400FECF56 /* GRMustacheLocalizeHelper.m */,
+				56E2F2F316C0095800F01DC2 /* NSFormatter+GRMustache.h */,
+				56E2F2F416C0095800F01DC2 /* NSFormatter+GRMustache.m */,
+				56E2F2F916C00B3F00F01DC2 /* NSValueTransformer+GRMustache.h */,
+				56E2F2FA16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m */,
 			);
-			name = StandardLibrary;
+			name = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1038,6 +1054,8 @@
 				56B283D116B44A4E007C1A33 /* GRMustacheConfiguration_private.h in Headers */,
 				56FE26B316B8095400FECF56 /* GRMustacheLocalizeHelper.h in Headers */,
 				56E2F2E816BAEB6100F01DC2 /* GRMustacheStandardLibrary_private.h in Headers */,
+				56E2F2F516C0095800F01DC2 /* NSFormatter+GRMustache.h in Headers */,
+				56E2F2FB16C00B4000F01DC2 /* NSValueTransformer+GRMustache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1082,6 +1100,8 @@
 				56B283D216B44A4E007C1A33 /* GRMustacheConfiguration_private.h in Headers */,
 				56FE26B416B8095400FECF56 /* GRMustacheLocalizeHelper.h in Headers */,
 				56E2F2E916BAEB6100F01DC2 /* GRMustacheStandardLibrary_private.h in Headers */,
+				56E2F2F616C0095800F01DC2 /* NSFormatter+GRMustache.h in Headers */,
+				56E2F2FC16C00B4000F01DC2 /* NSValueTransformer+GRMustache.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1390,6 +1410,8 @@
 				569EB2E7164030E300C09632 /* GRMustacheAccumulatorTag.m in Sources */,
 				56B11A1716B3A581009F184F /* GRMustacheConfiguration.m in Sources */,
 				56FE26B516B8095400FECF56 /* GRMustacheLocalizeHelper.m in Sources */,
+				56E2F2F716C0095800F01DC2 /* NSFormatter+GRMustache.m in Sources */,
+				56E2F2FD16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1459,6 +1481,8 @@
 				569EB2E8164030E300C09632 /* GRMustacheAccumulatorTag.m in Sources */,
 				56B11A1816B3A581009F184F /* GRMustacheConfiguration.m in Sources */,
 				56FE26B616B8095400FECF56 /* GRMustacheLocalizeHelper.m in Sources */,
+				56E2F2F816C0095800F01DC2 /* NSFormatter+GRMustache.m in Sources */,
+				56E2F2FE16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
