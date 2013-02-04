@@ -94,7 +94,7 @@ typedef struct {
 + (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * @return The GRMustache standard library.
  */
 #warning missing availability macro and @since declaration
 + (NSObject *)standardLibrary;
