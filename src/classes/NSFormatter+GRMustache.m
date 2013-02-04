@@ -28,6 +28,9 @@
 
 #pragma mark - <GRMustacheFilter>
 
+/**
+ * Support for {{ formatter(value) }}
+ */
 - (id)transformedValue:(id)object
 {
     return [self stringForObjectValue:object];
@@ -35,6 +38,9 @@
 
 #pragma mark - <GRMustacheRendering>
 
+/**
+ * Support for {{# formatter }}...{{ value }}...{{ value }}...{{/ formatter }}
+ */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     context = [context contextByAddingTagDelegate:self];
@@ -43,11 +49,17 @@
 
 #pragma mark - <GRMustacheTagDelegate>
 
+/**
+ * Support for {{# formatter }}...{{ value }}...{{ value }}...{{/ formatter }}
+ */
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
+    // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        return [self stringForObjectValue:object];
+        return [self transformedValue:object];
     }
+    
+    // Don't process {{# value }}, {{^ value }}, {{$ value }}
     return object;
 }
 

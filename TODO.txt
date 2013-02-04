@@ -9,7 +9,7 @@ Experiments:
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
 - Have `now` enter the standard library: `{{ dateFormat(now, ISO_8601) }}`
 - Have NSFormatter and NSValueTransformer be filter and "cross-platorm filters" tag delegate
-- escapeJavascript
-- escapeCGI
+- escapeJavascript -> javascript.escape
+- escapeCGI -> URL.escape
 ? Have filters put something in the scope: in `{{ dateFormat(date, ISO_8601) }}`, ISO_8601 would be defined by the dateFormat filter.
 ? date/time formatter: `{{ dateFormat(date, Short) }}`, `{{ timeFormat(date, Short) }}`, `{{ dateTimeFormat(date, Short, Full) }}`

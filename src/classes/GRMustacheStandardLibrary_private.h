@@ -22,26 +22,44 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheFilter.h"
+#import "GRMustacheRendering.h"
+
+
+// =============================================================================
+#pragma mark - GRMustacheCrossPlatformFilter
+
+/**
+ * Abstract base class for objects that provide two ways to filter:
+ *
+ * - {{ filter(value) }}
+ * - {{# filter }}...{{ value }}...{{/ filter }}
+ *
+ * Inside {{# filter }}...{{/ filter }} sections, all values rendered by
+ * variable tags get filtered. Values rendered by inner section tags are not:
+ * both loops and boolean interpretation are preserved.
+ */
+@interface GRMustacheCrossPlatformFilter : NSObject<GRMustacheFilter, GRMustacheRendering>
+@end
 
 
 // =============================================================================
 #pragma mark - GRMustacheCapitalizedFilter
 
-@interface GRMustacheCapitalizedFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheCapitalizedFilter: GRMustacheCrossPlatformFilter
 @end
 
 
 // =============================================================================
 #pragma mark - GRMustacheLowercaseFilter
 
-@interface GRMustacheLowercaseFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheLowercaseFilter: GRMustacheCrossPlatformFilter
 @end
 
 
 // =============================================================================
 #pragma mark - GRMustacheUppercaseFilter
 
-@interface GRMustacheUppercaseFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheUppercaseFilter: GRMustacheCrossPlatformFilter
 @end
 
 
