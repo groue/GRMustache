@@ -25,6 +25,7 @@
 #import "GRMustacheTag_private.h"
 #import "GRMustacheStandardLibrary_private.h"
 #import "GRMustacheJavascriptLibrary_private.h"
+#import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
 #import "GRMustacheLocalizeHelper.h"
 #import "GRMustacheVersion.h"
@@ -122,6 +123,13 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                         // {{ localize(value) }}
                         // {{^ localize }}...{{/}}
                         [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                        
+                        [NSDictionary dictionaryWithObjectsAndKeys:
+                         
+                         // {{ HTML.escape(value) }}
+                         // {{# HTML.escape }}...{{ value }}...{{/}}
+                         [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease], @"escape",
+                         nil], @"HTML",
                         
                         [NSDictionary dictionaryWithObjectsAndKeys:
                          
