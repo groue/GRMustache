@@ -21,66 +21,10 @@
 // THE SOFTWARE.
 
 #import "GRMustacheStandardLibrary_private.h"
-#import "GRMustacheTag.h"
-#import "GRMustacheContext.h"
-#import "GRMustacheTagDelegate.h"
-
-
-// =============================================================================
-#pragma mark - GRMustacheCrossPlatformFilter
-
-@interface GRMustacheCrossPlatformFilter()<GRMustacheTagDelegate>
-@end
-
-@implementation GRMustacheCrossPlatformFilter
-
-#pragma mark <GRMustacheFilter>
-
-/**
- * Support for {{ filter(value) }}
- */
-- (id)transformedValue:(id)object
-{
-    NSAssert(NO, @"Subclasses must override");
-    return nil;
-}
-
-#pragma mark <GRMustacheRendering>
-
-/**
- * Support for {{# filter }}...{{ value }}...{{ value }}...{{/ filter }}
- */
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    context = [context contextByAddingTagDelegate:self];
-    return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-}
-
-#pragma mark <GRMustacheTagDelegate>
-
-/**
- * Support for {{# filter }}...{{ value }}...{{ value }}...{{/ filter }}
- */
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
-{
-    // Process {{ value }}
-    if (tag.type == GRMustacheTagTypeVariable) {
-        return [self transformedValue:object];
-    }
-    
-    // Don't process {{# value }}, {{^ value }}, {{$ value }}
-    return object;
-}
-
-
-@end
 
 
 // =============================================================================
 #pragma mark - GRMustacheCapitalizedFilter
-
-@interface GRMustacheCapitalizedFilter()
-@end
 
 @implementation GRMustacheCapitalizedFilter
 
@@ -97,9 +41,6 @@
 // =============================================================================
 #pragma mark - GRMustacheLowercaseFilter
 
-@interface GRMustacheLowercaseFilter()
-@end
-
 @implementation GRMustacheLowercaseFilter
 
 #pragma mark <GRMustacheFilter>
@@ -114,9 +55,6 @@
 
 // =============================================================================
 #pragma mark - GRMustacheUppercaseFilter
-
-@interface GRMustacheUppercaseFilter()
-@end
 
 @implementation GRMustacheUppercaseFilter
 

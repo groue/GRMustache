@@ -24,6 +24,8 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheStandardLibrary_private.h"
+#import "GRMustacheJavascriptLibrary_private.h"
+#import "GRMustacheURLLibrary_private.h"
 #import "GRMustacheLocalizeHelper.h"
 #import "GRMustacheVersion.h"
 #import "GRMustacheRendering.h"
@@ -102,12 +104,38 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     // Prepare standard library
     
     standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                        // {{ capitalized(value) }}
                         [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+
+                        // {{ lowercase(value) }}
                         [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                        
+                        // {{ uppercase(value) }}
                         [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                        
+                        // {{# isBlank(value) }}...{{/}}
                         [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                        
+                        // {{# isEmpty(value) }}...{{/}}
                         [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
+                        
+                        // {{ localize(value) }}
+                        // {{^ localize }}...{{/}}
                         [[[GRMustacheLocalizeHelper alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                        
+                        [NSDictionary dictionaryWithObjectsAndKeys:
+                         
+                         // {{ javascript.escape(value) }}
+                         // {{# javascript.escape }}...{{ value }}...{{/}}
+                         [[[GRMustacheJavascriptEscapeFilter alloc] init] autorelease], @"escape",
+                         nil], @"javascript",
+                        
+                        [NSDictionary dictionaryWithObjectsAndKeys:
+                         
+                         // {{ URL.escape(value) }}
+                         // {{# URL.escape }}...{{ value }}...{{/}}
+                         [[[GRMustacheURLEscapeFilter alloc] init] autorelease], @"escape",
+                         nil], @"URL",
                         nil] retain];
 }
 
