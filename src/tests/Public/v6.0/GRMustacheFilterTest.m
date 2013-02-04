@@ -134,19 +134,6 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testFiltersDoNotEnterContextStack
-{
-    // TODO
-    
-//    id filter = [[[GRMustacheFilterTestSupport alloc] init] autorelease];
-//    NSDictionary *data = [NSDictionary dictionaryWithObject:@"success" forKey:@"test"];
-//    NSDictionary *filters = [NSDictionary dictionaryWithObject:filter forKey:@"filter"];
-//    STAssertEqualObjects([filter valueForKey:@"test"], @"failure", nil);
-//    NSString *templateString = @"<{{#filter}}failure{{/filter}}{{^filter}}success{{/filter}}><{{filter.test}}><{{filter(test)}}>";
-//    NSString *rendering = [GRMustacheTemplate renderObject:data withFilters:filters fromString:templateString error:NULL];
-//    STAssertEqualObjects(rendering, @"<success><><success>", nil);
-}
-
 - (void)testFilterArgumensDoNotEnterSectionContextStack
 {
     id data = @{
