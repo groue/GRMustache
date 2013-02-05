@@ -38,7 +38,7 @@
     
     NSString *string = [object description];
     
-    string = [[object description] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
     NSUInteger length = [string length];
     if (!length) {
