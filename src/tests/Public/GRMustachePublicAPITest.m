@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustachePublicAPITest.h"
+#import "JSONKit.h"
 
 static struct {
     NSString *tests;
@@ -63,7 +64,10 @@ static struct {
     
     NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
     STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
-    if (!testSuite) return;
+    if (!testSuite) {
+        // Allow breakpoint for failing tests
+        return;
+    }
     
     NSArray *tests = [testSuite objectForKey:GRMustacheTestSuiteKeys.tests];
     STAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
@@ -275,7 +279,7 @@ static struct {
                 // compare rendering to expected rendering
                 
                 if (![expectedRendering isEqualToString:rendering]) {
-                    // Allow Breakpointing failing tests
+                    // Allow breakpoint for failing tests
                     [template renderObject:object error:&error];
                 }
                 
@@ -283,7 +287,7 @@ static struct {
             } else {
                 // error was expected
                 
-                // Allow Breakpointing failing tests
+                // Allow breakpoint for failing tests
                 [template renderObject:object error:&error];
                 
                 STAssertTrue(NO, @"Unexpected rendering: %@: %@", rendering, testDescription);
@@ -296,13 +300,13 @@ static struct {
                     *stop = YES;
                 }];
                 if (!match) {
-                    // Allow Breakpointing failing tests
+                    // Allow breakpoint for failing tests
                     [template renderObject:object error:&error];
                     
                     STAssertTrue(NO, @"Unexpected error: %@: %@", error.localizedDescription, testDescription);
                 }
             } else {
-                // Allow Breakpointing failing tests
+                // Allow breakpoint for failing tests
                 [template renderObject:object error:&error];
                 
                 STAssertTrue(NO, @"Unexpected error: %@: %@", error.localizedDescription, testDescription);
@@ -316,13 +320,13 @@ static struct {
                 *stop = YES;
             }];
             if (!match) {
-                // Allow Breakpointing failing tests
+                // Allow breakpoint for failing tests
                 block(&template, &error);
                 
                 STAssertTrue(NO, @"Unexpected error: %@: %@", error.localizedDescription, testDescription);
             }
         } else {
-            // Allow Breakpointing failing tests
+            // Allow breakpoint for failing tests
             block(&template, &error);
             
             STAssertTrue(NO, @"Error loading template: %@: %@", error.localizedDescription, testDescription);

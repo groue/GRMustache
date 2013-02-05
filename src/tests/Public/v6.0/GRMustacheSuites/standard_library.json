@@ -1,5 +1,6 @@
 {
   "tests": [
+    // capitalized
     {
       "name": "`capitalized` filter should change the first character from each word to its corresponding uppercase value, and all remaining characters to their corresponding lowercase values.",
       "data": "EDGAR allan poE",
@@ -12,6 +13,8 @@
       "template": "{{ capitalized(.) }}",
       "expected": "Éé Ππ Ssß Fiﬁ Œœ Σς Ii"
     },
+    
+    // lowercase
     {
       "name": "`lowercase` filter should change the all characters to their corresponding lowercase values.",
       "data": "EDGAR allan poE",
@@ -24,6 +27,8 @@
       "template": "{{ lowercase(.) }}",
       "expected": "σéπœiς"
     },
+    
+    // uppercase
     {
       "name": "`uppercase` filter should change the all characters to their corresponding lowercase values.",
       "data": "EDGAR allan poE",
@@ -36,6 +41,8 @@
       "template": "{{ uppercase(.) }}",
       "expected": "ΣÉΠSSFIŒIΣ"
     },
+    
+    // isBlank
     {
       "name": "`isBlank` filter should match missing keys.",
       "data": {},
@@ -96,6 +103,8 @@
       "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
       "expected": "success"
     },
+    
+    // isEmpty
     {
       "name": "`isEmpty` filter should match missing keys.",
       "data": {},
@@ -155,6 +164,126 @@
       "data": { "object": {} },
       "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
       "expected": "success"
+    },
+    
+    // HTML.escape
+    {
+      "name": "`HTML.escape` escapes nil as empty string.",
+      "data": {},
+      "template": "<{{HTML.escape(missing)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`HTML.escape` escapes null as empty string.",
+      "data": { "null": null },
+      "template": "<{{HTML.escape(null)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`HTML.escape` escapes any value, including numbers.",
+      "data": 1,
+      "template": "<{{HTML.escape(.)}}>",
+      "expected": "<1>"
+    },
+    {
+      "name": "`HTML.escape` escapes HTML characters of strings.",
+      "data": "foo&\"'<>",
+      "template": "{{{.}}} {{{HTML.escape(.)}}} {{HTML.escape(.)}}",
+      "expected": "foo&\"'<> foo&amp;&quot;&apos;&lt;&gt; foo&amp;amp;&amp;quot;&amp;apos;&amp;lt;&amp;gt;"
+    },
+    
+    // javascript.escape
+    {
+      "name": "`javascript.escape` escapes nil as empty string.",
+      "data": {},
+      "template": "<{{javascript.escape(missing)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`javascript.escape` escapes null as empty string.",
+      "data": { "null": null },
+      "template": "<{{javascript.escape(null)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`javascript.escape` escapes any value, including numbers.",
+      "data": 1,
+      "template": "<{{javascript.escape(.)}}>",
+      "expected": "<1>"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes any value",
+      "data": "\"double quotes\" and 'single quotes'",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes double and single quotes",
+      "data": "\"double quotes\" and 'single quotes'",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes backslashes",
+      "data": "\\ : backslashes, too",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "\\u005C : backslashes, too"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes control characters",
+      "data": "and lots of whitespace: \r\n\t\f\b",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "and lots of whitespace: \\u000D\\u000A\\u0009\\u000C\\u0008"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes HTML tags",
+      "data": "<script>and this</script>",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "\\u003Cscript\\u003Eand this\\u003C/script\\u003E"
+    },
+    {
+      // Inspired by https://github.com/django/django/blob/master/tests/regressiontests/defaultfilters/tests.py
+      "name": "`javascript.escape` escapes PARAGRAPH SEPARATOR U+2029 and LINE SEPARATOR U+2028",
+      "data": "paragraph separator:\u2029and line separator:\u2028",
+      "template": "{{javascript.escape(.)}}",
+      "expected": "paragraph separator:\\u2029and line separator:\\u2028"
+    },
+    
+    // URL.escape
+    {
+      "name": "`URL.escape` escapes nil as empty string.",
+      "data": {},
+      "template": "<{{URL.escape(missing)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`URL.escape` escapes null as empty string.",
+      "data": { "null": null },
+      "template": "<{{URL.escape(null)}}>",
+      "expected": "<>"
+    },
+    {
+      "name": "`URL.escape` escapes any value, including numbers.",
+      "data": 1,
+      "template": "<{{URL.escape(.)}}>",
+      "expected": "<1>"
+    },
+    {
+      "name": "`URL.escape` escapes strings with UTF8 encoding.",
+      "data": "?&=\r\n\t\f\b<>\"[]{}",
+      "template": "{{URL.escape(.)}}",
+      "expected": "%3F%26%3D%0D%0A%09%0C%08%3C%3E%22%5B%5D%7B%7D"
+    },
+    {
+      "name": "`URL.escape` escapes unicode strings with UTF8 encoding.",
+      "data": "éı\ud83d\ude04",
+      "template": "{{URL.escape(.)}}",
+      "expected": "%C3%A9%C4%B1%F0%9F%98%84"
     }
   ]
 }

@@ -32,6 +32,9 @@
 
 - (id)transformedValue:(id)object
 {
+    if (object == [NSNull null]) {
+        return @"";
+    }
     NSString *string = [object description];
     return [GRMustache escapeHTML:string];
 }

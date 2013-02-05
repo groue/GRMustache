@@ -32,6 +32,10 @@
 
 - (id)transformedValue:(id)object
 {
+    if (object == [NSNull null]) {
+        return @"";
+    }
+    
     NSString *string = [object description];
     
     NSUInteger length = [string length];

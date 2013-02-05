@@ -32,6 +32,10 @@
 
 - (id)transformedValue:(id)object
 {
+    if (object == [NSNull null]) {
+        return @"";
+    }
+    
     NSString *string = [object description];
     
     string = [[object description] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
