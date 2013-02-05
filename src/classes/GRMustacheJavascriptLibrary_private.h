@@ -21,11 +21,11 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheCrossPlatformFilter_private.h"
+#import "GRMustacheFilter.h"
 
 
 // =============================================================================
 #pragma mark - GRMustacheJavascriptEscapeFilter
 
-@interface GRMustacheJavascriptEscapeFilter: GRMustacheCrossPlatformFilter
+@interface GRMustacheJavascriptEscapeFilter: NSObject<GRMustacheFilter>
 @end

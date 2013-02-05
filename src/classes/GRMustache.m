@@ -127,21 +127,18 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                         [NSDictionary dictionaryWithObjectsAndKeys:
                          
                          // {{ HTML.escape(value) }}
-                         // {{# HTML.escape }}...{{ value }}...{{/}}
                          [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease], @"escape",
                          nil], @"HTML",
                         
                         [NSDictionary dictionaryWithObjectsAndKeys:
                          
                          // {{ javascript.escape(value) }}
-                         // {{# javascript.escape }}...{{ value }}...{{/}}
                          [[[GRMustacheJavascriptEscapeFilter alloc] init] autorelease], @"escape",
                          nil], @"javascript",
                         
                         [NSDictionary dictionaryWithObjectsAndKeys:
                          
                          // {{ URL.escape(value) }}
-                         // {{# URL.escape }}...{{ value }}...{{/}}
                          [[[GRMustacheURLEscapeFilter alloc] init] autorelease], @"escape",
                          nil], @"URL",
                         nil] retain];

@@ -21,28 +21,27 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheCrossPlatformFilter_private.h"
 #import "GRMustacheFilter.h"
 
 
 // =============================================================================
 #pragma mark - GRMustacheCapitalizedFilter
 
-@interface GRMustacheCapitalizedFilter: GRMustacheCrossPlatformFilter
+@interface GRMustacheCapitalizedFilter: NSObject<GRMustacheFilter>
 @end
 
 
 // =============================================================================
 #pragma mark - GRMustacheLowercaseFilter
 
-@interface GRMustacheLowercaseFilter: GRMustacheCrossPlatformFilter
+@interface GRMustacheLowercaseFilter: NSObject<GRMustacheFilter>
 @end
 
 
 // =============================================================================
 #pragma mark - GRMustacheUppercaseFilter
 
-@interface GRMustacheUppercaseFilter: GRMustacheCrossPlatformFilter
+@interface GRMustacheUppercaseFilter: NSObject<GRMustacheFilter>
 @end
 
 
