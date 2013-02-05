@@ -23,12 +23,12 @@
 #warning missing GRMUSTACHE_VERSION_MAX_ALLOWED
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheConfiguration6_3Test : GRMustachePublicAPITest
+@interface GRMustacheConfiguration6_4Test : GRMustachePublicAPITest
 @end
 
 static BOOL defaultConfigurationHasBeenTouched = NO;
 
-@implementation GRMustacheConfiguration6_3Test
+@implementation GRMustacheConfiguration6_4Test
 
 - (void)tearDown
 {
