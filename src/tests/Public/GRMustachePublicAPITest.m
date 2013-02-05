@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustachePublicAPITest.h"
-#import "JSONKit.h"
 
 static struct {
     NSString *tests;
