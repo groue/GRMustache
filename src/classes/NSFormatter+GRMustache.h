@@ -28,5 +28,6 @@
 /**
  * TODO
  */
+#warning missing availability macro and @since declaration
 @interface NSFormatter (GRMustache)<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
 @end

@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheContext;
+
 /**
  * The content type of strings rendered by templates.
  *
@@ -95,6 +97,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
     GRMustacheContentType _contentType;
     NSString *_tagStartDelimiter;
     NSString *_tagEndDelimiter;
+    GRMustacheContext *_baseContext;
     BOOL _locked;
 }
 
@@ -180,5 +183,9 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 #warning missing availability macro and @since declaration
 @property (nonatomic, copy) NSString *tagEndDelimiter;
 
-
+/**
+ * TODO
+ */
+#warning missing availability macro and @since declaration
+@property (nonatomic, retain) GRMustacheContext *baseContext;
 @end

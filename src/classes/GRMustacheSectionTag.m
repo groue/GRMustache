@@ -60,6 +60,13 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
+    if (!context) {
+        // With a nil context, the method would return nil without setting the
+        // error argument.
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+        return NO;
+    }
+    
     NSMutableString *buffer = [NSMutableString string];
     
     for (id<GRMustacheTemplateComponent> component in _components) {

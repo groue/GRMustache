@@ -32,6 +32,7 @@
 @implementation GRMustacheTemplate
 @synthesize components=_components;
 @synthesize contentType=_contentType;
+@synthesize baseContext=_baseContext;
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
 {
@@ -82,22 +83,6 @@
     [super dealloc];
 }
 
-- (GRMustacheContext *)baseContext
-{
-    if (_baseContext == nil) {
-        _baseContext = [[GRMustacheContext contextWithObject:[GRMustache standardLibrary]] retain];
-    }
-    return [[_baseContext retain] autorelease];
-}
-
-- (void)setBaseContext:(GRMustacheContext *)baseContext
-{
-    if (_baseContext != baseContext) {
-        [_baseContext release];
-        _baseContext = [baseContext retain];
-    }
-}
-
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
     GRMustacheContext *context = [self.baseContext contextByAddingObject:object];
@@ -130,6 +115,13 @@
 
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
+    if (!context) {
+        // With a nil context, the method would return NO without setting the
+        // error argument.
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+        return NO;
+    }
+    
     NSMutableString *needsEscapingBuffer = nil;
     NSMutableString *renderingBuffer = nil;
     

@@ -84,13 +84,19 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
+    if (!context) {
+        // Consistency with GRMustacheSectionTag handling of nil context.
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+        return NO;
+    }
+    
     // Default empty string.
     // This method is overrided by GRMustacheSectionTag and
     // GRMustacheAccumulatorTag.
     if (HTMLSafe) {
         *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
     }
-    return @"foo";
+    return @"";
 }
 
 - (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag

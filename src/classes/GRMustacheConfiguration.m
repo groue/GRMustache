@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheConfiguration_private.h"
+#import "GRMustache_private.h"
+#import "GRMustacheContext_private.h"
 
 static GRMustacheConfiguration *defaultConfiguration;
 
@@ -53,6 +55,7 @@ static GRMustacheConfiguration *defaultConfiguration;
 {
     [_tagStartDelimiter release];
     [_tagEndDelimiter release];
+    [_baseContext release];
     [super dealloc];
 }
 
@@ -61,8 +64,9 @@ static GRMustacheConfiguration *defaultConfiguration;
     self = [super init];
     if (self) {
         _contentType = GRMustacheContentTypeHTML;
-        _tagStartDelimiter = @"{{";
-        _tagEndDelimiter = @"}}";
+        _tagStartDelimiter = [@"{{" retain];    // useless retain that matches the release in dealloc
+        _tagEndDelimiter = [@"}}" retain];      // useless retain that matches the release in dealloc
+        _baseContext = [[GRMustacheContext contextWithObject:[GRMustache standardLibrary]] retain];
     }
     return self;
 }
@@ -99,6 +103,16 @@ static GRMustacheConfiguration *defaultConfiguration;
     }
 }
 
+- (void)setBaseContext:(GRMustacheContext *)baseContext
+{
+    [self assertNotLocked];
+    
+    if (_baseContext != baseContext) {
+        [_baseContext release];
+        _baseContext = [baseContext retain];
+    }
+}
+
 
 #pragma mark - <NSCopying>
 
@@ -106,8 +120,9 @@ static GRMustacheConfiguration *defaultConfiguration;
 {
     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
     configuration.contentType = self.contentType;
-    configuration.tagStartDelimiter = self.tagStartDelimiter;   // property setter does the copy
-    configuration.tagEndDelimiter = self.tagEndDelimiter;       // property setter does the copy
+    configuration.tagStartDelimiter = self.tagStartDelimiter;
+    configuration.tagEndDelimiter = self.tagEndDelimiter;
+    configuration.baseContext = self.baseContext;
     return configuration;
 }
 
@@ -120,4 +135,5 @@ static GRMustacheConfiguration *defaultConfiguration;
         [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
     }
 }
+
 @end
