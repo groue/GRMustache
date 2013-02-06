@@ -40,6 +40,12 @@
     {
       "name": "Comma can not be found outside of filter arguments",
       "data": null,
+      "template": "{{a,b}}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Comma can not be found outside of filter arguments",
+      "data": null,
       "template": "{{a,}}",
       "expected_error": "Invalid expression"
     },
