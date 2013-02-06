@@ -25,12 +25,12 @@
 #import "GRMustacheFilter.h"
 
 /**
- * GRMustacheLocalizeHelper can localize the content of a Mustache section.
+ * GRMustacheLocalizer can localize the content of a Mustache section.
  * It also has a filter facet that localizes your data.
  *
  * The GRMustache standard library has a `localize` key which returns a
- * GRMustacheLocalizeHelper that localizes just like the NSLocalizableString
- * macro does: with the Localizable.strings table of the main bundle.
+ * GRMustacheLocalizer that localizes just like the NSLocalizableString macro
+ * does: with the Localizable.strings table of the main bundle.
  *
  * Localizing data:
  *
@@ -60,7 +60,7 @@
  * specified bundle.
  *
  */
-@interface GRMustacheLocalizeHelper : NSObject<GRMustacheRendering, GRMustacheFilter> {
+@interface GRMustacheLocalizer : NSObject<GRMustacheRendering, GRMustacheFilter> {
 @private
     NSBundle *_bundle;
     NSString *_tableName;

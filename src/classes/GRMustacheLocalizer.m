@@ -21,15 +21,15 @@
 // THE SOFTWARE.
 
 #import "GRMustache.h"
-#import "GRMustacheLocalizeHelper.h"
+#import "GRMustacheLocalizer.h"
 
-@interface GRMustacheLocalizeHelper()<GRMustacheTagDelegate>
+@interface GRMustacheLocalizer()<GRMustacheTagDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 - (NSString *)localizedStringForKey:(NSString *)key;
 - (NSString *)stringWithFormat:(NSString *)format argumentArray:(NSArray *)arguments;
 @end
 
-@implementation GRMustacheLocalizeHelper
+@implementation GRMustacheLocalizer
 @synthesize formatArguments=_formatArguments;
 @synthesize bundle=_bundle;
 @synthesize tableName=_tableName;
