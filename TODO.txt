@@ -7,6 +7,7 @@ Missing tests:
 
 Experiments:
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
+- Have `baseContext` enter GRMustacheConfiguration
 - Have `now` enter the standard library: `{{ dateFormat(now, ISO_8601) }}`
 - Have NSFormatter and NSValueTransformer be filter and "cross-platorm filters" tag delegate
 - escapeJavascript -> javascript.escape
