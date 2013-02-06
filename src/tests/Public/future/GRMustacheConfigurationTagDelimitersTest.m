@@ -23,12 +23,12 @@
 #warning missing GRMUSTACHE_VERSION_MAX_ALLOWED
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheConfiguration6_4Test : GRMustachePublicAPITest
+@interface GRMustacheConfigurationTagDelimitersTest : GRMustachePublicAPITest
 @end
 
 static BOOL defaultConfigurationHasBeenTouched = NO;
 
-@implementation GRMustacheConfiguration6_4Test
+@implementation GRMustacheConfigurationTagDelimitersTest
 
 - (void)tearDown
 {
@@ -38,14 +38,14 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter = @"{{";
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"}}";
     
-    // Help test1DefaultConfigurationHasHTMLContentType test the *real* default
+    // Help test1DefaultConfigurationHasDoubleBracesTagDelimiters test the *real* default
     // configuration.
     defaultConfigurationHasBeenTouched = YES;
 }
 
 // The goal is to have this test run first.
 // It looks that alphabetical order is applied: hence the digit 1 in the method name.
-- (void)test1DefaultConfigurationHasHTMLContentType
+- (void)test1DefaultConfigurationHasDoubleBracesTagDelimiters
 {
     STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
     STAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
@@ -212,5 +212,6 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
+#warning check error when setting ridiculous delimiters
 
 @end
