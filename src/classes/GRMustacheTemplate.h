@@ -58,7 +58,6 @@
  *
  * @since v6.0
  */
-
 @property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
