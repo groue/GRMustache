@@ -44,12 +44,12 @@
  *
  *     {{# percent }}...{{ value1 }}...{{ value2 }}...{{/ percent }}
  *
- * The formatting applies to all variable tags that evaluate to a value that can
- * be processed by the filter (see [NSFormatter stringForObjectValue:]
- * documentation).
+ * The formatting then applies to all inner variable tags that evaluate to a
+ * value that can be processed by the filter (see
+ * [NSFormatter stringForObjectValue:] documentation).
  *
- * Sections are unaffected, in order to preserve loops and boolean sections.
- * However their inner variable tags are:
+ * Inner loops and boolean sections are unaffected. However their inner variable
+ * tags are:
  *
  *     {{# percent }}
  *       {{ value1 }}        {{! format applies }}

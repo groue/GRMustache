@@ -33,26 +33,6 @@
  */
 - (id)transformedValue:(id)object
 {
-    // Preserve nil values
-    if (object == nil) {
-        return nil;
-    }
-    
-    id result = [self stringForObjectValue:object];
-    
-    if (result == nil) {
-        // NSFormatter documentation for stringForObjectValue: states:
-        //
-        // > First test the passed-in object to see if it’s of the correct
-        // > class. If it isn’t, return nil; but if it is of the right class,
-        // > return a properly formatted and, if necessary, localized string.
-        //
-        // So nil result means that object is not of the correct class. Leave
-        // it untouched.
-        
-        return object;
-    }
-    
     return [self stringForObjectValue:object];
 }
 
@@ -63,8 +43,27 @@
  */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    context = [context contextByAddingTagDelegate:self];
-    return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ formatter }}
+            // Behave as a regular object: render self's description
+            if (HTMLSafe != NULL) { *HTMLSafe = NO; }
+            return [self description];
+            
+        case GRMustacheTagTypeInvertedSection:
+            // {{^ formatter }}...{{/ formatter }}
+            // Behave as a truthy object: don't render for inverted sections
+            return nil;
+            
+        default:
+            // {{# formatter }}...{{/ formatter }}
+            // {{^ formatter }}...{{/ formatter }}
+            
+            // Render normally, but listen to all inner tags rendering, so that
+            // we can format them.
+            context = [context contextByAddingTagDelegate:self];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    }
 }
 
 #pragma mark - <GRMustacheTagDelegate>
@@ -74,9 +73,30 @@
  */
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
-    // Process {{ value }}
+    // Process {{ value }}, if and only if the value is processable
     if (tag.type == GRMustacheTagTypeVariable) {
-        return [self transformedValue:object];
+        
+        // Preserve nil values
+        if (object == nil) {
+            return nil;
+        }
+        
+        id result = [self stringForObjectValue:object];
+        
+        if (result == nil) {
+            // NSFormatter documentation for stringForObjectValue: states:
+            //
+            // > First test the passed-in object to see if it’s of the correct
+            // > class. If it isn’t, return nil; but if it is of the right class,
+            // > return a properly formatted and, if necessary, localized string.
+            //
+            // So nil result means that object is not of the correct class. Leave
+            // it untouched.
+            
+            return object;
+        }
+        
+        return result;
     }
     
     // Don't process {{# value }}, {{^ value }}, {{$ value }}
