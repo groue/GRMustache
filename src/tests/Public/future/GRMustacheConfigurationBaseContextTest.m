@@ -48,23 +48,41 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 {
     STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
     STAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
-    // TODO
+    NSString *rendering = [GRMustacheTemplate renderObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]
+                                                fromString:@"{{uppercase(foo)}}"
+                                                     error:NULL];
+    STAssertEqualObjects(rendering, @"SUCCESS", @"");
 }
 
 - (void)testFactoryConfigurationHasStandardLibraryInBaseContextRegardlessOfDefaultConfiguration
 {
     [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
-    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    STAssertNotNil(configuration, @"");
-    // TODO
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+    repo.configuration = [GRMustacheConfiguration configuration];
+    GRMustacheTemplate *template = [repo templateFromString:@"{{uppercase(foo)}}" error:NULL];
+    NSString *rendering = [template renderObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"] error:NULL];
+    STAssertEqualObjects(rendering, @"SUCCESS", @"");
 }
 
 - (void)testDefaultConfigurationMustacheBaseContext
 {
     [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-    NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"success", @"");
+    
+    {
+        // check presence of foo
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
+        STAssertEqualObjects(rendering, @"success", @"");
+    }
+    {
+        // check absence of standard library
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(foo)}}" error:NULL];
+        NSError *error;
+        NSString *rendering = [template renderObject:NULL error:&error];
+        STAssertNil(rendering, @"");
+        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @""); // no such filter
+    }
 }
 
 - (void)testTemplateBaseContextOverridesDefaultConfigurationBaseContext
