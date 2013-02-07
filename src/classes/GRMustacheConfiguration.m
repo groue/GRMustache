@@ -34,6 +34,7 @@ static GRMustacheConfiguration *defaultConfiguration;
 @synthesize contentType=_contentType;
 @synthesize tagStartDelimiter=_tagStartDelimiter;
 @synthesize tagEndDelimiter=_tagEndDelimiter;
+@synthesize baseContext=_baseContext;
 @synthesize locked=_locked;
 
 + (void)load
