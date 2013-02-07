@@ -88,7 +88,7 @@
 /**
  * Returns a context with _tagDelegate_ at the top of the tag delegate stack.
  *
- * @param tagDelegae  A tag delegate
+ * @param tagDelegate  A tag delegate
  *
  * @return A rendering context.
  */
