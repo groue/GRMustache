@@ -26,8 +26,9 @@
 #import "GRMustacheTagDelegate.h"
 
 /**
- * TODO
+ * A category on NSValueTransformer that allows them to be directly used as
+ * filters in GRMustache templates.
  */
 #warning missing availability macro and @since declaration
-@interface NSValueTransformer (GRMustache)<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
+@interface NSValueTransformer (GRMustache)<GRMustacheFilter>
 @end
