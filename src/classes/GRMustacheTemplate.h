@@ -48,15 +48,12 @@
 /**
  * The template's base context: all rendering start from this context.
  *
- * Its default value is a context containing the GRMustache standard library.
- *
- * You can set it to another context derived from the GRMustacheContext methods
- * such as `contextByAddingObject:`, `contextByAddingProtectedObject:` or
- * `contextByAddingTagDelegate:`.
- *
- * If you set it to nil, it is restored to its default value.
+ * Its default value comes from the configuration of the source template
+ * repository. Unless specified, it contains the GRMustache standard library.
  *
  * @see GRMustacheContext
+ * @see GRMustacheConfiguration
+ * @see GRMustacheTemplateRepository
  * @see [GRMustache standardLibrary]
  *
  * @since v6.0

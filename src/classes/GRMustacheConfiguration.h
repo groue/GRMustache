@@ -184,7 +184,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 @property (nonatomic, copy) NSString *tagEndDelimiter;
 
 /**
- * TODO
+ * The base context for templates rendering. The default base context contains
+ * the GRMustache standard Library.
+ *
+ * @see GRMustacheTemplate
  */
 #warning missing availability macro and @since declaration
 @property (nonatomic, retain) GRMustacheContext *baseContext;
