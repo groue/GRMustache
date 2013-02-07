@@ -226,5 +226,4 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertThrows([configuration setTagEndDelimiter:@""], @"");
 }
 
-
 @end
