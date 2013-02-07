@@ -71,13 +71,29 @@
     percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
     
     NSNumber *number = [NSNumber numberWithFloat:0.5];
-    STAssertEqualObjects([percentFormatter stringFromNumber:number], @"50%", @"");
-    
     id data = @{ @"number": number, @"percent": percentFormatter };
     NSString *rendering = [GRMustacheTemplate renderObject:data
                                                 fromString:@"{{# percent }}{{ number }} {{ number }}{{/ percent }}"
                                                      error:NULL];
     STAssertEqualObjects(rendering, @"50% 50%", @"");
+}
+
+- (void)testFormatterSectionDoesNotFormatUnprocessabkeInnerVariableTags
+{
+    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
+    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    
+    // test that string is unprocessable
+    NSString *unprocessableValue = @"foo";
+    STAssertNil([percentFormatter stringForObjectValue:unprocessableValue], @"");
+    
+    // test filtering a string
+    id data = @{ @"value": unprocessableValue, @"percent": percentFormatter };
+    NSString *rendering = [GRMustacheTemplate renderObject:data
+                                                fromString:@"{{# percent }}{{ value }}{{/ percent }}"
+                                                     error:NULL];
+    STAssertEqualObjects(rendering, @"foo", @"");
 }
 
 - (void)testFormatterAsSectionFormatsDeepInnerVariableTags
