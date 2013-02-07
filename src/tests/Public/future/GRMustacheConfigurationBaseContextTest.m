@@ -53,7 +53,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testFactoryConfigurationHasStandardLibraryInBaseContextRegardlessOfDefaultConfiguration
 {
-    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     STAssertNotNil(configuration, @"");
     // TODO
@@ -61,52 +61,52 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 
 - (void)testDefaultConfigurationMustacheBaseContext
 {
-    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"bar", @"");
+    STAssertEqualObjects(rendering, @"success", @"");
 }
 
 - (void)testTemplateBaseContextOverridesDefaultConfigurationBaseContext
 {
-    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"failure" forKey:@"foo"]];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-    template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"templatebar" forKey:@"foo"]];
+    template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"templatebar", @"");
+    STAssertEqualObjects(rendering, @"success", @"");
 }
 
 - (void)testDefaultRepositoryConfigurationHasDefaultConfigurationBaseContext
 {
-    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"bar", @"");
+    STAssertEqualObjects(rendering, @"success", @"");
 }
 
-- (void)testRepositoryConfigurationBaseContextApply
+- (void)testRepositoryConfigurationBaseContext
 {
     {
         // Setting the whole configuration
         GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
         repo.configuration = configuration;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"bar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"bar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
@@ -114,28 +114,28 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 {
     {
         // Setting the whole configuration
-        [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"failure" forKey:@"foo"]];
         
         GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"repobar" forKey:@"foo"]];
+        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
         repo.configuration = configuration;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"repobar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
-        [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"failure" forKey:@"foo"]];
         
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"repobar" forKey:@"foo"]];
+        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"repobar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
@@ -144,25 +144,25 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     {
         // Setting the whole configuration
         GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"failure" forKey:@"foo"]];
         
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
         repo.configuration = configuration;
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-        template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"templatebar" forKey:@"foo"]];
+        template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"templatebar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]];
+        repo.configuration.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"failure" forKey:@"foo"]];
         
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
-        template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"templatebar" forKey:@"foo"]];
+        template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"templatebar", @"");
+        STAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
@@ -188,6 +188,16 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
-#warning check error when setting ridiculous baseContext
+- (void)testConfigurationBaseContextCanNotBeSetToNil
+{
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+    STAssertThrows([configuration setBaseContext:nil], @"");
+}
+
+- (void)testTemplateBaseContextCanNotBeSetToNil
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:NULL];
+    STAssertThrows([template setBaseContext:nil], @"");
+}
 
 @end

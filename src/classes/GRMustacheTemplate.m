@@ -110,6 +110,19 @@
     return buffer;
 }
 
+- (void)setBaseContext:(GRMustacheContext *)baseContext
+{
+    if (!baseContext) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid baseContext:nil"];
+        return;
+    }
+    
+    if (_baseContext != baseContext) {
+        [_baseContext release];
+        _baseContext = [baseContext retain];
+    }
+}
+
 
 #pragma mark - <GRMustacheTemplateComponent>
 

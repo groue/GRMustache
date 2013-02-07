@@ -87,6 +87,11 @@ static GRMustacheConfiguration *defaultConfiguration;
 {
     [self assertNotLocked];
     
+    if (tagStartDelimiter.length == 0) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid tagStartDelimiter:%@", tagStartDelimiter];
+        return;
+    }
+    
     if (_tagStartDelimiter != tagStartDelimiter) {
         [_tagStartDelimiter release];
         _tagStartDelimiter = [tagStartDelimiter copy];
@@ -97,6 +102,11 @@ static GRMustacheConfiguration *defaultConfiguration;
 {
     [self assertNotLocked];
     
+    if (tagEndDelimiter.length == 0) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid tagEndDelimiter:%@", tagEndDelimiter];
+        return;
+    }
+    
     if (_tagEndDelimiter != tagEndDelimiter) {
         [_tagEndDelimiter release];
         _tagEndDelimiter = [tagEndDelimiter copy];
@@ -106,6 +116,11 @@ static GRMustacheConfiguration *defaultConfiguration;
 - (void)setBaseContext:(GRMustacheContext *)baseContext
 {
     [self assertNotLocked];
+    
+    if (!baseContext) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid baseContext:nil"];
+        return;
+    }
     
     if (_baseContext != baseContext) {
         [_baseContext release];

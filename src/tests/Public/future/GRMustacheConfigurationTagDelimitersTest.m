@@ -90,7 +90,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertEqualObjects(repo.configuration.tagEndDelimiter, [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"");
 }
 
-- (void)testRepositoryConfigurationTagDelimitersApply
+- (void)testRepositoryConfigurationTagDelimiters
 {
     {
         // Setting the whole configuration
@@ -212,6 +212,19 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
-#warning check error when setting ridiculous delimiters
+- (void)testConfigurationTagDelimitersCanNotBeSetToNil
+{
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+    STAssertThrows([configuration setTagStartDelimiter:nil], @"");
+    STAssertThrows([configuration setTagEndDelimiter:nil], @"");
+}
+
+- (void)testConfigurationTagDelimitersCanNotBeSetToEmptyString
+{
+    GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+    STAssertThrows([configuration setTagStartDelimiter:@""], @"");
+    STAssertThrows([configuration setTagEndDelimiter:@""], @"");
+}
+
 
 @end
