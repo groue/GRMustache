@@ -26,7 +26,37 @@
 #import "GRMustacheTagDelegate.h"
 
 /**
- * TODO
+ * A category on NSFormatter that allows them to be directly used in GRMustache
+ * templates.
+ *
+ * This applies to all NSFormatter subclasses such as NSDateFormatter,
+ * NSNumberFormatter, and your custom subclasses that provide their custom
+ * implementation of the `stringForObjectValue:` method.
+ *
+ * ## Filter facet
+ *
+ * A formatter can be used as a filter, as in {{ percent(value) }}. Just have
+ * your `percent` key evaluate to a formatter.
+ *
+ * ## Formatting all values in a section
+ *
+ * A formatter can be used to format all values in a section of a template:
+ *
+ *     {{# percent }}...{{ value1 }}...{{ value2 }}...{{/ percent }}
+ *
+ * The formatting applies to all variable tags that evaluate to a value that can
+ * be processed by the filter (see [NSFormatter stringForObjectValue:]
+ * documentation).
+ *
+ * Sections are unaffected, in order to preserve loops and boolean sections.
+ * However their inner variable tags are:
+ *
+ *     {{# percent }}
+ *       {{ value1 }}        {{! format applies }}
+ *       {{# condition }}    {{! format does not apply }}
+ *         {{ value2 }}      {{! format applies }}
+ *       {{/ condition }}
+ *     {{/ percent }}
  */
 #warning missing availability macro and @since declaration
 @interface NSFormatter (GRMustache)<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>

@@ -33,6 +33,26 @@
  */
 - (id)transformedValue:(id)object
 {
+    // Preserve nil values
+    if (object == nil) {
+        return nil;
+    }
+    
+    id result = [self stringForObjectValue:object];
+    
+    if (result == nil) {
+        // NSFormatter documentation for stringForObjectValue: states:
+        //
+        // > First test the passed-in object to see if it’s of the correct
+        // > class. If it isn’t, return nil; but if it is of the right class,
+        // > return a properly formatted and, if necessary, localized string.
+        //
+        // So nil result means that object is not of the correct class. Leave
+        // it untouched.
+        
+        return object;
+    }
+    
     return [self stringForObjectValue:object];
 }
 
