@@ -64,7 +64,7 @@
     STAssertEqualObjects(rendering, @"", @"");
 }
 
-- (void)testFormatterAsSectionAppliesToProcessableValues
+- (void)testFormatterSectionFormatsInnerVariableTags
 {
     NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
@@ -80,7 +80,7 @@
     STAssertEqualObjects(rendering, @"50% 50%", @"");
 }
 
-- (void)testFormatterAsSectionAppliesToInnerVariableTags
+- (void)testFormatterAsSectionFormatsDeepInnerVariableTags
 {
     NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
@@ -96,7 +96,7 @@
     STAssertEqualObjects(rendering, @"Number is 50%.", @"");
 }
 
-- (void)testFormatterAsSectionDoesNotApplyToInnerSectionTags
+- (void)testFormatterAsSectionDoesNotFormatInnerSectionTags
 {
     NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
@@ -112,7 +112,7 @@
     STAssertEqualObjects(rendering, @"NO is 0. NO is false. percent(NO) is 0%. percent(NO) is true. NO is now 0% and is still false.", @"");
 }
 
-- (void)testFormatterTriggerInvertedSectionOmission
+- (void)testFormatterIsTruthy
 {
     NSFormatter *formatter = [[[NSFormatter alloc] init] autorelease];
 
