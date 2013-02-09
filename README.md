@@ -5,7 +5,7 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
-**January 30, 2013: GRMustache 6.3.0 is out.** [Release notes](GRMustache/blob/master/RELEASE_NOTES.md)
+**January 30, 2013: GRMustache 6.3.0 is out.** [Release notes](RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -76,36 +76,36 @@ Documentation
 
 Introduction:
 
-- [Introduction](GRMustache/blob/master/Guides/introduction.md): a tour of the library features, and most common use cases.
+- [Introduction](Guides/introduction.md): a tour of the library features, and most common use cases.
 
 Loading templates:
 
-- [Templates](GRMustache/blob/master/Guides/templates.md): how to load templates from common sources.
-- [Partials](GRMustache/blob/master/Guides/partials.md): how to embed templates in other templates.
-- [Templates Repositories](GRMustache/blob/master/Guides/template_repositories.md): load templates from less common sources.
-- [HTML vs. Text templates](GRMustache/blob/master/Guides/html_vs_text.md): there's a life outside of HTML.
+- [Templates](Guides/templates.md): how to load templates from common sources.
+- [Partials](Guides/partials.md): how to embed templates in other templates.
+- [Templates Repositories](Guides/template_repositories.md): load templates from less common sources.
+- [HTML vs. Text templates](Guides/html_vs_text.md): there's a life outside of HTML.
 
 Rendering templates:
 
-- [Runtime](GRMustache/blob/master/Guides/runtime.md): how GRMustache renders your data
-- [Feeding The Templates](GRMustache/blob/master/Guides/runtime_patterns.md): an overview of various techniques to feed templates.
+- [Runtime](Guides/runtime.md): how GRMustache renders your data
+- [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
 Advanced GRMustache:
 
-- [Filters](GRMustache/blob/master/Guides/filters.md): how to process data before it is rendered with "filters".
-- [Tag Delegates](GRMustache/blob/master/Guides/delegate.md): how to observe and alter template rendering.
-- [Rendering Objects](GRMustache/blob/master/Guides/rendering_objects.md): how to provide your custom rendering code.
-- [Protected Contexts](GRMustache/blob/master/Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
+- [Filters](Guides/filters.md): how to process data before it is rendered with "filters".
+- [Tag Delegates](Guides/delegate.md): how to observe and alter template rendering.
+- [Rendering Objects](Guides/rendering_objects.md): how to provide your custom rendering code.
+- [Protected Contexts](Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
 
 Compatibility with other Mustache implementations:
 
-- [Compatibility](GRMustache/blob/master/Guides/compatibility.md): know where you put your foot in.
+- [Compatibility](Guides/compatibility.md): know where you put your foot in.
 
 ### Sample code
 
-- [Number Formatting](GRMustache/blob/master/Guides/sample_code/number_formatting.md): how to format numbers
-- [Collection Indexes](GRMustache/blob/master/Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- [Localization](GRMustache/blob/master/Guides/sample_code/localization.md): how to localize portions of your templates
+- [Number Formatting](Guides/sample_code/number_formatting.md): how to format numbers
+- [Collection Indexes](Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
+- [Localization](Guides/sample_code/localization.md): how to localize portions of your templates
 
 ### Reference
 
@@ -113,48 +113,48 @@ Compatibility with other Mustache implementations:
 
 ### Internals
 
-- [Forking](GRMustache/blob/master/Guides/forking.md): the forking guide tells you everything about GRMustache organization.
+- [Forking](Guides/forking.md): the forking guide tells you everything about GRMustache organization.
 
 FAQ
 ---
 
 - **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
-    A: [Yes, yes, and yes](GRMustache/blob/master/Guides/sample_code/indexes.md)
+    A: [Yes, yes, and yes](Guides/sample_code/indexes.md)
 
 - **Q: Is it possible to format numbers and dates?**
     
-    A: [Yes](GRMustache/blob/master/Guides/sample_code/number_formatting.md)
+    A: [Yes](Guides/sample_code/number_formatting.md)
 
 - **Q: Is it possible to render partial templates whose name is only known at runtime?**
 
-    A: [Yes](GRMustache/blob/master/Guides/rendering_objects.md)
+    A: [Yes](Guides/rendering_objects.md)
 
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
-    A: [Yes](GRMustache/blob/master/Guides/partials.md)
+    A: [Yes](Guides/partials.md)
 
 - **Q: Is it possible to localize templates?**
 
-    A: [Yes](GRMustache/blob/master/Guides/sample_code/localization.md)
+    A: [Yes](Guides/sample_code/localization.md)
 
 - **Q: Is it possible to render default values for missing keys?**
 
-    A: [Yes](GRMustache/blob/master/Guides/delegate.md)
+    A: [Yes](Guides/delegate.md)
 
 - **Q: Is it possible to disable HTML escaping?**
 
-    A: [Yes](GRMustache/blob/master/Guides/html_vs_text.md)
+    A: [Yes](Guides/html_vs_text.md)
 
 - **Q: What is this NSUndefinedKeyException stuff?**
 
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
+    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in the [Runtime Guide](Guides/runtime.md).
 
 - **Q: Why does GRMustache need JRSwizzle?**
 
     A: GRMustache does not *need* it, and this [swizzling](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) is a mere convenience that will not ship in your released binary:
     
-    *You* may be happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](GRMustache/blob/master/Guides/runtime.md).
+    *You* may be happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](Guides/runtime.md).
 
 What other people say
 ---------------------
@@ -208,10 +208,10 @@ Please look for an [open issue](GRMustache/issues) that smiles at you!
 Forking
 -------
 
-Please fork. You'll learn useful information in the [Forking Guide](GRMustache/blob/master/Guides/forking.md).
+Please fork. You'll learn useful information in the [Forking Guide](Guides/forking.md).
 
 
 License
 -------
 
-Released under the [MIT License](GRMustache/blob/master/LICENSE).
+Released under the [MIT License](LICENSE).
