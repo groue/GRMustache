@@ -5,7 +5,7 @@ Configuration
 
 GRMustache have options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning: globally for all templates, per [template repository](template_repositories.md), or per template.
 
-The global configuration is `[GRMustacheConfiguration defaultConfiguration]`:
+The global default configuration is `[GRMustacheConfiguration defaultConfiguration]`:
 
 ```objc
 // Have GRMustache templates render text by default,
