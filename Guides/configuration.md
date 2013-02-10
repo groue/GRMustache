@@ -3,7 +3,7 @@
 Configuration
 =============
 
-GRMustache have options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning: globally for all templates, per [template repository](template_repositories.md), or per template.
+GRMustache has options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning: globally for all templates, per [template repository](template_repositories.md), or per template.
 
 The global default configuration is `[GRMustacheConfiguration defaultConfiguration]`:
 
