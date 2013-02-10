@@ -81,7 +81,7 @@
             return nil;
         }
         
-        id result = [self stringForObjectValue:object];
+        NSString *result = [self stringForObjectValue:object];
         
         if (result == nil) {
             // NSFormatter documentation for stringForObjectValue: states:
