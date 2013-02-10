@@ -25,10 +25,10 @@ The distribution includes pre-built static libraries:
 1. Clone the repository with the `git clone https://github.com/groue/GRMustache.git` command.
 
 2. Embed GRMustache in your Xcode project:
-
+    
     - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
     - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
-
+    
     NB: If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
 
 3. Edit your target settings, and pass the `-ObjC` option in the "Other Linker Flags" ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
