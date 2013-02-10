@@ -1710,7 +1710,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				"GCC_ENABLE_OBJC_GC[arch=i386]" = supported;
+				"GCC_ENABLE_OBJC_GC[arch=x86_64]" = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1721,7 +1723,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				"GCC_ENABLE_OBJC_GC[arch=i386]" = supported;
+				"GCC_ENABLE_OBJC_GC[arch=x86_64]" = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
