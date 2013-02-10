@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](templates.md)
+[up](../../../../GRMustache), [next](compatibility.md)
 
 GRMustache introduction
 =======================
@@ -131,4 +131,4 @@ NSString *barbaraProfile = [template renderObject:barbara error:NULL];
 
 Examples above are common use cases for MacOS and iOS applications. The library does [much more](../../../../GRMustache#documentation).
 
-[up](../../../../GRMustache), [next](templates.md)
+[up](../../../../GRMustache), [next](compatibility.md)

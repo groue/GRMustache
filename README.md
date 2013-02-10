@@ -22,12 +22,16 @@ Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRM
 
 The distribution includes pre-built static libraries:
 
-Clone the repository with the `git clone https://github.com/groue/GRMustache.git` command.
+1. Clone the repository with the `git clone https://github.com/groue/GRMustache.git` command.
 
-- For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
-- For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
+2. Embed GRMustache in your Xcode project:
 
-If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
+    - For MacOS development, add `include/GRMustache.h` and `lib/libGRMustache6-MacOS.a` to your project.
+    - For iOS development, add `include/GRMustache.h` and `lib/libGRMustache6-iOS.a` to your project.
+
+    NB: If you have GRMustache files *copied* in your project, you'll need to copy all header files of the `include` directory, not only `GRMustache.h`.
+
+3. Edit your target settings, and pass the `-ObjC` option in the "Other Linker Flags" ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
 
 The armv6 slice is not included. In order to target this architecture, you have to compile GRMustache yourself (see below), or to use CocoaPods (see above).
 
@@ -77,29 +81,31 @@ Documentation
 Introduction:
 
 - [Introduction](Guides/introduction.md): a tour of the library features, and most common use cases.
+- [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 
 Loading templates:
 
-- [Templates](Guides/templates.md): how to load templates from common sources.
-- [Partials](Guides/partials.md): how to embed templates in other templates.
-- [Templates Repositories](Guides/template_repositories.md): load templates from less common sources.
+- [Templates](Guides/templates.md): how to load templates.
+- [Partials](Guides/partials.md): decompose your templates into reusable components named "partials".
+- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
+- [Configuration](Guides/configuration.md): know your options.
 - [HTML vs. Text templates](Guides/html_vs_text.md): there's a life outside of HTML.
 
 Rendering templates:
 
-- [Runtime](Guides/runtime.md): how GRMustache renders your data
+- [Runtime](Guides/runtime.md): how GRMustache renders your data.
 - [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
 Advanced GRMustache:
 
 - [Filters](Guides/filters.md): how to process data before it is rendered with "filters".
 - [Tag Delegates](Guides/delegate.md): how to observe and alter template rendering.
-- [Rendering Objects](Guides/rendering_objects.md): how to provide your custom rendering code.
+- [Rendering Objects](Guides/rendering_objects.md): how to write "Mustache lambdas", and generally provide your custom rendering code.
 - [Protected Contexts](Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
 
-Compatibility with other Mustache implementations:
+Standard library:
 
-- [Compatibility](Guides/compatibility.md): know where you put your foot in.
+- [Standard Library](Guides/standard_library.md): pre-built filters and lambdas, for your convenience.
 
 ### Sample code
 
@@ -117,6 +123,10 @@ Compatibility with other Mustache implementations:
 
 FAQ
 ---
+
+- **Q: I get "unrecognized selector sent to instance" errors.**
+    
+    A: Check that you have added the `-ObjC` option in the "Other Linker Flags" of your target ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
 
 - **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     

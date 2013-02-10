@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](compatibility.md)
+[up](../../../../GRMustache#documentation), [next](standard_library.md)
 
 Protected Contexts
 ==================
@@ -107,6 +107,7 @@ See how the `digits` key, alone on the third and fourth line, has not been rende
 
 Conclusion: you must use full paths to your deep protected objects, or they won't be found.
 
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
@@ -115,4 +116,4 @@ The [Mustache specification](https://github.com/mustache/spec) does not have any
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use protected objects with great care.**
 
 
-[up](../../../../GRMustache#documentation), [next](compatibility.md)
+[up](../../../../GRMustache#documentation), [next](standard_library.md)

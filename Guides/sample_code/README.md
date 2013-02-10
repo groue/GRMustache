@@ -1,4 +1,4 @@
-[up](../../../..#documentation), [next](number_formatting.md)
+[up](../../../../../GRMustache#documentation), [next](number_formatting.md)
 
 Sample code
 ===========
@@ -15,5 +15,4 @@ Sample code
     
     How to have GRMustache localize portions of your templates: *discussion, downloadable Xcode project*.
 
-[up](../../../..#documentation), [next](number_formatting.md)
-
+[up](../../../../../GRMustache#documentation), [next](number_formatting.md)
