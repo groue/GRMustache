@@ -55,9 +55,10 @@
 
 /**
  * @return An empty rendering context.
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-+ (instancetype)context;
++ (instancetype)context AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns a context with _object_ at the top of the context stack.
@@ -68,9 +69,10 @@
  * @param object  An object
  *
  * @return A rendering context.
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-+ (instancetype)contextWithObject:(id)object;
++ (instancetype)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns a context with _object_ at the top of the protected context stack.
@@ -81,9 +83,10 @@
  * @param object  An object
  *
  * @return A rendering context.
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-+ (instancetype)contextWithProtectedObject:(id)object;
++ (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns a context with _tagDelegate_ at the top of the tag delegate stack.
@@ -92,8 +95,7 @@
  *
  * @return A rendering context.
  */
-#warning missing availability macro and @since declaration
-+ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
++ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the

@@ -21,14 +21,14 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheRendering.h"
+#import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheFilter.h"
-#import "GRMustacheTagDelegate.h"
 
 /**
  * A category on NSValueTransformer that allows them to be directly used as
  * filters in GRMustache templates.
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
 @interface NSValueTransformer (GRMustache)<GRMustacheFilter>
 @end

@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheFilter.h"
 #import "GRMustacheTagDelegate.h"
@@ -57,7 +58,8 @@
  *         {{ value2 }}      {{! format applies }}
  *       {{/ condition }}
  *     {{/ percent }}
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
 @interface NSFormatter (GRMustache)<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
 @end

@@ -828,7 +828,7 @@
 			path = v6.2;
 			sourceTree = "<group>";
 		};
-		56DB555A16B9A1D6003685ED /* future */ = {
+		56DB555A16B9A1D6003685ED /* v6.4 */ = {
 			isa = PBXGroup;
 			children = (
 				56E2F31716C2E8B700F01DC2 /* GRMustacheConfigurationBaseContextTest.m */,
@@ -840,7 +840,7 @@
 				56E2F32316C44FC700F01DC2 /* GRMustacheNSValueTransformerTest.m */,
 				56E2F31B16C41FDF00F01DC2 /* GRMustacheStandardLibraryTest.m */,
 			);
-			path = future;
+			path = v6.4;
 			sourceTree = "<group>";
 		};
 		56DEC19A15262FC80031E8DC = {
@@ -990,7 +990,7 @@
 				56DEC3BD152639420031E8DC /* v6.0 */,
 				56B11A1916B3C77A009F184F /* v6.2 */,
 				56FAED0016B94FD600B26C6A /* v6.3 */,
-				56DB555A16B9A1D6003685ED /* future */,
+				56DB555A16B9A1D6003685ED /* v6.4 */,
 			);
 			path = Public;
 			sourceTree = "<group>";

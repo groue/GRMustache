@@ -95,9 +95,10 @@ typedef struct {
 
 /**
  * @return The GRMustache standard library.
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-+ (NSObject *)standardLibrary;
++ (NSObject *)standardLibrary AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns a rendering object that is able to render the argument _object_ for

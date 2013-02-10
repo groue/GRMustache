@@ -170,25 +170,28 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-@property (nonatomic, copy) NSString *tagStartDelimiter;
+@property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * The closing delimiter for Mustache tags. Its default value is @"}}".
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-@property (nonatomic, copy) NSString *tagEndDelimiter;
+@property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * The base context for templates rendering. The default base context contains
  * the GRMustache standard Library.
  *
  * @see GRMustacheTemplate
+ *
+ * @since v6.4
  */
-#warning missing availability macro and @since declaration
-@property (nonatomic, retain) GRMustacheContext *baseContext;
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 @end

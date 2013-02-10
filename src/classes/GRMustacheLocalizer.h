@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheFilter.h"
 
@@ -59,6 +60,7 @@
  * method. The helper would then localize using the specified table from the
  * specified bundle.
  *
+ * @since v6.4
  */
 @interface GRMustacheLocalizer : NSObject<GRMustacheRendering, GRMustacheFilter> {
 @private
@@ -69,15 +71,19 @@
 
 /**
  * The bundle where to look for localized strings.
+ *
+ * @since v6.4
  */
-@property (nonatomic, retain, readonly) NSBundle *bundle;
+@property (nonatomic, retain, readonly) NSBundle *bundle AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * The table where to look for localized strings.
  *
  * If nil, the default Localizable.strings table would be searched.
+ *
+ * @since v6.4
  */
-@property (nonatomic, retain, readonly) NSString *tableName;
+@property (nonatomic, retain, readonly) NSString *tableName AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * Returns an initialized localizing helper.
@@ -88,8 +94,10 @@
  *                   default Localizable.strings table would be searched.
  *
  * @return A newly initialized localizing helper.
+ *
+ * @since v6.4
  */
-- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName;
+- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 @end
 
