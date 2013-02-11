@@ -3,7 +3,11 @@
 Configuration
 =============
 
-GRMustache has options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning: globally for all templates, per [template repository](template_repositories.md), or per template.
+GRMustache has options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning:
+
+- global configuration for all templates,
+- configuration for all templates of a [template repository](template_repositories.md),
+- configuration for a single template.
 
 The global default configuration is `[GRMustacheConfiguration defaultConfiguration]`:
 
@@ -28,7 +32,7 @@ repo.configuration.contentType = GRMustacheContentTypeHTML;
 GRMustacheTemplate *template = [repo templateNamed:@"profile" error:NULL];
 ```
 
-Most options can be configured at the template level also. The `contentType` property seen above can be set using a pragma tag (see the [HTML vs. Text Templates Guide](html_vs_text.md)).
+Options can be configured at the template level also: this is described below.
 
 
 Factory configuration
@@ -65,34 +69,35 @@ Would render:
 
     Bonjour ARTHUR !
 
-Provided with a name and a localization for the "Hello %@!" string.
+Provided with a name and a localization for "Hello %@!" string in the Localizable.strings file of the main bundle.
 
-You can extend the global base context:
+You can extend the base context:
 
 ```objc
+// Globally for all templates:
 GRMustacheContext *baseContext = [GRMustache defaultConfiguration].baseContext;
 GRMustacheContext *extendedContext = [baseContext contextByAddingObject:myCustomLibrary];
 [GRMustache defaultConfiguration].baseContext = extendedContext;
+
+// For templates of a template repository:
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWith...];
+repo.configuration.baseContext = [repo.configuration.baseContext contextByAddingObject:myCustomLibrary];
 ```
 
 You can also reset it to a blank slate, getting rid of the whole standard library:
 
 ```objc
 [GRMustache defaultConfiguration].baseContext = [GRMustacheContext context];
+repo.configuration.baseContext = [GRMustacheContext context];
 ```
 
-#### At the template repository level
-
-The configuration of a template repository overrides the default configuration: you can set the baseContext for a bunch of templates only.
+You may also be interested in [protected contexts](protected_contexts.md). They guarantee that a particular identifier will always evaluate to the same value.
 
 ```objc
-// Configure all templates of the main bundle:
-GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
-
-repo.configuration.baseContext = ...;
-
-// This template will use its repository base context:
-GRMustacheTemplate *template = [repo templateNamed:@"profile" error:NULL];
+// Guarantee that {{my_important_value}} will always render the same and cannot
+// be overriden by custom data:
+id library = @{ @"my_important_value": ... };
+repo.configuration.baseContext = [GRMustacheContext contextWithProtectedObject:library];
 ```
 
 #### At the template level
@@ -100,7 +105,7 @@ GRMustacheTemplate *template = [repo templateNamed:@"profile" error:NULL];
 The base context can also be defined right at the template level:
 
 ```objc
-// This template has its own base context:
+// This template has its own base context that overrides the default configuration and its template repository:
 GRMustacheTemplate *template = ...;
 template.baseContext = ...;
 ```
@@ -126,7 +131,16 @@ You can also configure them through GRMustacheConfiguration:
 // Have all templates use <% and %> as tag delimiters:
 [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter = @"<%";
 [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"%>";
+
+// Only for templates of a template repository:
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWith...];
+repo.configuration.tagStartDelimiter = @"[[";
+repo.configuration.tagEndDelimiter = @"]]";
 ```
+
+#### At the template level
+
+The tag delimiters can be overriden at the template level using a "Set Delimiters Tag" such as `{{=<% %>=}}`: now tag would look like `<% name %>`.
 
 
 Compatibility with other Mustache implementations
