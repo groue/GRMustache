@@ -120,7 +120,7 @@ GRMustache also supports *text templates*, that render text and do not escape an
 This subject is fully covered in the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
-### tagStartDelimiter` and `tagEndDelimiter
+### tagStartDelimiter and tagEndDelimiter
 
 Mustache takes its name from its tag delimiters: `{{` and `}}`.
 
