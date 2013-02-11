@@ -105,7 +105,8 @@ repo.configuration.baseContext = [GRMustacheContext contextWithProtectedObject:l
 The base context can also be defined right at the template level:
 
 ```objc
-// This template has its own base context that overrides the default configuration and its template repository:
+// This template has its own base context that overrides the default
+// configuration and its template repository:
 GRMustacheTemplate *template = ...;
 template.baseContext = ...;
 ```
@@ -123,9 +124,7 @@ This subject is fully covered in the [HTML vs. Text Templates Guide](html_vs_tex
 
 Mustache takes its name from its tag delimiters: `{{` and `}}`.
 
-Those can be overriden at the template level using a "Set Delimiters Tag" such as `{{=<% %>=}}`: now tag would look like `<% name %>`.
-
-You can also configure them through GRMustacheConfiguration:
+You can configure them through GRMustacheConfiguration:
 
 ```objc
 // Have all templates use <% and %> as tag delimiters:
