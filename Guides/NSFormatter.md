@@ -11,7 +11,7 @@ There are ready-made [filters](filters.md) and [rendering objects](rendering_obj
 Filter facet
 ------------
 
-Just add your formatters to the data you render: they get ready to use as filters:
+Just add your formatters to the data you render: they get ready to be used as filters:
 
 `Document.mustache`:
 
