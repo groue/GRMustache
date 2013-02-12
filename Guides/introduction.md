@@ -1,4 +1,4 @@
-[up](../../../../GRMustache), [next](compatibility.md)
+[up](../../../../GRMustache), [next](templates.md)
 
 GRMustache introduction
 =======================
@@ -26,9 +26,14 @@ Those features are not documented in [mustache.5.html](http://mustache.github.co
 - **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
 
 
-### Core Engine Extensions
+### Beyond Mustache
 
-Genuine Mustache falls short on a few topics. GRMustache core engine implements syntaxes and features that are not in the specification:
+Genuine Mustache falls short on a few topics.
+
+GRMustache core engine implements syntaxes and features that are not in the specification (see the [Compatibility Guide](compatibility.md) for details).
+
+
+#### Syntax extensions
 
 - **Empty closing tags**, as in `{{#name}}...{{/}}`
 
@@ -46,30 +51,50 @@ Genuine Mustache falls short on a few topics. GRMustache core engine implements 
 
 - **Loops in variable tags**: a simple variable tag `{{items}}` renders a concatenation of the rendering of each individual item. You may think of Ruby on Rails' `<%= render @items %>`: check the [Rendering Objects Guide](rendering_objects.md).
 
-- **"Filters"**, as `{{ uppercase(name) }}`.
-    
-    Filters are documented in the [Filters Guide](filters.md).
 
-- **Support for partial templates in a file system hierarchy**.
+#### More partials
+
+- **Support for the file system hierarchy**.
     
     Use relative `{{> header }}` or absolute paths `{{> /shared/header }}` to your partial templates: see the [Partials Guide](partials.md).
 
-- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts.
+- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts:
+    
+        {{< page }}      {{! page.mustache defines the layout.  }}
+          {{$ content }} {{! this template defines the content. }}
+            ...
+          {{/ content }}
+        {{/ page }}
     
     Overridable partials are documented in the [Partials Guide](partials.md).
+
+
+#### Text templates
 
 - **Text templates**.
 
     The Mustache language focuses on rendering HTML, and safely HTML-escape your data. GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
+#### Filters
+
+Filters, as `{{ uppercase(name) }}`, are documented in the [Filters Guide](filters.md).
+
+
+### Services
+
+GRMustache ships with a [standard library](standard_library.md) of various filters and tools for rendering your data.
+
+Our old friends [NSFormatter and NSValueTransformer](NSFormatter.md) are also welcome to the party.
+
+
 ### Flexibility
 
 GRMustache's core engine is extensible. Feel free to hook in:
 
+- [Filters](filters.md) transform your raw data.
 - [Rendering objects](rendering_objects.md) provide their own custom rendering.
 - [Tag delegates](delegate.md) observe and alter objects rendered by tags.
-- [Filters](filters.md) transform your raw data.
 
 Should you eventually build a library of reusable code snippets, you'll find [Protected Contexts](protected_contexts.md) useful.
 
@@ -131,4 +156,4 @@ NSString *barbaraProfile = [template renderObject:barbara error:NULL];
 
 Examples above are common use cases for MacOS and iOS applications. The library does [much more](../../../../GRMustache#documentation).
 
-[up](../../../../GRMustache), [next](compatibility.md)
+[up](../../../../GRMustache), [next](templates.md)

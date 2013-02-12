@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](templates.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)
 
 Compatibility With Other Mustache Engines
 =========================================
@@ -149,4 +149,4 @@ Tag delegates may be used for formatting values in a spec-compliant way (see sam
 As such, they are an ambiguous tool. You will have to know when you cross the line.
 
 
-[up](../../../../GRMustache#documentation), [next](templates.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)

@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](filters.md)
 
 HTML vs. Text Templates
 =======================
@@ -155,4 +155,4 @@ The [Mustache specification](https://github.com/mustache/spec) does not have any
 
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use {{{ triple }}} mustache tags, and don't mix text with HTML.**
 
-[up](../../../../GRMustache#documentation), [next](runtime.md)
+[up](../../../../GRMustache#documentation), [next](filters.md)
