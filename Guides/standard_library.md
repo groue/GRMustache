@@ -15,7 +15,6 @@ GRMustache [default configuration](configuration.md) contains a library of prede
 - `uppercase`
 - `URL.escape`
 
-The standard library is built with GRMustache public APIs: you can build your own nifty library as well.
 
 HTML.escape
 -----------
