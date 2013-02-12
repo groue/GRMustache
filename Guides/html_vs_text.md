@@ -11,7 +11,7 @@ HTML templates return HTML: their `{{ name }}` variable tags escape their input.
 
 Text templates return text: their `{{ name }}` and `{{{ name }}}` tags do not escape their input: they have identical rendering.
 
-The `GRMustacheConfiguration` class is your vector to text & HTML templates.
+The [GRMustacheConfiguration](configuration.md) class is your vector to text & HTML templates.
 
 
 Global configuration
