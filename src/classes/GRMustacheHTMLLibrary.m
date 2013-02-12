@@ -37,9 +37,14 @@
  */
 - (id)transformedValue:(id)object
 {
+    // Specific case for [NSNull null]
+    
     if (object == [NSNull null]) {
         return @"";
     }
+    
+    // Turns other objects into strings, and escape
+    
     NSString *string = [object description];
     return [GRMustache escapeHTML:string];
 }
@@ -69,7 +74,7 @@
             // {{$ html.escape }}...{{/ html.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them.
+            // we can format them. See mustacheTag:willRenderObject: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -85,7 +90,6 @@
 {
     // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        
         return [self transformedValue:object];
     }
     

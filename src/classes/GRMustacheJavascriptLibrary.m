@@ -37,6 +37,8 @@
  */
 - (id)transformedValue:(id)object
 {
+    // Specific case for [NSNull null] and empty strings
+    
     if (object == [NSNull null]) {
         return @"";
     }
@@ -44,9 +46,12 @@
     NSString *string = [object description];
     
     NSUInteger length = [string length];
-    if (!length) {
+    if (length == 0) {
         return string;
     }
+    
+    
+    // Extract characters
     
     const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
     if (!characters) {
@@ -55,8 +60,11 @@
         characters = [data bytes];
     }
     
+    
+    // Set up the translation table
+    
     static const NSString *escapeForCharacter[] = {
-        // Those encodings come from https://github.com/django/django/commit/8c4a525871df19163d5bfdf5939eff33b544c2e2#django/template/defaultfilters.py
+        // This table comes from https://github.com/django/django/commit/8c4a525871df19163d5bfdf5939eff33b544c2e2#django/template/defaultfilters.py
         //
         // Quoting Malcolm Tredinnick:
         // > Added extra robustness to the escapejs filter so that all invalid
@@ -123,6 +131,9 @@
     };
     static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
     
+    
+    // Translate
+    
     NSMutableString *buffer = nil;
     const UniChar *unescapedStart = characters;
     CFIndex unescapedLength = 0;
@@ -186,7 +197,7 @@
             // {{$ javascript.escape }}...{{/ javascript.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them.
+            // we can format them. See mustacheTag:willRenderObject: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -202,7 +213,6 @@
 {
     // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        
         return [self transformedValue:object];
     }
     

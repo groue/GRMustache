@@ -37,18 +37,27 @@
  */
 - (id)transformedValue:(id)object
 {
+    // Specific case for [NSNull null] and empty strings
+    
     if (object == [NSNull null]) {
         return @"";
     }
     
     NSString *string = [object description];
     
-    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
     NSUInteger length = [string length];
-    if (!length) {
+    if (length == 0) {
         return string;
     }
+    
+    
+    // Perform a first escaping using Apple's implementation.
+    // It leaves many character unescaped. We'll have to go further.
+    
+    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    
+    // Extract characters
     
     const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
     if (!characters) {
@@ -56,6 +65,9 @@
         [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
         characters = [data bytes];
     }
+    
+    
+    // Set up the translation table
     
     static const NSString *escapeForCharacter[] = {
         ['$'] = @"%24",
@@ -78,6 +90,9 @@
         ['\r'] = @"%0D",
     };
     static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
+    
+    
+    // Translate
     
     NSMutableString *buffer = nil;
     const UniChar *unescapedStart = characters;
@@ -130,7 +145,7 @@
             // {{$ URL.escape }}...{{/ URL.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them.
+            // we can format them. See mustacheTag:willRenderObject: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -146,7 +161,6 @@
 {
     // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        
         return [self transformedValue:object];
     }
     

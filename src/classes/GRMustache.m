@@ -211,7 +211,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 + (NSString *)escapeHTML:(NSString *)string
 {
     NSUInteger length = [string length];
-    if (!length) {
+    if (length == 0) {
         return string;
     }
     

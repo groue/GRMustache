@@ -59,6 +59,9 @@
 
 #pragma mark - GRMustacheFilter
 
+/**
+ * Support for {{ localize(value) }}
+ */
 - (id)transformedValue:(id)object
 {
     return [self localizedStringForKey:[object description]];
@@ -67,24 +70,28 @@
 
 #pragma mark - GRMustacheRendering
 
+/**
+ * Support for {{# localize }}...{{ value }}...{{ value }}...{{/ localize }}
+ */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
 {
     /**
-     * Add self as a tag delegate, so that we know when tag will and did render.
-     */
-    context = [context contextByAddingTagDelegate:self];
-    
-    
-    /**
-     * Perform a first rendering of the section tag, that will set
-     * localizableFormat to "Hello %@! Do you know %@?".
+     * Perform a first rendering of the section tag, that will turn variable
+     * tags into %@. We'll get a localizable format: "...%@...%@...".
      *
-     * Our mustacheTag:willRenderObject: implementation will tell the tags to
-     * render "%@" instead of the regular values, "Arthur" or "Barbara". This
+     * For that, we make sure we are notified of tag rendering, so that our
+     * mustacheTag:willRenderObject: implementation tells the tags to render
+     * "%@" instead of the regular values, "Arthur" or "Barbara". This
      * behavior is trigerred by the nil value of self.formatArguments.
      */
     
+    // Set up first pass behavior
     self.formatArguments = nil;
+    
+    // Get notified of tag rendering
+    context = [context contextByAddingTagDelegate:self];
+    
+    // Render the localizable format
     NSString *localizableFormat = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
@@ -92,14 +99,18 @@
      * Perform a second rendering that will fill our formatArguments array with
      * HTML-escaped tag renderings.
      *
-     * Our mustacheTag:willRenderObject: implementation will now let the regular
-     * values through ("Arthur" or "Barbara"), so that our
-     * mustacheTag:didRenderObject:as: method can fill self.formatArguments.
+     * Now our mustacheTag:willRenderObject: implementation will let the regular
+     * values go through normal rendering ("Arthur" or "Barbara"). Our
+     * mustacheTag:didRenderObject:as: method will fill self.formatArguments.
+     *
      * This behavior is not the same as the previous one, and is trigerred by
      * the non-nil value of self.formatArguments.
      */
     
+    // Set up second pass behavior
     self.formatArguments = [NSMutableArray array];
+    
+    // Fill formatArguments
     [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     
     
@@ -122,12 +133,15 @@
 
 #pragma mark - GRMustacheTagDelegate
 
+/**
+ * Support for {{# localize }}...{{ value }}...{{ value }}...{{/ localize }}
+ */
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
     /**
      * We are only interested in the rendering of variable tags such as
      * {{name}}. We do not want to mess with Mustache handling of boolean
-     * sections such as {{#count}}...{{/}}.
+     * sections such as {{#true}}...{{/}}.
      */
     
     if (tag.type != GRMustacheTagTypeVariable) {
@@ -140,11 +154,14 @@
     
     if (self.formatArguments) {
         return object;
+    } else {
+        return @"%@";
     }
-
-    return @"%@";
 }
 
+/**
+ * Support for {{# localize }}...{{ value }}...{{ value }}...{{/ localize }}
+ */
 - (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
 {
     /**

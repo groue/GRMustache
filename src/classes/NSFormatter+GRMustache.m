@@ -33,6 +33,8 @@
  */
 - (id)transformedValue:(id)object
 {
+#warning What about nil?
+#warning What about [NSNull null]?
     return [self stringForObjectValue:object];
 }
 
@@ -60,7 +62,7 @@
             // {{$ formatter }}...{{/ formatter }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them.
+            // we can format them. See mustacheTag:willRenderObject: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -77,7 +79,8 @@
     if (tag.type == GRMustacheTagTypeVariable) {
         
         // Preserve nil values
-#warning Is this such a good idea?
+#warning Is this such a good idea to force nil preservation?
+#warning What about [NSNull null]?
         if (object == nil) {
             return nil;
         }
