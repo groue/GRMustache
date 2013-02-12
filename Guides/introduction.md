@@ -100,8 +100,10 @@ Flexibility
 GRMustache's core engine is extensible. Feel free to hook in:
 
 - [Filters](filters.md) transform your raw data.
-- [Rendering objects](rendering_objects.md) provide their own custom rendering.
-- [Tag delegates](delegate.md) observe and alter objects rendered by tags.
+- [Rendering objects](rendering_objects.md) provide custom rendering.
+- [Tag delegates](delegate.md) observe and alter tag rendering.
+
+Those three hooks are lego bricks: from them you can build more complex tools, such as [NSFormatter](NSFormatter.md) and the [localize](standard_library.md#localize) helper.
 
 Should you eventually build a library of reusable code snippets, you'll find [Protected Contexts](protected_contexts.md) useful.
 
