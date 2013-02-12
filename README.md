@@ -84,7 +84,7 @@ Introduction:
 Loading templates:
 
 - [Templates](Guides/templates.md): how to load templates.
-- [Partials](Guides/partials.md): decompose your templates into reusable components named "partials".
+- [Partials](Guides/partials.md): decompose your templates into components named "partials".
 - [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
 
 Rendering templates:
@@ -95,13 +95,13 @@ Rendering templates:
 Mustache, and beyond:
 
 - [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
-- [Configuration](Guides/configuration.md): know your options.
-- [HTML vs. Text templates](Guides/html_vs_text.md): there's a life outside of HTML.
-- [Filters](Guides/filters.md): how to process data before it is rendered with "filters".
-- [Tag Delegates](Guides/delegate.md): how to observe and alter template rendering.
-- [Rendering Objects](Guides/rendering_objects.md): how to write "Mustache lambdas", and generally provide your custom rendering code.
-- [Protected Contexts](Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
-- [Standard Library](Guides/standard_library.md): pre-built filters and lambdas, for your convenience.
+- [Configuration](Guides/configuration.md)
+- [HTML vs. Text templates](Guides/html_vs_text.md)
+- [Filters](Guides/filters.md): `{{ uppercase(name) }}` and beyond.
+- [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
+- [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and beyond.
+- [Protected Contexts](Guides/protected_contexts.md): protect some keys so that they always evaluate to the same value.
+- [Standard Library](Guides/standard_library.md): built-in, for your convenience.
 - [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
 
 
