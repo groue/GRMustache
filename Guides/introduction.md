@@ -91,7 +91,7 @@ Services
 
 GRMustache ships with a [standard library](standard_library.md) of various filters and tools for rendering your data.
 
-Our old friend [NSFormatter](NSFormatter.md) are also welcome to the party.
+Our old friend [NSFormatter](NSFormatter.md) is also welcome to the party.
 
 
 Flexibility
