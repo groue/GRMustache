@@ -7,6 +7,7 @@ GRMustache provides built-in support for NSFormatter and its subclasses such as 
 
 There are ready-made [filters](filters.md) and [rendering objects](rendering_objects.md) (aka "lambdas").
 
+
 Filter facet
 ------------
 
@@ -36,6 +37,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 Rendering:
 
     50%
+
 
 Rendering object facet
 ----------------------
@@ -96,5 +98,10 @@ Would render:
     - ham: 22%
     - butter: 43%
 
+
+Get inspired
+------------
+
+NSFormatter has been turned into a citizen of GRMustache using public APIs: check [the code](../src/classes/NSFormatter%2BGRMustache.m) for inspiration.
 
 [up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
