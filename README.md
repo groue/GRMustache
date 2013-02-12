@@ -97,9 +97,9 @@ Mustache, and beyond:
 - [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 - [Configuration](Guides/configuration.md)
 - [HTML vs. Text templates](Guides/html_vs_text.md)
-- [Filters](Guides/filters.md): `{{ uppercase(name) }}` and beyond.
+- [Filters](Guides/filters.md): `{{ uppercase(name) }}` et al.
 - [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
-- [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and beyond.
+- [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
 - [Protected Contexts](Guides/protected_contexts.md): protect some keys so that they always evaluate to the same value.
 - [Standard Library](Guides/standard_library.md): built-in, for your convenience.
 - [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
