@@ -5,15 +5,15 @@ The Standard Library
 
 GRMustache [default configuration](configuration.md) contains a library of predefined keys available for your templates:
 
-- 'HTML.escape'
-- 'javascript.escape'
+- `HTML.escape`
+- `javascript.escape`
 - `capitalized`
 - `isBlank`
 - `isEmpty`
 - `localize`
 - `lowercase`
 - `uppercase`
-- 'URL.escape'
+- `URL.escape`
 
 The standard library is built with GRMustache public APIs: you can build your own nifty library as well.
 
