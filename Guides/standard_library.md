@@ -127,11 +127,15 @@ As a [rendering object](rendering_objects.md), `localize` outputs the localizati
 
 This would render "Bonjour" given a French localization for "Hello".
 
+*NB: HTML-escaping is done as usual: you localize HTML chunks here, there is no escaping.*
+
 When looking for the localized string is the main bundle, GRMustache replaces all variable tags with "%@":
 
     {{# localize }}Hello {{name}}{{/ localize }}
 
 This would render "Bonjour Arthur" given a French localization for "Hello %@".
+
+*NB: HTML-escaping is done as usual: you localize HTML chunks here, there is no escaping, but for `{{name}}`.*
 
 You can embed conditional sections inside:
 
