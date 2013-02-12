@@ -1,3 +1,8 @@
+1.6.4:
+- update obsolete sample code
+- fix #warnings
+- Have `now` enter the standard library: `{{ dateFormat(now) }}`
+
 Nice to have:
 - document migration path from all previous versions to latest version
 
@@ -7,6 +12,5 @@ Missing tests:
 
 Experiments:
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
-- Have `now` enter the standard library: `{{ dateFormat(now, ISO_8601) }}`
-? Have filters put something in the scope: in `{{ dateFormat(date, ISO_8601) }}`, ISO_8601 would be defined by the dateFormat filter.
-? date/time formatter: `{{ dateFormat(date, Short) }}`, `{{ timeFormat(date, Short) }}`, `{{ dateTimeFormat(date, Short, Full) }}`
+- Have filters put something in the scope: in `{{ dateFormat(date, ISO_8601) }}`, ISO_8601 would be defined by the dateFormat filter.
+- date/time formatter: `{{ dateFormat(date, Short) }}`, `{{ timeFormat(date, Short) }}`, `{{ dateTimeFormat(date, Short, Full) }}`
