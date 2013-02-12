@@ -191,6 +191,10 @@ What other people say
 
 > Using GRMustache (Cocoa) for template processing. Looks like a top quality library. Good developer and good units tests. Get it on GitHub.
 
+[@dannolan](https://twitter.com/dannolan/status/301088034173120512)
+
+> okay GRMustache is the fucking daddy
+
 
 Popular projects & apps using GRMustache
 ----------------------------------------
