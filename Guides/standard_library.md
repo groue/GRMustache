@@ -143,6 +143,22 @@ You can embed conditional sections inside:
 
 Depending on the name, this would render "Bonjour Arthur" or "Bonjour toi", given French localizations for both "Hello %@" and "Hello you".
 
+### GRMustacheLocalizer
+
+The `localize` helper is based on the GRMustacheLocalizer class. You can create your own, and localize from a specific localization table from a specific bundle:
+
+```objc
+// Will localize from the given string file from the given bundle:
+GRMustacheLocalizer *localizer = [[GRMustacheLocalizer alloc] initWithBundle:... tableName:...];
+
+id data = @{
+    // Given the `localize` key, this localize overrides the default one:
+    @"localize": localizer,
+    ...
+};
+
+NSString *rendering = [GRMustacheTemplate renderObject:data from...];
+```
 
 lowercase
 ---------
@@ -184,6 +200,16 @@ Inner sections are unaffected, so that you can render loop and conditional secti
     {{/ URL.escape }}
 
 See also `HTML.escape`, `javascript.escape`
+
+
+Get inspired
+------------
+
+All items of the standard library are built using public APIs: check the code for inspiration:
+
+- [GRMustacheStandardLibrary.m](../src/classes/GRMustacheStandardLibrary.m)
+- [GRMustacheJavascriptLibrary.m](../src/classes/GRMustacheJavascriptLibrary.m)
+- [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)
 
 
 [up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
