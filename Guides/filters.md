@@ -25,32 +25,6 @@ You apply a filter just like calling a function, with parentheses:
 - Filters can return filters: `{{ f(x)(y) }}`.
 
 
-Standard filters library
-------------------------
-
-GRMustache ships with a bunch of already implemented filters:
-
-- `isEmpty`
-    
-    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or an empty string. Returns NO otherwise.
-
-- `isBlank`
-    
-    Returns YES if the input is nil, [NSNull null], or an empty enumerable object, or a string made of zero or more white space characters (space, tabs, newline). Returns NO otherwise.
-
-- `capitalized`
-    
-    Given "johannes KEPLER", it returns "Johannes Kepler".
-    
-- `lowercase`
-    
-    Given "johannes KEPLER", it returns "johannes kepler".
-
-- `uppercase`
-    
-    Given "johannes KEPLER", it returns "JOHANNES KEPLER".
-
-
 Defining your own filters
 -------------------------
 
@@ -181,7 +155,7 @@ NSString *rendering = [template renderObject:data error:NULL];
 Filters exceptions
 ------------------
 
-Should a filter be missing, or should the matching object not conform to the `GRMustacheFilter` protocol, GRMustache will raise an exception of name `GRMustacheRenderingException`.
+Should a filter be missing, or should the matching object not conform to the `GRMustacheFilter` protocol, GRMustache will return an error of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeRenderingError`.
 
 The message describes the exact place where the error occur has occurred:
 
