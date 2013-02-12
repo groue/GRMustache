@@ -152,7 +152,7 @@ The `localize` helper is based on the GRMustacheLocalizer class. You can create 
 GRMustacheLocalizer *localizer = [[GRMustacheLocalizer alloc] initWithBundle:... tableName:...];
 
 id data = @{
-    // Given the `localize` key, this localize overrides the default one:
+    // With the `localize` key, this localizer overrides the default one:
     @"localize": localizer,
     ...
 };
