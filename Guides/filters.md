@@ -152,8 +152,8 @@ NSString *rendering = [template renderObject:data error:NULL];
 ```
 
 
-Filters exceptions
-------------------
+Filters errors
+--------------
 
 Should a filter be missing, or should the matching object not conform to the `GRMustacheFilter` protocol, GRMustache will return an error of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeRenderingError`.
 
