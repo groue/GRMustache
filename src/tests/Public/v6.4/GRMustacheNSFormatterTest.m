@@ -78,7 +78,7 @@
     STAssertEqualObjects(rendering, @"50% 50%", @"");
 }
 
-- (void)testFormatterSectionDoesNotFormatUnprocessabkeInnerVariableTags
+- (void)testFormatterSectionDoesNotFormatUnprocessableInnerVariableTags
 {
     NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
