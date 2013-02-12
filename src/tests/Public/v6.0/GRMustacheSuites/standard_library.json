@@ -191,6 +191,18 @@
       "template": "{{{.}}} {{{HTML.escape(.)}}} {{HTML.escape(.)}}",
       "expected": "foo&\"'<> foo&amp;&quot;&apos;&lt;&gt; foo&amp;amp;&amp;quot;&amp;apos;&amp;lt;&amp;gt;"
     },
+    {
+      "name": "`HTML.escape` escapes all inner variable tags in a section.",
+      "data": { "subject1": "<", "subject2": ">" },
+      "template": "{{#HTML.escape}}{{subject1}}{{subject2}}{{{subject1}}}{{{subject2}}}{{/HTML.escape}}",
+      "expected": "&amp;lt;&amp;gt;&lt;&gt;"
+    },
+    {
+      "name": "`HTML.escape` does not escape inner section tags.",
+      "data": { "subject1": "<" },
+      "template": "{{#HTML.escape}}{{#subject1}}{{{subject1}}}{{/subject1}}{{^subject1}}-{{/subject1}}{{#subject2}}{{{subject2}}}{{/subject2}}{{^subject2}}-{{/subject2}}{{/HTML.escape}}",
+      "expected": "&lt;-"
+    },
     
     // javascript.escape
     {
@@ -253,6 +265,18 @@
       "template": "{{javascript.escape(.)}}",
       "expected": "paragraph separator:\\u2029and line separator:\\u2028"
     },
+    {
+      "name": "`javascript.escape` escapes all inner variable tags in a section.",
+      "data": { "subject1": "'subject1'", "subject2": "'subject2'" },
+      "template": "{{#javascript.escape}}{\"subject1\":\"{{subject1}}\",\"subject2\":\"{{subject2}}\"}{{/javascript.escape}}",
+      "expected": "{\"subject1\":\"\\u0027subject1\\u0027\",\"subject2\":\"\\u0027subject2\\u0027\"}"
+    },
+    {
+      "name": "`javascript.escape` does not escape inner section tags.",
+      "data": { "subject1": "'subject1'" },
+      "template": "{{#javascript.escape}}{\"subject1\":{{#subject1}}\"{{subject1}}\"{{/subject1}}{{^subject1}}null{{/subject1}},\"subject2\":{{#subject2}}\"{{subject2}}\"{{/subject2}}{{^subject2}}null{{/subject2}}}{{/javascript.escape}}",
+      "expected": "{\"subject1\":\"\\u0027subject1\\u0027\",\"subject2\":null}"
+    },
     
     // URL.escape
     {
@@ -284,6 +308,18 @@
       "data": "éı\ud83d\ude04",
       "template": "{{URL.escape(.)}}",
       "expected": "%C3%A9%C4%B1%F0%9F%98%84"
+    },
+    {
+      "name": "`URL.escape` escapes all inner variable tags in a section.",
+      "data": { "subject1": " ", "subject2": "&" },
+      "template": "{{#URL.escape}}subject1={{subject1}}&subject2={{subject2}}{{/URL.escape}}",
+      "expected": "subject1=%20&subject2=%26"
+    },
+    {
+      "name": "`URL.escape` does not escape inner section tags.",
+      "data": { "subject1": " " },
+      "template": "{{#URL.escape}}subject1={{subject1}}&subject2={{#subject2}}{{subject2}}{{/subject2}}{{^subject2}}0{{/subject2}}{{/URL.escape}}",
+      "expected": "subject1=%20&subject2=0"
     }
   ]
 }

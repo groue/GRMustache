@@ -57,7 +57,7 @@
             
         default:
             // {{# formatter }}...{{/ formatter }}
-            // {{^ formatter }}...{{/ formatter }}
+            // {{$ formatter }}...{{/ formatter }}
             
             // Render normally, but listen to all inner tags rendering, so that
             // we can format them.

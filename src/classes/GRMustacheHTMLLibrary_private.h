@@ -21,11 +21,13 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheRendering.h"
 #import "GRMustacheFilter.h"
+#import "GRMustacheTagDelegate.h"
 
 
 // =============================================================================
 #pragma mark - GRMustacheHTMLEscapeFilter
 
-@interface GRMustacheHTMLEscapeFilter: NSObject<GRMustacheFilter>
+@interface GRMustacheHTMLEscapeFilter: NSObject<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
 @end

@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheHTMLLibrary_private.h"
+#import "GRMustacheTag.h"
+#import "GRMustacheContext.h"
 #import "GRMustache_private.h"
 
 // =============================================================================
@@ -30,6 +32,9 @@
 
 #pragma mark <GRMustacheFilter>
 
+/**
+ * Support for {{ html.escape(value) }}
+ */
 - (id)transformedValue:(id)object
 {
     if (object == [NSNull null]) {
@@ -37,6 +42,55 @@
     }
     NSString *string = [object description];
     return [GRMustache escapeHTML:string];
+}
+
+
+#pragma mark - <GRMustacheRendering>
+
+/**
+ * Support for {{# html.escape }}...{{ value }}...{{ value }}...{{/ html.escape }}
+ */
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ html.escape }}
+            // Behave as a regular object: render self's description
+            if (HTMLSafe != NULL) { *HTMLSafe = NO; }
+            return [self description];
+            
+        case GRMustacheTagTypeInvertedSection:
+            // {{^ html.escape }}...{{/ html.escape }}
+            // Behave as a truthy object: don't render for inverted sections
+            return nil;
+            
+        default:
+            // {{# html.escape }}...{{/ html.escape }}
+            // {{$ html.escape }}...{{/ html.escape }}
+            
+            // Render normally, but listen to all inner tags rendering, so that
+            // we can format them.
+            context = [context contextByAddingTagDelegate:self];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    }
+}
+
+
+#pragma mark - <GRMustacheTagDelegate>
+
+/**
+ * Support for {{# html.escape }}...{{ value }}...{{ value }}...{{/ html.escape }}
+ */
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    // Process {{ value }}
+    if (tag.type == GRMustacheTagTypeVariable) {
+        
+        return [self transformedValue:object];
+    }
+    
+    // Don't process {{# value }}, {{^ value }}, {{$ value }}
+    return object;
 }
 
 @end

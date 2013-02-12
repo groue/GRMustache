@@ -21,15 +21,20 @@
 // THE SOFTWARE.
 
 #import "GRMustacheJavascriptLibrary_private.h"
+#import "GRMustacheTag.h"
+#import "GRMustacheContext.h"
 
 
 // =============================================================================
-#pragma mark - GRMustacheJavascriptEscapeFilter
+#pragma mark - GRMustacheJavascriptEscaper
 
-@implementation GRMustacheJavascriptEscapeFilter
+@implementation GRMustacheJavascriptEscaper
 
 #pragma mark <GRMustacheFilter>
 
+/**
+ * Support for {{ javascript.escape(value) }}
+ */
 - (id)transformedValue:(id)object
 {
     if (object == [NSNull null]) {
@@ -154,6 +159,55 @@
         CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
     }
     return buffer;
+}
+
+
+#pragma mark - <GRMustacheRendering>
+
+/**
+ * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
+ */
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ javascript.escape }}
+            // Behave as a regular object: render self's description
+            if (HTMLSafe != NULL) { *HTMLSafe = NO; }
+            return [self description];
+            
+        case GRMustacheTagTypeInvertedSection:
+            // {{^ javascript.escape }}...{{/ javascript.escape }}
+            // Behave as a truthy object: don't render for inverted sections
+            return nil;
+            
+        default:
+            // {{# javascript.escape }}...{{/ javascript.escape }}
+            // {{$ javascript.escape }}...{{/ javascript.escape }}
+            
+            // Render normally, but listen to all inner tags rendering, so that
+            // we can format them.
+            context = [context contextByAddingTagDelegate:self];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    }
+}
+
+
+#pragma mark - <GRMustacheTagDelegate>
+
+/**
+ * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
+ */
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    // Process {{ value }}
+    if (tag.type == GRMustacheTagTypeVariable) {
+        
+        return [self transformedValue:object];
+    }
+    
+    // Don't process {{# value }}, {{^ value }}, {{$ value }}
+    return object;
 }
 
 @end
