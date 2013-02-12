@@ -77,6 +77,7 @@
     if (tag.type == GRMustacheTagTypeVariable) {
         
         // Preserve nil values
+#warning Is this such a good idea?
         if (object == nil) {
             return nil;
         }
