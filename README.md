@@ -102,7 +102,7 @@ Mustache, and beyond:
 - [Rendering Objects](Guides/rendering_objects.md): how to write "Mustache lambdas", and generally provide your custom rendering code.
 - [Protected Contexts](Guides/protected_contexts.md): how to have some keys always evaluate to the same value.
 - [Standard Library](Guides/standard_library.md): pre-built filters and lambdas, for your convenience.
-- [NSFormatter and NSValueTransformer](Guides/NSFormatter.md): use them.
+- [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
 
 
 ### Sample code

@@ -3,10 +3,8 @@
 GRMustache introduction
 =======================
 
-Features
---------
-
-### Core Mustache
+Core Mustache
+-------------
 
 Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
 
@@ -17,23 +15,25 @@ Make sure you get familiar with the Mustache syntax and features first: http://m
 - **"set delimiter tags"**, as `{{=<% %>=}}`
 
 
-### Overlooked Mustache
+Overlooked Mustache
+-------------------
 
-Those features are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
+Those are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
 - **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
 
 
-### Beyond Mustache
+Beyond Mustache
+---------------
 
 Genuine Mustache falls short on a few topics.
 
 GRMustache core engine implements syntaxes and features that are not in the specification (see the [Compatibility Guide](compatibility.md) for details).
 
 
-#### Syntax extensions
+### Syntax extensions
 
 - **Empty closing tags**, as in `{{#name}}...{{/}}`
 
@@ -52,7 +52,7 @@ GRMustache core engine implements syntaxes and features that are not in the spec
 - **Loops in variable tags**: a simple variable tag `{{items}}` renders a concatenation of the rendering of each individual item. You may think of Ruby on Rails' `<%= render @items %>`: check the [Rendering Objects Guide](rendering_objects.md).
 
 
-#### More partials
+### More partials
 
 - **Support for the file system hierarchy**.
     
@@ -69,26 +69,33 @@ GRMustache core engine implements syntaxes and features that are not in the spec
     Overridable partials are documented in the [Partials Guide](partials.md).
 
 
-#### Text templates
+### Text templates
 
 Mustache focuses on rendering HTML, and safely HTML-escape your data.
 
 GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
-#### Filters
+### Filters
 
 Filters, as `{{ uppercase(name) }}`, are documented in the [Filters Guide](filters.md).
 
 
-### Services
+### Lambdas that work
+
+Forget everything you know about genuine Mustache lambdas, and give GRMustache [rendering objects](rendering_objects.md) a try.
+
+
+Services
+--------
 
 GRMustache ships with a [standard library](standard_library.md) of various filters and tools for rendering your data.
 
-Our old friends [NSFormatter and NSValueTransformer](NSFormatter.md) are also welcome to the party.
+Our old friend [NSFormatter](NSFormatter.md) are also welcome to the party.
 
 
-### Flexibility
+Flexibility
+-----------
 
 GRMustache's core engine is extensible. Feel free to hook in:
 
