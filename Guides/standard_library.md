@@ -120,7 +120,7 @@ As a [filter](filters.md), `localize` outputs a string looked in the Localizable
 
     {{ localize(greeting) }}
 
-This would render "Bonjour", given "Hello" as a greeting, and a French localization for "Hello".
+This would render `Bonjour`, given `Hello` as a greeting, and a French localization for `Hello`.
 
 ### Localizing template content
 
@@ -128,7 +128,7 @@ As a [rendering object](rendering_objects.md), `localize` outputs the localizati
 
     {{# localize }}Hello{{/ localize }}
 
-This would render `Bonjour`, given a French localization for `"Hello"`.
+This would render `Bonjour`, given a French localization for `Hello`.
 
 *Warning*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping.
 
@@ -138,11 +138,11 @@ When looking for the localized string is the main bundle, GRMustache replaces al
 
     {{# localize }}Hello {{name}}{{/ localize }}
 
-This would render `Bonjour Arthur`, given a French localization for `"Hello %@"`. `[NSString stringWithFormat:]` is used for the final interpolation.
+This would render `Bonjour Arthur`, given a French localization for `Hello %@`. `[NSString stringWithFormat:]` is used for the final interpolation.
 
 *Warning 1*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping, but for `{{name}}`.
 
-*Warning 2*: because of the invocation of `stringWithFormat:`, make sure your localized strings escape their percents. `{{# localize }}%:{{name}}{{/ localize }}` will render fine as long as you provide a localization for `"%%:%@"`.
+*Warning 2*: because of the invocation of `stringWithFormat:`, make sure your localized strings escape their percents. `{{# localize }}%:{{name}}{{/ localize }}` will render fine as long as you provide a localization for `%%:%@`.
 
 ### Localizing template content with embedded variables and conditions
 
@@ -150,7 +150,7 @@ You can embed conditional sections inside:
 
     {{# localize }}Hello {{#name}}{{name}}{{^}}you{{/}}{{/ localize }}
 
-Depending on the name, this would render `Bonjour Arthur` or `Bonjour toi`, given French localizations for both `"Hello %@"` and `"Hello you"`.
+Depending on the name, this would render `Bonjour Arthur` or `Bonjour toi`, given French localizations for both `Hello %@` and `Hello you`.
 
 
 ### GRMustacheLocalizer
