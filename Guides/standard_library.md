@@ -130,7 +130,7 @@ As a [rendering object](rendering_objects.md), `localize` outputs the localizati
 
 This would render `Bonjour`, given a French localization for `Hello` in the Localizable.string table of the main bundle.
 
-*Warning*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping.
+*Warning*: HTML-escaping is done as usual: you localize template snippets that are HTML chunks. There is no escaping.
 
 ### Localizing template content with embedded variables
 
@@ -140,7 +140,7 @@ When looking for the localized string, GRMustache replaces all variable tags wit
 
 This would render `Bonjour Arthur`, given a French localization for `Hello %@` in the Localizable.string table of the main bundle. `[NSString stringWithFormat:]` is used for the final interpolation.
 
-*Warning 1*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping, but for `{{name}}`.
+*Warning 1*: HTML-escaping is done as usual: you localize template snippets that are HTML chunks. There is no escaping, but for `{{name}}`.
 
 *Warning 2*: because of the invocation of `stringWithFormat:`, make sure your localized strings escape their percents. `{{# localize }}%:{{name}}{{/ localize }}` will render fine as long as you provide a localization for `%%:%@`.
 
