@@ -32,7 +32,7 @@ As a [rendering object](rendering_objects.md), `HTML.escape` escapes all inner v
       {{ lastName }}
     {{/ HTML.escape }}
 
-Inner sections are unaffected, so that you can render loop and conditional sections without escaping side effects:
+Variable tags buried inside inner sections are escaped as well, so that you can render loop and conditional sections:
 
     {{# HTML.escape }}
       {{# items }}
@@ -99,7 +99,7 @@ As a [rendering object](rendering_objects.md), `javascript.escape` escapes all i
       {{/ javascript.escape }}
     </script>
 
-Inner sections are unaffected, so that you can render loop and conditional sections without escaping side effects:
+Variable tags buried inside inner sections are escaped as well, so that you can render loop and conditional sections:
 
     <script type="text/javascript">
       {{# javascript.escape }}
@@ -203,7 +203,7 @@ As a [rendering object](rendering_objects.md), `URL.escape` escapes all inner va
       <a href="http://google.com?q={{ query }}&hl={{ language }}">
     {{/ URL.escape }}
 
-Inner sections are unaffected, so that you can render loop and conditional sections without escaping side effects:
+Variable tags buried inside inner sections are escaped as well, so that you can render loop and conditional sections:
 
     {{# URL.escape }}
       <a href="http://google.com?q={{ query }}{{#language}}&hl={{ language }}{{/language}}">
