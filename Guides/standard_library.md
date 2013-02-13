@@ -5,15 +5,15 @@ The Standard Library
 
 GRMustache [default configuration](configuration.md) contains a library of predefined keys available for your templates:
 
-- [`HTML.escape`](#htmlescape)
-- [`capitalized`](#capitalized)
-- [`isBlank`](#isblank)
-- [`isEmpty`](#isempty)
-- [`javascript.escape`](#javascriptescape)
-- [`localize`](#localize)
-- [`lowercase`](#lowercase)
-- [`uppercase`](#uppercase)
-- [`URL.escape`](#urlescape)
+- [HTML.escape](#htmlescape)
+- [capitalized](#capitalized)
+- [isBlank](#isblank)
+- [isEmpty](#isempty)
+- [javascript.escape](#javascriptescape)
+- [localize](#localize)
+- [lowercase](#lowercase)
+- [uppercase](#uppercase)
+- [URL.escape](#urlescape)
 
 
 HTML.escape
@@ -40,7 +40,7 @@ Inner sections are unaffected, so that you can render loop and conditional secti
       {{/}}
     {{/ HTML.escape }}
 
-See also [`javascript.escape`](#javascriptescape), [`URL.escape`](#urlescape)
+See also [javascript.escape](#javascriptescape), [URL.escape](#urlescape)
 
 
 capitalized
@@ -50,7 +50,7 @@ This [filter](filters.md) returns its argument, capitalized: the first character
 
     {{ capitalized(firstName) }} {{ capitalized(lastName) }}
 
-See also [`lowercase`](#lowercase), [`uppercase`](#uppercase).
+See also [lowercase](#lowercase), [uppercase](#uppercase).
 
 
 isBlank
@@ -64,7 +64,7 @@ This [filter](filters.md) is true if and only if its argument is "blank", that i
       {{name}}
     {{/}}
 
-See also [`isEmpty`](#isempty).
+See also [isEmpty](#isempty).
 
 
 isEmpty
@@ -78,7 +78,7 @@ This [filter](filters.md) is true if and only if its argument is "empty", that i
       {{name}}
     {{/}}
 
-See also [`isBlank`](#isblank).
+See also [isBlank](#isblank).
 
 
 javascript.escape
@@ -108,7 +108,7 @@ Inner sections are unaffected, so that you can render loop and conditional secti
       {{/ javascript.escape }}
     </script>
 
-See also [`HTML.escape`](#htmlescape), [`URL.escape`](#urlescape)
+See also [HTML.escape](#htmlescape), [URL.escape](#urlescape)
 
 
 localize
@@ -177,7 +177,7 @@ This [filter](filters.md) returns a lowercased representation of its argument.
 
     {{ lowercase(name) }}
 
-See also [`capitalized`](#capitalized), [`uppercase`](#uppercase).
+See also [capitalized](#capitalized), [uppercase](#uppercase).
 
 
 uppercase
@@ -187,7 +187,7 @@ This [filter](filters.md) returns a uppercased representation of its argument.
 
     {{ uppercase(name) }}
 
-See also [`lowercase`](#lowercase), [`uppercase`](#uppercase).
+See also [lowercase](#lowercase), [uppercase](#uppercase).
 
 
 URL.escape
@@ -209,7 +209,7 @@ Inner sections are unaffected, so that you can render loop and conditional secti
       <a href="http://google.com?q={{ query }}{{#language}}&hl={{ language }}{{/language}}">
     {{/ URL.escape }}
 
-See also [`HTML.escape`](#htmlescape), [`javascript.escape`](#javascriptescape)
+See also [HTML.escape](#htmlescape), [javascript.escape](#javascriptescape)
 
 
 Get inspired
