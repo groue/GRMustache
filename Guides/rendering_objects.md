@@ -419,7 +419,7 @@ Many useful things.
     
     When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
-    There is also a `contextByAddingTagDelegate:` method, that is documented in the [Delegates Guide](delegate.md). An interesting usage of this method is demonstrated in the [Localization Sample Code](sample_code/localization.md).
+    There is also a `contextByAddingTagDelegate:` method, that is illustrated in the [Delegates Guide](delegate.md).
 
 
 Example: Render collections of objects
@@ -482,8 +482,6 @@ You *can* write specification-compliant "Mustache lambdas" with rendering object
 
 Sample code
 -----------
-
-The [Localization Sample Code](sample_code/localization.md) uses the `GRMustacheRendering` protocol for localizing portions of template.
 
 The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 

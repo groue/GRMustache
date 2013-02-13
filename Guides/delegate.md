@@ -150,67 +150,17 @@ You can, for instance, provide default rendering for missing values:
 [[Document new] render];
 ```
 
-### Altering the rendering of tags in a section
-
-As stated above, when a section renders an object that conforms to the `GRMustacheTagDelegate` protocol, this object observes the rendering of all tags inside the section.
-
-The [Localization Sample Code](sample_code/localization.md) will give us an example, but let's have fun with numbers, and have Mustache format all numbers in a section attached to a `NSNumberFormatter` instance:
-
-```objc
-// Have NSNumberFormatter conform to the GRMustacheTagDelegate protocol,
-// so that a formatter can format all numbers in a section:
-@interface NSNumberFormatter(Document)<GRMustacheTagDelegate>
-@end
-
-@implementation NSNumberFormatter(Document)
-
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
-{
-    // Format all numbers that happen to be rendered by variable tags such as
-    // `{{ count }}`.
-    //
-    // We avoid messing with sections, since they rely on boolean values of
-    // numbers.
-    
-    if (tag.type == GRMustacheTagTypeVariable && [object isKindOfClass:[NSNumber class]]) {
-        return [self stringFromNumber:object];
-    }
-    return object;
-}
-
-@end
-
-NSString *templateString = @"x = {{x}}\n"
-                           @"{{#percent}}x = {{x}}{{/percent}}\n"
-                           @"{{#decimal}}x = {{x}}{{/decimal}}";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-
-NSNumberFormatter *percentFormatter = [NSNumberFormatter new];
-percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-
-NSNumberFormatter *decimalFormatter = [NSNumberFormatter new];
-decimalFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-
-id data = @{
-    @"x": @(0.5),
-    @"percent": percentFormatter,
-    @"decimal": decimalFormatter
-};
-
-// On a French system:
-// x = 0.5
-// x = 50 %
-// x = 0,5
-NSString *rendering = [template renderObject:data error:NULL];
-```
-
 
 Tag Delegates as Cross-Platform Filters
 ---------------------------------------
 
-Let's consider again the number formatting example above. We were able to render `{{#percent}}x = {{x}}{{/percent}}` as `x = 50 %`: The tag delegate attached to the `percent` has formatted the number `x` as a percentage.
+Tag delegates can observe, but also *alter* the rendering of all tags inside a section or the full template.
 
-You could also use [filters](filters.md) in order to format numbers: `x = {{ percent(x) }}` would render just as well.
+Let's consider the behavior of NSFormatter in GRMustache. They are able to format all variable tags inside a section (check the [NSFormatter Guide](NSFormatter.md)).
+
+For example, `{{#percent}}x = {{x}}{{/percent}}` renders as `x = 50 %` when `percent` is attached to an NSNumberFormatter. That is because formatters are *tag delegates*.
+
+We could also use [filters](filters.md) in order to format numbers: `x = {{ percent(x) }}` would render just as well.
 
 However, `{{#percent}}x = {{x}}{{/percent}}` has one advantage over `x = {{ percent(x) }}`: it uses plain Mustache syntax, and is compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations).
 
@@ -222,7 +172,7 @@ With such a common template, it's now a matter of providing different data, depe
     // data for GRMustache
     {
       "x": 0.5,
-      "percent": the_formating_tag_delegate
+      "percent": (some well-configured NSNumberFormatter)
     }
 
     // data for other Mustache implementations
@@ -276,18 +226,13 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 The final rendering is "JOHANNES KEPLER".
 
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
 The [Mustache specification](https://github.com/mustache/spec) does not have the concept of "tag delegates".
 
 **As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use `GRMustacheTagDelegate` with great care.**
-
-
-Sample code
------------
-
-The [Localization Sample Code](sample_code/localization.md) uses tag delegates for localizing portions of a template.
 
 
 [up](../../../../GRMustache#documentation), [next](rendering_objects.md)

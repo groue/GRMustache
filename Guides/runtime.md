@@ -239,7 +239,6 @@ Such sections are fully documented in the [Rendering Objects Guide](rendering_ob
 
 ```objc
 id data = @{
-    @"localize": [LocalizingHelper new],
     @"name1": @"Gustave",
     @"name2": @"Henriett" };
 
@@ -252,7 +251,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-This fancy `LocalizingHelper` class is described in the [Localization Sample Code](sample_code/localization.md).
+The `localize` key is attached to a rendering object that is built in the [standard library](standard_library.md) shipped with GRMustache.
 
 
 ### Other sections

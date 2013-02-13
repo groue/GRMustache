@@ -107,9 +107,7 @@ Mustache, and beyond:
 
 ### Sample code
 
-- [Number Formatting](Guides/sample_code/number_formatting.md): how to format numbers
 - [Collection Indexes](Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- [Localization](Guides/sample_code/localization.md): how to localize portions of your templates
 
 ### Reference
 
@@ -132,7 +130,7 @@ FAQ
 
 - **Q: Is it possible to format numbers and dates?**
     
-    A: [Yes](Guides/sample_code/number_formatting.md)
+    A: Yes. Use [NSNumberFormatter and NSDateFormatter](Guides/NSFormatter.md).
 
 - **Q: Is it possible to render partial templates whose name is only known at runtime?**
 
@@ -144,7 +142,7 @@ FAQ
 
 - **Q: Is it possible to localize templates?**
 
-    A: [Yes](Guides/sample_code/localization.md)
+    A: [Yes](Guides/standard_library.md#localize)
 
 - **Q: Is it possible to render default values for missing keys?**
 

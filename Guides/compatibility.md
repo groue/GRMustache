@@ -144,9 +144,9 @@ Tag delegates
 
 GRMustache's [tag delegates](delegate.md), unknown to the Mustache specification, let you observe, and possibly alter the rendering of the Mustache tags.
 
-Tag delegates may be used for formatting values in a spec-compliant way (see sample code in [Tag Delegates Guide](delegate.md)). They may also be used for putting Mustache on steroids, as in the [Localization Sample Code](sample_code/localization.md).
+Tag delegates may be used for formatting values in a spec-compliant way (see sample code in [Tag Delegates Guide](delegate.md)). They may also at the core of many items of the [standard library](standard_library.md).
 
-As such, they are an ambiguous tool. You will have to know when you cross the line.
+They are an ambiguous tool. You will have to know when you cross the line.
 
 
 [up](../../../../GRMustache#documentation), [next](configuration.md)

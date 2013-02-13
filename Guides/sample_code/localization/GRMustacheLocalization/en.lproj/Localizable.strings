@@ -1,5 +1,0 @@
-"Hello" = "Salut";
-"Hello %@! Do you know %@?" = "Salut %@ ! Tu connais %@ ?";
-"%@ and %@ have no mutual friend." = "%@ et %@ n’ont pas d’ami commun.";
-"%@ and %@ have one mutual friend." = "%@ et %@ ont un ami commun.";
-"%@ and %@ have %@ mutual friends." = "%@ et %@ ont %@ amis communs.";

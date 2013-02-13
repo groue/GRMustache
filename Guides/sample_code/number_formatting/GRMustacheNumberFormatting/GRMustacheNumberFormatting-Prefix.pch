@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'GRMustacheNumberFormatting' target in the 'GRMustacheNumberFormatting' project
-//
-
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-#endif

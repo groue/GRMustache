@@ -1,4 +1,4 @@
-[up](../../../../tree/master/Guides/sample_code), [next](localization.md)
+[up](../../../../tree/master/Guides/sample_code), [next](../forking.md)
 
 Collection Indexes
 ==================
@@ -153,4 +153,4 @@ Writing [filters](../filters.md) that return [rendering objects](../rendering_ob
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**
 
-[up](../../../../tree/master/Guides/sample_code), [next](localization.md)
+[up](../../../../tree/master/Guides/sample_code), [next](../forking.md)
