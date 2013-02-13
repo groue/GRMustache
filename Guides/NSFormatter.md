@@ -77,19 +77,14 @@ Rendering:
     daily: 150%
     weekly: 400%
 
-### Built-in Guards
-
-NSFormatters do not format:
-
-- values that can not be formatted (values that can't be formatted have the `stringForObjectValue:` method return nil, as stated by [apple](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSFormatter_Class/Reference/Reference.html#//apple_ref/occ/instm/NSFormatter/stringForObjectValue:)).
-- inner section tags: your loop and conditional sections are unaffected:
+Variable tags buried inside inner sections are escaped as well, so that you can render loop and conditional sections. However, values that can't be formatted are left untouched:
 
 `Document.mustache`:
 
     {{# percent }}
-      {{# items }}              {{! no formatting applied here. }}
-      - {{ name }}: {{ gain }}  {{! name is intact, gain is formatted. }}
-      {{/ items }}
+      {{# ingredients }}
+      - {{ name }}: {{ proportion }}  {{! name is intact, gain is formatted. }}
+      {{/ ingredients }}
     {{/ percent }}
 
 Would render:
@@ -97,6 +92,9 @@ Would render:
     - bread: 50%
     - ham: 22%
     - butter: 43%
+
+Precisely speaking, "values that can't be formatted" are the ones that have the `stringForObjectValue:` method return nil, as stated by [apple](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSFormatter_Class/Reference/Reference.html#//apple_ref/occ/instm/NSFormatter/stringForObjectValue:).
+
 
 
 Get inspired
