@@ -485,4 +485,6 @@ Sample code
 
 The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 
+The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{name}}{{/ localize }}`.
+
 [up](../../../../GRMustache#documentation), [next](protected_contexts.md)

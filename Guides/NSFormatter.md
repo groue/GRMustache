@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
+[up](../../../../GRMustache#documentation), [next](sample_code)
 
 NSFormatter
 ===========
@@ -104,4 +104,4 @@ Get inspired
 
 NSFormatter has been turned into a citizen of GRMustache using public APIs: check [the code](../src/classes/NSFormatter%2BGRMustache.m) for inspiration.
 
-[up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
+[up](../../../../GRMustache#documentation), [next](sample_code)
