@@ -150,4 +150,232 @@
     STAssertTrue(rendering.length > 0, @"");
 }
 
+- (void)testNumberFormatterRendersNothingForNil
+{
+    // Check that NSNumberFormatter does not have surprising behavior, and
+    // does not format nil.
+    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    
+    id data = @{ @"format":formatter };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
+- (void)testNumberFormatterRendersNothingForNSNull
+{
+    // Check that NSNumberFormatter does not have surprising behavior, and
+    // does not format NSNull.
+    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    
+    id data = @{ @"format":formatter, @"value": [NSNull null] };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
+- (void)testNumberFormatterRendersNothingForNSString
+{
+    // Check that NSNumberFormatter does not have surprising behavior, and
+    // does not format NSString.
+    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    
+    {
+        id data = @{ @"format":formatter, @"value":@"1" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+    {
+        id data = @{ @"format":formatter, @"value":@"YES" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+    {
+        id data = @{ @"format":formatter, @"value":@"foo" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+}
+
+- (void)testNumberFormatterRendersNothingForNSDate
+{
+    // Check that NSNumberFormatter does not have surprising behavior, and
+    // does not format NSDate.
+    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    
+    id data = @{ @"format":formatter, @"value": [NSDate date] };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
+- (void)testDateFormatterRendersNothingForNil
+{
+    // Check that NSDateFormatter does not have surprising behavior, and
+    // does not format nil.
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    formatter.dateStyle = NSDateFormatterFullStyle;
+    
+    id data = @{ @"format":formatter };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
+- (void)testDateFormatterRendersNothingForNSNull
+{
+    // Check that NSDateFormatter does not have surprising behavior, and
+    // does not format NSNull.
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    formatter.dateStyle = NSDateFormatterFullStyle;
+    
+    id data = @{ @"format":formatter, @"value": [NSNull null] };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
+- (void)testDateFormatterRendersNothingForNSString
+{
+    // Check that NSDateFormatter does not have surprising behavior, and
+    // does not format NSString.
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    formatter.dateStyle = NSDateFormatterFullStyle;
+    
+    {
+        id data = @{ @"format":formatter, @"value":@"1" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+    {
+        id data = @{ @"format":formatter, @"value":@"YES" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+    {
+        id data = @{ @"format":formatter, @"value":@"foo" };
+        
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"<>", @"");
+        }
+        {
+            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+            NSString *rendering = [template renderObject:data error:NULL];
+            STAssertEqualObjects(rendering, @"NO", @"");
+        }
+    }
+}
+
+- (void)testDateFormatterRendersNothingForNSNumber
+{
+    // Check that NSDateFormatter does not have surprising behavior, and
+    // does not format NSNumber.
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    formatter.dateStyle = NSDateFormatterFullStyle;
+    
+    id data = @{ @"format":formatter, @"value": [NSNumber numberWithInteger:0] };
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{format(value)}}>" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"<>", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#format(value)}}YES{{/}}{{^format(value)}}NO{{/}}" error:NULL];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"NO", @"");
+    }
+}
+
 @end

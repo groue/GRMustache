@@ -33,8 +33,14 @@
  */
 - (id)transformedValue:(id)object
 {
-#warning What about nil?
-#warning What about [NSNull null]?
+    // [NSNumberFormatter stringForObjectValue:] and
+    // [NSDateFormatter stringForObjectValue:] return nil or an empty string for
+    // nil, [NSNull null], and other off-topic values.
+    //
+    // Since nil and empty strings do not render anything, and are false when
+    // controlling boolean sections, we can safely say that formatters do not
+    // have surprising behavior: just use the plain straight
+    // stringForObjectValue: without any special care.
     return [self stringForObjectValue:object];
 }
 
@@ -78,16 +84,9 @@
     // Process {{ value }}, if and only if the value is processable
     if (tag.type == GRMustacheTagTypeVariable) {
         
-        // Preserve nil values
-#warning Is this such a good idea to force nil preservation?
-#warning What about [NSNull null]?
-        if (object == nil) {
-            return nil;
-        }
+        NSString *formatted = [self stringForObjectValue:object];
         
-        NSString *result = [self stringForObjectValue:object];
-        
-        if (result == nil) {
+        if (formatted == nil) {
             // NSFormatter documentation for stringForObjectValue: states:
             //
             // > First test the passed-in object to see if it’s of the correct
@@ -100,7 +99,7 @@
             return object;
         }
         
-        return result;
+        return formatted;
     }
     
     // Don't process {{# value }}, {{^ value }}, {{$ value }}

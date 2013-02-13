@@ -1,6 +1,5 @@
 1.6.4:
 - update obsolete sample code
-- fix #warnings
 
 Nice to have:
 - document migration path from all previous versions to latest version
