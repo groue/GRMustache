@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
+[up](../../../../GRMustache#documentation), [next](compatibility.md)
 
 The Standard Library
 ====================
@@ -222,4 +222,4 @@ All items of the standard library are built using public APIs: check the code fo
 - [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)
 
 
-[up](../../../../GRMustache#documentation), [next](../../../tree/master/Guides/sample_code)
+[up](../../../../GRMustache#documentation), [next](compatibility.md)

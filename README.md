@@ -92,6 +92,10 @@ Rendering templates:
 - [Runtime](Guides/runtime.md): how GRMustache renders your data.
 - [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
+Standard library:
+
+- [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
+
 Mustache, and beyond:
 
 - [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
@@ -101,7 +105,6 @@ Mustache, and beyond:
 - [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
 - [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
 - [Protected Contexts](Guides/protected_contexts.md): protect some keys so that they always evaluate to the same value.
-- [Standard Library](Guides/standard_library.md): built-in, for your convenience.
 - [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
 
 

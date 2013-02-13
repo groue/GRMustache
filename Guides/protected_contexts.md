@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](standard_library.md)
+[up](../../../../GRMustache#documentation), [next](NSFormatter.md)
 
 Protected Contexts
 ==================
@@ -116,4 +116,4 @@ The [Mustache specification](https://github.com/mustache/spec) does not have any
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use protected objects with great care.**
 
 
-[up](../../../../GRMustache#documentation), [next](standard_library.md)
+[up](../../../../GRMustache#documentation), [next](NSFormatter.md)
