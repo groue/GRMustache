@@ -83,7 +83,7 @@ Variable tags buried inside inner sections are escaped as well, so that you can 
 
     {{# percent }}
       {{# ingredients }}
-      - {{ name }}: {{ proportion }}  {{! name is intact, gain is formatted. }}
+      - {{ name }}: {{ proportion }}  {{! name is intact, proportion is formatted. }}
       {{/ ingredients }}
     {{/ percent }}
 
