@@ -1,6 +1,7 @@
 1.6.4:
 - update obsolete sample code
-- {{ localize(format, value, ...) }}
+? {{ localize(format, value, ...) }}
+- %-escape localizable format, so that we can safely render {{#localize}}%@{{/localize}}.
 
 Nice to have:
 - document migration path from all previous versions to latest version
