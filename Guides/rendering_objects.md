@@ -487,4 +487,6 @@ The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustach
 
 The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{name}}{{/ localize }}`.
 
+Last but not least, NSFormatter instances are rendering objets as well, so that `{{#decimal}}{{x}}+{{y}}={{sum}}{{/decimal}}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
+
 [up](../../../../GRMustache#documentation), [next](protected_contexts.md)
