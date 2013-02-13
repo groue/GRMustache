@@ -102,6 +102,33 @@
     STAssertEqualObjects(rendering, @".bar.truc.", @"");
 }
 
+- (void)testLocalizerAsRenderingObjectWithoutArgumentDoesNotNeedPercentEscapedLocalizedString
+{
+    NSString *templateString = @"{{#localize}}%d{{/}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    NSString *rendering = [template renderObject:nil error:NULL];
+    
+    // test the raw localization
+    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%d" value:nil table:nil], @"ha ha percent d %d", @"");
+    
+    // test the GRMustache localization
+    STAssertEqualObjects(rendering, @"ha ha percent d %d", @"");
+}
+
+- (void)testLocalizerAsRenderingObjectWithoutArgumentNeedsPercentEscapedLocalizedString
+{
+    NSString *templateString = @"{{#localize}}%d {{foo}}{{/}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    id data = @{ @"foo": @"bar" };
+    NSString *rendering = [template renderObject:data error:NULL];
+    
+    // test the raw localization
+    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%d %@" value:nil table:nil], @"ha ha percent d %%d %@", @"");
+    
+    // test the GRMustache localization
+    STAssertEqualObjects(rendering, @"ha ha percent d %d foo", @"");
+}
+
 - (void)testCustomLocalizerAsFilter
 {
     NSString *templateString = @"{{localize(foo)}}";

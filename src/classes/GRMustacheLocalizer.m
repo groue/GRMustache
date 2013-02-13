@@ -118,8 +118,30 @@
      * Localize the format, and render.
      */
     
-    NSString *localizedFormat = [self localizedStringForKey:localizableFormat];
-    NSString *rendering = [self stringWithFormat:localizedFormat argumentArray:self.formatArguments];
+    NSString *rendering = nil;
+    if (self.formatArguments.count > 0) {
+        /**
+         * Caution here:
+         *
+         * When rendering {{#localize}}%d{{name}}{{/localize}},
+         * The localizableFormat string we have just built is %d%@.
+         *
+         * Because of the %d, it can not be straightly used with
+         * stringWithFormat:.
+         *
+         * So escape percents first, and build %%d%@: this is the format that
+         * gets localized.
+         */
+        
+        localizableFormat = [localizableFormat stringByReplacingOccurrencesOfString:@"%" withString:@"%%"];
+        localizableFormat = [localizableFormat stringByReplacingOccurrencesOfString:@"%%@" withString:@"%@"];
+        
+        NSString *localizedFormat = [self localizedStringForKey:localizableFormat];
+        rendering = [self stringWithFormat:localizedFormat argumentArray:self.formatArguments];
+    } else {
+        // Do not take extra precaution here.
+        rendering = [self localizedStringForKey:localizableFormat];
+    }
     
     
     /**
