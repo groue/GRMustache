@@ -5,15 +5,15 @@ The Standard Library
 
 GRMustache [default configuration](configuration.md) contains a library of predefined keys available for your templates:
 
-- `HTML.escape`
-- `capitalized`
-- `isBlank`
-- `isEmpty`
-- `javascript.escape`
-- `localize`
-- `lowercase`
-- `uppercase`
-- `URL.escape`
+- [`HTML.escape`](#htmlescape)
+- [`capitalized`](#capitalized)
+- [`isBlank`](#isblank)
+- [`isEmpty`](#isempty)
+- [`javascript.escape`](#javascriptescape)
+- [`localize`](#localize)
+- [`lowercase`](#lowercase)
+- [`uppercase`](#uppercase)
+- [`URL.escape`](#urlescape)
 
 
 HTML.escape
@@ -50,7 +50,7 @@ This [filter](filters.md) returns its argument, capitalized: the first character
 
     {{ capitalized(firstName) }} {{ capitalized(lastName) }}
 
-See also [`lowercase`]'(#lowercase), [`uppercase`](#uppercase).
+See also [`lowercase`](#lowercase), [`uppercase`](#uppercase).
 
 
 isBlank
