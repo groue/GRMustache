@@ -42,6 +42,12 @@ The global default configuration is there to suit your needs: tweak it.
 
 Whenever you need a raw pristine configuration, use the `[GRMustacheConfiguration configuration]` class method. It returns a configuration initialized with factory defaults.
 
+```objc
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"];
+
+// Have all templates in /path/to/templates render with factory configuration:
+repo.configuration = [GRMustacheConfiguration configuration];
+```
 
 GRMustacheConfiguration properties
 ----------------------------------
