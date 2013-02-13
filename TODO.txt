@@ -1,7 +1,6 @@
 1.6.4:
 - update obsolete sample code
 - fix #warnings
-- Have `now` enter the standard library: `{{ dateFormat(now) }}`
 
 Nice to have:
 - document migration path from all previous versions to latest version
