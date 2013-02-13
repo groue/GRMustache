@@ -128,7 +128,7 @@ As a [rendering object](rendering_objects.md), `localize` outputs the localizati
 
     {{# localize }}Hello{{/ localize }}
 
-This would render "Bonjour", given a French localization for "Hello".
+This would render `Bonjour`, given a French localization for `"Hello"`.
 
 *Warning*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping.
 
@@ -138,7 +138,7 @@ When looking for the localized string is the main bundle, GRMustache replaces al
 
     {{# localize }}Hello {{name}}{{/ localize }}
 
-This would render "Bonjour Arthur", given a French localization for "Hello %@". `[NSString stringWithFormat:]` is used for the final interpolation.
+This would render `Bonjour Arthur`, given a French localization for `"Hello %@"`. `[NSString stringWithFormat:]` is used for the final interpolation.
 
 *Warning 1*: in the above example, HTML-escaping is done as usual: you localize HTML chunks. There is no escaping, but for `{{name}}`.
 
@@ -150,7 +150,7 @@ You can embed conditional sections inside:
 
     {{# localize }}Hello {{#name}}{{name}}{{^}}you{{/}}{{/ localize }}
 
-Depending on the name, this would render "Bonjour Arthur" or "Bonjour toi", given French localizations for both "Hello %@" and "Hello you".
+Depending on the name, this would render `Bonjour Arthur` or `Bonjour toi`, given French localizations for both `"Hello %@"` and `"Hello you"`.
 
 
 ### GRMustacheLocalizer
