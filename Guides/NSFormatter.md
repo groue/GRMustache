@@ -95,6 +95,8 @@ Would render:
 
 Precisely speaking, "values that can't be formatted" are the ones that have the `stringForObjectValue:` method return nil, as stated by [apple](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSFormatter_Class/Reference/Reference.html#//apple_ref/occ/instm/NSFormatter/stringForObjectValue:).
 
+Typically, NSNumberFormatter only formats numbers, and NSDateFormatter, dates: you can safely mix various data types in a section controlled by those well-behaved formatters.
+
 
 
 Get inspired
