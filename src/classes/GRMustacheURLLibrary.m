@@ -37,24 +37,26 @@
  */
 - (id)transformedValue:(id)object
 {
-    // Specific case for [NSNull null] and empty strings
+    // Specific case for [NSNull null]
     
     if (object == [NSNull null]) {
         return @"";
-    }
-    
-    NSString *string = [object description];
-    
-    NSUInteger length = [string length];
-    if (length == 0) {
-        return string;
     }
     
     
     // Perform a first escaping using Apple's implementation.
     // It leaves many character unescaped. We'll have to go further.
     
+    NSString *string = [object description];
     string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    
+    // Specific case for empty strings
+    
+    NSUInteger length = [string length];
+    if (length == 0) {
+        return string;
+    }
     
     
     // Extract characters
