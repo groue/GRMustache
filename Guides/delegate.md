@@ -112,6 +112,8 @@ The value returned by the `mustacheTag:willRenderObject:` is the value that will
 
 You can, for instance, provide default rendering for missing values:
 
+### Default value for missing keys
+
 ```objc
 @interface Document : NSObject<GRMustacheTagDelegate>
 - (NSString *)render;
@@ -151,10 +153,9 @@ You can, for instance, provide default rendering for missing values:
 ```
 
 
-Tag Delegates as Cross-Platform Filters
----------------------------------------
+### Tag Delegates as Cross-Platform Filters
 
-Tag delegates can observe, but also *alter* the rendering of all tags inside a section or the full template.
+Tag delegates can alter the rendering of all tags inside the section they are attached to.
 
 Let's consider the behavior of NSFormatter in GRMustache. They are able to format all variable tags inside a section (check the [NSFormatter Guide](NSFormatter.md)).
 
