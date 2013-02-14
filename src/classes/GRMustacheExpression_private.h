@@ -30,7 +30,7 @@
  * The GRMustacheExpression is the base class for objects that can provide
  * values out of a Mustache rendering context.
  *
- * GRMustacheExpression instances are built by GRMustacheParser. For instance,
+ * GRMustacheExpression instances are built by GRMustacheParser. For example,
  * the `{{ name }}` tag would yield a GRMustacheIdentifierExpression.
  *
  * @see GRMustacheFilteredExpression

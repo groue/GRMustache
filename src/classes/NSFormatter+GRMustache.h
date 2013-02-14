@@ -36,7 +36,7 @@
  *
  * ## Filter facet
  *
- * A formatter can be used as a filter, as in {{ percent(value) }}. Just have
+ * A formatter can be used as a filter, as in `{{ percent(value) }}`. Just have
  * your `percent` key evaluate to a formatter.
  *
  * ## Formatting all values in a section

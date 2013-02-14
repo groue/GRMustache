@@ -37,7 +37,7 @@
  * Returns a scoped expression, given an expression that returns a value, and
  * an identifier.
  *
- * For instance, the Mustache tag `{{ person.name }}` contains a scoped
+ * For example, the Mustache tag `{{ person.name }}` contains a scoped
  * expression, whose baseExpression is a GRMustacheIdentifierExpression (for the
  * identifier `person`), and whose identifier is `name`.
  *

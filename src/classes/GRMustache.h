@@ -59,8 +59,9 @@ typedef struct {
  */
 + (GRMustacheVersion)version AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
+
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Preventing NSUndefinedKeyException when using GRMustache in Development configuration
+/// @name Preventing NSUndefinedKeyException in Development configuration
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -93,12 +94,22 @@ typedef struct {
  */
 + (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Standard Library
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @return The GRMustache standard library.
  *
  * @since v6.4
  */
 + (NSObject *)standardLibrary AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Building rendering objects
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Returns a rendering object that is able to render the argument _object_ for

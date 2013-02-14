@@ -104,6 +104,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+/// @name Default Configuration
+////////////////////////////////////////////////////////////////////////////////
+
+
 /**
  * The default configuration.
  *
@@ -119,6 +124,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  */
 + (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Configuration
+////////////////////////////////////////////////////////////////////////////////
+
+
 /**
  * @returns A new factory configuration.
  *
@@ -128,6 +139,22 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @since v6.2
  */
 + (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Set Up Configuration
+////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * The base context for templates rendering. The default base context contains
+ * the GRMustache standard Library.
+ *
+ * @see GRMustacheTemplate
+ *
+ * @since v6.4
+ */
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
 /**
  * The content type of strings rendered by templates.
@@ -187,13 +214,4 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  */
 @property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
-/**
- * The base context for templates rendering. The default base context contains
- * the GRMustache standard Library.
- *
- * @see GRMustacheTemplate
- *
- * @since v6.4
- */
-@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 @end

@@ -101,7 +101,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
  * A GRMustacheToken is the product of GRMustacheParser. It represents a
  * {{Mustache}} tag, or raw text between tags.
  * 
- * For instance, the template string "hello {{name}}!" would be represented by
+ * For example, the template string "hello {{name}}!" would be represented by
  * three tokens:
  *
  * - a token of type GRMustacheTokenTypeText holding "hello "

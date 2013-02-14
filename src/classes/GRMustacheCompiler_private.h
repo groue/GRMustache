@@ -93,7 +93,7 @@
  * The AST will contain something if a GRMustacheParser has provided
  * GRMustacheToken instances to the compiler.
  * 
- * For instance:
+ * For example:
  * 
  *     // Create a Mustache compiler
  *     GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:...] autorelease];

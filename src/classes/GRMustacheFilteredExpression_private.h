@@ -40,7 +40,7 @@
  * Returns a filtered expression, given an expression that returns a filter, and
  * an expression that return the filter argument.
  *
- * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
+ * For example, the Mustache tag `{{ f(x) }}` contains a filtered expression,
  * whose filterExpression is a GRMustacheIdentifierExpression (for the
  * identifier `f`), and whose argumentExpression is a
  * GRMustacheIdentifierExpression (for the identifier `x`).
@@ -58,7 +58,7 @@
  * Returns a filtered expression, given an expression that returns a filter, and
  * an expression that return the filter argument.
  *
- * For instance, the Mustache tag `{{ f(x) }}` contains a filtered expression,
+ * For example, the Mustache tag `{{ f(x) }}` contains a filtered expression,
  * whose filterExpression is a GRMustacheIdentifierExpression (for the
  * identifier `f`), and whose argumentExpression is a
  * GRMustacheIdentifierExpression (for the identifier `x`).

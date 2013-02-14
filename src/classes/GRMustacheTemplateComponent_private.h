@@ -40,7 +40,7 @@
  * context, through their `renderWithContext:inBuffer:error:`
  * implementation.
  * 
- * For instance, the template string "hello {{name}}!" would give four template
+ * For example, the template string "hello {{name}}!" would give four template
  * components:
  *
  * - a GRMustacheTextComponent that renders "hello ".
