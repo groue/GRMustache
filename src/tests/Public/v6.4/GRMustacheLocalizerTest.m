@@ -106,6 +106,7 @@
 {
     NSString *templateString = @"{{#localize}}%d{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizer}];
     NSString *rendering = [template renderObject:nil error:NULL];
     
     // test the raw localization
@@ -119,6 +120,7 @@
 {
     NSString *templateString = @"{{#localize}}%d {{foo}}{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    template.baseContext = [template.baseContext contextByAddingObject:@{ @"localize": self.localizer}];
     id data = @{ @"foo": @"bar" };
     NSString *rendering = [template renderObject:data error:NULL];
     
@@ -126,7 +128,7 @@
     STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%d %@" value:nil table:nil], @"ha ha percent d %%d %@", @"");
     
     // test the GRMustache localization
-    STAssertEqualObjects(rendering, @"ha ha percent d %d foo", @"");
+    STAssertEqualObjects(rendering, @"ha ha percent d %d bar", @"");
 }
 
 - (void)testCustomLocalizerAsFilter
