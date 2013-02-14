@@ -226,7 +226,8 @@
     
     switch (arguments.count) {
         case 0:
-            return format;
+            // Use stringWithFormat, so that % characters are processed.
+            return [NSString stringWithFormat:format, nil]; // This nil prevents a compiler warning.
             
         case 1:
             return [NSString stringWithFormat:
