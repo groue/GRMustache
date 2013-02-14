@@ -89,6 +89,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * at the template level, using a "Set Delimiters tag": see the documentation of
  * these properties.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/configuration.md
+ *
  * @see GRMustacheTemplateRepository
  *
  * @since v6.2

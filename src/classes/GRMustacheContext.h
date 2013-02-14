@@ -34,9 +34,6 @@
  * - a *tag delegate stack*, so that tag delegates are notified when a Mustache
  *   tag is rendered.
  *
- * You may derive new rendering contexts when you implement *rendering objects*,
- * using the contextByAddingObject: and contextByAddingTagDelegate: methods.
- *
  * @see GRMustacheRendering protocol
  */
 @interface GRMustacheContext : NSObject {
@@ -80,6 +77,8 @@
  * Unlike contextWithObject:, this method does not put the object to the
  * tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md
+ *
  * @param object  An object
  *
  * @return A rendering context.
@@ -118,6 +117,8 @@
  *
  * Unlike contextByAddingObject:, this method does not add the object to the
  * tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md
  *
  * @param object  An object
  *

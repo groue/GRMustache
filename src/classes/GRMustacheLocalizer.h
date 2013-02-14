@@ -60,6 +60,8 @@
  * method. The helper would then localize using the specified table from the
  * specified bundle.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md#localize
+ *
  * @since v6.4
  */
 @interface GRMustacheLocalizer : NSObject<GRMustacheRendering, GRMustacheFilter> {

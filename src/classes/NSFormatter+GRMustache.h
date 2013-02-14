@@ -59,6 +59,8 @@
  *       {{/ condition }}
  *     {{/ percent }}
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/NSFormatter.md
+ *
  * @since v6.4
  */
 @interface NSFormatter (GRMustache)<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>

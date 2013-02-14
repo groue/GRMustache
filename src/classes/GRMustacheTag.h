@@ -65,6 +65,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * GRMustacheTag instances represent Mustache tags that render values, such as
  * a variable tag {{ name }}, or a section tag {{# name }}...{{/}).
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
  */
 @interface GRMustacheTag: NSObject {
 @private
