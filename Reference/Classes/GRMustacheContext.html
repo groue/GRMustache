@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.1 (build 840)" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.2 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.4 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -38,6 +38,17 @@
 	
 	
 	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/context">&nbsp;&nbsp;&nbsp;&nbsp;+ context</option>
+	
+	<option value="//api/name/contextWithObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ contextWithObject:</option>
+	
+	<option value="//api/name/contextWithProtectedObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ contextWithProtectedObject:</option>
+	
+	<option value="//api/name/contextWithTagDelegate:">&nbsp;&nbsp;&nbsp;&nbsp;+ contextWithTagDelegate:</option>
 	
 	
 	
@@ -66,6 +77,10 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creating Contexts">Creating Contexts</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Deriving New Contexts">Deriving New Contexts</a></span></li>
+	
 </ul></li>
 
 
@@ -73,6 +88,18 @@
 
 
 
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/context">context</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithObject:">contextWithObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithProtectedObject:">contextWithProtectedObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithTagDelegate:">contextWithTagDelegate:</a></span></li>
+	
+</ul></li>
 
 
 
@@ -125,15 +152,12 @@
 maintains two stacks:</p>
 
 <ul>
-<li>a <em>context stack</em>, that makes it able to provide the current context
+<li>a <em><a href="#//api/name/context">context</a> stack</em>, that makes it able to provide the current <a href="#//api/name/context">context</a>
 object, and to perform key lookup.</li>
 <li>a <em>tag delegate stack</em>, so that tag delegates are notified when a Mustache
 tag is rendered.</li>
 </ul>
 
-
-<p>You may derive new rendering contexts when you implement <em>rendering objects</em>,
-using the <a href="#//api/name/contextByAddingObject:">contextByAddingObject:</a> and <a href="#//api/name/contextByAddingTagDelegate:">contextByAddingTagDelegate:</a> methods.</p>
 					</div>
 					
 					
@@ -145,30 +169,66 @@ using the <a href="#//api/name/contextByAddingObject:">contextByAddingObject:</a
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
+						<a title="Creating Contexts" name="task_Creating Contexts"></a>
+						<h3 class="subsubtitle task-title">Creating Contexts</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/context">+&nbsp;context</a></code>
+		<span class="tooltip"><p>An empty rendering context.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contextWithObject:">+&nbsp;contextWithObject:</a></code>
+		<span class="tooltip"><p>Returns a <a href="#//api/name/context">context</a> with <em>object</em> at the top of the <a href="#//api/name/context">context</a> stack.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contextWithProtectedObject:">+&nbsp;contextWithProtectedObject:</a></code>
+		<span class="tooltip"><p>Returns a <a href="#//api/name/context">context</a> with <em>object</em> at the top of the protected <a href="#//api/name/context">context</a> stack.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contextWithTagDelegate:">+&nbsp;contextWithTagDelegate:</a></code>
+		<span class="tooltip"><p>Returns a <a href="#//api/name/context">context</a> with <em>tagDelegate</em> at the top of the tag delegate stack.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
 						
 						
+						<a title="Deriving New Contexts" name="task_Deriving New Contexts"></a>
+						<h3 class="subsubtitle task-title">Deriving New Contexts</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/contextByAddingObject:">&ndash;&nbsp;contextByAddingObject:</a></code>
-		<span class="tooltip"><p>Returns a new rendering context that is the copy of the receiver, and the
-given object added at the top of the context stack.</p></span>
+		<span class="tooltip"><p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
+given object added at the top of the <a href="#//api/name/context">context</a> stack.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/contextByAddingProtectedObject:">&ndash;&nbsp;contextByAddingProtectedObject:</a></code>
-		<span class="tooltip"><p>Returns a new rendering context that is the copy of the receiver, and the
-given object added at the top of the protected context stack.</p></span>
+		<span class="tooltip"><p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
+given object added at the top of the protected <a href="#//api/name/context">context</a> stack.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/contextByAddingTagDelegate:">&ndash;&nbsp;contextByAddingTagDelegate:</a></code>
-		<span class="tooltip"><p>Returns a new rendering context that is the copy of the receiver, and the
+		<span class="tooltip"><p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
 given object added at the top of the tag delegate stack.</p></span>
 	</span>
 	
@@ -184,6 +244,235 @@ given object added at the top of the tag delegate stack.</p></span>
 					
 					
 					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/context" title="context"></a>
+	<h3 class="subsubtitle method-title">context</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>An empty rendering context.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)context</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An empty rendering context.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contextWithObject:" title="contextWithObject:"></a>
+	<h3 class="subsubtitle method-title">contextWithObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a <a href="#//api/name/context">context</a> with <em>object</em> at the top of the <a href="#//api/name/context">context</a> stack.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)contextWithObject:(id)<em>object</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering <a href="#//api/name/context">context</a>.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If <em>object</em> conforms to the GRMustacheTemplateDelegate protocol, it is also
+made the top of the tag delegate stack.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contextWithProtectedObject:" title="contextWithProtectedObject:"></a>
+	<h3 class="subsubtitle method-title">contextWithProtectedObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a <a href="#//api/name/context">context</a> with <em>object</em> at the top of the protected <a href="#//api/name/context">context</a> stack.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)contextWithProtectedObject:(id)<em>object</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>An object</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering <a href="#//api/name/context">context</a>.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Unlike <a href="#//api/name/contextWithObject:">contextWithObject:</a>, this method does not put the object to the
+tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.</p>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md">https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md</a></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contextWithTagDelegate:" title="contextWithTagDelegate:"></a>
+	<h3 class="subsubtitle method-title">contextWithTagDelegate:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a <a href="#//api/name/context">context</a> with <em>tagDelegate</em> at the top of the tag delegate stack.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)contextWithTagDelegate:(id&lt;GRMustacheTagDelegate&gt;)<em>tagDelegate</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>tagDelegate</em></dt>
+			<dd><p>A tag delegate</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering <a href="#//api/name/context">context</a>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
 					
 					
 					<div class="section section-methods">
@@ -197,8 +486,8 @@ given object added at the top of the tag delegate stack.</p></span>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a new rendering context that is the copy of the receiver, and the
-given object added at the top of the context stack.</p>
+		<p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
+given object added at the top of the <a href="#//api/name/context">context</a> stack.</p>
 	</div>		
 	
     
@@ -221,14 +510,14 @@ given object added at the top of the context stack.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A new rendering context.</p>
+		<p>A new rendering <a href="#//api/name/context">context</a>.</p>
 	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -260,8 +549,8 @@ added at the top of the tag delegate stack.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a new rendering context that is the copy of the receiver, and the
-given object added at the top of the protected context stack.</p>
+		<p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
+given object added at the top of the protected <a href="#//api/name/context">context</a> stack.</p>
 	</div>		
 	
     
@@ -284,14 +573,14 @@ given object added at the top of the protected context stack.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A new rendering context.</p>
+		<p>A new rendering <a href="#//api/name/context">context</a>.</p>
 	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -300,6 +589,8 @@ given object added at the top of the protected context stack.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>Unlike <a href="#//api/name/contextByAddingObject:">contextByAddingObject:</a>, this method does not add the object to the
 tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.</p>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md">https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md</a></p>
 	</div>
 	
 	
@@ -323,7 +614,7 @@ tag delegate stack if it conforms to the GRMustacheTemplateDelegate protocol.</p
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a new rendering context that is the copy of the receiver, and the
+		<p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
 given object added at the top of the tag delegate stack.</p>
 	</div>		
 	
@@ -347,14 +638,14 @@ given object added at the top of the tag delegate stack.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A new rendering context.</p>
+		<p>A new rendering <a href="#//api/name/context">context</a>.</p>
 	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -386,9 +677,9 @@ given object added at the top of the tag delegate stack.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-27)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-02-14)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
 					</div>
 				</div>

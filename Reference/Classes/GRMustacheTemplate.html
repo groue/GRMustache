@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.1 (build 840)" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.2 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.4 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -86,15 +86,11 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Setting the Base Context">Setting the Base Context</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creating Templates">Creating Templates</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Template Strings">Template Strings</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Configuring Templates">Configuring Templates</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Template Files">Template Files</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Template Resources">Template Resources</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering a Template">Rendering a Template</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering Templates">Rendering Templates</a></span></li>
 	
 </ul></li>
 
@@ -188,23 +184,8 @@ services.</p>
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
-						<a title="Setting the Base Context" name="task_Setting the Base Context"></a>
-						<h3 class="subsubtitle task-title">Setting the Base Context</h3>
-
-						<ul class="task-list">
-							<li>
-	<span class="tooltip">
-		<code><a href="#//api/name/baseContext">&nbsp;&nbsp;baseContext</a></code>
-		<span class="tooltip"><p>The template&rsquo;s base context: all rendering start from this context.</p></span>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li>
-						</ul>
-						
-						
-						<a title="Template Strings" name="task_Template Strings"></a>
-						<h3 class="subsubtitle task-title">Template Strings</h3>
+						<a title="Creating Templates" name="task_Creating Templates"></a>
+						<h3 class="subsubtitle task-title">Creating Templates</h3>
 
 						<ul class="task-list">
 							<li>
@@ -214,15 +195,7 @@ services.</p>
 	</span>
 	
 	
-</li>
-						</ul>
-						
-						
-						<a title="Template Files" name="task_Template Files"></a>
-						<h3 class="subsubtitle task-title">Template Files</h3>
-
-						<ul class="task-list">
-							<li>
+</li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/templateFromContentsOfFile:error:">+&nbsp;templateFromContentsOfFile:error:</a></code>
 		<span class="tooltip"><p>Parses a template file, and returns a compiled template.</p></span>
@@ -236,15 +209,7 @@ services.</p>
 	</span>
 	
 	
-</li>
-						</ul>
-						
-						
-						<a title="Template Resources" name="task_Template Resources"></a>
-						<h3 class="subsubtitle task-title">Template Resources</h3>
-
-						<ul class="task-list">
-							<li>
+</li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/templateFromResource:bundle:error:">+&nbsp;templateFromResource:bundle:error:</a></code>
 		<span class="tooltip"><p>Parses a bundle resource template, and returns a compiled template.</p></span>
@@ -255,8 +220,23 @@ services.</p>
 						</ul>
 						
 						
-						<a title="Rendering a Template" name="task_Rendering a Template"></a>
-						<h3 class="subsubtitle task-title">Rendering a Template</h3>
+						<a title="Configuring Templates" name="task_Configuring Templates"></a>
+						<h3 class="subsubtitle task-title">Configuring Templates</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/baseContext">&nbsp;&nbsp;baseContext</a></code>
+		<span class="tooltip"><p>The template&rsquo;s base context: all rendering start from this context.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Rendering Templates" name="task_Rendering Templates"></a>
+						<h3 class="subsubtitle task-title">Rendering Templates</h3>
 
 						<ul class="task-list">
 							<li>
@@ -329,20 +309,15 @@ services.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Its default value is a context containing the <a href="../Classes/GRMustache.html">GRMustache</a> filter library.</p>
-
-<p>You can set it to another context derived from the <a href="../Classes/GRMustacheContext.html">GRMustacheContext</a> methods
-such as <code>contextByAddingObject:</code>, <code>contextByAddingProtectedObject:</code> or
-<code>contextByAddingTagDelegate:</code>.</p>
-
-<p>If you set it to nil, it is restored to its default value.</p>
+		<p>Its default value comes from the configuration of the source template
+repository. Unless specified, it contains the <a href="../Classes/GRMustache.html">GRMustache</a> standard library.</p>
 	</div>
 	
 	
@@ -354,6 +329,12 @@ such as <code>contextByAddingObject:</code>, <code>contextByAddingProtectedObjec
 		<ul>
 			
 			<li><code><p><a href="../Classes/GRMustacheContext.html">GRMustacheContext</a></p></code></li>
+			
+			<li><code><p><a href="../Classes/GRMustacheConfiguration.html">GRMustacheConfiguration</a></p></code></li>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+			<li><code><p><a href="../Classes/GRMustache.html#//api/name/standardLibrary">[GRMustache standardLibrary]</a></p></code></li>
 			
 		</ul>
 	</div>
@@ -407,13 +388,18 @@ such as <code>contextByAddingObject:</code>, <code>contextByAddingProtectedObjec
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>bundle</em></dt>
-			<dd><p>The bundle where to look for the template resource.</p></dd>
+			<dd><p>The bundle where to look for the template resource. If nil,</p>
+
+<pre><code>           the main bundle is used.
+</code></pre></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error during rendering, upon return contains an
-NSError object that describes the problem.</p></dd>
+			<dd><p>If there is an error during rendering, upon return contains an</p>
+
+<pre><code>           NSError object that describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -429,7 +415,7 @@ NSError object that describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.0</p>
+		
 	</div>
 	
 	
@@ -497,8 +483,10 @@ bundle, with a &ldquo;mustache&rdquo; extension.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error during rendering, upon return
-contains an NSError object that describes the problem.</p></dd>
+			<dd><p>If there is an error during rendering, upon return</p>
+
+<pre><code>                   contains an NSError object that describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -514,7 +502,7 @@ contains an NSError object that describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.0</p>
+		
 	</div>
 	
 	
@@ -545,7 +533,7 @@ contains an NSError object that describes the problem.</p></dd>
 	
     
 
-	<div class="method-subsection method-declaration"><code>+ (id)templateFromContentsOfFile:(NSString *)<em>path</em> error:(NSError **)<em>error</em></code></div>
+	<div class="method-subsection method-declaration"><code>+ (instancetype)templateFromContentsOfFile:(NSString *)<em>path</em> error:(NSError **)<em>error</em></code></div>
 
     
 	
@@ -559,9 +547,11 @@ contains an NSError object that describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error loading or parsing template and
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -577,7 +567,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.11</p>
+		
 	</div>
 	
 	
@@ -623,7 +613,7 @@ describes the problem.</p></dd>
 	
     
 
-	<div class="method-subsection method-declaration"><code>+ (id)templateFromContentsOfURL:(NSURL *)<em>url</em> error:(NSError **)<em>error</em></code></div>
+	<div class="method-subsection method-declaration"><code>+ (instancetype)templateFromContentsOfURL:(NSURL *)<em>url</em> error:(NSError **)<em>error</em></code></div>
 
     
 	
@@ -637,9 +627,11 @@ describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error loading or parsing template and
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -655,7 +647,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.11</p>
+		
 	</div>
 	
 	
@@ -701,7 +693,7 @@ describes the problem.</p></dd>
 	
     
 
-	<div class="method-subsection method-declaration"><code>+ (id)templateFromResource:(NSString *)<em>name</em> bundle:(NSBundle *)<em>bundle</em> error:(NSError **)<em>error</em></code></div>
+	<div class="method-subsection method-declaration"><code>+ (instancetype)templateFromResource:(NSString *)<em>name</em> bundle:(NSBundle *)<em>bundle</em> error:(NSError **)<em>error</em></code></div>
 
     
 	
@@ -715,14 +707,19 @@ describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>bundle</em></dt>
-			<dd><p>The bundle where to look for the template resource.</p></dd>
+			<dd><p>The bundle where to look for the template resource. If nil,</p>
+
+<pre><code>             the main bundle is used.
+</code></pre></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error loading or parsing template and
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>             partials, upon return contains an NSError object that
+             describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -738,7 +735,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.11</p>
+		
 	</div>
 	
 	
@@ -787,7 +784,7 @@ bundle.</p>
 	
     
 
-	<div class="method-subsection method-declaration"><code>+ (id)templateFromString:(NSString *)<em>templateString</em> error:(NSError **)<em>error</em></code></div>
+	<div class="method-subsection method-declaration"><code>+ (instancetype)templateFromString:(NSString *)<em>templateString</em> error:(NSError **)<em>error</em></code></div>
 
     
 	
@@ -801,9 +798,11 @@ bundle.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error loading or parsing template and
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error loading or parsing template and</p>
+
+<pre><code>                   partials, upon return contains an NSError object that
+                   describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -819,7 +818,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.11</p>
+		
 	</div>
 	
 	
@@ -872,16 +871,20 @@ describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>HTMLSafe</em></dt>
-			<dd><p>Upon return contains YES or NO, depending on the content
-type of the template, as set by the configuration of the
-source template repository. HTML templates yield YES, text
-templates yield NO.</p></dd>
+			<dd><p>Upon return contains YES or NO, depending on the content</p>
+
+<pre><code>             type of the template, as set by the configuration of the
+             source template repository. HTML templates yield YES, text
+             templates yield NO.
+</code></pre></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error rendering the tag, upon return contains
-an NSError object that describes the problem.</p></dd>
+			<dd><p>If there is an error rendering the tag, upon return contains</p>
+
+<pre><code>             an NSError object that describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -897,7 +900,7 @@ an NSError object that describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -951,9 +954,11 @@ an NSError object that describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error rendering the template and its
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error rendering the template and its</p>
+
+<pre><code>           partials, upon return contains an NSError object that
+           describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -969,7 +974,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -1014,9 +1019,11 @@ describes the problem.</p></dd>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error rendering the template and its
-partials, upon return contains an NSError object that
-describes the problem.</p></dd>
+			<dd><p>If there is an error rendering the template and its</p>
+
+<pre><code>            partials, upon return contains an NSError object that
+            describes the problem.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -1032,7 +1039,7 @@ describes the problem.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -1064,9 +1071,9 @@ describes the problem.</p></dd>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-27)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-02-14)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
 					</div>
 				</div>
