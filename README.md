@@ -5,7 +5,7 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
-**January 30, 2013: GRMustache 6.3.0 is out.** [Release notes](RELEASE_NOTES.md)
+**February 14, 2013: GRMustache 6.4.0 is out.** [Release notes](RELEASE_NOTES.md)
 
 Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
 
@@ -16,7 +16,7 @@ How To
 
 **Option 1: CocoaPods**
 
-Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRMustache', '~> 6.3'` to your Podfile.
+Dear [CocoaPods](https://github.com/CocoaPods/CocoaPods) users, append `pod 'GRMustache', '~> 6.4'` to your Podfile.
 
 **Option 2: Static Library**
 

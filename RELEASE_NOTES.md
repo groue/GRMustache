@@ -3,6 +3,21 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.4.0
+
+### Configuration
+
+The [GRMustacheConfiguration](Guides/configuration.md) class now lets you specify a base rendering context, and the Mustache tag delimiters.
+
+### Standard Library
+
+The [standard library](Guides/standard_library.md) sports new services. Localization support is now built-in, as well as various escaping tools.
+
+### NSFormatter
+
+NSFormatter and subclasses such as NSDateFormatter and NSNumberFormatter are now first citizen of GRMustache. Check the [NSFormatter Guide](Guides/NSFormatter.md).
+
+
 ## v6.3.0
 
 GRMustache does no longer raise an exception when a template can't evaluate a filter expression such as `{{ f(x) }}`.

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>--project-name</key>
-	<string>GRMustache 6.3</string>
+	<string>GRMustache 6.4</string>
 	<key>--project-version</key>
-	<string>6.3</string>
+	<string>6.4</string>
 	<key>--project-company</key>
 	<string>Gwendal Roué</string>
 	<key>--create-html</key>
