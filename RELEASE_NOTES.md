@@ -7,7 +7,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ### Integration in your Xcode project
 
-GRMustache now requires that you add the `-ObjC` option in the "Other Linker Flags" of your targets ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
+The GRMustache static libraries now require that you add the `-ObjC` option in the "Other Linker Flags" of your targets ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
 
 ### Configuration
 
