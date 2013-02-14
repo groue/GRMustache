@@ -43,11 +43,6 @@
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>
 @required
 
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Building Template IDs from Template Names
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Returns a template ID, that is to say an object that uniquely identifies a
  * template or a template partial.
@@ -56,7 +51,7 @@
  * GRMustacheTemplateRepositoryDataSource would define, for itself, what kind of
  * object would identity a template or a partial.
  * 
- * For instance, a file-based data source may use NSString objects containing
+ * For example, a file-based data source may use NSString objects containing
  * paths to the templates.
  * 
  * You should try to choose "human-readable" template IDs, because template IDs
@@ -91,17 +86,12 @@
  */
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Providing Template Strings from Template IDs
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Provided with a template ID that comes from
  * templateRepository:templateIDForName:relativeToTemplateID:,
  * returns a Mustache template string.
  * 
- * For instance, a file-based data source may interpret the template ID as a
+ * For example, a file-based data source may interpret the template ID as a
  * NSString object containing paths to the template, and return the file
  * content.
  * 
@@ -150,15 +140,134 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Building Repositories for Templates stored in the file system
+/// @name Creating Template Repositories
 ////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * Returns a GRMustacheTemplateRepository.
+ *
+ * Until it is provided with a data source, it is unable to load template by
+ * names, and unable to process partial tags such as `{{>partial}}`:
+ *
+ *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepository];
+ *     NSError *error;
+ *
+ *     // Returns nil, and sets error to an NSError of domain
+ *     // GRMustacheErrorDomain, code GRMustacheErrorCodeTemplateNotFound.
+ *     [repository templateNamed:@"foo" error:&error];
+ *
+ *     // Returns nil, and sets error to an NSError of domain GRMustacheErrorDomain,
+ *     // code GRMustacheErrorCodeTemplateNotFound.
+ *     [repository templateFromString:@"{{>partial}}" error:&error];
+ *
+ * It is, however, able to process Mustache template strings without any
+ * partial:
+ *
+ *     GRMustacheTemplate *template = [repository templateFromString:@"Hello {{name}}!" error:NULL];
+ *
+ * You will give it a data source conforming to the
+ * GRMustacheTemplateRepositoryDataSource protocol in order to load template and
+ * partials by name:
+ *
+ *     repository.dataSource = ...;
+ *
+ *     // Returns a template built from the string provided by the dataSource.
+ *     [repository templateNamed:@"foo" error:NULL];
+ *
+ * @return a GRMustacheTemplateRepository
+ *
+ * @see GRMustacheTemplateRepositoryDataSource
+ *
+ * @since v1.13
+ */
++ (instancetype)templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Returns a GRMustacheTemplateRepository that loads Mustache template strings
+ * from files of extension .mustache, encoded in UTF8, stored in the provided
+ * directory.
+ *
+ * For example:
+ *
+ *     // Creates a repository for templates stored in /path/to/templates
+ *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"];
+ *
+ *     // Returns a template for the file stored in
+ *     // /path/to/templates/profile.mustache
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
+ *
+ * A partial tag `{{>partial}}` loads a partial template stored in a file named
+ * `partial.mustache`, located in the enclosing template's directory.
+ *
+ * You may use the slash `/`, and `..`, in order to navigate the hierarchical
+ * file system: `{{>partials/achievements}}` would load
+ * /path/to/templates/partials/achievements.mustache, if invoked from
+ * /path/to/templates/profile.mustache.
+ *
+ * When you ask the repository to parse a raw template string, partials are
+ * loaded from the base directory:
+ *
+ *     // The partial would be loaded from
+ *     // /path/to/templates/partials/achievements.mustache
+ *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
+ *
+ * @param path  The path of the directory that stores templates.
+ *
+ * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
+ */
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
+ * Returns a GRMustacheTemplateRepository that loads Mustache template strings
+ * from files of provided extension, encoded in the provided encoding, stored in
+ * the provided directory.
+ *
+ * For example:
+ *
+ *     // Creates a repository for templates of extension `.txt` stored in
+ *     // /path/to/templates, encoded with NSMacOSRomanStringEncoding:
+ *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"
+ *                                                                                            templateExtension:@"txt"
+ *                                                                                                     encoding:NSMacOSRomanStringEncoding];
+ *
+ *     // Returns a template for the file stored in
+ *     // /path/to/templates/profile.txt
+ *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
+ *
+ * A partial tag `{{>partial}}` loads a partial template stored in a file named
+ * `partial.txt`, located in the enclosing template's directory.
+ *
+ * You may use the slash `/`, and `..`, in order to navigate the hierarchical
+ * file system: `{{>partials/achievements}}` would load
+ * /path/to/templates/partials/achievements.txt, if invoked from
+ * /path/to/templates/profile.txt.
+ *
+ * When you ask the repository to parse a raw template string, partials are
+ * loaded from the base directory:
+ *
+ *     // The partial would be loaded from
+ *     // /path/to/templates/partials/achievements.txt
+ *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
+ *
+ * @param path      The path of the directory that stores templates.
+ * @param ext       The extension of template files.
+ * @param encoding  The encoding of template files.
+ *
+ * @return a GRMustacheTemplateRepository
+ *
+ * @since v1.13
+ */
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from files of extension .mustache, encoded in UTF8, stored in the provided
  * base URL.
  * 
- * For instance:
+ * For example:
  * 
  *     // Creates a repository for templates stored in /path/to/templates
  *     NSURL *baseURL = [NSURL fileURLWithPath:@"/path/to/templates"];
@@ -189,14 +298,14 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from files of provided extension, encoded in the provided encoding, stored in
  * the provided base URL.
  * 
- * For instance:
+ * For example:
  * 
  *     // Creates a repository for templates of extension `.txt` stored in
  *     // /path/to/templates, encoded with NSMacOSRomanStringEncoding:
@@ -232,98 +341,14 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheTemplateRepository that loads Mustache template strings
- * from files of extension .mustache, encoded in UTF8, stored in the provided
- * directory.
- * 
- * For instance:
- * 
- *     // Creates a repository for templates stored in /path/to/templates
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"];
- *     
- *     // Returns a template for the file stored in
- *     // /path/to/templates/profile.mustache
- *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
- * 
- * A partial tag `{{>partial}}` loads a partial template stored in a file named
- * `partial.mustache`, located in the enclosing template's directory.
- * 
- * You may use the slash `/`, and `..`, in order to navigate the hierarchical
- * file system: `{{>partials/achievements}}` would load
- * /path/to/templates/partials/achievements.mustache, if invoked from
- * /path/to/templates/profile.mustache.
- * 
- * When you ask the repository to parse a raw template string, partials are
- * loaded from the base directory:
- * 
- *     // The partial would be loaded from
- *     // /path/to/templates/partials/achievements.mustache
- *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
- * 
- * @param path  The path of the directory that stores templates.
- *
- * @return a GRMustacheTemplateRepository
- *
- * @since v1.13
- */
-+ (id)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * Returns a GRMustacheTemplateRepository that loads Mustache template strings
- * from files of provided extension, encoded in the provided encoding, stored in
- * the provided directory.
- * 
- * For instance:
- * 
- *     // Creates a repository for templates of extension `.txt` stored in
- *     // /path/to/templates, encoded with NSMacOSRomanStringEncoding:
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:@"/path/to/templates"
- *                                                                                            templateExtension:@"txt"
- *                                                                                                     encoding:NSMacOSRomanStringEncoding];
- *     
- *     // Returns a template for the file stored in
- *     // /path/to/templates/profile.txt
- *     GRMustacheTemplate *template = [repository templateNamed:@"profile" error:NULL];
- * 
- * A partial tag `{{>partial}}` loads a partial template stored in a file named
- * `partial.txt`, located in the enclosing template's directory.
- * 
- * You may use the slash `/`, and `..`, in order to navigate the hierarchical
- * file system: `{{>partials/achievements}}` would load
- * /path/to/templates/partials/achievements.txt, if invoked from
- * /path/to/templates/profile.txt.
- * 
- * When you ask the repository to parse a raw template string, partials are
- * loaded from the base directory:
- * 
- *     // The partial would be loaded from
- *     // /path/to/templates/partials/achievements.txt
- *     GRMustacheTemplate *template = [repository templateFromString:@"{{>partials/achievements}}" error:NULL];
- * 
- * @param path      The path of the directory that stores templates.
- * @param ext       The extension of template files.
- * @param encoding  The encoding of template files.
- *
- * @return a GRMustacheTemplateRepository
- *
- * @since v1.13
- */
-+ (id)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Building Repositories for Templates stored as NSBundle resources
-////////////////////////////////////////////////////////////////////////////////
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from resources of extension .mustache, encoded in UTF8, stored in the
  * provided bundle.
  * 
- * For instance:
+ * For example:
  * 
  *     // Creates a repository for templates stored in the main bundle:
  *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
@@ -337,20 +362,21 @@
  * A partial tag `{{>partial}}` loads a partial template from the
  * `partial.mustache` resource in the bundle.
  * 
- * @param bundle  The bundle that stores templates as resources.
+ * @param bundle  The bundle that stores templates as resources. If nil, the
+ *                main bundle is used.
  *
  * @return a GRMustacheTemplateRepository
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from resources of provided extension, encoded in the provided encoding,
  * stored in the provided bundle.
  * 
- * For instance:
+ * For example:
  * 
  *     // Creates a repository for templates of extension `.txt` stored in the
  *     // main bundle, encoded with NSMacOSRomanStringEncoding:
@@ -375,18 +401,13 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Building Repositories for Templates stored in Memory
-////////////////////////////////////////////////////////////////////////////////
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from a dictionary whose keys are template names, and values template strings.
  * 
- * For instance:
+ * For example:
  * 
  *     NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works." forKey:@"partial"];
  *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
@@ -402,51 +423,13 @@
  *
  * @since v1.13
  */
-+ (id)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Building Repositories using a custom Data Source
+/// @name Configuring Template Repositories
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Returns a GRMustacheTemplateRepository.
- * 
- * Until it is provided with a data source, it is unable to load template by
- * names, and unable to process partial tags such as `{{>partial}}`:
- * 
- *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepository];
- *     NSError *error;
- *     
- *     // Returns nil, and sets error to an NSError of domain
- *     // GRMustacheErrorDomain, code GRMustacheErrorCodeTemplateNotFound.
- *     [repository templateNamed:@"foo" error:&error];
- *     
- *     // Returns nil, and sets error to an NSError of domain GRMustacheErrorDomain,
- *     // code GRMustacheErrorCodeTemplateNotFound.
- *     [repository templateFromString:@"{{>partial}}" error:&error];
- * 
- * It is, however, able to process Mustache template strings without any
- * partial:
- * 
- *     GRMustacheTemplate *template = [repository templateFromString:@"Hello {{name}}!" error:NULL];
- * 
- * You will give it a data source conforming to the
- * GRMustacheTemplateRepositoryDataSource protocol in order to load template and
- * partials by name:
- * 
- *     repository.dataSource = ...;
- *     
- *     // Returns a template built from the string provided by the dataSource.
- *     [repository templateNamed:@"foo" error:NULL];
- * 
- * @return a GRMustacheTemplateRepository
- *
- * @see GRMustacheTemplateRepositoryDataSource
- *
- * @since v1.13
- */
-+ (id)templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * The repository's data source.
@@ -456,11 +439,6 @@
  * @since v1.13
  */
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Configuring Repositories
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * The configuration for all templates and partials built by the repository.
@@ -474,7 +452,7 @@
  *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
  *     repo.configuration.contentType = GRMustacheContentTypeText;
  *
- * You can also create a new configuration, and assign it to the template:
+ * You can also create a new configuration, and assign it to the repository:
  *
  *     // Create a configuration
  *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
@@ -530,4 +508,5 @@
  * @since v1.13
  */
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
 @end

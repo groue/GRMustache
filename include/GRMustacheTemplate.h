@@ -41,36 +41,14 @@
     GRMustacheContentType _contentType;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-/// @name Setting the Base Context
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * The template's base context: all rendering start from this context.
- *
- * Its default value is a context containing the GRMustache filter library.
- *
- * You can set it to another context derived from the GRMustacheContext methods
- * such as `contextByAddingObject:`, `contextByAddingProtectedObject:` or
- * `contextByAddingTagDelegate:`.
- *
- * If you set it to nil, it is restored to its default value.
- *
- * @see GRMustacheContext
- *
- * @since v6.0
- */
-
-@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Template Strings
+/// @name Creating Templates
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Parses a template string, and returns a compiled template.
- * 
+ *
  * @param templateString  The template string.
  * @param error           If there is an error loading or parsing template and
  *                        partials, upon return contains an NSError object that
@@ -80,12 +58,7 @@
  *
  * @since v1.11
  */
-+ (id)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Template Files
-////////////////////////////////////////////////////////////////////////////////
++ (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Parses a template file, and returns a compiled template.
@@ -104,7 +77,7 @@
  *
  * @since v1.11
  */
-+ (id)templateFromContentsOfFile:(NSString *)path error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateFromContentsOfFile:(NSString *)path error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Parses a template file, and returns a compiled template.
@@ -123,24 +96,20 @@
  *
  * @since v1.11
  */
-+ (id)templateFromContentsOfURL:(NSURL *)url error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Template Resources
-////////////////////////////////////////////////////////////////////////////////
++ (instancetype)templateFromContentsOfURL:(NSURL *)url error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Parses a bundle resource template, and returns a compiled template.
- * 
+ *
  * If you provide nil as a bundle, the resource will be looked in the main
  * bundle.
- * 
+ *
  * The template resource must be encoded in UTF8. See the
  * GRMustacheTemplateRepository class for more encoding options.
- * 
+ *
  * @param name      The name of a bundle resource of extension "mustache".
- * @param bundle    The bundle where to look for the template resource.
+ * @param bundle    The bundle where to look for the template resource. If nil,
+ *                  the main bundle is used.
  * @param error     If there is an error loading or parsing template and
  *                  partials, upon return contains an NSError object that
  *                  describes the problem.
@@ -151,12 +120,33 @@
  *
  * @since v1.11
  */
-+ (id)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @name Rendering a Template
+/// @name Configuring Templates
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * The template's base context: all rendering start from this context.
+ *
+ * Its default value comes from the configuration of the source template
+ * repository. Unless specified, it contains the GRMustache standard library.
+ *
+ * @see GRMustacheContext
+ * @see GRMustacheConfiguration
+ * @see GRMustacheTemplateRepository
+ * @see [GRMustache standardLibrary]
+ *
+ * @since v6.0
+ */
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Rendering Templates
+////////////////////////////////////////////////////////////////////////////////
+
 
 /**
  * Renders an object from a template string.
@@ -183,7 +173,8 @@
  *
  * @param object  An object used for interpreting Mustache tags.
  * @param name    The name of a bundle resource of extension "mustache".
- * @param bundle  The bundle where to look for the template resource.
+ * @param bundle  The bundle where to look for the template resource. If nil,
+ *                the main bundle is used.
  * @param error   If there is an error during rendering, upon return contains an
  *                NSError object that describes the problem.
  *

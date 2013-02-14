@@ -7,12 +7,12 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.1 (build 840)" />
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.3 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.4 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -48,6 +48,8 @@
 	
 	<option value="//api/name/renderingObjectWithBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectWithBlock:</option>
 	
+	<option value="//api/name/standardLibrary">&nbsp;&nbsp;&nbsp;&nbsp;+ standardLibrary</option>
+	
 	<option value="//api/name/version">&nbsp;&nbsp;&nbsp;&nbsp;+ version</option>
 	
 	
@@ -70,7 +72,11 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Getting the GRMustache version">Getting the GRMustache version</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Preventing NSUndefinedKeyException when using GRMustache in Development configuration">Preventing NSUndefinedKeyException when using GRMustache in Development configuration</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Preventing NSUndefinedKeyException in Development configuration">Preventing NSUndefinedKeyException in Development configuration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Standard Library">Standard Library</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Building rendering objects">Building rendering objects</a></span></li>
 	
 </ul></li>
 
@@ -87,6 +93,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectForObject:">renderingObjectForObject:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectWithBlock:">renderingObjectWithBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/standardLibrary">standardLibrary</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/version">version</a></span></li>
 	
@@ -157,8 +165,8 @@ of the GRMustache library.</p>
 						</ul>
 						
 						
-						<a title="Preventing NSUndefinedKeyException when using GRMustache in Development configuration" name="task_Preventing NSUndefinedKeyException when using GRMustache in Development configuration"></a>
-						<h3 class="subsubtitle task-title">Preventing NSUndefinedKeyException when using GRMustache in Development configuration</h3>
+						<a title="Preventing NSUndefinedKeyException in Development configuration" name="task_Preventing NSUndefinedKeyException in Development configuration"></a>
+						<h3 class="subsubtitle task-title">Preventing NSUndefinedKeyException in Development configuration</h3>
 
 						<ul class="task-list">
 							<li>
@@ -169,7 +177,30 @@ templates.</p></span>
 	</span>
 	
 	
-</li><li>
+</li>
+						</ul>
+						
+						
+						<a title="Standard Library" name="task_Standard Library"></a>
+						<h3 class="subsubtitle task-title">Standard Library</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/standardLibrary">+&nbsp;standardLibrary</a></code>
+		<span class="tooltip"><p>The GRMustache standard library.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Building rendering objects" name="task_Building rendering objects"></a>
+						<h3 class="subsubtitle task-title">Building rendering objects</h3>
+
+						<ul class="task-list">
+							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderingObjectForObject:">+&nbsp;renderingObjectForObject:</a></code>
 		<span class="tooltip"><p>Returns a rendering object that is able to render the argument <em>object</em> for
@@ -222,7 +253,7 @@ templates.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.7</p>
+		
 	</div>
 	
 	
@@ -245,11 +276,10 @@ does not enter your Release configuration.</p>
 your development configuration, and to wrap the
 <code>preventNSUndefinedKeyExceptionAttack</code> method call in a #if block, like:</p>
 
-<h1>ifdef DEBUG</h1>
-
-<p><a href="#//api/name/preventNSUndefinedKeyExceptionAttack">[GRMustache preventNSUndefinedKeyExceptionAttack]</a>;</p>
-
-<h1>endif</h1>
+<pre><code>#ifdef DEBUG
+[GRMustache preventNSUndefinedKeyExceptionAttack];
+#endif
+</code></pre>
 
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime.md</a></p>
 	</div>
@@ -306,7 +336,7 @@ the various Mustache tags.</p>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -364,10 +394,12 @@ that provides the default GRMustache rendering.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>block</em></dt>
-			<dd><p>A block that follows the semantics of the
-renderForMustacheTag:context:HTMLSafe:error: method defined by
-the <a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol. See the documentation of this
-method.</p></dd>
+			<dd><p>A block that follows the semantics of the</p>
+
+<pre><code>          renderForMustacheTag:context:HTMLSafe:error: method defined by
+          the GRMustacheRendering protocol. See the documentation of this
+          method.
+</code></pre></dd>
 		</dl>
 		
 	</div>
@@ -383,7 +415,7 @@ method.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.0</p>
+		
 	</div>
 	
 	
@@ -400,6 +432,52 @@ method.</p></dd>
 			
 		</ul>
 	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustache.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/standardLibrary" title="standardLibrary"></a>
+	<h3 class="subsubtitle method-title">standardLibrary</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The GRMustache standard library.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (NSObject *)standardLibrary</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The GRMustache standard library.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		
+	</div>
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -438,7 +516,7 @@ method.</p></dd>
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.0</p>
+		
 	</div>
 	
 	
@@ -472,9 +550,9 @@ method.</p></dd>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-01-30)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-02-14)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
 					</div>
 				</div>
