@@ -7,7 +7,7 @@ GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (wit
 
 **February 14, 2013: GRMustache 6.4.0 is out.** [Release notes](RELEASE_NOTES.md)
 
-Don't miss a single release: follow [@GRMustache](http://twitter.com/GRMustache) on Twitter.
+Don't miss a single release: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
 How To
 ------
