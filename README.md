@@ -106,7 +106,7 @@ FAQ
     
     A: Yes. Use [NSNumberFormatter and NSDateFormatter](Guides/NSFormatter.md).
 
-- **Q: Is it possible to render partial templates whose name is only known at runtime?**
+- **Q: Is it possible to embed partial templates whose name is only known at runtime?**
 
     A: [Yes](Guides/rendering_objects.md)
 
