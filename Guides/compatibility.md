@@ -15,6 +15,7 @@ This guide is here to tell you where the border line is, topic by topic:
 
 - Syntax extensions
 - Sections and inverted sections
+- Standard Library
 - Text templates
 - File system hierarchy of template and partials
 - Dynamic partials
@@ -61,6 +62,12 @@ That's unfortunate. Anyway, for the record, here is a reminder of all false valu
 - `NSNumber` instances whose `boolValue` method returns `NO`
 - empty strings `@""`
 - empty enumerables.
+
+
+Standard Library
+----------------
+
+The Mustache specification does not provide any service like the [GRMustache standard library](standard_library.md).
 
 
 Text templates
