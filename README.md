@@ -118,7 +118,7 @@ FAQ
 
     A: [Yes](Guides/standard_library.md#localize)
 
-- **Q: Is it possible to render default values for missing keys?**
+- **Q: Is it possible to render a default value for missing keys?**
 
     A: [Yes](Guides/delegate.md)
 
