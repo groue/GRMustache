@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](standard_library.md)
+[up](../../../../GRMustache#documentation), [next](sample_code/indexes.md)
 
 Patterns For Feeding GRMustache Templates
 =========================================
@@ -297,4 +297,4 @@ Of course, it's hard to believe that the age of a pet can have you write so much
 
 **ViewModel Drawbacks**: Not done in five minutes. Quickly looks overdesigned, especially in a tutorial like this Guide.
 
-[up](../../../../GRMustache#documentation), [next](standard_library.md)
+[up](../../../../GRMustache#documentation), [next](sample_code/indexes.md)

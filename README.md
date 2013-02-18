@@ -53,35 +53,34 @@ Introduction:
 
 - [Introduction](Guides/introduction.md): a tour of the library features, and most common use cases.
 
-Loading templates:
+Basics:
 
 - [Templates](Guides/templates.md): how to load templates.
 - [Partials](Guides/partials.md): decompose your templates into components named "partials".
 - [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
-
-Rendering templates:
-
 - [Runtime](Guides/runtime.md): how GRMustache renders your data.
-- [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 
-Standard library:
+Services:
 
-- [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
-
-Mustache, and beyond:
-
-- [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 - [Configuration](Guides/configuration.md)
 - [HTML vs. Text templates](Guides/html_vs_text.md)
+- [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
+- [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
+
+Hooks:
+
 - [Filters](Guides/filters.md): `{{ uppercase(name) }}` et al.
 - [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
 - [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
 - [Protected Contexts](Guides/protected_contexts.md): protect some keys so that they always evaluate to the same value.
-- [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
 
+Mustache, and beyond:
+
+- [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 
 ### Sample code
 
+- [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 - [Collection Indexes](Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
 
 ### Reference

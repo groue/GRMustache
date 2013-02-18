@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](runtime_patterns.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)
 
 GRMustache runtime
 ==================
@@ -406,4 +406,4 @@ That's unfortunate. Anyway, for the record, here is a reminder of all false valu
 - empty strings `@""`
 - empty enumerables.
 
-[up](../../../../GRMustache#documentation), [next](runtime_patterns.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)
