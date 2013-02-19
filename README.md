@@ -17,7 +17,7 @@ How To
 You have three options, from the simplest to the hairiest:
 
 - [CocoaPods](Guides/installation.md#option-1-cocoapods)
-- [Static Libraries](Guides/installation.md#option-2-static-library)
+- [Static Library](Guides/installation.md#option-2-static-library)
 - [Compile the raw sources](Guides/installation.md#option-3-compiling-the-raw-sources)
 
 
