@@ -26,9 +26,9 @@ You have three options, from the simplest to the hairiest:
 ```objc
 #import "GRMustache.h"
 
-// Renders "Hello Arthur!"
+// Renders "Bonjour Arthur !"
 NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
-                                            fromString:@"Hello {{name}}!"
+                                            fromString:@"{{#localize}}Hello {{name}}!{{/localize}}"
                                                  error:NULL];
 
 // Renders a document from the `Profile.mustache` resource
