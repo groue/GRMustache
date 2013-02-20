@@ -155,7 +155,7 @@ self.template.baseContext = [self.template.baseContext contextByAddingProtectedO
 [self.template renderObject:user2 error:NULL];
 ```
 
-The base context of a template provides keys that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example, and now our `age` filter.
+The base context of a template provides keys that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example, and now our `age` filter.
 
 Here we have added the `age` filter as a *protected* object. This means that GRMustache will always resolve the `age` identifier to our filter. This makes our template future-proof: if the Pet class eventually gets an `age` property, the template will not suddenly resolve `age` as a number, which could not be used to compute the `age(birthDate)` expression.
 

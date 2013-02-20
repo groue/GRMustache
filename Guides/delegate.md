@@ -61,7 +61,7 @@ Also: if a section tag `{{# name }}...{{/}}` is provided with an array, its cont
 
 In order to observe the rendering of all tags rendered by a template, you have your tag delegate enter the *base context* of the template.
 
-The base context contains values and tag delegates that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example. Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
+The base context contains values and tag delegates that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example. Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
 
 ```objc
 @interface Document : NSObject<GRMustacheTagDelegate>

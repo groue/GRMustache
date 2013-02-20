@@ -91,9 +91,6 @@ The library features are described in the [guides](introduction.md). This sectio
 
     - `<GRMustacheFilter>` (protocol)
     - `GRMustacheFilter` (class)
-    - `GRMustacheFilterLibrary`
-    
-    The *filter library* provides with built-in filters.
     
     The library user can implement her own *filters*, that will add to the built-in ones.
     

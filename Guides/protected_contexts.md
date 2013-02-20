@@ -40,7 +40,7 @@ Protected objects
 
 GRMustache addresses this concern by letting you store *protected objects* in the *base context* of a template.
 
-The base context contains [context stack values](runtime.md) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use filters of the [filter library](filters.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
+The base context contains [context stack values](runtime.md) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
 You can derive a new context that contain protected objects with the `contextByAddingProtectedObject:` method:
 
