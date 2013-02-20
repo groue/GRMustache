@@ -366,7 +366,7 @@ NSDictionary never complains when asked for an unknown key. However, the default
 
 When debugging your project, those exceptions may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
 
-You can avoid that: add the `-ObjC` linker flag to your target (http://developer.apple.com/library/mac/#qa/qa1490/_index.html), and make sure you call before any GRMustache rendering the following method:
+You can avoid that: make sure you invoke once, early in your application, the following method:
 
 ```objc
 #if !defined(NS_BLOCK_ASSERTIONS)
@@ -374,7 +374,7 @@ You can avoid that: add the `-ObjC` linker flag to your target (http://developer
 #endif
 ```
 
-You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration. This is the purpose of the conditional compilation based on the `NS_BLOCK_ASSERTIONS` preprocessor macro (see http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html).
+You'll get a slight performance hit, so you'd probably make sure this call does not enter your Release configuration. The conditional compilation based on the `NS_BLOCK_ASSERTIONS` macro aboce does exactly that (see http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html).
 
 ### NSArray, NSSet, NSOrderedSet
 
