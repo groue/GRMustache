@@ -73,7 +73,7 @@ GRMustache core engine implements syntaxes and features that are not in the spec
 
 Mustache focuses on rendering HTML, and safely HTML-escape your data.
 
-GRMustache also support text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
+GRMustache also supports text templates, that do not escape anything. Check the [HTML vs. Text Templates Guide](html_vs_text.md).
 
 
 ### Filters
