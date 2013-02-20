@@ -68,7 +68,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-GRMustache first looks for the `person` key, extracts its `name`, and applies the `uppercase` built-in [filter](filters.md). The variable tag eventually renders the resulting string.
+GRMustache first looks for the `person` key, extracts its `name`, and applies the `uppercase` built-in filter of the [standard library](standard_library.md). The variable tag eventually renders the resulting string.
 
 
 Section tags
