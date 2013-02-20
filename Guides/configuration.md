@@ -52,14 +52,10 @@ repo.configuration = [GRMustacheConfiguration configuration];
 GRMustacheConfiguration properties
 ----------------------------------
 
-```objc
-@interface GRMustacheConfiguration : NSObject<NSCopying>
-@property (nonatomic, retain) GRMustacheContext *baseContext;
-@property (nonatomic) GRMustacheContentType contentType;
-@property (nonatomic, copy) NSString *tagStartDelimiter;
-@property (nonatomic, copy) NSString *tagEndDelimiter;
-@end
-```
+- [baseContext](#basecontext)
+- [contentType](#contenttype)
+- [tagStartDelimiter](#tagstartdelimiter)
+- [tagEndDelimiter](#tagenddelimiter)
 
 ### baseContext
 
