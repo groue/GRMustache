@@ -54,8 +54,8 @@ GRMustacheConfiguration properties
 
 - [baseContext](#basecontext)
 - [contentType](#contenttype)
-- [tagStartDelimiter](#tagstartdelimiter)
-- [tagEndDelimiter](#tagenddelimiter)
+- [tagStartDelimiter](#tagstartdelimiter-and-tagenddelimiter)
+- [tagEndDelimiter](#tagstartdelimiter-and-tagenddelimiter)
 
 ### baseContext
 
