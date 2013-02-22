@@ -224,6 +224,7 @@
      * So I guess we have to do it by hand :-(
      */
     
+    // TODO: Oleg suggests I look at OAActionSheetController.
     switch (arguments.count) {
         case 0:
             // Use stringWithFormat, so that % characters are processed.
