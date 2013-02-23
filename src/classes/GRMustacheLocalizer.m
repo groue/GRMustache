@@ -224,100 +224,37 @@
      * So I guess we have to do it by hand :-(
      */
     
-    // TODO: Oleg suggests I look at OAActionSheetController.
-    switch (arguments.count) {
-        case 0:
-            // Use stringWithFormat, so that % characters are processed.
-            return [NSString stringWithFormat:format, nil]; // This nil prevents a compiler warning.
-            
-        case 1:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0]];
-            
-        case 2:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1]];
-            
-        case 3:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2]];
-            
-        case 4:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3]];
-            
-        case 5:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3],
-                    [arguments objectAtIndex:4]];
-            
-        case 6:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3],
-                    [arguments objectAtIndex:4],
-                    [arguments objectAtIndex:5]];
-            
-        case 7:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3],
-                    [arguments objectAtIndex:4],
-                    [arguments objectAtIndex:5],
-                    [arguments objectAtIndex:6]];
-            
-        case 8:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3],
-                    [arguments objectAtIndex:4],
-                    [arguments objectAtIndex:5],
-                    [arguments objectAtIndex:6],
-                    [arguments objectAtIndex:7]];
-            
-        case 9:
-            return [NSString stringWithFormat:
-                    format,
-                    [arguments objectAtIndex:0],
-                    [arguments objectAtIndex:1],
-                    [arguments objectAtIndex:2],
-                    [arguments objectAtIndex:3],
-                    [arguments objectAtIndex:4],
-                    [arguments objectAtIndex:5],
-                    [arguments objectAtIndex:6],
-                    [arguments objectAtIndex:7],
-                    [arguments objectAtIndex:8]];
-            
-        default:
-            // Sorry. Add more cases above.
-            [NSException raise:NSGenericException format:@"Not implemented: format with %ld parameters", (unsigned long)arguments.count];
-            break;
+    NSUInteger count = arguments.count;
+
+    id args[] = {
+        (count > 0) ? [arguments objectAtIndex:0] : nil,
+        (count > 1) ? [arguments objectAtIndex:1] : nil,
+        (count > 2) ? [arguments objectAtIndex:2] : nil,
+        (count > 3) ? [arguments objectAtIndex:3] : nil,
+        (count > 4) ? [arguments objectAtIndex:4] : nil,
+        (count > 5) ? [arguments objectAtIndex:5] : nil,
+        (count > 6) ? [arguments objectAtIndex:6] : nil,
+        (count > 7) ? [arguments objectAtIndex:7] : nil,
+        (count > 8) ? [arguments objectAtIndex:8] : nil,
+        (count > 9) ? [arguments objectAtIndex:9] : nil,
+    };
+    
+    if (count > 10) {
+        [NSException raise:NSGenericException format:@"Not implemented: format with %ld parameters", (unsigned long)count];
+        return nil;
     }
     
-    return nil;
+    return [NSString stringWithFormat:format,
+            args[0],
+            args[1],
+            args[2],
+            args[3],
+            args[4],
+            args[5],
+            args[6],
+            args[7],
+            args[8],
+            args[9]];
 }
 
 @end
