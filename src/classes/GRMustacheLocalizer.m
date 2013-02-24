@@ -23,6 +23,8 @@
 #import "GRMustache.h"
 #import "GRMustacheLocalizer.h"
 
+static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocalizerValuePlaceholder";
+
 @interface GRMustacheLocalizer()<GRMustacheTagDelegate>
 @property (nonatomic, strong) NSMutableArray *formatArguments;
 - (NSString *)localizedStringForKey:(NSString *)key;
@@ -77,12 +79,15 @@
 {
     /**
      * Perform a first rendering of the section tag, that will turn variable
-     * tags into %@. We'll get a localizable format: "...%@...%@...".
+     * tags into a custom placeholder.
+     *
+     * "...{{name}}..." will get turned into "...GRMustacheLocalizerValuePlaceholder...".
      *
      * For that, we make sure we are notified of tag rendering, so that our
      * mustacheTag:willRenderObject: implementation tells the tags to render
-     * "%@" instead of the regular values, "Arthur" or "Barbara". This
-     * behavior is trigerred by the nil value of self.formatArguments.
+     * GRMustacheLocalizerValuePlaceholder instead of the regular values,
+     * "Arthur" or "Barbara". This behavior is trigerred by the nil value of
+     * self.formatArguments.
      */
     
     // Set up first pass behavior
@@ -119,28 +124,29 @@
      */
     
     NSString *rendering = nil;
-    if (self.formatArguments.count > 0) {
+    if (self.formatArguments.count == 0)
+    {
+        // Don't format anything if there is no format argument.
+        rendering = [self localizedStringForKey:localizableFormat];
+    }
+    else
+    {
         /**
-         * Caution here:
+         * When rendering {{#localize}}%d {{name}}{{/localize}},
+         * The localizableFormat string we have just built is
+         * "%d GRMustacheLocalizerValuePlaceholder".
          *
-         * When rendering {{#localize}}%d{{name}}{{/localize}},
-         * The localizableFormat string we have just built is %d%@.
+         * In order to get an actual format string, we have to:
+         * - turn GRMustacheLocalizerValuePlaceholder into %@
+         * - escape % into %%.
          *
-         * Because of the %d, it can not be straightly used with
-         * stringWithFormat:.
-         *
-         * So escape percents first, and build %%d%@: this is the format that
-         * gets localized.
+         * The format string will then be "%%d %@".
          */
         
         localizableFormat = [localizableFormat stringByReplacingOccurrencesOfString:@"%" withString:@"%%"];
-        localizableFormat = [localizableFormat stringByReplacingOccurrencesOfString:@"%%@" withString:@"%@"];
-        
+        localizableFormat = [localizableFormat stringByReplacingOccurrencesOfString:GRMustacheLocalizerValuePlaceholder withString:@"%@"];
         NSString *localizedFormat = [self localizedStringForKey:localizableFormat];
         rendering = [self stringWithFormat:localizedFormat argumentArray:self.formatArguments];
-    } else {
-        // Do not take extra precaution here.
-        rendering = [self localizedStringForKey:localizableFormat];
     }
     
     
@@ -177,7 +183,7 @@
     if (self.formatArguments) {
         return object;
     } else {
-        return @"%@";
+        return GRMustacheLocalizerValuePlaceholder;
     }
 }
 
