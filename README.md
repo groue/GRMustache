@@ -179,6 +179,7 @@ Popular projects & apps using GRMustache
 * [Fotopedia](http://itunes.com/apps/fotonautsinc), the first collaborative photo encyclopedia
 * [FunGolf GPS](http://itunes.com/apps/fungolf), a golf app with 3D maps
 * [KosmicTask](http://www.mugginsoft.com/kosmictask), an integrated scripting environment for OS X that supports more than 20 scripting languages.
+* [Servus](https://servus.io) can turn any file on your computer into a branded download page hosted on Dropbox.
 
 
 Contribution wish-list
