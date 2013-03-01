@@ -94,7 +94,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 + (void)load
 {
     // Prepare renderingObjectForObject:
-    
+    @autoreleasepool {
     nilRenderingObject = [[GRMustacheRenderingWithIMP alloc] initWithObject:nil implementation:(IMP)GRMustacheRenderNil];
     
     [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNull   forClass:[NSNull class]];
@@ -145,6 +145,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                          [[[GRMustacheURLEscapeFilter alloc] init] autorelease], @"escape",
                          nil], @"URL",
                         nil] retain];
+    }
 }
 
 + (void)preventNSUndefinedKeyExceptionAttack
