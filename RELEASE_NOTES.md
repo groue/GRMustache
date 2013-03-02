@@ -3,6 +3,13 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.4.1
+
+Bugfixes:
+
+- Avoid leaked memory warnings (thanks [@oleganza](https://github.com/oleganza)).
+- The `localize` helper now lets you localize sections whose content contains `%@`.
+
 ## v6.4.0
 
 ### Integration in your Xcode project

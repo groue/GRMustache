@@ -93,58 +93,59 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)load
 {
-    // Prepare renderingObjectForObject:
     @autoreleasepool {
-    nilRenderingObject = [[GRMustacheRenderingWithIMP alloc] initWithObject:nil implementation:(IMP)GRMustacheRenderNil];
-    
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNull   forClass:[NSNull class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNumber forClass:[NSNumber class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSString forClass:[NSString class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSObject forClass:[NSDictionary class]];
-    
-    // Prepare standard library
-    
-    standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
-                        // {{ capitalized(value) }}
-                        [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
+        
+        // Prepare renderingObjectForObject:
+        
+        nilRenderingObject = [[GRMustacheRenderingWithIMP alloc] initWithObject:nil implementation:(IMP)GRMustacheRenderNil];
+        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNull   forClass:[NSNull class]];
+        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNumber forClass:[NSNumber class]];
+        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSString forClass:[NSString class]];
+        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSObject forClass:[NSDictionary class]];
+        
+        // Prepare standard library
+        
+        standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
+                            // {{ capitalized(value) }}
+                            [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
 
-                        // {{ lowercase(value) }}
-                        [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
-                        
-                        // {{ uppercase(value) }}
-                        [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
-                        
-                        // {{# isBlank(value) }}...{{/}}
-                        [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
-                        
-                        // {{# isEmpty(value) }}...{{/}}
-                        [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
-                        
-                        // {{ localize(value) }}
-                        // {{^ localize }}...{{/}}
-                        [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
-                        
-                        [NSDictionary dictionaryWithObjectsAndKeys:
-                         
-                         // {{ HTML.escape(value) }}
-                         // {{# HTML.escape }}...{{/}}
-                         [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease], @"escape",
-                         nil], @"HTML",
-                        
-                        [NSDictionary dictionaryWithObjectsAndKeys:
-                         
-                         // {{ javascript.escape(value) }}
-                         // {{# javascript.escape }}...{{/}}
-                         [[[GRMustacheJavascriptEscaper alloc] init] autorelease], @"escape",
-                         nil], @"javascript",
-                        
-                        [NSDictionary dictionaryWithObjectsAndKeys:
-                         
-                         // {{ URL.escape(value) }}
-                         // {{# URL.escape }}...{{/}}
-                         [[[GRMustacheURLEscapeFilter alloc] init] autorelease], @"escape",
-                         nil], @"URL",
-                        nil] retain];
+                            // {{ lowercase(value) }}
+                            [[[GRMustacheLowercaseFilter alloc] init] autorelease], @"lowercase",
+                            
+                            // {{ uppercase(value) }}
+                            [[[GRMustacheUppercaseFilter alloc] init] autorelease], @"uppercase",
+                            
+                            // {{# isBlank(value) }}...{{/}}
+                            [[[GRMustacheBlankFilter alloc] init] autorelease], @"isBlank",
+                            
+                            // {{# isEmpty(value) }}...{{/}}
+                            [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
+                            
+                            // {{ localize(value) }}
+                            // {{^ localize }}...{{/}}
+                            [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                            
+                            [NSDictionary dictionaryWithObjectsAndKeys:
+                             
+                             // {{ HTML.escape(value) }}
+                             // {{# HTML.escape }}...{{/}}
+                             [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease], @"escape",
+                             nil], @"HTML",
+                            
+                            [NSDictionary dictionaryWithObjectsAndKeys:
+                             
+                             // {{ javascript.escape(value) }}
+                             // {{# javascript.escape }}...{{/}}
+                             [[[GRMustacheJavascriptEscaper alloc] init] autorelease], @"escape",
+                             nil], @"javascript",
+                            
+                            [NSDictionary dictionaryWithObjectsAndKeys:
+                             
+                             // {{ URL.escape(value) }}
+                             // {{# URL.escape }}...{{/}}
+                             [[[GRMustacheURLEscapeFilter alloc] init] autorelease], @"escape",
+                             nil], @"URL",
+                            nil] retain];
     }
 }
 
