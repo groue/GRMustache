@@ -167,6 +167,10 @@ What other people say
 
 > okay GRMustache is the fucking daddy
 
+[@OldManKris](https://twitter.com/oldmankris/status/307683824362483712)
+
+> GRMustache is teh awesome. Nice to find an open-source library that is more pleasant to use than expected.
+
 
 Popular projects & apps using GRMustache
 ----------------------------------------
