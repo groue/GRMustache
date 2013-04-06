@@ -432,7 +432,7 @@ Section delegates are used in the [number formatting sample code](Guides/sample_
 
 Headers contain documentation for every exposed API.
 
-An online reference, automatically generated from inline documentation by appledoc can be read at http://groue.github.com/GRMustache/Reference/.
+An online reference, automatically generated from inline documentation by appledoc can be read at http://groue.github.io/GRMustache/Reference/.
 
 ## v4.1.0
 
