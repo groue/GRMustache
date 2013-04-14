@@ -106,6 +106,14 @@ FAQ
     
     A: Yes. Use [NSNumberFormatter and NSDateFormatter](Guides/NSFormatter.md).
 
+- **Q: Is it possible to pluralize/singularize strings?**
+    
+    A: Yes. [Issue #50](https://github.com/groue/GRMustache/issues/50) contains sample code.
+
+- **Q: Is it possible to localize templates?**
+
+    A: [Yes](Guides/standard_library.md#localize)
+
 - **Q: Is it possible to embed partial templates whose name is only known at runtime?**
 
     A: [Yes](Guides/rendering_objects.md)
@@ -113,10 +121,6 @@ FAQ
 - **Q: Does GRMustache provide any layout or template inheritance facility?**
     
     A: [Yes](Guides/partials.md)
-
-- **Q: Is it possible to localize templates?**
-
-    A: [Yes](Guides/standard_library.md#localize)
 
 - **Q: Is it possible to render a default value for missing keys?**
 
