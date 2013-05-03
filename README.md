@@ -82,7 +82,7 @@ Mustache, and beyond:
 
 - [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
 - [Collection Indexes](Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- Also check the [FAQ][#FAQ] below.
+- Also check the [FAQ](#FAQ) below.
 
 ### Reference
 
