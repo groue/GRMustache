@@ -167,7 +167,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
     // copy identical stacks
     context.contextParent = _contextParent;
@@ -192,7 +192,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
     // copy identical stacks
     context.protectedContextParent = _protectedContextParent;
@@ -224,7 +224,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
     // copy identical stacks
     context.contextParent = _contextParent;
@@ -249,7 +249,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
     // copy identical stacks
     context.contextParent = _contextParent;
@@ -274,7 +274,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
     // copy identical stacks
     context.contextParent = _contextParent;
@@ -306,6 +306,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     // top of the stack is first object
     return [[_contextObject retain] autorelease];
+}
+
+- (id)valueForKey:(NSString *)key
+{
+    return [self contextValueForKey:key protected:NULL];
 }
 
 - (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected
@@ -345,6 +350,16 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
 
+    // Check for custom subclass key
+    
+    if (![self isMemberOfClass:[GRMustacheContext class]]) {
+        id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
+        if (protected != NULL) {
+            *protected = NO;
+        }
+        return value;
+    }
+    
     return nil;
 }
 

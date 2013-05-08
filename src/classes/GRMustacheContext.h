@@ -152,4 +152,10 @@
  */
 - (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
+/**
+ * Returns the value stored in the context stack.
+ *
+ * @since v6.5
+ */
+- (id)valueForKey:(NSString *)key;
 @end
