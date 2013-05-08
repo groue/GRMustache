@@ -23,14 +23,21 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_5
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheContextSubclass : GRMustacheContext
+@interface GRDocumentMustacheContext : GRMustacheContext
 @end
 
-@implementation GRMustacheContextSubclass
+@implementation GRDocumentMustacheContext
 
 - (NSNumber *)succ
 {
-    return [NSNumber numberWithInteger:[(NSNumber *)[self valueForKey:@"number"] integerValue] + 1];
+    NSInteger number = [[self valueForKey:@"number"] integerValue];
+    return [NSNumber numberWithInteger:number + 1];
+}
+
+- (NSNumber *)pred
+{
+    NSInteger succ = [[self valueForKey:@"succ"] integerValue];
+    return [NSNumber numberWithInteger:succ - 2];
 }
 
 - (id)name
@@ -40,10 +47,10 @@
 
 @end
 
-@interface GRMustacheContextSubclassTest : GRMustachePublicAPITest
+@interface GRDocumentMustacheContextTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheContextSubclassTest
+@implementation GRDocumentMustacheContextTest
 
 - (void)testMustacheContextSubclassExtendsAvailableKeys
 {
@@ -51,18 +58,18 @@
     //
     //    require "mustache"
     //
-    //    class Subclass < Mustache
+    //    class Document < Mustache
     //      self.template = "{{succ}}"
     //      def succ
     //        self[:number] + 1
     //      end
     //    end
     //
-    //    puts Subclass.render(:number => 1)  # => 2
+    //    puts Document.render(:number => 1)  # => 2
 
     NSString *templateString = @"{{succ}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     id data = @{ @"number": @1 };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -75,18 +82,18 @@
     //
     //    require "mustache"
     //
-    //    class Subclass < Mustache
+    //    class Document < Mustache
     //      self.template = "{{succ}},{{#a}}{{succ}}{{/a}},{{#b}}{{succ}}{{/b}}"
     //      def succ
     //        self[:number] + 1
     //      end
     //    end
     //
-    //    puts Subclass.render(:number => 1, :a => { :number => 2 }, :b => {})  # => 2,3,2
+    //    puts Document.render(:number => 1, :a => { :number => 2 }, :b => {})  # => 2,3,2
 
     NSString *templateString = @"{{succ}},{{#a}}{{succ}}{{/}},{{#b}}{{succ}}{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     id data = @{ @"number": @1, @"a" : @{ @"number": @2 }, @"b" : @{ } };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -99,18 +106,18 @@
     //
     //    require "mustache"
     //
-    //    class Subclass < Mustache
+    //    class Document < Mustache
     //      self.template = "{{a.succ}},{{b.succ}}"
     //      def succ
     //        self[:number] + 1
     //      end
     //    end
     //
-    //    puts Subclass.render(:number => 1, :a => { :number => 2 }, :b => {})  # => ,
+    //    puts Document.render(:number => 1, :a => { :number => 2 }, :b => {})  # => ,
     
     NSString *templateString = @"{{succ}},{{a.succ}},{{#a}}{{succ}}{{/}},{{b.succ}},{{#b}}{{succ}}{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     id data = @{ @"number": @1, @"a" : @{ @"number": @2 }, @"b" : @{ } };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -123,7 +130,7 @@
     
     NSString *templateString = @"{{#a}}{{.succ}}{{/}},{{#b}}{{.succ}}{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     id data = @{ @"number": @1, @"a" : @{ @"number": @2 }, @"b" : @{ } };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -136,20 +143,20 @@
     //
     //    require "mustache"
     //    
-    //    class Subclass < Mustache
+    //    class Document < Mustache
     //      self.template = "name:{{name}}"
     //      def name
     //        "defaultName"
     //      end
     //    end
     //    
-    //    puts Subclass.render                    # => name:defaultName
-    //    puts Subclass.render(:name => 'Arthur') # => name:Arthur
-    //    puts Subclass.render(:name => nil)      # => name:
+    //    puts Document.render                    # => name:defaultName
+    //    puts Document.render(:name => 'Arthur') # => name:Arthur
+    //    puts Document.render(:name => nil)      # => name:
 
     NSString *templateString = @"name:{{name}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];
@@ -171,7 +178,7 @@
 {
     NSString *templateString = @"{{uppercase(name)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass context];
+    template.baseContext = [GRDocumentMustacheContext context];
     
     // uppercase filter should not be defined
     NSError *error;
@@ -185,11 +192,38 @@
 {
     NSString *templateString = @"{{uppercase(name)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    template.baseContext = [GRMustacheContextSubclass contextWithObject:[GRMustache standardLibrary]];
+    template.baseContext = [GRDocumentMustacheContext contextWithObject:[GRMustache standardLibrary]];
     
     // uppercase filter should be defined
     NSString *rendering = [template renderObject:nil error:NULL];
     STAssertEqualObjects(rendering, @"DEFAULTNAME", @"");
 }
 
+- (void)testMustacheContextSubclassKeyDependencies
+{
+    // Behave just as the Ruby version:
+    //
+    //    require "mustache"
+    //
+    //    class Document < Mustache
+    //      self.template = "{{pred}},{{#a}}{{pred}}{{/a}},{{#b}}{{pred}}{{/b}}"
+    //      def succ
+    //        self[:number] + 1
+    //      end
+    //      def pred
+    //        # depends on self[:succ]
+    //        self[:succ] - 2
+    //      end
+    //    end
+    //
+    //    puts Document.render(:number => 1, :a => { :number => 2 }, :b => {})  # => 0,1,0
+    
+    NSString *templateString = @"{{pred}},{{#a}}{{pred}}{{/}},{{#b}}{{pred}}{{/}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    template.baseContext = [GRDocumentMustacheContext context];
+    
+    id data = @{ @"number": @1, @"a" : @{ @"number": @2 }, @"b" : @{ } };
+    NSString *rendering = [template renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"0,1,0", @"");
+}
 @end

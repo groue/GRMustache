@@ -102,12 +102,66 @@ The rendering code still reads:
 [self.template renderObject:user error:NULL];
 ```
 
+Dedicated ViewModel class
+-------------------------
+
+Many Mustache libraries let you create a dedicated class that defines template-specific keys. Those classes are called "View Models".
+
+In Ruby, for instance, the `age` key would be defined is this way:
+
+```ruby
+# Dedicated ViewModel subclass
+class Document < Mustache
+  def age
+    # return clever computation based on self[:birthDate]
+  end
+end
+
+# Render
+Document.render(:pets => pets, ...)
+```
+
+GRMustache let you do the same:
+
+```objc
+@interface DocumentMustacheContext : GRMustacheContext
+@end
+
+@implementation DocumentMustacheContext
+- (NSInteger)age
+{
+    NSDate *birthDate = [self valueForKey:@"birthDate"];
+    return /* clever calculation based on birthDate */;
+}
+@end
+```
+
+Use your custom DocumentMustacheContext class as the base context of the template, and render:
+
+```objc
+self.template.baseContext = [DocumentMustacheContext context];
+[self.template renderObject:user error:NULL];
+```
+
+Should you want to use the GRMustache standard library, you have to explicitely include it in your template base context:
+
+```objc
+// Keep standard library
+self.template.baseContext = [DocumentMustacheContext contextWithObject:[GRMustache standardLibrary]];
+[self.template renderObject:user error:NULL];
+```
+
+**ViewModel Benefits**: Conceptually clean, model objects remain pristine, good base for testing, compatible with most other Mustache implementations.
+
+**ViewModel Drawbacks**: The ViewModel implementation is very tied to the template content and the structure of provided data. For instance, the `age` key is forever bound to the `birthDate` key. This may make it difficult to make the template evolve.
+
+
 Filters
 -------
 
-If the dedicated property doesn't fit your coding standards, let us introduce GRMustache [filters](filters.md). Filters are a nice way to transform data. They do not cross the MVC barriers, and the Pet class can remain pristine.
+GRMustache [filters](filters.md) are a nice way to transform data.
 
-Obviously, if the Pet class doesn't help, the template has to help itself: below is our template rewritten with filters.
+Below is our template rewritten with filters.
 
     ...
     {{# pets }}
@@ -129,7 +183,7 @@ id filters = @{
 [self.template renderObjectsFromArray:@[filters, user] error:NULL];
 ```
 
-**Filter Benefits**: Done in five minutes. Conceptually clean.
+**Filter Benefits**: Done in five minutes. Conceptually clean, model objects remain pristine.
 
 **Filter Drawbacks**: The template is not compatible with other Mustache implementations, because filters are a GRMustache-specific addition. Help developers of other platforms: [spread the good news](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations)!
 
@@ -160,6 +214,7 @@ The base context of a template provides keys that are always available for the t
 Here we have added the `age` filter as a *protected* object. This means that GRMustache will always resolve the `age` identifier to our filter. This makes our template future-proof: if the Pet class eventually gets an `age` property, the template will not suddenly resolve `age` as a number, which could not be used to compute the `age(birthDate)` expression.
 
 Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
+
 
 
 ViewModel
