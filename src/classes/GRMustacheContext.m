@@ -121,6 +121,42 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     shouldPreventNSUndefinedKeyException = YES;
 }
 
+// TODO: put away in private section
++ (NSMutableSet *)inheritableKeysForClass:(Class)klass
+{
+    // Returns a set of writable properties declared by klass
+    NSMutableSet *keys = [NSMutableSet set];
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList(klass, &count);
+    for (unsigned int i=0; i<count; ++i) {
+        const char *attrs = property_getAttributes(properties[i]);
+        if (!strstr(attrs, ",R,")) {    // not read-only?
+            [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
+        }
+    }
+    free(properties);
+    return keys;
+}
+
+// TODO: expose in public API
++ (NSSet *)inheritableKeys
+{
+    // Returns a set of writable properties declared by self, minu those declared by GRMustacheContext itself:
+    // These are supposed to be the writable properties of GRMustacheContext subclasses.
+    NSMutableSet *keys = [self inheritableKeysForClass:self];
+    [keys minusSet:[self inheritableKeysForClass:[GRMustacheContext class]]];
+    return keys;
+}
+
+// TODO: put away in private section
+- (void)copyInheritableKeysFromContext:(GRMustacheContext *)context
+{
+    for (NSString *key in [[self class] inheritableKeys]) {
+        id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
+        [self setValue:value forKey:key];
+    }
+}
+
 + (instancetype)context
 {
     return [[[self alloc] init] autorelease];
@@ -183,6 +219,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_tagDelegate) { context.tagDelegateParent = self; }
     context.tagDelegate = tagDelegate;
     
+    [context copyInheritableKeysFromContext:self];
     return context;
 }
 
@@ -215,6 +252,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.tagDelegate = _tagDelegate;
     }
     
+    [context copyInheritableKeysFromContext:self];
     return context;
 }
 
@@ -240,6 +278,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_protectedContextObject) { context.protectedContextParent = self; }
     context.protectedContextObject = object;
     
+    [context copyInheritableKeysFromContext:self];
     return context;
 }
 
@@ -265,6 +304,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_hiddenContextObject) { context.hiddenContextParent = self; }
     context.hiddenContextObject = object;
     
+    [context copyInheritableKeysFromContext:self];
     return context;
 }
 
@@ -290,6 +330,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_templateOverride) { context.templateOverrideParent = self; }
     context.templateOverride = templateOverride;
     
+    [context copyInheritableKeysFromContext:self];
     return context;
 }
 

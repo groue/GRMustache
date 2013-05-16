@@ -23,21 +23,23 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_5
 #import "GRMustachePublicAPITest.h"
 
-@interface GRDocumentMustacheContext : GRMustacheContext
+@interface GRDocumentMustacheContext : GRMustacheContext {
+    NSInteger _age;
+}
+@property (nonatomic) NSInteger age;
 @end
 
 @implementation GRDocumentMustacheContext
+@synthesize age=_age;
 
-- (NSNumber *)succ
+- (NSInteger)succ
 {
-    NSInteger number = [[self valueForKey:@"number"] integerValue];
-    return [NSNumber numberWithInteger:number + 1];
+    return [[self valueForKey:@"number"] integerValue] + 1;
 }
 
-- (NSNumber *)pred
+- (NSInteger)pred
 {
-    NSInteger succ = [[self valueForKey:@"succ"] integerValue];
-    return [NSNumber numberWithInteger:succ - 2];
+    return [self succ] - 2;
 }
 
 - (id)name
@@ -226,4 +228,35 @@
     NSString *rendering = [template renderObject:data error:NULL];
     STAssertEqualObjects(rendering, @"0,1,0", @"");
 }
+
+- (void)testMustacheContextSubclassSetters
+{
+    // Behave just as the Ruby version:
+    //
+    //    require "mustache"
+    //
+    //    class Document < Mustache
+    //      self.template = "{{name}}:{{age}},{{#a}}{{name}}:{{age}}{{/a}}"
+    //
+    //      attr_accessor :age
+    //      def name
+    //        'defaultName'
+    //      end
+    //    end
+    //
+    //    document = Document.new
+    //    document.age = 39
+    //    puts document.render(:a => {})    # => defaultName:39,defaultName:39
+    
+    NSString *templateString = @"{{name}}:{{age}},{{#a}}{{name}}:{{age}}{{/a}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    GRDocumentMustacheContext *context = [GRDocumentMustacheContext context];
+    context.age = 39;
+    template.baseContext = context;
+    
+    id data = @{ @"a" : @{ } };
+    NSString *rendering = [template renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"defaultName:39,defaultName:39", @"");
+}
+
 @end
