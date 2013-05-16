@@ -49,6 +49,34 @@
 
 @end
 
+@interface GRMustacheRubyExampleContext : GRMustacheContext {
+    NSString *_name;
+    float _value;
+    BOOL _in_ca;
+}
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic) float value;
+@property (nonatomic) BOOL in_ca;
+@end
+
+@implementation GRMustacheRubyExampleContext
+@synthesize name=_name;
+@synthesize value=_value;
+@synthesize in_ca=_in_ca;
+
+- (void)dealloc
+{
+    [_name release];
+    [super dealloc];
+}
+
+- (float)taxed_value
+{
+    return self.value - self.value * 0.4;
+}
+
+@end
+
 @interface GRDocumentMustacheContextTest : GRMustachePublicAPITest
 @end
 
@@ -236,27 +264,45 @@
     //    require "mustache"
     //
     //    class Document < Mustache
-    //      self.template = "{{name}}:{{age}},{{#a}}{{name}}:{{age}}{{/a}}"
-    //
+    //      self.template = "{{age}},{{#a}}{{age}}{{/a}},{{#b}}{{age}}{{/b}}"
     //      attr_accessor :age
-    //      def name
-    //        'defaultName'
-    //      end
     //    end
     //
     //    document = Document.new
     //    document.age = 39
-    //    puts document.render(:a => {})    # => defaultName:39,defaultName:39
+    //    puts document.render(:a => {}, :b => { :age => 10 })    # => 39,39,10
     
-    NSString *templateString = @"{{name}}:{{age}},{{#a}}{{name}}:{{age}}{{/a}}";
+    NSString *templateString = @"{{age}},{{#a}}{{age}}{{/a}},{{#b}}{{age}}{{/b}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     GRDocumentMustacheContext *context = [GRDocumentMustacheContext context];
     context.age = 39;
     template.baseContext = context;
     
-    id data = @{ @"a" : @{ } };
+    id data = @{ @"a" : @{ }, @"b" : @{ @"age": @10 } };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"defaultName:39,defaultName:39", @"");
+    STAssertEqualObjects(rendering, @"39,39,10", @"");
+}
+
+- (void)testRubyMustacheExample
+{
+    NSString *templateString = @"Hello {{name}}\n"
+                               @"You have just won ${{value}}!\n"
+                               @"{{#in_ca}}"
+                               @"Well, ${{taxed_value}}, after taxes."
+                               @"{{/in_ca}}"
+                               @"{{^in_ca}}"
+                               @"You're lucky - in CA you'd be taxed like crazy!"
+                               @"{{/in_ca}}";
+
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    GRMustacheRubyExampleContext *context = [GRMustacheRubyExampleContext context];
+    context.name = @"Chris";
+    context.value = 10000;
+    context.in_ca = YES;
+    template.baseContext = context;
+    
+    NSString *rendering = [template renderAndReturnError:NULL];
+    STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
 }
 
 @end
