@@ -83,6 +83,11 @@
     [super dealloc];
 }
 
+- (NSString *)renderAndReturnError:(NSError **)error
+{
+    return [self renderContentWithContext:self.baseContext HTMLSafe:NULL error:error];
+}
+
 - (NSString *)renderObject:(id)object error:(NSError **)error
 {
     GRMustacheContext *context = [self.baseContext contextByAddingObject:object];

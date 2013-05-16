@@ -187,6 +187,19 @@
 + (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * Renders a template.
+ *
+ * @param error   If there is an error rendering the template and its
+ *                partials, upon return contains an NSError object that
+ *                describes the problem.
+ *
+ * @return A string containing the rendered template.
+ *
+ * @since v6.5
+ */
+- (NSString *)renderAndReturnError:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_5_AND_LATER;
+
+/**
  * Renders a template with a context stack initialized with a single object.
  *
  * @param object  An object used for interpreting Mustache tags.
