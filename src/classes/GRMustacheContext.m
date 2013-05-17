@@ -122,7 +122,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 }
 
 // TODO: put away in private section
-+ (NSMutableSet *)inheritableObjectKeysForClass:(Class)klass
++ (NSMutableSet *)writableKeysForClass:(Class)klass
 {
     // Returns a set of writable properties declared by klass
     NSMutableSet *keys = [NSMutableSet set];
@@ -130,7 +130,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     objc_property_t *properties = class_copyPropertyList(klass, &count);
     for (unsigned int i=0; i<count; ++i) {
         const char *attrs = property_getAttributes(properties[i]);
-        if ((strstr(attrs, "T@") == attrs) && !strstr(attrs, ",R,")) {    // not object, not read-only
+        if (!strstr(attrs, ",R,")) {    // not read-only
             [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
         }
     }
@@ -139,46 +139,19 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 }
 
 // TODO: expose in public API
-- (NSSet *)inheritableObjectKeys
+- (NSSet *)customWritableKeys
 {
-    // Returns a set of writable properties declared by self, minu those declared by GRMustacheContext itself:
+    // Returns a set of writable properties declared by self, minus those declared by GRMustacheContext itself:
     // These are supposed to be the writable properties of GRMustacheContext subclasses.
-    NSMutableSet *keys = [GRMustacheContext inheritableObjectKeysForClass:[self class]];
-    [keys minusSet:[GRMustacheContext inheritableObjectKeysForClass:[GRMustacheContext class]]];
+    NSMutableSet *keys = [GRMustacheContext writableKeysForClass:[self class]];
+    [keys minusSet:[GRMustacheContext writableKeysForClass:[GRMustacheContext class]]];
     return keys;
 }
 
 // TODO: put away in private section
-+ (NSMutableSet *)inheritableScalarKeysForClass:(Class)klass
+- (void)copyCustomWritableKeysFromContext:(GRMustacheContext *)context
 {
-    // Returns a set of writable properties declared by klass
-    NSMutableSet *keys = [NSMutableSet set];
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(klass, &count);
-    for (unsigned int i=0; i<count; ++i) {
-        const char *attrs = property_getAttributes(properties[i]);
-        if ((strstr(attrs, "T@") != attrs) && !strstr(attrs, ",R,")) {    // not object, not read-only
-            [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
-        }
-    }
-    free(properties);
-    return keys;
-}
-
-// TODO: expose in public API
-- (NSSet *)inheritableScalarKeys
-{
-    // Returns a set of writable properties declared by self, minu those declared by GRMustacheContext itself:
-    // These are supposed to be the writable properties of GRMustacheContext subclasses.
-    NSMutableSet *keys = [GRMustacheContext inheritableScalarKeysForClass:[self class]];
-    [keys minusSet:[GRMustacheContext inheritableScalarKeysForClass:[GRMustacheContext class]]];
-    return keys;
-}
-
-// TODO: put away in private section
-- (void)copyInheritableScalarKeysFromContext:(GRMustacheContext *)context
-{
-    for (NSString *key in [self inheritableScalarKeys]) {
+    for (NSString *key in [self customWritableKeys]) {
         id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
         [self setValue:value forKey:key];
     }
@@ -224,7 +197,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
     if (tagDelegate == nil) {
         return self;
@@ -246,11 +219,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_tagDelegate) { context.tagDelegateParent = self; }
     context.tagDelegate = tagDelegate;
     
-    [context copyInheritableScalarKeysFromContext:self];
+    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingObject:(id)object
+- (instancetype)contextByAddingObject:(id)object
 {
     if (object == nil) {
         return self;
@@ -266,8 +239,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     context.templateOverrideParent = _templateOverrideParent;
     context.templateOverride = _templateOverride;
     
-    // update context stack
-    if (_contextObject || ([GRMustacheContext inheritableObjectKeysForClass:[self class]].count > 0)) { context.contextParent = self; }
+    // Update context stack
+    if (_contextObject) { context.contextParent = self; }
     context.contextObject = object;
     
     // update or copy tag delegate stack
@@ -279,11 +252,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.tagDelegate = _tagDelegate;
     }
     
-    [context copyInheritableScalarKeysFromContext:self];
+    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingProtectedObject:(id)object
+- (instancetype)contextByAddingProtectedObject:(id)object
 {
     if (object == nil) {
         return self;
@@ -305,11 +278,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_protectedContextObject) { context.protectedContextParent = self; }
     context.protectedContextObject = object;
     
-    [context copyInheritableScalarKeysFromContext:self];
+    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingHiddenObject:(id)object
+- (instancetype)contextByAddingHiddenObject:(id)object
 {
     if (object == nil) {
         return self;
@@ -331,11 +304,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_hiddenContextObject) { context.hiddenContextParent = self; }
     context.hiddenContextObject = object;
     
-    [context copyInheritableScalarKeysFromContext:self];
+    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
-- (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
+- (instancetype)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
 {
     if (templateOverride == nil) {
         return self;
@@ -357,7 +330,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_templateOverride) { context.templateOverrideParent = self; }
     context.templateOverride = templateOverride;
     
-    [context copyInheritableScalarKeysFromContext:self];
+    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -421,28 +394,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     // Check for custom subclass key
     
     if (![self isMemberOfClass:[GRMustacheContext class]]) {
-        if ([[self inheritableObjectKeys] containsObject:key]) {
-            // Key is an inheritable object property, which has not been copied
-            // from parents: look it up in the stack.
-            for (GRMustacheContext *context = self; context; context = context.contextParent) {
-                id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
-                if (value != nil) {
-                    if (protected != NULL) {
-                        *protected = NO;
-                    }
-                    return value;
-                }
-            }
-        } else {
-            // Key is either a scalar property, which has been copied from
-            // parents, or a custom read-only property based on current context:
-            // Don't look up in the stack.
-            id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
-            if (protected != NULL) {
-                *protected = NO;
-            }
-            return value;
+        id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
+        if (protected != NULL) {
+            *protected = NO;
         }
+        return value;
     }
     
     return nil;

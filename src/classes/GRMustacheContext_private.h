@@ -115,13 +115,13 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 + (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (GRMustacheContext *)contextByAddingObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (instancetype)contextByAddingObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (GRMustacheContext *)contextByAddingProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (instancetype)contextByAddingProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
+- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
@@ -140,7 +140,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @see [GRMustacheContext contextValueForKey:protected:]
  */
-- (GRMustacheContext *)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
@@ -153,7 +153,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @see GRMustacheTemplateOverride
  * @see [GRMustacheTemplateOverride renderWithContext:inBuffer:error:]
  */
-- (GRMustacheContext *)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found

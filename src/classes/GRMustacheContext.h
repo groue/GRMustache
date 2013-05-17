@@ -121,7 +121,7 @@
  *
  * @since v6.0
  */
-- (GRMustacheContext *)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (instancetype)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -138,7 +138,7 @@
  *
  * @since v6.0
  */
-- (GRMustacheContext *)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -150,7 +150,7 @@
  *
  * @since v6.0
  */
-- (GRMustacheContext *)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
  * Returns the value stored in the context stack.
