@@ -370,6 +370,17 @@
         STAssertEqualObjects([context valueForKey:@"age"], @3, @"");
         STAssertEqualObjects([context valueForKey:@"ageNumber"], @4, @"");
     }
+    {
+        context = [context contextByAddingObject:@{}];
+        
+        // Test propagation with getters
+        STAssertEquals(context.age, (NSInteger)3, @"");
+        STAssertEqualObjects(context.ageNumber, @4, @"");
+        
+        // Test propagation with KVC
+        STAssertEqualObjects([context valueForKey:@"age"], @3, @"");
+        STAssertEqualObjects([context valueForKey:@"ageNumber"], @4, @"");
+    }
 }
 
 @end
