@@ -122,7 +122,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 }
 
 // TODO: put away in private section
-+ (NSMutableSet *)inheritableKeysForClass:(Class)klass
++ (NSMutableSet *)inheritableObjectKeysForClass:(Class)klass
 {
     // Returns a set of writable properties declared by klass
     NSMutableSet *keys = [NSMutableSet set];
@@ -130,7 +130,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     objc_property_t *properties = class_copyPropertyList(klass, &count);
     for (unsigned int i=0; i<count; ++i) {
         const char *attrs = property_getAttributes(properties[i]);
-        if (!strstr(attrs, ",R,")) {    // not read-only?
+        if ((strstr(attrs, "T@") == attrs) && !strstr(attrs, ",R,")) {    // not object, not read-only
             [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
         }
     }
@@ -139,19 +139,46 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 }
 
 // TODO: expose in public API
-+ (NSSet *)inheritableKeys
+- (NSSet *)inheritableObjectKeys
 {
     // Returns a set of writable properties declared by self, minu those declared by GRMustacheContext itself:
     // These are supposed to be the writable properties of GRMustacheContext subclasses.
-    NSMutableSet *keys = [self inheritableKeysForClass:self];
-    [keys minusSet:[self inheritableKeysForClass:[GRMustacheContext class]]];
+    NSMutableSet *keys = [GRMustacheContext inheritableObjectKeysForClass:[self class]];
+    [keys minusSet:[GRMustacheContext inheritableObjectKeysForClass:[GRMustacheContext class]]];
     return keys;
 }
 
 // TODO: put away in private section
-- (void)copyInheritableKeysFromContext:(GRMustacheContext *)context
++ (NSMutableSet *)inheritableScalarKeysForClass:(Class)klass
 {
-    for (NSString *key in [[self class] inheritableKeys]) {
+    // Returns a set of writable properties declared by klass
+    NSMutableSet *keys = [NSMutableSet set];
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList(klass, &count);
+    for (unsigned int i=0; i<count; ++i) {
+        const char *attrs = property_getAttributes(properties[i]);
+        if ((strstr(attrs, "T@") != attrs) && !strstr(attrs, ",R,")) {    // not object, not read-only
+            [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
+        }
+    }
+    free(properties);
+    return keys;
+}
+
+// TODO: expose in public API
+- (NSSet *)inheritableScalarKeys
+{
+    // Returns a set of writable properties declared by self, minu those declared by GRMustacheContext itself:
+    // These are supposed to be the writable properties of GRMustacheContext subclasses.
+    NSMutableSet *keys = [GRMustacheContext inheritableScalarKeysForClass:[self class]];
+    [keys minusSet:[GRMustacheContext inheritableScalarKeysForClass:[GRMustacheContext class]]];
+    return keys;
+}
+
+// TODO: put away in private section
+- (void)copyInheritableScalarKeysFromContext:(GRMustacheContext *)context
+{
+    for (NSString *key in [self inheritableScalarKeys]) {
         id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
         [self setValue:value forKey:key];
     }
@@ -219,7 +246,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_tagDelegate) { context.tagDelegateParent = self; }
     context.tagDelegate = tagDelegate;
     
-    [context copyInheritableKeysFromContext:self];
+    [context copyInheritableScalarKeysFromContext:self];
     return context;
 }
 
@@ -240,7 +267,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     context.templateOverride = _templateOverride;
     
     // update context stack
-    if (_contextObject) { context.contextParent = self; }
+    if (_contextObject || ([GRMustacheContext inheritableObjectKeysForClass:[self class]].count > 0)) { context.contextParent = self; }
     context.contextObject = object;
     
     // update or copy tag delegate stack
@@ -252,7 +279,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.tagDelegate = _tagDelegate;
     }
     
-    [context copyInheritableKeysFromContext:self];
+    [context copyInheritableScalarKeysFromContext:self];
     return context;
 }
 
@@ -278,7 +305,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_protectedContextObject) { context.protectedContextParent = self; }
     context.protectedContextObject = object;
     
-    [context copyInheritableKeysFromContext:self];
+    [context copyInheritableScalarKeysFromContext:self];
     return context;
 }
 
@@ -304,7 +331,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_hiddenContextObject) { context.hiddenContextParent = self; }
     context.hiddenContextObject = object;
     
-    [context copyInheritableKeysFromContext:self];
+    [context copyInheritableScalarKeysFromContext:self];
     return context;
 }
 
@@ -330,7 +357,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_templateOverride) { context.templateOverrideParent = self; }
     context.templateOverride = templateOverride;
     
-    [context copyInheritableKeysFromContext:self];
+    [context copyInheritableScalarKeysFromContext:self];
     return context;
 }
 
@@ -394,11 +421,28 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     // Check for custom subclass key
     
     if (![self isMemberOfClass:[GRMustacheContext class]]) {
-        id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
-        if (protected != NULL) {
-            *protected = NO;
+        if ([[self inheritableObjectKeys] containsObject:key]) {
+            // Key is an inheritable object property, which has not been copied
+            // from parents: look it up in the stack.
+            for (GRMustacheContext *context = self; context; context = context.contextParent) {
+                id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
+                if (value != nil) {
+                    if (protected != NULL) {
+                        *protected = NO;
+                    }
+                    return value;
+                }
+            }
+        } else {
+            // Key is either a scalar property, which has been copied from
+            // parents, or a custom read-only property based on current context:
+            // Don't look up in the stack.
+            id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
+            if (protected != NULL) {
+                *protected = NO;
+            }
+            return value;
         }
-        return value;
     }
     
     return nil;
