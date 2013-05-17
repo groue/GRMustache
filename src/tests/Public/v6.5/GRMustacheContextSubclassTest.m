@@ -286,8 +286,8 @@
     NSString *templateString = @"{{age}},{{#a}}{{age}}{{/a}},{{#b}}{{age}}{{/b}},{{ageNumber}},{{#a}}{{ageNumber}}{{/a}},{{#b}}{{ageNumber}}{{/b}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     GRDocumentMustacheContext *context = [GRDocumentMustacheContext context];
-    context.age = 1;
-    context.ageNumber = @2;
+    context.age = 1;                // test scalar property
+    context.ageNumber = @2;         // test object property
     template.baseContext = context;
     
     id data = @{ @"a" : @{ }, @"b" : @{ @"age": @3, @"ageNumber": @4 } };
@@ -318,6 +318,58 @@
     // Render
     NSString *rendering = [template renderAndReturnError:NULL];
     STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
+}
+
+- (void)testCustomObjectKeys
+{
+    GRDocumentMustacheContext *context = [GRDocumentMustacheContext context];
+    context.age = 1;                // test scalar property
+    context.ageNumber = @2;         // test object property
+    
+    {
+        context = [context contextByAddingProtectedObject:@{}];
+        
+        // Test propagation with getters
+        STAssertEquals(context.age, (NSInteger)1, @"");
+        STAssertEqualObjects(context.ageNumber, @2, @"");
+        
+        // Test propagation with KVC
+        STAssertEqualObjects([context valueForKey:@"age"], @1, @"");
+        STAssertEqualObjects([context valueForKey:@"ageNumber"], @2, @"");
+    }
+    {
+        context = [context contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)@{}];
+        
+        // Test propagation with getters
+        STAssertEquals(context.age, (NSInteger)1, @"");
+        STAssertEqualObjects(context.ageNumber, @2, @"");
+        
+        // Test propagation with KVC
+        STAssertEqualObjects([context valueForKey:@"age"], @1, @"");
+        STAssertEqualObjects([context valueForKey:@"ageNumber"], @2, @"");
+    }
+    {
+        context = [context contextByAddingObject:@{}];
+        
+        // Test propagation with getters
+        STAssertEquals(context.age, (NSInteger)1, @"");
+        STAssertEqualObjects(context.ageNumber, @2, @"");
+        
+        // Test propagation with KVC
+        STAssertEqualObjects([context valueForKey:@"age"], @1, @"");
+        STAssertEqualObjects([context valueForKey:@"ageNumber"], @2, @"");
+    }
+    {
+        context = [context contextByAddingObject:@{ @"age": @3, @"ageNumber": @4}];
+        
+        // Test propagation with getters
+        STAssertEquals(context.age, (NSInteger)3, @"");
+        STAssertEqualObjects(context.ageNumber, @4, @"");
+        
+        // Test propagation with KVC
+        STAssertEqualObjects([context valueForKey:@"age"], @3, @"");
+        STAssertEqualObjects([context valueForKey:@"ageNumber"], @4, @"");
+    }
 }
 
 @end
