@@ -18,7 +18,7 @@ id data = @{
 [template renderObject:data error:NULL];
 ```
 
-However, this may get tedious after a while. The number of specific keys can get very big. Without compiler support, you may do typos in the key names, leading to unexpected renderings. And since there is no easy way to define high-level accessor for those specific keys, you often end up preparing raw HTML snippets right in your controller, when obviously this should be done in some View class.
+However, this may get tedious after a while. The number of specific keys can get very big. Without compiler support, you may do typos in the key names, leading to unexpected renderings. And since there is no easy way to define high-level accessors for those specific keys, you often end up preparing raw HTML snippets right in your controller, when obviously this should be done in some View class.
 
 Wouldn't it be great if we could write instead:
 
