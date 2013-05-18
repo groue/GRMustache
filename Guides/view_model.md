@@ -105,7 +105,7 @@ Those properties give direct access to the [rendering context stack](runtime.md#
 
 Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[context valueForKey:@"name"]`.
 
-Your custom properties, such as `document.name`, return the same value as [document valueForKey:@"name"], the very value that would be rendered for `{{ name }}`. This allows you to reliably implement properties that depend on other values from the context stack (such as the `age` property above).
+Your custom properties, such as `document.name`, return the same value as `[document valueForKey:@"name"]`, the very value that would be rendered for `{{ name }}`. This allows you to reliably implement properties that depend on other values from the context stack (such as the `age` property above).
 
 After you have set a custom property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
 
