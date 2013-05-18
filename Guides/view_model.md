@@ -3,7 +3,7 @@
 ViewModel Classes
 =================
 
-Mustache templates rendering belong to the "View" side of the Model-View-Controller pattern. They often requires specific keys to be defined, and those keys do not belong to any of your model or controller classes.
+Mustache rendering belongs to the "View" side of the Model-View-Controller pattern. Templates often require specific keys to be defined, and those keys do not belong to any of your model or controller classes.
 
 For instance, a template needs to be given a `cssBodyColor`, so that it can render `body { background-color: {{ cssBodyColor }}; }`.
 
