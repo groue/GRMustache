@@ -30,6 +30,7 @@ struct GRPoint {
 @interface GRDocumentMustacheContext : GRMustacheContext
 @property (nonatomic, readonly) NSInteger succ;
 @property (nonatomic) NSInteger age;
+@property (nonatomic, copy) NSString *string;
 @property (nonatomic, retain) NSNumber *ageNumber;
 @property (nonatomic) struct GRPoint point;
 @property (nonatomic) SEL selector;
@@ -41,6 +42,7 @@ struct GRPoint {
 @end
 
 @implementation GRDocumentMustacheContext
+@dynamic string;
 @dynamic age;
 @dynamic ageNumber;
 @dynamic point;
@@ -105,7 +107,7 @@ struct GRPoint {
 {
     self = [super init];
     if (self) {
-        self.name = @"DefaultName";
+        self.name = @"defaultName";
     }
     return self;
 }
@@ -359,10 +361,12 @@ struct GRPoint {
     char *str = "string";
     int integer = 4;
     SEL selector = @selector(valueForKey:);
+    NSMutableString *string = [NSMutableString stringWithString:@"foo"];
     GRDocumentMustacheContext *rootContext = [GRDocumentMustacheContext context];
     GRDocumentMustacheContext *context = rootContext;
     context.age = 1;                            // test scalar property
     context.ageNumber = @2;                     // test object property
+    context.string = string;                    // test object property with copy storage
     context.point = (struct GRPoint){ 2, 3 };   // test struct property
     context.selector = selector;                // test SEL property
     context.charPtr = str;                      // test char* property
@@ -378,6 +382,9 @@ struct GRPoint {
     STAssertTrue([context respondsToSelector:@selector(getPropertyWithCustomGetter)], @"");
     STAssertTrue(![context respondsToSelector:@selector(setPropertyWithCustomSetter:)], @"");
     STAssertTrue([context respondsToSelector:@selector(updatePropertyWithCustomSetter:)], @"");
+    
+    [string appendString:@"bar"];
+    STAssertEqualObjects(context.string, @"foo", @"");    // the copy of string has not been mutated
     
     {
         context = [context contextByAddingProtectedObject:@{}];
@@ -504,11 +511,11 @@ struct GRPoint {
 {
     {
         GRMustacheContextSubclassWithInitializer *context = [[GRMustacheContextSubclassWithInitializer alloc] init];
-        STAssertEqualObjects(context.name, @"DefaultName", @"");
+        STAssertEqualObjects(context.name, @"defaultName", @"");
     }
     {
         GRMustacheContextSubclassWithInitializer *context = [GRMustacheContextSubclassWithInitializer context];
-        STAssertEqualObjects(context.name, @"DefaultName", @"");
+        STAssertEqualObjects(context.name, @"defaultName", @"");
     }
     {
         GRMustacheContextSubclassWithInitializer *context = [GRMustacheContextSubclassWithInitializer contextWithObject:@{@"name":@"Arthur"}];

@@ -60,6 +60,11 @@ static char *alternateNameForPropertyName(const char *propertyName)
     return altName;
 }
 
+typedef NS_OPTIONS(NSUInteger, GRMustachePropertyStorage) {
+    GRMustachePropertyStorageCopy = 1 << 0,
+    GRMustachePropertyStorageWeak = 1 << 1,
+};
+
 // Returns YES if the selectorName is a property accessor.
 // If allowKVCAlternateName is YES, variants isFoo/foo are tested.
 // If the result is YES:
@@ -67,7 +72,7 @@ static char *alternateNameForPropertyName(const char *propertyName)
 // - `propertyName` is set to the property name
 // - `objCTypes` is set to the encoding of the property
 // Caller must free the returned strings.
-BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, char **propertyName, char **objCTypes)
+BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, GRMustachePropertyStorage *storage, char **propertyName, char **objCTypes)
 {
     size_t selectorLength = strlen(selectorName);
     char *colon = strstr(selectorName, ":");
@@ -101,18 +106,27 @@ BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlt
                 }
                 
                 if (found) {
-                    if (objCTypes) {
-                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
-                        *objCTypes = malloc(typeLength + 1);
-                        strncpy(*objCTypes, attrs+1, typeLength);
-                        (*objCTypes)[typeLength] = '\0';
+                    if (getter) {
+                        *getter = YES;
+                    }
+                    if (storage) {
+                        if (strstr(attrs, ",C")) {
+                            *storage = GRMustachePropertyStorageCopy;
+                        } else if (strstr(attrs, ",W")) {
+                            *storage = GRMustachePropertyStorageWeak;
+                        } else {
+                            *storage = 0;
+                        }
                     }
                     if (propertyName) {
                         *propertyName = malloc(strlen(pName) + 1);
                         strcpy(*propertyName, pName);
                     }
-                    if (getter) {
-                        *getter = YES;
+                    if (objCTypes) {
+                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
+                        *objCTypes = malloc(typeLength + 1);
+                        strncpy(*objCTypes, attrs+1, typeLength);
+                        (*objCTypes)[typeLength] = '\0';
                     }
                     break;
                 }
@@ -309,33 +323,23 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (void)initialize
 {
     if (self != [GRMustacheContext class]) {
-        // raise exception if we have implementation for custom writable properties
         unsigned int count;
         objc_property_t *properties = class_copyPropertyList(self, &count);
         for (unsigned int i=0; i<count; ++i) {
             const char *attrs = property_getAttributes(properties[i]);
             if (!strstr(attrs, ",R")) {
-                // writable property
+                // Property is read/write
                 
-                char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
-                if (getterStart) {
-                    getterStart += 2;                               // "customGetter,..."
-                    char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
-                    size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
-                    char *getterName = malloc(getterLength + 1);
-                    strncpy(getterName, getterStart, getterLength);
-                    getterName[getterLength] = '\0';
-                    Method method = class_getInstanceMethod(self, sel_registerName(getterName));
-                    free(getterName);
-                    if (method) {
-                        [NSException raise:NSInternalInconsistencyException format:@"%@: the property `%@` is required to be @dynamic.", self, [NSString stringWithUTF8String:property_getName(properties[i])]];
-                    }
-                } else {
-                    const char *propertyName = property_getName(properties[i]);
-                    Method method = class_getInstanceMethod(self, sel_registerName(propertyName));
-                    if (method) {
-                        [NSException raise:NSInternalInconsistencyException format:@"%@: the property `%@` is required to be @dynamic.", self, [NSString stringWithUTF8String:propertyName]];
-                    }
+                if (!strstr(attrs, ",D")) {
+                    // Property is not dynamic.
+                    [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] The property `%@` of class %@ is required to be @dynamic.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
+                }
+                
+                if (strstr(attrs, ",W")) {
+                    // Property is not weak.
+                    // We store values in mutableContextObject, an NSDictionary that retain its values.
+                    // Don't lie: support for weak properties is not done yet.
+                    [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] Support for weak property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
                 }
             }
         }
@@ -625,7 +629,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         const char *keyCString = [key UTF8String];
         BOOL getter;
         char *propertyName;
-        if (hasPropertyAccessor([self class], keyCString, YES, &getter, &propertyName, NULL)) {
+        if (hasPropertyAccessor([self class], keyCString, YES, &getter, NULL, &propertyName, NULL)) {
             if (getter) {
                 mutableCustomContextKey = [NSString stringWithUTF8String:propertyName];
             }
@@ -714,6 +718,19 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (!_mutableContextObject) {
         _mutableContextObject = [[NSMutableDictionary alloc] init];
     }
+    
+    // Honor storage of subclass custom key
+    
+    if (object_getClass(self) != [GRMustacheContext class]) {
+        const char *keyCString = [key UTF8String];
+        BOOL getter;
+        GRMustachePropertyStorage storage;
+        if (hasPropertyAccessor([self class], keyCString, NO, &getter, &storage, NULL, NULL)) {
+            if (getter && storage == GRMustachePropertyStorageCopy) {
+                value = [value copy];
+            }
+        }
+    }
     [_mutableContextObject setValue:value forKey:key];
 }
 
@@ -724,7 +741,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     const char *selectorName = sel_getName(selector);
-    return hasPropertyAccessor([self class], selectorName, NO, NULL, NULL, NULL);
+    return hasPropertyAccessor([self class], selectorName, NO, NULL, NULL, NULL, NULL);
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
@@ -740,7 +757,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     char *propertyName;
     char *encoding;
     BOOL getter;
-    if (hasPropertyAccessor([self class], selectorName, NO, &getter, &propertyName, &encoding)) {
+    if (hasPropertyAccessor([self class], selectorName, NO, &getter, NULL, &propertyName, &encoding)) {
 
         if (getter) {
             // Getter
@@ -782,7 +799,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     char *propertyName;
     char *encoding;
     BOOL getter;
-    if (hasPropertyAccessor([self class], selectorName, NO, &getter, &propertyName, &encoding)) {
+    if (hasPropertyAccessor([self class], selectorName, NO, &getter, NULL, &propertyName, &encoding)) {
         
         if (getter) {
             // Getter
