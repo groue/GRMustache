@@ -77,8 +77,9 @@ The user object has no `age` property. Instead, it has a `birthDate`. Well, the 
 {
     // When this method is invoked, the {{ age }} tag is being rendered.
     //
-    // Since we are inside the {{# user }}...{{/ user }} section, we have
-    // access to all the keys defined by the user:
+    // Since we are inside the {{# user }}...{{/ user }} section, the user
+    // object is at the top of the context stack. If we look for the
+    // `birthDate` key, we'll get the user's one:
     
     NSDate *birthDate = [self valueForKey:@"birthDate"];
     return /* clever calculation based on birthDate */;

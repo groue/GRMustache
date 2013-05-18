@@ -143,8 +143,9 @@ GRMustache let you do the same, by subclassing the GRMustacheContext class:
 {
     // When this method is invoked, the {{ age }} tag is being rendered.
     //
-    // Since we are inside the {{# pets }}...{{/ pets }} section, we have
-    // access to all the keys defined by the current pet:
+    // Since we are inside the {{# pets }}...{{/ pets }} section, each pet
+    // on its turn gets at the top of the context stack. If we look for the
+    // `birthDate` key, we'll get the current pet's one:
     
     NSDate *birthDate = [self valueForKey:@"birthDate"];
     return /* clever calculation based on birthDate */;
