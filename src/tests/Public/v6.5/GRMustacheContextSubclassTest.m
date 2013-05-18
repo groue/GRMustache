@@ -507,6 +507,23 @@ struct GRPoint {
     STAssertEqualObjects([subContext valueForKey:@"title"], @"Mr", @"");
 }
 
+- (void)testContextExtension
+{
+    GRDocumentMustacheContext *context1 = [GRDocumentMustacheContext context];
+    context1.age = 1;
+    
+    GRDocumentMustacheContext *context2 = [GRDocumentMustacheContext context];
+    context2.point = (struct GRPoint){ 2, 3 };
+    
+    GRDocumentMustacheContext *context3 = [GRDocumentMustacheContext context];
+    context2.string = @"foo";
+    
+    GRDocumentMustacheContext *context = [[context1 contextByAddingObject:context2] contextByAddingObject:context3];
+    STAssertEquals(context.age, (NSInteger)1, @"");
+    STAssertEquals(context.point.x, 2.0f, @"");
+    STAssertEqualObjects(context.string, @"foo", @"");
+}
+
 - (void)testGRMustacheContextSubclassWithInitializer
 {
     {
