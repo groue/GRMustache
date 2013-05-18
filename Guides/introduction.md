@@ -32,6 +32,10 @@ Genuine Mustache falls short on a few topics.
 
 GRMustache core engine implements syntaxes and features that are not in the specification (see the [Compatibility Guide](compatibility.md) for details).
 
+### ViewModel classes
+
+ViewModel classes let you implement specific keys for your templates. Check the [ViewModel Guide](view_model.md).
+
 
 ### Syntax extensions
 

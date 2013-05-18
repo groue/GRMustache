@@ -59,6 +59,7 @@ Basics:
 - [Partials](Guides/partials.md): decompose your templates into components named "partials".
 - [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
 - [Runtime](Guides/runtime.md): how GRMustache renders your data.
+- [ViewModel](Guides/view_model.md): define custom classes for feeding your templates.
 
 Services:
 

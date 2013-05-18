@@ -107,12 +107,14 @@ Dedicated ViewModel class
 
 Many Mustache libraries let you create a dedicated class that defines template-specific keys. Those classes are called "View Models".
 
-In Ruby, for instance, the `age` key would be defined is this way:
+In [Ruby Mustache](https://github.com/defunkt/mustache), for instance, we would write:
 
 ```ruby
 # Dedicated ViewModel subclass
 class Document < Mustache
-  attr_accessor :user
+  attr_accessor :firstName
+  attr_accessor :lastName
+  attr_accessor :pets
   def age
     # Assume the key `birthDate` is defined somewhere in the context stack, and
     # return clever computation based on self[:birthDate]
@@ -121,37 +123,43 @@ end
 
 # Render
 document = Document.new
-document.user = ...
+document.firstName = ...
 document.render
 ```
 
-GRMustache let you do the same:
+GRMustache let you do the same, by subclassing the GRMustacheContext class:
 
 ```objc
-@interface DocumentContext : GRMustacheContext
-@property (nonatomic) User *user;
+@interface Document : GRMustacheContext
+@property (nonatomic) NSString *firstName;
+@property (nonatomic) NSString *lastName;
+@property (nonatomic) NSArray *pets;
 @end
 
-@implementation DocumentContext
-@dynamic user;
+@implementation Document
+@dynamic firstName, lastName, pets;
 
 - (NSInteger)age
 {
-    // Assume the key `birthDate` is defined somewhere in the context stack:
-    NSDate *birthDate = [self valueForKey:@"birthDate"];
+    // When this method is invoked, the {{ age }} tag is being rendered.
+    //
+    // Since we are inside the {{# pets }}...{{/ pets }} section, we have
+    // access to all the keys defined by the current pet:
     
+    NSDate *birthDate = [self valueForKey:@"birthDate"];
     return /* clever calculation based on birthDate */;
 }
 @end
 ```
 
-Use your custom DocumentContext class as the base context of the template, and render:
+**NB**: The custom properties are declared `@dynamic`. This is required by GRMustache. Check the [ViewModel Guide](view_model.md) for more information.
+
+The rendering is straightforward:
 
 ```objc
-DocumentContext *documentContext = [DocumentContext context];
-documentContext.user = ...;
-self.template.baseContext = documentContext;
-[self.template renderAndReturnError:NULL];
+Document *document = [[Document alloc] init];
+document.firstName = ...;
+[self.template renderObject:document error:NULL];
 ```
 
 **ViewModel Benefits**: Conceptually clean, model objects remain pristine, good base for testing, compatible with most other Mustache implementations.
@@ -186,7 +194,7 @@ id filters = @{
 [self.template renderObjectsFromArray:@[filters, user] error:NULL];
 ```
 
-**Filter Benefits**: Done in five minutes. Conceptually clean, model objects remain pristine.
+**Filter Benefits**: Done in five minutes. Conceptually clean, model objects remain pristine. Filters are reusable.
 
 **Filter Drawbacks**: The template is not compatible with other Mustache implementations, because filters are a GRMustache-specific addition. Help developers of other platforms: [spread the good news](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations)!
 
@@ -218,141 +226,5 @@ Here we have added the `age` filter as a *protected* object. This means that GRM
 
 Contexts are detailed in the [Rendering Objects](rendering_objects.md) and [Protected Contexts](protected_contexts) Guides.
 
-
-
-ViewModel
----------
-
-This technique is compatible with other Mustache implementations. It is also more verbose. And heartfully supported by GRMustache.
-
-You set up *ViewModel* objects that fit your templates, and get rendered by GRMustache instead of the raw model objects.
-
-The role of those ViewModel objects is to encapsulate the template interface, the set of Mustache tags that should be fed, and to translate raw model values into values that get rendered.
-
-ViewModel objects can be defined by a set of regular classes, or a dedicated dictionary built by some specific method. Let's look at how it can be done with whole classes.
-
-Everything starts from the `{{age}}` tag. This is the tag that can not be fed by model objects. So let's first build the `PetMustache` class, which provides data for the `{{age}}` and `{{name}}` pet tags:
-
-`PetMustache.h`
-
-```objc
-@class Pet;
-
-// The PetMustache class is dedicated at feeding the pet-related tags
-// of a Mustache template with pet-related data.
-@interface PetMustache : NSObject
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) NSInteger age;
-- (id)initWithPet:(Pet *)pet;
-@end
-```
-
-`PetMustache.m`
-
-```objc
-#import "PetMustache.h"
-#import "Pet.h"
-
-@interface PetMustache()
-@property (nonatomic) Pet *pet;
-@end
-
-@implementation PetMustache
-
-- (id)initWithPet:(Pet *)pet
-{
-    self = [super init];
-    if (self) {
-        self.pet = pet;
-    }
-    return self;
-}
-
-- (NSString *)name
-{
-    return self.pet.name;
-}
-
-- (NSInteger)age
-{
-    return /* clever calculation based on self.pet.birthDate */;
-}
-
-@end
-```
-
-Our `Person` class does not give any PetMustache objects. That's unfortunate, but we need a `PersonMustache` class as well, for the `{{pets}}`, `{{firstName}}` and `{{lastName}}` person tags:
-
-`PersonMustache.h`
-
-```objc
-@class Person;
-
-// The PersonMustache class is dedicated at feeding the person-related tags
-// of a Mustache template with person-related data.
-@interface PersonMustache : NSObject
-@property (nonatomic, readonly) NSString *firstName;
-@property (nonatomic, readonly) NSString *lastName;
-@property (nonatomic, readonly) NSArray *pets;    // array of PetMustache objects
-- (id)initWithPerson:(Person *)person;
-@end
-```
-
-`PersonMustache.m`
-
-```objc
-#import "PersonMustache.h"
-#import "PetMustache.h"
-#import "Person.h"
-
-@interface PersonMustache()
-@property (nonatomic) Person *person;
-@end
-
-@implementation PersonMustache
-
-- (id)initWithPerson:(Person *)person
-{
-    self = [super init];
-    if (self) {
-        self.person = person;
-    }
-    return self;
-}
-
-- (NSString *)firstName
-{
-    return self.person.firstName;
-}
-
-- (NSString *)lastName
-{
-    return self.person.lastName;
-}
-
-- (NSArray *)pets
-{
-    NSMutableArray *pets = [NSMutableArray array];
-    for (Pet *pet in self.person.pets) {
-        [pets addObject:[[PetMustache alloc] initWithPet:pet]];
-    }
-    return pets;
-}
-
-@end
-```
-
-Rendering code:
-
-```objc
-PersonMustache *personMustache = [[PersonMustache alloc] initWithPerson:user];
-[self.template renderObject:personMustache error:NULL];
-```
-
-Of course, it's hard to believe that the age of a pet can have you write so much boilerplate. Well, this guide is here to show you some techniques for rendering your data. Style is another topic, left to the reader's conscience.
-
-**ViewModel Benefits**: Conceptually clean. Good base for testing the template without creating a full graph of person and pets.
-
-**ViewModel Drawbacks**: Not done in five minutes. Quickly looks overdesigned, especially in a tutorial like this Guide.
 
 [up](../../../../GRMustache#documentation), [next](sample_code/indexes.md)
