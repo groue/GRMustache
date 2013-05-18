@@ -63,6 +63,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 @interface GRMustacheContext : NSObject {
 @private
     GRMustacheContext *_contextParent;
+    NSMutableDictionary *_mutableContextObject;
     id _contextObject;
     GRMustacheContext *_protectedContextParent;
     id _protectedContextObject;

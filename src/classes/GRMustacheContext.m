@@ -29,6 +29,175 @@
 #import "GRMustacheTemplateOverride_private.h"
 #import "JRSwizzle.h"
 
+// Returns an alternate name for a propertyName
+// "foo" -> "isFoo"
+// "isFoo" -> "foo"
+// Caller must free the returned string.
+static char *alternateNameForPropertyName(const char *propertyName)
+{
+    size_t propertyLength = strlen(propertyName);
+    
+    // Build altName ("foo" or "isFoo")
+    char *altName;
+    if (propertyLength >= 3 && strstr(propertyName, "is") == propertyName && propertyName[2] >= 'A' && propertyName[2] <= 'Z') {
+        // "isFoo" getter
+        // Build altName "foo"
+        altName = malloc(propertyLength - 1);       // given "isFoo" of length 5, the room for "foo\0" (4 bytes)
+        strcpy(altName, propertyName + 2);          // "Foo\0"
+        altName[0] += 'a' - 'A';                    // "foo\0"
+    } else {
+        // "foo" getter
+        // Build altName "isFoo"
+        // (tested, OK)
+        altName = malloc(propertyLength + 3);       // given "foo" of length 3, the room for "isFoo\0" (6 bytes)
+        strcpy(altName+2, propertyName);            // "??foo\0"
+        altName[0] = 'i';                           // "i?foo\0"
+        altName[1] = 's';                           // "i?foo\0"
+        altName[2] += 'A' - 'a';                    // "isFoo\0"
+    }
+    
+    return altName;
+}
+
+// Returns YES if the selectorName is a property accessor.
+// If allowKVCAlternateName is YES, variants isFoo/foo are tested.
+// If the result is YES:
+// - `getter` is set to YES if the selector is a getter.
+// - `propertyName` is set to the property name
+// - `objCTypes` is set to the encoding of the property
+// Caller must free the returned strings.
+BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, char **propertyName, char **objCTypes)
+{
+    size_t selectorLength = strlen(selectorName);
+    char *colon = strstr(selectorName, ":");
+    
+    if (colon == NULL)
+    {
+        // Arity 0: it may be a getter
+        // Support KVC variants: foo and isFoo are synonyms
+        char *altName = allowKVCAlternateName ? alternateNameForPropertyName(selectorName) : nil;
+
+        // Look for a property named "foo" or "isFoo", or with a custom getter "foo" or "isFoo"
+        BOOL found = NO;
+        unsigned int count;
+        while (!found && klass && klass != [GRMustacheContext class]) {
+            objc_property_t *properties = class_copyPropertyList(klass, &count);
+            for (unsigned int i=0; i<count; ++i) {
+                const char *pName = property_getName(properties[i]);
+                const char *attrs = property_getAttributes(properties[i]);
+                if (strcmp(selectorName, pName) == 0 || (altName && strcmp(altName, pName) == 0)) {
+                    found = YES;
+                } else {
+                    char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
+                    if (getterStart) {
+                        getterStart += 2;                               // "customGetter,..."
+                        char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                        size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                        if (strncmp(selectorName, getterStart, getterLength) == 0 || (altName && strncmp(altName, getterStart, getterLength) == 0)) {
+                            found = YES;
+                        }
+                    }
+                }
+                
+                if (found) {
+                    if (objCTypes) {
+                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
+                        *objCTypes = malloc(typeLength + 1);
+                        strncpy(*objCTypes, attrs+1, typeLength);
+                        (*objCTypes)[typeLength] = '\0';
+                    }
+                    if (propertyName) {
+                        *propertyName = malloc(strlen(pName) + 1);
+                        strcpy(*propertyName, pName);
+                    }
+                    if (getter) {
+                        *getter = YES;
+                    }
+                    break;
+                }
+            }
+            
+            free(properties);
+            klass = class_getSuperclass(klass);
+        }
+        
+        if (altName) {
+            free(altName);
+        }
+        
+        return found;
+    }
+    else if (colon == selectorName + selectorLength - 1)
+    {
+        // Arity 1: it may be a setter
+        
+        char *expectedPropertyName = nil;
+        if (strstr(selectorName, "set") == selectorName)
+        {
+            expectedPropertyName = malloc(selectorLength - 3);                 // given "setFoo:" of length 7, the room for "foo\0" (4 bytes)
+            strncpy(expectedPropertyName, selectorName+3, selectorLength - 4); // "Foo?z"
+            expectedPropertyName[selectorLength - 4] = '\0';                   // "Foo\0"
+            if (expectedPropertyName[0] >= 'A' && expectedPropertyName[0] <= 'Z') {
+                expectedPropertyName[0] += 'a' - 'A';                          // "foo\0"
+            }
+        }
+        
+        // Look for a property of custom setter selectorName, or with name expectedPropertyName
+        BOOL found = NO;
+        while (!found && klass && klass != [GRMustacheContext class]) {
+            unsigned int count;
+            objc_property_t *properties = class_copyPropertyList(klass, &count);
+            for (unsigned int i=0; i<count; ++i) {
+                const char *pName = property_getName(properties[i]);
+                const char *attrs = property_getAttributes(properties[i]);
+                
+                char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
+                if (setterStart) {
+                    setterStart += 2;                               // "customSetter:,..."
+                    char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
+                    size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
+                    if (strncmp(selectorName, setterStart, setterLength) == 0) {
+                        found = YES;
+                    }
+                } else if (expectedPropertyName && strcmp(expectedPropertyName, pName) == 0) {
+                    found = YES;
+                }
+
+                if (found) {
+                    if (objCTypes) {
+                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
+                        *objCTypes = malloc(typeLength + 1);
+                        strncpy(*objCTypes, attrs+1, typeLength);
+                        (*objCTypes)[typeLength] = '\0';
+                    }
+                    if (propertyName) {
+                        *propertyName = malloc(strlen(pName) + 1);
+                        strcpy(*propertyName, pName);
+                    }
+                    if (getter) {
+                        *getter = NO;
+                    }
+                    break;
+                }
+            }
+            
+            free(properties);
+            klass = class_getSuperclass(klass);
+        }
+        
+        if (expectedPropertyName) {
+            free(expectedPropertyName);
+        }
+        
+        return found;
+    }
+    else
+    {
+        // unknown selector
+        return NO;
+    }
+}
+
 #if !defined(NS_BLOCK_ASSERTIONS)
 BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
@@ -42,8 +211,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 // If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
 @property (nonatomic, retain) GRMustacheContext *contextParent;
 @property (nonatomic, retain) id contextObject;
+@property (nonatomic, retain) NSMutableDictionary *mutableContextObject;
 
 // Protected context stack
+// If _protectedContextObject is nil, the stack is empty.
+// If _protectedContextObject is not nil, the top of the stack is _protectedContextObject, and the rest of the stack is _protectedContextParent.
 @property (nonatomic, retain) GRMustacheContext *protectedContextParent;
 @property (nonatomic, retain) id protectedContextObject;
 
@@ -92,6 +264,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 @implementation GRMustacheContext
 @synthesize contextParent=_contextParent;
 @synthesize contextObject=_contextObject;
+@synthesize mutableContextObject=_mutableContextObject;
 @synthesize protectedContextParent=_protectedContextParent;
 @synthesize protectedContextObject=_protectedContextObject;
 @synthesize hiddenContextParent=_hiddenContextParent;
@@ -105,6 +278,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     [_contextParent release];
     [_contextObject release];
+    [_mutableContextObject release];
     [_protectedContextParent release];
     [_protectedContextObject release];
     [_hiddenContextParent release];
@@ -116,45 +290,46 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     [super dealloc];
 }
 
++ (void)initialize
+{
+    if (self != [GRMustacheContext class]) {
+        // raise exception if we have implementation for custom writable properties
+        unsigned int count;
+        objc_property_t *properties = class_copyPropertyList(self, &count);
+        for (unsigned int i=0; i<count; ++i) {
+            const char *attrs = property_getAttributes(properties[i]);
+            if (!strstr(attrs, ",R")) {
+                // writable property
+                
+                char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
+                if (getterStart) {
+                    getterStart += 2;                               // "customGetter,..."
+                    char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                    size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                    char *getterName = malloc(getterLength + 1);
+                    strncpy(getterName, getterStart, getterLength);
+                    getterName[getterLength] = '\0';
+                    Method method = class_getInstanceMethod(self, sel_registerName(getterName));
+                    free(getterName);
+                    if (method) {
+                        [NSException raise:NSInternalInconsistencyException format:@"%@: the property `%@` is required to be @dynamic.", self, [NSString stringWithUTF8String:property_getName(properties[i])]];
+                    }
+                } else {
+                    const char *propertyName = property_getName(properties[i]);
+                    Method method = class_getInstanceMethod(self, sel_registerName(propertyName));
+                    if (method) {
+                        [NSException raise:NSInternalInconsistencyException format:@"%@: the property `%@` is required to be @dynamic.", self, [NSString stringWithUTF8String:propertyName]];
+                    }
+                }
+            }
+        }
+        free(properties);
+    }
+}
+
 + (void)preventNSUndefinedKeyExceptionAttack
 {
     shouldPreventNSUndefinedKeyException = YES;
-}
-
-// TODO: put away in private section
-+ (NSMutableSet *)writableKeysForClass:(Class)klass
-{
-    // Returns a set of writable properties declared by klass
-    NSMutableSet *keys = [NSMutableSet set];
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(klass, &count);
-    for (unsigned int i=0; i<count; ++i) {
-        const char *attrs = property_getAttributes(properties[i]);
-        if (!strstr(attrs, ",R,")) {    // not read-only
-            [keys addObject:[NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding]];
-        }
-    }
-    free(properties);
-    return keys;
-}
-
-// TODO: expose in public API
-- (NSSet *)customWritableKeys
-{
-    // Returns a set of writable properties declared by self, minus those declared by GRMustacheContext itself:
-    // These are supposed to be the writable properties of GRMustacheContext subclasses.
-    NSMutableSet *keys = [GRMustacheContext writableKeysForClass:[self class]];
-    [keys minusSet:[GRMustacheContext writableKeysForClass:[GRMustacheContext class]]];
-    return keys;
-}
-
-// TODO: put away in private section
-- (void)copyCustomWritableKeysFromContext:(GRMustacheContext *)context
-{
-    for (NSString *key in [self customWritableKeys]) {
-        id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ context, [NSObject class] }];
-        [self setValue:value forKey:key];
-    }
 }
 
 + (instancetype)context
@@ -205,9 +380,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
+    // Update context stack
+    context.contextParent = self;
+    context.contextObject = nil;
+    
     // copy identical stacks
-    context.contextParent = _contextParent;
-    context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
     context.hiddenContextParent = _hiddenContextParent;
@@ -219,7 +396,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_tagDelegate) { context.tagDelegateParent = self; }
     context.tagDelegate = tagDelegate;
     
-    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -240,7 +416,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     context.templateOverride = _templateOverride;
     
     // Update context stack
-    if (_contextObject) { context.contextParent = self; }
+    context.contextParent = self;
     context.contextObject = object;
     
     // update or copy tag delegate stack
@@ -252,7 +428,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.tagDelegate = _tagDelegate;
     }
     
-    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -264,9 +439,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
+    // Update context stack
+    context.contextParent = self;
+    context.contextObject = nil;
+    
     // copy identical stacks
-    context.contextParent = _contextParent;
-    context.contextObject = _contextObject;
     context.hiddenContextParent = _hiddenContextParent;
     context.hiddenContextObject = _hiddenContextObject;
     context.tagDelegateParent = _tagDelegateParent;
@@ -278,7 +455,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_protectedContextObject) { context.protectedContextParent = self; }
     context.protectedContextObject = object;
     
-    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -290,9 +466,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
+    // Update context stack
+    context.contextParent = self;
+    context.contextObject = nil;
+    
     // copy identical stacks
-    context.contextParent = _contextParent;
-    context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
     context.tagDelegateParent = _tagDelegateParent;
@@ -304,7 +482,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_hiddenContextObject) { context.hiddenContextParent = self; }
     context.hiddenContextObject = object;
     
-    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -316,9 +493,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     
     GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
     
+    // Update context stack
+    context.contextParent = self;
+    context.contextObject = nil;
+    
     // copy identical stacks
-    context.contextParent = _contextParent;
-    context.contextObject = _contextObject;
     context.protectedContextParent = _protectedContextParent;
     context.protectedContextObject = _protectedContextObject;
     context.hiddenContextParent = _hiddenContextParent;
@@ -330,7 +509,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (_templateOverride) { context.templateOverrideParent = self; }
     context.templateOverride = templateOverride;
     
-    [context copyCustomWritableKeysFromContext:self];
     return context;
 }
 
@@ -345,13 +523,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (id)currentContextValue
 {
-    // top of the stack is first object
-    return [[_contextObject retain] autorelease];
-}
-
-- (id)valueForKey:(NSString *)key
-{
-    return [self contextValueForKey:key protected:NULL];
+    for (GRMustacheContext *context = self; context; context = context.contextParent) {
+        id contextObject = context.contextObject;
+        if (contextObject) {
+            return contextObject;
+        }
+    }
+    return nil;
 }
 
 - (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected
@@ -368,9 +546,48 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
     
-    if (_contextObject) {
-        for (GRMustacheContext *context = self; context; context = context.contextParent) {
-            id contextObject = context.contextObject;
+    // We're about to look into mutableContextObject.
+    //
+    // This dictionary is filled via setValue:forKey:, and via property setters.
+    //
+    // Property setters use property names as the key.
+    // So we have to translate custom getters to the property name.
+    //
+    // Regular KVC also supports `isFoo` key for `foo` property: we also have to
+    // translate `isFoo` to `foo`.
+    //
+    // mutableCustomContextKey holds that "canonical" key.
+    NSString *mutableCustomContextKey = key;
+    if (object_getClass(self) != [GRMustacheContext class]) {
+        const char *keyCString = [key UTF8String];
+        BOOL getter;
+        char *propertyName;
+        if (hasPropertyAccessor([self class], keyCString, YES, &getter, &propertyName, NULL)) {
+            if (getter) {
+                mutableCustomContextKey = [NSString stringWithUTF8String:propertyName];
+            }
+        }
+    }
+    
+    for (GRMustacheContext *context = self; context; context = context.contextParent) {
+        // First check mutableContextObject:
+        //
+        // [context setValue:value forKey:key];
+        // assert([context valueForKey:key] == value);
+        id value = [context.mutableContextObject objectForKey:mutableCustomContextKey];
+        if (value != nil) {
+            if (protected != NULL) {
+                *protected = NO;
+            }
+            return value;
+        }
+        
+        // Then check for contextObject:
+        //
+        // context = [GRMustacheContext contextWithObject:@{key:value}];
+        // assert([context valueForKey:key] == value);
+        id contextObject = context.contextObject;
+        if (contextObject) {
             BOOL hidden = NO;
             if (_hiddenContextObject) {
                 for (GRMustacheContext *hiddenContext = self; hiddenContext; hiddenContext = hiddenContext.hiddenContextParent) {
@@ -391,9 +608,9 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
 
-    // Check for custom subclass key
+    // Check for subclass custom key
     
-    if (![self isMemberOfClass:[GRMustacheContext class]]) {
+    if (object_getClass(self) != [GRMustacheContext class]) {
         id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
         if (protected != NULL) {
             *protected = NO;
@@ -412,6 +629,238 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
     return component;
+}
+
+
+#pragma mark - NSObject
+
+- (id)valueForKey:(NSString *)key
+{
+    return [self contextValueForKey:key protected:NULL];
+}
+
+- (void)setValue:(id)value forKey:(NSString *)key
+{
+    if (!_mutableContextObject) {
+        _mutableContextObject = [[NSMutableDictionary alloc] init];
+    }
+    [_mutableContextObject setValue:value forKey:key];
+}
+
+- (BOOL)respondsToSelector:(SEL)selector
+{
+    if ([super respondsToSelector:selector]) {
+        return YES;
+    }
+    
+    const char *selectorName = sel_getName(selector);
+    return hasPropertyAccessor([self class], selectorName, NO, NULL, NULL, NULL);
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
+{
+    NSMethodSignature *signature = [super methodSignatureForSelector:selector];
+    if (signature) {
+        return signature;
+    }
+    
+    // The method is undefined.
+    
+    const char *selectorName = sel_getName(selector);
+    char *propertyName;
+    char *encoding;
+    BOOL getter;
+    if (hasPropertyAccessor([self class], selectorName, NO, &getter, &propertyName, &encoding)) {
+
+        if (getter) {
+            // Getter
+            
+            size_t encodingLength = strlen(encoding);
+            char *objCTypes = malloc(encodingLength+3);
+            strcpy(objCTypes, encoding);
+            objCTypes[encodingLength] = '@';
+            objCTypes[encodingLength + 1] = ':';
+            objCTypes[encodingLength + 2] = '\0';
+            signature = [NSMethodSignature signatureWithObjCTypes:objCTypes];
+            free(objCTypes);
+            
+        } else {
+            // Setter
+            
+            size_t encodingLength = strlen(encoding);
+            char *objCTypes = malloc(encodingLength+4);
+            strcpy(objCTypes + 3, encoding);
+            objCTypes[0] = 'v';
+            objCTypes[1] = '@';
+            objCTypes[2] = ':';
+            signature = [NSMethodSignature signatureWithObjCTypes:objCTypes];
+            free(objCTypes);
+        }
+
+        free(propertyName);
+        free(encoding);
+    }
+    
+    return signature;
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation
+{
+    SEL selector = [invocation selector];
+
+    const char *selectorName = sel_getName(selector);
+    char *propertyName;
+    char *encoding;
+    BOOL getter;
+    if (hasPropertyAccessor([self class], selectorName, NO, &getter, &propertyName, &encoding)) {
+        
+        if (getter) {
+            // Getter
+            //
+            // context.age returns the same value as [context valueForKey:@"age"]
+            
+            NSUInteger valueSize;
+            NSGetSizeAndAlignment(encoding, &valueSize, NULL);
+            NSMutableData *data = [NSMutableData dataWithLength:valueSize];   // autoreleased so that invocation's return value survives
+            void *bytes = [data mutableBytes];
+            
+            id value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+            switch (encoding[0]) {
+                case 'c':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(char *)bytes = [(NSNumber *)value charValue];
+                    break;
+                case 'i':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(int *)bytes = [(NSNumber *)value intValue];
+                    break;
+                case 's':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(short *)bytes = [(NSNumber *)value shortValue];
+                    break;
+                case 'l':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(long *)bytes = [(NSNumber *)value longValue];
+                    break;
+                case 'q':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(long long *)bytes = [(NSNumber *)value longLongValue];
+                    break;
+                case 'C':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(unsigned char *)bytes = [(NSNumber *)value unsignedCharValue];
+                    break;
+                case 'I':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(unsigned int *)bytes = [(NSNumber *)value unsignedIntValue];
+                    break;
+                case 'S':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(unsigned short *)bytes = [(NSNumber *)value unsignedShortValue];
+                    break;
+                case 'L':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(unsigned long *)bytes = [(NSNumber *)value unsignedLongValue];
+                    break;
+                case 'Q':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(unsigned long long *)bytes = [(NSNumber *)value unsignedLongLongValue];
+                    break;
+                case 'f':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(float *)bytes = [(NSNumber *)value floatValue];
+                    break;
+                case 'd':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(double *)bytes = [(NSNumber *)value doubleValue];
+                    break;
+                case 'B':
+                    if (![value isKindOfClass:[NSNumber class]]) return;
+                    *(_Bool *)bytes = [(NSNumber *)value boolValue];
+                    break;
+                case '@':
+                    *(id *)bytes = value;
+                    break;
+                case '#':
+                    *(Class *)bytes = value;
+                    break;
+                default:
+                    if (![value isKindOfClass:[NSValue class]]) return;
+                    [(NSValue *)value getValue:bytes];
+                    break;
+            }
+            
+            [invocation setReturnValue:bytes];
+            
+        } else {
+            // Setter
+            //
+            // [context setAge:1] performs [context setValue:@1 forKey:@"age"]
+            
+            NSUInteger valueSize;
+            NSGetSizeAndAlignment(encoding, &valueSize, NULL);
+            void *bytes = malloc(valueSize);
+            [invocation getArgument:bytes atIndex:2];
+            
+            switch (encoding[0]) {
+                case 'c':
+                    [self setValue:[NSNumber numberWithChar:*(char *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'i':
+                    [self setValue:[NSNumber numberWithInt:*(int *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 's':
+                    [self setValue:[NSNumber numberWithShort:*(short *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'l':
+                    [self setValue:[NSNumber numberWithLong:*(long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'q':
+                    [self setValue:[NSNumber numberWithLongLong:*(long long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'C':
+                    [self setValue:[NSNumber numberWithUnsignedChar:*(unsigned char *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'I':
+                    [self setValue:[NSNumber numberWithUnsignedInt:*(unsigned int *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'S':
+                    [self setValue:[NSNumber numberWithUnsignedShort:*(unsigned short *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'L':
+                    [self setValue:[NSNumber numberWithUnsignedLong:*(unsigned long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'Q':
+                    [self setValue:[NSNumber numberWithUnsignedLongLong:*(unsigned long long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'f':
+                    [self setValue:[NSNumber numberWithFloat:*(float *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'd':
+                    [self setValue:[NSNumber numberWithDouble:*(double *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case 'B':
+                    [self setValue:[NSNumber numberWithBool:(BOOL)(*(_Bool *)bytes)] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case '@':
+                    [self setValue:*(id *)bytes forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                case '#':
+                    [self setValue:*(Class *)bytes forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+                default:
+                    [self setValue:[NSValue valueWithBytes:bytes objCType:encoding ?: "@"] forKey:[NSString stringWithUTF8String:propertyName]];
+                    break;
+            }
+            
+            free(bytes);
+        }
+
+        free(propertyName);
+        free(encoding);
+    } else {
+        [super forwardInvocation:invocation];
+    }
 }
 
 
