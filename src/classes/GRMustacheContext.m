@@ -61,8 +61,9 @@ static char *alternateNameForPropertyName(const char *propertyName)
 }
 
 typedef NS_OPTIONS(NSUInteger, GRMustachePropertyStorage) {
-    GRMustachePropertyStorageCopy = 1 << 0,
-    GRMustachePropertyStorageWeak = 1 << 1,
+    GRMustachePropertyStorageRetain = 1 << 0,
+    GRMustachePropertyStorageCopy = 1 << 1,
+    GRMustachePropertyStorageWeak = 1 << 2,
 };
 
 // Returns YES if the selectorName is a property accessor.
@@ -110,7 +111,9 @@ BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlt
                         *getter = YES;
                     }
                     if (storage) {
-                        if (strstr(attrs, ",C")) {
+                        if (strstr(attrs, ",&")) {
+                            *storage = GRMustachePropertyStorageRetain;
+                        } else if (strstr(attrs, ",C")) {
                             *storage = GRMustachePropertyStorageCopy;
                         } else if (strstr(attrs, ",W")) {
                             *storage = GRMustachePropertyStorageWeak;
@@ -336,10 +339,18 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                 }
                 
                 if (strstr(attrs, ",W")) {
-                    // Property is not weak.
+                    // Property has `weak` storage.
                     // We store values in mutableContextObject, an NSDictionary that retain its values.
                     // Don't lie: support for weak properties is not done yet.
                     [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] Support for weak property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
+                } else if (!strstr(attrs, ",&") && !strstr(attrs, ",C")) {
+                    // Property has `assign` storage.
+                    if (strstr(attrs, "T@") == attrs) {
+                        // Property has `assign` storage for an id object
+                        // We store values in mutableContextObject, an NSDictionary that retain its values.
+                        // Don't lie: support for weak properties is not done yet.
+                        [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] Support for nonretained property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
+                    }
                 }
             }
         }
