@@ -53,8 +53,7 @@ The Document class above is a GRMustacheContext subclass. As such, it can provid
 @end
 ```
 
-Read only properties
---------------------
+### Read only properties
 
 Obviously, you write custom getters for read-only properties.
 
@@ -94,8 +93,7 @@ document.user = ...;
 ```
 
 
-Read/write properties
----------------------
+### Read/write properties
 
 Read/write properties have constraints:
 
