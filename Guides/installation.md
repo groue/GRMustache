@@ -6,7 +6,7 @@ Installation
 Option 1: CocoaPods
 -------------------
 
-Append `pod 'GRMustache', '~> 6.4'` to your [Podfile](https://github.com/CocoaPods/CocoaPods).
+Append `pod 'GRMustache', '~> 6.5'` to your [Podfile](https://github.com/CocoaPods/CocoaPods).
 
 
 Option 2: Static Library
