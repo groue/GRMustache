@@ -29,6 +29,7 @@
 #import "GRMustacheTemplateOverride_private.h"
 #import "JRSwizzle.h"
 
+
 // Returns an alternate name for a propertyName
 // "foo" -> "isFoo"
 // "isFoo" -> "foo"
@@ -259,6 +260,16 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
  */
 + (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
 
+// Return a dictionary where keys are NSValue wrapping ancestor context objects,
+// and values are depth numbers: self has depth 0, parent has depth 1,
+// grand-parent has depth 2, etc.
+- (NSDictionary *)depthsForAncestors;
+
+// Return an array of ancestor contexts.
+// First context in the array is the root context.
+// Last context in the array is self.
+- (NSArray *)ancestors;
+
 @end
 
 @implementation GRMustacheContext
@@ -339,6 +350,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 + (instancetype)contextWithObject:(id)object
 {
+    if ([object isKindOfClass:[GRMustacheContext class]]) {
+        if (![object isKindOfClass:self]) { // method has instancetype return type
+            [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [object class], self];
+        }
+        return object;
+    }
+    
     GRMustacheContext *context = [[[self alloc] init] autorelease];
     
     // initialize context stack
@@ -405,27 +423,62 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = nil;
     
-    // copy identical stacks
-    context.protectedContextParent = _protectedContextParent;
-    context.protectedContextObject = _protectedContextObject;
-    context.hiddenContextParent = _hiddenContextParent;
-    context.hiddenContextObject = _hiddenContextObject;
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
-    
-    // Update context stack
-    context.contextParent = self;
-    context.contextObject = object;
-    
-    // update or copy tag delegate stack
-    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
-        if (_tagDelegate) { context.tagDelegateParent = self; }
-        context.tagDelegate = object;
-    } else {
-        context.tagDelegateParent = _tagDelegateParent;
-        context.tagDelegate = _tagDelegate;
+    if ([object isKindOfClass:[GRMustacheContext class]])
+    {
+        // Extend self with a context
+        // Contexts are immutable stacks: we duplicate all ancestors of context,
+        // in order to build a new context stack.
+
+        context = self;
+        for (GRMustacheContext *ancestor in ((GRMustacheContext *)object).ancestors) {
+            if (![ancestor isKindOfClass:[context class]]) {
+                [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [ancestor class], [context class]];
+            }
+            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] init] autorelease];
+            
+            extendedContext.contextParent = context;
+            extendedContext.contextObject = ancestor.contextObject;
+            extendedContext.mutableContextObject = [ancestor.mutableContextObject mutableCopy];
+            extendedContext.protectedContextParent = _protectedContextParent;
+            extendedContext.protectedContextObject = ancestor.protectedContextObject;
+            extendedContext.hiddenContextParent = _hiddenContextParent;
+            extendedContext.hiddenContextObject = ancestor.hiddenContextObject;
+            extendedContext.tagDelegateParent = _tagDelegateParent;
+            extendedContext.tagDelegate = ancestor.tagDelegate;
+            extendedContext.templateOverrideParent = _templateOverrideParent;
+            extendedContext.templateOverride = ancestor.templateOverride;
+            
+            context = extendedContext;
+        };
+    }
+    else
+    {
+        // Extend self with a regular object
+        
+        context = [[[[self class] alloc] init] autorelease];
+        
+        // copy identical stacks
+        context.protectedContextParent = _protectedContextParent;
+        context.protectedContextObject = _protectedContextObject;
+        context.hiddenContextParent = _hiddenContextParent;
+        context.hiddenContextObject = _hiddenContextObject;
+        context.templateOverrideParent = _templateOverrideParent;
+        context.templateOverride = _templateOverride;
+        
+        // Update context stack
+        context.contextParent = self;
+        context.contextObject = object;
+        
+        // update or copy tag delegate stack
+        if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+            if (_tagDelegate) { context.tagDelegateParent = self; }
+            context.tagDelegate = object;
+        } else {
+            context.tagDelegateParent = _tagDelegateParent;
+            context.tagDelegate = _tagDelegate;
+        }
     }
     
     return context;
@@ -1017,6 +1070,34 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
 }
 
+- (NSDictionary *)depthsForAncestors
+{
+    NSMutableDictionary *depthsForAncestors = [NSMutableDictionary dictionary];
+    [depthsForAncestors setObject:[NSNumber numberWithUnsignedInteger:0] forKey:[NSValue valueWithNonretainedObject:self]];
+    
+    void (^fill)(id key, id obj, BOOL *stop) = ^(NSValue *ancestorValue, NSNumber *depth, BOOL *stop) {
+        NSUInteger currentDepth = [[depthsForAncestors objectForKey:ancestorValue] unsignedIntegerValue];
+        if (currentDepth < [depth unsignedIntegerValue] + 1) {
+            [depthsForAncestors setObject:[NSNumber numberWithUnsignedInteger:[depth unsignedIntegerValue] + 1] forKey:ancestorValue];
+        }
+    };
+    [[_contextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+    [[_protectedContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+    [[_hiddenContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+    [[_tagDelegateParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+    [[_templateOverrideParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+    
+    return depthsForAncestors;
+}
+
+- (NSArray *)ancestors
+{
+    NSDictionary *depthsForAncestors = [self depthsForAncestors];
+    NSArray *ancestorValues = [depthsForAncestors keysSortedByValueUsingComparator:^NSComparisonResult(NSNumber *depth1, NSNumber *depth2) {
+        return -[depth1 compare:depth2];
+    }];
+    return [ancestorValues valueForKey:@"nonretainedObjectValue"];
+}
 
 #pragma mark - NSUndefinedKeyException prevention
 
