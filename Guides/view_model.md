@@ -5,14 +5,14 @@ ViewModel Classes
 
 Mustache templates rendering belong to the "View" side of the Model-View-Controller pattern. They often requires specific keys to be defined, and those keys do not belong to any of your model or controller classes.
 
-For instance, a template needs to be given a `cssBodyColor`, so that it can render `body { background-color: {{ cssBodyColor }} }`.
+For instance, a template needs to be given a `cssBodyColor`, so that it can render `body { background-color: {{ cssBodyColor }}; }`.
 
 A very simple way to achieve this goal is to provide the `cssBodyColor` in a dictionary:
 
 ```objc
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 id data = @{
-    @"cssBodyColor" = @"red",
+    @"cssBodyColor" = @"#ff0000",
     ...
 };
 [template renderObject:data error:NULL];
