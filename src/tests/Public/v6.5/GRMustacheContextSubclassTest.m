@@ -314,18 +314,26 @@ struct GRPoint {
                                @"{{^in_ca}}"
                                @"You're lucky - in CA you'd be taxed like crazy!"
                                @"{{/in_ca}}";
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     
     // Custom context
     GRMustacheRubyExampleContext *context = [GRMustacheRubyExampleContext context];
     context.name = @"Chris";
     context.value = 10000;
     context.in_ca = YES;
-    template.baseContext = context;
     
-    // Render
-    NSString *rendering = [template renderAndReturnError:NULL];
-    STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
+    {
+        // Render with base context
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        template.baseContext = context;
+        NSString *rendering = [template renderAndReturnError:NULL];
+        STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
+    }
+    {
+        // Render without base context
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+        NSString *rendering = [template renderObject:context error:NULL];
+        STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
+    }
 }
 
 - (void)testCustomObjectKeys

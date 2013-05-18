@@ -85,4 +85,19 @@
     STAssertEqualObjects(rendering, @"not important", @"");
 }
 
+- (void)testRenderingContextsDoesHonorProtectedObjects
+{
+    // we expect the rendering to be gold
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{precious}}{{/}}" error:NULL];
+    GRMustacheContext *context = [template.baseContext contextByAddingProtectedObject:@{@"precious":@"gold"}];
+    context = [context contextByAddingObject:@{@"object":@{@"precious":@"aluminum"}}];
+    
+    // protected stack does apply
+    STAssertEqualObjects([template renderObject:context error:NULL], @"gold", @"");
+    
+    // protected stack does apply
+    template.baseContext = context;
+    STAssertEqualObjects([template renderObject:nil error:NULL], @"gold", @"");
+}
+
 @end

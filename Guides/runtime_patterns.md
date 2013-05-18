@@ -112,43 +112,46 @@ In Ruby, for instance, the `age` key would be defined is this way:
 ```ruby
 # Dedicated ViewModel subclass
 class Document < Mustache
+  attr_accessor :user
   def age
+    # Assume the key `birthDate` is defined somewhere in the context stack, and
     # return clever computation based on self[:birthDate]
   end
 end
 
 # Render
-Document.render(:pets => pets, ...)
+document = Document.new
+document.user = ...
+document.render
 ```
 
 GRMustache let you do the same:
 
 ```objc
-@interface DocumentMustacheContext : GRMustacheContext
+@interface DocumentContext : GRMustacheContext
+@property (nonatomic) User *user;
 @end
 
-@implementation DocumentMustacheContext
+@implementation DocumentContext
+@dynamic user;
+
 - (NSInteger)age
 {
+    // Assume the key `birthDate` is defined somewhere in the context stack:
     NSDate *birthDate = [self valueForKey:@"birthDate"];
+    
     return /* clever calculation based on birthDate */;
 }
 @end
 ```
 
-Use your custom DocumentMustacheContext class as the base context of the template, and render:
+Use your custom DocumentContext class as the base context of the template, and render:
 
 ```objc
-self.template.baseContext = [DocumentMustacheContext context];
-[self.template renderObject:user error:NULL];
-```
-
-Should you want to use the GRMustache standard library, you have to explicitely include it in your template base context:
-
-```objc
-// Keep standard library
-self.template.baseContext = [DocumentMustacheContext contextWithObject:[GRMustache standardLibrary]];
-[self.template renderObject:user error:NULL];
+DocumentContext *documentContext = [DocumentContext context];
+documentContext.user = ...;
+self.template.baseContext = documentContext;
+[self.template renderAndReturnError:NULL];
 ```
 
 **ViewModel Benefits**: Conceptually clean, model objects remain pristine, good base for testing, compatible with most other Mustache implementations.
