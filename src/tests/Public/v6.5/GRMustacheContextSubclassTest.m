@@ -28,6 +28,7 @@ struct GRPoint {
     float y;
 };
 @interface GRDocumentMustacheContext : GRMustacheContext
+@property (nonatomic, readonly) NSInteger currentInteger;
 @property (nonatomic, readonly) NSInteger succ;
 @property (nonatomic) NSInteger age;
 @property (nonatomic, copy) NSString *string;
@@ -42,6 +43,7 @@ struct GRPoint {
 @end
 
 @implementation GRDocumentMustacheContext
+@dynamic currentInteger;
 @dynamic string;
 @dynamic age;
 @dynamic ageNumber;
@@ -387,9 +389,10 @@ struct GRPoint {
     STAssertEqualObjects(context.string, @"foo", @"");    // the copy of string has not been mutated
     
     {
-        context = [context contextByAddingProtectedObject:@{}];
+        context = [context contextByAddingProtectedObject:@{ @"currentInteger" : @42 }];
 
         // Test propagation with getters
+        STAssertEquals(context.currentInteger, (NSInteger)42, @"");
         STAssertEquals(context.age, (NSInteger)1, @"");
         STAssertEqualObjects(context.ageNumber, @2, @"");
         STAssertEquals(context.point.x, (float)2, @"");
@@ -416,6 +419,7 @@ struct GRPoint {
         context = [context contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)@{}];
         
         // Test propagation with getters
+        STAssertEquals(context.currentInteger, (NSInteger)42, @"");
         STAssertEquals(context.age, (NSInteger)2, @"");
         STAssertEqualObjects(context.ageNumber, @2, @"");
         STAssertEquals(context.point.x, (float)2, @"");
@@ -437,6 +441,7 @@ struct GRPoint {
         context = [context contextByAddingObject:@{}];
         
         // Test propagation with getters
+        STAssertEquals(context.currentInteger, (NSInteger)42, @"");
         STAssertEquals(context.age, (NSInteger)3, @"");
         STAssertEqualObjects(context.ageNumber, @2, @"");
         STAssertEquals(context.point.x, (float)2, @"");
