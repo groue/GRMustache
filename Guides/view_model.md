@@ -31,10 +31,10 @@ document.bodyColor = [UIColor redColor];
 ```
 
 
-GRMustacheContext subclass
---------------------------
+GRMustacheContext Subclasses
+----------------------------
 
-The Document class above is a GRMustacheContext subclass. As such, it can provide its own keys to templates, and also fetch values from the [rendering context stack](runtime.md) (more on that later).
+The Document class above is a GRMustacheContext subclass. As such, it can provide its own keys to templates, and also fetch values from the [rendering context stack](runtime.md#the-context-stack) (more on that later).
 
 ```objc
 @interface Document : GRMustacheContext
@@ -53,7 +53,7 @@ The Document class above is a GRMustacheContext subclass. As such, it can provid
 @end
 ```
 
-### Read only properties
+### Read-Only Properties
 
 Obviously, you write custom getters for read-only properties.
 
@@ -93,13 +93,34 @@ document.user = ...;
 ```
 
 
-### Read/write properties
+### Read/Write Properties and Key-Value Coding
 
 Read/write properties have constraints:
 
 - They must be declared @dynamic, and you must not provide custom getters and setters. You do not have to release them in your dealloc method.
 
-- Weak properties are not supported at the moment.
+- Non-retained (weak, assign, unsafe_unretained) properties are not supported at the moment.
 
+Those properties give direct access to the [rendering context stack](runtime.md#the-context-stack). Their storage *is* the context stack. This is why GRMustache provides custom accessors for them, and doesn't rely on ivars and synthesized accessors.
+
+Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[context valueForKey:@"name"]`.
+
+Your custom properties, such as `document.name`, return the same value as [document valueForKey:@"name"], the very value that would be rendered for `{{ name }}`. This allows you to reliably implement properties that depend on other values from the context stack (such as the `age` property above).
+
+After you have set a custom property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
+
+```objc
+Document *document = [[Document alloc] init];
+document.name = @"DefaultName";
+document.name; // Returns @"DefaultName"
+
+// A new context is derived when a section gets rendered:
+document = [document contextByAddingObject:@{ @"age": @39 }];
+document.name; // Returns @"DefaultName" (inherited)
+
+// A new context is again derived when another inner section gets rendered:
+document = [document contextByAddingObject:[User userWithName:@"Arthur"]];
+document.name; // Returns @"Arthur" (@"DefaultName" has been overriden)
+```
 
 [up](../../../../GRMustache#documentation), [next](configuration.md)
