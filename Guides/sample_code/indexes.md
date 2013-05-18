@@ -96,7 +96,7 @@ The protocol requires the `transformedValue:` method, that returns the result of
 
 Since we need a custom rendering of the array, the result of the filter will conform to the `GRMustacheRendering` protocol (see the [Rendering Objects Guide](../rendering_objects.md)).
 
-Rendering objects take full responsability of their rendering. Our will render the section tag as many times as the array has items, extending the [context stack](../runtime.md) with both a dictionary containing the special keys, and the array items that will provide the `name` key.
+Rendering objects take full responsability of their rendering. Our will render the section tag as many times as the array has items, extending the [context stack](../runtime.md#the-context-stack) with both a dictionary containing the special keys, and the array items that will provide the `name` key.
 
 ```objc
 @implementation PositionFilter

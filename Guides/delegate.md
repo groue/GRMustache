@@ -189,7 +189,7 @@ Let's have a closer look at how you would convert a filter-based template to a t
 
 In order to turn the `uppercase` filter into a tag delegate, we need a Mustache section: `{{#uppercase}}{{name}}{{/uppercase}}`, and a tag delegate attached to the `uppercase` key.
 
-We also have to make sure our tag delegate does not enter the [context stack](runtime.md), so that its own methods and properties do not shadow your data: `{{#uppercase}}{{description}}{{/uppercase}}` for instance should render without invoking the `description` method of the tag delegate. This involves the [GRMustacheRendering protocol](rendering_objects.md), which allows the tag delegate to take full responsibility of its rendering:
+We also have to make sure our tag delegate does not enter the [context stack](runtime.md#the-context-stack), so that its own methods and properties do not shadow your data: `{{#uppercase}}{{description}}{{/uppercase}}` for instance should render without invoking the `description` method of the tag delegate. This involves the [GRMustacheRendering protocol](rendering_objects.md), which allows the tag delegate to take full responsibility of its rendering:
 
 ```objc
 @interface UppercaseTagDelegate : NSObject<GRMustacheTagDelegate, GRMustacheRendering>

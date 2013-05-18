@@ -59,7 +59,7 @@ GRMustacheConfiguration properties
 
 ### baseContext
 
-Mustache rendering is all about looking for values in a *context stack*. That context stack is initialized with the *base context*, gets extended with the objects you provide to templates, and grows as Mustache sections get rendered each on its turn. See the [Runtime Guide](runtime.md) for more information.
+Mustache rendering is all about looking for values in a *context stack*. That context stack is initialized with the *base context*, gets extended with the objects you provide to templates, and grows as Mustache sections get rendered each on its turn. See the [Runtime Guide](runtime.md#the-context-stack) for more information.
 
 The default configuration contains the default base context, pre-filled with the GRMustache [standard library](standard_library.md).
 

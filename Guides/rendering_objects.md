@@ -37,7 +37,7 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
 
-- The _context_ represents the [context stack](runtime.md), and all information that tags need to render.
+- The _context_ represents the [context stack](runtime.md#the-context-stack), and all information that tags need to render.
 
 - _HTMLSafe_ is a pointer to a BOOL: upon return, it must be set to YES or NO, depending on the safety of the string you render. If you forget to set it, it is of course assumed to be NO. Returning NO would have GRMustache HTML-escape the returned string before inserting it in the final rendering of HTML templates (see the [HTML vs. Text Templates Guide](html_vs_text.md) for more information).
 
@@ -417,7 +417,7 @@ Many useful things.
 
 3. *Rendering objects manage the context stack*.
     
-    When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
+    When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md#the-context-stack): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
     There is also a `contextByAddingTagDelegate:` method, that is illustrated in the [Delegates Guide](delegate.md).
 
