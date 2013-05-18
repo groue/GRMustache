@@ -94,6 +94,24 @@ struct GRPoint {
 @dynamic title;
 @end
 
+@interface GRMustacheContextSubclassWithInitializer : GRMustacheContext
+@property (nonatomic, retain) NSString *name;
+@end
+
+@implementation GRMustacheContextSubclassWithInitializer
+@dynamic name;
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.name = @"DefaultName";
+    }
+    return self;
+}
+
+@end
+
 @interface GRDocumentMustacheContextTest : GRMustachePublicAPITest
 @end
 
@@ -325,7 +343,7 @@ struct GRPoint {
         // Render with base context
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         template.baseContext = context;
-        NSString *rendering = [template renderAndReturnError:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
         STAssertEqualObjects(rendering, @"Hello Chris\nYou have just won $10000!\nWell, $6000, after taxes.", @"");
     }
     {
@@ -442,18 +460,18 @@ struct GRPoint {
         
         // Test modification
         context.age = 6;
-        STAssertEquals(context.age, (NSInteger)6, @"");
+        STAssertEquals(context.age, (NSInteger)5, @"");     // 6 is overriden by the context object
         STAssertEquals(rootContext.age, (NSInteger)1, @"");
     }
     {
         context = [context contextByAddingObject:@{}];
         
         // Test propagation with getters
-        STAssertEquals(context.age, (NSInteger)6, @"");
+        STAssertEquals(context.age, (NSInteger)5, @"");
         STAssertEqualObjects(context.ageNumber, @4, @"");
         
         // Test propagation with KVC
-        STAssertEqualObjects([context valueForKey:@"age"], @6, @"");
+        STAssertEqualObjects([context valueForKey:@"age"], @5, @"");
         STAssertEqualObjects([context valueForKey:@"ageNumber"], @4, @"");
         
         // Test modification
@@ -480,6 +498,27 @@ struct GRPoint {
     STAssertEqualObjects([subContext valueForKey:@"value"], @100.0f, @"");
     STAssertEqualObjects([subContext valueForKey:@"name"], @"Bruce", @"");
     STAssertEqualObjects([subContext valueForKey:@"title"], @"Mr", @"");
+}
+
+- (void)testGRMustacheContextSubclassWithInitializer
+{
+    {
+        GRMustacheContextSubclassWithInitializer *context = [[GRMustacheContextSubclassWithInitializer alloc] init];
+        STAssertEqualObjects(context.name, @"DefaultName", @"");
+    }
+    {
+        GRMustacheContextSubclassWithInitializer *context = [GRMustacheContextSubclassWithInitializer context];
+        STAssertEqualObjects(context.name, @"DefaultName", @"");
+    }
+    {
+        GRMustacheContextSubclassWithInitializer *context = [GRMustacheContextSubclassWithInitializer contextWithObject:@{@"name":@"Arthur"}];
+        STAssertEqualObjects(context.name, @"Arthur", @""); // context object overrides custom property
+    }
+    {
+        GRMustacheContextSubclassWithInitializer *context = [GRMustacheContextSubclassWithInitializer context];
+        context = [context contextByAddingObject:@{@"name":@"Arthur"}];
+        STAssertEqualObjects(context.name, @"Arthur", @"");
+    }
 }
 
 @end

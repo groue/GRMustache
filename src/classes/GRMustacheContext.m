@@ -238,6 +238,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 + (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
 + (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects;
 
+// Private dedicated initializer
+//
+// This method allows us to derive new contexts without calling the init method of the subclass.
+- (instancetype)privateInit;
+
 /**
  * Sends the `valueForKey:` message to super_data->receiver with the provided
  * key, using the implementation of super_data->super_class, and returns the
@@ -390,13 +395,18 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return context;
 }
 
+- (instancetype)privateInit
+{
+    return [super init];
+}
+
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
     if (tagDelegate == nil) {
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -436,7 +446,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             if (![ancestor isKindOfClass:[context class]]) {
                 [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [ancestor class], [context class]];
             }
-            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] init] autorelease];
+            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] privateInit] autorelease];
             
             extendedContext.contextParent = context;
             extendedContext.contextObject = ancestor.contextObject;
@@ -457,7 +467,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     {
         // Extend self with a regular object
         
-        context = [[[[self class] alloc] init] autorelease];
+        context = [[[[self class] alloc] privateInit] autorelease];
         
         // copy identical stacks
         context.protectedContextParent = _protectedContextParent;
@@ -490,7 +500,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -517,7 +527,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -544,7 +554,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -623,19 +633,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     for (GRMustacheContext *context = self; context; context = context.contextParent) {
-        // First check mutableContextObject:
-        //
-        // [context setValue:value forKey:key];
-        // assert([context valueForKey:key] == value);
-        id value = [context.mutableContextObject objectForKey:mutableCustomContextKey];
-        if (value != nil) {
-            if (protected != NULL) {
-                *protected = NO;
-            }
-            return value;
-        }
-        
-        // Then check for contextObject:
+        // First check for contextObject:
         //
         // context = [GRMustacheContext contextWithObject:@{key:value}];
         // assert([context valueForKey:key] == value);
@@ -659,6 +657,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                 return value;
             }
         }
+
+        // Then check mutableContextObject:
+        //
+        // context = [GRMustacheContext context];
+        // [context setValue:value forKey:key];
+        // assert([context valueForKey:key] == value);
+        id value = [context.mutableContextObject objectForKey:mutableCustomContextKey];
+        if (value != nil) {
+            if (protected != NULL) {
+                *protected = NO;
+            }
+            return value;
+        }
+        
     }
 
     // Check for subclass custom key
@@ -686,6 +698,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 
 #pragma mark - NSObject
+
+- (instancetype)init
+{
+    return [self privateInit];
+}
 
 - (id)valueForKey:(NSString *)key
 {
