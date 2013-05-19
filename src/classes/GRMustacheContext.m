@@ -30,35 +30,9 @@
 #import "JRSwizzle.h"
 
 
-// Returns an alternate name for a propertyName
-// "foo" -> "isFoo"
-// "isFoo" -> "foo"
-// Caller must free the returned string.
-static char *alternateNameForPropertyName(const char *propertyName)
-{
-    size_t propertyLength = strlen(propertyName);
-    
-    // Build altName ("foo" or "isFoo")
-    char *altName;
-    if (propertyLength >= 3 && strstr(propertyName, "is") == propertyName && propertyName[2] >= 'A' && propertyName[2] <= 'Z') {
-        // "isFoo" getter
-        // Build altName "foo"
-        altName = malloc(propertyLength - 1);       // given "isFoo" of length 5, the room for "foo\0" (4 bytes)
-        strcpy(altName, propertyName + 2);          // "Foo\0"
-        altName[0] += 'a' - 'A';                    // "foo\0"
-    } else {
-        // "foo" getter
-        // Build altName "isFoo"
-        // (tested, OK)
-        altName = malloc(propertyLength + 3);       // given "foo" of length 3, the room for "isFoo\0" (6 bytes)
-        strcpy(altName+2, propertyName);            // "??foo\0"
-        altName[0] = 'i';                           // "i?foo\0"
-        altName[1] = 's';                           // "i?foo\0"
-        altName[2] += 'A' - 'a';                    // "isFoo\0"
-    }
-    
-    return altName;
-}
+#if !defined(NS_BLOCK_ASSERTIONS)
+BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
+#endif
 
 typedef NS_ENUM(NSUInteger, GRMustachePropertyStorage) {
     GRMustachePropertyStorageAssign,
@@ -74,152 +48,39 @@ typedef NS_ENUM(NSUInteger, GRMustachePropertyStorage) {
 // - `propertyName` is set to the property name
 // - `objCTypes` is set to the encoding of the property
 // Caller must free the returned strings.
-BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, GRMustachePropertyStorage *storage, char **propertyName, char **objCTypes)
-{
-    size_t selectorLength = strlen(selectorName);
-    char *colon = strstr(selectorName, ":");
-    
-    if (colon == NULL)
-    {
-        // Arity 0: it may be a getter
-        // Support KVC variants: foo and isFoo are synonyms
-        char *altName = allowKVCAlternateName ? alternateNameForPropertyName(selectorName) : nil;
+BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, GRMustachePropertyStorage *storage, char **propertyName, char **objCTypes);
 
-        // Look for a property named "foo" or "isFoo", or with a custom getter "foo" or "isFoo"
-        BOOL found = NO;
-        unsigned int count;
-        while (!found && klass && klass != [GRMustacheContext class]) {
-            objc_property_t *properties = class_copyPropertyList(klass, &count);
-            for (unsigned int i=0; i<count; ++i) {
-                const char *pName = property_getName(properties[i]);
-                const char *attrs = property_getAttributes(properties[i]);
-                if (strcmp(selectorName, pName) == 0 || (altName && strcmp(altName, pName) == 0)) {
-                    found = YES;
-                } else {
-                    char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
-                    if (getterStart) {
-                        getterStart += 2;                               // "customGetter,..."
-                        char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
-                        size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
-                        if (strncmp(selectorName, getterStart, getterLength) == 0 || (altName && strncmp(altName, getterStart, getterLength) == 0)) {
-                            found = YES;
-                        }
-                    }
-                }
-                
-                if (found) {
-                    if (getter) {
-                        *getter = YES;
-                    }
-                    if (storage) {
-                        if (strstr(attrs, ",&")) {
-                            *storage = GRMustachePropertyStorageRetain;
-                        } else if (strstr(attrs, ",C")) {
-                            *storage = GRMustachePropertyStorageCopy;
-                        } else if (strstr(attrs, ",W")) {
-                            *storage = GRMustachePropertyStorageWeak;
-                        } else {
-                            *storage = GRMustachePropertyStorageAssign;
-                        }
-                    }
-                    if (propertyName) {
-                        *propertyName = malloc(strlen(pName) + 1);
-                        strcpy(*propertyName, pName);
-                    }
-                    if (objCTypes) {
-                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
-                        *objCTypes = malloc(typeLength + 1);
-                        strncpy(*objCTypes, attrs+1, typeLength);
-                        (*objCTypes)[typeLength] = '\0';
-                    }
-                    break;
-                }
-            }
-            
-            free(properties);
-            klass = class_getSuperclass(klass);
-        }
-        
-        if (altName) {
-            free(altName);
-        }
-        
-        return found;
-    }
-    else if (colon == selectorName + selectorLength - 1)
-    {
-        // Arity 1: it may be a setter
-        
-        char *expectedPropertyName = nil;
-        if (strstr(selectorName, "set") == selectorName)
-        {
-            expectedPropertyName = malloc(selectorLength - 3);                 // given "setFoo:" of length 7, the room for "foo\0" (4 bytes)
-            strncpy(expectedPropertyName, selectorName+3, selectorLength - 4); // "Foo?z"
-            expectedPropertyName[selectorLength - 4] = '\0';                   // "Foo\0"
-            if (expectedPropertyName[0] >= 'A' && expectedPropertyName[0] <= 'Z') {
-                expectedPropertyName[0] += 'a' - 'A';                          // "foo\0"
-            }
-        }
-        
-        // Look for a property of custom setter selectorName, or with name expectedPropertyName
-        BOOL found = NO;
-        while (!found && klass && klass != [GRMustacheContext class]) {
-            unsigned int count;
-            objc_property_t *properties = class_copyPropertyList(klass, &count);
-            for (unsigned int i=0; i<count; ++i) {
-                const char *pName = property_getName(properties[i]);
-                const char *attrs = property_getAttributes(properties[i]);
-                
-                char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
-                if (setterStart) {
-                    setterStart += 2;                               // "customSetter:,..."
-                    char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
-                    size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
-                    if (strncmp(selectorName, setterStart, setterLength) == 0) {
-                        found = YES;
-                    }
-                } else if (expectedPropertyName && strcmp(expectedPropertyName, pName) == 0) {
-                    found = YES;
-                }
+static void GRMustacheContextManagedPropertyCharSetter(GRMustacheContext *self, SEL _cmd, char value);
+static void GRMustacheContextManagedPropertyIntSetter(GRMustacheContext *self, SEL _cmd, int value);
+static void GRMustacheContextManagedPropertyShortSetter(GRMustacheContext *self, SEL _cmd, short value);
+static void GRMustacheContextManagedPropertyLongSetter(GRMustacheContext *self, SEL _cmd, long value);
+static void GRMustacheContextManagedPropertyLongLongSetter(GRMustacheContext *self, SEL _cmd, long long value);
+static void GRMustacheContextManagedPropertyUnsignedCharSetter(GRMustacheContext *self, SEL _cmd, unsigned char value);
+static void GRMustacheContextManagedPropertyUnsignedIntSetter(GRMustacheContext *self, SEL _cmd, unsigned int value);
+static void GRMustacheContextManagedPropertyUnsignedShortSetter(GRMustacheContext *self, SEL _cmd, unsigned short value);
+static void GRMustacheContextManagedPropertyUnsignedLongSetter(GRMustacheContext *self, SEL _cmd, unsigned long value);
+static void GRMustacheContextManagedPropertyUnsignedLongLongSetter(GRMustacheContext *self, SEL _cmd, unsigned long long value);
+static void GRMustacheContextManagedPropertyFloatSetter(GRMustacheContext *self, SEL _cmd, float value);
+static void GRMustacheContextManagedPropertyDoubleSetter(GRMustacheContext *self, SEL _cmd, double value);
+static void GRMustacheContextManagedPropertyBoolSetter(GRMustacheContext *self, SEL _cmd, _Bool value);
+static void GRMustacheContextManagedPropertyObjectSetter(GRMustacheContext *self, SEL _cmd, id value);
+static void GRMustacheContextManagedPropertyClassSetter(GRMustacheContext *self, SEL _cmd, Class value);
 
-                if (found) {
-                    if (objCTypes) {
-                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
-                        *objCTypes = malloc(typeLength + 1);
-                        strncpy(*objCTypes, attrs+1, typeLength);
-                        (*objCTypes)[typeLength] = '\0';
-                    }
-                    if (propertyName) {
-                        *propertyName = malloc(strlen(pName) + 1);
-                        strcpy(*propertyName, pName);
-                    }
-                    if (getter) {
-                        *getter = NO;
-                    }
-                    break;
-                }
-            }
-            
-            free(properties);
-            klass = class_getSuperclass(klass);
-        }
-        
-        if (expectedPropertyName) {
-            free(expectedPropertyName);
-        }
-        
-        return found;
-    }
-    else
-    {
-        // unknown selector
-        return NO;
-    }
-}
-
-#if !defined(NS_BLOCK_ASSERTIONS)
-BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
-#endif
+static char GRMustacheContextManagedPropertyCharGetter(GRMustacheContext *self, SEL _cmd);
+static int GRMustacheContextManagedPropertyIntGetter(GRMustacheContext *self, SEL _cmd);
+static short GRMustacheContextManagedPropertyShortGetter(GRMustacheContext *self, SEL _cmd);
+static long GRMustacheContextManagedPropertyLongGetter(GRMustacheContext *self, SEL _cmd);
+static long long GRMustacheContextManagedPropertyLongLongGetter(GRMustacheContext *self, SEL _cmd);
+static unsigned char GRMustacheContextManagedPropertyUnsignedCharGetter(GRMustacheContext *self, SEL _cmd);
+static unsigned int GRMustacheContextManagedPropertyUnsignedIntGetter(GRMustacheContext *self, SEL _cmd);
+static unsigned short GRMustacheContextManagedPropertyUnsignedShortGetter(GRMustacheContext *self, SEL _cmd);
+static unsigned long GRMustacheContextManagedPropertyUnsignedLongGetter(GRMustacheContext *self, SEL _cmd);
+static unsigned long long GRMustacheContextManagedPropertyUnsignedLongLongGetter(GRMustacheContext *self, SEL _cmd);
+static float GRMustacheContextManagedPropertyFloatGetter(GRMustacheContext *self, SEL _cmd);
+static double GRMustacheContextManagedPropertyDoubleGetter(GRMustacheContext *self, SEL _cmd);
+static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self, SEL _cmd);
+static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd);
+static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd);
 
 static BOOL shouldPreventNSUndefinedKeyException = NO;
 
@@ -331,18 +192,102 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         objc_property_t *properties = class_copyPropertyList(self, &count);
         for (unsigned int i=0; i<count; ++i) {
             const char *attrs = property_getAttributes(properties[i]);
+
+            // Check if we can synthesize accessors
+            
+            if (!strstr(attrs, ",D"))
+            {
+                // Property is not dynamic.
+                //
+                // Log and exit, because exceptions raised from initialize method do not stop the program.
+                NSLog(@"[GRMustache] The property `%s` of class %@ is required to be @dynamic.", property_getName(properties[i]), self);
+                exit(1);
+            }
+            
+            const char *propertyName = property_getName(properties[i]);
+            size_t objCTypeLength = strstr(attrs, ",") - attrs - 1;
+            
+            // Synthesize getter
+            
+            {
+                char *getterName = nil;
+                char *getterStart = strstr(attrs, ",G");            // ",ScustomGetter:,..." or NULL if there is no custom getter
+                if (getterStart) {
+                    getterStart += 2;                               // "customGetter:,..."
+                    char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                    size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                    getterName = malloc(getterLength + 1);
+                    strncpy(getterName, getterStart, getterLength);
+                    getterName[getterLength] = '\0';
+                }
+                
+                char *getterObjCTypes = malloc(objCTypeLength+3);
+                strncpy(getterObjCTypes, attrs+1, objCTypeLength);
+                getterObjCTypes[objCTypeLength] = '@';
+                getterObjCTypes[objCTypeLength + 1] = ':';
+                getterObjCTypes[objCTypeLength + 2] = '\0';
+                
+                switch (attrs[1]) {
+                    case 'c':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyCharGetter, getterObjCTypes);
+                        break;
+                    case 'i':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyIntGetter, getterObjCTypes);
+                        break;
+                    case 's':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyShortGetter, getterObjCTypes);
+                        break;
+                    case 'l':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongGetter, getterObjCTypes);
+                        break;
+                    case 'q':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongLongGetter, getterObjCTypes);
+                        break;
+                    case 'C':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedCharGetter, getterObjCTypes);
+                        break;
+                    case 'I':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedIntGetter, getterObjCTypes);
+                        break;
+                    case 'S':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedShortGetter, getterObjCTypes);
+                        break;
+                    case 'L':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongGetter, getterObjCTypes);
+                        break;
+                    case 'Q':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongGetter, getterObjCTypes);
+                        break;
+                    case 'f':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyFloatGetter, getterObjCTypes);
+                        break;
+                    case 'd':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyDoubleGetter, getterObjCTypes);
+                        break;
+                    case 'B':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyBoolGetter, getterObjCTypes);
+                        break;
+                    case '@':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyObjectGetter, getterObjCTypes);
+                        break;
+                    case '#':
+                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyClassGetter, getterObjCTypes);
+                        break;
+                    default:
+                        // I don't know how to write an IMP that returns any kind of argument.
+                        // We'll rely of forwardInvocation:
+                        break;
+                }
+                
+                free(getterName);
+                free(getterObjCTypes);
+            }
+            
             if (!strstr(attrs, ",R"))
             {
                 // Property is read/write
                 
-                if (!strstr(attrs, ",D"))
-                {
-                    // Property is not dynamic.
-                    //
-                    // Log and exit, because exceptions raised from initialize method do not stop the program.
-                    NSLog(@"[GRMustache] The property `%@` of class %@ is required to be @dynamic.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
-                    exit(1);
-                }
+                // Check if we can honor storage
                 
                 if (strstr(attrs, ",W"))
                 {
@@ -352,7 +297,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                     // Don't lie: support for weak properties is not done yet.
                     //
                     // Log and exit, because exceptions raised from initialize method do not stop the program.
-                    NSLog(@"[GRMustache] Support for weak property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
+                    NSLog(@"[GRMustache] Support for weak property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
                     exit(1);
                 }
                 else if (!strstr(attrs, ",&") && !strstr(attrs, ",C"))
@@ -365,9 +310,96 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                         // Don't lie: support for weak properties is not done yet.
                         //
                         // Log and exit, because exceptions raised from initialize method do not stop the program.
-                        NSLog(@"[GRMustache] Support for nonretained property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
+                        NSLog(@"[GRMustache] Support for nonretained property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
                         exit(1);
                     }
+                }
+                
+                // Synthesize setter
+                
+                {
+                    char *setterName = nil;
+                    char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
+                    if (setterStart) {
+                        setterStart += 2;                               // "customSetter:,..."
+                        char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
+                        size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
+                        setterName = malloc(setterLength + 1);
+                        strncpy(setterName, setterStart, setterLength);
+                        setterName[setterLength] = '\0';
+                    } else {
+                        size_t setterLength = strlen(propertyName) + 4;
+                        setterName = malloc(setterLength + 1);  // room for "setFoo:\O"
+                        strcpy(setterName+3, propertyName);
+                        setterName[0] = 's';
+                        setterName[1] = 'e';
+                        setterName[2] = 't';
+                        setterName[3] += 'A' - 'a';
+                        setterName[setterLength - 1] = ':';
+                        setterName[setterLength] = '\0';
+                    }
+                    
+                    char *setterObjCTypes = malloc(objCTypeLength+4);
+                    strncpy(setterObjCTypes+3, attrs+1, objCTypeLength);
+                    setterObjCTypes[0] = 'v';
+                    setterObjCTypes[1] = '@';
+                    setterObjCTypes[2] = ':';
+                    setterObjCTypes[objCTypeLength+3] = '\0';
+                    
+                    switch (attrs[1]) {
+                        case 'c':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyCharSetter, setterObjCTypes);
+                            break;
+                        case 'i':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyIntSetter, setterObjCTypes);
+                            break;
+                        case 's':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyShortSetter, setterObjCTypes);
+                            break;
+                        case 'l':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongSetter, setterObjCTypes);
+                            break;
+                        case 'q':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongLongSetter, setterObjCTypes);
+                            break;
+                        case 'C':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedCharSetter, setterObjCTypes);
+                            break;
+                        case 'I':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedIntSetter, setterObjCTypes);
+                            break;
+                        case 'S':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedShortSetter, setterObjCTypes);
+                            break;
+                        case 'L':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongSetter, setterObjCTypes);
+                            break;
+                        case 'Q':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongSetter, setterObjCTypes);
+                            break;
+                        case 'f':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyFloatSetter, setterObjCTypes);
+                            break;
+                        case 'd':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyDoubleSetter, setterObjCTypes);
+                            break;
+                        case 'B':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyBoolSetter, setterObjCTypes);
+                            break;
+                        case '@':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyObjectSetter, setterObjCTypes);
+                            break;
+                        case '#':
+                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyClassSetter, setterObjCTypes);
+                            break;
+                        default:
+                            // I don't know how to write an IMP that takes any kind of argument.
+                            // We'll rely of forwardInvocation:
+                            break;
+                    }
+                    
+                    free(setterName);
+                    free(setterObjCTypes);
                 }
             }
         }
@@ -706,8 +738,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         
     }
 
-    // Check for subclass custom key
-    
+    // Support for custom properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) != [GRMustacheContext class]) {
         id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
         if (protected != NULL) {
@@ -748,18 +779,19 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         _mutableContextObject = [[NSMutableDictionary alloc] init];
     }
     
-    // Honor storage of subclass custom key
-    
+    // Support for custom properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) != [GRMustacheContext class]) {
         const char *keyCString = [key UTF8String];
         BOOL getter;
         GRMustachePropertyStorage storage;
         if (hasPropertyAccessor([self class], keyCString, NO, &getter, &storage, NULL, NULL)) {
             if (getter && storage == GRMustachePropertyStorageCopy) {
+                // Honor property storage
                 value = [[value copy] autorelease];
             }
         }
     }
+    
     [_mutableContextObject setValue:value forKey:key];
 }
 
@@ -767,6 +799,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     if ([super respondsToSelector:selector]) {
         return YES;
+    }
+    
+    // Support for custom properties is reserved to GRMustacheContext subclasses
+    if (object_getClass(self) == [GRMustacheContext class]) {
+        return NO;
     }
     
     const char *selectorName = sel_getName(selector);
@@ -779,7 +816,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     if (signature) {
         return signature;
     }
-    
+
+    // Support for custom properties is reserved to GRMustacheContext subclasses
+    if (object_getClass(self) == [GRMustacheContext class]) {
+        return nil;
+    }
+
     // The method is undefined.
     
     const char *selectorName = sel_getName(selector);
@@ -822,6 +864,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
+    // Support for custom properties is reserved to GRMustacheContext subclasses
+    if (object_getClass(self) == [GRMustacheContext class]) {
+        [super forwardInvocation:invocation];
+        return;
+    }
+    
     SEL selector = [invocation selector];
 
     const char *selectorName = sel_getName(selector);
@@ -840,70 +888,29 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             NSMutableData *data = [NSMutableData dataWithLength:valueSize];   // autoreleased so that invocation's return value survives
             void *bytes = [data mutableBytes];
             
-            id value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
             switch (encoding[0]) {
                 case 'c':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(char *)bytes = [(NSNumber *)value charValue];
-                    break;
                 case 'i':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(int *)bytes = [(NSNumber *)value intValue];
-                    break;
                 case 's':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(short *)bytes = [(NSNumber *)value shortValue];
-                    break;
                 case 'l':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(long *)bytes = [(NSNumber *)value longValue];
-                    break;
                 case 'q':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(long long *)bytes = [(NSNumber *)value longLongValue];
-                    break;
                 case 'C':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(unsigned char *)bytes = [(NSNumber *)value unsignedCharValue];
-                    break;
                 case 'I':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(unsigned int *)bytes = [(NSNumber *)value unsignedIntValue];
-                    break;
                 case 'S':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(unsigned short *)bytes = [(NSNumber *)value unsignedShortValue];
-                    break;
                 case 'L':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(unsigned long *)bytes = [(NSNumber *)value unsignedLongValue];
-                    break;
                 case 'Q':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(unsigned long long *)bytes = [(NSNumber *)value unsignedLongLongValue];
-                    break;
                 case 'f':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(float *)bytes = [(NSNumber *)value floatValue];
-                    break;
                 case 'd':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(double *)bytes = [(NSNumber *)value doubleValue];
-                    break;
                 case 'B':
-                    if (![value isKindOfClass:[NSNumber class]]) return;
-                    *(_Bool *)bytes = [(NSNumber *)value boolValue];
-                    break;
                 case '@':
-                    *(id *)bytes = value;
-                    break;
                 case '#':
-                    *(Class *)bytes = value;
+                    [NSException raise:NSInternalInconsistencyException format:@"Missing synthesized getter for property %s", propertyName];
                     break;
-                default:
+                default: {
+                    id value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
                     if (![value isKindOfClass:[NSValue class]]) return;
                     [(NSValue *)value getValue:bytes];
-                    break;
+                } break;
             }
             
             [invocation setReturnValue:bytes];
@@ -920,52 +927,24 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             
             switch (encoding[0]) {
                 case 'c':
-                    [self setValue:[NSNumber numberWithChar:*(char *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'i':
-                    [self setValue:[NSNumber numberWithInt:*(int *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 's':
-                    [self setValue:[NSNumber numberWithShort:*(short *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'l':
-                    [self setValue:[NSNumber numberWithLong:*(long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'q':
-                    [self setValue:[NSNumber numberWithLongLong:*(long long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'C':
-                    [self setValue:[NSNumber numberWithUnsignedChar:*(unsigned char *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'I':
-                    [self setValue:[NSNumber numberWithUnsignedInt:*(unsigned int *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'S':
-                    [self setValue:[NSNumber numberWithUnsignedShort:*(unsigned short *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'L':
-                    [self setValue:[NSNumber numberWithUnsignedLong:*(unsigned long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'Q':
-                    [self setValue:[NSNumber numberWithUnsignedLongLong:*(unsigned long long *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'f':
-                    [self setValue:[NSNumber numberWithFloat:*(float *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'd':
-                    [self setValue:[NSNumber numberWithDouble:*(double *)bytes] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case 'B':
-                    [self setValue:[NSNumber numberWithBool:(BOOL)(*(_Bool *)bytes)] forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case '@':
-                    [self setValue:*(id *)bytes forKey:[NSString stringWithUTF8String:propertyName]];
-                    break;
                 case '#':
-                    [self setValue:*(Class *)bytes forKey:[NSString stringWithUTF8String:propertyName]];
+                    [NSException raise:NSInternalInconsistencyException format:@"Missing synthesized setter for property %s", propertyName];
                     break;
                 default:
-                    [self setValue:[NSValue valueWithBytes:bytes objCType:encoding ?: "@"] forKey:[NSString stringWithUTF8String:propertyName]];
+                    [self setValue:[NSValue valueWithBytes:bytes objCType:encoding] forKey:[NSString stringWithUTF8String:propertyName]];
                     break;
             }
             
@@ -1238,3 +1217,486 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 }
 
 @end
+
+// Returns an alternate name for a propertyName
+// "foo" -> "isFoo"
+// "isFoo" -> "foo"
+// Caller must free the returned string.
+static char *alternateNameForPropertyName(const char *propertyName)
+{
+    size_t propertyLength = strlen(propertyName);
+    
+    // Build altName ("foo" or "isFoo")
+    char *altName;
+    if (propertyLength >= 3 && strstr(propertyName, "is") == propertyName && propertyName[2] >= 'A' && propertyName[2] <= 'Z') {
+        // "isFoo" getter
+        // Build altName "foo"
+        altName = malloc(propertyLength - 1);       // given "isFoo" of length 5, the room for "foo\0" (4 bytes)
+        strcpy(altName, propertyName + 2);          // "Foo\0"
+        altName[0] += 'a' - 'A';                    // "foo\0"
+    } else {
+        // "foo" getter
+        // Build altName "isFoo"
+        // (tested, OK)
+        altName = malloc(propertyLength + 3);       // given "foo" of length 3, the room for "isFoo\0" (6 bytes)
+        strcpy(altName+2, propertyName);            // "??foo\0"
+        altName[0] = 'i';                           // "i?foo\0"
+        altName[1] = 's';                           // "i?foo\0"
+        altName[2] += 'A' - 'a';                    // "isFoo\0"
+    }
+    
+    return altName;
+}
+
+BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, GRMustachePropertyStorage *storage, char **propertyName, char **objCTypes)
+{
+    size_t selectorLength = strlen(selectorName);
+    char *colon = strstr(selectorName, ":");
+    
+    if (colon == NULL)
+    {
+        // Arity 0: it may be a getter
+        // Support KVC variants: foo and isFoo are synonyms
+        char *altName = allowKVCAlternateName ? alternateNameForPropertyName(selectorName) : nil;
+        
+        // Look for a property named "foo" or "isFoo", or with a custom getter "foo" or "isFoo"
+        BOOL found = NO;
+        unsigned int count;
+        while (!found && klass && klass != [GRMustacheContext class]) {
+            objc_property_t *properties = class_copyPropertyList(klass, &count);
+            for (unsigned int i=0; i<count; ++i) {
+                const char *pName = property_getName(properties[i]);
+                const char *attrs = property_getAttributes(properties[i]);
+                if (strcmp(selectorName, pName) == 0 || (altName && strcmp(altName, pName) == 0)) {
+                    found = YES;
+                } else {
+                    char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
+                    if (getterStart) {
+                        getterStart += 2;                               // "customGetter,..."
+                        char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                        size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                        if (strncmp(selectorName, getterStart, getterLength) == 0 || (altName && strncmp(altName, getterStart, getterLength) == 0)) {
+                            found = YES;
+                        }
+                    }
+                }
+                
+                if (found) {
+                    if (getter) {
+                        *getter = YES;
+                    }
+                    if (storage) {
+                        if (strstr(attrs, ",&")) {
+                            *storage = GRMustachePropertyStorageRetain;
+                        } else if (strstr(attrs, ",C")) {
+                            *storage = GRMustachePropertyStorageCopy;
+                        } else if (strstr(attrs, ",W")) {
+                            *storage = GRMustachePropertyStorageWeak;
+                        } else {
+                            *storage = GRMustachePropertyStorageAssign;
+                        }
+                    }
+                    if (propertyName) {
+                        *propertyName = malloc(strlen(pName) + 1);
+                        strcpy(*propertyName, pName);
+                    }
+                    if (objCTypes) {
+                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
+                        *objCTypes = malloc(typeLength + 1);
+                        strncpy(*objCTypes, attrs+1, typeLength);
+                        (*objCTypes)[typeLength] = '\0';
+                    }
+                    break;
+                }
+            }
+            
+            free(properties);
+            klass = class_getSuperclass(klass);
+        }
+        
+        if (altName) {
+            free(altName);
+        }
+        
+        return found;
+    }
+    else if (colon == selectorName + selectorLength - 1)
+    {
+        // Arity 1: it may be a setter
+        
+        char *expectedPropertyName = nil;
+        if (strstr(selectorName, "set") == selectorName)
+        {
+            expectedPropertyName = malloc(selectorLength - 3);                 // given "setFoo:" of length 7, the room for "foo\0" (4 bytes)
+            strncpy(expectedPropertyName, selectorName+3, selectorLength - 4); // "Foo?z"
+            expectedPropertyName[selectorLength - 4] = '\0';                   // "Foo\0"
+            if (expectedPropertyName[0] >= 'A' && expectedPropertyName[0] <= 'Z') {
+                expectedPropertyName[0] += 'a' - 'A';                          // "foo\0"
+            }
+        }
+        
+        // Look for a property of custom setter selectorName, or with name expectedPropertyName
+        BOOL found = NO;
+        while (!found && klass && klass != [GRMustacheContext class]) {
+            unsigned int count;
+            objc_property_t *properties = class_copyPropertyList(klass, &count);
+            for (unsigned int i=0; i<count; ++i) {
+                const char *pName = property_getName(properties[i]);
+                const char *attrs = property_getAttributes(properties[i]);
+                
+                char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
+                if (setterStart) {
+                    setterStart += 2;                               // "customSetter:,..."
+                    char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
+                    size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
+                    if (strncmp(selectorName, setterStart, setterLength) == 0) {
+                        found = YES;
+                    }
+                } else if (expectedPropertyName && strcmp(expectedPropertyName, pName) == 0) {
+                    found = YES;
+                }
+                
+                if (found) {
+                    if (getter) {
+                        *getter = NO;
+                    }
+                    if (storage) {
+                        if (strstr(attrs, ",&")) {
+                            *storage = GRMustachePropertyStorageRetain;
+                        } else if (strstr(attrs, ",C")) {
+                            *storage = GRMustachePropertyStorageCopy;
+                        } else if (strstr(attrs, ",W")) {
+                            *storage = GRMustachePropertyStorageWeak;
+                        } else {
+                            *storage = GRMustachePropertyStorageAssign;
+                        }
+                    }
+                    if (propertyName) {
+                        *propertyName = malloc(strlen(pName) + 1);
+                        strcpy(*propertyName, pName);
+                    }
+                    if (objCTypes) {
+                        size_t typeLength = strstr(attrs, ",") - attrs - 1;
+                        *objCTypes = malloc(typeLength + 1);
+                        strncpy(*objCTypes, attrs+1, typeLength);
+                        (*objCTypes)[typeLength] = '\0';
+                    }
+                    break;
+                }
+            }
+            
+            free(properties);
+            klass = class_getSuperclass(klass);
+        }
+        
+        if (expectedPropertyName) {
+            free(expectedPropertyName);
+        }
+        
+        return found;
+    }
+    else
+    {
+        // unknown selector
+        return NO;
+    }
+}
+
+static void GRMustacheContextManagedPropertyCharSetter(GRMustacheContext *self, SEL _cmd, char value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithChar:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyIntSetter(GRMustacheContext *self, SEL _cmd, int value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithInt:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyShortSetter(GRMustacheContext *self, SEL _cmd, short value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithShort:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyLongSetter(GRMustacheContext *self, SEL _cmd, long value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithLong:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyLongLongSetter(GRMustacheContext *self, SEL _cmd, long long value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithLongLong:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyUnsignedCharSetter(GRMustacheContext *self, SEL _cmd, unsigned char value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithUnsignedChar:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyUnsignedIntSetter(GRMustacheContext *self, SEL _cmd, unsigned int value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithUnsignedInt:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyUnsignedShortSetter(GRMustacheContext *self, SEL _cmd, unsigned short value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithUnsignedShort:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyUnsignedLongSetter(GRMustacheContext *self, SEL _cmd, unsigned long value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithUnsignedLong:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyUnsignedLongLongSetter(GRMustacheContext *self, SEL _cmd, unsigned long long value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithUnsignedLongLong:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyFloatSetter(GRMustacheContext *self, SEL _cmd, float value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithFloat:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyDoubleSetter(GRMustacheContext *self, SEL _cmd, double value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithDouble:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyBoolSetter(GRMustacheContext *self, SEL _cmd, _Bool value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:[NSNumber numberWithBool:value] forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyObjectSetter(GRMustacheContext *self, SEL _cmd, id value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:value forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static void GRMustacheContextManagedPropertyClassSetter(GRMustacheContext *self, SEL _cmd, Class value)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    [self setValue:value forKey:[NSString stringWithUTF8String:propertyName]];
+    free(propertyName);
+}
+
+static char GRMustacheContextManagedPropertyCharGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    char result = [value charValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static int GRMustacheContextManagedPropertyIntGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    int result = [value intValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static short GRMustacheContextManagedPropertyShortGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    short result = [value shortValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static long GRMustacheContextManagedPropertyLongGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    long result = [value longValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static long long GRMustacheContextManagedPropertyLongLongGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    long long result = [value longLongValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static unsigned char GRMustacheContextManagedPropertyUnsignedCharGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    unsigned char result = [value unsignedCharValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static unsigned int GRMustacheContextManagedPropertyUnsignedIntGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    unsigned int result = [value unsignedIntValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static unsigned short GRMustacheContextManagedPropertyUnsignedShortGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    unsigned short result = [value unsignedShortValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static unsigned long GRMustacheContextManagedPropertyUnsignedLongGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    unsigned long result = [value unsignedLongValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static unsigned long long GRMustacheContextManagedPropertyUnsignedLongLongGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    unsigned long long result = [value unsignedLongLongValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static float GRMustacheContextManagedPropertyFloatGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    float result = [value floatValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static double GRMustacheContextManagedPropertyDoubleGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    double result = [value doubleValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    NSNumber *value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    _Bool result = [value boolValue];
+    
+    free(propertyName);
+    return result;
+}
+
+static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    id value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    
+    free(propertyName);
+    return value;
+}
+
+static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd)
+{
+    char *propertyName;
+    hasPropertyAccessor([self class], sel_getName(_cmd), NO, NULL, NULL, &propertyName, NULL);
+    
+    Class value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+    
+    free(propertyName);
+    return value;
+}
+
