@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, GRMustachePropertyType) {
 // Caller must free the returned strings.
 BOOL hasManagedPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, BOOL *readOnly, GRMustachePropertyStoragePolicy *storagePolicy, char **propertyName, char **objCTypes, GRMustachePropertyType *type);
 
-BOOL isManagedPropertyKVCKey(Class klass, NSString *key);
+BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *unitializedValue);
 NSString *managedPropertyNameForSelector(Class klass, SEL selector);
 NSString *canonicalKeyForKey(Class klass, NSString *key);
 
@@ -748,16 +748,22 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     // Support for managed properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) != [GRMustacheContext class]) {
         
-        // Make sure we do not invoke NSObject's implementation of valueForKey:
-        // for our managed properties.
+        if (protected != NULL) {
+            *protected = NO;
+        }
         
-        if (!isManagedPropertyKVCKey([self class], key)) {
+        id unitializedValue;
+        if (isManagedPropertyKVCKey([self class], key, &unitializedValue)) {
             
+            // The managed property does not have any value
+            
+            return unitializedValue;
+            
+        } else {
+            
+            // Key does not refer to a managed property.
             // Invoke NSObject's implementation of valueForKey:
             
-            if (protected != NULL) {
-                *protected = NO;
-            }
             return [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
         }
     }
@@ -1581,8 +1587,11 @@ NSString *canonicalKeyForKey(Class klass, NSString *key)
     return canonicalKey;
 }
 
-BOOL isManagedPropertyKVCKey(Class klass, NSString *key)
+BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *unitializedValue)
 {
+    static NSString *isManagedKey = @"isManagedKey";
+    static NSString *unitializedValueKey = @"unitializedValueKey";
+    
     static CFMutableDictionaryRef classCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -1597,23 +1606,83 @@ BOOL isManagedPropertyKVCKey(Class klass, NSString *key)
         CFDictionarySetValue(classCache, klass, keyCache);
     }
     
-    NSNumber *result = [keyCache objectForKey:key];
+    NSDictionary *result = [keyCache objectForKey:key];
     if (result == nil) {
+        BOOL isManaged = NO;
+        id zeroValue = nil;
         BOOL getter;
-        if (hasManagedPropertyAccessor(klass, [key UTF8String], YES, &getter, NULL, NULL, NULL, NULL, NULL)) {
-            if (getter) {
-                result = [NSNumber numberWithBool:YES];
-            } else {
-                result = [NSNumber numberWithBool:NO];
+        char *encoding;
+        if (hasManagedPropertyAccessor(klass, [key UTF8String], YES, &getter, NULL, NULL, NULL, &encoding, NULL)) {
+            isManaged = getter;
+            
+            switch (encoding[0]) {
+                case 'c':
+                    zeroValue = [NSNumber numberWithChar:0];
+                    break;
+                case 'i':
+                    zeroValue = [NSNumber numberWithInt:0];
+                    break;
+                case 's':
+                    zeroValue = [NSNumber numberWithShort:0];
+                    break;
+                case 'l':
+                    zeroValue = [NSNumber numberWithLong:0];
+                    break;
+                case 'q':
+                    zeroValue = [NSNumber numberWithLongLong:0];
+                    break;
+                case 'C':
+                    zeroValue = [NSNumber numberWithUnsignedChar:0];
+                    break;
+                case 'I':
+                    zeroValue = [NSNumber numberWithUnsignedInt:0];
+                    break;
+                case 'S':
+                    zeroValue = [NSNumber numberWithUnsignedShort:0];
+                    break;
+                case 'L':
+                    zeroValue = [NSNumber numberWithUnsignedLong:0];
+                    break;
+                case 'Q':
+                    zeroValue = [NSNumber numberWithUnsignedLongLong:0];
+                    break;
+                case 'f':
+                    zeroValue = [NSNumber numberWithFloat:0.0f];
+                    break;
+                case 'd':
+                    zeroValue = [NSNumber numberWithDouble:0.0f];
+                    break;
+                case 'B':
+                    zeroValue = [NSNumber numberWithBool:NO];
+                    break;
+                case '@':
+                    zeroValue = nil;
+                    break;
+                case '#':
+                    zeroValue = nil;
+                    break;
+                default: {
+                    NSUInteger valueSize;
+                    NSGetSizeAndAlignment(encoding, &valueSize, NULL);
+                    void *bytes = malloc(valueSize);
+                    memset(bytes, 0, valueSize);
+                    zeroValue = [NSValue valueWithBytes:bytes objCType:encoding];
+                    free(bytes);
+                } break;
             }
-        } else {
-            result = [NSNumber numberWithBool:NO];
         }
         
+        result = [NSDictionary dictionaryWithObjectsAndKeys:
+                  [NSNumber numberWithBool:isManaged], isManagedKey,
+                  zeroValue, unitializedValueKey,   // if zeroValue is nil, result contains only the isManaged information
+                  nil];
         [keyCache setValue:result forKey:key];
     }
     
-    return [result boolValue];
+    if (unitializedValue != NULL) {
+        *unitializedValue = [result objectForKey:unitializedValueKey];
+    }
+    return [[result objectForKey:isManagedKey] boolValue];
 }
 
 static void GRMustacheContextManagedPropertyCharSetter(GRMustacheContext *self, SEL _cmd, char value)
