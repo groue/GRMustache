@@ -40,6 +40,7 @@ struct GRPoint {
 @property (nonatomic) BOOL nice;
 @property (nonatomic, getter = getPropertyWithCustomGetter) int propertyWithCustomGetter;
 @property (nonatomic, setter = updatePropertyWithCustomSetter:) int propertyWithCustomSetter;
+@property (nonatomic, setter = updatePointPropertyWithCustomSetter:) struct GRPoint pointPropertyWithCustomSetter;
 @end
 
 @implementation GRDocumentMustacheContext
@@ -54,6 +55,7 @@ struct GRPoint {
 @dynamic nice;
 @dynamic propertyWithCustomGetter;
 @dynamic propertyWithCustomSetter;
+@dynamic pointPropertyWithCustomSetter;
 
 - (void)setNilValueForKey:(NSString *)key
 {
@@ -395,10 +397,14 @@ struct GRPoint {
     
     STAssertTrue([context respondsToSelector:@selector(age)], @"");
     STAssertTrue([context respondsToSelector:@selector(setAge:)], @"");
+    STAssertTrue([context respondsToSelector:@selector(point)], @"");
+    STAssertTrue([context respondsToSelector:@selector(setPoint:)], @"");
     STAssertTrue([context respondsToSelector:@selector(propertyWithCustomGetter)], @"");
     STAssertTrue([context respondsToSelector:@selector(getPropertyWithCustomGetter)], @"");
     STAssertTrue(![context respondsToSelector:@selector(setPropertyWithCustomSetter:)], @"");
     STAssertTrue([context respondsToSelector:@selector(updatePropertyWithCustomSetter:)], @"");
+    STAssertTrue(![context respondsToSelector:@selector(setPointPropertyWithCustomSetter:)], @"");
+    STAssertTrue([context respondsToSelector:@selector(updatePointPropertyWithCustomSetter:)], @"");
     
     [string appendString:@"bar"];
     STAssertEqualObjects(context.string, @"foo", @"");    // the copy of string has not been mutated
