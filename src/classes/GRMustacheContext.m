@@ -481,7 +481,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             
             extendedContext.contextParent = context;
             extendedContext.contextObject = ancestor.contextObject;
-            extendedContext.mutableContextObject = [ancestor.mutableContextObject mutableCopy];
+            extendedContext.mutableContextObject = [[ancestor.mutableContextObject mutableCopy] autorelease];
             extendedContext.protectedContextParent = _protectedContextParent;
             extendedContext.protectedContextObject = ancestor.protectedContextObject;
             extendedContext.hiddenContextParent = _hiddenContextParent;
@@ -660,6 +660,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             if (getter) {
                 mutableCustomContextKey = [NSString stringWithUTF8String:propertyName];
             }
+            free(propertyName);
         }
     }
     
