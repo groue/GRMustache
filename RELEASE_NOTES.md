@@ -3,11 +3,15 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.5.1
+
+Robustness of ViewModel classes.
+
 ## v6.5
 
 ### ViewModel classes
 
-ViewModel classes are havens for your template-specific keys. To be discovered in the [ViewModel Guide](Guides/view_model.md)
+ViewModel classes are havens for your template-specific keys. To be discovered in the [ViewModel Guide](Guides/view_model.md).
 
 
 ## v6.4.1

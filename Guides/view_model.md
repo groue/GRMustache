@@ -34,7 +34,7 @@ document.bodyColor = [UIColor redColor];
 GRMustacheContext Subclasses
 ----------------------------
 
-The Document class above is a GRMustacheContext subclass. As such, it can provide its own keys to templates, and also fetch values from the [rendering context stack](runtime.md#the-context-stack) (more on that later).
+The Document class above is a GRMustacheContext subclass. As such, it can define its own configuration API, and provide its own keys to templates:
 
 ```objc
 @interface Document : GRMustacheContext
@@ -53,63 +53,28 @@ The Document class above is a GRMustacheContext subclass. As such, it can provid
 @end
 ```
 
-### Read-Only Properties
+Note that the `bodyColor` property is declared `@dynamic`.
 
-Obviously, you write custom getters for read-only properties.
 
-From them, you can read other properties, and also values from the current context stack. For instance, consider the following template snippet:
+### Dynamic properties, Key-Value Coding, and the Context Stack
 
-    {{# user }}{{ age }}{{/ user }}
+Properties that you declare `@dynamic` have direct access to the [rendering context stack](runtime.md#the-context-stack). Their storage *is* the context stack.
 
-The user object has no `age` property. Instead, it has a `birthDate`. Well, the ViewModel can access the user's birth date through the `valueForKey:` method:
+Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[document valueForKey:@"name"]`.
+
+Your custom properties, such as `document.name`, return the very same value.
+
+After you have set a read/write property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
 
 ```objc
 @interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;
-@property (nonatomic, readonly) NSUInteger age;
+@property (nonatomic, strong) NSString *name;
 @end
 
 @implementation Document
-@dynamic user;
-
-- (NSInteger)age
-{
-    // When this method is invoked, the {{ age }} tag is being rendered.
-    //
-    // Since we are inside the {{# user }}...{{/ user }} section, the user
-    // object is at the top of the context stack. If we look for the
-    // `birthDate` key, we'll get the user's one:
-    
-    NSDate *birthDate = [self valueForKey:@"birthDate"];
-    return /* clever calculation based on birthDate */;
-}
-
+@dynamic name;
 @end
 
-GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-Document *document = [[Document alloc] init];
-document.user = ...;
-[template renderObject:document error:NULL];
-```
-
-
-### Read/Write Properties and Key-Value Coding
-
-Read/write properties have constraints:
-
-- They must be declared @dynamic, and you must not provide custom getters and setters. You do not have to release them in your dealloc method.
-
-- Non-retained (weak, assign, unsafe_unretained) properties are not supported at the moment.
-
-Those properties give direct access to the [rendering context stack](runtime.md#the-context-stack). Their storage *is* the context stack. This is why GRMustache provides custom accessors for them, and doesn't rely on ivars and synthesized accessors.
-
-Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[context valueForKey:@"name"]`.
-
-Your custom properties, such as `document.name`, return the same value as `[document valueForKey:@"name"]`, the very value that would be rendered for `{{ name }}`. This allows you to reliably implement properties that depend on other values from the context stack (such as the `age` property above).
-
-After you have set a custom property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
-
-```objc
 Document *document = [[Document alloc] init];
 document.name = @"DefaultName";
 document.name; // Returns @"DefaultName"
@@ -122,5 +87,46 @@ document.name; // Returns @"DefaultName" (inherited)
 document = [document contextByAddingObject:[User userWithName:@"Arthur"]];
 document.name; // Returns @"Arthur" (@"DefaultName" has been overriden)
 ```
+
+
+### Round Up
+
+For instance, consider the following template snippet, and ViewModel:
+
+    ...
+    {{# user }}{{ age }}{{/ user }}                         // (1) (2)
+    ...
+
+```objc
+@interface Document : GRMustacheContext
+@property (nonatomic, strong) User *user;                   // (1)
+@end
+
+@implementation Document
+@dynamic user;                                              // (1)
+
+- (NSInteger)age                                            // (2)
+{
+    // When this method is invoked, the {{ age }} tag is being rendered.
+    //
+    // Since we are inside the {{# user }}...{{/ user }} section, the user
+    // object is at the top of the context stack. If we look for the
+    // `birthDate` key, we'll get the user's one:
+    
+    NSDate *birthDate = [self valueForKey:@"birthDate"];    // (2)
+    return /* clever calculation based on birthDate */;
+}
+
+@end
+
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+Document *document = [[Document alloc] init];
+document.user = ...;                                         // (1)
+[template renderObject:document error:NULL];
+```
+
+1. The `user` property matches the name of the `{{# user }}` section. Thanks to it @dynamic declaration, the user given to the document object is transfered to the template, accross the context stack.
+
+2. The `age` method matches the name of the `{{ age }}` tag. It reads the birth date that is available in the current section through the `valueForKey:` method.
 
 [up](../../../../GRMustache#documentation), [next](configuration.md)
