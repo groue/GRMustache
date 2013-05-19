@@ -74,6 +74,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
     id<GRMustacheTagDelegate> _tagDelegate;
     GRMustacheContext *_templateOverrideParent;
     GRMustacheTemplateOverride *_templateOverride;
+    NSString *_nonManagedKey;
 }
 
 /**

@@ -710,13 +710,14 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
         // We're about to look into mutableContextObject.
         //
-        // This dictionary is filled via setValue:forKey:, and via property setters.
+        // This dictionary is filled via setValue:forKey:, and via managed
+        // property setters.
         //
         // Managed property setters use property names as the key.
         // So we have to translate custom getters to the property name.
         //
-        // Regular KVC also supports `isFoo` key for `foo` property: we also have to
-        // translate `isFoo` to `foo`.
+        // Regular KVC also supports `isFoo` key for `foo` property: we also
+        // have to translate `isFoo` to `foo`.
         //
         // mutableContextKey holds that "canonical" key.
         
@@ -745,21 +746,20 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         
     }
 
-    // Support for managed properties is reserved to GRMustacheContext subclasses
-    if (object_getClass(self) != [GRMustacheContext class]) {
+    // Support for non-managed properties is reserved to GRMustacheContext subclasses
+    if ((object_getClass(self) != [GRMustacheContext class]) && !isManagedPropertyKVCKey([self class], key)) {
         
-        // Make sure we do not invoke NSObject's implementation of valueForKey:
-        // for our managed properties.
+        // Invoke NSObject's implementation of valueForKey:
+        // And make sure we do not enter an infinite loop through valueForUndefinedKey:
+        id previousNonManagedKey = _nonManagedKey;
+        _nonManagedKey = key;
+        id value = [super valueForKey:key];
+        _nonManagedKey = previousNonManagedKey;
         
-        if (!isManagedPropertyKVCKey([self class], key)) {
-            
-            // Invoke NSObject's implementation of valueForKey:
-            
-            if (protected != NULL) {
-                *protected = NO;
-            }
-            return [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
+        if (protected != NULL) {
+            *protected = NO;
         }
+        return value;
     }
     
     return nil;
@@ -783,8 +783,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return [self privateInit];
 }
 
-- (id)valueForKey:(NSString *)key
+- (id)valueForUndefinedKey:(NSString *)key
 {
+    // _nonManagedKey may have been set in contextValue:forKey:
+    if ([_nonManagedKey isEqualToString:key]) {
+        return nil;
+    }
     return [self contextValueForKey:key protected:NULL];
 }
 
@@ -792,7 +796,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 {
     // Support for managed properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) == [GRMustacheContext class]) {
-        [self setValue:value forUndefinedKey:key];
+        [super setValue:value forKey:key];
         return;
     }
     
@@ -802,12 +806,12 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     GRMustachePropertyStoragePolicy storagePolicy;
     GRMustachePropertyType type;
     if (!hasManagedPropertyAccessor([self class], [key UTF8String], NO, &getter, &readOnly, &storagePolicy, NULL, NULL, &type)) {
-        [self setValue:value forUndefinedKey:key];
+        [super setValue:value forKey:key];
         return;
     }
     
     if (!getter || readOnly) {
-        [self setValue:value forUndefinedKey:key];
+        [super setValue:value forKey:key];
         return;
     }
     
@@ -963,7 +967,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                     [NSException raise:NSInternalInconsistencyException format:@"Missing synthesized getter for property %s", propertyName];
                     break;
                 default: {
-                    id value = [self valueForKey:[NSString stringWithUTF8String:propertyName]];
+                    id value = [self contextValueForKey:[NSString stringWithUTF8String:propertyName] protected:NULL];
                     if (![value isKindOfClass:[NSValue class]]) return;
                     [(NSValue *)value getValue:bytes];
                 } break;
@@ -1693,76 +1697,76 @@ static void GRMustacheContextManagedPropertyClassSetter(GRMustacheContext *self,
 
 static char GRMustacheContextManagedPropertyCharGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] charValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] charValue];
 }
 
 static int GRMustacheContextManagedPropertyIntGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] intValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] intValue];
 }
 
 static short GRMustacheContextManagedPropertyShortGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] shortValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] shortValue];
 }
 
 static long GRMustacheContextManagedPropertyLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] longValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longValue];
 }
 
 static long long GRMustacheContextManagedPropertyLongLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] longLongValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longLongValue];
 }
 
 static unsigned char GRMustacheContextManagedPropertyUnsignedCharGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] unsignedCharValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedCharValue];
 }
 
 static unsigned int GRMustacheContextManagedPropertyUnsignedIntGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] unsignedIntValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedIntValue];
 }
 
 static unsigned short GRMustacheContextManagedPropertyUnsignedShortGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] unsignedShortValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedShortValue];
 }
 
 static unsigned long GRMustacheContextManagedPropertyUnsignedLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] unsignedLongValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongValue];
 }
 
 static unsigned long long GRMustacheContextManagedPropertyUnsignedLongLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] unsignedLongLongValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongLongValue];
 }
 
 static float GRMustacheContextManagedPropertyFloatGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] floatValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] floatValue];
 }
 
 static double GRMustacheContextManagedPropertyDoubleGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] doubleValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] doubleValue];
 }
 
 static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self valueForKey:managedPropertyNameForSelector([self class], _cmd)] boolValue];
+    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] boolValue];
 }
 
 static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [self valueForKey:managedPropertyNameForSelector([self class], _cmd)];
+    return [self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
 }
 
 static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [self valueForKey:managedPropertyNameForSelector([self class], _cmd)];
+    return [self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
 }
 
