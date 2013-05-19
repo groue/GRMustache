@@ -756,7 +756,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         GRMustachePropertyStorage storage;
         if (hasPropertyAccessor([self class], keyCString, NO, &getter, &storage, NULL, NULL)) {
             if (getter && storage == GRMustachePropertyStorageCopy) {
-                value = [value copy];
+                value = [[value copy] autorelease];
             }
         }
     }
