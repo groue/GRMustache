@@ -27,6 +27,8 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateOverride_private.h"
+#import "GRMustacheParser_private.h"
+#import "GRMustacheExpression_private.h"
 #import "JRSwizzle.h"
 
 
@@ -180,23 +182,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 @synthesize tagDelegate=_tagDelegate;
 @synthesize templateOverrideParent=_templateOverrideParent;
 @synthesize templateOverride=_templateOverride;
-
-- (void)dealloc
-{
-    [_depthsForAncestors release];
-    [_contextParent release];
-    [_contextObject release];
-    [_mutableContextObject release];
-    [_protectedContextParent release];
-    [_protectedContextObject release];
-    [_hiddenContextParent release];
-    [_hiddenContextObject release];
-    [_tagDelegateParent release];
-    [_tagDelegate release];
-    [_templateOverrideParent release];
-    [_templateOverride release];
-    [super dealloc];
-}
 
 + (void)initialize
 {
@@ -775,8 +760,49 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return component;
 }
 
+- (id)valueForExpression:(NSString *)string error:(NSError **)error
+{
+    id value = nil;
+    @autoreleasepool {
+        GRMustacheExpression *expression = [GRMustacheParser parseExpression:string invalid:NULL];
+        if (expression) {
+            if ([expression hasValue:&value withContext:self protected:NULL error:error]) {
+                [value retain]; // escape autorelease pool
+            }
+        } else {
+            // Invalid or empty expression.
+            // Since we can't return any value, return an error.
+            if (error != NULL) {
+                *error = [NSError errorWithDomain:GRMustacheErrorDomain
+                                             code:GRMustacheErrorCodeParseError
+                                         userInfo:[NSDictionary dictionaryWithObject:@"Invalid expression" forKey:NSLocalizedDescriptionKey]];
+            }
+        }
+        if (!value && error != NULL) [*error retain];   // escape autorelease pool
+    }
+    if (!value && error != NULL) [*error autorelease];
+    return [value autorelease];
+}
+
 
 #pragma mark - NSObject
+
+- (void)dealloc
+{
+    [_depthsForAncestors release];
+    [_contextParent release];
+    [_contextObject release];
+    [_mutableContextObject release];
+    [_protectedContextParent release];
+    [_protectedContextObject release];
+    [_hiddenContextParent release];
+    [_hiddenContextObject release];
+    [_tagDelegateParent release];
+    [_tagDelegate release];
+    [_templateOverrideParent release];
+    [_templateOverride release];
+    [super dealloc];
+}
 
 - (instancetype)init
 {

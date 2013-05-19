@@ -126,6 +126,9 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 // Documented in GRMustacheContext.h
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheContext.h
+- (id)valueForExpression:(NSString *)expressionString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
@@ -199,4 +202,5 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @param block  The block to apply to tag delegates.
  */
 - (void)enumerateTagDelegatesUsingBlock:(void(^)(id<GRMustacheTagDelegate> tagDelegate))block GRMUSTACHE_API_INTERNAL;
+
 @end

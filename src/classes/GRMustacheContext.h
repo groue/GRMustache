@@ -156,9 +156,18 @@
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * TODO
+ *
+ * @since v6.6
+ */
+- (id)valueForExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
+
+/**
  * Returns the value stored in the context stack.
+ *
+ * @see valueForExpressionString:
  *
  * @since v6.5
  */
-- (id)valueForKey:(NSString *)key;
+- (id)valueForUndefinedKey:(NSString *)key;
 @end
