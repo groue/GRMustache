@@ -330,26 +330,42 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         objc_property_t *properties = class_copyPropertyList(self, &count);
         for (unsigned int i=0; i<count; ++i) {
             const char *attrs = property_getAttributes(properties[i]);
-            if (!strstr(attrs, ",R")) {
+            if (!strstr(attrs, ",R"))
+            {
                 // Property is read/write
                 
-                if (!strstr(attrs, ",D")) {
+                if (!strstr(attrs, ",D"))
+                {
                     // Property is not dynamic.
-                    [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] The property `%@` of class %@ is required to be @dynamic.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
+                    //
+                    // Log and exit, because exceptions raised from initialize method do not stop the program.
+                    NSLog(@"[GRMustache] The property `%@` of class %@ is required to be @dynamic.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
+                    exit(1);
                 }
                 
-                if (strstr(attrs, ",W")) {
+                if (strstr(attrs, ",W"))
+                {
                     // Property has `weak` storage.
+                    //
                     // We store values in mutableContextObject, an NSDictionary that retain its values.
                     // Don't lie: support for weak properties is not done yet.
-                    [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] Support for weak property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
-                } else if (!strstr(attrs, ",&") && !strstr(attrs, ",C")) {
+                    //
+                    // Log and exit, because exceptions raised from initialize method do not stop the program.
+                    NSLog(@"[GRMustache] Support for weak property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
+                    exit(1);
+                }
+                else if (!strstr(attrs, ",&") && !strstr(attrs, ",C"))
+                {
                     // Property has `assign` storage.
+                    
                     if (strstr(attrs, "T@") == attrs) {
                         // Property has `assign` storage for an id object
                         // We store values in mutableContextObject, an NSDictionary that retain its values.
                         // Don't lie: support for weak properties is not done yet.
-                        [NSException raise:NSInternalInconsistencyException format:@"[GRMustache] Support for nonretained property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self];
+                        //
+                        // Log and exit, because exceptions raised from initialize method do not stop the program.
+                        NSLog(@"[GRMustache] Support for nonretained property `%@` of class %@ is not implemented.", [NSString stringWithUTF8String:property_getName(properties[i])], self);
+                        exit(1);
                     }
                 }
             }
