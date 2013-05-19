@@ -127,7 +127,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (id)valueForExpression:(NSString *)expressionString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (id)valueForMustacheExpression:(NSString *)expressionString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the

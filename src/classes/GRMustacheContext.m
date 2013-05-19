@@ -760,7 +760,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return component;
 }
 
-- (id)valueForExpression:(NSString *)string error:(NSError **)error
+- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
 {
     id value = nil;
     @autoreleasepool {

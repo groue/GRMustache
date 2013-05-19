@@ -160,12 +160,12 @@
  *
  * @since v6.6
  */
-- (id)valueForExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
+- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
 
 /**
  * Returns the value stored in the context stack.
  *
- * @see valueForExpressionString:
+ * @see valueForMustacheExpression:error:
  *
  * @since v6.5
  */
