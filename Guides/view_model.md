@@ -56,11 +56,11 @@ The Document class above is a GRMustacheContext subclass. As such, it can define
 Note that the `bodyColor` property is declared `@dynamic`.
 
 
-### Dynamic properties, Key-Value Coding, and the Context Stack
+### Dynamic Properties, Key-Value Coding, and the Context Stack
 
 GRMustacheContext synthesize accessors for the properties that you declare `@dynamic`.
 
-Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). Their storage *is* the context stack.
+Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). The storage of those properties *is* the context stack.
 
 Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[document valueForKey:@"name"]`.
 
