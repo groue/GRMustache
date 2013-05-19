@@ -55,6 +55,11 @@ struct GRPoint {
 @dynamic propertyWithCustomGetter;
 @dynamic propertyWithCustomSetter;
 
+- (void)setNilValueForKey:(NSString *)key
+{
+    [self setValue:[NSNumber numberWithInt:0] forKey:key];
+}
+
 - (NSInteger)succ
 {
     return [[self valueForKey:@"number"] integerValue] + 1;
@@ -358,6 +363,16 @@ struct GRPoint {
     }
 }
 
+- (void)testUndefinedContextKeys
+{
+    GRMustacheContext *context = [GRMustacheContext context];
+    STAssertThrows([context setValue:@"bar" forKey:@"foo"], @"");
+    
+    GRDocumentMustacheContext *document = [GRDocumentMustacheContext context];
+    STAssertThrows([document setValue:@"bar" forKey:@"foo"], @"");
+    STAssertThrows([document setValue:@"bar" forKey:@"currentInteger"], @"");
+}
+
 - (void)testCustomObjectKeys
 {
     char *str = "string";
@@ -389,6 +404,21 @@ struct GRPoint {
     STAssertEqualObjects(context.string, @"foo", @"");    // the copy of string has not been mutated
     
     {
+        // test valid objects
+        context.age = 1;
+        [context setValue:@"foo" forKey:@"age"];
+        STAssertEquals(context.age, (NSInteger)1, @"");
+        [context setValue:nil forKey:@"age"];       // test setNilValueForKey
+        STAssertEquals(context.age, (NSInteger)0, @"");
+        context.age = 1;
+        STAssertEquals(context.age, (NSInteger)1, @"");
+        [context setNilValueForKey:@"age"];
+        STAssertEquals(context.age, 0, @"");
+        [context setValue:@1 forKey:@"age"];
+        STAssertEquals(context.age, (NSInteger)1, @"");
+    }
+    
+    {
         context = [context contextByAddingProtectedObject:@{ @"currentInteger" : @42 }];
 
         // Test propagation with getters
@@ -409,6 +439,8 @@ struct GRPoint {
         STAssertEqualObjects([context valueForKey:@"ageNumber"], @2, @"");
         STAssertEqualObjects([context valueForKey:@"nice"], @YES, @"");
         STAssertEqualObjects([context valueForKey:@"isNice"], @YES, @"");
+        STAssertEqualObjects([context valueForKey:@"propertyWithCustomGetter"], @5, @"");
+        STAssertEqualObjects([context valueForKey:@"getPropertyWithCustomGetter"], @5, @"");
         
         // Test modification
         context.age = 2;
