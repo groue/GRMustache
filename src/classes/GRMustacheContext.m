@@ -322,7 +322,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                             setterName[setterLength] = '\0';
                         } else {
                             size_t setterLength = strlen(propertyName) + 4;
-                            setterName = malloc(setterLength + 1);  // room for "setFoo:\O"
+                            setterName = malloc(setterLength + 1);  // room for "setFoo:\0"
                             strcpy(setterName+3, propertyName);
                             setterName[0] = 's';
                             setterName[1] = 'e';
@@ -734,6 +734,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
     // Support for custom properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) != [GRMustacheContext class]) {
+        // Invoke NSObject's valueForKey:
         id value = [GRMustacheContext valueForKey:key inSuper:&(struct objc_super){ self, [NSObject class] }];
         if (protected != NULL) {
             *protected = NO;
