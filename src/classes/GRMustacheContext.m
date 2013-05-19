@@ -60,10 +60,11 @@ static char *alternateNameForPropertyName(const char *propertyName)
     return altName;
 }
 
-typedef NS_OPTIONS(NSUInteger, GRMustachePropertyStorage) {
-    GRMustachePropertyStorageRetain = 1 << 0,
-    GRMustachePropertyStorageCopy = 1 << 1,
-    GRMustachePropertyStorageWeak = 1 << 2,
+typedef NS_ENUM(NSUInteger, GRMustachePropertyStorage) {
+    GRMustachePropertyStorageAssign,
+    GRMustachePropertyStorageRetain,
+    GRMustachePropertyStorageCopy,
+    GRMustachePropertyStorageWeak,
 };
 
 // Returns YES if the selectorName is a property accessor.
@@ -118,7 +119,7 @@ BOOL hasPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlt
                         } else if (strstr(attrs, ",W")) {
                             *storage = GRMustachePropertyStorageWeak;
                         } else {
-                            *storage = 0;
+                            *storage = GRMustachePropertyStorageAssign;
                         }
                     }
                     if (propertyName) {
