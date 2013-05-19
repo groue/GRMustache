@@ -156,14 +156,23 @@
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * TODO
+ * Evaluate the expression in the receiver context.
+ *
+ * This method can evaluate complex expressions such as `user.name` or
+ * `uppercase(user.name)`.
  *
  * @since v6.6
  */
 - (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
 
 /**
- * Returns the value stored in the context stack.
+ * This method is invoked when the default search pattern for valueForKey:
+ * fails (see -[NSObject valueForKey:] documentation).
+ *
+ * It returns the value stored in the context stack for the given key.
+ *
+ * If you want the value for an full expression such as `user.name` or
+ * `uppercase(user.name)`, use the valueForMustacheExpression:error: method.
  *
  * @see valueForMustacheExpression:error:
  *
