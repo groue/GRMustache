@@ -137,7 +137,7 @@ Key-Value Coding vs. Mustache Expressions
 
 When the `valueForKey:` method is able to evaluate a simple key, you may need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`.
 
-Mustache expressions are not KVC key paths: the `valueForKeyPath:` won't help here.
+Mustache expressions are not KVC key paths: the `valueForKeyPath:` method won't help here.
 
 Instead, use `valueForMustacheExpression:error:`:
 
