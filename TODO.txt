@@ -1,5 +1,7 @@
 TODO:
-GRMustacheContext subclass:
+GRMustacheContext custom properties:
+- performances
+- weak/assign/unsafe_unretained storage
 
 Nice to have:
 - document migration path from all previous versions to latest version
