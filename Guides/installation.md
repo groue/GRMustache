@@ -6,7 +6,7 @@ Installation
 Option 1: CocoaPods
 -------------------
 
-Append `pod 'GRMustache', '~> 6.5'` to your [Podfile](https://github.com/CocoaPods/CocoaPods).
+Append `pod 'GRMustache', '~> 6.6'` to your [Podfile](https://github.com/CocoaPods/CocoaPods).
 
 
 Option 2: Static Library
@@ -34,7 +34,7 @@ You may also embed the raw GRMustache sources in your project:
 
     $ git clone https://github.com/groue/GRMustache.git
     $ cd GRMustache
-    $ git checkout v6.5.1  # checkout the latest stable release
+    $ git checkout v6.6.0  # checkout the latest stable release
     $ git submodule update --init src/vendor/groue/jrswizzle
 
 Add all files of `src/classes` plus `src/vendor/groue/jrswizzle/JRSwizzle.*` to your project.

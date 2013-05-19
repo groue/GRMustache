@@ -31,8 +31,8 @@ document.bodyColor = [UIColor redColor];
 ```
 
 
-GRMustacheContext Subclasses
-----------------------------
+Dynamic Properties of GRMustacheContext Subclasses
+--------------------------------------------------
 
 The Document class above is a GRMustacheContext subclass. As such, it can define its own configuration API, and provide its own keys to templates:
 
@@ -91,7 +91,7 @@ document.name; // Returns @"Arthur" (@"DefaultName" has been overriden)
 ```
 
 
-### Round Up
+### Example
 
 For instance, consider the following template snippet, and ViewModel:
 
@@ -130,5 +130,40 @@ document.user = ...;                                         // (1)
 1. The `user` property matches the name of the `{{# user }}` section. Thanks to it @dynamic declaration, the user given to the document object is transfered to the template, accross the context stack.
 
 2. The `age` method matches the name of the `{{ age }}` tag. It reads the birth date that is available in the current section through the `valueForKey:` method.
+
+
+Key-Value Coding vs. Mustache Expressions
+-----------------------------------------
+
+When the `valueForKey:` method is able to evaluate a simple key, you may need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`.
+
+Mustache expressions are not KVC key paths: the `valueForKeyPath:` won't help here.
+
+Instead, use `valueForMustacheExpression:error:`:
+
+```objc
+GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
+context = [context contextByAddingObject:[User userWithName:@"Benoît"]];
+
+// Returns BENOÎT
+id value = [context valueForMustacheExpression:@"uppercase(name)" error:NULL];
+```
+
+Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
+
+> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
+
+Possible errors are parse errors (for invalid expressions), or filter errors (missing or invalid filter).
+
+
+Compatibility with other Mustache implementations
+-------------------------------------------------
+
+[Many Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) foster the ViewModel concept, and encourage you to write your custom subclasses.
+
+However, this topic is not mentioned in the [Mustache specification](https://github.com/mustache/spec).
+
+**If your goal is to design ViewModels that remain compatible with other Mustache implementations, check their documentation.**
+
 
 [up](../../../../GRMustache#documentation), [next](configuration.md)

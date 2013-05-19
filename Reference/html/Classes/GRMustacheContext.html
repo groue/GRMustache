@@ -12,7 +12,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.5 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.6 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -61,7 +61,9 @@
 	
 	<option value="//api/name/contextByAddingTagDelegate:">&nbsp;&nbsp;&nbsp;&nbsp;- contextByAddingTagDelegate:</option>
 	
-	<option value="//api/name/valueForKey:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForKey:</option>
+	<option value="//api/name/valueForMustacheExpression:error:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForMustacheExpression:error:</option>
+	
+	<option value="//api/name/valueForUndefinedKey:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForUndefinedKey:</option>
 	
 	
 	
@@ -113,7 +115,9 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextByAddingTagDelegate:">contextByAddingTagDelegate:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForKey:">valueForKey:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForMustacheExpression:error:">valueForMustacheExpression:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForUndefinedKey:">valueForUndefinedKey:</a></span></li>
 	
 </ul></li>
 
@@ -239,8 +243,16 @@ given object added at the top of the tag delegate stack.</p></span>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/valueForKey:">&ndash;&nbsp;valueForKey:</a></code>
-		<span class="tooltip"><p>Returns the value stored in the <a href="#//api/name/context">context</a> stack.</p></span>
+		<code><a href="#//api/name/valueForMustacheExpression:error:">&ndash;&nbsp;valueForMustacheExpression:error:</a></code>
+		<span class="tooltip"><p>Evaluate the expression in the receiver <a href="#//api/name/context">context</a>.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/valueForUndefinedKey:">&ndash;&nbsp;valueForUndefinedKey:</a></code>
+		<span class="tooltip"><p>This method is invoked when the default search pattern for valueForKey:
+fails (see [NSObject valueForKey:] documentation).</p></span>
 	</span>
 	
 	
@@ -676,18 +688,18 @@ given object added at the top of the tag delegate stack.</p>
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/valueForKey:" title="valueForKey:"></a>
-	<h3 class="subsubtitle method-title">valueForKey:</h3>
+	<a name="//api/name/valueForMustacheExpression:error:" title="valueForMustacheExpression:error:"></a>
+	<h3 class="subsubtitle method-title">valueForMustacheExpression:error:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns the value stored in the <a href="#//api/name/context">context</a> stack.</p>
+		<p>Evaluate the expression in the receiver <a href="#//api/name/context">context</a>.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (id)valueForKey:(NSString *)<em>key</em></code></div>
+	<div class="method-subsection method-declaration"><code>- (id)valueForMustacheExpression:(NSString *)<em>expression</em> error:(NSError **)<em>error</em></code></div>
 
     
 	
@@ -702,9 +714,74 @@ given object added at the top of the tag delegate stack.</p>
 	
 	
 	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This method can evaluate complex expressions such as <code>user.name</code> or
+<code>uppercase(user.name)</code>.</p>
+	</div>
 	
 	
 	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/valueForUndefinedKey:" title="valueForUndefinedKey:"></a>
+	<h3 class="subsubtitle method-title">valueForUndefinedKey:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>This method is invoked when the default search pattern for valueForKey:
+fails (see [NSObject valueForKey:] documentation).</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)valueForUndefinedKey:(NSString *)<em>key</em></code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>It returns the value stored in the <a href="#//api/name/context">context</a> stack for the given key.</p>
+
+<p>If you want the value for an full expression such as <code>user.name</code> or
+<code>uppercase(user.name)</code>, use the <a href="#//api/name/valueForMustacheExpression:error:">valueForMustacheExpression:error:</a> method.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/valueForMustacheExpression:error:">&ndash; valueForMustacheExpression:error:</a></p></code></li>
+			
+		</ul>
+	</div>
 	
 	
 	
@@ -729,7 +806,7 @@ given object added at the top of the tag delegate stack.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-05-18)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-05-19)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
