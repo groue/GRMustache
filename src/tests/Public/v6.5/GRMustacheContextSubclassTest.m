@@ -521,7 +521,7 @@ struct GRPoint {
     context2.point = (struct GRPoint){ 2, 3 };
     
     GRDocumentMustacheContext *context3 = [GRDocumentMustacheContext context];
-    context2.string = @"foo";
+    context3.string = @"foo";
     
     GRDocumentMustacheContext *context = [[context1 contextByAddingObject:context2] contextByAddingObject:context3];
     STAssertEquals(context.age, (NSInteger)1, @"");
