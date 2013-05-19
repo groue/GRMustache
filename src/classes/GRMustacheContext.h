@@ -38,6 +38,7 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
+    NSDictionary *_depthsForAncestors;
     GRMustacheContext *_contextParent;
     NSMutableDictionary *_mutableContextObject;
     id _contextObject;

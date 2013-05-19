@@ -224,6 +224,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 @interface GRMustacheContext()
 
+// A dictionary where keys are ancestor context objects, and values depth
+// numbers: self has depth 0, parent has depth 1, grand-parent has depth 2, etc.
+@property (nonatomic, readonly) NSDictionary *depthsForAncestors;
+
 // Context stack:
 // If _contextObject is nil, the stack is empty.
 // If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
@@ -282,11 +286,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
  */
 + (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
 
-// Return a dictionary where keys are NSValue wrapping ancestor context objects,
-// and values are depth numbers: self has depth 0, parent has depth 1,
-// grand-parent has depth 2, etc.
-- (NSDictionary *)depthsForAncestors;
-
 // Return an array of ancestor contexts.
 // First context in the array is the root context.
 // Last context in the array is self.
@@ -309,6 +308,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (void)dealloc
 {
+    [_depthsForAncestors release];
     [_contextParent release];
     [_contextObject release];
     [_mutableContextObject release];
@@ -1134,31 +1134,37 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (NSDictionary *)depthsForAncestors
 {
-    NSMutableDictionary *depthsForAncestors = [NSMutableDictionary dictionary];
-    [depthsForAncestors setObject:[NSNumber numberWithUnsignedInteger:0] forKey:[NSValue valueWithNonretainedObject:self]];
+    if (_depthsForAncestors == nil) {
+        // Don't use NSMutableDictionary, which has copy semantics on keys.
+        // Instead, use CFDictionaryCreateMutable that does not manage keys, but manages values (depth numbers)
+        CFMutableDictionaryRef depthsForAncestors = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+        
+        // self has depth 0
+        CFDictionarySetValue(depthsForAncestors, self, [NSNumber numberWithUnsignedInteger:0]);
+        
+        void (^fill)(id key, id obj, BOOL *stop) = ^(GRMustacheContext *ancestor, NSNumber *depth, BOOL *stop) {
+            NSUInteger currentDepth = [(NSNumber *)CFDictionaryGetValue(depthsForAncestors, ancestor) unsignedIntegerValue];
+            if (currentDepth < [depth unsignedIntegerValue] + 1) {
+                CFDictionarySetValue(depthsForAncestors, ancestor, [NSNumber numberWithUnsignedInteger:[depth unsignedIntegerValue] + 1]);
+            }
+        };
+        [[_contextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        [[_protectedContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        [[_hiddenContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        [[_tagDelegateParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        [[_templateOverrideParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        
+        _depthsForAncestors = (NSDictionary *)depthsForAncestors;
+    }
     
-    void (^fill)(id key, id obj, BOOL *stop) = ^(NSValue *ancestorValue, NSNumber *depth, BOOL *stop) {
-        NSUInteger currentDepth = [[depthsForAncestors objectForKey:ancestorValue] unsignedIntegerValue];
-        if (currentDepth < [depth unsignedIntegerValue] + 1) {
-            [depthsForAncestors setObject:[NSNumber numberWithUnsignedInteger:[depth unsignedIntegerValue] + 1] forKey:ancestorValue];
-        }
-    };
-    [[_contextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-    [[_protectedContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-    [[_hiddenContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-    [[_tagDelegateParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-    [[_templateOverrideParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-    
-    return depthsForAncestors;
+    return [[_depthsForAncestors retain] autorelease];
 }
 
 - (NSArray *)ancestors
 {
-    NSDictionary *depthsForAncestors = [self depthsForAncestors];
-    NSArray *ancestorValues = [depthsForAncestors keysSortedByValueUsingComparator:^NSComparisonResult(NSNumber *depth1, NSNumber *depth2) {
+    return [[self depthsForAncestors] keysSortedByValueUsingComparator:^NSComparisonResult(NSNumber *depth1, NSNumber *depth2) {
         return -[depth1 compare:depth2];
     }];
-    return [ancestorValues valueForKey:@"nonretainedObjectValue"];
 }
 
 #pragma mark - NSUndefinedKeyException prevention
