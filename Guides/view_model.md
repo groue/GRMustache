@@ -146,6 +146,8 @@ context = [context contextByAddingObject:[User userWithName:@"Benoît"]];
 id value = [context valueForMustacheExpression:@"uppercase(name)" error:NULL];
 ```
 
+(The `uppercase` filter is part of the [Standard Library](standard_library.md)).
+
 Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
 
 > Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
