@@ -651,7 +651,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return nil;
 }
 
-- (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected
+- (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected
 {
     if (_protectedContextObject) {
         for (GRMustacheContext *context = self; context; context = context.protectedContextParent) {
@@ -786,7 +786,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (id)valueForMustacheKey:(NSString *)key
 {
-    return [self contextValueForKey:key protected:NULL];
+    return [self valueForMustacheKey:key protected:NULL];
 }
 
 
@@ -833,7 +833,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return [super valueForUndefinedKey:key];
     }
 
-    return [self contextValueForKey:key protected:NULL];
+    return [self valueForMustacheKey:key protected:NULL];
 }
 
 - (void)setValue:(id)value forKey:(NSString *)key
@@ -1011,7 +1011,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                     [NSException raise:NSInternalInconsistencyException format:@"Missing synthesized getter for property %s", propertyName];
                     break;
                 default: {
-                    id value = [self contextValueForKey:[NSString stringWithUTF8String:propertyName] protected:NULL];
+                    id value = [self valueForMustacheKey:[NSString stringWithUTF8String:propertyName] protected:NULL];
                     if (![value isKindOfClass:[NSValue class]]) return;
                     [(NSValue *)value getValue:bytes];
                 } break;
@@ -1741,76 +1741,76 @@ static void GRMustacheContextManagedPropertyClassSetter(GRMustacheContext *self,
 
 static char GRMustacheContextManagedPropertyCharGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] charValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] charValue];
 }
 
 static int GRMustacheContextManagedPropertyIntGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] intValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] intValue];
 }
 
 static short GRMustacheContextManagedPropertyShortGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] shortValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] shortValue];
 }
 
 static long GRMustacheContextManagedPropertyLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longValue];
 }
 
 static long long GRMustacheContextManagedPropertyLongLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longLongValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] longLongValue];
 }
 
 static unsigned char GRMustacheContextManagedPropertyUnsignedCharGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedCharValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedCharValue];
 }
 
 static unsigned int GRMustacheContextManagedPropertyUnsignedIntGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedIntValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedIntValue];
 }
 
 static unsigned short GRMustacheContextManagedPropertyUnsignedShortGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedShortValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedShortValue];
 }
 
 static unsigned long GRMustacheContextManagedPropertyUnsignedLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongValue];
 }
 
 static unsigned long long GRMustacheContextManagedPropertyUnsignedLongLongGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongLongValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] unsignedLongLongValue];
 }
 
 static float GRMustacheContextManagedPropertyFloatGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] floatValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] floatValue];
 }
 
 static double GRMustacheContextManagedPropertyDoubleGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] doubleValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] doubleValue];
 }
 
 static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [[self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] boolValue];
+    return [[self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL] boolValue];
 }
 
 static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
+    return [self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
 }
 
 static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd)
 {
-    return [self contextValueForKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
+    return [self valueForMustacheKey:managedPropertyNameForSelector([self class], _cmd) protected:NULL];
 }
 

@@ -136,7 +136,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
  *
- * Hidden objects can not be queried by the contextValueForKey:protected:
+ * Hidden objects can not be queried by the valueForMustacheKey:protected:
  * method.
  *
  * For a full discussion of the interaction between the protected and the hidden
@@ -147,7 +147,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @return A GRMustacheContext object.
  *
- * @see [GRMustacheContext contextValueForKey:protected:]
+ * @see [GRMustacheContext valueForMustacheKey:protected:]
  */
 - (instancetype)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
 
@@ -176,7 +176,7 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @see -[GRMustacheIdentifierExpression hasValue:withContext:protected:error:]
  */
-- (id)contextValueForKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
+- (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns the top object of the receiver's context stack.

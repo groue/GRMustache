@@ -66,7 +66,7 @@
 - (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
     if (value != NULL) {
-        *value = [context contextValueForKey:_identifier protected:protected];
+        *value = [context valueForMustacheKey:_identifier protected:protected];
     }
     return YES;
 }

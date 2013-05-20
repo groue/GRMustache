@@ -152,7 +152,7 @@ struct GRPoint {
     STAssertEqualObjects(rendering, @"2", @"");
 }
 
-- (void)testMustacheContextValueForKeyUsesFullContextStack
+- (void)testValueForMustacheKeyUsesFullContextStack
 {
     // Behave just as the Ruby version:
     //
@@ -176,7 +176,7 @@ struct GRPoint {
     STAssertEqualObjects(rendering, @"2,3,2", @"");
 }
 
-- (void)testMustacheContextValueForKeyIsNotTriggeredByCompoundKeys
+- (void)testValueForMustacheKeyIsNotTriggeredByCompoundKeys
 {
     // Behave just as the Ruby version:
     //
@@ -200,7 +200,7 @@ struct GRPoint {
     STAssertEqualObjects(rendering, @"2,,3,,2", @"");
 }
 
-- (void)testMustacheContextValueForKeyIsNotTriggeredByDotPrefixedKeys
+- (void)testValueForMustacheKeyIsNotTriggeredByDotPrefixedKeys
 {
     // Ruby version does not support `.name` expressions
     
@@ -213,7 +213,7 @@ struct GRPoint {
     STAssertEqualObjects(rendering, @",", @"");
 }
 
-- (void)testMustacheContextValueForKeyIsOnlyUsedForMissingKeys
+- (void)testValueForMustacheKeyIsOnlyUsedForMissingKeys
 {
     // Behave just as the Ruby version:
     //
