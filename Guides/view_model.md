@@ -67,7 +67,7 @@ GRMustacheContext provides two methods for fetching values from the [context sta
 
 `valueForMustacheKey:` returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"name"]` returns the value that would be rendered by the `{{ name }}` tag. It looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved.
 
-You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)` with the `valueForMustacheExpression:error:` method.
+You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`. This is the job of the `valueForMustacheExpression:error:` method.
 
 For example:
 
