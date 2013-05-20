@@ -67,6 +67,8 @@ All methods defined by a ViewModel class are available for templates: `{{ name }
 
 However, ViewModels get overriden by other objects that can provide the matching key. For example, if a user has a name, `{{# user }}{{ name }}{{/ user }}` would render the user's name, and not the ViewModel's.
 
+Also, a compound expression like `{{ user.name }}` will never call the `name` method of the ViewModel. This expression always returns the name of the user. See the [Runtime Guide](runtime.md) for more information about the way GRMustache resolves identifiers and expressions.
+
 
 ### Peeking at the Context Stack
 
