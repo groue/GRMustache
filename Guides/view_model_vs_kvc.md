@@ -111,7 +111,8 @@ Document *innerContext = [document contextByAddingObject:document.user];
 // Direct access to the `name` method returns "DefaultName".
 innerContext.name;
 
-// "Dimitri", because `{{ name }}` would render the name of the user at the top of the context stack: Dimitri.
+// "Dimitri", because `{{ name }}` would render the name of the user at the top
+// of the context stack: Dimitri.
 [innerContext valueForKey:@"name"];
 ```
 
