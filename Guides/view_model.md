@@ -96,18 +96,18 @@ document.name; // Returns @"Arthur" (@"DefaultName" has been overriden)
 For instance, consider the following template snippet, and ViewModel:
 
     ...
-    {{# user }}{{ age }}{{/ user }}                         // (1) (2)
+    {{# user }}{{ age }}{{/ user }}                                // (1) (2)
     ...
 
 ```objc
 @interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;                   // (1)
+@property (nonatomic, strong) User *user;                          // (1)
 @end
 
 @implementation Document
-@dynamic user;                                              // (1)
+@dynamic user;                                                     // (1)
 
-- (NSInteger)age                                            // (2)
+- (NSInteger)age                                                   // (2)
 {
     // When this method is invoked, the {{ age }} tag is being rendered.
     //
@@ -123,7 +123,7 @@ For instance, consider the following template snippet, and ViewModel:
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 Document *document = [[Document alloc] init];
-document.user = ...;                                         // (1)
+document.user = ...;                                                // (1)
 [template renderObject:document error:NULL];
 ```
 
@@ -157,13 +157,15 @@ Possible errors are parse errors (for invalid expressions), or filter errors (mi
 Mustache Keys and Expressions vs. Key-Value Coding
 --------------------------------------------------
 
-The GRMustacheContext and your ViewModel subclasses generally do not change the semantics of Key-Value Coding methods such as `valueForKey:`, `valueForKeyPath:`, and `setValue:forKey:`.
+The GRMustacheContext and your ViewModel subclasses do not change the semantics of Key-Value Coding methods such as `valueForKey:`, `valueForKeyPath:`, and `setValue:forKey:`.
 
 In some cases those methods do not have the same result as `valueForMustacheKey:` and `valueForMustacheExpression:error:`. We'll see one below.
 
 **The rule of thumb** is simple: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
 
-Here is a ViewModel that exhibits the conflict between KVC and Mustache keys:
+### The difference between the context stack and KVC
+
+Here is a ViewModel that exhibits how Mustache and KVC may differ, and how GRMustache "does not change the semantics of Key-Value Coding".
 
 ```objc
 @interface Document : GRMustacheContext
@@ -179,7 +181,21 @@ Here is a ViewModel that exhibits the conflict between KVC and Mustache keys:
 @end
 ```
 
-The `name` method is available for templates:
+#### Difference 1: Behavior regarding missing keys
+
+An unknown key would have KVC methods raise exception, while Mustache accessors simply return nil:
+
+```objc
+Document *document = [[Document alloc] init];
+[document valueForMustacheKey:@"missing"];      // Returns nil
+[document valueForKey:@"missing"];              // Raises an exception
+```
+
+#### Difference 2: Behavior regarding keys defined by objects entering the context stack
+
+The exhibition of the second difference needs some setup. Please follow us:
+
+Known keys such as `name`, here made available by the `name` method, are available for templates:
 
 ```objc
 // Render a simple {{ name }} template
@@ -190,7 +206,9 @@ Document *document = [[Document alloc] init];
 NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-The `name` key may be overriden by objects entering the context stack. When an object in the context stack provides a Mustache key, the ViewModel methods are not invoked:
+So far, so good.
+
+Now, objects that enter the context stack override keys. That's the whole point of Mustache, after all:
 
 ```objc
 // Render {{# user }}{{ name }}{{/ user }}
@@ -202,7 +220,11 @@ document.user = [User userWithName:@"Cyrille"];
 NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-The context that renders the `{{ name }}` tag inside the `{{# user }}...{{/ user }}` section would have `[context valueForMustacheKey:@"name"]` return Cyrille. However, `[context valueForKey:@"name"]` would return DefaultName. This is what we mean by "not changing the semantics of Key-Value Coding".
+The rendering is "Cyrille", because the `name` key was provided by the user. The `name` method of the Document object has not been called.
+
+This means that `valueForMustacheKey:@"name"` would return "Cyrille", when `valueForKey:@"name"` would return "DefaultName".
+
+So, remember: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
 
 
 Compatibility with other Mustache implementations
