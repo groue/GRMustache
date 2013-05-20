@@ -61,9 +61,9 @@ GRMustacheContext synthesize accessors for the properties that you declare `@dyn
 
 Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). The storage of those properties *is* the context stack.
 
-Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[document valueForMustacheKey:@"name"]`.
+Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it returns `[document valueForMustacheKey:@"name"]`.
 
-Your custom properties, such as `document.name`, return the very same value.
+Your dynamic ViewModel properties, such as `document.name`, return the very same value.
 
 After you have set a read/write property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
 
