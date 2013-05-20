@@ -30,11 +30,7 @@ document.bodyColor = [UIColor redColor];
 [template renderObject:document error:NULL];
 ```
 
-
-ViewModels are Subclasses of GRMustacheContext
-----------------------------------------------
-
-The Document class above is a GRMustacheContext subclass. As such, it can define its own configuration API, and provide its own keys to templates:
+This Document class would be defined as below:
 
 ```objc
 @interface Document : GRMustacheContext
@@ -42,7 +38,7 @@ The Document class above is a GRMustacheContext subclass. As such, it can define
 @end
 
 @implementation Document
-@dynamic bodyColor;
+@dynamic bodyColor;     // more on that below
 
 - (NSString *)cssBodyColor
 {
@@ -52,111 +48,98 @@ The Document class above is a GRMustacheContext subclass. As such, it can define
 @end
 ```
 
-Note that the `bodyColor` property is declared `@dynamic`.
+
+ViewModels are Subclasses of GRMustacheContext
+----------------------------------------------
+
+The ViewModel Document class above is a GRMustacheContext subclass.
+
+As such:
+
+- All its methods are available to templates.
+- It can peek at the [context stack](runtime.md#the-context-stack), and compute values derived from other objects available to the template
+- It can define custom properties for injecting values into the templates, and reading from them.
 
 
-### Dynamic Properties and the Context Stack
+### Peeking at the Context Stack
+
+GRMustacheContext provides two methods for fetching values from the [context stack](runtime.md#the-context-stack): `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
+
+`valueForMustacheKey:` returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"name"]` returns the value that would be rendered by the `{{ name }}` tag. It looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved.
+
+You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)` with the `valueForMustacheExpression:error:` method.
+
+For example:
+
+```objc
+@interface Document : GRMustacheContext
+@end
+
+@implementation Document
+
+// {{ capitalizedName1 }} should render the capitalized version of the name
+// that would render for {{ name }}.
+- (NSString *)capitalizedName1
+{
+    return [[self valueForMustacheKey:@"name"] capitalizedString];
+}
+
+// {{ capitalizedName2 }} should render the capitalized version of the name
+// that would render for {{ name }}.
+- (NSString *)capitalizedName2
+{
+    return [self valueForMustacheExpression:@"uppercase(name)" error:NULL];
+}
+
+@end
+```
+
+(The `uppercase` filter is part of the [Standard Library](standard_library.md)).
+
+`valueForMustacheExpression:error:` may return parse errors (for invalid expressions), or filter errors (missing or invalid filter). Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
+
+> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
+
+See the [Runtime Guide](runtime.md) for more information about the way GRMustache resolves identifiers and expressions.
+
+
+### Dynamic Properties
 
 GRMustacheContext synthesize accessors for the properties that you declare `@dynamic`.
 
 Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). The storage of those properties *is* the context stack.
 
-Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it returns `[document valueForMustacheKey:@"name"]`.
+Your dynamic properties, such as `document.name`, return the value that should render for `{{ name }}`. They have the same value as `[document valueForMustacheKey:@"name"]`.
 
-Your dynamic ViewModel properties, such as `document.name`, return the very same value.
-
-After you have set a read/write property to some value, this value is inherited by derived contexts, and overriden as soon as an object that redefines this key enters the context stack:
+When you set the value of a read/write property, that value becomes available for `{{ name }}` tags in templates. This value is inherited by derived contexts as Mustache sections are rendered. It is overriden as soon as a section renders an object that redefines this key:
 
 ```objc
 @interface Document : GRMustacheContext
+@property (nonatomic, strong) User *user;
 @property (nonatomic, strong) NSString *name;
 @end
 
 @implementation Document
+@dynamic user;
 @dynamic name;
 @end
 
 Document *document = [[Document alloc] init];
+document.user = [User userWithName:@"Fulgence"];
 document.name = @"DefaultName";
-document.name; // Returns @"DefaultName"
 
-// A new context is derived when a section gets rendered:
-document = [document contextByAddingObject:@{ @"age": @39 }];
-document.name; // Returns @"DefaultName" (inherited)
+// Render {{ name }}, {{# user }}{{ name }}{{/ user }}
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ name }}, {{# user }}{{ name }}{{/ user }}" error:NULL];
 
-// A new context is again derived when another inner section gets rendered:
-document = [document contextByAddingObject:[User userWithName:@"Arthur"]];
-document.name; // Returns @"Arthur" (@"DefaultName" has been overriden)
-```
-
-
-### Example
-
-For instance, consider the following template snippet, and ViewModel:
-
-    ...
-    {{# user }}{{ age }}{{/ user }}                                // (1) (2)
-    ...
-
-```objc
-@interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;                          // (1)
-@end
-
-@implementation Document
-@dynamic user;                                                     // (1)
-
-- (NSInteger)age                                                   // (2)
-{
-    // When this method is invoked, the {{ age }} tag is being rendered.
-    //
-    // Since we are inside the {{# user }}...{{/ user }} section, the user
-    // object is at the top of the context stack. If we look for the
-    // `birthDate` key, we'll get the user's one:
-    
-    NSDate *birthDate = [self valueForMustacheKey:@"birthDate"];    // (2)
-    return /* clever calculation based on birthDate */;
-}
-
-@end
-
-GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-Document *document = [[Document alloc] init];
-document.user = ...;                                                // (1)
+// Returns "DefaultName, Fulgence"
 [template renderObject:document error:NULL];
 ```
 
-1. The `user` property matches the name of the `{{# user }}` section. Thanks to it @dynamic declaration, the user given to the document object is transfered to the template, accross the context stack.
-
-2. The `age` method matches the name of the `{{ age }}` tag. It reads the birth date that is available in the current section through the `valueForMustacheKey:` method.
+See how the user name sneaks in, as soon as the user enters the top of the context stack, inside the `{{# user }}...{{/ user }}` section.
 
 
-Mustache Expressions
---------------------
-
-When the `valueForMustacheKey:` method is able to evaluate a simple key, you may need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`.
-
-Use `valueForMustacheExpression:error:`:
-
-```objc
-GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
-context = [context contextByAddingObject:[User userWithName:@"Benoît"]];
-
-// Returns BENOÎT
-id value = [context valueForMustacheExpression:@"uppercase(name)" error:NULL];
-```
-
-(The `uppercase` filter is part of the [Standard Library](standard_library.md)).
-
-Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
-
-> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
-
-Possible errors are parse errors (for invalid expressions), or filter errors (missing or invalid filter).
-
-
-ViewModel and Key-Value Coding
-------------------------------
+A note about Key-Value Coding
+-----------------------------
 
 GRMustache does not mess with Key-Value Coding, and leaves `valueForKey:` untouched.
 
