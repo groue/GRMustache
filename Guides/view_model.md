@@ -159,7 +159,7 @@ Mustache Keys and Expressions vs. Key-Value Coding
 
 The GRMustacheContext and your ViewModel subclasses do not change the semantics of Key-Value Coding methods such as `valueForKey:`, `valueForKeyPath:`, and `setValue:forKey:`.
 
-In some cases those methods do not have the same result as `valueForMustacheKey:` and `valueForMustacheExpression:error:`. We'll see one below.
+In some cases those methods do not have the same result as `valueForMustacheKey:` and `valueForMustacheExpression:error:`. We'll see how below.
 
 **The rule of thumb** is simple: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
 
@@ -181,6 +181,9 @@ Here is a ViewModel that exhibits how Mustache and KVC may differ, and how GRMus
 @end
 ```
 
+Quite a simple ViewModel. It provides templates with a user through its dynamic property. It also provides a default value for the `name` key.
+
+
 #### Difference 1: Behavior regarding missing keys
 
 An unknown key would have KVC methods raise exception, while Mustache accessors simply return nil:
@@ -190,6 +193,7 @@ Document *document = [[Document alloc] init];
 [document valueForMustacheKey:@"missing"];      // Returns nil
 [document valueForKey:@"missing"];              // Raises an exception
 ```
+
 
 #### Difference 2: Behavior regarding keys defined by objects entering the context stack
 
