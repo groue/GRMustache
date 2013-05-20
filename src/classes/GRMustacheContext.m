@@ -139,7 +139,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 // Private dedicated initializer
 //
 // This method allows us to derive new contexts without calling the init method of the subclass.
-- (instancetype)privateInit;
+- (instancetype)initPrivate;
 
 /**
  * Sends the `valueForKey:` message to super_data->receiver with the provided
@@ -451,7 +451,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return context;
 }
 
-- (instancetype)privateInit
+- (instancetype)initPrivate
 {
     return [super init];
 }
@@ -462,7 +462,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -502,7 +502,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             if (![ancestor isKindOfClass:[context class]]) {
                 [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [ancestor class], [context class]];
             }
-            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] privateInit] autorelease];
+            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] initPrivate] autorelease];
             
             extendedContext.contextParent = context;
             extendedContext.contextObject = ancestor.contextObject;
@@ -523,7 +523,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     {
         // Extend self with a regular object
         
-        context = [[[[self class] alloc] privateInit] autorelease];
+        context = [[[[self class] alloc] initPrivate] autorelease];
         
         // copy identical stacks
         context.protectedContextParent = _protectedContextParent;
@@ -556,7 +556,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -583,7 +583,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -610,7 +610,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] privateInit] autorelease];
+    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
     context.contextParent = self;
@@ -811,7 +811,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (instancetype)init
 {
-    return [self privateInit];
+    return [self initPrivate];
 }
 
 - (id)valueForUndefinedKey:(NSString *)key
