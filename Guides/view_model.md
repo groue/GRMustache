@@ -191,7 +191,7 @@ An unknown key would have KVC methods raise exception, while Mustache accessors 
 ```objc
 Document *document = [[Document alloc] init];
 [document valueForMustacheKey:@"missing"];      // Returns nil
-[document valueForKey:@"missing"];              // Raises an exception
+[document valueForKey:@"missing"];              // Raises a regular KVC exception
 ```
 
 
