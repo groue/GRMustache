@@ -419,7 +419,7 @@ struct GRPoint {
         context.age = 1;
         STAssertEquals(context.age, (NSInteger)1, @"");
         [context setNilValueForKey:@"age"];
-        STAssertEquals(context.age, 0, @"");
+        STAssertEquals(context.age, (NSInteger)0, @"");
         [context setValue:@1 forKey:@"age"];
         STAssertEquals(context.age, (NSInteger)1, @"");
     }
