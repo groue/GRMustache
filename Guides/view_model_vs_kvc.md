@@ -118,8 +118,18 @@ innerContext.name;
 
 **Ouch**. This object has a really weird relationship to KVC...
 
-Of course, it could be made acceptable through explanation and documentation. NSDictionary, NSArray are examples of classes that have funny implementations of `valueForKey:`.
+Is is so bad?
 
-But NSDictionary and NSArray are used everyday. Mustache templates are not. I can't expect users to find, read, learn and remember the funny rules of ViewModels regarding KVC. I can't expect users to blame themselves when their program has a bug because of an object such as `innerContext` above exhibits its funny behavior. For them it would just be a bug in GRMustache.
+- It could be made acceptable through explanation and documentation. NSDictionary, NSArray are examples of classes that have funny implementations of `valueForKey:`.
+
+    Yes, but NSDictionary and NSArray are used everyday. Mustache templates are not. I can't expect users to find, read, learn and remember the funny rules of ViewModels regarding KVC. I can't expect users to blame themselves when their program has a bug because of an object such as `innerContext` above exhibits its funny behavior. For them it would just be a bug in GRMustache.
+
+- The code above that exhibits the inconsistency between `innerContext.name` and `[innerContext valueForKey:@"name"]` invocation is rather contrieved. No library user would ever find himself in such a situation, and you are quick turning this tiny weirdness into a no-go.
+
+    Yes, the `contextByAddingObject:` method that derives new contexts and is able to generate funny objects is not used very often.
+    
+    But it is in the API for a reason. You'll see it in the [Collection Indexes Sample Code](sample_code/indexes.md).
+    
+    "Rare" does not mean "contrieved". Some users will get funny objects such as `innerContext` above. Among them, some users will get bitten by the inconsistency.
 
 That's why the hypothetic case C was ditched for good, and why GRMustache does not override `valueForKey:`, and exposes `valueForMustacheKey:` instead.
