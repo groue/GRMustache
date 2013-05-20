@@ -56,16 +56,23 @@ The ViewModel Document class above is a GRMustacheContext subclass.
 
 As such:
 
-- All its methods are available for template tags.
+- All its methods define default values for template keys.
 - It can peek at the [context stack](runtime.md#the-context-stack), and compute values derived from other objects available to the template.
 - It can define custom properties for injecting values into the templates, and reading from them.
+
+
+### Default Values for Templates Keys
+
+All methods defined by a ViewModel class are available for templates: `{{ name }}` would render the value returned by the `name` method or property of the ViewModel.
+
+However, ViewModels get overriden by other objects that can provide the matching key. For example, if a user has a name, `{{# user }}{{ name }}{{/ user }}` would render the user's name, and not the ViewModel's.
 
 
 ### Peeking at the Context Stack
 
 GRMustacheContext provides two methods for fetching values from the [context stack](runtime.md#the-context-stack): `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
 
-`valueForMustacheKey:` returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"name"]` returns the value that would be rendered by the `{{ name }}` tag. It looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved.
+`valueForMustacheKey:` returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"name"]` returns the value rendered by `{{ name }}`. It looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved.
 
 You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`. This is the job of the `valueForMustacheExpression:error:` method.
 
@@ -77,15 +84,15 @@ For example:
 
 @implementation Document
 
-// {{ uppercaseName1 }} should render the uppercase version of the name
-// that would render for {{ name }}.
+// {{ uppercaseName1 }} renders the uppercase version of the name that would
+// render for {{ name }}.
 - (NSString *)uppercaseName1
 {
     return [[self valueForMustacheKey:@"name"] uppercaseString];
 }
 
-// {{ uppercaseName2 }} should render the uppercase version of the name
-// that would render for {{ name }}.
+// {{ uppercaseName2 }} renders the uppercase version of the name that would
+// render for {{ name }}.
 - (NSString *)uppercaseName2
 {
     return [self valueForMustacheExpression:@"uppercase(name)" error:NULL];
@@ -111,7 +118,11 @@ Those accessors give them direct access to the [rendering context stack](runtime
 
 Your dynamic properties, such as `document.name`, return the value that should render for `{{ name }}`. They have the same value as `[document valueForMustacheKey:@"name"]`.
 
-When you set the value of a read/write property, that value becomes available for `{{ name }}` tags in templates. This value is inherited by derived contexts as Mustache sections are rendered. It is overriden as soon as a section renders an object that redefines this key:
+When you set the value of a read/write property, that value becomes available for `{{ name }}` tags in templates. This value is inherited by derived contexts as Mustache sections are rendered.
+
+As stated above, View Model properties are overriden as soon as a section renders an object that redefines this key.
+
+For example:
 
 ```objc
 @interface Document : GRMustacheContext
