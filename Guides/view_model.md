@@ -235,6 +235,8 @@ Compatibility with other Mustache implementations
 
 [Many Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) foster the ViewModel concept, and encourage you to write your custom subclasses.
 
+GRMustache implementation follows closely the behavior of the [canonical Ruby implementation](https://github.com/defunkt/mustache).
+
 However, this topic is not mentioned in the [Mustache specification](https://github.com/mustache/spec).
 
 **If your goal is to design ViewModels that remain compatible with other Mustache implementations, check their documentation.**
