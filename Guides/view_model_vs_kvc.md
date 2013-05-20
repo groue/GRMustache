@@ -55,7 +55,7 @@ Document *document = [[Document alloc] init];
 [document valueForKey:@"missing"];              // Raises a regular KVC exception
 ```
 
-**This was the description of the implemented behavior.**
+*This was the description of the implemented behavior.*
 
 Let's now evaluate our hypothetic case C: `valueForKey:` is overriden in order to return the result of `valueForMustacheKey:`.
 
@@ -96,7 +96,7 @@ The rendering is "Cyrille", because the `name` key was provided by the user. The
 
 This means that `valueForMustacheKey:@"name"` would return "Cyrille", when `valueForKey:@"name"` would find the `name` method, and return "DefaultName".
 
-**This was the description of the implemented behavior.**
+*This was the description of the implemented behavior.*
 
 Let's now evaluate our hypothetic case C: `valueForKey:` is overriden in order to return the result of `valueForMustacheKey:`.
 
@@ -167,7 +167,7 @@ Document *innerContext = [document contextByAddingObject:document.user];
 
 `[innerContext valueForMustacheKey:@"age"]` would return 25, because that is the value that is rendered by the `{{ age }}` tag when the user is at the top of the context stack.
 
-**This was the description of the implemented behavior.**
+*This was the description of the implemented behavior.*
 
 Let's now evaluate our hypothetic case C: `valueForKey:` is overriden in order to return the result of `valueForMustacheKey:`.
 
