@@ -28,6 +28,33 @@
 
 @implementation GRMustacheContextValueForMustacheExpressionTest
 
+- (void)testValueForMustacheKey
+{
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
+    id data = @{ @"name": @"name1", @"a": @{ @"name": @"name2" }};
+    context = [context contextByAddingObject:data];
+    {
+        // '.' is an expression, not a key
+        id value = [context valueForMustacheKey:@"."];
+        STAssertNil(value, @"");
+    }
+    {
+        // 'name' is a key
+        id value = [context valueForMustacheKey:@"name"];
+        STAssertEqualObjects(value, @"name1", @"");
+    }
+    {
+        // 'a.name' is an expression, not a key
+        id value = [context valueForMustacheKey:@"a.name"];
+        STAssertNil(value, @"");
+    }
+    {
+        // 'uppercase' is a key
+        id value = [context valueForMustacheKey:@"uppercase"];
+        STAssertTrue([value conformsToProtocol:@protocol(GRMustacheFilter)], @"");
+    }
+}
+
 - (void)testValueForMustacheExpression
 {
     GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];

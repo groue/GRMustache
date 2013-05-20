@@ -56,13 +56,13 @@ The Document class above is a GRMustacheContext subclass. As such, it can define
 Note that the `bodyColor` property is declared `@dynamic`.
 
 
-### Dynamic Properties, Key-Value Coding, and the Context Stack
+### Dynamic Properties and the Context Stack
 
 GRMustacheContext synthesize accessors for the properties that you declare `@dynamic`.
 
 Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). The storage of those properties *is* the context stack.
 
-Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[document valueForKey:@"name"]`.
+Generally speaking, when a GRMustacheContext object, or an instance of a subclass, is asked for the value that should render for `{{ name }}`, it renders the value returned by `[document valueForMustacheKey:@"name"]`.
 
 Your custom properties, such as `document.name`, return the very same value.
 
@@ -115,7 +115,7 @@ For instance, consider the following template snippet, and ViewModel:
     // object is at the top of the context stack. If we look for the
     // `birthDate` key, we'll get the user's one:
     
-    NSDate *birthDate = [self valueForKey:@"birthDate"];    // (2)
+    NSDate *birthDate = [self valueForMustacheKey:@"birthDate"];    // (2)
     return /* clever calculation based on birthDate */;
 }
 
@@ -129,17 +129,15 @@ document.user = ...;                                         // (1)
 
 1. The `user` property matches the name of the `{{# user }}` section. Thanks to it @dynamic declaration, the user given to the document object is transfered to the template, accross the context stack.
 
-2. The `age` method matches the name of the `{{ age }}` tag. It reads the birth date that is available in the current section through the `valueForKey:` method.
+2. The `age` method matches the name of the `{{ age }}` tag. It reads the birth date that is available in the current section through the `valueForMustacheKey:` method.
 
 
-Key-Value Coding vs. Mustache Expressions
------------------------------------------
+Mustache Expressions
+--------------------
 
-When the `valueForKey:` method is able to evaluate a simple key, you may need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`.
+When the `valueForMustacheKey:` method is able to evaluate a simple key, you may need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`.
 
-Mustache expressions are not KVC key paths: the `valueForKeyPath:` method won't help here.
-
-Instead, use `valueForMustacheExpression:error:`:
+Use `valueForMustacheExpression:error:`:
 
 ```objc
 GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];

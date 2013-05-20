@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_5
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_6
 #import "GRMustachePublicAPITest.h"
 
 struct GRPoint {
@@ -64,7 +64,7 @@ struct GRPoint {
 
 - (NSInteger)succ
 {
-    return [[self valueForKey:@"number"] integerValue] + 1;
+    return [[self valueForMustacheKey:@"number"] integerValue] + 1;
 }
 
 - (NSInteger)pred
@@ -591,7 +591,7 @@ struct GRPoint {
 - (void)testValueForKey
 {
     // Test that GRMustache does not fuck with valueForKey: semantics, by
-    // checking that the value returned by a nonmanaged properties is identitcal
+    // checking that the value returned by a nonmanaged properties is identical
     // to valueForKey:
     
     GRDocumentMustacheContext *context = [[GRDocumentMustacheContext alloc] init];
@@ -613,6 +613,37 @@ struct GRPoint {
         // nonmanaged property accessor and valueForKey: are bound
         STAssertEqualObjects(context.name, @"defaultName", @"");
         STAssertEqualObjects(context.name, [context valueForKey:@"name"], @"");
+    }
+    {
+        // Unknown key throws
+        STAssertThrows([context valueForKey:@"unknown"], @"");
+    }
+}
+
+- (void)testValueForMustacheKey
+{
+    GRDocumentMustacheContext *context = [[GRDocumentMustacheContext alloc] init];
+    {
+        STAssertEqualObjects(context.name, @"defaultName", @"");
+        
+        // rendering and valueForMustacheKey: are bound
+        NSString *rendering = [GRMustacheTemplate renderObject:context fromString:@"{{name}}" error:NULL];
+        STAssertEqualObjects(rendering, @"defaultName", @"");
+        STAssertEqualObjects(rendering, [context valueForMustacheKey:@"name"], @"");
+    }
+    {
+        context = [context contextByAddingObject:@{@"name":@"foo"}];
+        
+        STAssertEqualObjects(context.name, @"defaultName", @"");
+        
+        // rendering and valueForMustacheKey: are bound
+        NSString *rendering = [GRMustacheTemplate renderObject:context fromString:@"{{name}}" error:NULL];
+        STAssertEqualObjects(rendering, @"foo", @"");
+        STAssertEqualObjects(rendering, [context valueForMustacheKey:@"name"], @"");
+    }
+    {
+        // Unknown key returs nil
+        STAssertNil([context valueForMustacheKey:@"unknown"], @"");
     }
 }
 

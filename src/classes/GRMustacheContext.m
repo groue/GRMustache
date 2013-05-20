@@ -784,6 +784,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return [value autorelease];
 }
 
+- (id)valueForMustacheKey:(NSString *)key
+{
+    return [self contextValueForKey:key protected:NULL];
+}
+
 
 #pragma mark - NSObject
 
@@ -811,10 +816,23 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (id)valueForUndefinedKey:(NSString *)key
 {
+    // Support for managed properties is reserved to GRMustacheContext subclasses
+    if (object_getClass(self) == [GRMustacheContext class]) {
+        return [super valueForUndefinedKey:key];
+    }
+    
     // _nonManagedKey may have been set in contextValue:forKey:
     if ([_nonManagedKey isEqualToString:key]) {
         return nil;
     }
+
+    // Key must be a getter for managed property.
+    // Regular KVC also supports `isFoo` key for the `foo` property.
+    BOOL getter;
+    if (!hasManagedPropertyAccessor([self class], [key UTF8String], YES, &getter, NULL, NULL, NULL, NULL, NULL)) {
+        return [super valueForUndefinedKey:key];
+    }
+
     return [self contextValueForKey:key protected:NULL];
 }
 
