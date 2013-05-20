@@ -5,7 +5,11 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v6.6
 
-`-[GRMustacheContext valueForMustacheExpression:error:]` allows your ViewModels to perform the same computations as Mustache tags, such as `{{ uppercase(user.name) }}`. Check the [ViewModel Guide](Guides/view_model.md).
+`-[GRMustacheContext valueForMustacheKey:]` allows your ViewModels to dig in the [context stack](Guides/runtime.md#the-context-stack).
+
+`-[GRMustacheContext valueForMustacheExpression:error:]` allows your ViewModels to perform the same computations as Mustache tags, such as `{{ uppercase(user.name) }}`.
+
+Check the [ViewModel Guide](Guides/view_model.md) for more information.
 
 ## v6.5.1
 
