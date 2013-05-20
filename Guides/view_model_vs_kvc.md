@@ -122,7 +122,7 @@ Is is so bad?
 
 - "The code above, that exhibits the inconsistency between `innerContext.name` and `[innerContext valueForKey:@"name"]`, is rather contrieved. No library user would ever find himself in such a situation. It just looks that you complain about a bug in the internal guts of your library. Who cares, as long as everyday code just works?"
 
-    Yes, the `contextByAddingObject:` method that derives new contexts and is able to generate funny objects is not used very often.
+    Yes, the `contextByAddingObject:` method that derives new contexts and is able to generate funny objects is not used very often by the end user.
     
     But it is in the API for a reason. You'll see it in the [Collection Indexes Sample Code](sample_code/indexes.md). "Rare" does not mean "contrieved". Some users will get funny objects such as `innerContext` above. Among them, some users will get bitten by the inconsistency.
 
