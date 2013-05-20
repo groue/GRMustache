@@ -31,8 +31,8 @@ document.bodyColor = [UIColor redColor];
 ```
 
 
-Dynamic Properties of GRMustacheContext Subclasses
---------------------------------------------------
+ViewModels are Subclasses of GRMustacheContext
+----------------------------------------------
 
 The Document class above is a GRMustacheContext subclass. As such, it can define its own configuration API, and provide its own keys to templates:
 
