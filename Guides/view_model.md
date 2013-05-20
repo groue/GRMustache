@@ -56,8 +56,8 @@ The ViewModel Document class above is a GRMustacheContext subclass.
 
 As such:
 
-- All its methods are available to templates.
-- It can peek at the [context stack](runtime.md#the-context-stack), and compute values derived from other objects available to the template
+- All its methods are available for template tags.
+- It can peek at the [context stack](runtime.md#the-context-stack), and compute values derived from other objects available to the template.
 - It can define custom properties for injecting values into the templates, and reading from them.
 
 
