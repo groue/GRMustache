@@ -17,7 +17,7 @@ Let's look at the undesired situations that would emerge in three hypothetic cas
 
 Case A is easily dismissed, because there would be no API for looking up the context stack. And I want to provide such an API: good bye, case A.
 
-Case B is easily dismissed, because it is unreliable. Only users who learn their manual would know what value they would get. This is not what I call a nice API: so long, case B.
+Case B is easily dismissed, because it is unreliable. Only users who find, read, learn and remember their manual would know what value they would get. This is not what I call a nice API: so long, case B.
 
 Case C is not easily dismissed. We'll see how below.
 
