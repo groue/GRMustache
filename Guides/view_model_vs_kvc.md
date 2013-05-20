@@ -12,10 +12,10 @@ Why did GRMustache introduce `valueForMustacheKey:`? Why didn't it just make `va
 Let's look at the undesired situations that would emerge in three hypothetic cases:
 
 - A: `valueForKey:` is not overriden, and `valueForMustacheKey:` would not exist in the API.
-- B: `valueForKey:` is overriden. It returns sometimes the result of `valueForMustacheKey:`, sometimes some other value.
-- C: `valueForKey:` is overriden. It always returns the result of `valueForMustacheKey:`
+- B: `valueForKey:` is overriden: it returns sometimes the result of `valueForMustacheKey:`, sometimes some other value.
+- C: `valueForKey:` is overriden: it always returns the result of `valueForMustacheKey:`
 
-Case A is easily dismissed, because there would be no API for looking up the context stack. And I want to provide such an API: good bye, case C.
+Case A is easily dismissed, because there would be no API for looking up the context stack. And I want to provide such an API: good bye, case A.
 
 Case B is easily dismissed, because it is unreliable. Only users who learn their manual would know what value they would get. This is not what I call a nice API: so long, case B.
 
