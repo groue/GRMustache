@@ -116,7 +116,7 @@ innerContext.name;
 [innerContext valueForKey:@"name"];
 ```
 
-**Ouch**. This object has a really weird relationship to KVC...
+**Ouch**. `innerContext.name` and `[innerContext valueForKey:@"name"]` are inconsistent. This object has a really weird relationship to KVC...
 
 Is is so bad?
 
