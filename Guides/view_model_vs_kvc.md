@@ -124,7 +124,7 @@ Is is so bad?
 
     Yes, but NSDictionary and NSArray are used everyday. Mustache templates are not. I can't expect users to find, read, learn and remember the funny rules of ViewModels regarding KVC. I can't expect users to blame themselves when their program has a bug because of an object such as `innerContext` above exhibits its funny behavior. For them it would just be a bug in GRMustache.
 
-- "The code above that exhibits the inconsistency between `innerContext.name` and `[innerContext valueForKey:@"name"]` invocation is rather contrieved. No library user would ever find himself in such a situation, and you are quick turning this tiny weirdness into a no-go."
+- "The code above, that exhibits the inconsistency between `innerContext.name` and `[innerContext valueForKey:@"name"]`, is rather contrieved. No library user would ever find himself in such a situation, and you are quick turning this tiny weirdness into a no-go."
 
     Yes, the `contextByAddingObject:` method that derives new contexts and is able to generate funny objects is not used very often.
     
