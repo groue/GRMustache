@@ -147,7 +147,7 @@ GRMustache let you do the same, by subclassing the GRMustacheContext class:
     // on its turn gets at the top of the context stack. If we look for the
     // `birthDate` key, we'll get the current pet's one:
     
-    NSDate *birthDate = [self valueForKey:@"birthDate"];
+    NSDate *birthDate = [self valueForMustacheKey:@"birthDate"];
     return /* clever calculation based on birthDate */;
 }
 @end
