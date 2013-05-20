@@ -12,7 +12,7 @@ A very simple way to achieve this goal is to provide the `cssBodyColor` in a dic
 ```objc
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 id data = @{
-    @"cssBodyColor" = @"#ff0000",
+    @"cssBodyColor": @"#ff0000",
     ...
 };
 [template renderObject:data error:NULL];
@@ -152,6 +152,57 @@ Error handling follows [Cocoa conventions](https://developer.apple.com/library/i
 > Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
 
 Possible errors are parse errors (for invalid expressions), or filter errors (missing or invalid filter).
+
+
+Mustache Keys and Expressions vs. Key-Value Coding
+--------------------------------------------------
+
+The GRMustacheContext and your ViewModel subclasses generally do not change the semantics of Key-Value Coding methods such as `valueForKey:`, `valueForKeyPath:`, and `setValue:forKey:`.
+
+In some cases those methods do not have the same result as `valueForMustacheKey:` and `valueForMustacheExpression:error:`. We'll see one below.
+
+**The rule of thumb** is simple: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
+
+Here is a ViewModel that exhibits the conflict between KVC and Mustache keys:
+
+```objc
+@interface Document : GRMustacheContext
+@property (nonatomic, strong) User *user;
+@end
+
+@implementation
+@dynamic user;
+
+- (NSString *)name {
+    return @"DefaultName";
+}
+@end
+```
+
+The `name` method is available for templates:
+
+```objc
+// Render a simple {{ name }} template
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ name }}" error:NULL];
+Document *document = [[Document alloc] init];
+
+// Renders "DefaultName"
+NSString *rendering = [template renderObject:document error:NULL];
+```
+
+The `name` key may be overriden by objects entering the context stack. When an object in the context stack provides a Mustache key, the ViewModel methods are not invoked:
+
+```objc
+// Render {{# user }}{{ name }}{{/ user }}
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{# user }}{{ name }}{{/ user }}" error:NULL];
+Document *document = [[Document alloc] init];
+document.user = [User userWithName:@"Cyrille"];
+
+// Renders "Cyrille"
+NSString *rendering = [template renderObject:document error:NULL];
+```
+
+The context that renders the `{{ name }}` tag inside the `{{# user }}...{{/ user }}` section would have `[context valueForMustacheKey:@"name"]` return Cyrille. However, `[context valueForKey:@"name"]` would return DefaultName. This is what we mean by "not changing the semantics of Key-Value Coding".
 
 
 Compatibility with other Mustache implementations
