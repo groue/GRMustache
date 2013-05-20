@@ -77,16 +77,16 @@ For example:
 
 @implementation Document
 
-// {{ capitalizedName1 }} should render the capitalized version of the name
+// {{ uppercaseName1 }} should render the uppercase version of the name
 // that would render for {{ name }}.
-- (NSString *)capitalizedName1
+- (NSString *)uppercaseName1
 {
-    return [[self valueForMustacheKey:@"name"] capitalizedString];
+    return [[self valueForMustacheKey:@"name"] uppercaseString];
 }
 
-// {{ capitalizedName2 }} should render the capitalized version of the name
+// {{ uppercaseName2 }} should render the uppercase version of the name
 // that would render for {{ name }}.
-- (NSString *)capitalizedName2
+- (NSString *)uppercaseName2
 {
     return [self valueForMustacheExpression:@"uppercase(name)" error:NULL];
 }
