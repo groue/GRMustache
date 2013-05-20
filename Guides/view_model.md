@@ -155,81 +155,16 @@ Error handling follows [Cocoa conventions](https://developer.apple.com/library/i
 Possible errors are parse errors (for invalid expressions), or filter errors (missing or invalid filter).
 
 
-Mustache Keys and Expressions vs. Key-Value Coding
---------------------------------------------------
+ViewModel and Key-Value Coding
+------------------------------
 
-The GRMustacheContext and your ViewModel subclasses do not change the semantics of Key-Value Coding methods such as `valueForKey:`, `valueForKeyPath:`, and `setValue:forKey:`.
+Some readers may think:
 
-In some cases those methods do not have the same result as `valueForMustacheKey:` and `valueForMustacheExpression:error:`. We'll see how below.
+> Looks nice. But why did he introduce this weird valueForMustacheKey: method? Why didn't he just override valueForKey:? Key-Value Coding is sooo cool, this lib is missing something.
 
-**The rule of thumb** is simple: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
+Well, I have tried, really hard, to inject Mustache into KVC, and throw a nonchalant "just use valueForKey:" is this Guide.
 
-### The difference between the context stack and KVC
-
-Here is a ViewModel that exhibits how Mustache and KVC may differ, and how GRMustache "does not change the semantics of Key-Value Coding".
-
-```objc
-@interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;
-@end
-
-@implementation
-@dynamic user;
-
-- (NSString *)name {
-    return @"DefaultName";
-}
-@end
-```
-
-Quite a simple ViewModel. It provides templates with a user through its dynamic property. It also provides a default value for the `name` key.
-
-
-#### Difference 1: Behavior regarding missing keys
-
-An unknown key would have KVC methods raise exception, while Mustache accessors simply return nil:
-
-```objc
-Document *document = [[Document alloc] init];
-[document valueForMustacheKey:@"missing"];      // Returns nil
-[document valueForKey:@"missing"];              // Raises a regular KVC exception
-```
-
-
-#### Difference 2: Behavior regarding keys defined by objects entering the context stack
-
-The exhibition of the second difference needs some setup. Please follow us:
-
-Known keys such as `name`, here made available by the `name` method, are available for templates:
-
-```objc
-// Render a simple {{ name }} template
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ name }}" error:NULL];
-Document *document = [[Document alloc] init];
-
-// Renders "DefaultName"
-NSString *rendering = [template renderObject:document error:NULL];
-```
-
-So far, so good.
-
-Now, objects that enter the context stack override keys. That's the whole point of Mustache, after all:
-
-```objc
-// Render {{# user }}{{ name }}{{/ user }}
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{# user }}{{ name }}{{/ user }}" error:NULL];
-Document *document = [[Document alloc] init];
-document.user = [User userWithName:@"Cyrille"];
-
-// Renders "Cyrille"
-NSString *rendering = [template renderObject:document error:NULL];
-```
-
-The rendering is "Cyrille", because the `name` key was provided by the user. The `name` method of the Document object has not been called.
-
-This means that `valueForMustacheKey:@"name"` would return "Cyrille", when `valueForKey:@"name"` would return "DefaultName".
-
-So, remember: to get the value that would be rendered by a tag `{{ ... }}`, use `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
+But the [rule of least surprise](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html#id2878339) eventually get broken. Very interested users, and the [future me](http://xkcd.com/302/), will be interested in this [detailed rationale](view_model_vs_kvc.md).
 
 
 Compatibility with other Mustache implementations
