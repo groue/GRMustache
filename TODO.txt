@@ -1,7 +1,6 @@
 TODO:
-GRMustacheContext custom properties:
-- performances
-- weak/assign/unsafe_unretained storage
+- Introduce [GRMustacheContext valueForUndefinedMustacheKey:], and clean up the default value FAQ that still needs Tag Delegates.
+- weak/assign/unsafe_unretained GRMustacheContext managed properties:
 
 Nice to have:
 - document migration path from all previous versions to latest version
