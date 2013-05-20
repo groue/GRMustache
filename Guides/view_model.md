@@ -39,7 +39,6 @@ The Document class above is a GRMustacheContext subclass. As such, it can define
 ```objc
 @interface Document : GRMustacheContext
 @property (nonatomic, strong) UIColor *bodyColor;
-@property (nonatomic, readonly) NSString *cssBodyColor;
 @end
 
 @implementation Document
