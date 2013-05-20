@@ -588,4 +588,32 @@ struct GRPoint {
     }
 }
 
+- (void)testValueForKey
+{
+    // Test that GRMustache does not fuck with valueForKey: semantics, by
+    // checking that the value returned by a nonmanaged properties is identitcal
+    // to valueForKey:
+    
+    GRDocumentMustacheContext *context = [[GRDocumentMustacheContext alloc] init];
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:context fromString:@"{{name}}" error:NULL];
+        STAssertEqualObjects(rendering, @"defaultName", @"");
+        
+        // nonmanaged property accessor and valueForKey: are bound
+        STAssertEqualObjects(context.name, @"defaultName", @"");
+        STAssertEqualObjects(context.name, [context valueForKey:@"name"], @"");
+    }
+    {
+        context = [context contextByAddingObject:@{@"name":@"foo"}];
+        
+        // Context stack overrides nonmanaged properties, just as the Ruby Mustache does.
+        NSString *rendering = [GRMustacheTemplate renderObject:context fromString:@"{{name}}" error:NULL];
+        STAssertEqualObjects(rendering, @"foo", @"");
+        
+        // nonmanaged property accessor and valueForKey: are bound
+        STAssertEqualObjects(context.name, @"defaultName", @"");
+        STAssertEqualObjects(context.name, [context valueForKey:@"name"], @"");
+    }
+}
+
 @end
