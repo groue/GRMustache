@@ -641,13 +641,18 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return context;
 }
 
-- (void)enumerateTagDelegatesUsingBlock:(void(^)(id<GRMustacheTagDelegate> tagDelegate))block
+- (NSArray *)tagDelegates
 {
+    NSMutableArray *tagDelegates = nil;
+    
     if (_tagDelegate) {
+        tagDelegates = [NSMutableArray array];
         for (GRMustacheContext *context = self; context; context = context.tagDelegateParent) {
-            block(context.tagDelegate);
+            [tagDelegates addObject:context.tagDelegate];
         }
     }
+    
+    return tagDelegates;
 }
 
 - (id)currentContextValue

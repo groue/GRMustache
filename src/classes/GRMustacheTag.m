@@ -176,12 +176,12 @@
             
             
             // Tag delegates pre-rendering callbacks
-            
-            [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
+            NSArray *tagDelegates = [context tagDelegates];
+            for (id<GRMustacheTagDelegate> tagDelegate in tagDelegates) {
                 if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
                     object = [tagDelegate mustacheTag:self willRenderObject:object];
                 }
-            }];
+            }
             
             
             // 4. Render
@@ -191,32 +191,18 @@
             NSError *renderingError = nil;
             NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
             
-            // If rendering is nil, but rendering error is not set,
-            // assume lazy coder, and the intention to render nothing:
-            // fail if and only if rendering is nil and renderingError is
-            // explicitely set.
+            if (rendering == nil && renderingError == nil)
+            {
+                // Rendering is nil, but rendering error is not set.
+                //
+                // Assume a rendering object coded by a lazy programmer, whose
+                // intention is to render nothing.
+                
+                rendering = @"";
+            }
             
-            if (!rendering && renderingError) {
-                
-                // Error
-                
-                if (error != NULL) {
-                    *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
-                } else {
-                    NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-                }
-                success = NO;
-                
-                // Tag delegates post-rendering callbacks
-
-                [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
-                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                        [tagDelegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
-                    }
-                }];
-                
-            } else {
-                
+            if (rendering)
+            {
                 // Success
                 
                 if (rendering.length > 0) {
@@ -228,12 +214,29 @@
                 
                 // Tag delegates post-rendering callbacks
                 
-                if (rendering == nil) { rendering = @""; }  // Don't expose nil as a success
-                [context enumerateTagDelegatesUsingBlock:^(id<GRMustacheTagDelegate> tagDelegate) {
+                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegates reverseObjectEnumerator]) { // invoke tag delegates in reverse order
                     if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
                         [tagDelegate mustacheTag:self didRenderObject:object as:rendering];
                     }
-                }];
+                }
+            }
+            else {
+                // Error
+                
+                if (error != NULL) {
+                    *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+                } else {
+                    NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+                }
+                success = NO;
+                
+                // Tag delegates post-rendering callbacks
+
+                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegates reverseObjectEnumerator]) { // invoke tag delegates in reverse order
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                        [tagDelegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
+                    }
+                }
             }
         }
     }

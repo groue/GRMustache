@@ -203,10 +203,11 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 
 /**
- * Executes a given block using each tag delegate in the tag delegate stack.
+ * Returns an array containing all tag delegates in the delegate stack.
+ * Array may be null (meaning there is no tag delegate in the stack).
  *
- * @param block  The block to apply to tag delegates.
+ * First object is the top object in the delegate stack.
  */
-- (void)enumerateTagDelegatesUsingBlock:(void(^)(id<GRMustacheTagDelegate> tagDelegate))block GRMUSTACHE_API_INTERNAL;
+- (NSArray *)tagDelegates GRMUSTACHE_API_INTERNAL;
 
 @end
