@@ -463,7 +463,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
@@ -507,7 +507,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                 [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [ancestor class], [context class]];
             }
             
-            // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+            // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
             GRMustacheContext *extendedContext = [[[[ancestor class] alloc] initPrivate] autorelease];
             
             extendedContext.contextParent = context;
@@ -529,7 +529,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     {
         // Extend self with a regular object
         
-        // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+        // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
         context = [[[[self class] alloc] initPrivate] autorelease];
         
         // copy identical stacks
@@ -563,7 +563,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
@@ -591,7 +591,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
@@ -619,7 +619,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return self;
     }
     
-    // Don't call subclass's init method, which may alter the context stack (user may set default values for some managed properties).
+    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
@@ -769,7 +769,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     
-    // Then try valueForUndefinedKey:
+    // Then try valueForUndefinedMustacheKey:
     
     id value = [self valueForUndefinedMustacheKey:key];
     if (value) {
