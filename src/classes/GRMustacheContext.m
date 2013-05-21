@@ -653,6 +653,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 
 - (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected
 {
+    // First look for in the protected context stack
+    
     if (_protectedContextObject) {
         for (GRMustacheContext *context = self; context; context = context.protectedContextParent) {
             id value = [GRMustacheContext valueForKey:key inObject:context.protectedContextObject];
@@ -664,6 +666,9 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
             }
         }
     }
+    
+    
+    // Then look for in the regular context stack
     
     NSString *mutableContextKey = nil;
     
@@ -730,6 +735,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
         
     }
+    
+    
+    // Then look for a ViewModel method
+    
 
     // Support for non-managed properties is reserved to GRMustacheContext subclasses
     if ((object_getClass(self) != [GRMustacheContext class]) && !isManagedPropertyKVCKey([self class], key)) {
@@ -741,11 +750,27 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         id value = [super valueForKey:key];
         _nonManagedKey = previousNonManagedKey;
         
+        if (value) {
+            if (protected != NULL) {
+                *protected = NO;
+            }
+            return value;
+        }
+    }
+    
+    
+    // Then try valueForUndefinedKey:
+    
+    id value = [self valueForUndefinedMustacheKey:key];
+    if (value) {
         if (protected != NULL) {
             *protected = NO;
         }
         return value;
     }
+    
+    
+    // OK give up now
     
     return nil;
 }
@@ -787,6 +812,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 - (id)valueForMustacheKey:(NSString *)key
 {
     return [self valueForMustacheKey:key protected:NULL];
+}
+
+- (id)valueForUndefinedMustacheKey:(NSString *)key
+{
+    return nil;
 }
 
 

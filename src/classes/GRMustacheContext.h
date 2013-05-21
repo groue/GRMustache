@@ -161,6 +161,7 @@
  * This method can evaluate complex expressions such as `user.name` or
  * `uppercase(user.name)`.
  *
+ * @see valueForUndefinedMustacheKey:
  * @see valueForMustacheExpression:error:
  *
  * @since v6.6
@@ -178,5 +179,17 @@
  * @since v6.6
  */
 - (id)valueForMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
+
+/**
+ * This method is invoked when a key could not be resolved to any value.
+ *
+ * Default implementation returns nil.
+ *
+ * @see valueForMustacheKey:
+ * @see valueForMustacheExpression:error:
+ *
+ * @since v6.7
+ */
+- (id)valueForUndefinedMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_6_7_AND_LATER;
 
 @end

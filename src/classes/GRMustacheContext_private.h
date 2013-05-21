@@ -132,6 +132,9 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 // Documented in GRMustacheContext.h
 - (id)valueForMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheContext.h
+- (id)valueForUndefinedMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
+
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
