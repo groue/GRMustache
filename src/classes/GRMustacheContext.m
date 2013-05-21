@@ -652,6 +652,13 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
     
+    // if self conforms to GRMustacheTagDelegate, self behaves as the first tag
+    // delegate in the stack (before all section delegates).
+    if ([self conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+        if (!tagDelegates) tagDelegates = [NSMutableArray array];
+        [tagDelegates addObject:self];
+    }
+    
     return tagDelegates;
 }
 
