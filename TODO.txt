@@ -1,9 +1,9 @@
 TODO:
 - Introduce [GRMustacheContext valueForUndefinedMustacheKey:], and clean up the default value FAQ that still needs Tag Delegates.
 - Check whether GRMustacheContextSubclassTagDelegateTest.didRenderObjectCount should return and render 0 before it is set.
+- If GRMustacheContext conforms to GRMustacheTagDelegate, it should get notified of tag rendering.
 
 TODO (after checking if those are good ideas):
-- If GRMustacheContext conforms to GRMustacheTagDelegate, it should get notified of tag rendering.
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
 
 Nice to have:
