@@ -26,12 +26,10 @@
 
 @interface GRMustacheContextSubclassTagDelegate : GRMustacheContext<GRMustacheTagDelegate>
 @property (nonatomic) int didRenderObjectCount;
-@property (nonatomic) int didFailRenderingObjectCount;
 @end
 
 @implementation GRMustacheContextSubclassTagDelegate
 @dynamic didRenderObjectCount;
-@dynamic didFailRenderingObjectCount;
 
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
