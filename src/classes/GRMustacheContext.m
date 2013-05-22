@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, GRMustachePropertyType) {
 // Caller must free the returned strings.
 BOOL hasManagedPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, BOOL *readOnly, GRMustachePropertyStoragePolicy *storagePolicy, char **propertyName, char **objCTypes, GRMustachePropertyType *type);
 
-BOOL isManagedPropertyKVCKey(Class klass, NSString *key);
+BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *zeroScalarValue);
 NSString *managedPropertyNameForSelector(Class klass, SEL selector);
 NSString *canonicalKeyForKey(Class klass, NSString *key);
 
@@ -759,24 +759,41 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     
-    // Then look for a ViewModel method
+    // Support for extra methods and properties is reserved to GRMustacheContext subclasses
     
-
-    // Support for non-managed properties is reserved to GRMustacheContext subclasses
-    if ((object_getClass(self) != [GRMustacheContext class]) && !isManagedPropertyKVCKey([self class], key)) {
+    if (object_getClass(self) != [GRMustacheContext class]) {
         
-        // Invoke NSObject's implementation of valueForKey:
-        // And make sure we do not enter an infinite loop through valueForUndefinedKey:
-        id previousNonManagedKey = _nonManagedKey;
-        _nonManagedKey = key;
-        id value = [super valueForKey:key];
-        _nonManagedKey = previousNonManagedKey;
         
-        if (value) {
+        id zeroScalarValue;
+        if (isManagedPropertyKVCKey([self class], key, &zeroScalarValue)) {
+            
+            // Key is a managed property.
+            // It the property type is a scalar, provide a default 0 value.
+            
             if (protected != NULL) {
                 *protected = NO;
             }
-            return value;
+            return zeroScalarValue;
+            
+            
+        } else {
+            
+            // Key is not a managed property. But subclass may have defined a
+            // method for that key.
+            
+            // Invoke NSObject's implementation of valueForKey:
+            // _nonManagedKey makes sure we do not enter an infinite loop through valueForUndefinedKey:
+            id previousNonManagedKey = _nonManagedKey;
+            _nonManagedKey = key;
+            id value = [super valueForKey:key];
+            _nonManagedKey = previousNonManagedKey;
+            
+            if (value) {
+                if (protected != NULL) {
+                    *protected = NO;
+                }
+                return value;
+            }
         }
     }
     
@@ -1681,38 +1698,113 @@ NSString *canonicalKeyForKey(Class klass, NSString *key)
     return canonicalKey;
 }
 
-BOOL isManagedPropertyKVCKey(Class klass, NSString *key)
+BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *zeroScalarValue)
 {
-    static CFMutableDictionaryRef classCache;
+    static CFMutableDictionaryRef isManagedPropertyClassCache;
+    static CFMutableDictionaryRef zeroScalarValueClassCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         // Don't use NSMutableDictionary, which has copy semantics on keys.
-        // Instead, use CFDictionaryCreateMutable that does not manage keys, but manages values (depth numbers)
-        classCache = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+        // Instead, use CFDictionaryCreateMutable that does not manage keys (classes), but manages values (dictionaries)
+        isManagedPropertyClassCache = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+        zeroScalarValueClassCache = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
     });
     
-    NSMutableDictionary *keyCache = CFDictionaryGetValue(classCache, klass);
-    if (keyCache == nil) {
-        keyCache = [NSMutableDictionary dictionary];
-        CFDictionarySetValue(classCache, klass, keyCache);
+    NSMutableDictionary *isManagedPropertyCache = CFDictionaryGetValue(isManagedPropertyClassCache, klass);
+    if (isManagedPropertyCache == nil) {
+        isManagedPropertyCache = [NSMutableDictionary dictionary];
+        CFDictionarySetValue(isManagedPropertyClassCache, klass, isManagedPropertyCache);
     }
     
-    NSNumber *result = [keyCache objectForKey:key];
+    NSMutableDictionary *zeroScalarValueCache = CFDictionaryGetValue(zeroScalarValueClassCache, klass);
+    if (zeroScalarValueCache == nil) {
+        zeroScalarValueCache = [NSMutableDictionary dictionary];
+        CFDictionarySetValue(zeroScalarValueClassCache, klass, zeroScalarValueCache);
+    }
+    
+    NSNumber *result = [isManagedPropertyCache objectForKey:key];
     if (result == nil) {
+        BOOL isManagedProperty = NO;
+        id zeroScalarValue = nil;
+        
         BOOL getter;
-        if (hasManagedPropertyAccessor(klass, [key UTF8String], YES, &getter, NULL, NULL, NULL, NULL, NULL)) {
-            if (getter) {
-                result = [NSNumber numberWithBool:YES];
-            } else {
-                result = [NSNumber numberWithBool:NO];
+        char *encoding;
+        if (hasManagedPropertyAccessor(klass, [key UTF8String], YES, &getter, NULL, NULL, NULL, &encoding, NULL)) {
+            isManagedProperty = getter;
+
+            if (isManagedProperty) {
+                // build zero scalar value
+                
+                switch (encoding[0]) {
+                    case 'c':
+                        zeroScalarValue = [NSNumber numberWithChar:0];
+                        break;
+                    case 'i':
+                        zeroScalarValue = [NSNumber numberWithInt:0];
+                        break;
+                    case 's':
+                        zeroScalarValue = [NSNumber numberWithShort:0];
+                        break;
+                    case 'l':
+                        zeroScalarValue = [NSNumber numberWithLong:0];
+                        break;
+                    case 'q':
+                        zeroScalarValue = [NSNumber numberWithLongLong:0];
+                        break;
+                    case 'C':
+                        zeroScalarValue = [NSNumber numberWithUnsignedChar:0];
+                        break;
+                    case 'I':
+                        zeroScalarValue = [NSNumber numberWithUnsignedInt:0];
+                        break;
+                    case 'S':
+                        zeroScalarValue = [NSNumber numberWithUnsignedShort:0];
+                        break;
+                    case 'L':
+                        zeroScalarValue = [NSNumber numberWithUnsignedLong:0];
+                        break;
+                    case 'Q':
+                        zeroScalarValue = [NSNumber numberWithUnsignedLongLong:0];
+                        break;
+                    case 'f':
+                        zeroScalarValue = [NSNumber numberWithFloat:0.0f];
+                        break;
+                    case 'd':
+                        zeroScalarValue = [NSNumber numberWithDouble:0.0];
+                        break;
+                    case 'B':
+                        zeroScalarValue = [NSNumber numberWithBool:0];
+                        break;
+                    case '@':
+                        zeroScalarValue = nil;
+                        break;
+                    case '#':
+                        zeroScalarValue = Nil;
+                        break;
+                    default: {
+                        NSUInteger valueSize;
+                        NSGetSizeAndAlignment(encoding, &valueSize, NULL);
+                        void *bytes = malloc(valueSize);
+                        memset(bytes, 0, valueSize);
+                        zeroScalarValue = [NSValue valueWithBytes:bytes objCType:encoding];
+                        free(bytes);
+                    } break;
+                }
             }
-        } else {
-            result = [NSNumber numberWithBool:NO];
+            
+            free(encoding);
         }
         
-        [keyCache setValue:result forKey:key];
+        result = [NSNumber numberWithBool:isManagedProperty];
+        [isManagedPropertyCache setValue:result forKey:key];
+        if (zeroScalarValue) {
+            [zeroScalarValueCache setValue:zeroScalarValue forKey:key];
+        }
     }
     
+    if ([result boolValue] && zeroScalarValue != NULL) {
+        *zeroScalarValue = [zeroScalarValueCache objectForKey:key];
+    }
     return [result boolValue];
 }
 

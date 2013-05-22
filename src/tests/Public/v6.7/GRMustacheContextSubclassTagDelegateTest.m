@@ -66,7 +66,6 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{didRenderObjectCount}},{{didRenderObjectCount}}" error:NULL];
     GRMustacheContextSubclassTagDelegate *context = [GRMustacheContextSubclassTagDelegate context];
-    context.didRenderObjectCount = 0;
     
     NSString *rendering = [template renderObject:context error:NULL];
     STAssertEqualObjects(rendering, @"0,1", @"");
