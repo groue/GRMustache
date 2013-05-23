@@ -175,7 +175,7 @@ You can also declare read-only @dynamic properties. Those give you straight acce
 ```objc
 @interface Document : GRMustacheContext
 @property (nonatomic, strong) User *user;           // The rendered user
-@property (nonatomic, readonly) NSDate *birthDate   // The current birth date
+@property (nonatomic, readonly) NSDate *birthDate;  // The current birth date
 @end
 ```
 
@@ -215,8 +215,7 @@ The `valueForUndefinedMustacheKey:` method lets you provide a default value for 
 TODO
 
 
-A note about Key-Value Coding
------------------------------
+### A note about Key-Value Coding
 
 GRMustacheContext does not mess with Key-Value Coding, and leaves `valueForKey:` untouched.
 
