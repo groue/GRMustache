@@ -106,7 +106,7 @@ document.user = self.user;
 NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-The `contextByAddingTagDelegate:` derives a new context: our template now has a base context that contains both the [standard library](standard_library.md), and `self`, reading to observe tag rendering.
+The `contextByAddingTagDelegate:` derives a new context: our template now has a base context that contains both the [standard library](standard_library.md), and `self`, reading to observe the rendering of tags.
 
 
 ### By Deriving a Deep Context
@@ -115,7 +115,7 @@ The `contextByAddingTagDelegate:` derives a new context: our template now has a 
 
 To illustrate this use case, let's write an object that renders the uppercase version of all inner tags of the section it is attached to.
 
-We do not want it to "pollute" the [context stack](runtime.md#the-context-stack), because we want it to be able to transform *all* tags, including `{{ description }}`. Should our object be in the context stack, its own description would render, and we would have a bug.
+We do not want it to "pollute" the [context stack](runtime.md#the-context-stack), because we want it to be able to transform *all* tags, including `{{ description }}`. Should our object be in the context stack, its own description (inherited from NSObject) would render, and we would have a bug.
 
 `Document.mustache`
 
