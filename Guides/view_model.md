@@ -26,14 +26,14 @@ This is because its methods and properties define an interface to the template t
 Custom ViewModel Classes
 ------------------------
 
-In practice, it's very common to reuse an existing class, such as an all too plain Controller or Model object, as the ViewModel of a template. The controller or the model object has not been particularly designed to fit a template. Rather you write the template with carefully chosen keys that match your object's method.
+In practice, the ViewModel concept is pretty fuzzy. It's very common to reuse an existing class, such as an all too plain Controller or Model object, as the ViewModel of a template. The controller or the model object has not been particularly designed to fit a template. Rather you write the template with carefully chosen keys that match your object's method.
 
-However, eventually, templates need some very specific data that are uneasy to fit in those objects:
+However, templates sometimes need some very specific data that are uneasy to fit in those objects:
 
 - values derived from others, such as formatted numbers and dates, or custom properties.
 - default values when one is missing.
 
-For instance, consider the following template:
+A genuine ViewModel class eventually comes to the mind. For example, consider the following template:
 
 `Document.mustache`
 
@@ -42,7 +42,7 @@ For instance, consider the following template:
         Member since {{ fullDateFormat(joinDate) }}
     {{/ user }}
 
-Let's design a custom ViewModel class:
+Let's design a custom ViewModel for it:
 
 `Document.h`
 

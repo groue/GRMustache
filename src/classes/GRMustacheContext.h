@@ -34,6 +34,12 @@
  * - a *tag delegate stack*, so that tag delegates are notified when a Mustache
  *   tag is rendered.
  *
+ * **Companion guides:**
+ *
+ * - https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
+ *
  * @see GRMustacheRendering protocol
  */
 @interface GRMustacheContext : NSObject {
@@ -72,9 +78,17 @@
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * made the top of the tag delegate stack.
  *
+ * If _object_ is an instance of GRMustacheContext, its class must be the class
+ * of the receiver, or any subclass, and the returned context is _object.
+ * An exception is raised otherwise.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ *
  * @param object  An object
  *
  * @return A rendering context.
+ *
+ * @see GRMustacheTemplateDelegate
  *
  * @since v6.4
  */
@@ -99,9 +113,15 @@
 /**
  * Returns a context with _tagDelegate_ at the top of the tag delegate stack.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ *
  * @param tagDelegate  A tag delegate
  *
  * @return A rendering context.
+ *
+ * @see GRMustacheTagDelegate
+ *
+ * @since v6.4
  */
 + (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
 
@@ -118,9 +138,17 @@
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * added at the top of the tag delegate stack.
  *
+ * If _object_ is an instance of GRMustacheContext, its class must be the class
+ * of the receiver, or any subclass, and the returned context will be an
+ * instance of the class of _object_. An exception is raised otherwise.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ *
  * @param object  An object
  *
  * @return A new rendering context.
+ *
+ * @see GRMustacheTemplateDelegate
  *
  * @since v6.0
  */
@@ -147,33 +175,33 @@
  * Returns a new rendering context that is the copy of the receiver, and the
  * given object added at the top of the tag delegate stack.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ *
  * @param tagDelegate  A tag delegate
  *
  * @return A new rendering context.
+ *
+ * @see GRMustacheTagDelegate
  *
  * @since v6.0
  */
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
-/**
- * Evaluate the expression in the receiver context.
- *
- * This method can evaluate complex expressions such as `user.name` or
- * `uppercase(user.name)`.
- *
- * @see valueForUndefinedMustacheKey:
- * @see valueForMustacheExpression:error:
- *
- * @since v6.6
- */
-- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Fetching Values from the Context Stack
+////////////////////////////////////////////////////////////////////////////////
+
 
 /**
  * Returns the value stored in the context stack for the given key.
  *
- * If you want the value for an full expression such as `user.name` or
- * `uppercase(user.name)`, use the valueForMustacheExpression:error: method.
+ * If you want the value for an full expression such as @"user.name" or
+ * @"uppercase(user.name)", use the valueForMustacheExpression:error: method.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
+ *
+ * @see valueForUndefinedMustacheKey:
  * @see valueForMustacheExpression:error:
  *
  * @since v6.6
@@ -185,11 +213,28 @@
  *
  * Default implementation returns nil.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
+ *
  * @see valueForMustacheKey:
  * @see valueForMustacheExpression:error:
  *
  * @since v6.7
  */
 - (id)valueForUndefinedMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_6_7_AND_LATER;
+
+/**
+ * Evaluate the expression in the receiver context.
+ *
+ * This method can evaluate complex expressions such as @"user.name" or
+ * @"uppercase(user.name)".
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
+ *
+ * @see valueForUndefinedMustacheKey:
+ * @see valueForMustacheExpression:error:
+ *
+ * @since v6.6
+ */
+- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
 
 @end

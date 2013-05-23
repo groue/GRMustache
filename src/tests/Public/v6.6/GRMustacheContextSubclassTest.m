@@ -647,4 +647,16 @@ struct GRPoint {
     }
 }
 
+- (void)testContextWithObject
+{
+    {
+        GRDocumentMustacheContext *context = [[GRDocumentMustacheContext alloc] init];
+        STAssertEquals([GRMustacheContext contextWithObject:context], context, @"");
+    }
+    {
+        GRMustacheContext *context = [[GRMustacheContext alloc] init];
+        STAssertThrowsSpecificNamed([GRDocumentMustacheContext contextWithObject:context], NSException, NSInvalidArgumentException, @"");
+    }
+}
+
 @end
