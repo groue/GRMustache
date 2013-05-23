@@ -1,160 +1,224 @@
 [up](../../../../GRMustache#documentation), [next](configuration.md)
 
-ViewModel Classes
-=================
+Patterns For Feeding GRMustache Templates
+=========================================
 
-Mustache rendering lies on the "View" side of the Model-View-Controller pattern. Templates often require specific keys to be defined, and those keys do not belong to any of your model or controller classes.
+ViewModels
+----------
 
-For instance, a template needs to be given a `cssBodyColor`, so that it can render `body { background-color: {{ cssBodyColor }}; }`.
-
-A very simple way to achieve this goal is to provide the `cssBodyColor` in a dictionary:
+GRMustache fetches values with the [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method. Any compliant object can provide values to templates. Dictionaries are, and generally all your objects (see the [Runtime Guide](runtime.md) for more information):
 
 ```objc
-GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-id data = @{
-    @"cssBodyColor": @"#ff0000",
-    ...
-};
-[template renderObject:data error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
+
+// Arthur
+[template renderObject:@{ @"name": @"Arthur" } error:NULL];
+
+// Bernard
+[template renderObject:[Person personWithName:@"Bernard"] error:NULL];
 ```
 
-However, this may get tedious after a while. The number of specific keys can get very big. Without compiler support, you may do typos in the key names, leading to unexpected renderings. And since there is no easy way to define high-level accessors for those specific keys, you often end up preparing raw HTML snippets right in your controller, when obviously this should be done in some View class.
+The rendered object is sometimes called, in the Mustache lingo, a *ViewModel*.
 
-Wouldn't it be great if we could write instead:
+This is because its methods and properties define an interface to the template to be rendered. It's a model of the template, just as your Person class is a model of an actual person. A method or key `name` matches a `{{ name }}` tag just as it matches a person's name. And because a template belongs to the View realm, we eventually settle on the "ViewModel" name.
+
+
+Custom ViewModel Classes
+------------------------
+
+In practice, it's very common to reuse an existing class, such as an all too plain Controller or Model object, as the ViewModel of a template. The controller or the model object has not been particularly designed to fit a template. Rather you write the template with carefully chosen keys that match your object's method.
+
+However, eventually, templates need some very specific data that are uneasy to fit in those objects:
+
+- values derived from others, such as formatted numbers and dates, or custom properties.
+- default values when one is missing.
+
+For instance, consider the following template:
+
+`Document.mustache`
+
+    {{# user }}
+        {{ name }} ({{ age }})
+        Member since {{ fullDateFormat(joinDate) }}
+    {{/ user }}
+
+Let's design a custom ViewModel class:
+
+`Document.h`
 
 ```objc
-GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-Document *document = [[Document alloc] init];
-document.bodyColor = [UIColor redColor];
-...
-[template renderObject:document error:NULL];
-```
-
-This Document class would be defined as below:
-
-```objc
-@interface Document : GRMustacheContext
-@property (nonatomic, strong) UIColor *bodyColor;
+// Public interface to the Document.mustache template
+@interface Document : NSObject
+@property (nonatomic, strong) User *user;   // The rendered user
 @end
+```
 
+`Document.m`
+
+```objc
 @implementation Document
-@dynamic bodyColor;     // more on that below
 
-- (NSString *)cssBodyColor
+// Some users don't have any name.
+// Provides a default name for those anonymous users.
+- (NSString *)name
 {
-    return /* clever computation based on self.bodyColor */;
+    return @"Anonymous";
+}
+
+// The User class does not have any `age` property.
+// Instead, they have a `birthDate` property.
+- (NSUInteger)age
+{
+    NSDate *birthDate = self.user.birthDate;
+    return /* clever computation based on user's birth date */;
+}
+
+// The `fullDateFormat` filter.
+- (NSDateFormatter *)fullDateFormat
+{
+    NSDateFormatter *fullDateFormat = [[NSDateFormatter alloc] init];
+    fullDateFormat.dateStyle = NSDateFormatterLongStyle;
+    return fullDateFormat;
 }
 
 @end
 ```
 
+The rendering:
 
-ViewModels are Subclasses of GRMustacheContext
-----------------------------------------------
+```objc
+- (NSString *)rendering
+{
+    // Load Document.mustache
+    GRMustacheTemplate *template = [GRMsutacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+    
+    // Initialize Document object
+    Document *document = [[Document alloc] init];
+    document.user = self.user;
+    
+    // Render
+    return [template renderObject:document error:NULL];
+}
+```
 
-The ViewModel Document class above is a GRMustacheContext subclass.
+Subclasses of GRMustacheContext
+-------------------------------
 
-As such:
+The Document class above was a plain subclass of NSObject.
 
-- All its methods define default values for template keys.
-- It can peek at the [context stack](runtime.md#the-context-stack), and compute values derived from other objects available to the template.
-- It can define custom properties for injecting values into the templates, and reading from them.
+You may also subclass `GRMustacheContext`, and have access to a few extra features:
+
+1. more flexibility for computing derived values.
+2. default value for any key.
+3. easier template debugging.
+
+Let's consider this other template, and see what we can do with GRMustacheContext subclasses.
+
+`Document.mustache`
+
+    {{# user }}
+        {{ name }} ({{ age }})
+        
+        {{ #pets }}
+        - {{ name }} ({{ age }})
+        {{ /pets }}
+    {{/ user }}
 
 
-### Default Values for Templates Keys
+### Deriving Values From the Context Stack
 
-All methods defined by a ViewModel class are available for templates: `{{ name }}` would render the value returned by the `name` method or property of the ViewModel.
+The [context stack](runtime.md#the-context-stack) is the stack of objects that are available for providing values to templates.
 
-However, ViewModels get overriden by other objects that can provide the matching key. For example, if a user has a name, `{{# user }}{{ name }}{{/ user }}` would render the user's name, and not the ViewModel's.
+Inside the `{{# user }}...{{/ user }}` section, the user is at the top of the context stack: he will provide template keys.
 
-Also, a compound expression like `{{ user.name }}` will never call the `name` method of the ViewModel. This expression always returns the name of the user. See the [Runtime Guide](runtime.md) for more information about the way GRMustache resolves identifiers and expressions.
+Inside the `{{# pets }}...{{/ pets }}` section, each user's pet on its turn gets at the top of the context stack: it will provide template keys, and leave the ones it doesn't know to the user.
 
+GRMustacheContext subclasses can load values for the context stack. This will help us rendering the `{{ age }}` tags: first with the user's birth date, then with the pets'.
 
-### Peeking at the Context Stack
+`Document.h`
 
-GRMustacheContext provides two methods for fetching values from the [context stack](runtime.md#the-context-stack): `valueForMustacheKey:` and `valueForMustacheExpression:error:`.
+```objc
+@interface Document : GRMustacheContext
+@property (nonatomic, strong) User *user;   // The rendered user
+@end
+```
 
-`valueForMustacheKey:` returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"name"]` returns the value rendered by `{{ name }}`. It looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved.
+`Document.m`
+
+```objc
+@implementation Document
+@dynamic user;      // more on that below
+
+- (NSUInteger)age
+{
+    // Load user's or pet's birth date
+    NSDate *birthDate = [self valueForMustacheKey:@"birthDate"];
+    return /* clever computation based on the birth date */;
+}
+
+@end
+```
+
+`valueForMustacheKey:` looks in the context stack for an object that provides the given key, and returns this value. It returns nil if the key could not be resolved. Generally speaking, it returns the value that would be rendered by a tag containing a single identifier: `[context valueForMustacheKey:@"xxx"]` returns the value rendered by `{{ xxx }}`.
 
 You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`. This is the job of the `valueForMustacheExpression:error:` method.
 
-For example:
+
+### Dynamic properties
+
+Be cautious: when implementing a GRMustacheContext subclass, the properties that are available to the templates, such as the `user` property above, *must* be declared as @dynamic.
+
+You can also declare read-only @dynamic properties. Those give you straight access to the context stack, just as the `valueForMustacheKey:` method:
+
+`Document.h`
 
 ```objc
 @interface Document : GRMustacheContext
+@property (nonatomic, strong) User *user;           // The rendered user
+@property (nonatomic, readonly) NSDate *birthDate   // The current birth date
 @end
+```
 
+`Document.m`
+
+```objc
 @implementation Document
+@dynamic user, birthDate;
 
-// {{ uppercaseName1 }} renders the uppercase version of the name that would
-// render for {{ name }}.
-- (NSString *)uppercaseName1
+- (NSUInteger)age
 {
-    return [[self valueForMustacheKey:@"name"] uppercaseString];
-}
-
-// {{ uppercaseName2 }} renders the uppercase version of the name that would
-// render for {{ name }}.
-- (NSString *)uppercaseName2
-{
-    return [self valueForMustacheExpression:@"uppercase(name)" error:NULL];
+    return /* clever computation based on the self.birthDate */;
 }
 
 @end
 ```
 
-(The `uppercase` filter is part of the [Standard Library](standard_library.md)).
+### Default values for any key
 
-`valueForMustacheExpression:error:` may return parse errors (for invalid expressions), or filter errors (missing or invalid filter). Error handling follows [Cocoa conventions](https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/ErrorHandlingCocoa/CreateCustomizeNSError/CreateCustomizeNSError.html). Especially:
+The `valueForUndefinedMustacheKey:` method lets you provide a default value for any key. It is triggered when no object in the context stack would provide a value for a given key.
 
-> Success or failure is indicated by the return value of the method. [...] You should always check that the return value is nil or NO before attempting to do anything with the NSError object.
-
-See the [Runtime Guide](runtime.md) for more information about the way GRMustache resolves identifiers and expressions.
-
-
-### Dynamic Properties
-
-GRMustacheContext synthesize accessors for the properties that you declare `@dynamic`.
-
-Those accessors give them direct access to the [rendering context stack](runtime.md#the-context-stack). The storage of those properties *is* the context stack.
-
-Your dynamic properties, such as `document.name`, return the value that should render for `{{ name }}`. They have the same value as `[document valueForMustacheKey:@"name"]`.
-
-When you set the value of a read/write property, that value becomes available for `{{ name }}` tags in templates. This value is inherited by derived contexts as Mustache sections are rendered.
-
-As stated above, View Model properties are overriden as soon as a section renders an object that redefines this key.
-
-For example:
+`Document.m`
 
 ```objc
-@interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;
-@property (nonatomic, strong) NSString *name;
-@end
-
 @implementation Document
-@dynamic user;
-@dynamic name;
+
+- (id)valueForUndefinedMustacheKey:(NSString *)key
+{
+    return [NSString stringWithFormat:@"<default %@>", key];
+}
+
 @end
-
-Document *document = [[Document alloc] init];
-document.user = [User userWithName:@"Fulgence"];
-document.name = @"DefaultName";
-
-// Render {{ name }}, {{# user }}{{ name }}{{/ user }}
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ name }}, {{# user }}{{ name }}{{/ user }}" error:NULL];
-
-// Returns "DefaultName, Fulgence"
-[template renderObject:document error:NULL];
 ```
 
-See how the user name sneaks in, as soon as the user enters the top of the context stack, inside the `{{# user }}...{{/ user }}` section.
+### Template debugging
+
+TODO
 
 
 A note about Key-Value Coding
 -----------------------------
 
-GRMustache does not mess with Key-Value Coding, and leaves `valueForKey:` untouched.
+GRMustacheContext does not mess with Key-Value Coding, and leaves `valueForKey:` untouched.
 
 **The rule of thumb** is simple: to get the value that would be rendered by a tag `{{ ... }}`, avoid `valueForKey:`, and use `valueForMustacheKey:` or `valueForMustacheExpression:error:`.
 

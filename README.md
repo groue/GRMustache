@@ -59,7 +59,7 @@ Basics:
 - [Partials](Guides/partials.md): decompose your templates into components named "partials".
 - [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
 - [Runtime](Guides/runtime.md): how GRMustache renders your data.
-- [ViewModel](Guides/view_model.md): define custom classes for feeding your templates.
+- [ViewModel](Guides/view_model.md): an overview of various techniques to feed templates.
 
 Services:
 
@@ -81,9 +81,7 @@ Mustache, and beyond:
 
 ### Sample code
 
-- [Feeding The Templates](Guides/runtime_patterns.md): an overview of various techniques to feed templates.
-- [Collection Indexes](Guides/sample_code/indexes.md): how to render array indexes, render sections for the first or the last element, for odd or even elements, etc.
-- Also check the [FAQ](#faq) below.
+Check the [FAQ](#faq) below.
 
 ### Reference
 

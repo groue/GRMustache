@@ -3,7 +3,7 @@
 GRMustache runtime
 ==================
 
-You'll learn here how GRMustache renders your data. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [Feeding Templates Guides](runtime_patterns.md).
+You'll learn here how GRMustache renders your data. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [ViewModel Guide](view_model.md).
 
 Variable tags
 -------------
