@@ -168,7 +168,7 @@ You may also need to fetch the value of more complex Mustache expressions such a
 
 ### Managed properties
 
-When implementing a GRMustacheContext subclass, the properties that are available to the templates, such as the `user` property above, *must* be declared as @dynamic.
+When implementing a GRMustacheContext subclass, the properties that are available to the templates, such as the `user` property above, **must** be declared as @dynamic.
 
 Think of Core Data properties: they are also declared @dynamic, because Core Data manages their storage (the underlying database). The same goes for GRMustacheContext properties: their storage is the context stack, and they are managed by GRMustache.
 
@@ -222,7 +222,34 @@ The `valueForUndefinedMustacheKey:` method lets you provide a default value for 
 
 ### Template debugging
 
-TODO
+By conforming to the GRMustacheTagDelegate protocol (fully described in the [Tag Delegates Guide](delegate.md)), a GRMustacheContext subclass can also get extra information about the template rendering.
+
+GRMustacheTagDelegate is a nifty tool, but we'll give a simple example here, and log all tags that couldn't render anything (it may well be the sign of a typo in the template):
+
+`Document.m`
+
+```objc
+// Declare the protocol in class extension
+@interface Document<GRMustacheTagDelegate>
+@end
+
+@implementation Document
+
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    if (object == nil) {
+        NSLog(@"Missing value for %@", tag);
+    }
+    return object;
+}
+
+@end
+```
+
+Your application log will contain lines like:
+
+    Missing value for <GRMustacheVariableTag `{{ name }}` at line 3>
+    Missing value for <GRMustacheVariableTag `{{ fullDateFormat(joinDate) }}` at line 12>
 
 
 ### A note about Key-Value Coding
@@ -245,7 +272,7 @@ Compatibility with other Mustache implementations
 
 [Many Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) foster the ViewModel concept, and encourage you to write your custom subclasses.
 
-GRMustache implementation follows closely the behavior of the [canonical Ruby implementation](https://github.com/defunkt/mustache).
+By subclassing GRMustacheContext, you'll get a behavior that is as close as possible to the [canonical Ruby implementation](https://github.com/defunkt/mustache).
 
 However, this topic is not mentioned in the [Mustache specification](https://github.com/mustache/spec).
 

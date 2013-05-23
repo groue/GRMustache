@@ -419,7 +419,7 @@ Many useful things.
     
     When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md#the-context-stack): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
-    There is also a `contextByAddingTagDelegate:` method, that is illustrated in the [Delegates Guide](delegate.md).
+    There is also a `contextByAddingTagDelegate:` method, that is illustrated in the [Tag Delegates Guide](delegate.md).
 
 
 Example: Render collections of objects
