@@ -203,6 +203,7 @@ This property will return the user's birth date, or a pet's birth date, dependin
 @end
 ```
 
+
 ### Default values for any key
 
 The `valueForUndefinedMustacheKey:` method lets you provide a default value for any key. It is triggered when no object in the context stack would provide a value for a given key.
@@ -220,6 +221,7 @@ The `valueForUndefinedMustacheKey:` method lets you provide a default value for 
 @end
 ```
 
+
 ### Template debugging
 
 By conforming to the GRMustacheTagDelegate protocol (fully described in the [Tag Delegates Guide](delegate.md)), a GRMustacheContext subclass can also get extra information about the template rendering.
@@ -229,7 +231,7 @@ GRMustacheTagDelegate is a nifty tool, but we'll give a simple example here, and
 `Document.m`
 
 ```objc
-// Declare the protocol in class extension
+// Declare the protocol in the class extension
 @interface Document<GRMustacheTagDelegate>
 @end
 

@@ -64,9 +64,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 /**
  * GRMustacheTag instances represent Mustache tags that render values, such as
- * a variable tag {{ name }}, or a section tag {{# name }}...{{/}).
+ * a variable tag `{{ name }}`, or a section tag `{{# name }}...{{/ })`.
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
+ * **Companion guides:**
+ * 
+ * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
  */
 @interface GRMustacheTag: NSObject {
 @private
@@ -75,27 +78,28 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     GRMustacheContentType _contentType;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Tag Information
+////////////////////////////////////////////////////////////////////////////////
+
+
 /**
- * The type of the tag
+ * The type of the tag:
+ *
+ *     typedef enum {
+ *         GRMustacheTagTypeVariable = 1 << 1,           // The type for variable tags such as {{ name }}
+ *         GRMustacheTagTypeSection = 1 << 2,            // The type for section tags such as {{# name }}...{{/}}
+ *         GRMustacheTagTypeOverridableSection = 1 << 3, // The type for overridable section tags such as {{$ name }}...{{/}}
+ *         GRMustacheTagTypeInvertedSection = 1 << 4,    // The type for inverted section tags such as {{^ name }}...{{/}}
+ *     } GRMustacheTagType;
  */
 @property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
- * The template repository that did provide the template string from which the
- * receiver tag has been extracted.
+ * Returns the literal and unprocessed inner content of the tag.
  *
- * Caveat: Make sure you own (retain) template repositories. Don't use templates
- * returned by methods like `[GRMustacheTemplate templateFrom...]`: they return
- * autoreleased templates with an implicit autoreleased repository that will
- * eventually be deallocated when your rendering object tries to access it.
- *
- * @see GRMustacheTemplateRepository
- */
-@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
-
-/**
- * The literal and unprocessed inner content of the tag, the `...` in
- * `{{# name }}...{{/}}`.
+ * A section tag such as `{{# name }}...{{/}}` returns @"...".
  *
  * Variable tags such as `{{ name }}` have no inner content: their inner
  * template string is the empty string.
@@ -103,8 +107,42 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * Returns the description of the tag.
+ *
+ * For example:
+ *
+ *     <GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache>
+ */
+- (NSString *)description;
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Methods Dedicated to the GRMustacheRendering Protocol
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * The template repository that did provide the template string from which the
+ * receiver tag has been extracted.
+ *
+ * This method is intended for objects conforming to the GRMustacheRendering
+ * protocol who deal with templates including partial templates that come from
+ * various template repositories.
+ *
+ * Caveat: Make sure you own (retain) template repositories. Don't use templates
+ * returned by methods like `[GRMustacheTemplate templateFrom...]`: they return
+ * autoreleased templates with an implicit autoreleased repository that will
+ * eventually be deallocated when your rendering object tries to access it.
+ *
+ * @see GRMustacheRendering
+ * @see GRMustacheTemplateRepository
+ */
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+
+/**
  * Returns the rendering of the tag's inner content, rendering all inner
  * Mustache tags with the rendering context argument.
+ *
+ * This method is intended for objects conforming to the GRMustacheRendering
+ * protocol.
  *
  * Note that variable tags such as `{{ name }}` have no inner content, and
  * return the empty string.
@@ -117,6 +155,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * @param error     If there is an error rendering the tag, upon return contains
  *                  an NSError object that describes the problem.
  *
+ * @see GRMustacheRendering
  * @see GRMustacheConfiguration
  * @see GRMustacheContentType
  *
