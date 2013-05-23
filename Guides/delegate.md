@@ -41,7 +41,7 @@ Also: when a section tag `{{# pets }}...{{/ pets }}` is provided with an array, 
 Providing Tag Delegates
 -----------------------
 
-Tag delegates are an uncommon kind of delegate. There is no object with a `delegate` property that you would set to your custom delegate, as one could expect.
+Tag delegates are an uncommon kind of delegate. There is no object exposing a `delegate` property that you would set to your custom delegate, as one could expect.
 
 Actually, *many* tag delegates can enter the game, observe, and alter the rendering of a template. For example, NSDateFormatter and NSNumberFormatter are tag delegates, and this is how they can format all dates and numbers inside the section they are attached to (see the [NSFormatter Guide](NSFormatter.md)).
 
@@ -66,7 +66,7 @@ For example, consider the following template and rendering code:
 
 ```objc
 // Load Document.mustache
-GRMustacheTemplate *template = [GRMsutacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // Initialize Document object
 Document *document = [[Document alloc] init];
@@ -93,7 +93,7 @@ Let's see how `self` can become a tag delegate for the whole template:
 
 ```objc
 // Load Document.mustache
-GRMustacheTemplate *template = [GRMsutacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // Add self as a tag delegate
 template.baseContext = [template.baseContext contextByAddingTagDelegate:self];

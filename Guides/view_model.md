@@ -92,7 +92,7 @@ The rendering:
 - (NSString *)rendering
 {
     // Load Document.mustache
-    GRMustacheTemplate *template = [GRMsutacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
     
     // Initialize Document object
     Document *document = [[Document alloc] init];
