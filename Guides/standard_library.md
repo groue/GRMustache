@@ -218,7 +218,7 @@ Get inspired
 All items of the standard library are built using public APIs: check the code for inspiration:
 
 - [GRMustacheStandardLibrary.m](../src/classes/GRMustacheStandardLibrary.m)
-- [GRMustacheJavascriptLibrary.m](../src/classes/GRMustacheJavascriptLibrary.m)
+- [GRMustacheHTMLLibrary.m](../src/classes/GRMustacheHTMLLibrary.m)
 - [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)
 
 

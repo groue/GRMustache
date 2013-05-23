@@ -206,6 +206,14 @@ With such a common template, it's now a matter of providing different data, depe
 See? When you, GRMustache user, can provide your raw model data and have tag delegates do the formatting, users of the other implementations can still *prepare* their data and build a "ViewModel" that contains the values that should be rendered. Eventually both renderings are identical.
 
 
+### Funny Hooks
+
+Many objects of the [standard library](standard_library.md) are tag delegates. They are all built on top of public APIs, APIs that you can use, so check them out. For example:
+
+- GRMustacheHTMLEscapeFilter is quite simple: [GRMustacheHTMLLibrary.m](../src/classes/GRMustacheHTMLLibrary.m)
+- GRMustacheLocalizer is less simple: [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)
+
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
