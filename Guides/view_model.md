@@ -131,15 +131,15 @@ The [context stack](runtime.md#the-context-stack) is the stack of objects that a
 
 Inside the `{{# user }}...{{/ user }}` section, the user is at the top of the context stack: he will provide template keys.
 
-Inside the `{{# pets }}...{{/ pets }}` section, each user's pet on its turn gets at the top of the context stack: it will provide template keys, and leave the ones it doesn't know to the user.
+Inside the `{{# pets }}...{{/ pets }}` section, which is rendered as many times as the user has pets, each pet on its turn gets at the top of the context stack: it will provide its own keys.
 
-GRMustacheContext subclasses can load values for the context stack. This will help us rendering the `{{ age }}` tags: first with the user's birth date, then with the pets'.
+GRMustacheContext subclasses can load values for the context stack. When our previous NSObject-based Document class could only access its user's birth date, a GRMustacheContext subclass can easily load both user's and pets':
 
 `Document.h`
 
 ```objc
 @interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;   // The rendered user
+@property (nonatomic, strong) User *user;   // The current user
 @end
 ```
 
@@ -151,7 +151,7 @@ GRMustacheContext subclasses can load values for the context stack. This will he
 
 - (NSUInteger)age
 {
-    // Load user's or pet's birth date
+    // Load current birth date, from user or pet:
     NSDate *birthDate = [self valueForMustacheKey:@"birthDate"];
     return /* clever computation based on the birth date */;
 }
@@ -164,17 +164,23 @@ GRMustacheContext subclasses can load values for the context stack. This will he
 You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`. This is the job of the `valueForMustacheExpression:error:` method.
 
 
-### Dynamic properties
+### Managed properties
 
-Be cautious: when implementing a GRMustacheContext subclass, the properties that are available to the templates, such as the `user` property above, *must* be declared as @dynamic.
+When implementing a GRMustacheContext subclass, the properties that are available to the templates, such as the `user` property above, *must* be declared as @dynamic.
 
-You can also declare read-only @dynamic properties. Those give you straight access to the context stack, just as the `valueForMustacheKey:` method:
+Think of Core Data properties: they are also declared @dynamic, because Core Data manages their storage (the underlying database). The same goes for GRMustacheContext properties: their storage is the context stack, and they are managed by GRMustache.
+
+Unlike regular NSObject's synthesized properties, whose value is stable once set, the value of managed properties comes for the context stack, just as the values returned by the `valueForMustacheKey:` method. Any object that comes at the top of the context stack overrides their value, as long as it provides the matching key.
+
+Let's give an example to make this clear, and rewrite the class above by accessing the current `birthDate` through a dynamic property.
+
+This property will return the user's birth date, or a pet's birth date, depending on the moment it is invoked by the GRMustache runtime (inside the `user` section, or inside the `pets` section):
 
 `Document.h`
 
 ```objc
 @interface Document : GRMustacheContext
-@property (nonatomic, strong) User *user;           // The rendered user
+@property (nonatomic, strong) User *user;           // The current user
 @property (nonatomic, readonly) NSDate *birthDate;  // The current birth date
 @end
 ```
@@ -187,6 +193,8 @@ You can also declare read-only @dynamic properties. Those give you straight acce
 
 - (NSUInteger)age
 {
+    // self.birthDate is the current birth date, loaded
+    // from the user, or from a pet.
     return /* clever computation based on the self.birthDate */;
 }
 

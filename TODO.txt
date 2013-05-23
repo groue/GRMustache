@@ -1,4 +1,5 @@
 TODO:
+- Document behavior of GRMustacheContext subclasses in the inline documentation of GRMustacheContext.
 - Introduce [GRMustacheContext valueForUndefinedMustacheKey:], and clean up the default value FAQ that still needs Tag Delegates.
 - Check whether GRMustacheContextSubclassTagDelegateTest.didRenderObjectCount should return and render 0 before it is set.
 - If GRMustacheContext conforms to GRMustacheTagDelegate, it should get notified of tag rendering.
