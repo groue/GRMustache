@@ -66,7 +66,7 @@ Let's design a custom ViewModel class:
 }
 
 // The User class does not have any `age` property.
-// Instead, they have a `birthDate` property.
+// Instead, it defines a `birthDate` property.
 - (NSUInteger)age
 {
     NSDate *birthDate = self.user.birthDate;
@@ -83,6 +83,8 @@ Let's design a custom ViewModel class:
 
 @end
 ```
+
+(Check the [NSFormatter Guide](NSFormatter.md) about formatting abilities of NSFormatter classes.)
 
 The rendering:
 
