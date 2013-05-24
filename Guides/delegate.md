@@ -23,7 +23,7 @@ See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Refere
 
 `mustacheTag:willRenderObject:` renders the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
 
-`mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag. This feature is used by the GRMustacheLocalizer class involved in the `localize` helper of the [standard library](standard_library.md), which demonstrates an interesting technique of double rendering (see [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)).
+`mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag.
 
 `mustacheTag:didFailRenderingObject:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
 
