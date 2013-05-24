@@ -165,6 +165,8 @@ GRMustacheContext subclasses can load values for the context stack. When our pre
 
 You may also need to fetch the value of more complex Mustache expressions such as `user.name` or `uppercase(user.name)`. This is the job of the `valueForMustacheExpression:error:` method.
 
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
+
 
 ### Managed properties
 
@@ -253,6 +255,7 @@ Your application log will contain lines like:
     Missing value for <GRMustacheVariableTag `{{ name }}` at line 3>
     Missing value for <GRMustacheVariableTag `{{ fullDateFormat(joinDate) }}` at line 12>
 
+See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of the GRMustacheTag class.
 
 ### A note about Key-Value Coding
 

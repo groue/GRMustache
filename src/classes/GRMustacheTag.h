@@ -142,7 +142,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * Mustache tags with the rendering context argument.
  *
  * This method is intended for objects conforming to the GRMustacheRendering
- * protocol.
+ * protocol. The following Guides show some use cases for this method:
+ *
+ * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/sample_code/indexes.md
  *
  * Note that variable tags such as `{{ name }}` have no inner content, and
  * return the empty string.
@@ -156,8 +160,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  *                  an NSError object that describes the problem.
  *
  * @see GRMustacheRendering
- * @see GRMustacheConfiguration
- * @see GRMustacheContentType
+ * @see GRMustacheContext
  *
  * @return The rendering of the tag's inner content.
  */

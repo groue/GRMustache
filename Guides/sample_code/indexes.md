@@ -149,6 +149,8 @@ Rendering objects take full responsability of their rendering. Our will render t
 @end
 ```
 
+See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext, and details on the `contextByAddingObject:` and `renderContentWithContext:HTMLSafe:error:` methods.
+
 Writing [filters](../filters.md) that return [rendering objects](../rendering_objects.md) lead to code that is pretty close to the [Handlebars.js block helpers](http://handlebarsjs.com/block_helpers.html). You may enjoy comparing the code above to the [`each_with_index` Handlebars helper](https://gist.github.com/1048968).
 
 **[Download the code](../../../../tree/master/Guides/sample_code/indexes)**

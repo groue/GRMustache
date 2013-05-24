@@ -56,6 +56,7 @@ template.baseContext = [template.baseContext contextByAddingProtectedObject:prot
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full discussion of `contextByAddingProtectedObject:`.
 
 Protected namespaces
 --------------------

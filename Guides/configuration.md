@@ -102,6 +102,8 @@ id library = @{ @"my_important_value": ... };
 repo.configuration.baseContext = [GRMustacheContext contextWithProtectedObject:library];
 ```
 
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
+
 #### At the template level
 
 The base context can also be defined right at the template level:

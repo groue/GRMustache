@@ -43,6 +43,8 @@ This protocol declares the method that all rendering objects must implement. NSA
 
 - _error_ is... the eventual error. You can return nil without setting any error: in this case, everything happens as if you returned the empty string.
 
+See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext.
+
 You may declare and implement your own conforming classes. The `+[GRMustache renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
 
 ```objc
@@ -419,7 +421,7 @@ Many useful things.
     
     When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md#the-context-stack): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
-    There is also a `contextByAddingTagDelegate:` method, that is illustrated in the [Tag Delegates Guide](delegate.md).
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
 
 
 Example: Render collections of objects
