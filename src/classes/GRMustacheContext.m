@@ -139,7 +139,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 // Private dedicated initializer
 //
 // This method allows us to derive new contexts without calling the init method of the subclass.
-- (instancetype)initPrivate;
+- (id)initPrivate;
 
 /**
  * Sends the `valueForKey:` message to super_data->receiver with the provided
@@ -452,7 +452,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return context;
 }
 
-- (instancetype)initPrivate
+- (id)initPrivate
 {
     return [super init];
 }
@@ -662,7 +662,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     return tagDelegates;
 }
 
-- (id)currentContextValue
+- (id)topMustacheObject
 {
     for (GRMustacheContext *context = self; context; context = context.contextParent) {
         id contextObject = context.contextObject;
@@ -719,43 +719,45 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
                 return value;
             }
         }
-
-        // We're about to look into mutableContextObject.
-        //
-        // This dictionary is filled via setValue:forKey:, and via managed
-        // property setters.
-        //
-        // Managed property setters use property names as the key.
-        // So we have to translate custom getters to the property name.
-        //
-        // Regular KVC also supports `isFoo` key for `foo` property: we also
-        // have to translate `isFoo` to `foo`.
-        //
-        // mutableContextKey holds that "canonical" key.
         
-        if (mutableContextKey == nil) {
-            // Support for managed properties is reserved to GRMustacheContext subclasses
-            if (object_getClass(self) == [GRMustacheContext class]) {
-                mutableContextKey = key;
-            } else {
-                mutableContextKey = canonicalKeyForKey([self class], key);
+        if (context.mutableContextObject) {
+
+            // We're about to look into mutableContextObject.
+            //
+            // This dictionary is filled via setValue:forKey:, and via managed
+            // property setters.
+            //
+            // Managed property setters use property names as the key.
+            // So we have to translate custom getters to the property name.
+            //
+            // Regular KVC also supports `isFoo` key for `foo` property: we also
+            // have to translate `isFoo` to `foo`.
+            //
+            // mutableContextKey holds that "canonical" key.
+            
+            if (mutableContextKey == nil) {
+                // Support for managed properties is reserved to GRMustacheContext subclasses
+                if (object_getClass(self) == [GRMustacheContext class]) {
+                    mutableContextKey = key;
+                } else {
+                    mutableContextKey = canonicalKeyForKey([self class], key);
+                }
+            }
+
+            // Check mutableContextObject:
+            //
+            // context = [GRMustacheContext context];
+            // [context setValue:value forKey:key];
+            // assert([context valueForKey:key] == value);
+            
+            id value = [context.mutableContextObject objectForKey:mutableContextKey];
+            if (value != nil) {
+                if (protected != NULL) {
+                    *protected = NO;
+                }
+                return value;
             }
         }
-
-        // Check mutableContextObject:
-        //
-        // context = [GRMustacheContext context];
-        // [context setValue:value forKey:key];
-        // assert([context valueForKey:key] == value);
-        
-        id value = [context.mutableContextObject objectForKey:mutableContextKey];
-        if (value != nil) {
-            if (protected != NULL) {
-                *protected = NO;
-            }
-            return value;
-        }
-        
     }
     
     
@@ -878,7 +880,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     [super dealloc];
 }
 
-- (instancetype)init
+- (id)init
 {
     return [self initPrivate];
 }

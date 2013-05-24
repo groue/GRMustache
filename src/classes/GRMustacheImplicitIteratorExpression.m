@@ -44,7 +44,7 @@
         *protected = NO;
     }
     if (value != NULL) {
-        *value = [context currentContextValue];
+        *value = [context topMustacheObject];
     }
     return YES;
 }

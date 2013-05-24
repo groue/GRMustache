@@ -135,6 +135,10 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 // Documented in GRMustacheContext.h
 - (id)valueForUndefinedMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
 
+// Documented in GRMustacheContext.h
+// @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
+@property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
+
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
@@ -180,15 +184,6 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * @see -[GRMustacheIdentifierExpression hasValue:withContext:protected:error:]
  */
 - (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns the top object of the receiver's context stack.
- *
- * @return The top object of the receiver's context stack.
- *
- * @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
- */
-- (id)currentContextValue GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be
