@@ -153,7 +153,7 @@ It conforms to GRMustacheTagDelegate, obviously, but also to the [GRMustacheRend
 @end
 ```
 
-See the [GRMustacheRendering Class Reference](http://groue.github.io/GRMustache/Reference/Protocols/GRMustacheRendering.html) and [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of GRMustacheRendering and GRMustacheTag.
+See the [GRMustacheRendering Protocol Reference](http://groue.github.io/GRMustache/Reference/Protocols/GRMustacheRendering.html) and [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of GRMustacheRendering and GRMustacheTag.
 
 
 Use Cases for Tag Delegates
