@@ -70,11 +70,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns an initialized rendering context.
+ * Returns an initialized empty rendering context.
  *
- * See the discussion for the +[GRMustacheContext context] class method.
+ * Empty contexts do not provide any value for any key.
+ *
+ * If you wish to use the services provided by the GRMustache standard library,
+ * you should create a context with the +[GRMustacheContext contextWithObject:]
+ * method, like this:
+ *
+ *     [GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
  *
  * @return A rendering context.
+ *
+ * @see +[GRMustache standardLibrary]
  */
 - (id)init;
 
@@ -159,6 +167,10 @@
  *
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
+ *
+ * Unlike contextWithObject: and contextWithProtectedObject:, _tagDelegate_ will
+ * not provide any key to the templates. It will only be notified of the
+ * rendering of tags.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
@@ -251,6 +263,10 @@
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
  *
+ * Unlike contextByAddingObject: and contextByAddingProtectedObject:,
+ * _tagDelegate_ will not provide any key to the templates. It will only be
+ * notified of the rendering of tags.
+ *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
  * @param tagDelegate  A tag delegate
@@ -311,7 +327,7 @@
  *    `valueForKey:` on the receiver, so that methods defined by subclasses can
  *    provide default values.
  *
- * 4. If none of the above situations occurs, returns the result if
+ * 4. If none of the above situations occurs, returns the result of
  *    valueForUndefinedMustacheKey:.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
