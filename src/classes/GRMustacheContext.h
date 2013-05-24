@@ -211,7 +211,8 @@
 /**
  * This method is invoked when a key could not be resolved to any value.
  *
- * Default implementation returns nil.
+ * Subclasses can override this method to return an alternate value for
+ * undefined keys. The default implementation returns nil.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
  *
