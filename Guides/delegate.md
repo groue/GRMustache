@@ -13,6 +13,7 @@ It provides you with a pair of classic "will.../did..." methods that are invoked
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object;
 - (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering;
 - (void)mustacheTag:(GRMustacheTag *)tag didFailRenderingObject:(id)object withError:(NSError *)error;
+@end
 ```
 
 - The _object_ argument is the rendered value: a string, a number, an array, depending on the data you provided.
@@ -26,9 +27,7 @@ See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Refere
 
 - `mustacheTag:didFailRenderingObject:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
 
-Note that those methods do not allow you to build a complete "stack trace" of a template rendering.
-
-For instance, a tag like `{{ person.name }}` is rendered once. Thus the delegate will be called once. If the person has been found, the rendered object will be the name of the person. If the person could not be found, the rendered object will be `nil`.
+Note that a tag like `{{ person.name }}` is rendered once. Thus the delegate will be called once. If the person has been found, the rendered object will be the name of the person. If the person could not be found, the rendered object will be `nil`.
 
 Also: when a section tag `{{# pets }}...{{/ pets }}` is provided with an array, its content is rendered several times. However the delegate will be called once, with the array passed in the _object_ argument.
 
