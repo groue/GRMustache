@@ -15,17 +15,16 @@ It provides you with a pair of classic "will.../did..." methods that are invoked
 - (void)mustacheTag:(GRMustacheTag *)tag didFailRenderingObject:(id)object withError:(NSError *)error;
 ```
 
-The _object_ argument is the rendered value: a string, a number, an array, depending on the data you provided.
-
-The _tag_ argument represents the rendering tag: `{{ name }}`, `{{# name }}...{{/}}`, etc.
+- The _object_ argument is the rendered value: a string, a number, an array, depending on the data you provided.
+- The _tag_ argument represents the rendering tag: `{{ name }}`, `{{# name }}...{{/}}`, etc.
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of the GRMustacheTag class.
 
-`mustacheTag:willRenderObject:` renders the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
+- `mustacheTag:willRenderObject:` renders the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
 
-`mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag.
+- `mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag.
 
-`mustacheTag:didFailRenderingObject:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
+- `mustacheTag:didFailRenderingObject:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
 
 Note that those methods do not allow you to build a complete "stack trace" of a template rendering.
 
