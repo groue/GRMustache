@@ -124,7 +124,7 @@ FAQ
 
 - **Q: Is it possible to render a default value for missing keys?**
 
-    A: Yes. [ViewModels](Guides/view_model.md) can render default values for specific keys. [Tag Delegates](Guides/delegate.md) can handle any key.
+    A: [Yes](Guides/view_model.md).
 
 - **Q: Is it possible to disable HTML escaping?**
 
