@@ -19,11 +19,7 @@ The _object_ argument is the rendered value: a string, a number, an array, depen
 
 The _tag_ argument represents the rendering tag: `{{ name }}`, `{{# name }}...{{/}}`, etc.
 
-The `description` method of tags provides a clear description such as:
-
-    <GRMustacheVariableTag `{{name}}` at line 18 of template /path/to/Profile.mustache>
-    
-Don't miss the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html).
+All methods of GRMustacheTag tag are documented in the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html).
 
 `mustacheTag:willRenderObject:` renders the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
 
@@ -108,6 +104,9 @@ NSString *rendering = [template renderObject:document error:NULL];
 
 The `contextByAddingTagDelegate:` derives a new context: our template now has a base context that contains both the [standard library](standard_library.md), and `self`, reading to observe the rendering of tags.
 
+See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full discussion of `contextByAddingTagDelegate:`.
+
+
 
 ### By Deriving a Deep Context
 
@@ -171,6 +170,11 @@ Use Cases for Tag Delegates
     return object;
 }
 ```
+
+Your application log will contain lines like:
+
+    Missing value for <GRMustacheVariableTag `{{ name }}` at line 3>
+    Missing value for <GRMustacheVariableTag `{{ fullDateFormat(joinDate) }}` at line 12>
 
 
 ### Cross-Platform Filters
