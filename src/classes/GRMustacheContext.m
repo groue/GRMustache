@@ -97,8 +97,6 @@ static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self,
 static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd);
 static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd);
 
-static BOOL shouldPreventNSUndefinedKeyException = NO;
-
 @interface GRMustacheContext()
 
 // A dictionary where keys are ancestor context objects, and values depth
@@ -401,11 +399,6 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
         free(properties);
     }
-}
-
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    shouldPreventNSUndefinedKeyException = YES;
 }
 
 + (instancetype)context

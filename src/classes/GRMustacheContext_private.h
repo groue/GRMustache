@@ -78,21 +78,9 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 }
 
 /**
- * Avoids most NSUndefinedException to be raised by the invocation of
- * `valueForKey:inObject:`.
- *
- * @see valueForKey:inObject:
- */
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
-
-/**
  * Sends the `valueForKey:` message to _object_ with the provided _key_, and
  * returns the result.
  *
- * Should [GRMustacheContext preventNSUndefinedKeyExceptionAttack] method have
- * been called earlier, temporarily swizzle _object_ so that most
- * NSUndefinedKeyException are avoided.
- * 
  * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
  *
  * @param key     The searched key
@@ -100,8 +88,6 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  *
  * @return `[object valueForKey:key]`, or nil should an NSUndefinedKeyException
  *         be raised.
- *
- * @see preventNSUndefinedKeyExceptionAttack
  */
 + (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
