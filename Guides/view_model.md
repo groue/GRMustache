@@ -257,6 +257,7 @@ Your application log will contain lines like:
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of the GRMustacheTag class.
 
+
 ### A note about Key-Value Coding
 
 GRMustacheContext does not mess with Key-Value Coding, and leaves `valueForKey:` untouched.

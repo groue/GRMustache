@@ -5,7 +5,16 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v6.7
 
-TODO.
+### Performance improvements
+
+Many thanks to [Alex Reid](https://github.com/AlexJReid) who could setup benchmarks revealing performance problems.
+
+### More ViewModel
+
+- `-[GRMustacheContext topMustacheObject]` gives you access to the top of the rendering stack
+- `-[GRMustacheContext valueForUndefinedMustacheKey:]` let your subclasses define default values for any key.
+
+Check the [ViewModel Guide](Guides/view_model.md) for more information.
 
 ## v6.6
 
