@@ -409,8 +409,10 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             // {{# number }}...{{/}}
             // {{$ number }}...{{/}}
             if ([self boolValue]) {
-                context = [context contextByAddingObject:self];
-                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                context = [[context class] newContextWithParent:context addedObject:self];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                [context release];
+                return rendering;
             } else {
                 return @"";
             }
@@ -439,8 +441,10 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             // {{# string }}...{{/}}
             // {{$ string }}...{{/}}
             if (self.length > 0) {
-                context = [context contextByAddingObject:self];
-                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                context = [[context class] newContextWithParent:context addedObject:self];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                [context release];
+                return rendering;
             } else {
                 return @"";
             }
@@ -465,11 +469,14 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
             return [self description];
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection:
+        case GRMustacheTagTypeOverridableSection: {
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
-            context = [context contextByAddingObject:self];
-            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            context = [[context class] newContextWithParent:context addedObject:self];
+            NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            [context release];
+            return rendering;
+        }
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ object }}...{{/}}
@@ -545,13 +552,16 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             NSMutableString *buffer = [NSMutableString string];
             for (id item in self) {
                 // item enters the context as a context object
-                GRMustacheContext *itemContext = [context contextByAddingObject:item];
-                
-                NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
-                if (!rendering) {
-                    return nil;
+                @autoreleasepool {
+                    GRMustacheContext *itemContext = [[context class] newContextWithParent:context addedObject:item];
+                    NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
+                    [itemContext release];
+                    
+                    if (!rendering) {
+                        return nil;
+                    }
+                    [buffer appendString:rendering];
                 }
-                [buffer appendString:rendering];
             }
             return buffer;
         }
