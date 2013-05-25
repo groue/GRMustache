@@ -56,7 +56,7 @@
 
 - (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
 {
-    self = [super initWithTemplateRepository:templateRepository expression:expression contentType:contentType];
+    self = [super initWithType:GRMustacheTagTypeVariable templateRepository:templateRepository expression:expression contentType:contentType];
     if (self) {
         _escapesHTML = escapesHTML;
     }

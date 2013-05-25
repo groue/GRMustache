@@ -42,11 +42,6 @@
 
 #pragma mark - GRMustacheTag
 
-- (GRMustacheTagType)type
-{
-    return ((GRMustacheTag *)[_tags objectAtIndex:0]).type;
-}
-
 - (NSString *)innerTemplateString
 {
     return [[_tags valueForKey:@"innerTemplateString"] componentsJoinedByString:@""];
@@ -120,7 +115,7 @@
 - (id)initWithTags:(NSArray *)tags
 {
     GRMustacheTag *initialTag = [tags objectAtIndex:0];
-    self = [super initWithTemplateRepository:initialTag.templateRepository expression:initialTag.expression contentType:initialTag.contentType];
+    self = [super initWithType:initialTag.type templateRepository:initialTag.templateRepository expression:initialTag.expression contentType:initialTag.contentType];
     if (self) {
         _tags = [tags retain];
     }

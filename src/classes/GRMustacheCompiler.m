@@ -274,13 +274,13 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
-                                                                                               expression:_currentOpeningToken.expression
-                                                                                              contentType:_contentType
-                                                                                           templateString:token.templateString
-                                                                                               innerRange:innerRange
-                                                                                                     type:GRMustacheTagTypeInvertedSection
-                                                                                               components:_currentComponents];
+                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithType:GRMustacheTagTypeInvertedSection
+                                                                         templateRepository:_templateRepository
+                                                                                 expression:_currentOpeningToken.expression
+                                                                                contentType:_contentType
+                                                                             templateString:token.templateString
+                                                                                 innerRange:innerRange
+                                                                                 components:_currentComponents];
                 
                 [_openingTokenStack removeLastObject];
                 [_componentsStack removeLastObject];
@@ -359,13 +359,13 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
-                                                                                               expression:_currentOpeningToken.expression
-                                                                                              contentType:_contentType
-                                                                                           templateString:token.templateString
-                                                                                               innerRange:innerRange
-                                                                                                     type:GRMustacheTagTypeSection
-                                                                                               components:_currentComponents];
+                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithType:GRMustacheTagTypeSection
+                                                                         templateRepository:_templateRepository
+                                                                                 expression:_currentOpeningToken.expression
+                                                                                contentType:_contentType
+                                                                             templateString:token.templateString
+                                                                                 innerRange:innerRange
+                                                                                 components:_currentComponents];
                 
                 [_openingTokenStack removeLastObject];
                 [_componentsStack removeLastObject];
@@ -440,13 +440,13 @@
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : ((_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening) ? GRMustacheTagTypeOverridableSection : GRMustacheTagTypeSection);
-                    wrapperComponent = [GRMustacheSectionTag sectionTagWithTemplateRepository:_templateRepository
-                                                                                   expression:_currentOpeningToken.expression
-                                                                                  contentType:_contentType
-                                                                               templateString:token.templateString
-                                                                                   innerRange:innerRange
-                                                                                         type:type
-                                                                                   components:_currentComponents];
+                    wrapperComponent = [GRMustacheSectionTag sectionTagWithType:type
+                                                             templateRepository:_templateRepository
+                                                                     expression:_currentOpeningToken.expression
+                                                                    contentType:_contentType
+                                                                 templateString:token.templateString
+                                                                     innerRange:innerRange
+                                                                     components:_currentComponents];
                     
                 } break;
                 

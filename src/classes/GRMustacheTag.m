@@ -29,6 +29,7 @@
 #import "GRMustacheRendering.h"
 
 @implementation GRMustacheTag
+@synthesize type=_type;
 @synthesize expression=_expression;
 @synthesize templateRepository=_templateRepository;
 @synthesize contentType=_contentType;
@@ -39,10 +40,11 @@
     [super dealloc];
 }
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
+- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
+        _type = type;
         _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
         _contentType = contentType;
@@ -58,12 +60,6 @@
     } else {
         return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
     }
-}
-
-- (GRMustacheTagType)type
-{
-    NSAssert(NO, @"Subclasses must override");
-    return 0;
 }
 
 - (BOOL)escapesHTML
@@ -248,7 +244,7 @@
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
     // Only overridable tags can override components
-    if (self.type != GRMustacheTagTypeOverridableSection) {
+    if (_type != GRMustacheTagTypeOverridableSection) {
         return component;
     }
     

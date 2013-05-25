@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 // Documented in GRMustacheTag.h
 @interface GRMustacheTag: NSObject<GRMustacheTemplateComponent> {
 @private
+    GRMustacheTagType _type;
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;
     GRMustacheContentType _contentType;
@@ -102,6 +103,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * Returns a new GRMustacheTag.
  *
+ * @param type                The tag type
  * @param templateRepository  The template repository exposed to the library
  *                            user via the public `templateRepository` property.
  *                            It is the template repository that provides the
@@ -114,7 +116,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * @see expression property
  * @see contentType property
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
  * Abstract method that returns a tag that represents the receiver overrided by

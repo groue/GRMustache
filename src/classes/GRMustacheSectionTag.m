@@ -35,15 +35,15 @@
 /**
  * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:overridable:components:]
  */
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components;
+- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components;
 @end
 
 
 @implementation GRMustacheSectionTag
 
-+ (instancetype)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
 {
-    return [[[self alloc] initWithTemplateRepository:templateRepository expression:expression contentType:contentType templateString:templateString innerRange:innerRange type:type components:components] autorelease];
+    return [[[self alloc] initWithType:type templateRepository:templateRepository expression:expression contentType:contentType templateString:templateString innerRange:innerRange components:components] autorelease];
 }
 
 - (void)dealloc
@@ -55,8 +55,6 @@
 
 
 #pragma mark - GRMustacheTag
-
-@synthesize type=_type;
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
@@ -127,13 +125,12 @@
 
 #pragma mark - Private
 
-- (id)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components
+- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
 {
-    self = [super initWithTemplateRepository:templateRepository expression:expression contentType:contentType];
+    self = [super initWithType:type templateRepository:templateRepository expression:expression contentType:contentType];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _type = type;
         _components = [components retain];
     }
     return self;

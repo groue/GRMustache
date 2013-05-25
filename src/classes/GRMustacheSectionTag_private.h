@@ -34,7 +34,6 @@
 @private
     NSString *_templateString;
     NSRange _innerRange;
-    GRMustacheTagType _type;
     NSArray *_components;
 }
 
@@ -52,6 +51,7 @@
  * The _components_ array contains the GRMustacheTemplateComponent objects
  * that make the section (texts, variables, other sections, etc.)
  * 
+ * @param type                The type of the section.
  * @param templateRepository  The template repository that did provide the
  *                            template string.
  * @param expression          The expression that would evaluate against a
@@ -60,7 +60,6 @@
  * @param templateString      A Mustache template string.
  * @param innerRange          The range of the inner template string of the
  *                            section in _templateString_.
- * @param type                The type of the section.
  * @param components          An array of GRMustacheTemplateComponent that make
  *                            the section.
  *
@@ -70,6 +69,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (instancetype)sectionTagWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange type:(GRMustacheTagType)type components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end
