@@ -131,9 +131,8 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 @property (nonatomic, retain) id templateOverride;
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
++ (BOOL)classIsTagDelegate:(Class)klass;
 + (void)setupPreventionOfNSUndefinedKeyException;
-+ (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
-+ (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object;
 + (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects;
 
 // Private dedicated initializer
@@ -182,6 +181,11 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
 @synthesize tagDelegate=_tagDelegate;
 @synthesize templateOverrideParent=_templateOverrideParent;
 @synthesize templateOverride=_templateOverride;
+
++ (void)load
+{
+    [self setupPreventionOfNSUndefinedKeyException];
+}
 
 + (void)initialize
 {
@@ -425,7 +429,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     context.contextObject = [object retain];
         
     // initialize tag delegate stack
-    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+    if ([self classIsTagDelegate:[object class]]) {
         context.tagDelegate = [object retain];
     }
     
@@ -545,7 +549,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         context.contextObject = object;
         
         // update or copy tag delegate stack
-        if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+        if ([GRMustacheContext classIsTagDelegate:[object class]]) {
             if (_tagDelegate) { context.tagDelegateParent = self; }
             context.tagDelegate = object;
         } else {
@@ -652,11 +656,16 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         }
     }
     
-    // if self conforms to GRMustacheTagDelegate, self behaves as the first tag
-    // delegate in the stack (before all section delegates).
-    if ([self conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
-        if (!tagDelegates) tagDelegates = [NSMutableArray array];
-        [tagDelegates addObject:self];
+    Class klass = object_getClass(self);
+    if (klass != [GRMustacheContext class]) {
+        
+        // if self conforms to GRMustacheTagDelegate, self behaves as the first tag
+        // delegate in the stack (before all section delegates).
+        
+        if ([GRMustacheContext classIsTagDelegate:klass]) {
+            if (!tagDelegates) tagDelegates = [NSMutableArray array];
+            [tagDelegates addObject:self];
+        }
     }
     
     return tagDelegates;
@@ -1165,10 +1174,10 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
         return nil;
     }
     
+    NSMutableSet *preventionOfNSUndefinedKeyExceptionObjects = [self preventionOfNSUndefinedKeyExceptionObjects];
+    
     @try {
-        if (shouldPreventNSUndefinedKeyException) {
-            [self beginPreventionOfNSUndefinedKeyExceptionFromObject:super_data->receiver];
-        }
+        [preventionOfNSUndefinedKeyExceptionObjects addObject:super_data->receiver];
         
         // We accept nil super_data->super_class, as a convenience for our
         // implementation of valueForKey:inObject:.
@@ -1200,9 +1209,7 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
     
     @finally {
-        if (shouldPreventNSUndefinedKeyException) {
-            [self endPreventionOfNSUndefinedKeyExceptionFromObject:super_data->receiver];
-        }
+        [preventionOfNSUndefinedKeyExceptionObjects removeObject:super_data->receiver];
     }
     
     return nil;
@@ -1287,6 +1294,23 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     }
 }
 
++ (BOOL)classIsTagDelegate:(Class)klass
+{
+    static CFMutableDictionaryRef cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+    });
+    int result = (int)CFDictionaryGetValue(cache, klass);
+    if (!result) {
+        result = ([klass instancesRespondToSelector:@selector(mustacheTag:willRenderObject:)] ||
+                  [klass instancesRespondToSelector:@selector(mustacheTag:didRenderObject:as:)] ||
+                  [klass instancesRespondToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) ? 1 : 2;
+        CFDictionarySetValue(cache, klass, (const void *)result);
+    }
+    return (result == 1);
+}
+
 - (NSDictionary *)depthsForAncestors
 {
     if (_depthsForAncestors == nil) {
@@ -1347,24 +1371,23 @@ static BOOL shouldPreventNSUndefinedKeyException = NO;
     });
 }
 
-+ (void)beginPreventionOfNSUndefinedKeyExceptionFromObject:(id)object
-{
-    [self setupPreventionOfNSUndefinedKeyException];
-    [[self preventionOfNSUndefinedKeyExceptionObjects] addObject:object];
-}
-
-+ (void)endPreventionOfNSUndefinedKeyExceptionFromObject:(id)object
-{
-    [[self preventionOfNSUndefinedKeyExceptionObjects] removeObject:object];
-}
-
 + (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects
 {
+    if ([NSThread isMainThread]) {
+        static NSMutableSet *mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            mainThreadPreventionOfNSUndefinedKeyExceptionObjects = [[NSMutableSet set] retain];
+        });
+        return mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
+    }
+    
+    NSThread *thread = [NSThread currentThread];
     static NSString const * GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects";
-    NSMutableSet *silentObjects = [[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
+    NSMutableSet *silentObjects = [[thread threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     if (silentObjects == nil) {
         silentObjects = [NSMutableSet set];
-        [[[NSThread currentThread] threadDictionary] setObject:silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
+        [[thread threadDictionary] setObject:silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     }
     return silentObjects;
 }
