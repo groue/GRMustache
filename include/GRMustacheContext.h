@@ -198,7 +198,7 @@
  * the values defined by objects already contained in the context stack. Keys
  * unknown to _object_ will be looked up deeper in the context stack.
  *
- *     context = [GRMustacheContext contextWithProtectedObject:@{ @"a": @"ignored", @"b": @"foo" }];
+ *     context = [GRMustacheContext contextWithObject:@{ @"a": @"ignored", @"b": @"foo" }];
  *     context = [context contextByAddingObject:@{ @"a": @"bar" }];
  *
  *     // `a` is overriden

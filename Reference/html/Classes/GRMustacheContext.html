@@ -775,7 +775,7 @@ given object added at the top of the <a href="#//api/name/context">context</a> s
 the values defined by objects already contained in the <a href="#//api/name/context">context</a> stack. Keys
 unknown to <em>object</em> will be looked up deeper in the <a href="#//api/name/context">context</a> stack.</p>
 
-<pre><code>context = [GRMustacheContext contextWithProtectedObject:@{ @"a": @"ignored", @"b": @"foo" }];
+<pre><code>context = [GRMustacheContext contextWithObject:@{ @"a": @"ignored", @"b": @"foo" }];
 context = [context contextByAddingObject:@{ @"a": @"bar" }];
 
 // `a` is overriden
