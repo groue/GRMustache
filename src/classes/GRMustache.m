@@ -529,9 +529,10 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 GRMustacheContext *itemContext = [context contextByAddingObject:item];
                 
                 NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
-                if (rendering) {
-                    [buffer appendString:rendering];
+                if (!rendering) {
+                    return nil;
                 }
+                [buffer appendString:rendering];
             }
             return buffer;
         }
