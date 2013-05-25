@@ -130,16 +130,6 @@ FAQ
 
     A: [Yes](Guides/html_vs_text.md)
 
-- **Q: What is this NSUndefinedKeyException stuff?**
-
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException are raised and caught. Let us double guess you: it's likely that you wish Xcode would stop breaking on those exceptions. This use case is covered in the [Runtime Guide](Guides/runtime.md).
-
-- **Q: Why does GRMustache need JRSwizzle?**
-
-    A: GRMustache does not *need* it, and this [swizzling](http://www.mikeash.com/pyblog/friday-qa-2010-01-29-method-replacement-for-fun-and-profit.html) is a mere convenience that will not ship in your released binary:
-    
-    *You* may be happy having GRMustache swizzle `valueForUndefinedKey:` in the NSObject class when you invoke `[GRMustache preventNSUndefinedKeyExceptionAttack]`: it allows you to debug your application without being interrupted by the NSUndefinedKeyException that may be raised and caught by template rendering. The use case is described in the [Runtime Guide](Guides/runtime.md).
-
 What other people say
 ---------------------
 
