@@ -67,13 +67,16 @@
 }
 @end
 
-@interface ThrowingObject: NSObject
+@interface ThrowingObjectFromValueForKey: NSObject
 @end
 
-@implementation ThrowingObject
+@implementation ThrowingObjectFromValueForKey
 
 - (id)valueForKey:(NSString *)key
 {
+    if ([key isEqualToString:@"KnownKey"]) {
+        return @"KnownValue";
+    }
     if ([key isEqualToString:@"NonNSUndefinedKeyException"]) {
         NSAssert(NO, @"");
     }
@@ -81,6 +84,27 @@
         return [@"" valueForKey:@"foo"];
     }
     return [super valueForKey:key];
+}
+
+@end
+
+@interface ThrowingObjectFromValueForUndefinedKey: NSObject
+@end
+
+@implementation ThrowingObjectFromValueForUndefinedKey
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    if ([key isEqualToString:@"KnownKey"]) {
+        return @"KnownValue";
+    }
+    if ([key isEqualToString:@"NonNSUndefinedKeyException"]) {
+        NSAssert(NO, @"");
+    }
+    if ([key isEqualToString:@"NonSelfNSUndefinedKeyException"]) {
+        return [@"" valueForKey:@"foo"];
+    }
+    return [super valueForUndefinedKey:key];
 }
 
 @end
@@ -217,29 +241,88 @@
     STAssertEqualObjects(result, @"foo", nil);
 }
 
+- (void)testRuntimeDoNotThrowForKnownKey
+{
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForKey alloc] init] autorelease];
+        id value = [throwingObject valueForKey:@"KnownKey"];
+        STAssertEqualObjects(value, @"KnownValue", nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        value = [context valueForMustacheKey:@"KnownKey" protected:NULL];
+        STAssertEqualObjects(value, @"KnownValue", nil);
+    }
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
+        id value = [throwingObject valueForKey:@"KnownKey"];
+        STAssertEqualObjects(value, @"KnownValue", nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        value = [context valueForMustacheKey:@"KnownKey" protected:NULL];
+        STAssertEqualObjects(value, @"KnownValue", nil);
+    }
+}
+
 - (void)testRuntimeRethrowsNonNSUndefinedKeyException
 {
-    ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
-    context = [context contextByAddingObject:throwingObject];
-    STAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" protected:NULL], nil);
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"NonNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" protected:NULL], nil);
+    }
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"NonNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" protected:NULL], nil);
+    }
 }
 
 - (void)testRuntimeSwallowsNonSelfNSUndefinedKeyException
 {
-    // This test makes sure users can implement proxy objects
-    ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
-    context = [context contextByAddingObject:throwingObject];
-    STAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" protected:NULL], nil);
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"NonSelfNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" protected:NULL], nil);
+    }
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"NonSelfNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" protected:NULL], nil);
+    }
 }
 
 - (void)testRuntimeSwallowsSelfNSUndefinedKeyException
 {
-    ThrowingObject *throwingObject = [[[ThrowingObject alloc] init] autorelease];
-    GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
-    context = [context contextByAddingObject:throwingObject];
-    STAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" protected:NULL], nil);
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"SelfNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" protected:NULL], nil);
+    }
+    {
+        id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
+        STAssertThrows([throwingObject valueForKey:@"SelfNSUndefinedKeyException"], nil);
+        
+        GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
+        context = [context contextByAddingObject:throwingObject];
+        STAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" protected:NULL], nil);
+    }
 }
 
 - (void)testContextByAddingProtectedObject
