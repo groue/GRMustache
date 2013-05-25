@@ -558,7 +558,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 - (instancetype)contextByAddingObject:(id)object
 {
-    return [[self class] newContextWithParent:self addedObject:object];
+    return [[[self class] newContextWithParent:self addedObject:object] autorelease];
 }
 
 - (instancetype)contextByAddingProtectedObject:(id)object
