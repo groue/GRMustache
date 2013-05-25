@@ -219,13 +219,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         return string;
     }
     
-    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
-    if (!characters) {
-        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
-        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
-        characters = [data bytes];
-    }
-    
     static const NSString *escapeForCharacter[] = {
         ['&'] = @"&amp;",
         ['<'] = @"&lt;",
@@ -235,15 +228,38 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     };
     static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
     
-    NSMutableString *buffer = nil;
+    
+    // Avoid creating a NSMutableData instance if escaping in uncessary
+    
+    BOOL needsEscaping = NO;
+    for (NSUInteger i=0; i<length; ++i) {
+        unichar character = [string characterAtIndex:i];
+        if (character < escapeForCharacterLength && escapeForCharacter[character]) {
+            needsEscaping = YES;
+            break;
+        }
+    }
+    
+    if (!needsEscaping) {
+        return string;
+    }
+    
+    
+    // Escape
+    
+    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
+    if (!characters) {
+        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
+        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
+        characters = [data bytes];
+    }
+    
+    NSMutableString *buffer = [NSMutableString stringWithCapacity:length];
     const UniChar *unescapedStart = characters;
     CFIndex unescapedLength = 0;
     for (NSUInteger i=0; i<length; ++i, ++characters) {
         const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
-            if (!buffer) {
-                buffer = [NSMutableString stringWithCapacity:length];
-            }
             CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
             CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
             unescapedStart = characters+1;
@@ -251,9 +267,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         } else {
             ++unescapedLength;
         }
-    }
-    if (!buffer) {
-        return string;
     }
     if (unescapedLength > 0) {
         CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
