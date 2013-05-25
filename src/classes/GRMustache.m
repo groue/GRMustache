@@ -36,10 +36,12 @@
 // =============================================================================
 #pragma mark - Private declarations
 
-static id<GRMustacheRendering> nilRenderingObject;
 static NSObject *standardLibrary = nil;
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+@interface GRMustacheNilRendering : NSObject<GRMustacheRendering>
+@end
+static GRMustacheNilRendering *nilRenderingObject;
+
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
@@ -97,7 +99,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         
         // Prepare renderingObjectForObject:
         
-        nilRenderingObject = [[GRMustacheRenderingWithIMP alloc] initWithObject:nil implementation:(IMP)GRMustacheRenderNil];
+        nilRenderingObject = [[GRMustacheNilRendering alloc] init];
         [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNull   forClass:[NSNull class]];
         [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNumber forClass:[NSNumber class]];
         [self registerRenderingImplementation:(IMP)GRMustacheRenderNSString forClass:[NSString class]];
@@ -341,7 +343,9 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 // =============================================================================
 #pragma mark - Rendering implementations
 
-static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+@implementation GRMustacheNilRendering
+
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
@@ -357,6 +361,8 @@ static NSString *GRMustacheRenderNil(id self, SEL _cmd, GRMustacheTag *tag, GRMu
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
 }
+
+@end
 
 
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
