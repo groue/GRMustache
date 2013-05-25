@@ -12,7 +12,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.6 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.7 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -53,6 +53,8 @@
 	
 	<option value="instance_methods">Instance Methods</option>
 	
+	<option value="//api/name/description">&nbsp;&nbsp;&nbsp;&nbsp;- description</option>
+	
 	<option value="//api/name/renderContentWithContext:HTMLSafe:error:">&nbsp;&nbsp;&nbsp;&nbsp;- renderContentWithContext:HTMLSafe:error:</option>
 	
 	
@@ -70,6 +72,10 @@
 
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Tag Information">Tag Information</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Methods Dedicated to the GRMustacheRendering Protocol">Methods Dedicated to the GRMustacheRendering Protocol</a></span></li>
 	
 </ul></li>
 
@@ -92,6 +98,8 @@
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/description">description</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderContentWithContext:HTMLSafe:error:">renderContentWithContext:HTMLSafe:error:</a></span></li>
 	
@@ -133,9 +141,15 @@
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
 						<p>GRMustacheTag instances represent Mustache tags that render values, such as
-a variable tag {{ name }}, or a section tag {{# name }}&hellip;{{/}).</p>
+a variable tag <code>{{ name }}</code>, or a section tag <code>{{# name }}...{{/ })</code>.</p>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md">https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md</a></p>
+<p><strong>Companion guides:</strong></p>
+
+<ul>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></li>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md">https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md</a></li>
+</ul>
+
 					</div>
 					
 					
@@ -147,30 +161,44 @@ a variable tag {{ name }}, or a section tag {{# name }}&hellip;{{/}).</p>
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
-						
-						
+						<a title="Tag Information" name="task_Tag Information"></a>
+						<h3 class="subsubtitle task-title">Tag Information</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/type">&nbsp;&nbsp;type</a></code>
-		<span class="tooltip"><p>The type of the tag</p></span>
-	</span>
-	<span class="task-item-suffix">property</span>
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/templateRepository">&nbsp;&nbsp;templateRepository</a></code>
-		<span class="tooltip"><p>The template repository that did provide the template string from which the
-receiver tag has been extracted.</p></span>
+		<span class="tooltip"><p>The type of the tag:</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/innerTemplateString">&nbsp;&nbsp;innerTemplateString</a></code>
-		<span class="tooltip"><p>The literal and unprocessed inner content of the tag, the <code>...</code> in
-<code>{{# name }}...{{/}}</code>.</p></span>
+		<span class="tooltip"><p>Returns the literal and unprocessed inner content of the tag.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
+		<span class="tooltip"><p>Returns the description of the tag.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Methods Dedicated to the GRMustacheRendering Protocol" name="task_Methods Dedicated to the GRMustacheRendering Protocol"></a>
+						<h3 class="subsubtitle task-title">Methods Dedicated to the GRMustacheRendering Protocol</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/templateRepository">&nbsp;&nbsp;templateRepository</a></code>
+		<span class="tooltip"><p>The template repository that did provide the template string from which the
+receiver tag has been extracted.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -202,8 +230,7 @@ Mustache tags with the rendering context argument.</p></span>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The literal and unprocessed inner content of the tag, the <code>...</code> in
-<code>{{# name }}...{{/}}</code>.</p>
+		<p>Returns the literal and unprocessed inner content of the tag.</p>
 	</div>		
 	
     
@@ -220,7 +247,9 @@ Mustache tags with the rendering context argument.</p></span>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Variable tags such as <code>{{ name }}</code> have no inner content: their inner
+		<p>A section tag such as <code>{{# name }}...{{/}}</code> returns @&ldquo;&hellip;&rdquo;.</p>
+
+<p>Variable tags such as <code>{{ name }}</code> have no inner content: their inner
 template string is the empty string.</p>
 	</div>
 	
@@ -263,7 +292,11 @@ receiver tag has been extracted.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Caveat: Make sure you own (retain) template repositories. Don&rsquo;t use templates
+		<p>This method is intended for objects conforming to the <a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a>
+protocol who deal with templates including partial templates that come from
+various template repositories.</p>
+
+<p>Caveat: Make sure you own (retain) template repositories. Don&rsquo;t use templates
 returned by methods like <code>[GRMustacheTemplate templateFrom...]</code>: they return
 autoreleased templates with an implicit autoreleased repository that will
 eventually be deallocated when your rendering object tries to access it.</p>
@@ -276,6 +309,8 @@ eventually be deallocated when your rendering object tries to access it.</p>
 	<div class="method-subsection see-also-section">
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
+			
+			<li><code><p><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a></p></code></li>
 			
 			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
 			
@@ -299,7 +334,7 @@ eventually be deallocated when your rendering object tries to access it.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The type of the tag</p>
+		<p>The type of the tag:</p>
 	</div>		
 	
     
@@ -313,6 +348,17 @@ eventually be deallocated when your rendering object tries to access it.</p>
 	
 	
 	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<pre><code>typedef enum {
+    GRMustacheTagTypeVariable = 1 &lt;&lt; 1,           // The type for variable tags such as {{ name }}
+    GRMustacheTagTypeSection = 1 &lt;&lt; 2,            // The type for section tags such as {{# name }}...{{/}}
+    GRMustacheTagTypeOverridableSection = 1 &lt;&lt; 3, // The type for overridable section tags such as {{$ name }}...{{/}}
+    GRMustacheTagTypeInvertedSection = 1 &lt;&lt; 4,    // The type for inverted section tags such as {{^ name }}...{{/}}
+} GRMustacheTagType;
+</code></pre>
+	</div>
 	
 	
 	
@@ -337,6 +383,50 @@ eventually be deallocated when your rendering object tries to access it.</p>
 					<div class="section section-methods">
 						<a title="Instance Methods" name="instance_methods"></a>
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/description" title="description"></a>
+	<h3 class="subsubtitle method-title">description</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the description of the tag.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (NSString *)description</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>For example:</p>
+
+<pre><code>&lt;GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache&gt;
+</code></pre>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTag.h</code><br />
+	</div>				
+	
+	
+</div>
 						
 						<div class="section-method">
 	<a name="//api/name/renderContentWithContext:HTMLSafe:error:" title="renderContentWithContext:HTMLSafe:error:"></a>
@@ -396,7 +486,17 @@ Mustache tags with the rendering context argument.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Note that variable tags such as <code>{{ name }}</code> have no inner content, and
+		<p>This method is intended for objects conforming to the GRMustacheRendering
+protocol. The following Guides show some use cases for this method:</p>
+
+<ul>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></li>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/rendering">https://github.com/groue/GRMustache/blob/master/Guides/rendering</a>_objects.md</li>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/sample">https://github.com/groue/GRMustache/blob/master/Guides/sample</a>_code/indexes.md</li>
+</ul>
+
+
+<p>Note that variable tags such as <code>{{ name }}</code> have no inner content, and
 return the empty string.</p>
 	</div>
 	
@@ -408,7 +508,9 @@ return the empty string.</p>
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
 			
-			<li><code><p><a href="../Classes/GRMustacheConfiguration.html">GRMustacheConfiguration</a></p></code></li>
+			<li><code><p><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a></p></code></li>
+			
+			<li><code><p><a href="../Classes/GRMustacheContext.html">GRMustacheContext</a></p></code></li>
 			
 		</ul>
 	</div>
@@ -436,7 +538,7 @@ return the empty string.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-05-19)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-05-25)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
