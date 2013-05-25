@@ -126,6 +126,12 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 @property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
 
 /**
+ * Same as [parent contextByAddingObject:object], but returns a retained object.
+ * This method helps efficiently managing memory, and targeting slow methods.
+ */
++ (instancetype)newContextWithParent:(GRMustacheContext *)parent addedObject:(id)object GRMUSTACHE_API_INTERNAL;
+
+/**
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
  *

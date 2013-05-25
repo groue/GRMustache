@@ -131,7 +131,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)classIsTagDelegate:(Class)klass;
 + (void)setupPreventionOfNSUndefinedKeyException;
-+ (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects;
++ (CFMutableSetRef)preventionOfNSUndefinedKeyExceptionObjects;
 
 // Private dedicated initializer
 //
@@ -482,10 +482,10 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return context;
 }
 
-- (instancetype)contextByAddingObject:(id)object
++ (instancetype)newContextWithParent:(GRMustacheContext *)parent addedObject:(id)object
 {
     if (object == nil) {
-        return self;
+        return [parent retain];
     }
     
     GRMustacheContext *context = nil;
@@ -495,8 +495,8 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         // Extend self with a context
         // Contexts are immutable stacks: we duplicate all ancestors of context,
         // in order to build a new context stack.
-
-        context = self;
+        
+        context = parent;
         for (GRMustacheContext *ancestor in ((GRMustacheContext *)object).ancestors) {
             
             // The rule is: contexts derived from class A should be instances of class A as well.
@@ -508,50 +508,57 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
             GRMustacheContext *extendedContext = [[[[ancestor class] alloc] initPrivate] autorelease];
             
             extendedContext.contextParent = context;
-            extendedContext.contextObject = ancestor.contextObject;
-            extendedContext.mutableContextObject = [[ancestor.mutableContextObject mutableCopy] autorelease];
-            extendedContext.protectedContextParent = _protectedContextParent;
-            extendedContext.protectedContextObject = ancestor.protectedContextObject;
-            extendedContext.hiddenContextParent = _hiddenContextParent;
-            extendedContext.hiddenContextObject = ancestor.hiddenContextObject;
-            extendedContext.tagDelegateParent = _tagDelegateParent;
-            extendedContext.tagDelegate = ancestor.tagDelegate;
-            extendedContext.templateOverrideParent = _templateOverrideParent;
-            extendedContext.templateOverride = ancestor.templateOverride;
+            extendedContext.contextObject = ancestor->_contextObject;
+            extendedContext.mutableContextObject = [[ancestor->_mutableContextObject mutableCopy] autorelease];
+            extendedContext.protectedContextParent = ancestor->_protectedContextParent;
+            extendedContext.protectedContextObject = ancestor->_protectedContextObject;
+            extendedContext.hiddenContextParent = ancestor->_hiddenContextParent;
+            extendedContext.hiddenContextObject = ancestor->_hiddenContextObject;
+            extendedContext.tagDelegateParent = ancestor->_tagDelegateParent;
+            extendedContext.tagDelegate = ancestor->_tagDelegate;
+            extendedContext.templateOverrideParent = ancestor->_templateOverrideParent;
+            extendedContext.templateOverride = ancestor->_templateOverride;
             
             context = extendedContext;
         };
+        
+        [context retain];
     }
     else
     {
         // Extend self with a regular object
         
         // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
-        context = [[[[self class] alloc] initPrivate] autorelease];
+        context = [[[self class] alloc] initPrivate];
         
         // copy identical stacks
-        context.protectedContextParent = _protectedContextParent;
-        context.protectedContextObject = _protectedContextObject;
-        context.hiddenContextParent = _hiddenContextParent;
-        context.hiddenContextObject = _hiddenContextObject;
-        context.templateOverrideParent = _templateOverrideParent;
-        context.templateOverride = _templateOverride;
+        context.protectedContextParent = parent->_protectedContextParent;
+        context.protectedContextObject = parent->_protectedContextObject;
+        context.hiddenContextParent = parent->_hiddenContextParent;
+        context.hiddenContextObject = parent->_hiddenContextObject;
+        context.templateOverrideParent = parent->_templateOverrideParent;
+        context.templateOverride = parent->_templateOverride;
         
         // Update context stack
-        context.contextParent = self;
+        context.contextParent = parent;
         context.contextObject = object;
         
         // update or copy tag delegate stack
         if ([GRMustacheContext classIsTagDelegate:[object class]]) {
-            if (_tagDelegate) { context.tagDelegateParent = self; }
+            if (parent->_tagDelegate) { context.tagDelegateParent = parent; }
             context.tagDelegate = object;
         } else {
-            context.tagDelegateParent = _tagDelegateParent;
-            context.tagDelegate = _tagDelegate;
+            context.tagDelegateParent = parent->_tagDelegateParent;
+            context.tagDelegate = parent->_tagDelegate;
         }
     }
     
     return context;
+}
+
+- (instancetype)contextByAddingObject:(id)object
+{
+    return [[self class] newContextWithParent:self addedObject:object];
 }
 
 - (instancetype)contextByAddingProtectedObject:(id)object
@@ -1167,10 +1174,10 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         return nil;
     }
     
-    NSMutableSet *preventionOfNSUndefinedKeyExceptionObjects = [self preventionOfNSUndefinedKeyExceptionObjects];
+    CFMutableSetRef preventionOfNSUndefinedKeyExceptionObjects = [self preventionOfNSUndefinedKeyExceptionObjects];
     
     @try {
-        [preventionOfNSUndefinedKeyExceptionObjects addObject:super_data->receiver];
+        CFSetAddValue(preventionOfNSUndefinedKeyExceptionObjects, super_data->receiver);
         
         // We accept nil super_data->super_class, as a convenience for our
         // implementation of valueForKey:inObject:.
@@ -1202,7 +1209,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     }
     
     @finally {
-        [preventionOfNSUndefinedKeyExceptionObjects removeObject:super_data->receiver];
+        CFSetRemoveValue(preventionOfNSUndefinedKeyExceptionObjects, super_data->receiver);
     }
     
     return nil;
@@ -1364,23 +1371,23 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     });
 }
 
-+ (NSMutableSet *)preventionOfNSUndefinedKeyExceptionObjects
++ (CFMutableSetRef)preventionOfNSUndefinedKeyExceptionObjects
 {
     if ([NSThread isMainThread]) {
-        static NSMutableSet *mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
+        static CFMutableSetRef mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            mainThreadPreventionOfNSUndefinedKeyExceptionObjects = [[NSMutableSet set] retain];
+            mainThreadPreventionOfNSUndefinedKeyExceptionObjects = CFSetCreateMutable(NULL, 0, NULL);
         });
         return mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
     }
     
     NSThread *thread = [NSThread currentThread];
     static NSString const * GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects";
-    NSMutableSet *silentObjects = [[thread threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
+    CFMutableSetRef silentObjects = (CFMutableSetRef)[[thread threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     if (silentObjects == nil) {
-        silentObjects = [NSMutableSet set];
-        [[thread threadDictionary] setObject:silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
+        silentObjects = CFSetCreateMutable(NULL, 0, NULL);
+        [[thread threadDictionary] setObject:(id)silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
     }
     return silentObjects;
 }
@@ -1392,7 +1399,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 // NSObject
 - (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key
 {
-    if ([[GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+    if (CFSetContainsValue([GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects], self)) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSObject:key];
@@ -1401,7 +1408,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 // NSManagedObject
 - (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key
 {
-    if ([[GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects] containsObject:self]) {
+    if (CFSetContainsValue([GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects], self)) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSManagedObject:key];
