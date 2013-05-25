@@ -24,8 +24,6 @@
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 
-static GRMustacheConfiguration *defaultConfiguration;
-
 @interface GRMustacheConfiguration()
 - (void)assertNotLocked;
 @end
@@ -37,13 +35,13 @@ static GRMustacheConfiguration *defaultConfiguration;
 @synthesize baseContext=_baseContext;
 @synthesize locked=_locked;
 
-+ (void)load
-{
-    defaultConfiguration = [[GRMustacheConfiguration alloc] init];
-}
-
 + (GRMustacheConfiguration *)defaultConfiguration
 {
+    static GRMustacheConfiguration *defaultConfiguration;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        defaultConfiguration = [[GRMustacheConfiguration alloc] init];
+    });
     return defaultConfiguration;
 }
 
