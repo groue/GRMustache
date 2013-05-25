@@ -128,10 +128,11 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 @property (nonatomic, retain) GRMustacheContext *templateOverrideParent;
 @property (nonatomic, retain) id templateOverride;
 
-+ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
++ (BOOL)classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(Class)klass;
 + (BOOL)classIsTagDelegate:(Class)klass;
-+ (void)setupPreventionOfNSUndefinedKeyException;
-+ (CFMutableSetRef)preventionOfNSUndefinedKeyExceptionObjects;
++ (void)setupNSUndefinedKeyExceptionPrevention;
++ (void)startPreventingNSUndefinedKeyException;
++ (void)stopPreventingNSUndefinedKeyException;
 
 // Private dedicated initializer
 //
@@ -182,7 +183,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 + (void)load
 {
-    [self setupPreventionOfNSUndefinedKeyException];
+    [self setupNSUndefinedKeyExceptionPrevention];
 }
 
 + (void)initialize
@@ -1156,7 +1157,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     // invoke NSObject's implementation of valueForKey: for those objects, with
     // our valueForKey:inSuper: method.
     
-    if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
+    if ([self classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:[object class]]) {
         return [self valueForKey:key inSuper:&(struct objc_super){ object, [NSObject class] }];
     }
     
@@ -1174,10 +1175,9 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         return nil;
     }
     
-    CFMutableSetRef preventionOfNSUndefinedKeyExceptionObjects = [self preventionOfNSUndefinedKeyExceptionObjects];
+    [GRMustacheContext startPreventingNSUndefinedKeyException];
     
     @try {
-        CFSetAddValue(preventionOfNSUndefinedKeyExceptionObjects, super_data->receiver);
         
         // We accept nil super_data->super_class, as a convenience for our
         // implementation of valueForKey:inObject:.
@@ -1209,89 +1209,36 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     }
     
     @finally {
-        CFSetRemoveValue(preventionOfNSUndefinedKeyExceptionObjects, super_data->receiver);
+        [GRMustacheContext stopPreventingNSUndefinedKeyException];
     }
     
     return nil;
 }
 
-+ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
++ (BOOL)classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(Class)klass
 {
-    // Returns YES if object is NSArray, NSSet, or NSOrderedSet.
-    //
-    // [NSObject isKindOfClass:] is slow.
-    //
-    // Our strategy: provide a fast path for objects whose implementation of
-    // valueForKey: is the same as NSObject, NSDictionary and NSManagedObject,
-    // by comparing implementations of valueForKey:. The slow path is for other
-    // objects, for which we check whether they are NSArray, NSSet, or
-    // NSOrderedSet with isKindOfClass:. We can not compare implementations for
-    // those classes, because they are class clusters and that we can't be sure
-    // they provide a single implementation of valueForKey:
+    static CFMutableDictionaryRef cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+    });
     
-    if (object == nil) {
-        return NO;
-    }
-    
-    static SEL valueForKeySelector = nil;
-    if (valueForKeySelector == nil) {
-        valueForKeySelector = @selector(valueForKey:);
-    }
-    IMP objectIMP = class_getMethodImplementation([object class], valueForKeySelector);
-    
-    // Fast path: objects using NSObject's implementation of valueForKey: are not collections
-    {
-        static IMP NSObjectIMP = nil;
-        if (NSObjectIMP == nil) {
-            NSObjectIMP = class_getMethodImplementation([NSObject class], valueForKeySelector);
-        }
-        if (objectIMP == NSObjectIMP) {
-            return NO;
-        }
-    }
-    
-    // Fast path: objects using NSDictionary's implementation of valueForKey: are not collections
-    {
-        static IMP NSDictionaryIMP = nil;
-        if (NSDictionaryIMP == nil) {
-            NSDictionaryIMP = class_getMethodImplementation([NSDictionary class], valueForKeySelector);
-        }
-        if (objectIMP == NSDictionaryIMP) {
-            return NO;
-        }
-    }
-    
-    // Fast path: objects using NSManagedObject's implementation of valueForKey: are not collections
-    {
-        // NSManagedObject may not be linked. Don't name it directly.
-        static BOOL NSManagedObjectIMPComputed = NO;
-        static IMP NSManagedObjectIMP = nil;
-        if (NSManagedObjectIMPComputed == NO) {
-            Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
-            if (NSManagedObjectClass) {
-                NSManagedObjectIMP = class_getMethodImplementation(NSManagedObjectClass, valueForKeySelector);
+    int result = (int)CFDictionaryGetValue(cache, klass);
+    if (!result) {
+        result = 2;
+        Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
+        for (Class testKlass = klass; testKlass; testKlass = class_getSuperclass(testKlass)) {
+            if (testKlass == [NSArray class] ||
+                testKlass == [NSSet class] ||
+                testKlass == NSOrderedSetClass)
+            {
+                result = 1;
+                break;
             }
-            NSManagedObjectIMPComputed = YES;
         }
-        if (objectIMP == NSManagedObjectIMP) {
-            return NO;
-        }
+        CFDictionarySetValue(cache, klass, (const void *)result);
     }
-    
-    // Slow path: NSArray, NSSet and NSOrderedSet are collections
-    {
-        // NSOrderedSet is iOS >= 5 or OSX >= 10.7. Don't name it directly.
-        static BOOL NSOrderedSetClassComputed = NO;
-        static Class NSOrderedSetClass = nil;
-        if (NSOrderedSetClassComputed == NO) {
-            NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-            NSOrderedSetClassComputed = YES;
-        }
-        
-        return ([object isKindOfClass:[NSArray class]] ||
-                [object isKindOfClass:[NSSet class]] ||
-                (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]));
-    }
+    return (result == 1);
 }
 
 + (BOOL)classIsTagDelegate:(Class)klass
@@ -1348,7 +1295,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 #pragma mark - NSUndefinedKeyException prevention
 
-+ (void)setupPreventionOfNSUndefinedKeyException
++ (void)setupNSUndefinedKeyExceptionPrevention
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -1371,25 +1318,36 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     });
 }
 
-+ (CFMutableSetRef)preventionOfNSUndefinedKeyExceptionObjects
+static BOOL mainThreadPreventsNSUndefinedKeyException = NO;
+static NSString const * GRMustacheContextPreventsNSUndefinedKeyException = @"GRMustacheContextPreventsNSUndefinedKeyException";
+
++ (void)startPreventingNSUndefinedKeyException
 {
     if ([NSThread isMainThread]) {
-        static CFMutableSetRef mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            mainThreadPreventionOfNSUndefinedKeyExceptionObjects = CFSetCreateMutable(NULL, 0, NULL);
-        });
-        return mainThreadPreventionOfNSUndefinedKeyExceptionObjects;
+        mainThreadPreventsNSUndefinedKeyException = YES;
+        return;
     }
     
-    NSThread *thread = [NSThread currentThread];
-    static NSString const * GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects = @"GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects";
-    CFMutableSetRef silentObjects = (CFMutableSetRef)[[thread threadDictionary] objectForKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
-    if (silentObjects == nil) {
-        silentObjects = CFSetCreateMutable(NULL, 0, NULL);
-        [[thread threadDictionary] setObject:(id)silentObjects forKey:GRMustacheContextPreventionOfNSUndefinedKeyExceptionObjects];
+    [[[NSThread currentThread] threadDictionary] setObject:(id)kCFBooleanTrue forKey:GRMustacheContextPreventsNSUndefinedKeyException];
+}
+
++ (void)stopPreventingNSUndefinedKeyException
+{
+    if ([NSThread isMainThread]) {
+        mainThreadPreventsNSUndefinedKeyException = NO;
+        return;
     }
-    return silentObjects;
+    
+    [[[NSThread currentThread] threadDictionary] removeObjectForKey:GRMustacheContextPreventsNSUndefinedKeyException];
+}
+
++ (BOOL)preventsNSUndefinedKeyException
+{
+    if ([NSThread isMainThread]) {
+        return mainThreadPreventsNSUndefinedKeyException;
+    }
+    
+    return [[[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheContextPreventsNSUndefinedKeyException] boolValue];
 }
 
 @end
@@ -1399,7 +1357,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 // NSObject
 - (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key
 {
-    if (CFSetContainsValue([GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects], self)) {
+    if ([GRMustacheContext preventsNSUndefinedKeyException]) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSObject:key];
@@ -1408,13 +1366,16 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 // NSManagedObject
 - (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key
 {
-    if (CFSetContainsValue([GRMustacheContext preventionOfNSUndefinedKeyExceptionObjects], self)) {
+    if ([GRMustacheContext preventsNSUndefinedKeyException]) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSManagedObject:key];
 }
 
 @end
+
+
+#pragma mark - Managed Properties
 
 // Returns an alternate name for a propertyName
 // "foo" -> "isFoo"
