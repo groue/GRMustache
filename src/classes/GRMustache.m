@@ -401,7 +401,9 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
             // {{ number }}
-            *HTMLSafe = NO;
+            if (HTMLSafe != NULL) {
+                *HTMLSafe = NO;
+            }
             return [self description];
             
         case GRMustacheTagTypeSection:
@@ -433,7 +435,9 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
             // {{ string }}
-            *HTMLSafe = NO;
+            if (HTMLSafe != NULL) {
+                *HTMLSafe = NO;
+            }
             return self;
             
         case GRMustacheTagTypeSection:
@@ -465,7 +469,9 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
             // {{ object }}
-            *HTMLSafe = NO;
+            if (HTMLSafe != NULL) {
+                *HTMLSafe = NO;
+            }
             return [self description];
             
         case GRMustacheTagTypeSection:
@@ -539,7 +545,9 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 }
             }
             
-            *HTMLSafe = oneItemHasRenderedHTMLSafe;
+            if (HTMLSafe != NULL) {
+                *HTMLSafe = oneItemHasRenderedHTMLSafe;
+            }
             return buffer;
         }
             
