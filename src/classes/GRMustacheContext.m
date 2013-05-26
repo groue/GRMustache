@@ -145,8 +145,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
     if (_templateOverride) {
-        for (GRMustacheContext *context = self; context; context = context.templateOverrideParent) {
-            component = [context.templateOverride resolveTemplateComponent:component];
+        for (GRMustacheContext *context = self; context; context = context->_templateOverrideParent) {
+            component = [context->_templateOverride resolveTemplateComponent:component];
         }
     }
     return component;
@@ -174,11 +174,11 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[self alloc] init] autorelease];
     
     // initialize context stack
-    context.contextObject = [object retain];
+    context->_contextObject = [object retain];
         
     // initialize tag delegate stack
     if ([self objectIsTagDelegate:object]) {
-        context.tagDelegate = [object retain];
+        context->_tagDelegate = [object retain];
     }
     
     return context;
@@ -189,7 +189,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[self alloc] init] autorelease];
     
     // initialize protected context stack
-    context.protectedContextObject = [object retain];
+    context->_protectedContextObject = [object retain];
     
     return context;
 }
@@ -199,7 +199,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[self alloc] init] autorelease];
     
     // initialize tag delegate stack
-    context.tagDelegate = [tagDelegate retain];
+    context->_tagDelegate = [tagDelegate retain];
     
     return context;
 }
@@ -264,17 +264,17 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
             GRMustacheContext *extendedContext = [[[[ancestor class] alloc] initPrivate] autorelease];
             
-            extendedContext.contextParent = context;
-            extendedContext.contextObject = ancestor->_contextObject;
-            extendedContext.mutableContextObject = [[ancestor->_mutableContextObject mutableCopy] autorelease];
-            extendedContext.protectedContextParent = ancestor->_protectedContextParent;
-            extendedContext.protectedContextObject = ancestor->_protectedContextObject;
-            extendedContext.hiddenContextParent = ancestor->_hiddenContextParent;
-            extendedContext.hiddenContextObject = ancestor->_hiddenContextObject;
-            extendedContext.tagDelegateParent = ancestor->_tagDelegateParent;
-            extendedContext.tagDelegate = ancestor->_tagDelegate;
-            extendedContext.templateOverrideParent = ancestor->_templateOverrideParent;
-            extendedContext.templateOverride = ancestor->_templateOverride;
+            extendedContext->_contextParent = [context retain];
+            extendedContext->_contextObject = [ancestor->_contextObject retain];
+            extendedContext->_mutableContextObject = [ancestor->_mutableContextObject mutableCopy];
+            extendedContext->_protectedContextParent = [ancestor->_protectedContextParent retain];
+            extendedContext->_protectedContextObject = [ancestor->_protectedContextObject retain];
+            extendedContext->_hiddenContextParent = [ancestor->_hiddenContextParent retain];
+            extendedContext->_hiddenContextObject = [ancestor->_hiddenContextObject retain];
+            extendedContext->_tagDelegateParent = [ancestor->_tagDelegateParent retain];
+            extendedContext->_tagDelegate = [ancestor->_tagDelegate retain];
+            extendedContext->_templateOverrideParent = [ancestor->_templateOverrideParent retain];
+            extendedContext->_templateOverride = [ancestor->_templateOverride retain];
             
             context = extendedContext;
         };
@@ -289,24 +289,24 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
         context = [[[self class] alloc] initPrivate];
         
         // copy identical stacks
-        context.protectedContextParent = parent->_protectedContextParent;
-        context.protectedContextObject = parent->_protectedContextObject;
-        context.hiddenContextParent = parent->_hiddenContextParent;
-        context.hiddenContextObject = parent->_hiddenContextObject;
-        context.templateOverrideParent = parent->_templateOverrideParent;
-        context.templateOverride = parent->_templateOverride;
+        context->_protectedContextParent = [parent->_protectedContextParent retain];
+        context->_protectedContextObject = [parent->_protectedContextObject retain];
+        context->_hiddenContextParent = [parent->_hiddenContextParent retain];
+        context->_hiddenContextObject = [parent->_hiddenContextObject retain];
+        context->_templateOverrideParent = [parent->_templateOverrideParent retain];
+        context->_templateOverride = [parent->_templateOverride retain];
         
         // Update context stack
-        context.contextParent = parent;
-        context.contextObject = object;
+        context->_contextParent = [parent retain];
+        context->_contextObject = [object retain];
         
         // update or copy tag delegate stack
         if ([GRMustacheContext objectIsTagDelegate:object]) {
-            if (parent->_tagDelegate) { context.tagDelegateParent = parent; }
-            context.tagDelegate = object;
+            if (parent->_tagDelegate) { context->_tagDelegateParent = [parent retain]; }
+            context->_tagDelegate = [object retain];
         } else {
-            context.tagDelegateParent = parent->_tagDelegateParent;
-            context.tagDelegate = parent->_tagDelegate;
+            context->_tagDelegateParent = [parent->_tagDelegateParent retain];
+            context->_tagDelegate = [parent->_tagDelegate retain];
         }
     }
     
@@ -323,20 +323,19 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
-    context.contextParent = self;
-    context.contextObject = nil;
+    context->_contextParent = [self retain];
     
     // copy identical stacks
-    context.protectedContextParent = _protectedContextParent;
-    context.protectedContextObject = _protectedContextObject;
-    context.hiddenContextParent = _hiddenContextParent;
-    context.hiddenContextObject = _hiddenContextObject;
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
+    context->_protectedContextParent = [_protectedContextParent retain];
+    context->_protectedContextObject = [_protectedContextObject retain];
+    context->_hiddenContextParent = [_hiddenContextParent retain];
+    context->_hiddenContextObject = [_hiddenContextObject retain];
+    context->_templateOverrideParent = [_templateOverrideParent retain];
+    context->_templateOverride = [_templateOverride retain];
     
     // update tag delegate stack
-    if (_tagDelegate) { context.tagDelegateParent = self; }
-    context.tagDelegate = tagDelegate;
+    if (_tagDelegate) { context->_tagDelegateParent = [self retain]; }
+    context->_tagDelegate = [tagDelegate retain];
     
     return context;
 }
@@ -356,20 +355,19 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
-    context.contextParent = self;
-    context.contextObject = nil;
+    context->_contextParent = [self retain];
     
     // copy identical stacks
-    context.hiddenContextParent = _hiddenContextParent;
-    context.hiddenContextObject = _hiddenContextObject;
-    context.tagDelegateParent = _tagDelegateParent;
-    context.tagDelegate = _tagDelegate;
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
+    context->_hiddenContextParent = [_hiddenContextParent retain];
+    context->_hiddenContextObject = [_hiddenContextObject retain];
+    context->_tagDelegateParent = [_tagDelegateParent retain];
+    context->_tagDelegate = [_tagDelegate retain];
+    context->_templateOverrideParent = [_templateOverrideParent retain];
+    context->_templateOverride = [_templateOverride retain];
     
     // update protected context stack
-    if (_protectedContextObject) { context.protectedContextParent = self; }
-    context.protectedContextObject = object;
+    if (_protectedContextObject) { context->_protectedContextParent = [self retain]; }
+    context->_protectedContextObject = [object retain];
     
     return context;
 }
@@ -384,20 +382,19 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
-    context.contextParent = self;
-    context.contextObject = nil;
+    context->_contextParent = [self retain];
     
     // copy identical stacks
-    context.protectedContextParent = _protectedContextParent;
-    context.protectedContextObject = _protectedContextObject;
-    context.tagDelegateParent = _tagDelegateParent;
-    context.tagDelegate = _tagDelegate;
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
+    context->_protectedContextParent = [_protectedContextParent retain];
+    context->_protectedContextObject = [_protectedContextObject retain];
+    context->_tagDelegateParent = [_tagDelegateParent retain];
+    context->_tagDelegate = [_tagDelegate retain];
+    context->_templateOverrideParent = [_templateOverrideParent retain];
+    context->_templateOverride = [_templateOverride retain];
     
     // update hidden context stack
-    if (_hiddenContextObject) { context.hiddenContextParent = self; }
-    context.hiddenContextObject = object;
+    if (_hiddenContextObject) { context->_hiddenContextParent = [self retain]; }
+    context->_hiddenContextObject = [object retain];
     
     return context;
 }
@@ -412,20 +409,19 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
     
     // Update context stack
-    context.contextParent = self;
-    context.contextObject = nil;
+    context->_contextParent = [self retain];
     
     // copy identical stacks
-    context.protectedContextParent = _protectedContextParent;
-    context.protectedContextObject = _protectedContextObject;
-    context.hiddenContextParent = _hiddenContextParent;
-    context.hiddenContextObject = _hiddenContextObject;
-    context.tagDelegateParent = _tagDelegateParent;
-    context.tagDelegate = _tagDelegate;
+    context->_protectedContextParent = [_protectedContextParent retain];
+    context->_protectedContextObject = [_protectedContextObject retain];
+    context->_hiddenContextParent = [_hiddenContextParent retain];
+    context->_hiddenContextObject = [_hiddenContextObject retain];
+    context->_tagDelegateParent = [_tagDelegateParent retain];
+    context->_tagDelegate = [_tagDelegate retain];
     
     // update template override stack
-    if (_templateOverride) { context.templateOverrideParent = self; }
-    context.templateOverride = templateOverride;
+    if (_templateOverride) { context->_templateOverrideParent = [self retain]; }
+    context->_templateOverride = [templateOverride retain];
     
     return context;
 }
@@ -471,10 +467,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 - (id)topMustacheObject
 {
-    for (GRMustacheContext *context = self; context; context = context.contextParent) {
-        id contextObject = context.contextObject;
-        if (contextObject) {
-            return contextObject;
+    for (GRMustacheContext *context = self; context; context = context->_contextParent) {
+        if (context->_contextObject) {
+            return context->_contextObject;
         }
     }
     return nil;
@@ -495,8 +490,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     // First look for in the protected context stack
     
     if (_protectedContextObject) {
-        for (GRMustacheContext *context = self; context; context = context.protectedContextParent) {
-            id value = [GRMustacheContext valueForKey:key inObject:context.protectedContextObject];
+        for (GRMustacheContext *context = self; context; context = context->_protectedContextParent) {
+            id value = [GRMustacheContext valueForKey:key inObject:context->_protectedContextObject];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = YES;
@@ -511,17 +506,17 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     
     NSString *mutableContextKey = nil;
     
-    for (GRMustacheContext *context = self; context; context = context.contextParent) {
+    for (GRMustacheContext *context = self; context; context = context->_contextParent) {
         // First check for contextObject:
         //
         // context = [GRMustacheContext contextWithObject:@{key:value}];
         // assert([context valueForKey:key] == value);
-        id contextObject = context.contextObject;
+        id contextObject = context->_contextObject;
         if (contextObject) {
             BOOL hidden = NO;
             if (_hiddenContextObject) {
-                for (GRMustacheContext *hiddenContext = self; hiddenContext; hiddenContext = hiddenContext.hiddenContextParent) {
-                    if (contextObject == hiddenContext.hiddenContextObject) {
+                for (GRMustacheContext *hiddenContext = self; hiddenContext; hiddenContext = hiddenContext->_hiddenContextParent) {
+                    if (contextObject == hiddenContext->_hiddenContextObject) {
                         hidden = YES;
                         break;
                     }
@@ -537,7 +532,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             }
         }
         
-        if (context.mutableContextObject) {
+        if (context->_mutableContextObject) {
             
             // We're about to look into mutableContextObject.
             //
@@ -567,7 +562,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             // [context setValue:value forKey:key];
             // assert([context valueForKey:key] == value);
             
-            id value = [context.mutableContextObject objectForKey:mutableContextKey];
+            id value = [context->_mutableContextObject objectForKey:mutableContextKey];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = NO;
@@ -736,7 +731,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     
     if (_tagDelegate) {
         tagDelegateStack = [NSMutableArray array];
-        for (GRMustacheContext *context = self; context; context = context.tagDelegateParent) {
+        for (GRMustacheContext *context = self; context; context = context->_tagDelegateParent) {
             [tagDelegateStack insertObject:context->_tagDelegate atIndex:0];
         }
     }
