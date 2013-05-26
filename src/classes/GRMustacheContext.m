@@ -469,7 +469,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 {
     for (GRMustacheContext *context = self; context; context = context->_contextParent) {
         if (context->_contextObject) {
-            return context->_contextObject;
+            return [[context->_contextObject retain] autorelease];
         }
     }
     return nil;
