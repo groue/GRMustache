@@ -26,6 +26,14 @@ The distribution includes pre-built static libraries:
 
 The armv6 slice is not included. In order to target this architecture, you have to compile GRMustache yourself (see below), or to use CocoaPods (see above).
 
+### Updating your static library
+
+When pulling the `master` branch of GRMustache, you'll get the latest stable release. Should a new major version be shipped, you may pull incompatible changes. In order to prevent this, checkout and pull the `GRMustache6` branch:
+
+    $ git clone https://github.com/groue/GRMustache.git
+    $ cd GRMustache
+    $ git checkout -b GRMustache6 origin/GRMustache6
+    $ git pull  # checkout the latest version 6
 
 Option 3: Compiling the raw sources
 -----------------------------------
