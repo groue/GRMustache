@@ -411,10 +411,10 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             // {{# number }}...{{/}}
             // {{$ number }}...{{/}}
             if ([self boolValue]) {
-                context = [[context class] newContextWithParent:context addedObject:self];
-                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                [context release];
-                return rendering;
+                // janl/mustache.js and defunkt/mustache don't push bools in the
+                // context stack. Follow their path, and avoid the creation of a
+                // useless context nobody cares about.
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
                 return @"";
             }
