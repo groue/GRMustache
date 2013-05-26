@@ -62,18 +62,44 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  */
 @interface GRMustacheContext : NSObject {
 @private
-    NSDictionary *_depthsForAncestors;
+    // Context stack
+    //
+    // The top of the stack is the pair (_contextObject, _managedPropertiesStore).
+    // Both of them may be nil.
+    // The rest of the stack is _contextParent.
     GRMustacheContext *_contextParent;
-    NSMutableDictionary *_mutableContextObject;
     id _contextObject;
+    NSMutableDictionary *_managedPropertiesStore;
+    
+    // Protected context stack
+    //
+    // If _protectedContextObject is nil, the stack is empty.
+    // If _protectedContextObject is not nil, the top of the stack is _protectedContextObject, and the rest of the stack is _protectedContextParent.
     GRMustacheContext *_protectedContextParent;
     id _protectedContextObject;
+    
+    // Hidden context stack
+    //
+    // If _hiddenContextObject is nil, the stack is empty.
+    // If _hiddenContextObject is not nil, the top of the stack is _hiddenContextObject, and the rest of the stack is _hiddenContextParent.
     GRMustacheContext *_hiddenContextParent;
     id _hiddenContextObject;
+    
+    // Tag delegate stack
+    //
+    // If _tagDelegate is nil, the stack is empty.
+    // If _tagDelegate is not nil, the top of the stack is _tagDelegate, and the rest of the stack is _tagDelegateParent.
     GRMustacheContext *_tagDelegateParent;
     id<GRMustacheTagDelegate> _tagDelegate;
+    
+    // Template override stack
+    //
+    // If _templateOverride is nil, the stack is empty.
+    // If _templateOverride is not nil, the top of the stack is _templateOverride, and the rest of the stack is _templateOverrideParent.
     GRMustacheContext *_templateOverrideParent;
     GRMustacheTemplateOverride *_templateOverride;
+
+    NSDictionary *_depthsForAncestors;
 }
 
 /**

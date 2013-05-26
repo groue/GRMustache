@@ -82,53 +82,17 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 // `depthsForAncestors` returns a dictionary where keys are ancestor context
 // objects, and values depth numbers: self has depth 0, parent has depth 1,
 // grand-parent has depth 2, etc.
-//
+@property (nonatomic, readonly) NSDictionary *depthsForAncestors;
+
 // `ancestors` returns an array of ancestor contexts.
 // First context in the array is the root context.
 // Last context in the array is self.
-@property (nonatomic, readonly) NSDictionary *depthsForAncestors;
 @property (nonatomic, readonly) NSArray *ancestors;
-
-// Context stack:
-// If _contextObject is nil, the stack is empty.
-// If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
-@property (nonatomic, retain) GRMustacheContext *contextParent;
-@property (nonatomic, retain) id contextObject;
-@property (nonatomic, retain) NSMutableDictionary *mutableContextObject;
-
-// Protected context stack
-// If _protectedContextObject is nil, the stack is empty.
-// If _protectedContextObject is not nil, the top of the stack is _protectedContextObject, and the rest of the stack is _protectedContextParent.
-@property (nonatomic, retain) GRMustacheContext *protectedContextParent;
-@property (nonatomic, retain) id protectedContextObject;
-
-// Hidden context stack
-@property (nonatomic, retain) GRMustacheContext *hiddenContextParent;
-@property (nonatomic, retain) id hiddenContextObject;
-
-// Tag delegate stack
-@property (nonatomic, retain) GRMustacheContext *tagDelegateParent;
-@property (nonatomic, retain) id<GRMustacheTagDelegate> tagDelegate;
-
-// Template override stack
-@property (nonatomic, retain) GRMustacheContext *templateOverrideParent;
-@property (nonatomic, retain) id templateOverride;
 
 @end
 
 
 @implementation GRMustacheContext
-@synthesize contextParent=_contextParent;
-@synthesize contextObject=_contextObject;
-@synthesize mutableContextObject=_mutableContextObject;
-@synthesize protectedContextParent=_protectedContextParent;
-@synthesize protectedContextObject=_protectedContextObject;
-@synthesize hiddenContextParent=_hiddenContextParent;
-@synthesize hiddenContextObject=_hiddenContextObject;
-@synthesize tagDelegateParent=_tagDelegateParent;
-@synthesize tagDelegate=_tagDelegate;
-@synthesize templateOverrideParent=_templateOverrideParent;
-@synthesize templateOverride=_templateOverride;
 
 + (void)load
 {
@@ -220,10 +184,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 - (void)dealloc
 {
-    [_depthsForAncestors release];
     [_contextParent release];
     [_contextObject release];
-    [_mutableContextObject release];
+    [_managedPropertiesStore release];
     [_protectedContextParent release];
     [_protectedContextObject release];
     [_hiddenContextParent release];
@@ -232,6 +195,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     [_tagDelegate release];
     [_templateOverrideParent release];
     [_templateOverride release];
+    [_depthsForAncestors release];
     [super dealloc];
 }
 
@@ -266,7 +230,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             
             extendedContext->_contextParent = [context retain];
             extendedContext->_contextObject = [ancestor->_contextObject retain];
-            extendedContext->_mutableContextObject = [ancestor->_mutableContextObject mutableCopy];
+            extendedContext->_managedPropertiesStore = [ancestor->_managedPropertiesStore mutableCopy]; // TODO: is it a good idea to copy?
             extendedContext->_protectedContextParent = [ancestor->_protectedContextParent retain];
             extendedContext->_protectedContextObject = [ancestor->_protectedContextObject retain];
             extendedContext->_hiddenContextParent = [ancestor->_hiddenContextParent retain];
@@ -532,9 +496,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             }
         }
         
-        if (context->_mutableContextObject) {
+        if (context->_managedPropertiesStore) {
             
-            // We're about to look into mutableContextObject.
+            // We're about to look into managedPropertiesStore.
             //
             // This dictionary is filled via setValue:forKey:, and via managed
             // property setters.
@@ -556,13 +520,13 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
                 }
             }
             
-            // Check mutableContextObject:
+            // Check managedPropertiesStore:
             //
             // context = [GRMustacheContext context];
             // [context setValue:value forKey:key];
             // assert([context valueForKey:key] == value);
             
-            id value = [context->_mutableContextObject objectForKey:mutableContextKey];
+            id value = [context->_managedPropertiesStore objectForKey:mutableContextKey];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = NO;
@@ -844,11 +808,11 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
         value = [[value copy] autorelease];
     }
     
-    if (!_mutableContextObject) {
-        _mutableContextObject = [[NSMutableDictionary alloc] init];
+    if (!_managedPropertiesStore) {
+        _managedPropertiesStore = [[NSMutableDictionary alloc] init];
     }
     
-    [_mutableContextObject setValue:value forKey:key];
+    [_managedPropertiesStore setValue:value forKey:key];
 }
 
 
@@ -1523,7 +1487,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
             {
                 // Property has `weak` storage.
                 //
-                // We store values in mutableContextObject, an NSDictionary that retain its values.
+                // We store values in managedPropertiesStore, an NSDictionary that retain its values.
                 // Don't lie: support for weak properties is not done yet.
                 //
                 // Log and exit, because exceptions raised from initialize method do not stop the program.
@@ -1536,8 +1500,8 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
                 
                 if (strstr(attrs, "T@") == attrs) {
                     // Property has `assign` storage for an id object
-                    // We store values in mutableContextObject, an NSDictionary that retain its values.
-                    // Don't lie: support for weak properties is not done yet.
+                    // We store values in managedPropertiesStore, an NSDictionary that retain its values.
+                    // Don't lie: support for non-retained properties is not done yet.
                     //
                     // Log and exit, because exceptions raised from initialize method do not stop the program.
                     NSLog(@"[GRMustache] Support for nonretained property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
