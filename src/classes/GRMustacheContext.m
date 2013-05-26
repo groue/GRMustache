@@ -152,6 +152,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)objectIsTagDelegate:(id)object;
 + (void)setupNSUndefinedKeyExceptionPrevention;
++ (void)synthesizeManagedPropertiesAccessors;
 + (void)startPreventingNSUndefinedKeyException;
 + (void)stopPreventingNSUndefinedKeyException;
 
@@ -183,216 +184,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 + (void)initialize
 {
     if (self != [GRMustacheContext class]) {
-        unsigned int count;
-        objc_property_t *properties = class_copyPropertyList(self, &count);
-        for (unsigned int i=0; i<count; ++i) {
-            const char *attrs = property_getAttributes(properties[i]);
-
-            // Synthesize accessors if and only if property is dynamic
-            
-            if (!strstr(attrs, ",D")) continue;
-            
-            
-            const char *propertyName = property_getName(properties[i]);
-            size_t objCTypeLength = strstr(attrs, ",") - attrs - 1;
-            
-            // Synthesize getter
-            
-            {
-                char *getterName = nil;
-                char *getterStart = strstr(attrs, ",G");            // ",ScustomGetter:,..." or NULL if there is no custom getter
-                if (getterStart) {
-                    getterStart += 2;                               // "customGetter:,..."
-                    char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
-                    size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
-                    getterName = malloc(getterLength + 1);
-                    strncpy(getterName, getterStart, getterLength);
-                    getterName[getterLength] = '\0';
-                }
-                
-                char *getterObjCTypes = malloc(objCTypeLength+3);
-                strncpy(getterObjCTypes, attrs+1, objCTypeLength);
-                getterObjCTypes[objCTypeLength] = '@';
-                getterObjCTypes[objCTypeLength + 1] = ':';
-                getterObjCTypes[objCTypeLength + 2] = '\0';
-                
-                switch (attrs[1]) {
-                    case 'c':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyCharGetter, getterObjCTypes);
-                        break;
-                    case 'i':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyIntGetter, getterObjCTypes);
-                        break;
-                    case 's':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyShortGetter, getterObjCTypes);
-                        break;
-                    case 'l':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongGetter, getterObjCTypes);
-                        break;
-                    case 'q':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongLongGetter, getterObjCTypes);
-                        break;
-                    case 'C':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedCharGetter, getterObjCTypes);
-                        break;
-                    case 'I':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedIntGetter, getterObjCTypes);
-                        break;
-                    case 'S':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedShortGetter, getterObjCTypes);
-                        break;
-                    case 'L':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongGetter, getterObjCTypes);
-                        break;
-                    case 'Q':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongGetter, getterObjCTypes);
-                        break;
-                    case 'f':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyFloatGetter, getterObjCTypes);
-                        break;
-                    case 'd':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyDoubleGetter, getterObjCTypes);
-                        break;
-                    case 'B':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyBoolGetter, getterObjCTypes);
-                        break;
-                    case '@':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyObjectGetter, getterObjCTypes);
-                        break;
-                    case '#':
-                        class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyClassGetter, getterObjCTypes);
-                        break;
-                    default:
-                        // I don't know how to write an IMP that returns any kind of argument.
-                        // We'll rely of forwardInvocation:
-                        break;
-                }
-                
-                free(getterName);
-                free(getterObjCTypes);
-            }
-            
-            if (!strstr(attrs, ",R"))
-            {
-                // Property is read/write
-                
-                // Check if we can honor storage policy
-                
-                if (strstr(attrs, ",W"))
-                {
-                    // Property has `weak` storage.
-                    //
-                    // We store values in mutableContextObject, an NSDictionary that retain its values.
-                    // Don't lie: support for weak properties is not done yet.
-                    //
-                    // Log and exit, because exceptions raised from initialize method do not stop the program.
-                    NSLog(@"[GRMustache] Support for weak property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
-                    exit(1);
-                }
-                else if (!strstr(attrs, ",&") && !strstr(attrs, ",C"))
-                {
-                    // Property has `assign` storage.
-                    
-                    if (strstr(attrs, "T@") == attrs) {
-                        // Property has `assign` storage for an id object
-                        // We store values in mutableContextObject, an NSDictionary that retain its values.
-                        // Don't lie: support for weak properties is not done yet.
-                        //
-                        // Log and exit, because exceptions raised from initialize method do not stop the program.
-                        NSLog(@"[GRMustache] Support for nonretained property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
-                        exit(1);
-                    }
-                }
-                
-                // Synthesize setter
-                
-                {
-                    char *setterName = nil;
-                    char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
-                    if (setterStart) {
-                        setterStart += 2;                               // "customSetter:,..."
-                        char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
-                        size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
-                        setterName = malloc(setterLength + 1);
-                        strncpy(setterName, setterStart, setterLength);
-                        setterName[setterLength] = '\0';
-                    } else {
-                        size_t setterLength = strlen(propertyName) + 4;
-                        setterName = malloc(setterLength + 1);  // room for "setFoo:\0"
-                        strcpy(setterName+3, propertyName);
-                        setterName[0] = 's';
-                        setterName[1] = 'e';
-                        setterName[2] = 't';
-                        setterName[3] += 'A' - 'a';
-                        setterName[setterLength - 1] = ':';
-                        setterName[setterLength] = '\0';
-                    }
-                    
-                    char *setterObjCTypes = malloc(objCTypeLength+4);
-                    strncpy(setterObjCTypes+3, attrs+1, objCTypeLength);
-                    setterObjCTypes[0] = 'v';
-                    setterObjCTypes[1] = '@';
-                    setterObjCTypes[2] = ':';
-                    setterObjCTypes[objCTypeLength+3] = '\0';
-                    
-                    switch (attrs[1]) {
-                        case 'c':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyCharSetter, setterObjCTypes);
-                            break;
-                        case 'i':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyIntSetter, setterObjCTypes);
-                            break;
-                        case 's':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyShortSetter, setterObjCTypes);
-                            break;
-                        case 'l':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongSetter, setterObjCTypes);
-                            break;
-                        case 'q':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongLongSetter, setterObjCTypes);
-                            break;
-                        case 'C':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedCharSetter, setterObjCTypes);
-                            break;
-                        case 'I':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedIntSetter, setterObjCTypes);
-                            break;
-                        case 'S':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedShortSetter, setterObjCTypes);
-                            break;
-                        case 'L':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongSetter, setterObjCTypes);
-                            break;
-                        case 'Q':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongSetter, setterObjCTypes);
-                            break;
-                        case 'f':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyFloatSetter, setterObjCTypes);
-                            break;
-                        case 'd':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyDoubleSetter, setterObjCTypes);
-                            break;
-                        case 'B':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyBoolSetter, setterObjCTypes);
-                            break;
-                        case '@':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyObjectSetter, setterObjCTypes);
-                            break;
-                        case '#':
-                            class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyClassSetter, setterObjCTypes);
-                            break;
-                        default:
-                            // I don't know how to write an IMP that takes any kind of argument.
-                            // We'll rely of forwardInvocation:
-                            break;
-                    }
-                    
-                    free(setterName);
-                    free(setterObjCTypes);
-                }
-            }
-        }
-        free(properties);
+        [self synthesizeManagedPropertiesAccessors];
     }
 }
 
@@ -440,39 +232,6 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     
     // initialize tag delegate stack
     context.tagDelegate = [tagDelegate retain];
-    
-    return context;
-}
-
-- (id)initPrivate
-{
-    return [super init];
-}
-
-- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
-{
-    if (tagDelegate == nil) {
-        return self;
-    }
-    
-    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
-    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
-    
-    // Update context stack
-    context.contextParent = self;
-    context.contextObject = nil;
-    
-    // copy identical stacks
-    context.protectedContextParent = _protectedContextParent;
-    context.protectedContextObject = _protectedContextObject;
-    context.hiddenContextParent = _hiddenContextParent;
-    context.hiddenContextObject = _hiddenContextObject;
-    context.templateOverrideParent = _templateOverrideParent;
-    context.templateOverride = _templateOverride;
-    
-    // update tag delegate stack
-    if (_tagDelegate) { context.tagDelegateParent = self; }
-    context.tagDelegate = tagDelegate;
     
     return context;
 }
@@ -547,6 +306,39 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
             context.tagDelegate = parent->_tagDelegate;
         }
     }
+    
+    return context;
+}
+
+- (id)initPrivate
+{
+    return [super init];
+}
+
+- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+{
+    if (tagDelegate == nil) {
+        return self;
+    }
+    
+    // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
+    GRMustacheContext *context = [[[[self class] alloc] initPrivate] autorelease];
+    
+    // Update context stack
+    context.contextParent = self;
+    context.contextObject = nil;
+    
+    // copy identical stacks
+    context.protectedContextParent = _protectedContextParent;
+    context.protectedContextObject = _protectedContextObject;
+    context.hiddenContextParent = _hiddenContextParent;
+    context.hiddenContextObject = _hiddenContextObject;
+    context.templateOverrideParent = _templateOverrideParent;
+    context.templateOverride = _templateOverride;
+    
+    // update tag delegate stack
+    if (_tagDelegate) { context.tagDelegateParent = self; }
+    context.tagDelegate = tagDelegate;
     
     return context;
 }
@@ -657,7 +449,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     
     if (object_getClass(self) != [GRMustacheContext class] && [GRMustacheContext objectIsTagDelegate:self]) {
         if (!tagDelegateStack) {
-            tagDelegateStack = [NSMutableArray arrayWithObject:self];
+            return [NSArray arrayWithObject:self];
         } else {
             [tagDelegateStack insertObject:self atIndex:0];
         }
@@ -665,6 +457,44 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     
     return tagDelegateStack;
 }
+
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+{
+    if (_templateOverride) {
+        for (GRMustacheContext *context = self; context; context = context.templateOverrideParent) {
+            component = [context.templateOverride resolveTemplateComponent:component];
+        }
+    }
+    return component;
+}
+
+
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    [_depthsForAncestors release];
+    [_contextParent release];
+    [_contextObject release];
+    [_mutableContextObject release];
+    [_protectedContextParent release];
+    [_protectedContextObject release];
+    [_hiddenContextParent release];
+    [_hiddenContextObject release];
+    [_tagDelegateParent release];
+    [_tagDelegate release];
+    [_templateOverrideParent release];
+    [_templateOverride release];
+    [super dealloc];
+}
+
+- (id)init
+{
+    return [self initPrivate];
+}
+
+
+#pragma mark - Context Stack Peeking
 
 - (id)topMustacheObject
 {
@@ -675,6 +505,16 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         }
     }
     return nil;
+}
+
+- (id)valueForUndefinedMustacheKey:(NSString *)key
+{
+    return nil;
+}
+
+- (id)valueForMustacheKey:(NSString *)key
+{
+    return [self valueForMustacheKey:key protected:NULL];
 }
 
 - (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected
@@ -725,7 +565,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         }
         
         if (context.mutableContextObject) {
-
+            
             // We're about to look into mutableContextObject.
             //
             // This dictionary is filled via setValue:forKey:, and via managed
@@ -747,7 +587,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
                     mutableContextKey = canonicalKeyForKey([self class], key);
                 }
             }
-
+            
             // Check mutableContextObject:
             //
             // context = [GRMustacheContext context];
@@ -815,16 +655,6 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return nil;
 }
 
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
-{
-    if (_templateOverride) {
-        for (GRMustacheContext *context = self; context; context = context.templateOverrideParent) {
-            component = [context.templateOverride resolveTemplateComponent:component];
-        }
-    }
-    return component;
-}
-
 - (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
 {
     id value = nil;
@@ -849,40 +679,8 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return [value autorelease];
 }
 
-- (id)valueForMustacheKey:(NSString *)key
-{
-    return [self valueForMustacheKey:key protected:NULL];
-}
 
-- (id)valueForUndefinedMustacheKey:(NSString *)key
-{
-    return nil;
-}
-
-
-#pragma mark - NSObject
-
-- (void)dealloc
-{
-    [_depthsForAncestors release];
-    [_contextParent release];
-    [_contextObject release];
-    [_mutableContextObject release];
-    [_protectedContextParent release];
-    [_protectedContextObject release];
-    [_hiddenContextParent release];
-    [_hiddenContextObject release];
-    [_tagDelegateParent release];
-    [_tagDelegate release];
-    [_templateOverrideParent release];
-    [_templateOverride release];
-    [super dealloc];
-}
-
-- (id)init
-{
-    return [self initPrivate];
-}
+#pragma mark - Key-Value Coding
 
 - (id)valueForKey:(NSString *)key
 {
@@ -892,10 +690,15 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     }
     
     // Key must be a getter for managed property.
+    //
     // Regular KVC also supports `isFoo` key for the `foo` property: provide YES
     // for the allowKVCAlternateName argument.
     BOOL getter;
     if (!hasManagedPropertyAccessor([self class], [key UTF8String], YES, &getter, NULL, NULL, NULL, NULL, NULL)) {
+        return [super valueForKey:key];
+    }
+    
+    if (!getter) {
         return [super valueForKey:key];
     }
     
@@ -965,41 +768,278 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     [_mutableContextObject setValue:value forKey:key];
 }
 
-- (BOOL)respondsToSelector:(SEL)selector
+
+#pragma mark - Managed Properties
+
++ (void)synthesizeManagedPropertiesAccessors
 {
-    if ([super respondsToSelector:selector]) {
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList(self, &count);
+    for (unsigned int i=0; i<count; ++i) {
+        const char *attrs = property_getAttributes(properties[i]);
+        
+        // Synthesize accessors if and only if property is dynamic
+        
+        if (!strstr(attrs, ",D")) continue;
+        
+        
+        const char *propertyName = property_getName(properties[i]);
+        size_t objCTypeLength = strstr(attrs, ",") - attrs - 1;
+        
+        // Synthesize getter
+        
+        {
+            char *getterName = nil;
+            char *getterStart = strstr(attrs, ",G");            // ",ScustomGetter:,..." or NULL if there is no custom getter
+            if (getterStart) {
+                getterStart += 2;                               // "customGetter:,..."
+                char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                getterName = malloc(getterLength + 1);
+                strncpy(getterName, getterStart, getterLength);
+                getterName[getterLength] = '\0';
+            }
+            
+            char *getterObjCTypes = malloc(objCTypeLength+3);
+            strncpy(getterObjCTypes, attrs+1, objCTypeLength);
+            getterObjCTypes[objCTypeLength] = '@';
+            getterObjCTypes[objCTypeLength + 1] = ':';
+            getterObjCTypes[objCTypeLength + 2] = '\0';
+            
+            switch (attrs[1]) {
+                case 'c':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyCharGetter, getterObjCTypes);
+                    break;
+                case 'i':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyIntGetter, getterObjCTypes);
+                    break;
+                case 's':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyShortGetter, getterObjCTypes);
+                    break;
+                case 'l':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongGetter, getterObjCTypes);
+                    break;
+                case 'q':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyLongLongGetter, getterObjCTypes);
+                    break;
+                case 'C':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedCharGetter, getterObjCTypes);
+                    break;
+                case 'I':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedIntGetter, getterObjCTypes);
+                    break;
+                case 'S':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedShortGetter, getterObjCTypes);
+                    break;
+                case 'L':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongGetter, getterObjCTypes);
+                    break;
+                case 'Q':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongGetter, getterObjCTypes);
+                    break;
+                case 'f':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyFloatGetter, getterObjCTypes);
+                    break;
+                case 'd':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyDoubleGetter, getterObjCTypes);
+                    break;
+                case 'B':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyBoolGetter, getterObjCTypes);
+                    break;
+                case '@':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyObjectGetter, getterObjCTypes);
+                    break;
+                case '#':
+                    class_addMethod(self, sel_registerName(getterName ?: propertyName), (IMP)GRMustacheContextManagedPropertyClassGetter, getterObjCTypes);
+                    break;
+                default:
+                    // I don't know how to write an IMP that returns any kind of argument.
+                    // We'll rely of forwardInvocation:
+                    break;
+            }
+            
+            free(getterName);
+            free(getterObjCTypes);
+        }
+        
+        if (!strstr(attrs, ",R"))
+        {
+            // Property is read/write
+            
+            // Check if we can honor storage policy
+            
+            if (strstr(attrs, ",W"))
+            {
+                // Property has `weak` storage.
+                //
+                // We store values in mutableContextObject, an NSDictionary that retain its values.
+                // Don't lie: support for weak properties is not done yet.
+                //
+                // Log and exit, because exceptions raised from initialize method do not stop the program.
+                NSLog(@"[GRMustache] Support for weak property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
+                exit(1);
+            }
+            else if (!strstr(attrs, ",&") && !strstr(attrs, ",C"))
+            {
+                // Property has `assign` storage.
+                
+                if (strstr(attrs, "T@") == attrs) {
+                    // Property has `assign` storage for an id object
+                    // We store values in mutableContextObject, an NSDictionary that retain its values.
+                    // Don't lie: support for weak properties is not done yet.
+                    //
+                    // Log and exit, because exceptions raised from initialize method do not stop the program.
+                    NSLog(@"[GRMustache] Support for nonretained property `%s` of class %@ is not implemented.", property_getName(properties[i]), self);
+                    exit(1);
+                }
+            }
+            
+            // Synthesize setter
+            
+            {
+                char *setterName = nil;
+                char *setterStart = strstr(attrs, ",S");            // ",ScustomSetter:,..." or NULL if there is no custom setter
+                if (setterStart) {
+                    setterStart += 2;                               // "customSetter:,..."
+                    char *setterEnd = strstr(setterStart, ",");     // ",..." or NULL if customSetter is the last attribute
+                    size_t setterLength = (setterEnd ? setterEnd : attrs + strlen(attrs)) - setterStart;
+                    setterName = malloc(setterLength + 1);
+                    strncpy(setterName, setterStart, setterLength);
+                    setterName[setterLength] = '\0';
+                } else {
+                    size_t setterLength = strlen(propertyName) + 4;
+                    setterName = malloc(setterLength + 1);  // room for "setFoo:\0"
+                    strcpy(setterName+3, propertyName);
+                    setterName[0] = 's';
+                    setterName[1] = 'e';
+                    setterName[2] = 't';
+                    setterName[3] += 'A' - 'a';
+                    setterName[setterLength - 1] = ':';
+                    setterName[setterLength] = '\0';
+                }
+                
+                char *setterObjCTypes = malloc(objCTypeLength+4);
+                strncpy(setterObjCTypes+3, attrs+1, objCTypeLength);
+                setterObjCTypes[0] = 'v';
+                setterObjCTypes[1] = '@';
+                setterObjCTypes[2] = ':';
+                setterObjCTypes[objCTypeLength+3] = '\0';
+                
+                switch (attrs[1]) {
+                    case 'c':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyCharSetter, setterObjCTypes);
+                        break;
+                    case 'i':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyIntSetter, setterObjCTypes);
+                        break;
+                    case 's':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyShortSetter, setterObjCTypes);
+                        break;
+                    case 'l':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongSetter, setterObjCTypes);
+                        break;
+                    case 'q':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyLongLongSetter, setterObjCTypes);
+                        break;
+                    case 'C':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedCharSetter, setterObjCTypes);
+                        break;
+                    case 'I':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedIntSetter, setterObjCTypes);
+                        break;
+                    case 'S':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedShortSetter, setterObjCTypes);
+                        break;
+                    case 'L':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongSetter, setterObjCTypes);
+                        break;
+                    case 'Q':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyUnsignedLongLongSetter, setterObjCTypes);
+                        break;
+                    case 'f':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyFloatSetter, setterObjCTypes);
+                        break;
+                    case 'd':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyDoubleSetter, setterObjCTypes);
+                        break;
+                    case 'B':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyBoolSetter, setterObjCTypes);
+                        break;
+                    case '@':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyObjectSetter, setterObjCTypes);
+                        break;
+                    case '#':
+                        class_addMethod(self, sel_registerName(setterName), (IMP)GRMustacheContextManagedPropertyClassSetter, setterObjCTypes);
+                        break;
+                    default:
+                        // I don't know how to write an IMP that takes any kind of argument.
+                        // We'll rely of forwardInvocation:
+                        break;
+                }
+                
+                free(setterName);
+                free(setterObjCTypes);
+            }
+        }
+    }
+    free(properties);
+}
+
++ (BOOL)instancesRespondToSelector:(SEL)selector
+{
+    // synthesizeManagedPropertiesAccessors could not synthesize accessors for
+    // properties containing char*, struct, union, etc.
+    //
+    // We have to pretend that we have an actual implementation.
+    
+    if ([super instancesRespondToSelector:selector]) {
         return YES;
     }
     
     // Support for managed properties is reserved to GRMustacheContext subclasses
-    if (object_getClass(self) == [GRMustacheContext class]) {
+    if (self == [GRMustacheContext class]) {
         return NO;
     }
     
     const char *selectorName = sel_getName(selector);
-    return hasManagedPropertyAccessor([self class], selectorName, NO, NULL, NULL, NULL, NULL, NULL, NULL);
+    return hasManagedPropertyAccessor(self, selectorName, NO, NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
+- (BOOL)respondsToSelector:(SEL)selector
 {
-    NSMethodSignature *signature = [super methodSignatureForSelector:selector];
+    // synthesizeManagedPropertiesAccessors could not synthesize accessors for
+    // properties containing char*, struct, union, etc.
+    //
+    // We have to pretend that we have an actual implementation.
+    
+    return [[self class] instancesRespondToSelector:selector];
+}
+
++ (NSMethodSignature *)instanceMethodSignatureForSelector:(SEL)selector
+{
+    // synthesizeManagedPropertiesAccessors could not synthesize accessors for
+    // properties containing char*, struct, union, etc.
+    //
+    // We have to pretend that we have an actual implementation.
+    
+    NSMethodSignature *signature = [super instanceMethodSignatureForSelector:selector];
     if (signature) {
         return signature;
     }
-
+    
     // Support for managed properties is reserved to GRMustacheContext subclasses
-    if (object_getClass(self) == [GRMustacheContext class]) {
+    if (self == [GRMustacheContext class]) {
         return nil;
     }
-
+    
     // The method is undefined.
     
     const char *selectorName = sel_getName(selector);
     char *propertyName;
     char *encoding;
     BOOL getter;
-    if (hasManagedPropertyAccessor([self class], selectorName, NO, &getter, NULL, NULL, &propertyName, &encoding, NULL)) {
-
+    if (hasManagedPropertyAccessor(self, selectorName, NO, &getter, NULL, NULL, &propertyName, &encoding, NULL)) {
+        
         if (getter) {
             // Getter
             
@@ -1024,7 +1064,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
             signature = [NSMethodSignature signatureWithObjCTypes:objCTypes];
             free(objCTypes);
         }
-
+        
         free(propertyName);
         free(encoding);
     }
@@ -1032,8 +1072,23 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return signature;
 }
 
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
+{
+    // synthesizeManagedPropertiesAccessors could not synthesize accessors for
+    // properties containing char*, struct, union, etc.
+    //
+    // We have to pretend that we have an actual implementation.
+    
+    return [[self class] instanceMethodSignatureForSelector:selector];
+}
+
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
+    // synthesizeManagedPropertiesAccessors could not synthesize accessors for
+    // properties containing char*, struct, union, etc.
+    //
+    // We have to pretend that we have an actual implementation.
+    
     // Support for managed properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) == [GRMustacheContext class]) {
         [super forwardInvocation:invocation];

@@ -618,6 +618,10 @@ struct GRPoint {
         // Unknown key throws
         STAssertThrows([context valueForKey:@"unknown"], @"");
     }
+    {
+        // Unknown key looking like a setter throws
+        STAssertThrows([context valueForKey:@"setAge:"], @"");
+    }
 }
 
 - (void)testValueForMustacheKey
