@@ -149,7 +149,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 @property (nonatomic, retain) GRMustacheContext *templateOverrideParent;
 @property (nonatomic, retain) id templateOverride;
 
-+ (BOOL)classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(Class)klass;
++ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
 + (BOOL)classIsTagDelegate:(Class)klass;
 + (void)setupNSUndefinedKeyExceptionPrevention;
 + (void)startPreventingNSUndefinedKeyException;
@@ -159,28 +159,6 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 //
 // This method allows us to derive new contexts without calling the init method of the subclass.
 - (id)initPrivate;
-
-/**
- * Sends the `valueForKey:` message to super_data->receiver with the provided
- * key, using the implementation of super_data->super_class, and returns the
- * result.
- *
- * Should [GRMustacheContext preventNSUndefinedKeyExceptionAttack] method have
- * been called earlier, temporarily swizzle _object_ so that it does not raise
- * any NSUndefinedKeyException.
- *
- * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
- *
- * @param key         The searched key
- * @param super_data  A pointer to a struct objc_super
- *
- * @return The result of the implementation of `valueForKey:` in
- *         super_data->super_class, or nil should an NSUndefinedKeyException be
- *         raised.
- *
- * @see GRMustacheProxy
- */
-+ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
 
 @end
 
@@ -1165,48 +1143,26 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 + (id)valueForKey:(NSString *)key inObject:(id)object
 {
-    // We don't want to use NSArray, NSSet and NSOrderedSet implementation
-    // of valueForKey:, because they return another collection: see issue #21
-    // and "anchored key should not extract properties inside an array" test in
-    // src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
-    //
-    // Still, we do not want to prevent access to [NSArray count]. We thus
-    // invoke NSObject's implementation of valueForKey: for those objects, with
-    // our valueForKey:inSuper: method.
-    
-    if ([self classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:[object class]]) {
-        return [self valueForKey:key inSuper:&(struct objc_super){ object, [NSObject class] }];
-    }
-    
-    
-    // For other objects, return the result of their own implementation of
-    // valueForKey: (but use our valueForKey:inSuper: with nil super_class, so
-    // that we can prevent or catch NSUndefinedKeyException).
-    
-    return [self valueForKey:key inSuper:&(struct objc_super){ object, nil }];
-}
-
-+ (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data
-{
-    if (super_data->receiver == nil) {
+    if (object == nil) {
         return nil;
     }
     
     [GRMustacheContext startPreventingNSUndefinedKeyException];
     
     @try {
-        
-        // We accept nil super_data->super_class, as a convenience for our
-        // implementation of valueForKey:inObject:.
-#if !defined(__cplusplus)  &&  !__OBJC2__
-        if (super_data->class)  // support for 32bits MacOS (see declaration of struct objc_super in <objc/message.h>)
-#else
-        if (super_data->super_class)
-#endif
-        {
-            return objc_msgSendSuper(super_data, @selector(valueForKey:), key);
+        // We don't want to use NSArray, NSSet and NSOrderedSet implementation
+        // of valueForKey:, because they return another collection: see issue #21
+        // and "anchored key should not extract properties inside an array" test
+        // in src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
+            static IMP NSObjectIMP;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                NSObjectIMP = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
+            });
+            return NSObjectIMP(object, @selector(valueForKey:), key);
         } else {
-            return [super_data->receiver valueForKey:key];
+            return [object valueForKey:key];
         }
     }
     
@@ -1232,7 +1188,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return nil;
 }
 
-+ (BOOL)classIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(Class)klass
++ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
 {
     static CFMutableDictionaryRef cache;
     static dispatch_once_t onceToken;
@@ -1240,7 +1196,8 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
     });
     
-    int result = (int)CFDictionaryGetValue(cache, klass);
+    Class klass = object_getClass(object);
+    int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
         result = 2;
         Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
@@ -1265,7 +1222,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     dispatch_once(&onceToken, ^{
         cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
     });
-    int result = (int)CFDictionaryGetValue(cache, klass);
+    int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
         result = ([klass instancesRespondToSelector:@selector(mustacheTag:willRenderObject:)] ||
                   [klass instancesRespondToSelector:@selector(mustacheTag:didRenderObject:as:)] ||
