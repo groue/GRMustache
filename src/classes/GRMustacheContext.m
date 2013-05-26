@@ -1627,6 +1627,10 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     //
     // We have to pretend that we have an actual implementation.
     
+    if ([super respondsToSelector:selector]) {
+        return YES;
+    }
+    
     return [[self class] instancesRespondToSelector:selector];
 }
 
@@ -1693,6 +1697,11 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     // properties containing char*, struct, union, etc.
     //
     // We have to pretend that we have an actual implementation.
+    
+    NSMethodSignature *signature = [super methodSignatureForSelector:selector];
+    if (signature) {
+        return signature;
+    }
     
     return [[self class] instanceMethodSignatureForSelector:selector];
 }
