@@ -61,7 +61,6 @@
     id<GRMustacheTagDelegate> _tagDelegate;
     GRMustacheContext *_templateOverrideParent;
     id _templateOverride;
-    NSString *_nonManagedKey;
 }
 
 

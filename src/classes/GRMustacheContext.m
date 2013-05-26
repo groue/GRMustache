@@ -787,12 +787,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
             // Key is not a managed property. But subclass may have defined a
             // method for that key.
             
-            // Invoke NSObject's implementation of valueForKey:
-            // _nonManagedKey makes sure we do not enter an infinite loop through valueForUndefinedKey:
-            id previousNonManagedKey = _nonManagedKey;
-            _nonManagedKey = key;
-            id value = [super valueForKey:key];
-            _nonManagedKey = previousNonManagedKey;
+            id value = [GRMustacheContext valueForKey:key inObject:self];
             
             if (value) {
                 if (protected != NULL) {
@@ -889,25 +884,21 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return [self initPrivate];
 }
 
-- (id)valueForUndefinedKey:(NSString *)key
+- (id)valueForKey:(NSString *)key
 {
     // Support for managed properties is reserved to GRMustacheContext subclasses
     if (object_getClass(self) == [GRMustacheContext class]) {
-        return [super valueForUndefinedKey:key];
+        return [super valueForKey:key];
     }
     
-    // _nonManagedKey may have been set in contextValue:forKey:
-    if ([_nonManagedKey isEqualToString:key]) {
-        return nil;
-    }
-
     // Key must be a getter for managed property.
-    // Regular KVC also supports `isFoo` key for the `foo` property.
+    // Regular KVC also supports `isFoo` key for the `foo` property: provide YES
+    // for the allowKVCAlternateName argument.
     BOOL getter;
     if (!hasManagedPropertyAccessor([self class], [key UTF8String], YES, &getter, NULL, NULL, NULL, NULL, NULL)) {
-        return [super valueForUndefinedKey:key];
+        return [super valueForKey:key];
     }
-
+    
     return [self valueForMustacheKey:key protected:NULL];
 }
 
