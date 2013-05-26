@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <objc/message.h>
+#import <pthread.h>
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
@@ -1296,6 +1297,11 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 #pragma mark - NSUndefinedKeyException prevention
 
+static pthread_key_t NSUndefinedKeyExceptionPreventionCount;
+void freeNSUndefinedKeyExceptionPreventionCount(void *count) {
+    free(count);
+}
+
 + (void)setupNSUndefinedKeyExceptionPrevention
 {
     static dispatch_once_t onceToken;
@@ -1317,38 +1323,37 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
                                              error:nil];
         }
     });
-}
 
-static BOOL mainThreadPreventsNSUndefinedKeyException = NO;
-static NSString const * GRMustacheContextPreventsNSUndefinedKeyException = @"GRMustacheContextPreventsNSUndefinedKeyException";
+    pthread_key_create(&NSUndefinedKeyExceptionPreventionCount, freeNSUndefinedKeyExceptionPreventionCount);
+}
 
 + (void)startPreventingNSUndefinedKeyException
 {
-    if ([NSThread isMainThread]) {
-        mainThreadPreventsNSUndefinedKeyException = YES;
-        return;
+    NSUInteger *count;
+    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
+        count = malloc(sizeof(NSUInteger));
+        pthread_setspecific(NSUndefinedKeyExceptionPreventionCount, count);
+        *count = 0;
     }
-    
-    [[[NSThread currentThread] threadDictionary] setObject:(id)kCFBooleanTrue forKey:GRMustacheContextPreventsNSUndefinedKeyException];
+    *count += 1;
 }
 
 + (void)stopPreventingNSUndefinedKeyException
 {
-    if ([NSThread isMainThread]) {
-        mainThreadPreventsNSUndefinedKeyException = NO;
-        return;
+    NSUInteger *count;
+    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
+        [NSException raise:NSInternalInconsistencyException format:@"Uninitialized state for NSUndefinedKeyException prevention"];
     }
-    
-    [[[NSThread currentThread] threadDictionary] removeObjectForKey:GRMustacheContextPreventsNSUndefinedKeyException];
+    *count -= 1;
 }
 
 + (BOOL)preventsNSUndefinedKeyException
 {
-    if ([NSThread isMainThread]) {
-        return mainThreadPreventsNSUndefinedKeyException;
+    NSUInteger *count;
+    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
+        return NO;
     }
-    
-    return [[[[NSThread currentThread] threadDictionary] objectForKey:GRMustacheContextPreventsNSUndefinedKeyException] boolValue];
+    return (*count > 0);
 }
 
 @end
