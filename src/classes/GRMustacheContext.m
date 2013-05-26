@@ -37,6 +37,10 @@
 BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 #endif
 
+
+// =============================================================================
+#pragma mark - Managed Properties
+
 typedef NS_ENUM(NSInteger, GRMustachePropertyStoragePolicy) {
     GRMustachePropertyStoragePolicyAssign,
     GRMustachePropertyStoragePolicyRetain,
@@ -45,12 +49,14 @@ typedef NS_ENUM(NSInteger, GRMustachePropertyStoragePolicy) {
 };
 
 typedef NS_ENUM(NSInteger, GRMustachePropertyType) {
-    GRMustachePropertyTypeNumber,
-    GRMustachePropertyTypeObject,
-    GRMustachePropertyTypeClass,
-    GRMustachePropertyTypeScalar,
+    GRMustachePropertyTypeNumber, // char, int, etc.
+    GRMustachePropertyTypeObject, // id
+    GRMustachePropertyTypeClass,  // Class
+    GRMustachePropertyTypeScalar, // char*, struct, union, etc.
 };
 
+// Low-level managed property function
+//
 // Returns YES if the selectorName is a property accessor.
 // If allowKVCAlternateName is YES, variants isFoo/foo are tested.
 // If the result is YES:
@@ -62,10 +68,12 @@ typedef NS_ENUM(NSInteger, GRMustachePropertyType) {
 // Caller must free the returned strings.
 BOOL hasManagedPropertyAccessor(Class klass, const char *selectorName, BOOL allowKVCAlternateName, BOOL *getter, BOOL *readOnly, GRMustachePropertyStoragePolicy *storagePolicy, char **propertyName, char **objCTypes, GRMustachePropertyType *type);
 
+// High-level managed property functions
 BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *zeroScalarValue);
 NSString *managedPropertyNameForSelector(Class klass, SEL selector);
 NSString *canonicalKeyForKey(Class klass, NSString *key);
 
+// Managed property setters
 static void GRMustacheContextManagedPropertyCharSetter(GRMustacheContext *self, SEL _cmd, char value);
 static void GRMustacheContextManagedPropertyIntSetter(GRMustacheContext *self, SEL _cmd, int value);
 static void GRMustacheContextManagedPropertyShortSetter(GRMustacheContext *self, SEL _cmd, short value);
@@ -82,6 +90,7 @@ static void GRMustacheContextManagedPropertyBoolSetter(GRMustacheContext *self, 
 static void GRMustacheContextManagedPropertyObjectSetter(GRMustacheContext *self, SEL _cmd, id value);
 static void GRMustacheContextManagedPropertyClassSetter(GRMustacheContext *self, SEL _cmd, Class value);
 
+// Managed property getters
 static char GRMustacheContextManagedPropertyCharGetter(GRMustacheContext *self, SEL _cmd);
 static int GRMustacheContextManagedPropertyIntGetter(GRMustacheContext *self, SEL _cmd);
 static short GRMustacheContextManagedPropertyShortGetter(GRMustacheContext *self, SEL _cmd);
@@ -98,11 +107,22 @@ static _Bool GRMustacheContextManagedPropertyBoolGetter(GRMustacheContext *self,
 static id GRMustacheContextManagedPropertyObjectGetter(GRMustacheContext *self, SEL _cmd);
 static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self, SEL _cmd);
 
+
+// =============================================================================
+#pragma mark - GRMustacheContext
+
 @interface GRMustacheContext()
 
-// A dictionary where keys are ancestor context objects, and values depth
-// numbers: self has depth 0, parent has depth 1, grand-parent has depth 2, etc.
+
+// `depthsForAncestors` returns a dictionary where keys are ancestor context
+// objects, and values depth numbers: self has depth 0, parent has depth 1,
+// grand-parent has depth 2, etc.
+//
+// `ancestors` returns an array of ancestor contexts.
+// First context in the array is the root context.
+// Last context in the array is self.
 @property (nonatomic, readonly) NSDictionary *depthsForAncestors;
+@property (nonatomic, readonly) NSArray *ancestors;
 
 // Context stack:
 // If _contextObject is nil, the stack is empty.
@@ -161,11 +181,6 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
  * @see GRMustacheProxy
  */
 + (id)valueForKey:(NSString *)key inSuper:(struct objc_super *)super_data GRMUSTACHE_API_INTERNAL;
-
-// Return an array of ancestor contexts.
-// First context in the array is the root context.
-// Last context in the array is self.
-- (NSArray *)ancestors;
 
 @end
 
