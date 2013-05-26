@@ -646,30 +646,31 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return context;
 }
 
-- (NSArray *)tagDelegates
+- (NSArray *)tagDelegateStack
 {
-    NSMutableArray *tagDelegates = nil;
+    NSMutableArray *tagDelegateStack = nil;
     
     if (_tagDelegate) {
-        tagDelegates = [NSMutableArray array];
+        tagDelegateStack = [NSMutableArray array];
         for (GRMustacheContext *context = self; context; context = context.tagDelegateParent) {
-            [tagDelegates addObject:context.tagDelegate];
+            [tagDelegateStack insertObject:context->_tagDelegate atIndex:0];
         }
     }
+    
+    // If self is a GRMustacheContext subclass and conforms to
+    // GRMustacheTagDelegate, self behaves as the first tag delegate in the
+    // stack (before all section delegates).
     
     Class klass = object_getClass(self);
-    if (klass != [GRMustacheContext class]) {
-        
-        // if self conforms to GRMustacheTagDelegate, self behaves as the first tag
-        // delegate in the stack (before all section delegates).
-        
-        if ([GRMustacheContext classIsTagDelegate:klass]) {
-            if (!tagDelegates) tagDelegates = [NSMutableArray array];
-            [tagDelegates addObject:self];
+    if (klass != [GRMustacheContext class] && [GRMustacheContext classIsTagDelegate:klass]) {
+        if (!tagDelegateStack) {
+            tagDelegateStack = [NSMutableArray arrayWithObject:self];
+        } else {
+            [tagDelegateStack insertObject:self atIndex:0];
         }
     }
     
-    return tagDelegates;
+    return tagDelegateStack;
 }
 
 - (id)topMustacheObject

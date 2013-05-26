@@ -193,8 +193,8 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
  * Returns an array containing all tag delegates in the delegate stack.
  * Array may be null (meaning there is no tag delegate in the stack).
  *
- * First object is the top object in the delegate stack.
+ * Last object is the top object in the delegate stack.
  */
-- (NSArray *)tagDelegates GRMUSTACHE_API_INTERNAL;
+- (NSArray *)tagDelegateStack GRMUSTACHE_API_INTERNAL;
 
 @end

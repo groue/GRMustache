@@ -172,8 +172,8 @@
             
             
             // Tag delegates pre-rendering callbacks
-            NSArray *tagDelegates = [context tagDelegates];
-            for (id<GRMustacheTagDelegate> tagDelegate in tagDelegates) {
+            NSArray *tagDelegateStack = [context tagDelegateStack];
+            for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
                 if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
                     object = [tagDelegate mustacheTag:self willRenderObject:object];
                 }
@@ -210,7 +210,7 @@
                 
                 // Tag delegates post-rendering callbacks
                 
-                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegates reverseObjectEnumerator]) { // invoke tag delegates in reverse order
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
                     if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
                         [tagDelegate mustacheTag:self didRenderObject:object as:rendering];
                     }
@@ -228,7 +228,7 @@
                 
                 // Tag delegates post-rendering callbacks
 
-                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegates reverseObjectEnumerator]) { // invoke tag delegates in reverse order
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
                     if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
                         [tagDelegate mustacheTag:self didFailRenderingObject:object withError:renderingError];
                     }
