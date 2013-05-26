@@ -150,7 +150,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 @property (nonatomic, retain) id templateOverride;
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object;
-+ (BOOL)classIsTagDelegate:(Class)klass;
++ (BOOL)objectIsTagDelegate:(id)object;
 + (void)setupNSUndefinedKeyExceptionPrevention;
 + (void)startPreventingNSUndefinedKeyException;
 + (void)stopPreventingNSUndefinedKeyException;
@@ -417,7 +417,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     context.contextObject = [object retain];
         
     // initialize tag delegate stack
-    if ([self classIsTagDelegate:[object class]]) {
+    if ([self objectIsTagDelegate:object]) {
         context.tagDelegate = [object retain];
     }
     
@@ -539,7 +539,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
         context.contextObject = object;
         
         // update or copy tag delegate stack
-        if ([GRMustacheContext classIsTagDelegate:[object class]]) {
+        if ([GRMustacheContext objectIsTagDelegate:object]) {
             if (parent->_tagDelegate) { context.tagDelegateParent = parent; }
             context.tagDelegate = object;
         } else {
@@ -655,8 +655,7 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     // GRMustacheTagDelegate, self behaves as the first tag delegate in the
     // stack (before all section delegates).
     
-    Class klass = object_getClass(self);
-    if (klass != [GRMustacheContext class] && [GRMustacheContext classIsTagDelegate:klass]) {
+    if (object_getClass(self) != [GRMustacheContext class] && [GRMustacheContext objectIsTagDelegate:self]) {
         if (!tagDelegateStack) {
             tagDelegateStack = [NSMutableArray arrayWithObject:self];
         } else {
@@ -1215,18 +1214,18 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     return (result == 1);
 }
 
-+ (BOOL)classIsTagDelegate:(Class)klass
++ (BOOL)objectIsTagDelegate:(id)object
 {
     static CFMutableDictionaryRef cache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
     });
+
+    Class klass = object_getClass(object);
     int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
-        result = ([klass instancesRespondToSelector:@selector(mustacheTag:willRenderObject:)] ||
-                  [klass instancesRespondToSelector:@selector(mustacheTag:didRenderObject:as:)] ||
-                  [klass instancesRespondToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) ? 1 : 2;
+        result = class_conformsToProtocol(klass, @protocol(GRMustacheTagDelegate)) ? 1 : 2;
         CFDictionarySetValue(cache, klass, (const void *)result);
     }
     return (result == 1);
