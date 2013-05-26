@@ -705,17 +705,10 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     Class klass = object_getClass(object);
     int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
-        result = 2;
         Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-        for (Class testKlass = klass; testKlass; testKlass = class_getSuperclass(testKlass)) {
-            if (testKlass == [NSArray class] ||
-                testKlass == [NSSet class] ||
-                testKlass == NSOrderedSetClass)
-            {
-                result = 1;
-                break;
-            }
-        }
+        result = ([klass isSubclassOfClass:[NSArray class]] ||
+                  [klass isSubclassOfClass:[NSSet class]] ||
+                  (NSOrderedSetClass && [klass isSubclassOfClass:NSOrderedSetClass])) ? 1 : 2;
         CFDictionarySetValue(cache, klass, (const void *)result);
     }
     return (result == 1);
