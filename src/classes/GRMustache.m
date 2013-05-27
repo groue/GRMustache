@@ -37,16 +37,16 @@
 #pragma mark - Rendering declarations
 
 
-// GRMustacheNilRendering renders for nil
+// GRMustacheNilRenderer renders for nil
 
-@interface GRMustacheNilRendering : NSObject<GRMustacheRendering>
+@interface GRMustacheNilRenderer : NSObject<GRMustacheRendering>
 @end
-static GRMustacheNilRendering *nilRenderingObject;
+static GRMustacheNilRenderer *nilRenderingObject;
 
 
-// GRMustacheNilRendering renders for objects of class NSObject
+// GRMustacheNSObjectRenderer renders for objects of class NSObject
 
-@interface GRMustacheNSObjectRendering:NSObject<GRMustacheRendering> {
+@interface GRMustacheNSObjectRenderer:NSObject<GRMustacheRendering> {
 @private
     id _object;
 }
@@ -54,9 +54,9 @@ static GRMustacheNilRendering *nilRenderingObject;
 @end
 
 
-// GRMustacheRenderingWithBlock renders with a block
+// GRMustacheBlockRenderer renders with a block
 
-@interface GRMustacheRenderingWithBlock:NSObject<GRMustacheRendering> {
+@interface GRMustacheBlockRenderer:NSObject<GRMustacheRendering> {
 @private
     NSString *(^_block)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 }
@@ -107,7 +107,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 + (void)setupRendering
 {
     // Once and for all
-    nilRenderingObject = [[GRMustacheNilRendering alloc] init];
+    nilRenderingObject = [[GRMustacheNilRenderer alloc] init];
     
     // We could have declared categories on NSNull, NSNumber, NSString and
     // NSDictionary.
@@ -159,13 +159,13 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         // Don't make NSObject able to render: don't provide unregistered
         // classes conforming to NSFastEnumeration with the generic
         // GRMustacheRenderNSObject implementation.
-        return [[[GRMustacheNSObjectRendering alloc] initWithObject:object] autorelease];
+        return [[[GRMustacheNSObjectRenderer alloc] initWithObject:object] autorelease];
     }
 }
 
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
-    return [[[GRMustacheRenderingWithBlock alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheBlockRenderer alloc] initWithBlock:block] autorelease];
 }
 
 + (void)registerRenderingImplementation:(IMP)imp forClass:(Class)klass
@@ -317,7 +317,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 // =============================================================================
 #pragma mark - Rendering Implementations
 
-@implementation GRMustacheNilRendering
+@implementation GRMustacheNilRenderer
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
@@ -339,7 +339,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 @end
 
 
-@implementation GRMustacheNSObjectRendering
+@implementation GRMustacheNSObjectRenderer
 
 - (void)dealloc
 {
@@ -364,7 +364,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 @end
 
 
-@implementation GRMustacheRenderingWithBlock
+@implementation GRMustacheBlockRenderer
 
 - (void)dealloc
 {
