@@ -517,50 +517,64 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             BOOL oneItemHasRenderedHTMLUnescaped = NO;
             
             for (id item in self) {
-                
-                // render item
-                id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
-                BOOL itemHasRenderedHTMLSafe = NO;
-                NSError *itemRenderingError = nil;
-                NSString *rendering = [itemRenderingObject renderForMustacheTag:tag context:context HTMLSafe:&itemHasRenderedHTMLSafe error:&itemRenderingError];
-                
-                if (rendering)
-                {
-                    if (rendering.length > 0)
+                @autoreleasepool {
+                    // Render item
+                    
+                    id<GRMustacheRendering> itemRenderingObject = [GRMustache renderingObjectForObject:item];
+                    BOOL itemHasRenderedHTMLSafe = NO;
+                    NSError *renderingError = nil;
+                    NSString *rendering = [itemRenderingObject renderForMustacheTag:tag context:context HTMLSafe:&itemHasRenderedHTMLSafe error:&renderingError];
+                    
+                    if (rendering == nil && renderingError == nil)
                     {
-                        // check consistency of HTML escaping before appending the rendering to the buffer
+                        // Rendering is nil, but rendering error is not set.
+                        //
+                        // Assume a rendering object coded by a lazy programmer, whose
+                        // intention is to render nothing.
                         
-                        if (itemHasRenderedHTMLSafe) {
-                            oneItemHasRenderedHTMLSafe = YES;
-                            if (oneItemHasRenderedHTMLUnescaped) {
-                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                        rendering = @"";
+                    }
+                    
+                    if (rendering)
+                    {
+                        // Success
+                        
+                        if (rendering.length > 0)
+                        {
+                            // check consistency of HTML escaping before appending the rendering to the buffer
+                            
+                            if (itemHasRenderedHTMLSafe) {
+                                oneItemHasRenderedHTMLSafe = YES;
+                                if (oneItemHasRenderedHTMLUnescaped) {
+                                    [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                                }
+                            } else {
+                                oneItemHasRenderedHTMLUnescaped = YES;
+                                if (oneItemHasRenderedHTMLSafe) {
+                                    [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                                }
                             }
+                            
+                            [buffer appendString:rendering];
+                        }
+                    }
+                    else
+                    {
+                        // Error
+                        
+                        if (error != NULL) {
+                            *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
                         } else {
-                            oneItemHasRenderedHTMLUnescaped = YES;
-                            if (oneItemHasRenderedHTMLSafe) {
-                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
-                            }
+                            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
                         }
                         
-                        [buffer appendString:rendering];
+                        return nil;
                     }
-                }
-                else if (itemRenderingError)
-                {
-                    // If rendering is nil, but rendering error is not set,
-                    // assume lazy coder, and the intention to render nothing:
-                    // Fail if and only if renderingError is explicitely set.
-                    if (error != NULL) {
-                        *error = itemRenderingError;
-                    } else {
-                        NSLog(@"GRMustache error: %@", itemRenderingError.localizedDescription);
-                    }
-                    return @"";
                 }
             }
             
             if (HTMLSafe != NULL) {
-                *HTMLSafe = oneItemHasRenderedHTMLSafe;
+                *HTMLSafe = !oneItemHasRenderedHTMLUnescaped;   // YES if list is empty
             }
             return buffer;
         }
