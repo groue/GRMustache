@@ -216,7 +216,8 @@
                     }
                 }
             }
-            else {
+            else
+            {
                 // Error
                 
                 if (error != NULL) {
