@@ -66,6 +66,7 @@ static GRMustacheNilRenderer *nilRenderingObject;
 
 // NSNull, NSNumber, NSString, NSObject, NSFastEnumeration rendering
 
+typedef NSString *(*GRMustacheRenderIMP)(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
@@ -89,7 +90,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
  * @param imp     an implementation
  * @param aClass  the class to modify
  */
-+ (void)registerRenderingImplementation:(IMP)imp forClass:(Class)aClass;
++ (void)registerRenderingImplementation:(GRMustacheRenderIMP)imp forClass:(Class)aClass;
 
 @end
 
@@ -122,35 +123,39 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     //
     // Other classes will be dynamically attached their rendering implementation
     // in the renderingObjectForObject: method.
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNull   forClass:[NSNull class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSNumber forClass:[NSNumber class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSString forClass:[NSString class]];
-    [self registerRenderingImplementation:(IMP)GRMustacheRenderNSObject forClass:[NSDictionary class]];
+    [self registerRenderingImplementation:GRMustacheRenderNSNull   forClass:[NSNull class]];
+    [self registerRenderingImplementation:GRMustacheRenderNSNumber forClass:[NSNumber class]];
+    [self registerRenderingImplementation:GRMustacheRenderNSString forClass:[NSString class]];
+    [self registerRenderingImplementation:GRMustacheRenderNSObject forClass:[NSDictionary class]];
 }
 
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object
 {
+    // Easy case: nil
+    
     if (object == nil) {
         return nilRenderingObject;
     }
+    
+    // Easy case: already a rendering object
     
     if ([object respondsToSelector:@selector(renderForMustacheTag:context:HTMLSafe:error:)]) {
         return object;
     }
     
-    // Object doesn't know how to render
+    // Object doesn't know (yet) how to render
     
     Class klass = object_getClass(object);
-    if ([object conformsToProtocol:@protocol(NSFastEnumeration)])
+    if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)])
     {
         // Make it able to render with GRMustacheRenderNSFastEnumeration
-        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSFastEnumeration forClass:klass];
+        [self registerRenderingImplementation:GRMustacheRenderNSFastEnumeration forClass:klass];
         return object;
     }
     else if (klass != [NSObject class])
     {
         // Make it able to render with GRMustacheRenderNSObject
-        [self registerRenderingImplementation:(IMP)GRMustacheRenderNSObject forClass:klass];
+        [self registerRenderingImplementation:GRMustacheRenderNSObject forClass:klass];
         return object;
     }
     else
@@ -168,17 +173,17 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     return [[[GRMustacheBlockRenderer alloc] initWithBlock:block] autorelease];
 }
 
-+ (void)registerRenderingImplementation:(IMP)imp forClass:(Class)klass
++ (void)registerRenderingImplementation:(GRMustacheRenderIMP)imp forClass:(Class)klass
 {
-    // Set the implementation of renderForMustacheTag:context:HTMLSafe:error:
-    SEL renderSelector = @selector(renderForMustacheTag:context:HTMLSafe:error:);
-    if (!class_addMethod(klass, renderSelector, imp, "@@:@@^c^@")) {
-        Method method = class_getInstanceMethod(klass, renderSelector);
-        method_setImplementation(method, imp);
-    }
+    SEL selector = @selector(renderForMustacheTag:context:HTMLSafe:error:);
+    Protocol *protocol = @protocol(GRMustacheRendering);
+
+    // Add method implementation
+    struct objc_method_description methodDescription = protocol_getMethodDescription(protocol, selector, YES, YES);
+    class_addMethod(klass, selector, (IMP)imp, methodDescription.types);
     
     // Add protocol conformance
-    class_addProtocol(klass, @protocol(GRMustacheRendering));
+    class_addProtocol(klass, protocol);
 }
 
 
