@@ -119,17 +119,17 @@
         return NO;
     }
     
-    if (![filter conformsToProtocol:@protocol(GRMustacheFilter)]) {
+    if (![filter respondsToSelector:@selector(transformedValue:)]) {
         GRMustacheToken *token = self.token;
         NSString *renderingErrorDescription = nil;
         if (token) {
             if (token.templateID) {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
+                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol in tag `%@` at line %lu of template %@: %@", protocol_getName(@protocol(GRMustacheFilter)), token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
             } else {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
+                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol in tag `%@` at line %lu: %@", protocol_getName(@protocol(GRMustacheFilter)), token.templateSubstring, (unsigned long)token.line, filter];
             }
         } else {
-            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol: %@", filter];
+            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol: %@", protocol_getName(@protocol(GRMustacheFilter)), filter];
         }
         NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
         if (error != NULL) {
