@@ -49,10 +49,9 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
-    NSDictionary *_depthsForAncestors;
     GRMustacheContext *_contextParent;
-    NSMutableDictionary *_mutableContextObject;
     id _contextObject;
+    NSMutableDictionary *_managedPropertiesStore;
     GRMustacheContext *_protectedContextParent;
     id _protectedContextObject;
     GRMustacheContext *_hiddenContextParent;
@@ -61,6 +60,7 @@
     id<GRMustacheTagDelegate> _tagDelegate;
     GRMustacheContext *_templateOverrideParent;
     id _templateOverride;
+    NSDictionary *_depthsForAncestors;
 }
 
 
