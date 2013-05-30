@@ -76,19 +76,19 @@
     {
       "name": "Whitespace in double mustache tag should be ignored.",
       "data": { "subject": "---" },
-      "template": "<{{ subject }}>",
+      "template": "<{{ \r\n\tsubject \r\n\t}}>",
       "expected": "<--->"
     },
     {
       "name": "Whitespace in triple mustache tag should be ignored.",
       "data": { "subject": "---" },
-      "template": "<{{{ subject }}}>",
+      "template": "<{{{ \r\n\tsubject \r\n\t}}}>",
       "expected": "<--->"
     },
     {
       "name": "Whitespace in ampersand tag should be ignored.",
       "data": { "subject": "---" },
-      "template": "<{{& subject }}>",
+      "template": "<{{& \r\n\tsubject \r\n\t}}>",
       "expected": "<--->"
     },
 

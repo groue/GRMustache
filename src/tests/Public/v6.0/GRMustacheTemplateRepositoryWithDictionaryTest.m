@@ -46,7 +46,7 @@
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
-    template = [repository templateFromString:@"{{>not found}}" error:&error];
+    template = [repository templateFromString:@"{{>not_found}}" error:&error];
     STAssertNil(template, @"");
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");

@@ -591,7 +591,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 {
     id value = nil;
     @autoreleasepool {
-        GRMustacheExpression *expression = [GRMustacheParser parseExpression:string invalid:NULL];
+        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:nil] autorelease];
+        GRMustacheExpression *expression = [parser parseExpression:string invalid:NULL];
         if (expression) {
             if ([expression hasValue:&value withContext:self protected:NULL error:error]) {
                 [value retain]; // escape autorelease pool

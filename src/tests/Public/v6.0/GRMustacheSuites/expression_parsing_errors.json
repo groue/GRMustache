@@ -78,6 +78,276 @@
       "data": null,
       "template": "{{a(b, ,c)}}",
       "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `{`",
+      "data": null,
+      "template": "{{ { }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `{`",
+      "data": null,
+      "template": "{{ {a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `{` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .{a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `{` (in compound expression)",
+      "data": null,
+      "template": "{{ a.{a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `{` (as filter argument)",
+      "data": null,
+      "template": "{{ a({a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `}`",
+      "data": null,
+      "template": "{{ } }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `}`",
+      "data": null,
+      "template": "{{ }a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `}` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .}a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `}` (in compound expression)",
+      "data": null,
+      "template": "{{ a.}a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `}` (as filter argument)",
+      "data": null,
+      "template": "{{ a(}a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `<`",
+      "data": null,
+      "template": "{{ < }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `<`",
+      "data": null,
+      "template": "{{ <a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `<` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .<a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `<` (in compound expression)",
+      "data": null,
+      "template": "{{ a.<a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `<` (as filter argument)",
+      "data": null,
+      "template": "{{ a(<a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `>`",
+      "data": null,
+      "template": "{{ > }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `>`",
+      "data": null,
+      "template": "{{ >a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `>` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .>a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `>` (in compound expression)",
+      "data": null,
+      "template": "{{ a.>a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `>` (as filter argument)",
+      "data": null,
+      "template": "{{ a(>a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `&`",
+      "data": null,
+      "template": "{{ & }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `&`",
+      "data": null,
+      "template": "{{ &a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `&` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .&a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `&` (in compound expression)",
+      "data": null,
+      "template": "{{ a.&a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `&` (as filter argument)",
+      "data": null,
+      "template": "{{ a(&a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `#`",
+      "data": null,
+      "template": "{{ # }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `#`",
+      "data": null,
+      "template": "{{ #a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `#` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .#a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `#` (in compound expression)",
+      "data": null,
+      "template": "{{ a.#a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `#` (as filter argument)",
+      "data": null,
+      "template": "{{ a(#a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `^`",
+      "data": null,
+      "template": "{{ ^ }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `^`",
+      "data": null,
+      "template": "{{ ^a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `^` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .^a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `^` (in compound expression)",
+      "data": null,
+      "template": "{{ a.^a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `^` (as filter argument)",
+      "data": null,
+      "template": "{{ a(^a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `$`",
+      "data": null,
+      "template": "{{ $ }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `$`",
+      "data": null,
+      "template": "{{ $a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `$` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ .$a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `$` (in compound expression)",
+      "data": null,
+      "template": "{{ a.$a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `$` (as filter argument)",
+      "data": null,
+      "template": "{{ a($a) }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not be `/`",
+      "data": null,
+      "template": "{{ / }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `/`",
+      "data": null,
+      "template": "{{ /a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `/` (in dot-prefixed expression)",
+      "data": null,
+      "template": "{{ ./a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `/` (in compound expression)",
+      "data": null,
+      "template": "{{ a./a }}",
+      "expected_error": "Invalid expression"
+    },
+    {
+      "name": "Identifier can not start with `/` (as filter argument)",
+      "data": null,
+      "template": "{{ a(/a) }}",
+      "expected_error": "Invalid expression"
     }
   ]
 }

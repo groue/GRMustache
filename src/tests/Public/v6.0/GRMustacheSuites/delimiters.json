@@ -24,7 +24,7 @@
     {
       "name": "Whitespace in tag should be ignored.",
       "data": { "text": "---" },
-      "template": "<{{= @   @ =}}@text@>",
+      "template": "<{{= \r\n\t@ \r\n\t@ \r\n\t=}}@text@>",
       "expected": "<--->"
     },
 

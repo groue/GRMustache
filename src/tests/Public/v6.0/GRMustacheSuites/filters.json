@@ -11,6 +11,16 @@
       "data": "EDGAR allan poE",
       "template": "{{ capitalized(.) }}",
       "expected": "Edgar Allan Poe"
+    },
+
+    // Whitespace Insensitivity
+
+    {
+      "name": "Whitespace in filter expressions should be ignored.",
+      "data": { "name": "EDGAR allan poE" },
+      "template": "{{ capitalized \r\n\t( \r\n\tname \r\n\t) }}",
+      "expected": "Edgar Allan Poe"
+
     }
   ]
 }

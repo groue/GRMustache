@@ -21,6 +21,13 @@
       "partials": { "node": "{{content}}<{{#nodes}}{{>node}}{{/nodes}}>" },
       "expected": "<X<Y<>>>"
     },
+    {
+      "name": "Partial names can contain dots.",
+      "data": null,
+      "template": "<{{>partial.html}}>",
+      "partials": { "partial.html": "---" },
+      "expected": "<--->"
+    },
     
     // File system
 
@@ -30,11 +37,56 @@
       "template_name": "template.mustache",
       "partials": {
         "template.mustache": "<{{>partial}}>",
-        "partial": "none",
-        "partial.mustache": "mustache",
-        "partial.txt": "text"
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
       },
-      "expected": "<mustache>"
+      "expected": "<partial.mustache>"
+    },
+    {
+      "name": "Partials loaded from a template with .mustache extension should have the extension .mustache",
+      "data": { },
+      "template_name": "template.mustache",
+      "partials": {
+        "template.mustache": "<{{>partial.mustache}}>",
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
+      },
+      "expected": "<partial.mustache.mustache>"
+    },
+    {
+      "name": "Partials loaded from a template with .mustache extension should have the extension .mustache",
+      "data": { },
+      "template_name": "template.mustache",
+      "partials": {
+        "template.mustache": "<{{>partial.html}}>",
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
+      },
+      "expected": "<partial.html.mustache>"
     },
     {
       "name": "Partials loaded from a template with .txt extension should have the extension .txt",
@@ -42,11 +94,56 @@
       "template_name": "template.txt",
       "partials": {
         "template.txt": "<{{>partial}}>",
-        "partial": "none",
-        "partial.mustache": "mustache",
-        "partial.txt": "text"
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
       },
-      "expected": "<text>"
+      "expected": "<partial.txt>"
+    },
+    {
+      "name": "Partials loaded from a template with .txt extension should have the extension .txt",
+      "data": { },
+      "template_name": "template.txt",
+      "partials": {
+        "template.txt": "<{{>partial.txt}}>",
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
+      },
+      "expected": "<partial.txt.txt>"
+    },
+    {
+      "name": "Partials loaded from a template with .txt extension should have the extension .txt",
+      "data": { },
+      "template_name": "template.txt",
+      "partials": {
+        "template.txt": "<{{>partial.html}}>",
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
+      },
+      "expected": "<partial.html.txt>"
     },
     {
       "name": "Partials loaded from a template without extension should have no extension",
@@ -54,11 +151,37 @@
       "template_name": "template",
       "partials": {
         "template": "<{{>partial}}>",
-        "partial": "none",
-        "partial.mustache": "mustache",
-        "partial.txt": "text"
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
       },
-      "expected": "<none>"
+      "expected": "<partial>"
+    },
+    {
+      "name": "Partials loaded from a template without extension should have no extension",
+      "data": { },
+      "template_name": "template",
+      "partials": {
+        "template": "<{{>partial.html}}>",
+        "partial": "partial",
+        "partial.html": "partial.html",
+        "partial.html.txt": "partial.html.txt",
+        "partial.html.mustache": "partial.html.mustache",
+        "partial.mustache": "partial.mustache",
+        "partial.mustache.txt": "partial.mustache.txt",
+        "partial.mustache.mustache": "partial.mustache.mustache",
+        "partial.txt": "partial.txt",
+        "partial.txt.txt": "partial.txt.txt",
+        "partial.txt.mustache": "partial.txt.mustache"
+      },
+      "expected": "<partial.html>"
     },
     {
       "name": "Deep partials loaded from a template with .mustache extension should have the extension .mustache",
@@ -235,7 +358,7 @@
     {
       "name": "Whitespace in tag should be ignored.",
       "data": { "boolean": true },
-      "template": "<{{> partial }}>",
+      "template": "<{{> \r\n\tpartial \r\n\t}}>",
       "partials": { "partial": "=" },
       "expected": "<=>"
     },

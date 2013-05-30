@@ -47,7 +47,7 @@
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error
 {
     _templateStringForTemplateIDCount++;
-    if ([templateID isEqualToString:@"not found"]) {
+    if ([templateID isEqualToString:@"not_found"]) {
         return nil;
     }
     if ([templateID isEqualToString:@"error"]) {
@@ -84,7 +84,7 @@
     STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)2, @"");
     STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
     
-    [repository templateFromString:@"{{> not found }}" error:&error];
+    [repository templateFromString:@"{{> not_found }}" error:&error];
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
     STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     

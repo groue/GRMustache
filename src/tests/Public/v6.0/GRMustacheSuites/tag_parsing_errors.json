@@ -126,6 +126,30 @@
       "data": null,
       "template": "\n{{#a}}\n{{/a.b}}",
       "expected_error": "Parse error.*line 3\\b"
+    },
+    {
+      "name": "Partial name must not contain any white space character.",
+      "data": null,
+      "template": "{{> a b }}",
+      "expected_error": "Parse error.*line 1\\b"
+    },
+    {
+      "name": "Partial name must not contain any white space character.",
+      "data": null,
+      "template": "{{> a\rb }}",
+      "expected_error": "Parse error.*line 1\\b"
+    },
+    {
+      "name": "Partial name must not contain any white space character.",
+      "data": null,
+      "template": "{{> a\nb }}",
+      "expected_error": "Parse error.*line 1\\b"
+    },
+    {
+      "name": "Partial name must not contain any white space character.",
+      "data": null,
+      "template": "{{> a\tb }}",
+      "expected_error": "Parse error.*line 1\\b"
     }
   ]
 }

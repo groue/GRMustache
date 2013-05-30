@@ -270,7 +270,7 @@
     {
       "name": "Whitespace in tag should be ignored.",
       "data": { "subject": true },
-      "template": "<{{# subject }}---{{/ subject }}>",
+      "template": "<{{# \r\n\tsubject \r\n\t}}---{{/ \r\n\tsubject \r\n\t}}>",
       "expected": "<--->"
     },
     
