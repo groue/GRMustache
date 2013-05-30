@@ -407,7 +407,6 @@
             break;
             
         case stateText: {
-            // TODO: check if (i == start), so that we do not insert an empty text token
             GRMustacheToken *token = [GRMustacheToken tokenWithType:GRMustacheTokenTypeText
                                                      templateString:templateString
                                                          templateID:templateID
@@ -422,9 +421,6 @@
             [self failWithParseErrorAtLine:tagStartLineNumber description:@"Unclosed Mustache tag" templateID:templateID];
             return;
         } break;
-            
-        default:
-            break;
     }
 }
 
