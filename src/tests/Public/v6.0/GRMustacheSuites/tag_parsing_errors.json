@@ -7,6 +7,14 @@
       "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
     },
     {
+      // Regression test: parser used to choke on '}' at the end of the
+      // template string.
+      "name": "Variable tags must be closed.",
+      "data": null,
+      "template": "\n{{\n}",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
       "name": "Triple mustache tags must be closed.",
       "data": null,
       "template": "\n{{{#\n",
