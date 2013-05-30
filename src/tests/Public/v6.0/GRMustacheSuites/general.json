@@ -17,6 +17,12 @@
       "data": { },
       "template": "Hello",
       "expected": "Hello"
+    },
+    {
+      "name": "A multi-line template should be rendered as is.",
+      "data": { },
+      "template": "\n\n \n Hello \n\n",
+      "expected": "\n\n \n Hello \n\n"
     }
   ]
 }
