@@ -18,6 +18,13 @@
       "template": "<{{=<% %>=}}<% start %><%=| |=%>|# middle || item ||/ middle ||={{ }}=|{{ final }}>",
       "expected": "<1234>"
     },
+    {
+      // Test for https://github.com/groue/GRMustache/issues/38
+      "name": "Delimiters can be set to current delimiters",
+      "data": { "text": "---" },
+      "template": "<{{={{ }}=}}{{text}}>{{=| |=}}<|=| |=||text|>|=<% %>=|<<%=<% %>=%><%text%>>",
+      "expected": "<---><---><--->"
+    },
   
     // Whitespace Insensitivity
     
