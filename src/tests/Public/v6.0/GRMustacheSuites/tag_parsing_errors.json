@@ -1,89 +1,148 @@
 {
   "tests": [
-
+    {
+      "name": "Variable tags must be closed.",
+      "data": null,
+      "template": "\n{{\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Triple mustache tags must be closed.",
+      "data": null,
+      "template": "\n{{{#\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Unescaped variable tags must be closed.",
+      "data": null,
+      "template": "\n{{&\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Section tags must be closed.",
+      "data": null,
+      "template": "\n{{#\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Inverted section tags must be closed.",
+      "data": null,
+      "template": "\n{{^\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Overridable section tags must be closed.",
+      "data": null,
+      "template": "\n{{$\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Partial tags must be closed.",
+      "data": null,
+      "template": "\n{{>\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Comment tags must be closed.",
+      "data": null,
+      "template": "\n{{!\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Set delimiter tags must be closed.",
+      "data": null,
+      "template": "\n{{=\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
+    {
+      "name": "Pragma tags must be closed.",
+      "data": null,
+      "template": "\n{{%\n",
+      "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
+    },
     {
       "name": "Variable tags can not be empty.",
       "data": null,
       "template": "\n{{}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Variable tags can not be blank.",
       "data": null,
       "template": "\n{{ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Triple mustache tags can not be empty.",
       "data": null,
       "template": "\n{{{}}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Triple mustache tags can not be blank.",
       "data": null,
       "template": "\n{{{ \n\t}}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Unescaped variable tags can not be empty.",
       "data": null,
       "template": "\n{{&}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Unescaped variable tags can not be blank.",
       "data": null,
       "template": "\n{{& \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Section tags can not be empty.",
       "data": null,
       "template": "\n{{#}}\n{{/}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Section tags can not be blank.",
       "data": null,
       "template": "\n{{# \n\t}}\n{{/ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Inverted section tags can not be empty.",
       "data": null,
       "template": "\n{{^}}\n{{/}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Inverted section can not be blank.",
       "data": null,
       "template": "\n{{^ \n\t}}\n{{/ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Overridable section tags can not be empty.",
       "data": null,
       "template": "\n{{$}}\n{{/}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Overridable section can not be blank.",
       "data": null,
       "template": "\n{{$ \n\t}}\n{{/ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
       "name": "Partial tags can not be empty.",
       "data": null,
       "template": "\n{{>}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing template name"
     },
     {
       "name": "Partial can not be blank.",
       "data": null,
       "template": "\n{{> \n\t}}",
-      "expected_error": "Parse error.*line 2\\b"
+      "expected_error": "Parse error.*line 2\\b.*Missing template name"
     },
     {
       "name": "Quadruple mustaches yield a parse error.",
