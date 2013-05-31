@@ -230,7 +230,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             
             extendedContext->_contextParent = [context retain];
             extendedContext->_contextObject = [ancestor->_contextObject retain];
-            extendedContext->_managedPropertiesStore = [ancestor->_managedPropertiesStore mutableCopy]; // TODO: is it a good idea to copy?
+            extendedContext->_managedPropertiesStore = [ancestor->_managedPropertiesStore retain];
             extendedContext->_protectedContextParent = [ancestor->_protectedContextParent retain];
             extendedContext->_protectedContextObject = [ancestor->_protectedContextObject retain];
             extendedContext->_hiddenContextParent = [ancestor->_hiddenContextParent retain];
