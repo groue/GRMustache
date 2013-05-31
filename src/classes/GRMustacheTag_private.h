@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 // Documented in GRMustacheTag.h
 @interface GRMustacheTag: NSObject<GRMustacheTemplateComponent> {
-@private
+@public
     GRMustacheTagType _type;
     GRMustacheExpression *_expression;
     GRMustacheTemplateRepository *_templateRepository;

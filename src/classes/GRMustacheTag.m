@@ -90,7 +90,7 @@
     // This method is overrided by GRMustacheSectionTag and
     // GRMustacheAccumulatorTag.
     if (HTMLSafe) {
-        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
+        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
     return @"";
 }
@@ -106,7 +106,7 @@
 
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    NSAssert(requiredContentType == self.contentType, @"Not implemented");
+    NSAssert(requiredContentType == _contentType, @"Not implemented");
     
     BOOL success = YES;
     

@@ -72,13 +72,13 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderContentType:self.contentType inBuffer:buffer withContext:context error:error]) {
+        if (![component renderContentType:_contentType inBuffer:buffer withContext:context error:error]) {
             return nil;
         }
     }
     
     if (HTMLSafe) {
-        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
+        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
     return buffer;
 }
