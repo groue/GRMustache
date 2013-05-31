@@ -44,16 +44,6 @@
 static GRMustacheNilRenderer *nilRenderingObject;
 
 
-// GRMustacheNSObjectRenderer renders for objects of class NSObject
-
-@interface GRMustacheNSObjectRenderer:NSObject<GRMustacheRendering> {
-@private
-    id _object;
-}
-- (id)initWithObject:(id)object;
-@end
-
-
 // GRMustacheBlockRenderer renders with a block
 
 @interface GRMustacheBlockRenderer:NSObject<GRMustacheRendering> {
@@ -67,6 +57,7 @@ static GRMustacheNilRenderer *nilRenderingObject;
 // NSNull, NSNumber, NSString, NSObject, NSFastEnumeration rendering
 
 typedef NSString *(*GRMustacheRenderIMP)(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+static NSString *GRMustacheRenderGeneric(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
@@ -122,50 +113,18 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     // is already known.
     //
     // Other classes will be dynamically attached their rendering implementation
-    // in the renderingObjectForObject: method.
+    // in the GRMustacheRenderGeneric implementation attached to NSObject.
     [self registerRenderingImplementation:GRMustacheRenderNSNull   forClass:[NSNull class]];
     [self registerRenderingImplementation:GRMustacheRenderNSNumber forClass:[NSNumber class]];
     [self registerRenderingImplementation:GRMustacheRenderNSString forClass:[NSString class]];
     [self registerRenderingImplementation:GRMustacheRenderNSObject forClass:[NSDictionary class]];
+    [self registerRenderingImplementation:GRMustacheRenderGeneric  forClass:[NSObject class]];
 }
 
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object
 {
-    // Easy case: nil
-    
-    if (object == nil) {
-        return nilRenderingObject;
-    }
-    
-    // Easy case: already a rendering object
-    
-    if ([object respondsToSelector:@selector(renderForMustacheTag:context:HTMLSafe:error:)]) {
-        return object;
-    }
-    
-    // Object doesn't know (yet) how to render
-    
-    Class klass = object_getClass(object);
-    if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)])
-    {
-        // Make it able to render with GRMustacheRenderNSFastEnumeration
-        [self registerRenderingImplementation:GRMustacheRenderNSFastEnumeration forClass:klass];
-        return object;
-    }
-    else if (klass != [NSObject class])
-    {
-        // Make it able to render with GRMustacheRenderNSObject
-        [self registerRenderingImplementation:GRMustacheRenderNSObject forClass:klass];
-        return object;
-    }
-    else
-    {
-        // Object's class is NSObject.
-        // Don't make NSObject able to render: don't provide unregistered
-        // classes conforming to NSFastEnumeration with the generic
-        // GRMustacheRenderNSObject implementation.
-        return [[[GRMustacheNSObjectRenderer alloc] initWithObject:object] autorelease];
-    }
+    // All objects but nil know how to render (see setupRendering).
+    return object ?: nilRenderingObject;
 }
 
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
@@ -344,31 +303,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 @end
 
 
-@implementation GRMustacheNSObjectRenderer
-
-- (void)dealloc
-{
-    [_object release];
-    [super dealloc];
-}
-
-- (id)initWithObject:(id)object
-{
-    self = [super init];
-    if (self) {
-        _object = [object retain];
-    }
-    return self;
-}
-
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    return GRMustacheRenderNSObject(_object, _cmd, tag, context, HTMLSafe, error);
-}
-
-@end
-
-
 @implementation GRMustacheBlockRenderer
 
 - (void)dealloc
@@ -395,6 +329,28 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 }
 
 @end
+
+
+static NSString *GRMustacheRenderGeneric(id self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    // Self doesn't know (yet) how to render
+    
+    Class klass = object_getClass(self);
+    if ([self respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)])
+    {
+        // Future invocations will use GRMustacheRenderNSFastEnumeration
+        [GRMustache registerRenderingImplementation:GRMustacheRenderNSFastEnumeration forClass:klass];
+        return GRMustacheRenderNSFastEnumeration(self, _cmd, tag, context, HTMLSafe, error);
+    }
+    
+    if (klass != [NSObject class])
+    {
+        // Future invocations will use GRMustacheRenderNSObject
+        [GRMustache registerRenderingImplementation:GRMustacheRenderNSObject forClass:klass];
+    }
+    
+    return GRMustacheRenderNSObject(self, _cmd, tag, context, HTMLSafe, error);
+}
 
 
 static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
