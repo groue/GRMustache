@@ -133,10 +133,10 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
-    configuration.contentType = self.contentType;
-    configuration.tagStartDelimiter = self.tagStartDelimiter;
-    configuration.tagEndDelimiter = self.tagEndDelimiter;
-    configuration.baseContext = self.baseContext;
+    configuration.contentType = _contentType;
+    configuration.tagStartDelimiter = _tagStartDelimiter;
+    configuration.tagEndDelimiter = _tagEndDelimiter;
+    configuration.baseContext = _baseContext;
     return configuration;
 }
 
