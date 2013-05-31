@@ -191,7 +191,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    // NOOP since v6.7
+    [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
 }
 
 + (GRMustacheVersion)version

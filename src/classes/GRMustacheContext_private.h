@@ -103,6 +103,14 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 }
 
 /**
+ * Avoids most NSUndefinedException to be raised by the invocation of
+ * `valueForKey:inObject:`.
+ *
+ * @see valueForKey:inObject:
+ */
++ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
+
+/**
  * Sends the `valueForKey:` message to _object_ with the provided _key_, and
  * returns the result.
  *

@@ -94,11 +94,6 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 @implementation GRMustacheContext
 
-+ (void)load
-{
-    [self setupNSUndefinedKeyExceptionPrevention];
-}
-
 + (void)initialize
 {
     if (self != [GRMustacheContext class]) {
@@ -618,7 +613,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
         return nil;
     }
     
-    [GRMustacheContext startPreventingNSUndefinedKeyException];
+    [GRMustacheContext startPreventingNSUndefinedKeyExceptionFromObject:object];
     
     @try {
         // We don't want to use NSArray, NSSet and NSOrderedSet implementation
@@ -653,7 +648,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     }
     
     @finally {
-        [GRMustacheContext stopPreventingNSUndefinedKeyException];
+        [GRMustacheContext stopPreventingNSUndefinedKeyExceptionFromObject:object];
     }
     
     return nil;
@@ -1812,9 +1807,16 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 // =============================================================================
 #pragma mark - NSUndefinedKeyException prevention
 
-static pthread_key_t NSUndefinedKeyExceptionPreventionCount;
-void freeNSUndefinedKeyExceptionPreventionCount(void *count) {
-    free(count);
+static BOOL preventsNSUndefinedKeyException = NO;
+static pthread_key_t GRUndefinedKeyExceptionPrevention;
+void freeGRUndefinedKeyExceptionPrevention(void *objects) {
+    [(NSMutableSet *)objects release];
+}
+
++ (void)preventNSUndefinedKeyExceptionAttack
+{
+    preventsNSUndefinedKeyException = YES;
+    [self setupNSUndefinedKeyExceptionPrevention];
 }
 
 + (void)setupNSUndefinedKeyExceptionPrevention
@@ -1839,36 +1841,35 @@ void freeNSUndefinedKeyExceptionPreventionCount(void *count) {
         }
     });
 
-    pthread_key_create(&NSUndefinedKeyExceptionPreventionCount, freeNSUndefinedKeyExceptionPreventionCount);
+    pthread_key_create(&GRUndefinedKeyExceptionPrevention, freeGRUndefinedKeyExceptionPrevention);
 }
 
-+ (void)startPreventingNSUndefinedKeyException
++ (void)startPreventingNSUndefinedKeyExceptionFromObject:(id)object
 {
-    NSUInteger *count;
-    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
-        count = malloc(sizeof(NSUInteger));
-        pthread_setspecific(NSUndefinedKeyExceptionPreventionCount, count);
-        *count = 0;
+    if (!preventsNSUndefinedKeyException) return;
+    
+    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
+    if (objects == NULL) {
+        objects = [[NSMutableSet alloc] init];
+        pthread_setspecific(GRUndefinedKeyExceptionPrevention, objects);
     }
-    *count += 1;
+    [objects addObject:object];
 }
 
-+ (void)stopPreventingNSUndefinedKeyException
++ (void)stopPreventingNSUndefinedKeyExceptionFromObject:(id)object
 {
-    NSUInteger *count;
-    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
-        [NSException raise:NSInternalInconsistencyException format:@"Uninitialized state for NSUndefinedKeyException prevention"];
-    }
-    *count -= 1;
+    if (!preventsNSUndefinedKeyException) return;
+    
+    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
+    [objects removeObject:object];
 }
 
-+ (BOOL)preventsNSUndefinedKeyException
++ (BOOL)preventsNSUndefinedKeyExceptionFromObject:(id)object
 {
-    NSUInteger *count;
-    if ((count = pthread_getspecific(NSUndefinedKeyExceptionPreventionCount)) == NULL) {
-        return NO;
-    }
-    return (*count > 0);
+    if (!preventsNSUndefinedKeyException) return NO;
+    
+    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
+    return [objects containsObject:object];
 }
 
 @end
@@ -1878,7 +1879,7 @@ void freeNSUndefinedKeyExceptionPreventionCount(void *count) {
 // NSObject
 - (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key
 {
-    if ([GRMustacheContext preventsNSUndefinedKeyException]) {
+    if ([GRMustacheContext preventsNSUndefinedKeyExceptionFromObject:self]) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSObject:key];
@@ -1887,7 +1888,7 @@ void freeNSUndefinedKeyExceptionPreventionCount(void *count) {
 // NSManagedObject
 - (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key
 {
-    if ([GRMustacheContext preventsNSUndefinedKeyException]) {
+    if ([GRMustacheContext preventsNSUndefinedKeyExceptionFromObject:self]) {
         return nil;
     }
     return [self GRMustacheContextValueForUndefinedKey_NSManagedObject:key];

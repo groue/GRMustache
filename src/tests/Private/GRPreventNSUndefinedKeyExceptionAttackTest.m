@@ -61,6 +61,8 @@
 
 - (void)testNSUndefinedKeyExceptionPrevention
 {
+    [GRMustache preventNSUndefinedKeyExceptionAttack];
+    
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"foo:{{foo}}" error:nil];
     {
         GRMustacheContextDidCatchNSUndefinedKeyException = NO;
