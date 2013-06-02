@@ -482,9 +482,7 @@
                         return NO;
                     }
                     
-                    if (_currentTagValue == nil) {
-                        NSAssert(_currentTagValue, @"WTF expected _currentTagValue");
-                    }
+                    NSAssert(_currentTagValue, @"WTF expected _currentTagValue");
                     if (expression && ![expression isEqual:_currentTagValue]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
@@ -493,7 +491,9 @@
                     // Nothing prevents tokens to come from different template strings.
                     // We, however, do not support this case, because GRMustacheSectionTag
                     // builds from a single template string and a single innerRange.
-                    NSAssert(_currentOpeningToken.templateString == token.templateString, @"not implemented");
+                    if (_currentOpeningToken.templateString != token.templateString) {
+                        [NSException raise:NSInternalInconsistencyException format:@"Support for tokens coming from different strings is not implemented."];
+                    }
                     
                     // Success: create new GRMustacheSectionTag
                     NSRange openingTokenRange = _currentOpeningToken.range;
