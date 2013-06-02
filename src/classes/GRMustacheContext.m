@@ -228,7 +228,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     
     if ([object isKindOfClass:[GRMustacheContext class]])
     {
-        // Extend self with a context
+        // Extend parent with a context
+        //
         // Contexts are immutable stacks: we duplicate all ancestors of context,
         // in order to build a new context stack.
         
@@ -262,7 +263,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     }
     else
     {
-        // Extend self with a regular object
+        // Extend parent with a regular object
         
         // Don't call init method, because subclasses may alter the context stack (they may set default values for some managed properties).
         context = [[[self class] alloc] initPrivate];
@@ -527,13 +528,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             // mutableContextKey holds that "canonical" key.
             
             if (mutableContextKey == nil) {
-                // Support for managed properties is reserved to GRMustacheContext subclasses
-                Class klass = object_getClass(self);
-                if (klass == [GRMustacheContext class]) {
-                    mutableContextKey = key;
-                } else {
-                    mutableContextKey = canonicalKeyForKey(klass, key);
-                }
+                mutableContextKey = canonicalKeyForKey(object_getClass(self), key);
             }
             
             // Check managedPropertiesStore:
@@ -558,7 +553,6 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     Class klass = object_getClass(self);
     if (klass != [GRMustacheContext class]) {
         
-        
         id zeroValue;
         if (isManagedPropertyKVCKey(klass, key, &zeroValue)) {
             
@@ -569,7 +563,6 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
                 *protected = NO;
             }
             return zeroValue;
-            
             
         } else {
             
@@ -606,12 +599,19 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 - (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
 {
+    // This method is flawed: it may return a valid nil result.
+    // Let's make sure error is set to nil in this case.
+    //
+    // TODO: deprecate this method and provide a better API.
+    
     id value = nil;
+    BOOL hasValue = NO;
     @autoreleasepool {
         GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:nil] autorelease];
         GRMustacheExpression *expression = [parser parseExpression:string invalid:NULL];
         if (expression) {
-            if ([expression hasValue:&value withContext:self protected:NULL error:error]) {
+            hasValue = [expression hasValue:&value withContext:self protected:NULL error:error];
+            if (hasValue) {
                 [value retain]; // escape autorelease pool
             }
         } else {
@@ -623,9 +623,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
                                          userInfo:[NSDictionary dictionaryWithObject:@"Invalid expression" forKey:NSLocalizedDescriptionKey]];
             }
         }
-        if (!value && error != NULL) [*error retain];   // escape autorelease pool
+        if (!hasValue && error != NULL) [*error retain];   // escape autorelease pool
     }
-    if (!value && error != NULL) [*error autorelease];
+    if (!hasValue && error != NULL) [*error autorelease];
     return [value autorelease];
 }
 

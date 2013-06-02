@@ -1,5 +1,6 @@
 TODO:
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
+- Deprecate flawed [GRMustacheContext valueForMustacheExpression:error:]
 
 Nice to have:
 - document migration path from all previous versions to latest version
