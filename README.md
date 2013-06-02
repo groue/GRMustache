@@ -47,6 +47,10 @@ Documentation
 
 - http://mustache.github.com/mustache.5.html
 
+### Reference
+
+- [Reference](http://groue.github.io/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
+
 ### Guides
 
 Introduction:
@@ -81,15 +85,8 @@ Mustache, and beyond:
 
 ### Sample code
 
-Check the [FAQ](#faq) below.
+Check the [FAQ](#faq) right below.
 
-### Reference
-
-- [Reference](http://groue.github.io/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
-
-### Internals
-
-- [Forking](Guides/forking.md): the forking guide tells you everything about GRMustache organization.
 
 FAQ
 ---
