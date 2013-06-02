@@ -829,7 +829,7 @@ static char *alternateNameForPropertyName(const char *propertyName)
     
     // Build altName ("foo" or "isFoo")
     char *altName;
-    if (propertyLength >= 3 && strstr(propertyName, "is") == propertyName && propertyName[2] >= 'A' && propertyName[2] <= 'Z') {
+    if (propertyLength >= 3 /* isX */ && strstr(propertyName, "is") == propertyName && propertyName[2] >= 'A' && propertyName[2] <= 'Z') {
         // "isFoo" getter
         // Build altName "foo"
         altName = malloc(propertyLength - 1);       // given "isFoo" of length 5, the room for "foo\0" (4 bytes)
@@ -978,7 +978,7 @@ BOOL hasManagedPropertyAccessor(Class klass, const char *selectorName, BOOL allo
         // Arity 1: it may be a setter
         
         char *expectedPropertyName = nil;
-        if (strstr(selectorName, "set") == selectorName)
+        if (selectorLength >= 5 /* setX: */ && strstr(selectorName, "set") == selectorName && selectorName[3] >= 'A' && selectorName[3] <= 'Z')
         {
             expectedPropertyName = malloc(selectorLength - 3);                 // given "setFoo:" of length 7, the room for "foo\0" (4 bytes)
             strncpy(expectedPropertyName, selectorName+3, selectorLength - 4); // "Foo?z"
