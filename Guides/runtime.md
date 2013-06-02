@@ -358,11 +358,34 @@ Detailed description of GRMustache handling of `valueForKey:`
 
 As seen above, GRMustache looks for a key in your data objects with the `valueForKey:` method. With some extra bits.
 
-### NSUndefinedKeyException handling
+
+### NSUndefinedKeyException Handling
 
 NSDictionary never complains when asked for an unknown key. However, the default NSObject implementation of `valueForKey:` raises an `NSUndefinedKeyException`.
 
-*GRMustache actively prevents, and catches those exceptions*, so that the key lookup can continue down the context stack.
+*GRMustache catches those exceptions*, so that the key lookup can continue down the context stack.
+
+
+### NSUndefinedKeyException Prevention
+
+When debugging your project, those NSUndefinedKeyException exceptions raised by template rendering may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
+
+You can avoid that: make sure you invoke once, early in your application, the following method:
+
+```objc
+[GRMustache preventNSUndefinedKeyExceptionAttack];
+```
+
+Depending on the number of NSUndefinedKeyException that get prevented, you will experience a slight performance hit, or a performance improvement.
+
+Since the main use case for this method is to avoid Xcode break on rendering exceptions, the best practice is to conditionally invoke this method, using the [NS_BLOCK_ASSERTIONS](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html) that is defined in the Debug configuration of your targets:
+
+```objc
+#if !defined(NS_BLOCK_ASSERTIONS)
+[GRMustache preventNSUndefinedKeyExceptionAttack];
+#endif
+```
+
 
 ### NSArray, NSSet, NSOrderedSet
 
