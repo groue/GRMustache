@@ -1,6 +1,4 @@
 TODO:
-- Check that valueForUndefinedKey: can replace valueForUndefinedMustacheKey:
-- Check that GRMustacheContext does not need to override valueForUndefinedKey: in order to do KVC for unsynthesized managed properties.
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
 
 Nice to have:

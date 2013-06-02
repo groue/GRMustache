@@ -37,6 +37,19 @@
 @end
 
 
+@interface GRMustacheContextWithValueForUndefinedKey : GRMustacheContext
+@end
+
+@implementation GRMustacheContextWithValueForUndefinedKey
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    return [[self valueForMustacheKey:[key lowercaseString]] uppercaseString];
+}
+
+@end
+
+
 @interface GRMustacheContextValueForUndefinedMustacheKeyTest : GRMustachePublicAPITest
 @end
 
@@ -46,6 +59,16 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{NAME}},{{#a}}{{NAME}}{{/a}}" error:NULL];
     template.baseContext = [GRMustacheContextWithValueForUndefinedMustacheKey context];;
+    
+    id data = @{ @"name": @"foo", @"a": @{ @"name": @"bar" } };
+    NSString *rendering = [template renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"FOO,BAR", @"");
+}
+
+- (void)testValueForUndefinedKey
+{
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{NAME}},{{#a}}{{NAME}}{{/a}}" error:NULL];
+    template.baseContext = [GRMustacheContextWithValueForUndefinedKey context];;
     
     id data = @{ @"name": @"foo", @"a": @{ @"name": @"bar" } };
     NSString *rendering = [template renderObject:data error:NULL];
