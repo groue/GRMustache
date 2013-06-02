@@ -121,7 +121,7 @@ FAQ
 
 - **Q: Is it possible to render a default value for missing keys?**
 
-    A: [Yes](Guides/view_model.md).
+    A: [Yes](Guides/view_model.md#default-values).
 
 - **Q: Is it possible to disable HTML escaping?**
 

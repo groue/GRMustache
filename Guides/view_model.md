@@ -103,9 +103,11 @@ The rendering:
 }
 ```
 
-### Default values for any key
+### Default values
 
-The `valueForUndefinedKey:` method lets you provide a default value for any key. It is triggered when no object in the context stack would provide a value for a given key.
+The `name` method above would provide a default value for the `name` key only.
+
+Override `valueForUndefinedKey:` when you want to provide a default value for any key.
 
 `Document.m`
 
@@ -120,6 +122,9 @@ The `valueForUndefinedKey:` method lets you provide a default value for any key.
 @end
 ```
 
+Note that a `{{ user.name }}` tag would not trigger the `name`, nor the `valueForUndefinedKey:` method, even if the user have no name. The GRMustache [runtime](Runtime.md) would extract the `name` key right from the very object given for `user`. That is the behavior of compound expressions.
+
+If you want to provide a default value for all expressions that feed Mustache tags, `{{ name }}`, `{{ user.name }}`, `{{ format(last(events).birthDate) }}`, etc., you need the GRMustacheTagDelegate protocol. Go check the [Tag Delegates Guide](delegate.md).
 
 Subclasses of GRMustacheContext
 -------------------------------
