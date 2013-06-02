@@ -103,16 +103,30 @@ The rendering:
 }
 ```
 
+### Default values for any key
+
+The `valueForUndefinedKey:` method lets you provide a default value for any key. It is triggered when no object in the context stack would provide a value for a given key.
+
+`Document.m`
+
+```objc
+@implementation Document
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    return [NSString stringWithFormat:@"<default %@>", key];
+}
+
+@end
+```
+
+
 Subclasses of GRMustacheContext
 -------------------------------
 
 The Document class above was a plain subclass of NSObject.
 
-You may also subclass `GRMustacheContext`, and have access to a few extra features:
-
-1. more flexibility for computing derived values.
-2. default value for any key.
-3. easier template debugging.
+You may also subclass `GRMustacheContext`, and be granted more access to the context stack.
 
 Let's consider this other template, and see what we can do with GRMustacheContext subclasses.
 
@@ -204,58 +218,6 @@ This property will return the user's birth date, or a pet's birth date, dependin
 
 @end
 ```
-
-
-### Default values for any key
-
-The `valueForUndefinedMustacheKey:` method lets you provide a default value for any key. It is triggered when no object in the context stack would provide a value for a given key.
-
-`Document.m`
-
-```objc
-@implementation Document
-
-- (id)valueForUndefinedMustacheKey:(NSString *)key
-{
-    return [NSString stringWithFormat:@"<default %@>", key];
-}
-
-@end
-```
-
-
-### Template debugging
-
-By conforming to the GRMustacheTagDelegate protocol (fully described in the [Tag Delegates Guide](delegate.md)), a GRMustacheContext subclass can also get extra information about the template rendering.
-
-GRMustacheTagDelegate is a nifty tool, but we'll give a simple example here, and log all tags that couldn't render anything (it may well be the sign of a typo in the template):
-
-`Document.m`
-
-```objc
-// Declare the protocol in the class extension
-@interface Document<GRMustacheTagDelegate>
-@end
-
-@implementation Document
-
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
-{
-    if (object == nil) {
-        NSLog(@"Missing value for %@", tag);
-    }
-    return object;
-}
-
-@end
-```
-
-Your application log will contain lines like:
-
-    Missing value for <GRMustacheVariableTag `{{ name }}` at line 3>
-    Missing value for <GRMustacheVariableTag `{{ fullDateFormat(joinDate) }}` at line 12>
-
-See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of the GRMustacheTag class.
 
 
 ### A note about Key-Value Coding
