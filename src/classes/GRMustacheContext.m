@@ -1808,10 +1808,25 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 #pragma mark - NSUndefinedKeyException prevention
 
 static BOOL preventsNSUndefinedKeyException = NO;
-static pthread_key_t GRUndefinedKeyExceptionPrevention;
-void freeGRUndefinedKeyExceptionPrevention(void *objects) {
-    [(NSMutableSet *)objects release];
-}
+
+#if !defined(__OBJC_GC__)
+    // Garbage Collector is not enabled.
+    // Use fast pthread library.
+    static pthread_key_t GRPreventedObjectsStorageKey;
+    void freePreventedObjectsStorage(void *objects) {
+        [(NSMutableSet *)objects release];
+    }
+    #define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
+    #define getCurrentThreadPreventedObjects() pthread_getspecific(GRPreventedObjectsStorageKey)
+    #define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
+#else
+    // Garbage Collector is enabled.
+    // Use slow NSThread library.
+    static NSString *GRPreventedObjectsStorageKey = @"GRPreventedObjectsStorageKey";
+    #define setupPreventedObjectsStorage()
+    #define getCurrentThreadPreventedObjects() [[[NSThread currentThread] threadDictionary] objectForKey:GRPreventedObjectsStorageKey]
+    #define setCurrentThreadPreventedObjects(objects) [[[NSThread currentThread] threadDictionary] setObject:objects forKey:GRPreventedObjectsStorageKey]
+#endif
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
@@ -1839,20 +1854,21 @@ void freeGRUndefinedKeyExceptionPrevention(void *objects) {
                                         withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSManagedObject:)
                                              error:nil];
         }
-    });
 
-    pthread_key_create(&GRUndefinedKeyExceptionPrevention, freeGRUndefinedKeyExceptionPrevention);
+        setupPreventedObjectsStorage();
+    });
 }
 
 + (void)startPreventingNSUndefinedKeyExceptionFromObject:(id)object
 {
     if (!preventsNSUndefinedKeyException) return;
     
-    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
+    NSMutableSet *objects = getCurrentThreadPreventedObjects();
     if (objects == NULL) {
-        objects = [[NSMutableSet alloc] init];
-        pthread_setspecific(GRUndefinedKeyExceptionPrevention, objects);
+        objects = [[NSMutableSet alloc] init];  // released by garbage collector, or by pthread destructor function
+        setCurrentThreadPreventedObjects(objects);
     }
+    
     [objects addObject:object];
 }
 
@@ -1860,16 +1876,12 @@ void freeGRUndefinedKeyExceptionPrevention(void *objects) {
 {
     if (!preventsNSUndefinedKeyException) return;
     
-    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
-    [objects removeObject:object];
+    [getCurrentThreadPreventedObjects() removeObject:object];
 }
 
 + (BOOL)preventsNSUndefinedKeyExceptionFromObject:(id)object
 {
-    if (!preventsNSUndefinedKeyException) return NO;
-    
-    NSMutableSet *objects = pthread_getspecific(GRUndefinedKeyExceptionPrevention);
-    return [objects containsObject:object];
+    return preventsNSUndefinedKeyException && [getCurrentThreadPreventedObjects() containsObject:object];
 }
 
 @end
