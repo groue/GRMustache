@@ -159,7 +159,7 @@ See the [GRMustacheRendering Protocol Reference](http://groue.github.io/GRMustac
 Use Cases for Tag Delegates
 ---------------------------
 
-### Providing Default Value for Missing Ones
+### Default Values
 
 ```objc
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
