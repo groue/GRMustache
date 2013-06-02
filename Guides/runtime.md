@@ -378,10 +378,11 @@ You can avoid that: make sure you invoke once, early in your application, the fo
 
 Depending on the number of NSUndefinedKeyException that get prevented, you will experience a slight performance hit, or a performance improvement.
 
-Since the main use case for this method is to avoid Xcode breaks on rendering exceptions, the best practice is to conditionally invoke this method, using the [NS_BLOCK_ASSERTIONS](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html) that is defined in the Debug configuration of your targets:
+Since the main use case for this method is to avoid Xcode breaks on rendering exceptions, the best practice is to conditionally invoke this method, using the [NS_BLOCK_ASSERTIONS](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html) that helps identifying the Debug configuration of your targets:
 
 ```objc
 #if !defined(NS_BLOCK_ASSERTIONS)
+// Debug configuration: keep GRMustache quiet
 [GRMustache preventNSUndefinedKeyExceptionAttack];
 #endif
 ```
