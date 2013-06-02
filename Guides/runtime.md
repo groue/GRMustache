@@ -368,7 +368,7 @@ NSDictionary never complains when asked for an unknown key. However, the default
 
 ### NSUndefinedKeyException Prevention
 
-When debugging your project, those NSUndefinedKeyException exceptions raised by template rendering may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
+When debugging your project, NSUndefinedKeyException raised by template rendering may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
 
 You can avoid that: make sure you invoke once, early in your application, the following method:
 
