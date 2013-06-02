@@ -1830,33 +1830,33 @@ static BOOL preventsNSUndefinedKeyException = NO;
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    preventsNSUndefinedKeyException = YES;
-    [self setupNSUndefinedKeyExceptionPrevention];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self setupNSUndefinedKeyExceptionPrevention];
+    });
 }
 
 + (void)setupNSUndefinedKeyExceptionPrevention
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        // Swizzle [NSObject valueForUndefinedKey:]
-        
-        [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                        withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSObject:)
-                             error:nil];
-        
-        
-        // Swizzle [NSManagedObject valueForUndefinedKey:]
-        
-        Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
-        if (NSManagedObjectClass) {
-            [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                                        withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSManagedObject:)
-                                             error:nil];
-        }
+    preventsNSUndefinedKeyException = YES;
+    
+    // Swizzle [NSObject valueForUndefinedKey:]
+    
+    [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
+                    withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSObject:)
+                         error:nil];
+    
+    
+    // Swizzle [NSManagedObject valueForUndefinedKey:]
+    
+    Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+    if (NSManagedObjectClass) {
+        [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
+                                    withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSManagedObject:)
+                                         error:nil];
+    }
 
-        setupPreventedObjectsStorage();
-    });
+    setupPreventedObjectsStorage();
 }
 
 + (void)startPreventingNSUndefinedKeyExceptionFromObject:(id)object
