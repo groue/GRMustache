@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustachePrivateAPITest.h"
-#import "GRMustacheParser_private.h"
+#import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheFilteredExpression_private.h"
@@ -29,16 +29,16 @@
 #import "GRMustacheError.h"
 
 
-@interface GRMustacheParserTest : GRMustachePrivateAPITest {
-	GRMustacheParser *parser;
+@interface GRMustacheExpressionParserTest : GRMustachePrivateAPITest {
+	GRMustacheExpressionParser *parser;
 }
 @end
 
-@implementation GRMustacheParserTest
+@implementation GRMustacheExpressionParserTest
 
 - (void)setUp
 {
-    parser = [[GRMustacheParser alloc] initWithConfiguration:[GRMustacheConfiguration defaultConfiguration]];
+    parser = [[GRMustacheExpressionParser alloc] init];
 }
 
 - (void)tearDown
@@ -48,7 +48,7 @@
 
 - (void)testParserParsesEscapedVariableTokenWithSingleKey
 {
-    GRMustacheExpression *parsedExpression = [parser parseExpression:@"name" invalid:NULL];
+    GRMustacheExpression *parsedExpression = [parser parseExpression:@"name" empty:NULL error:NULL];
 
     GRMustacheIdentifierExpression *expression = [GRMustacheIdentifierExpression expressionWithIdentifier:@"name"];
     
@@ -57,7 +57,7 @@
 
 - (void)testParserParsesEscapedVariableTokenWithCompoundKey
 {
-    GRMustacheExpression *parsedExpression = [parser parseExpression:@"foo.bar" invalid:NULL];
+    GRMustacheExpression *parsedExpression = [parser parseExpression:@"foo.bar" empty:NULL error:NULL];
     
     GRMustacheScopedExpression *expression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     
@@ -66,7 +66,7 @@
 
 - (void)testParserParsesEscapedVariableTokenWithFilter
 {
-    GRMustacheExpression *parsedExpression = [parser parseExpression:@"toto.titi(foo.bar)" invalid:NULL];
+    GRMustacheExpression *parsedExpression = [parser parseExpression:@"toto.titi(foo.bar)" empty:NULL error:NULL];
 
     GRMustacheScopedExpression *argumentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
@@ -77,7 +77,7 @@
 
 - (void)testParserParsesEscapedVariableTokenWithComplexExpression
 {
-    GRMustacheExpression *parsedExpression = [parser parseExpression:@"a.b ( c.d ( e.f ) .g.h ).i.j" invalid:NULL];
+    GRMustacheExpression *parsedExpression = [parser parseExpression:@"a.b ( c.d ( e.f ) .g.h ).i.j" empty:NULL error:NULL];
     
     GRMustacheExpression *expression_e = [GRMustacheIdentifierExpression expressionWithIdentifier:@"e"];
     GRMustacheExpression *expression_ef = [GRMustacheScopedExpression expressionWithBaseExpression:expression_e scopeIdentifier:@"f"];

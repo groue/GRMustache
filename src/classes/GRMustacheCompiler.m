@@ -28,6 +28,7 @@
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 
@@ -210,6 +211,8 @@
         return NO;
     }
     
+    GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
+    
     switch (token.type) {
         case GRMustacheTokenTypeSetDelimiter:
         case GRMustacheTokenTypeComment:
@@ -245,16 +248,11 @@
             
         case GRMustacheTokenTypeEscapedVariable: {
             // Expression validation
-            BOOL invalidExpression;
-            GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
+            NSError *error;
+            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
             if (expression == nil) {
-                if (invalidExpression) {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                    return NO;
-                } else {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                    return NO;
-                }
+                [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
+                return NO;
             }
             
             // Success: append GRMustacheVariableTag
@@ -268,16 +266,11 @@
             
         case GRMustacheTokenTypeUnescapedVariable: {
             // Expression validation
-            BOOL invalidExpression;
-            GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
+            NSError *error;
+            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
             if (expression == nil) {
-                if (invalidExpression) {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                    return NO;
-                } else {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                    return NO;
-                }
+                [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
+                return NO;
             }
             
             // Success: append GRMustacheVariableTag
@@ -291,12 +284,13 @@
             
         case GRMustacheTokenTypeSectionOpening: {
             // Expression validation
-            BOOL invalidExpression;
-            GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
+            NSError *error;
+            BOOL empty;
+            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
             
             if (_currentOpeningToken &&
                 _currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening &&
-                ((expression == nil && !invalidExpression) || (expression != nil && [expression isEqual:_currentTagValue])))
+                ((expression == nil && empty) || (expression != nil && [expression isEqual:_currentTagValue])))
             {
                 // We found the "else" close of an inverted section:
                 // {{^foo}}...{{#}}...
@@ -329,13 +323,8 @@
                 
                 // Validate expression
                 if (expression == nil) {
-                    if (invalidExpression) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                        return NO;
-                    } else {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                        return NO;
-                    }
+                    [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
+                    return NO;
                 }
                 
                 // Prepare a new section
@@ -361,16 +350,11 @@
             // this is a new overridable section.
             
             // Expression validation
-            BOOL invalidExpression;
-            GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
+            NSError *error;
+            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
             if (expression == nil) {
-                if (invalidExpression) {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                    return NO;
-                } else {
-                    [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                    return NO;
-                }
+                [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
+                return NO;
             }
             
             // Prepare a new section
@@ -392,12 +376,13 @@
             
         case GRMustacheTokenTypeInvertedSectionOpening: {
             // Expression validation
-            BOOL invalidExpression;
-            GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
+            NSError *error;
+            BOOL empty;
+            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
             
             if (_currentOpeningToken &&
                 _currentOpeningToken.type == GRMustacheTokenTypeSectionOpening &&
-                ((expression == nil && !invalidExpression) || (expression != nil && [expression isEqual:_currentTagValue])))
+                ((expression == nil && empty) || (expression != nil && [expression isEqual:_currentTagValue])))
             {
                 // We found the "else" close of a regular or overridable section:
                 // {{#foo}}...{{^}}...{{/foo}}
@@ -432,13 +417,8 @@
                 
                 // Validate expression
                 if (expression == nil) {
-                    if (invalidExpression) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
-                        return NO;
-                    } else {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Missing expression"]]];
-                        return NO;
-                    }
+                    [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
+                    return NO;
                 }
                 
                 // Prepare a new section
@@ -475,10 +455,11 @@
                     // Expression validation
                     // We need a valid expression that matches section opening,
                     // or an empty `{{/}}` closing tags.
-                    BOOL invalidExpression;
-                    GRMustacheExpression *expression = [parser parseExpression:token.tagInnerContent invalid:&invalidExpression];
-                    if (expression == nil && invalidExpression) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Invalid expression"]]];
+                    NSError *error;
+                    BOOL empty;
+                    GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
+                    if (expression == nil && !empty) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
                         return NO;
                     }
                     

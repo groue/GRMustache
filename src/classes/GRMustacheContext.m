@@ -28,7 +28,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateOverride_private.h"
-#import "GRMustacheParser_private.h"
+#import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "JRSwizzle.h"
 
@@ -553,7 +553,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     Class klass = object_getClass(self);
     if (klass != [GRMustacheContext class]) {
         
-        id zeroValue;
+        id zeroValue = nil;
         if (isManagedPropertyKVCKey(klass, key, &zeroValue)) {
             
             // Key is an uninitialized managed property.
@@ -605,28 +605,16 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     // TODO: deprecate this method and provide a better API.
     
     id value = nil;
-    BOOL hasValue = NO;
-    @autoreleasepool {
-        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:nil] autorelease];
-        GRMustacheExpression *expression = [parser parseExpression:string invalid:NULL];
-        if (expression) {
-            hasValue = [expression hasValue:&value withContext:self protected:NULL error:error];
-            if (hasValue) {
-                [value retain]; // escape autorelease pool
-            }
-        } else {
-            // Invalid or empty expression.
-            // Since we can't return any value, return an error.
-            if (error != NULL) {
-                *error = [NSError errorWithDomain:GRMustacheErrorDomain
-                                             code:GRMustacheErrorCodeParseError
-                                         userInfo:[NSDictionary dictionaryWithObject:@"Invalid expression" forKey:NSLocalizedDescriptionKey]];
-            }
-        }
-        if (!hasValue && error != NULL) [*error retain];   // escape autorelease pool
+    GRMustacheExpressionParser *parser = [[[GRMustacheExpressionParser alloc] init] autorelease];
+    GRMustacheExpression *expression = [parser parseExpression:string empty:NULL error:error];
+    if (!expression) {
+        return nil;
     }
-    if (!hasValue && error != NULL) [*error autorelease];
-    return [value autorelease];
+    if (![expression hasValue:&value withContext:self protected:NULL error:error]) {
+        return nil;
+    }
+    if (error) { *error = nil; }
+    return value;
 }
 
 + (id)valueForKey:(NSString *)key inObject:(id)object
@@ -1895,7 +1883,7 @@ static BOOL preventsNSUndefinedKeyException = NO;
 {
     NSMutableSet *objects = getCurrentThreadPreventedObjects();
     if (objects == NULL) {
-        objects = [[NSMutableSet alloc] init];  // released by garbage collector, or by pthread destructor function
+        objects = [[NSMutableSet alloc] init];  // released by garbage collector, or by pthread destructor function freePreventedObjectsStorage
         setCurrentThreadPreventedObjects(objects);
     }
     
