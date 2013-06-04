@@ -21,7 +21,7 @@ It provides you with a pair of classic "will.../did..." methods that are invoked
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of the GRMustacheTag class.
 
-- `mustacheTag:willRenderObject:` renders the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
+- `mustacheTag:willRenderObject:` returns the value that should be rendered by the tag. It can return its `object` argument, leaving this value untouched, or it can return another value.
 
 - `mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag.
 
