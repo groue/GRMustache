@@ -124,7 +124,7 @@ Override `valueForUndefinedKey:` when you want to provide a default value for an
 
 Note that a `{{ user.name }}` tag would not trigger the `name`, nor the `valueForUndefinedKey:` method, even if the user have no name. The GRMustache [runtime](Runtime.md) would extract the `name` key right from the very object given for `user`. That is the behavior of compound expressions.
 
-If you want to provide a default value for all expressions that feed Mustache tags, `{{ name }}`, `{{ user.name }}`, `{{ format(last(events).birthDate) }}`, etc., you need the GRMustacheTagDelegate protocol. Go check the [Tag Delegates Guide](delegate.md#default-values).
+If you want to provide a default value for all expressions that feed Mustache tags, `{{ name }}`, `{{ user.name }}`, `{{ format(last(events).date) }}`, etc., you need the GRMustacheTagDelegate protocol. Go check the [Tag Delegates Guide](delegate.md#default-values).
 
 Subclasses of GRMustacheContext
 -------------------------------
