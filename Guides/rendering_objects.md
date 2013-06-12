@@ -588,6 +588,10 @@ Handlebars.registerHelper('list', function(context, options) {
 });
 ```
 
+### What did we learn here?
+
+A fundamental technique for advanced rendering: [filters](filters.md) that return rendering objects.
+
 
 Sample code
 -----------
