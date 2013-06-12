@@ -8,17 +8,13 @@ Overview
 
 The [Runtime Guide](runtime.md) describes what happens whenever a tag such as `{{ name }}` or `{{# items }}...{{/ items }}` gets rendered. Strings are HTML-escaped, arrays are iterated, numbers control boolean sections, etc.
 
-It's time to shed a brighter light on the rendering process.
+But sometimes you need something more dynamic, you need to inject your own code into the template rendering, and extend the language. Orthodox Mustache provides with "lambda sections". [Handlebars.js]((http://handlebarsjs.com), an extended Mustache engine, has introduced "helpers".
 
-GRMustache is designed so that the rendered objects are actually responsible for their own rendering. NSString, NSNumber, NSArray, etc. do render themselves against the various kinds of Mustache tags (they all implement a rendering method that we'll see below).
-
-For example, let's focus on NSNumber. When asked to render for a variable tag `{{ amount }}`, a number returns itself as a string. When asked to render for a section tag `{{# items.count }}...{{/ }}`, it renders the inner content of the section if and only if its `boolValue` method returns YES. The opposite happens when the tag is an inverted section such as `{{^ hasLuck }}...{{/ }}`.
-
-Your custom objects can perform their own custom rendering, with the exact same set of APIs that are used by NSString, NSNumber, NSArray, etc.
+Let us introduce GRMustache "rendering objects".
 
 ### Examples
 
-Rendering objects are very versatile. Let's look at a few examples:
+Rendering objects are quite versatile. Let's look at a few examples:
 
     {{# localize }}...{{/ }}
 
