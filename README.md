@@ -107,6 +107,10 @@ FAQ
     
     A: Yes. You have some [sample code](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912) in issue #50. You may check [@mattt's InflectorKit](https://github.com/mattt/InflectorKit) for actual inflection methods.
 
+- **Q: Is it possible to write Handlebars-like helpers?**
+    
+    A: [Yes](Guides/rendering_objects.md)
+
 - **Q: Is it possible to localize templates?**
 
     A: [Yes](Guides/standard_library.md#localize)
