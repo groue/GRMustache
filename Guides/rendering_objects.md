@@ -484,6 +484,88 @@ Final rendering:
 A new perspective on the fact that arrays render the concatenation of their items.
 
 
+Example: A Handlebars.js Helper
+-------------------------------
+
+From http://handlebarsjs.com/block_helpers.html:
+
+> For instance, let's create an iterator that creates a `<ul>` wrapper, and wraps each resulting element in an `<li>`.
+> 
+>     {{#list nav}}
+>       <a href="{{url}}">{{title}}</a>
+>     {{/list}}
+
+Let's build this "helper" with GRMustache:
+
+`Document.mustache`:
+
+    {{# list(nav) }}
+      <a href="{{url}}">{{title}}</a>
+    {{/ }}
+
+`Render.m`:
+
+```objc
+// Load the template
+
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+
+
+// Extend the template base context, so that the "list" helper is always
+// available.
+
+id customHelperLibrary = @{
+    // Make `list` a filter that returns a rendering object
+    @"list": [GRMustacheFilter filterWithBlock:^id(NSArray *items) {
+        
+        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+            
+            NSMutableString *buffer = [NSMutableString string];
+            
+            // Open the <ul> element.
+            [buffer appendString:@"<ul>"];
+            
+            // Append a <li> element for each item.
+            for (id item in items) {
+                
+                // Have each item enter the context stack on its turn...
+                GRMustacheContext *itemContext = [context contextByAddingObject:item];
+                
+                // ... and render the inner content of the section.
+                NSString *itemRendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
+                
+                // Wrap in a <li> element.
+                [buffer appendString:[NSString stringWithFormat:@"<li>%@</li>", itemRendering]];
+            }
+            
+            // Close the <ul> tag, and return.
+            [buffer appendString:@"</ul>"];
+            return buffer;
+        }];
+    }]
+};
+template.baseContext = [template.baseContext contextByAddingObject:customHelperLibrary];
+
+
+// Set up rendered data, and render
+
+id obj = @{
+    @"nav": @[
+        @{ @"url": @"http://mustache.github.io", @"title": @"Mustache" },
+        @{ @"url": @"http://github.com/groue/GRMustache", @"title": @"GRMustache" },
+    ]
+};
+NSString *rendering = [template renderObject:obj error:NULL];
+```
+
+Final rendering:
+
+    <ul>
+        <li><a href="http://mustache.github.io">Mustache</a></li>
+        <li><a href="http://github.com/groue/GRMustache">GRMustache</a></li>
+    </ul>
+
+
 Sample code
 -----------
 
