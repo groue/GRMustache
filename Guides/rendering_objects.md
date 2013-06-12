@@ -20,7 +20,7 @@ Let's look at a few examples of such objects:
 
     {{# localize }}...{{/ }}
 
-`localize` is part of the [standard library](standard_library.md). It performs a custom rendering by localizing the inner content of the section it renders.
+`localize` is part of the [standard library](standard_library.md#localize). It performs a custom rendering by localizing the inner content of the section it renders.
 
     {{# dateFormat }}...{{ birthDate }}...{{ joinDate }}...{{/ }}
 
