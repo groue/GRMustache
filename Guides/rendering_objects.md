@@ -93,6 +93,7 @@ Trivial Example
 `Document.mustache`:
 
     {{ name }}
+    {{{ name }}}
 
 `Render.m`:
 
@@ -113,10 +114,13 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 Final rendering:
 
     Arthur &amp; Cie
+    Arthur & Cie
 
 ### What did we learn here?
 
 Rendering objects are not difficult to trigger: when you know how to have a tag `{{ name }}` render a regular value, you know how to have it handled by a rendering object.
+
+The HTML escaping is negociated between the tag and the rendering object: `{{ name }}` escapes HTML, when `{{{ name }}}` does not. Since the rendering object does not explicitly set the _HTMLSafe_ parameter to YES, the first tag escapes the result.
 
 
 Example: Wrapping the content of a section tag
