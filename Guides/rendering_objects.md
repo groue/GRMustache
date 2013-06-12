@@ -130,9 +130,9 @@ Let's write a rendering object which wraps a section in a `<strong>` HTML tag:
 
 `Document.mustache`:
 
-    {{#strong}}
-        {{name}} is awesome.
-    {{/strong}}
+    {{# strong }}
+        {{ name }} is awesome.
+    {{/ strong }}
 
 `Render.m`:
 
@@ -178,9 +178,9 @@ Your rendering objects can thus delegate their rendering to the tag they are giv
 
 `Document.mustache`:
 
-    {{#twice}}
+    {{# twice }}
         Mustache is awesome!
-    {{/twice}}
+    {{/ twice }}
 
 `Render.m`:
 
@@ -213,7 +213,7 @@ Let's write a rendering object that wraps a section in a HTML link. The URL of t
 
 `Document.mustache`:
 
-    {{#link}}{{firstName}} {{lastName}}{{/link}}
+    {{# link }}{{ firstName }} {{ lastName }}{{/ link }}
 
 `Render.m`:
 
@@ -223,10 +223,10 @@ id link = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, G
     // Build an alternate template string by wrapping the inner content of
     // the section in a `<a>` HTML tag:
     //
-    // We'll get `<a href="{{url}}">{{firstName}} {{lastName}}</a>`
+    // We'll get `<a href="{{ url }}">{{ firstName }} {{ lastName }}</a>`
     
     NSString *innerTemplateString = tag.innerTemplateString;
-    NSString *format = @"<a href=\"{{url}}\">%@</a>";
+    NSString *format = @"<a href=\"{{ url }}\">%@</a>";
     NSString *templateString = [NSString stringWithFormat:format, innerTemplateString];
     
     // Build a new template, and return its rendering:
@@ -258,7 +258,7 @@ Again, variable tags such as `{{ name }}` don't have much inner content, but sec
 
 The `innerTemplateString` property returns the raw content of the section, with Mustache tags left untouched.
 
-You can derive new template strings from this raw content, even by appending new tags to it (the `{{url}}` tag, above).
+You can derive new template strings from this raw content, even by appending new tags to it (the `{{ url }}` tag, above).
 
 From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context.
 
@@ -290,17 +290,17 @@ You can still choose the rendered partial at runtime, with simple variable tags:
 
 `Document.mustache`:
 
-    {{#items}}
-    - {{link}}
-    {{/items}}
+    {{# items }}
+    - {{ link }}
+    {{/ items }}
 
 `Movie.mustache`:
 
-    <a href="{{url}}">{{title}}</a>
+    <a href="{{ url }}">{{ title }}</a>
 
 `Person.mustache`:
 
-    <a href="{{url}}">{{firstName}} {{lastName}}</a>
+    <a href="{{ url }}">{{ firstName }} {{ lastName }}</a>
 
 `Render.m`:
 
@@ -337,79 +337,22 @@ Final rendering:
 Let's say a handy technique: we haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
 
 
-Example: Dynamic partials, take 2
----------------------------------
-
-`Document.mustache`:
-
-    {{# items }}
-    - {{ render(partial) }}
-    {{/ items }}
-
-`Movie.mustache`:
-
-    <a href="{{url}}">{{title}}</a>
-
-`Person.mustache`:
-
-    <a href="{{url}}">{{firstName}} {{lastName}}</a>
-
-`Render.m`:
-
-```objc
-id data = @{
-    @"items": @[
-        @{
-            @"title": @"Citizen Kane",
-            @"url":@"/movies/321",
-            @"partial": @"Movie",
-        },
-        @{
-            @"firstName": @"Orson",
-            @"lastName": @"Welles",
-            @"url":@"/people/123",
-            @"partial": @"Person",
-        },
-    ],
-    @"render": [GRMustacheFilter filterWithBlock:^id(id value) {
-        return [GRMustacheTemplate templateFromResource:value bundle:nil error:NULL];
-    }],
-};
-
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                          fromResource:@"Document"
-                                                bundle:nil
-                                                 error:NULL];
-```
-
-Final rendering:
-
-    - <a href="/movies/123">Citizen Kane</a>
-    - <a href="">Orson Welles</a>
-
-### What did we learn here?
-
-Well, filters that return rendering objects are awesome.
-
-The above example is somewhat contrived, but you'll see a much more useful example in the [Indexes Sample Code](sample_code/indexes.md).
-
-
-Example: Dynamic partials, take 3: objects that "render themselves"
+Example: Dynamic partials, take 2: objects that "render themselves"
 -------------------------------------------------------------------
 
 Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
 
 `Document.mustache`:
 
-    {{movie}}
+    {{ movie }}
 
 `Movie.mustache`:
 
-    {{title}} by {{director}}
+    {{ title }} by {{ director }}
     
 `Person.mustache`:
 
-    {{firstName}} {{lastName}}
+    {{ firstName }} {{ lastName }}
 
 `Render.m`:
 
@@ -507,15 +450,15 @@ Using the same Movie and Person class introduced above, we can easily render a l
 
 `Document.mustache`:
 
-    {{movies}}  {{! one movie is not enough }}
+    {{ movies }}  {{! one movie is not enough }}
 
 `Movie.mustache`:
 
-    {{title}} by {{director}}
+    {{ title }} by {{ director }}
     
 `Person.mustache`:
 
-    {{firstName}} {{lastName}}
+    {{ firstName }} {{ lastName }}
 
 `Render.m`:
 
@@ -562,8 +505,8 @@ Sample code
 
 The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 
-The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{name}}{{/ localize }}`.
+The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{ name }}{{/ localize }}`.
 
-Last but not least, NSFormatter instances are rendering objets as well, so that `{{#decimal}}{{x}}+{{y}}={{sum}}{{/decimal}}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
+Last but not least, NSFormatter instances are rendering objets as well, so that `{{# decimal }}{{ x }} + {{ y }} = {{ sum }}{{/ decimal }}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
 
 [up](../../../../GRMustache#documentation), [next](protected_contexts.md)
