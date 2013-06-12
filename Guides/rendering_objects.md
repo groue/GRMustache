@@ -16,7 +16,9 @@ For example, let's focus on NSNumber. When asked to render for a variable tag `{
 
 Your custom objects can perform their own custom rendering, with the exact same set of APIs that are used by NSString, NSNumber, NSArray, etc.
 
-Let's look at a few examples of such objects:
+### Examples
+
+Rendering objects are very versatile. Let's look at a few examples:
 
     {{# localize }}...{{/ }}
 
@@ -38,9 +40,13 @@ The `{{> partial }}` tag renders a hard-coded template, identified by its name. 
 
 `withPosition` is a filter that returns an object that performs a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
 
+----
+
+All examples above are built using public GRMustache APIs, even the ones that use built-in objects such as `localize` or the date formatter: your own rendering objects are not artificially limited.
+
 The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering: they just transform values. However, when they return objects that provide custom rendering, the fun can begin. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
 
-Let's begin the tour.
+Let's begin the detailed tour.
 
 
 GRMustacheRendering protocol
