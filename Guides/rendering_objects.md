@@ -84,6 +84,41 @@ id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustache
 }];
 ```
 
+The _tag_ and _context_ parameters help you perform your custom rendering. Check their references ([GRMustacheTag](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html), [GRMustacheContext](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html)) for a full documentation of their classes. This guide will illustrate how to use those objects with a few examples.
+
+
+Trivial Example
+---------------
+
+`Document.mustache`:
+
+    {{ name }}
+
+`Render.m`:
+
+```objc
+id nameRenderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    return @"Arthur & Cie";
+}];
+
+id data = @{ @"name": nameRenderingObject };
+
+NSString *rendering = [GRMustacheTemplate renderObject:data
+                                          fromResource:@"Document"
+                                                bundle:nil
+                                                 error:NULL];
+```
+
+Final rendering:
+
+    Arthur &amp; Cie
+
+### What did we learn here?
+
+Rendering objects are not difficult to trigger: when you know how to have a tag `{{ name }}` render a regular value, you know how to have it handled by a rendering object.
+
+
 Example: Wrapping the content of a section tag
 ----------------------------------------------
 
@@ -223,7 +258,21 @@ You can derive new template strings from this raw content, even by appending new
 
 From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context.
 
-It also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES. There are also text templates (see the [HTML vs. Text Templates Guide](html_vs_text.md)): in this case, `HTMLSafe` would be NO. Depending on how reusable you want your rendering object to be, you may have to deal with it.
+The template also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES (see the [HTML vs. Text Templates Guide](html_vs_text.md)).
+
+Not all of you load their templates from the main bundle. If you use [template repositories](template_repositories.md), consider replacing the following line:
+
+```objc
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+```
+
+by this one:
+
+```objc
+GRMustacheTemplate *template = [tag.templateRepository templateFromString:templateString error:NULL];
+```
+
+This is because the section that should be wrapped in a link may embed a partial tag `{{> partial }}`. Our code will be more robust if we make sure that we use the same template repository as the one that did provide the original template. Check the [GRMustacheTag Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html#//api/name/templateRepository) for more information.
 
 
 Example: Dynamic partials, take 1
@@ -433,21 +482,13 @@ Final rendering:
 
 ### What did we learn here?
 
-Many useful things.
+Two useful things:
 
 1. *`GRMustacheRendering` is a protocol*.
     
     Surely `+[GRMustache renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the protocol is available for you to use on your custom classes.
 
-2. *The tag provides a template repository*.
-    
-    This object lets you load partials from the same set of templates as the "main" rendering template, the one that did provide the rendered tag (check the [Template Repositories Guide](template_repositories.md) if you haven't yet).
-
-    This does not make much difference when all templates are loaded from your main bundle. But some of you manage their sets of templates differently.
-    
-    Caveat: Make sure you own (retain) template repositories. Don't use templates returned by methods like `[GRMustacheTemplate templateFrom...]`: they return autoreleased templates with an implicit autoreleased repository that will eventually be deallocated when your rendering object tries to access it.
-
-3. *Rendering objects manage the context stack*.
+2. *Rendering objects manage the context stack*.
     
     When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md#the-context-stack): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
