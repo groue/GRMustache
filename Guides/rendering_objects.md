@@ -6,17 +6,37 @@ Rendering Objects
 Overview
 --------
 
-Let's first confess a lie: here and there in this documentation, you have been reading that Mustache tags renders objects in a way or another: variable tags output values HTML-escaped, sections tags loop over arrays, etc.
+The [Runtime Guide](runtime.md) describes what happens whenever a tag such as `{{ name }}` or `{{# items }}...{{/ items }}` gets rendered. Strings are HTML-escaped, arrays are iterated, numbers control boolean sections, etc.
 
-This is an illusion. Data objects actually have full control on their rendering:
+It's time to shed a brighter light on the rendering process.
 
-`NSArray` *does* render the `{{# items }}...{{/}}` tag for each of its items.
+GRMustache is designed so that the rendered objects are actually responsible for their own rendering. NSString, NSNumber, NSArray, etc. do render themselves against the various kinds of Mustache tags (they all implement a rendering method that we'll see below).
 
-`NSNumber` *does* render as a string for `{{ number }}`, and decides if `{{# condition }}...{{/}}` should render or not.
+For example, let's focus on NSNumber. When asked to render for a variable tag `{{ amount }}`, a number returns itself as a string. When asked to render for a section tag `{{# items.count }}...{{/ }}`, it renders the inner content of the section if and only if its `boolValue` method returns YES. The opposite happens when the tag is an inverted section such as `{{^ hasLuck }}...{{/ }}`.
 
-etc.
+Your custom objects can perform their own custom rendering, with the exact same set of APIs that are used by NSString, NSNumber, NSArray, etc.
 
-Your objects that conform to the GRMustacheRendering protocol also take full control of their rendering.
+Let's look at a few examples of such objects, that perform a custom rendering:
+
+    {{# localize }}...{{/ }}
+
+`localize` is part of the [standard library](standard_library.md). It performs a custom rendering by localizing the inner content of the section it renders.
+
+    {{# dateFormat }}...{{ birthDate }}...{{ joinDate }}...{{/ }}
+
+[NSDateFormatter](NSFormatter.md) is able to format all dates in a section.
+
+    I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
+
+`pluralize` is a filter that returns an object able to pluralize the content of the section (see sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912)).
+
+    {{# withPosition(items) }}{{ position }}: {{ name }}{{/ }}
+
+`withPosition` is a filter that returns an object that provides a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
+
+The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering. However, they can return objects that provide custom rendering. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
+
+Let's begin the tour.
 
 
 GRMustacheRendering protocol
