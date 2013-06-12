@@ -592,6 +592,10 @@ Handlebars.registerHelper('list', function(context, options) {
 
 A fundamental technique for advanced rendering: [filters](filters.md) that return rendering objects.
 
+You have more sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912), which shows a helper able to pluralize the inner content of its section:
+
+    I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
+
 
 Sample code
 -----------
@@ -600,7 +604,9 @@ The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustach
 
 The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{ name }}{{/ localize }}`.
 
-Last but not least, NSFormatter instances are rendering objets as well, so that `{{# decimal }}{{ x }} + {{ y }} = {{ sum }}{{/ decimal }}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
+NSFormatter instances are rendering objets as well, so that `{{# decimal }}{{ x }} + {{ y }} = {{ sum }}{{/ decimal }}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
+
+[Issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912) contains sample code for pluralizing the inner content of a section.
 
 
 Compatibility with other Mustache implementations
