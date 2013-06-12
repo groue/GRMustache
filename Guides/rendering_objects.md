@@ -515,7 +515,7 @@ GRMustacheTemplate *template = [GRMustacheTemplate fromResource:@"Document" bund
 // registered for all renderings.
 
 id customHelperLibrary = @{
-    // Make `list` a filter that returns a rendering object
+    // `list` is a filter that takes an array, and returns a rendering object:
     @"list": [GRMustacheFilter filterWithBlock:^id(NSArray *items) {
         
         return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
