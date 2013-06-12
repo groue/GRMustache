@@ -508,7 +508,7 @@ Let's build this "helper" with GRMustache:
 ```objc
 // Load the template
 
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate fromResource:@"Document" bundle:nil error:NULL];
 
 
 // Extend the template base context, so that the "list" helper is always
