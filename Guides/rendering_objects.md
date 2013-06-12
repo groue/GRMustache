@@ -511,8 +511,8 @@ Let's build this "helper" with GRMustache:
 GRMustacheTemplate *template = [GRMustacheTemplate fromResource:@"Document" bundle:nil error:NULL];
 
 
-// Extend the template base context, so that the "list" helper is always
-// available.
+// Extend the base context of the template, so that the "list" helper gets
+// registered for all renderings.
 
 id customHelperLibrary = @{
     // Make `list` a filter that returns a rendering object
@@ -564,6 +564,29 @@ Final rendering:
         <li><a href="http://mustache.github.io">Mustache</a></li>
         <li><a href="http://github.com/groue/GRMustache">GRMustache</a></li>
     </ul>
+
+The implementation of the Handlebars helper is fundamentally identical:
+
+```javascript
+Handlebars.registerHelper('list', function(context, options) {
+    
+    // Open the <ul> element.
+    var ret = "<ul>";
+    
+    // Append a <li> element for each item.
+    for(var i=0, j=context.length; i<j; i++) {
+        
+        // Render item
+        var itemRendering = options.fn(context[i]);
+        
+        // Wrap in a <li> element.
+        ret = ret + "<li>" + itemRendering + "</li>";
+    }
+    
+    // Close the <ul> tag, and return.
+    return ret + "</ul>";
+});
+```
 
 
 Sample code
