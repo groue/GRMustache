@@ -677,7 +677,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     });
     
     Class klass = object_getClass(object);
-    int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
+    NSInteger result = (NSInteger)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
         Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
         result = ([klass isSubclassOfClass:[NSArray class]] ||
@@ -727,7 +727,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     });
     
     Class klass = object_getClass(object);
-    int result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
+    NSInteger result = (int)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
         result = class_conformsToProtocol(klass, @protocol(GRMustacheTagDelegate)) ? 1 : 2;
         CFDictionarySetValue(cache, klass, (const void *)result);
