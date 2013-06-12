@@ -22,13 +22,13 @@ Let's look at a few examples of such objects:
 
 `localize` is part of the [standard library](standard_library.md#localize). It performs a custom rendering by localizing the inner content of the section it renders.
 
-    {{ template }} vs. {{> partial }}
+    {{> partial }} vs. {{ template }}
 
-`{{> partial }}` tags render a hard-coded template, identified by its name. By providing instead a GRMustacheTemplate object to a tag, which performs its own custom rendering, you can render a "dynamic partial".
+The `{{> partial }}` tag renders a hard-coded template, identified by its name. By providing instead a GRMustacheTemplate object to a tag, which performs its own custom rendering, you can render a "dynamic partial".
 
     {{# dateFormat }}...{{ birthDate }}...{{ joinDate }}...{{/ }}
 
-[NSDateFormatter](NSFormatter.md) is a rendering object able to format all dates in a section. This involves the [GRMustacheTagDelegate protocol](delegate.md), that allows the formatter to observe and alter the rendering of all tags inside the section.
+[NSDateFormatter](NSFormatter.md) is a rendering object able to format all dates in a section.
 
     I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
 
