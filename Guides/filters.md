@@ -132,9 +132,9 @@ Final rendering:
 Filters that return rendering objects
 -------------------------------------
 
-"Rendering objects" are objects that perform a custom rendering. They are described in detail in the [Rendering Objects Guide](rendering_objects.md)).
+"Rendering objects" are objects that perform a custom rendering. They are described in detail in the [Rendering Objects Guide](rendering_objects.md).
 
-A fundamental technique of advanced GRMustache rendering is filters that return rendering objects. For example,
+A fundamental technique of advanced GRMustache rendering is filters that return rendering objects. For example:
 
     I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
 
@@ -143,7 +143,7 @@ would render, depending on the number of cats:
     I have 1 cat.
     I have 5 cats.
 
-The `pluralize` filter returns an object that is able to pluralize the inner content of the section it is attached to. Go check the [Rendering Objects Guide](rendering_objects.md)) for more details.
+The `pluralize` filter returns an object that is able to pluralize the inner content of the section it is attached to. Go check the [Rendering Objects Guide](rendering_objects.md) for more details.
 
 
 Filters namespaces
