@@ -24,7 +24,7 @@ Let's look at a few examples of such objects:
 
     {{# dateFormat }}...{{ birthDate }}...{{ joinDate }}...{{/ }}
 
-[NSDateFormatter](NSFormatter.md) is able to format all dates in a section.
+[NSDateFormatter](NSFormatter.md) is a rendering object able to format all dates in a section. This involves the [GRMustacheTagDelegate protocol](delegate.md), that allows the formatter to observe and alter the rendering of all tags inside the section.
 
     I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
 
@@ -32,7 +32,7 @@ Let's look at a few examples of such objects:
 
     {{# withPosition(items) }}{{ position }}: {{ name }}{{/ }}
 
-`withPosition` is a filter that returns an object that provides a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
+`withPosition` is a filter that returns an object that performs a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
 
 The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering: they just transform values. However, when they return objects that provide custom rendering, the fun can begin. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
 
