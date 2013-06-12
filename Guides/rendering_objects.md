@@ -48,7 +48,7 @@ Let's begin the detailed tour.
 GRMustacheRendering protocol
 ----------------------------
 
-This protocol declares the method that all rendering objects must implement. NSArray does implement it, so does NSNumber, and NSString. Your objects can, as well:
+This protocol declares the method that all rendering objects must implement:
 
 ```objc
 @protocol GRMustacheRendering <NSObject>
