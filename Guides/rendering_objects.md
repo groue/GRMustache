@@ -34,7 +34,7 @@ Let's look at a few examples of such objects:
 
 `withPosition` is a filter that returns an object that provides a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
 
-The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering. However, they can return objects that provide custom rendering. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
+The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering: they just transform values. However, when they return objects that provide custom rendering, the fun can begin. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
 
 Let's begin the tour.
 
