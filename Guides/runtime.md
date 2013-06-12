@@ -233,7 +233,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 ### Lambda sections
 
-Mustache defines [lambda sections](http://mustache.github.com/mustache.5.html), that is, sections that execute your own application code, and allow you to extend the core Mustache engine.
+Mustache defines [lambda sections](http://mustache.github.io/mustache.5.html), that is, sections that execute your own application code, and allow you to extend the core Mustache engine.
 
 Such sections are fully documented in the [Rendering Objects Guide](rendering_objects.md), but here is a preview:
 

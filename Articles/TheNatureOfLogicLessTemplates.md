@@ -1,6 +1,6 @@
 # The nature of logicless templates
 
-[@pvande](https://github.com/pvande) [wonders](https://github.com/mustache/spec/wiki/%5BDiscussion%5D-Logic-Free-vs.-Non-Evaled) what is the difference between the "Logic Free" templates such as [Mustache](http://mustache.github.com) and the "Non-Evaled" templates like [Liquid](http://liquidmarkup.org).
+[@pvande](https://github.com/pvande) [wonders](https://github.com/mustache/spec/wiki/%5BDiscussion%5D-Logic-Free-vs.-Non-Evaled) what is the difference between the "Logic Free" templates such as [Mustache](http://mustache.github.io) and the "Non-Evaled" templates like [Liquid](http://liquidmarkup.org).
 
 He enumerates different properties of both kinds of templates, and feels perplexed when wondering what are the fundamental properties he should be the guardian of, as the maintainer of the [Mustache Specification](http://github.com/mustache/spec).
 

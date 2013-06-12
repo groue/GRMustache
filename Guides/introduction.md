@@ -6,7 +6,7 @@ GRMustache introduction
 Core Mustache
 -------------
 
-Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.com/mustache.5.html.
+Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.io/mustache.5.html.
 
 - **variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
 - **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
@@ -18,7 +18,7 @@ Make sure you get familiar with the Mustache syntax and features first: http://m
 Overlooked Mustache
 -------------------
 
-Those are not documented in [mustache.5.html](http://mustache.github.com/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
+Those are not documented in [mustache.5.html](http://mustache.github.io/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
