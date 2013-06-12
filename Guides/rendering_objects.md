@@ -16,7 +16,7 @@ For example, let's focus on NSNumber. When asked to render for a variable tag `{
 
 Your custom objects can perform their own custom rendering, with the exact same set of APIs that are used by NSString, NSNumber, NSArray, etc.
 
-Let's look at a few examples of such objects, that perform a custom rendering:
+Let's look at a few examples of such objects:
 
     {{# localize }}...{{/ }}
 
