@@ -1892,8 +1892,16 @@ static BOOL preventsNSUndefinedKeyException = NO;
 {
     NSMutableSet *objects = getCurrentThreadPreventedObjects();
     if (objects == NULL) {
-        objects = [[NSMutableSet alloc] init];  // released by garbage collector, or by pthread destructor function freePreventedObjectsStorage
+        // objects will be released by the garbage collector, or by pthread
+        // destructor function freePreventedObjectsStorage.
+        //
+        // Static analyzer can't see that, and emits a memory leak warning here.
+        // This is a false positive: avoid the static analyzer examine this
+        // portion of code.
+#ifndef __clang_analyzer__
+        objects = [[NSMutableSet alloc] init];
         setCurrentThreadPreventedObjects(objects);
+#endif
     }
     
     [objects addObject:object];
