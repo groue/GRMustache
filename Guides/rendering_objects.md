@@ -429,7 +429,9 @@ Two useful things:
 
 1. *`GRMustacheRendering` is a protocol*.
     
-    Surely `+[GRMustache renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the protocol is available for you to use on your custom classes.
+    Surely `+[GRMustache renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the GRMustacheRendering protocol is available for you to use on your custom classes.
+    
+    You can even mix it with the [GRMustacheFilter protocol](filters.md). The conformance to both protocols gives you objects with multiple facets. For example, the [NSFormatter](NSFormatter.md) class takes this opportunity to format values, as in `{{ format(value) }}`, and to format all variable tags in a section, when used as in `{{# format }}...{{ value1 }}...{{ value2 }}...{{/ }}`.
 
 2. *Rendering objects manage the context stack*.
     
