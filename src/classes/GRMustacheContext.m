@@ -1837,14 +1837,14 @@ static BOOL preventsNSUndefinedKeyException = NO;
         [(NSMutableSet *)objects release];
     }
     #define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
-    #define getCurrentThreadPreventedObjects() pthread_getspecific(GRPreventedObjectsStorageKey)
+    #define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
     #define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
 #else
     // Garbage Collector is enabled.
     // Use slow NSThread library.
     static NSString *GRPreventedObjectsStorageKey = @"GRPreventedObjectsStorageKey";
     #define setupPreventedObjectsStorage()
-    #define getCurrentThreadPreventedObjects() [[[NSThread currentThread] threadDictionary] objectForKey:GRPreventedObjectsStorageKey]
+    #define getCurrentThreadPreventedObjects() (NSMutableSet *)[[[NSThread currentThread] threadDictionary] objectForKey:GRPreventedObjectsStorageKey]
     #define setCurrentThreadPreventedObjects(objects) [[[NSThread currentThread] threadDictionary] setObject:objects forKey:GRPreventedObjectsStorageKey]
 #endif
 
