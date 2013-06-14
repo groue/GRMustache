@@ -231,8 +231,3 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 - (NSArray *)tagDelegateStack GRMUSTACHE_API_INTERNAL;
 
 @end
-
-@interface NSObject(GRMustacheContextPreventionOfNSUndefinedKeyException)
-- (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key;
-- (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key;
-@end;

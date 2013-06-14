@@ -95,6 +95,15 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 
 // =============================================================================
+#pragma mark - NSUndefinedKeyException prevention declarations
+
+@interface NSObject(GRMustacheContextPreventionOfNSUndefinedKeyException)
+- (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key;
+- (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key;
+@end;
+
+
+// =============================================================================
 #pragma mark - GRMustacheContext
 
 @interface GRMustacheContext()
@@ -677,7 +686,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     });
     
     Class klass = object_getClass(object);
-    NSInteger result = (NSInteger)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
+    intptr_t result = (intptr_t)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
     if (!result) {
         Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
         result = ([klass isSubclassOfClass:[NSArray class]] ||
