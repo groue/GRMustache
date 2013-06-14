@@ -489,7 +489,7 @@ A new perspective on the fact that arrays render the concatenation of their item
 Example: A Handlebars.js Helper
 -------------------------------
 
-From http://handlebarsjs.com/block_helpers.html:
+From [http://handlebarsjs.com/block_helpers.html](http://handlebarsjs.com/block_helpers.html):
 
 > For instance, let's create an iterator that creates a `<ul>` wrapper, and wraps each resulting element in an `<li>`.
 > 
