@@ -3,6 +3,13 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.7.4
+
+Bug fixes:
+
+- NSUndefinedKeyException prevention used not to work under a Garbage Collector-enabled OSX application.
+- Some custom setters of GRMustacheContext managed properties could prevent proper management of those properties.
+
 ## v6.7.3
 
 More performance improvements.
