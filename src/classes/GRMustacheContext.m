@@ -1829,8 +1829,8 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
 
 static BOOL preventsNSUndefinedKeyException = NO;
 
-#if !defined(__OBJC_GC__)
-    // Garbage Collector is not enabled.
+#if TARGET_OS_IPHONE
+    // iOS never had support for Garbage Collector.
     // Use fast pthread library.
     static pthread_key_t GRPreventedObjectsStorageKey;
     void freePreventedObjectsStorage(void *objects) {
@@ -1840,7 +1840,7 @@ static BOOL preventsNSUndefinedKeyException = NO;
     #define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
     #define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
 #else
-    // Garbage Collector is enabled.
+    // OSX used to have support for Garbage Collector.
     // Use slow NSThread library.
     static NSString *GRPreventedObjectsStorageKey = @"GRPreventedObjectsStorageKey";
     #define setupPreventedObjectsStorage()
