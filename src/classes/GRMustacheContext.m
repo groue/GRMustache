@@ -192,7 +192,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     return context;
 }
 
-// Private dedicated initializer
+// Private designated initializer
 //
 // This method allows us to derive new contexts without calling the init method of the subclass.
 - (id)initPrivate
@@ -200,7 +200,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     return [super init];
 }
 
-// Public dedicated initializer
+// Public designated initializer
 - (id)init
 {
     return [self initPrivate];
