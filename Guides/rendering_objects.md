@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](protected_contexts.md)
+[up](../../../../GRMustache#documentation), [next](delegate.md)
 
 Rendering Objects
 =================
@@ -623,4 +623,4 @@ You *can* write specification-compliant "Mustache lambdas" with rendering object
 **As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use `GRMustacheRendering` with great care.**
 
 
-[up](../../../../GRMustache#documentation), [next](protected_contexts.md)
+[up](../../../../GRMustache#documentation), [next](delegate.md)

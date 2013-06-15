@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](delegate.md)
+[up](../../../../GRMustache#documentation), [next](rendering_objects.md)
 
 Filters
 =======
@@ -199,4 +199,4 @@ Sample code
 Custom filters are used in the [Collection Indexes](sample_code/indexes.md) sample code, and in many items of the [standard library](standard_library.md). [NSFormatter](NSFormatter.md) are ready-made filters in GRMustache. Go check inspiration there.
 
 
-[up](../../../../GRMustache#documentation), [next](delegate.md)
+[up](../../../../GRMustache#documentation), [next](rendering_objects.md)

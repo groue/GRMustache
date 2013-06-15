@@ -256,7 +256,7 @@ The `localize` key is attached to a rendering object that is built in the [stand
 
 ### Other sections
 
-When a section renders an object that is not false, not enumerable, not a lambda, it renders once, making the objet available for the key lookup inside the section:
+When a section renders a value that is not false, not enumerable, not a [rendering object](rendering_objects.md), it renders once, making the value available for the key lookup inside the section:
 
 ```objc
 Person *ignacio = [Person personWithName:@"Ignacio"];
@@ -295,7 +295,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-The `withPosition` filter, that makes the `position` key available inside the section, is described in the [Collection Indexes Sample Code](sample_code/indexes.md).
+The `withPosition` filter returns a [rendering object](rendering_objects.md) that makes the `position` key available inside the section. It is described in the [Collection Indexes Sample Code](sample_code/indexes.md).
 
 
 The Context Stack

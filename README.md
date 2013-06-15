@@ -75,8 +75,8 @@ Services:
 Hooks:
 
 - [Filters](Guides/filters.md): `{{ uppercase(name) }}` et al.
-- [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
 - [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
+- [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
 - [Protected Contexts](Guides/protected_contexts.md): protect some keys so that they always evaluate to the same value.
 
 Mustache, and beyond:
