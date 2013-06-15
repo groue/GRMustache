@@ -25,7 +25,7 @@ See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Refere
 
 - `mustacheTag:didRenderObject:as:` can let you clean up anything that has been prepared in `mustacheTag:willRenderObject:`. Besides, it is provided with the actual rendering of the tag.
 
-- `mustacheTag:didFailRenderingObject:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
+- `mustacheTag:didFailRenderingObject:withError:` has no other purpose but to let you perform any necessary clean up. There is no error recovery, and the error would eventually come out of the initial rendering method.
 
 Note that a tag like `{{ person.name }}` is rendered once. Thus the delegate will be called once. If the person has been found, the rendered object will be the name of the person. If the person could not be found, the rendered object will be `nil`.
 
