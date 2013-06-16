@@ -13,3 +13,4 @@ build/*
 !default.xcworkspace
 xcuserdata
 *.moved-aside
+.DS_Store
