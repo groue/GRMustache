@@ -1,6 +1,7 @@
 TODO:
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
 - Deprecate flawed [GRMustacheContext valueForMustacheExpression:error:]
+- Check that {{$ expression }} leads to some paradox when expression evaluates to nil - and make overridable sections not evaluate any expression.
 
 Nice to have:
 - document migration path from all previous versions to latest version
