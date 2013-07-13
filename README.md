@@ -27,15 +27,13 @@ You have three options, from the simplest to the hairiest:
 #import "GRMustache.h"
 
 // Renders "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
+NSString *rendering = [GRMustacheTemplate renderObject:@{ @"name": @"Arthur" }
                                             fromString:@"Hello {{name}}!"
                                                  error:NULL];
 
 // Renders a document from the `Profile.mustache` resource
-NSString *rendering = [GRMustacheTemplate renderObject:[Person personWithName:@"Arthur"]
-                                          fromResource:@"Profile"
-                                                bundle:nil
-                                                 error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
+NSString *rendering = [template renderObject:self.currentUser error:NULL];
 ```
 
 [GRMustachio](https://github.com/mugginsoft/GRMustachio) by Jonathan Mitchell is "A super simple, interactive GRMustache based application". It can help you design and test your templates.
