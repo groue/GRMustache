@@ -10,21 +10,27 @@ Errors
 
 Not funny, but those happens.
 
-Once and for all: GRMustache methods may return errors, or throw exceptions:
-
 ```objc
 extern NSString * const GRMustacheRenderingException;
-
 extern NSString * const GRMustacheErrorDomain;
 
 typedef enum {
-    GRMustacheErrorCodeParseError,
-    GRMustacheErrorCodeTemplateNotFound,
-    GRMustacheErrorCodeRenderingError,
+    GRMustacheErrorCodeParseError,          // bad Mustache syntax
+    GRMustacheErrorCodeTemplateNotFound,    // missing template
+    GRMustacheErrorCodeRenderingError,      // bad food
 } GRMustacheErrorCode;
 ```
 
-Exceptions are thrown for programming error such as inconsistently rendering both HTML and text in a loop of [rendering objects](rendering_objects.md).
+GRMustache usually returns regular NSError objects of domain `GRMustacheErrorDomain`. Exceptions are only thrown for rare programming errors such as inconsistently rendering both HTML and text in a loop of [rendering objects](rendering_objects.md).
+
+As a convenience, if your code does not explictly handle errors (if you provide a NULL error pointer), GRMustache will log them:
+
+```objc
+NSString *rendering = [GRMustacheTemplate renderObject:self.currentUser
+                                          fromResource:@"Profile"
+                                                bundle:nil
+                                                 error:NULL]; // NULL triggers error logging
+```
 
 On-the-fly rendering methods
 ----------------------------
