@@ -111,6 +111,39 @@
     return [fileName pathExtension];
 }
 
+- (void)testGRMustacheTemplateFromNilString
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromString:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeParseError, @"");
+}
+
+- (void)testGRMustacheTemplateFromNilResource
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromResource:nil bundle:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+}
+
+- (void)testGRMustacheTemplateFromNilFile
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromContentsOfFile:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+}
+
+- (void)testGRMustacheTemplateFromNilURL
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate templateFromContentsOfURL:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+}
+
+
 - (void)test_templateFromString_error
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString

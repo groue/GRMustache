@@ -82,6 +82,11 @@
 
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID
 {
+    if (templateString == nil) {
+        [self failWithParseErrorAtLine:0 description:@"Nil template string can not be parsed" templateID:templateID];
+        return;
+    }
+    
     // Extract characters
     
     NSUInteger length = [templateString length];

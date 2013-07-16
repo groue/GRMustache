@@ -96,6 +96,22 @@
     return [fileName pathExtension];
 }
 
+- (void)testGRMustacheTemplateRenderObjectFromNilString
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate renderObject:nil fromString:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeParseError, @"");
+}
+
+- (void)testGRMustacheTemplateRenderObjectFromNilResource
+{
+    NSError *error;
+    STAssertNil([GRMustacheTemplate renderObject:nil fromResource:nil bundle:nil error:&error], @"");
+    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+}
+
 - (void)testGRMustacheTemplate_renderObject
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
