@@ -3,6 +3,10 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.7.5
+
+Fix for issue [#56](https://github.com/groue/GRMustache/issues/56) (nil template strings have GRMustache return an error instead of crashing).
+
 ## v6.7.4
 
 Bug fixes:
