@@ -116,7 +116,7 @@
     NSError *error;
     STAssertNil([GRMustacheTemplate templateFromString:nil error:&error], @"");
     STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeParseError, @"");
+    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplateFromNilResource
