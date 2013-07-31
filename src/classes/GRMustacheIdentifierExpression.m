@@ -66,7 +66,12 @@
 - (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
     if (value != NULL) {
-        *value = [context valueForMustacheKey:_identifier protected:protected];
+        NSUInteger length = [_identifier length];
+        if ((length > 1) && ([_identifier characterAtIndex:0] == '"')) {
+            *value = [_identifier substringWithRange:NSMakeRange(1, length - 2)];
+        } else {
+            *value = [context valueForMustacheKey:_identifier protected:protected];
+        }
     }
     return YES;
 }
