@@ -123,11 +123,7 @@ FAQ
 
 - **Q: Is it possible to render a default value for missing keys?**
 
-    A: [Yes](Guides/view_model.md#default-values)
-
-- **Q: Is it possible to provide literal values in tags, or as filter arguments?**
-
-    A: Yes. You have some [sample code](https://github.com/groue/GRMustache/pull/54#issuecomment-21967544) in issue #54. You can now write `{{#equals(name,"fred")}}this guys name is short for fredrick! {{/}}`, or `{{date_format(date,"yyyy-MM-dd 'at' HH:mm")}}`.
+    A: [Yes](Guides/view_model.md#default-values).
 
 - **Q: Is it possible to disable HTML escaping?**
 
