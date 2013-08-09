@@ -35,6 +35,7 @@ Because of untrusted templates, you can not be sure that your precious keys will
 
 Untrusted data and templates do exist, I've seen them: at the minimum they are the data and the templates built by the [future you](http://xkcd.com/302/).
 
+
 Protected objects
 -----------------
 
@@ -42,7 +43,7 @@ GRMustache addresses this concern by letting you store *protected objects* in th
 
 The base context contains [context stack values](runtime.md#the-context-stack) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
-You can derive a new context that contain protected objects with the `contextByAddingProtectedObject:` method:
+You can extend it with a protected object with the `extendBaseContextWithProtectedObject:` method:
 
 ```objc
 
@@ -51,12 +52,13 @@ id protectedData = @{
 };
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-template.baseContext = [template.baseContext contextByAddingProtectedObject:protectedData];
+[template extendBaseContextWithProtectedObject:protectedData];
 ```
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
-See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full discussion of `contextByAddingProtectedObject:`.
+See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithProtectedObject:`.
+
 
 Protected namespaces
 --------------------
@@ -92,7 +94,7 @@ id modules = @{
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // "import string"
-template.baseContext = [template.baseContext contextByAddingProtectedObject:modules];
+[template extendBaseContextWithProtectedObject:modules];
 
 NSString *rendering = [template renderObject:nil error:NULL];
 ```

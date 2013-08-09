@@ -77,13 +77,11 @@ You can extend the base context:
 
 ```objc
 // Globally for all templates:
-GRMustacheContext *baseContext = [GRMustache defaultConfiguration].baseContext;
-GRMustacheContext *extendedContext = [baseContext contextByAddingObject:myCustomLibrary];
-[GRMustache defaultConfiguration].baseContext = extendedContext;
+[[GRMustache defaultConfiguration] extendBaseContextWithObject:myCustomLibrary]
 
 // For templates of a template repository:
 GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWith...];
-repo.configuration.baseContext = [repo.configuration.baseContext contextByAddingObject:myCustomLibrary];
+[repo.configuration extendBaseContextWithObject:myCustomLibrary]
 ```
 
 You can also reset it to a blank slate, getting rid of the whole standard library:
@@ -99,7 +97,7 @@ You may also be interested in [protected contexts](protected_contexts.md). They 
 // Guarantee that {{my_important_value}} will always render the same and cannot
 // be overriden by custom data:
 id library = @{ @"my_important_value": ... };
-repo.configuration.baseContext = [GRMustacheContext contextWithProtectedObject:library];
+[repo.configuration extendBaseContextWithProtectedObject:library];
 ```
 
 See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
@@ -109,10 +107,9 @@ See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Re
 The base context can also be defined right at the template level:
 
 ```objc
-// This template has its own base context that overrides the default
-// configuration and its template repository:
-GRMustacheTemplate *template = ...;
-template.baseContext = ...;
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+[template extendBaseContextWith...];    // base context extension
+template.baseContext = ...;             // base context replacement
 ```
 
 ### contentType

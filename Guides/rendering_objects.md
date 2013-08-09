@@ -546,7 +546,7 @@ id customHelperLibrary = @{
         }];
     }]
 };
-template.baseContext = [template.baseContext contextByAddingObject:customHelperLibrary];
+[template extendBaseContextWithObject:customHelperLibrary];
 
 
 // Set up rendered data, and render

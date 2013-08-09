@@ -90,7 +90,7 @@ Let's see how `self` can become a tag delegate for the whole template:
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // Add self as a tag delegate
-template.baseContext = [template.baseContext contextByAddingTagDelegate:self];
+[template extendBaseContextWithTagDelegate:self];
 
 // Initialize Document object
 Document *document = [[Document alloc] init];
@@ -100,17 +100,13 @@ document.user = self.user;
 NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-The `contextByAddingTagDelegate:` derives a new context: our template now has a base context that contains both the [standard library](standard_library.md), and `self`, reading to observe the rendering of tags.
-
-See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full discussion of `contextByAddingTagDelegate:`.
+See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithTagDelegate:`.
 
 
 
 ### By Deriving a Deep Context
 
-`contextByAddingTagDelegate:` can also derive the context attached to a section.
-
-To illustrate this use case, let's write an object that renders the uppercase version of all inner tags of the section it is attached to.
+To illustrate this last use case, let's write an object that renders the uppercase version of all inner tags of the section it is attached to.
 
 We do not want it to "pollute" the [context stack](runtime.md#the-context-stack), because we want it to be able to transform *all* tags, including `{{ description }}`. Should our object be in the context stack, its own description (inherited from NSObject) would render, and we would have a bug.
 
@@ -153,7 +149,9 @@ It conforms to GRMustacheTagDelegate, obviously, but also to the [GRMustacheRend
 @end
 ```
 
-See the [GRMustacheRendering Protocol Reference](http://groue.github.io/GRMustache/Reference/Protocols/GRMustacheRendering.html) and [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of GRMustacheRendering and GRMustacheTag.
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full discussion of `contextByAddingTagDelegate:`.
+
+See also the [GRMustacheRendering Protocol Reference](http://groue.github.io/GRMustache/Reference/Protocols/GRMustacheRendering.html) and [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) for a full documentation of GRMustacheRendering and GRMustacheTag.
 
 
 Use Cases for Tag Delegates

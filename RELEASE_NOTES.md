@@ -3,6 +3,42 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.8
+
+This version introduces a few convenience APIs, and deprecates a flawed method.
+
+### New APIs:
+
+```objc
+@interface GRMustacheTemplate
+- (void)extendBaseContextWithObject:(id)object;
+- (void)extendBaseContextWithProtectedObject:(id)object;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
+@end
+
+@interface GRMustacheConfiguration
+- (void)extendBaseContextWithObject:(id)object;
+- (void)extendBaseContextWithProtectedObject:(id)object;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
+@end
+
+@interface GRMustacheContext
+// Use the new hasValue:forMustacheExpression:error: method instead
+- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error;
+@end
+```
+
+Full documentation of the new APIs: [GRMustacheTemplate](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html), [GRMustacheConfiguration](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheConfiguration.html) and [GRMustacheContext](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the new APIs.
+
+### Deprecated APIs:
+
+```objc
+@interface GRMustacheContext
+// Use the new hasValue:forMustacheExpression:error: method instead
+- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error;
+@end
+```
+
 ## v6.7.5
 
 Fix for issue [#56](https://github.com/groue/GRMustache/issues/56) (nil template strings have GRMustache return an error instead of crashing).
