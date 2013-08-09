@@ -4,7 +4,6 @@
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
 		<title>GRMustacheTag Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
-		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
 		<meta name="generator" content="appledoc 2.1 (build 858)" />
@@ -12,7 +11,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.7 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.8 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -134,8 +133,8 @@
 </tr>
 						</tbody></table></div>
 					
-					
-					
+                    
+                    
 					
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
@@ -168,21 +167,18 @@ a variable tag <code>{{ name }}</code>, or a section tag <code>{{# name }}...{{/
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/type">&nbsp;&nbsp;type</a></code>
-		<span class="tooltip"><p>The type of the tag:</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/innerTemplateString">&nbsp;&nbsp;innerTemplateString</a></code>
-		<span class="tooltip"><p>Returns the literal and unprocessed inner content of the tag.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/description">&ndash;&nbsp;description</a></code>
-		<span class="tooltip"><p>Returns the description of the tag.</p></span>
 	</span>
 	
 	
@@ -197,16 +193,12 @@ a variable tag <code>{{ name }}</code>, or a section tag <code>{{# name }}...{{/
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/templateRepository">&nbsp;&nbsp;templateRepository</a></code>
-		<span class="tooltip"><p>The template repository that did provide the template string from which the
-receiver tag has been extracted.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/renderContentWithContext:HTMLSafe:error:">&ndash;&nbsp;renderContentWithContext:HTMLSafe:error:</a></code>
-		<span class="tooltip"><p>Returns the rendering of the tag&rsquo;s inner content, rendering all inner
-Mustache tags with the rendering context argument.</p></span>
 	</span>
 	
 	
@@ -334,7 +326,7 @@ eventually be deallocated when your rendering object tries to access it.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The type of the tag:</p>
+		<p>The type of the tag</p>
 	</div>		
 	
     
@@ -348,17 +340,6 @@ eventually be deallocated when your rendering object tries to access it.</p>
 	
 	
 	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<pre><code>typedef enum {
-    GRMustacheTagTypeVariable = 1 &lt;&lt; 1,           // The type for variable tags such as {{ name }}
-    GRMustacheTagTypeSection = 1 &lt;&lt; 2,            // The type for section tags such as {{# name }}...{{/}}
-    GRMustacheTagTypeOverridableSection = 1 &lt;&lt; 3, // The type for overridable section tags such as {{$ name }}...{{/}}
-    GRMustacheTagTypeInvertedSection = 1 &lt;&lt; 4,    // The type for inverted section tags such as {{^ name }}...{{/}}
-} GRMustacheTagType;
-</code></pre>
-	</div>
 	
 	
 	
@@ -410,8 +391,7 @@ eventually be deallocated when your rendering object tries to access it.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>For example:</p>
 
-<pre><code>&lt;GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache&gt;
-</code></pre>
+<p><GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache></p>
 	</div>
 	
 	
@@ -455,20 +435,16 @@ Mustache tags with the rendering context argument.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>HTMLSafe</em></dt>
-			<dd><p>Upon return contains YES or NO, depending on the content</p>
-
-<pre><code>             type of the tag's template, as set by the configuration of
-             the source template repository. HTML templates yield YES,
-             text templates yield NO.
-</code></pre></dd>
+			<dd><p>Upon return contains YES or NO, depending on the content
+<a href="#//api/name/type">type</a> of the tag&rsquo;s template, as set by the configuration of
+the source template repository. HTML templates yield YES,
+text templates yield NO.</p></dd>
 		</dl>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>error</em></dt>
-			<dd><p>If there is an error rendering the tag, upon return contains</p>
-
-<pre><code>             an NSError object that describes the problem.
-</code></pre></dd>
+			<dd><p>If there is an error rendering the tag, upon return contains
+an NSError object that describes the problem.</p></dd>
 		</dl>
 		
 	</div>
@@ -528,6 +504,8 @@ return the empty string.</p>
 					</div>
 					
 					
+                    
+                    
 				</div>
 				<div class="main-navigation navigation-bottom">
 					<ul>
@@ -538,7 +516,7 @@ return the empty string.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-05-25)</span><br />
+						<p><span class="copyright">&copy; 2013 Gwendal Roué. All rights reserved. (Last updated: 2013-08-09)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
 						
