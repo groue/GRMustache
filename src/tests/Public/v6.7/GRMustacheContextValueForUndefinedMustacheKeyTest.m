@@ -58,7 +58,7 @@
 - (void)testValueForUndefinedMustacheKey
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{NAME}},{{#a}}{{NAME}}{{/a}}" error:NULL];
-    template.baseContext = [GRMustacheContextWithValueForUndefinedMustacheKey context];;
+    template.baseContext = [GRMustacheContextWithValueForUndefinedMustacheKey context];
     
     id data = @{ @"name": @"foo", @"a": @{ @"name": @"bar" } };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -68,7 +68,7 @@
 - (void)testValueForUndefinedKey
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{NAME}},{{#a}}{{NAME}}{{/a}}" error:NULL];
-    template.baseContext = [GRMustacheContextWithValueForUndefinedKey context];;
+    template.baseContext = [GRMustacheContextWithValueForUndefinedKey context];
     
     id data = @{ @"name": @"foo", @"a": @{ @"name": @"bar" } };
     NSString *rendering = [template renderObject:data error:NULL];

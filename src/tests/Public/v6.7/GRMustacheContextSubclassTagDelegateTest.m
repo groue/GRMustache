@@ -55,7 +55,7 @@
 - (void)testMustacheTagWillRenderObject
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}},{{#a}}{{name}}{{/a}}" error:NULL];
-    template.baseContext = [GRMustacheContextSubclassTagDelegate context];;
+    template.baseContext = [GRMustacheContextSubclassTagDelegate context];
     
     id data = @{ @"default": @"foo", @"a": @{ @"default": @"bar" } };
     NSString *rendering = [template renderObject:data error:NULL];
