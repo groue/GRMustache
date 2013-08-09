@@ -606,20 +606,20 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     return nil;
 }
 
-- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
+- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)string error:(NSError **)error
 {
-    // This method is flawed: it may return a valid nil result.
-    // Let's make sure error is set to nil in this case.
-    //
-    // TODO: deprecate this method and provide a better API.
-    
-    id value = nil;
     GRMustacheExpressionParser *parser = [[[GRMustacheExpressionParser alloc] init] autorelease];
     GRMustacheExpression *expression = [parser parseExpression:string empty:NULL error:error];
-    if (!expression) {
-        return nil;
-    }
-    if (![expression hasValue:&value withContext:self protected:NULL error:error]) {
+    return [expression hasValue:value withContext:self protected:NULL error:error];
+}
+
+- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
+{
+    // This deprecated method is flawed: it may return a valid nil result.
+    // Let's make sure error is set to nil in this case.
+    
+    id value = nil;
+    if (![self hasValue:&value forMustacheExpression:string error:error]) {
         return nil;
     }
     if (error) { *error = nil; }

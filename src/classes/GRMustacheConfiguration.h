@@ -185,13 +185,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @param object  An object
  *
  * @see baseContext
- * @see importProtectedObject:
- * @see importTagDelegate:
+ * @see extendBaseContextWithProtectedObject:
+ * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.8
  */
-#warning Missing availability macro
-- (void)importObject:(id)object;
+- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -218,13 +217,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @param object  An object
  *
  * @see baseContext
- * @see importObject:
- * @see importTagDelegate:
+ * @see extendBaseContextWithObject:
+ * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.8
  */
-#warning Missing availability macro
-- (void)importProtectedObject:(id)object;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -237,13 +235,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @param tagDelegate  A tag delegate
  *
  * @see baseContext
- * @see importObject:
- * @see importTagDelegate:
+ * @see extendBaseContextWithObject:
+ * @see extendBaseContextWithProtectedObject:
  *
  * @since v6.8
  */
-#warning Missing availability macro
-- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
 
 /**
  * The content type of strings rendered by templates.

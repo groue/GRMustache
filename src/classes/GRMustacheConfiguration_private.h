@@ -64,13 +64,13 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 @property (nonatomic, retain) GRMustacheContext *baseContext;
 
 // Documented in GRMustacheConfiguration.h
-- (void)importObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (void)extendBaseContextWithObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
-- (void)importProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (void)extendBaseContextWithProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
-- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * Whether the receiver is locked or not.

@@ -83,17 +83,17 @@
     [super dealloc];
 }
 
-- (void)importObject:(id)object
+- (void)extendBaseContextWithObject:(id)object
 {
     self.baseContext = [self.baseContext contextByAddingObject:object];
 }
 
-- (void)importProtectedObject:(id)object
+- (void)extendBaseContextWithProtectedObject:(id)object
 {
     self.baseContext = [self.baseContext contextByAddingProtectedObject:object];
 }
 
-- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
     self.baseContext = [self.baseContext contextByAddingTagDelegate:tagDelegate];
 }

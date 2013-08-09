@@ -1,15 +1,7 @@
 TODO:
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
-- Deprecate flawed [GRMustacheContext valueForMustacheExpression:error:]
-- Check that {{$ expression }} leads to some paradox when expression evaluates to nil - and make overridable sections not evaluate any expression.
 
 Nice to have:
-- [GRMustacheConfiguration importObject:]
-- [GRMustacheConfiguration importTagDelegate:]
-- [GRMustacheConfiguration importProtectedObject:]
-- [GRMustacheTemplate importObject:]
-- [GRMustacheTemplate importTagDelegate:]
-- [GRMustacheTemplate importProtectedObject:]
 - document migration path from all previous versions to latest version
 - > But they do allow Xcode to see the symbols when creating the final executable and allow the static library symbols to get included in the final DSYM file thereby allowing full symoblication of crash reports. (https://github.com/RestKit/RestKit/issues/1277)
 

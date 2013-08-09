@@ -157,6 +157,12 @@
 		56A8D4941527A23900D9C718 /* GRMustacheTagDelegateTest.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4921527A23900D9C718 /* GRMustacheTagDelegateTest.mustache */; };
 		56A8D4961527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4951527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache */; };
 		56A8D4971527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8D4951527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache */; };
+		56A937EB17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EA17B5459100E38188 /* GRMustacheExtendBaseContextTest.m */; };
+		56A937EC17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EA17B5459100E38188 /* GRMustacheExtendBaseContextTest.m */; };
+		56A937ED17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EA17B5459100E38188 /* GRMustacheExtendBaseContextTest.m */; };
+		56A937EF17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EE17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m */; };
+		56A937F017B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EE17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m */; };
+		56A937F117B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A937EE17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m */; };
 		56A9686B1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */; };
 		56A9686C1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */; };
 		56AC19BA163852CC009AAC1A /* GRMustacheRendering.h in Headers */ = {isa = PBXBuildFile; fileRef = 56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -473,6 +479,8 @@
 		56A8D48B15279F8A00D9C718 /* GRMustacheTagDelegateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTagDelegateTest.m; sourceTree = "<group>"; };
 		56A8D4921527A23900D9C718 /* GRMustacheTagDelegateTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTagDelegateTest.mustache; sourceTree = "<group>"; };
 		56A8D4951527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTagDelegateTest_wrapper.mustache; sourceTree = "<group>"; };
+		56A937EA17B5459100E38188 /* GRMustacheExtendBaseContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExtendBaseContextTest.m; sourceTree = "<group>"; };
+		56A937EE17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextHasValueForMustacheExpressionTest.m; sourceTree = "<group>"; };
 		56A9686A1642BC41009193BB /* GRMustacheProtectedContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheProtectedContextTest.m; sourceTree = "<group>"; };
 		56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheRendering.h; sourceTree = "<group>"; };
 		56B11A1316B3A581009F184F /* GRMustacheConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheConfiguration.h; sourceTree = "<group>"; };
@@ -832,6 +840,15 @@
 			name = Tags;
 			sourceTree = "<group>";
 		};
+		56A937E817B5447600E38188 /* v6.8 */ = {
+			isa = PBXGroup;
+			children = (
+				56A937EE17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m */,
+				56A937EA17B5459100E38188 /* GRMustacheExtendBaseContextTest.m */,
+			);
+			path = v6.8;
+			sourceTree = "<group>";
+		};
 		56B11A1116B3A4F6009F184F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -1035,6 +1052,7 @@
 				56DB555A16B9A1D6003685ED /* v6.4 */,
 				56C3C1EA1749376400A62E8D /* v6.6 */,
 				56C3C1F4174B401F00A62E8D /* v6.7 */,
+				56A937E817B5447600E38188 /* v6.8 */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -1558,6 +1576,8 @@
 				56C3C1F11749DBAA00A62E8D /* GRMustacheContextSubclassTest.m in Sources */,
 				56C3C1F7174B403700A62E8D /* GRMustacheContextValueForUndefinedMustacheKeyTest.m in Sources */,
 				56F422CB174B93DB00C38C7C /* GRMustacheContextSubclassTagDelegateTest.m in Sources */,
+				56A937EB17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */,
+				56A937EF17B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1641,6 +1661,8 @@
 				56C3C1F31749DBAA00A62E8D /* GRMustacheContextSubclassTest.m in Sources */,
 				56C3C1F9174B403700A62E8D /* GRMustacheContextValueForUndefinedMustacheKeyTest.m in Sources */,
 				56F422CD174B93DB00C38C7C /* GRMustacheContextSubclassTagDelegateTest.m in Sources */,
+				56A937ED17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */,
+				56A937F117B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1686,6 +1708,8 @@
 				56C3C1F21749DBAA00A62E8D /* GRMustacheContextSubclassTest.m in Sources */,
 				56C3C1F8174B403700A62E8D /* GRMustacheContextValueForUndefinedMustacheKeyTest.m in Sources */,
 				56F422CC174B93DB00C38C7C /* GRMustacheContextSubclassTagDelegateTest.m in Sources */,
+				56A937EC17B5459100E38188 /* GRMustacheExtendBaseContextTest.m in Sources */,
+				56A937F017B55C1800E38188 /* GRMustacheContextHasValueForMustacheExpressionTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
