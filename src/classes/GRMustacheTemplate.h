@@ -196,7 +196,7 @@
  *     [template importProtectedObject:object];
  *
  *     // Renders "gold"
- *     [template renderObject:@{ @"precious": @"lead" } @ error:NULL];
+ *     [template renderObject:@{ @"precious": @"lead" } error:NULL];
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *

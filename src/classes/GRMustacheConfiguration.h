@@ -209,7 +209,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  *     [configuration importObject:object];
  *
  *     // Renders "gold"
- *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } @ fromString:@"{{precious}}" error:NULL];
+ *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
