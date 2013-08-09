@@ -28,7 +28,7 @@ This version introduces a few convenience APIs, and deprecates a flawed method.
 @end
 ```
 
-Full documentation of the new APIs: [GRMustacheTemplate](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html), [GRMustacheConfiguration](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheConfiguration.html) and [GRMustacheContext](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the new APIs.
+Full documentation of the new APIs: [GRMustacheTemplate](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html), [GRMustacheConfiguration](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheConfiguration.html) and [GRMustacheContext](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html).
 
 ### Deprecated APIs:
 
