@@ -23,7 +23,6 @@ This version introduces a few convenience APIs, and deprecates a flawed method.
 @end
 
 @interface GRMustacheContext
-// Use the new hasValue:forMustacheExpression:error: method instead
 - (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error;
 @end
 ```
