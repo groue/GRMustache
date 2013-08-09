@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
+@protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheConfiguration.h
 typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
@@ -61,6 +62,15 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 
 // Documented in GRMustacheConfiguration.h
 @property (nonatomic, retain) GRMustacheContext *baseContext;
+
+// Documented in GRMustacheConfiguration.h
+- (void)importObject:(id)object GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheConfiguration.h
+- (void)importProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheConfiguration.h
+- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 /**
  * Whether the receiver is locked or not.

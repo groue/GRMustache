@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheContext;
+@protocol GRMustacheTagDelegate;
 
 /**
  * The content type of strings rendered by templates.
@@ -155,6 +156,94 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * @since v6.4
  */
 @property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+
+/**
+ * Extends the base context of the receiver with the provided object, making its
+ * keys available for all renderings.
+ *
+ * For example:
+ *
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ *
+ *     // Have the `name` key defined for all template renderings:
+ *     id object = @{ @"name": @"Arthur" };
+ *     [configuration importObject:object];
+ *
+ *     // Renders "Arthur"
+ *     [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+ *
+ * Keys defined by _object_ can be overriden by other objects that will
+ * eventually enter the context stack:
+ *
+ *     // Renders "Billy", not "Arthur"
+ *     [GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+ *
+ * This method is a shortcut. It is equivalent to the following line of code:
+ *
+ *     configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+ *
+ * @param object  An object
+ *
+ * @see baseContext
+ * @see importProtectedObject:
+ * @see importTagDelegate:
+ *
+ * @since v6.8
+ */
+#warning Missing availability macro
+- (void)importObject:(id)object;
+
+/**
+ * Extends the base context of the receiver with the provided object, making its
+ * keys available for all renderings.
+ *
+ * Keys defined by _object_ gets "protected", which means that they can not be
+ * overriden by other objects that will eventually enter the context stack.
+ *
+ * For example:
+ *
+ *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ *
+ *     // Have the `precious` key defined, and protected, for all template renderings:
+ *     id object = @{ @"precious": @"gold" };
+ *     [configuration importObject:object];
+ *
+ *     // Renders "gold"
+ *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } @ fromString:@"{{precious}}" error:NULL];
+ *
+ * This method is a shortcut. It is equivalent to the following line of code:
+ *
+ *     configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+ *
+ * @param object  An object
+ *
+ * @see baseContext
+ * @see importObject:
+ * @see importTagDelegate:
+ *
+ * @since v6.8
+ */
+#warning Missing availability macro
+- (void)importProtectedObject:(id)object;
+
+/**
+ * Extends the base context of the receiver with a tag delegate, making it aware
+ * of the rendering of all template tags.
+ *
+ * This method is a shortcut. It is equivalent to the following line of code:
+ *
+ *     configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+ *
+ * @param tagDelegate  A tag delegate
+ *
+ * @see baseContext
+ * @see importObject:
+ * @see importTagDelegate:
+ *
+ * @since v6.8
+ */
+#warning Missing availability macro
+- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate;
 
 /**
  * The content type of strings rendered by templates.

@@ -127,6 +127,21 @@
     }
 }
 
+- (void)importObject:(id)object
+{
+    self.baseContext = [self.baseContext contextByAddingObject:object];
+}
+
+- (void)importProtectedObject:(id)object
+{
+    self.baseContext = [self.baseContext contextByAddingProtectedObject:object];
+}
+
+- (void)importTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
+{
+    self.baseContext = [self.baseContext contextByAddingTagDelegate:tagDelegate];
+}
+
 
 #pragma mark - <NSCopying>
 
