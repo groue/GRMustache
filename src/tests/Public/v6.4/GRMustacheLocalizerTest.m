@@ -56,15 +56,21 @@
 
 - (void)testLocalizer
 {
-    NSString *testable = [self.localizer transformedValue:@"testable?"];
-    STAssertEqualObjects(testable, @"YES", @"");
+    NSString *templateString = @"{{localize(string)}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    id data = @{ @"localize": self.localizer, @"string": @"testable?" };
+    NSString *rendering = [template renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"YES", @"");
 }
 
 - (void)testLocalizerFromTable
 {
-    GRMustacheLocalizer *helper = [[[GRMustacheLocalizer alloc] initWithBundle:self.localizableBundle tableName:@"Table"] autorelease];
-    NSString *testable = [helper transformedValue:@"table_testable?"];
-    STAssertEqualObjects(testable, @"YES", @"");
+    NSString *templateString = @"{{localize(string)}}";
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+    GRMustacheLocalizer *localizer = [[[GRMustacheLocalizer alloc] initWithBundle:self.localizableBundle tableName:@"Table"] autorelease];
+    id data = @{ @"localize": localizer, @"string": @"table_testable?" };
+    NSString *rendering = [template renderObject:data error:NULL];
+    STAssertEqualObjects(rendering, @"YES", @"");
 }
 
 - (void)testDefaultLocalizerAsFilter
@@ -253,6 +259,31 @@
         NSString *rendering = [template renderObject:data error:NULL];
         STAssertEqualObjects(rendering, @"..&..", @"");
     }
+}
+
+- (void)testLocalizerAppliesPostRendering
+{
+    id data = @{ @"localize": self.localizer,
+                 @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+                     return @"<>";
+                 }]};
+    
+    NSString *templateString = @"<{{ value }}|{{ localize(value) }}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<&lt;&gt;|translated_&lt;&gt;>", @"");
+}
+
+- (void)testLocalizerPreservesHTMLSafety
+{
+    id data = @{ @"localize": self.localizer,
+                 @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+                     *HTMLSafe = YES;
+                     return @"<>";
+                 }]};
+    
+    NSString *templateString = @"<{{ value }}|{{ localize(value) }}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<<>|translated_<>>", @"");
 }
 
 @end

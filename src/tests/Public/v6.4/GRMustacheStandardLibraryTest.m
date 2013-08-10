@@ -88,4 +88,31 @@
     }
 }
 
+- (void)testCapitalizedAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"aB"; }]};
+    
+    NSString *templateString = @"<{{ capitalized(value) }}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<Ab>", @"");
+}
+
+- (void)testLowercaseAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"aB"; }]};
+    
+    NSString *templateString = @"<{{ lowercase(value) }}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<ab>", @"");
+}
+
+- (void)testUppercaseAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"aB"; }]};
+    
+    NSString *templateString = @"<{{ uppercase(value) }}>";
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+    STAssertEqualObjects(rendering, @"<AB>", @"");
+}
+
 @end

@@ -281,9 +281,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
+        id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
+            return [[value description] uppercaseString];
+        }];
+        
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{filter(subject)}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
-        NSString *rendering = [template renderObject:nil error:NULL];
+        NSString *rendering = [template renderObject:@{@"filter": filter} error:NULL];
         
         STAssertEqualObjects(rendering, @"", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -301,9 +305,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject)}}" error:NULL];
+        id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
+            return [[value description] uppercaseString];
+        }];
+        
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{filter(subject)}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo", @"filter":filter} error:NULL];
         
         STAssertEqualObjects(rendering, @"FOO", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
@@ -320,13 +328,17 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(subject).length}}" error:NULL];
-        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
-        NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
+        id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
+            return [[value description] stringByAppendingString:@"!"];
+        }];
         
-        STAssertEqualObjects(rendering, @"3", @"");
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{filter(subject).length}}" error:NULL];
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
+        NSString *rendering = [template renderObject:@{@"subject":@"foo", @"filter":filter} error:NULL];
+        
+        STAssertEqualObjects(rendering, @"4", @"");
         STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(renderedObject, @3, @"");
+        STAssertEqualObjects(renderedObject, @4, @"");
     }
 }
 

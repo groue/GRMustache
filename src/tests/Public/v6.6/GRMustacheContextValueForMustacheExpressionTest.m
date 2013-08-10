@@ -58,7 +58,10 @@
 - (void)testValueForMustacheExpression
 {
     GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
-    id data = @{ @"name": @"name1", @"a": @{ @"name": @"name2" }};
+    id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
+        return [[value description] uppercaseString];
+    }];
+    id data = @{ @"name": @"name1", @"a": @{ @"name": @"name2" }, @"filter": filter };
     context = [context contextByAddingObject:data];
     {
         id value = [context valueForMustacheExpression:@"." error:NULL];
@@ -73,7 +76,7 @@
         STAssertEqualObjects(value, @"name2", @"");
     }
     {
-        id value = [context valueForMustacheExpression:@"uppercase(a.name)" error:NULL];
+        id value = [context valueForMustacheExpression:@"filter(a.name)" error:NULL];
         STAssertEqualObjects(value, @"NAME2", @"");
     }
 }
