@@ -30,7 +30,7 @@
 #pragma mark - GRMustacheURLEscapeFilter
 
 @interface GRMustacheURLEscapeFilter()
-+ (NSString *)escape:(NSString *)string;
+- (NSString *)escape:(NSString *)string;
 @end
 
 @implementation GRMustacheURLEscapeFilter
@@ -42,22 +42,18 @@
  */
 - (id)transformedValue:(id)object
 {
-    // We need to escape the rendering of the object, not the object itself.
+    // Our transformation applies to strings, not to objects of type `id`.
     //
-    // We do not have the rendering yet: so build a rendering object that
-    // will eventually be able to get the rendering of the object, and apply
-    // our escaping.
+    // So let's transform the *rendering* of the object, not the object itself.
+    //
+    // However, we do not have the rendering yet. So we return a rendering
+    // object that will eventually render the object, and transform the
+    // rendering.
     
     return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        
         id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
         NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-        
-        if (!rendering) {
-            return nil;
-        }
-        
-        return [GRMustacheURLEscapeFilter escape:rendering];
+        return [self escape:rendering];
     }];
 }
 
@@ -112,9 +108,8 @@
 
 #pragma mark - Private
 
-+ (NSString *)escape:(NSString *)string
+- (NSString *)escape:(NSString *)string
 {
-    
     // Perform a first escaping using Apple's implementation.
     // It leaves many character unescaped. We'll have to go further.
     
