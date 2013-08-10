@@ -1,5 +1,6 @@
 TODO:
 - weak/assign/unsafe_unretained GRMustacheContext managed properties
+- Introduce [GRMustacheTagDelegate mustacheTag:willRenderObject:as:] in order to let tag delegate process the rendering of inner tags
 
 Nice to have:
 - document migration path from all previous versions to latest version
