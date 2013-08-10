@@ -21,9 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheURLLibrary_private.h"
-#import "GRMustacheTag.h"
-#import "GRMustacheContext.h"
-#import "GRMustache.h"
+#import "GRMustacheTag_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustache_private.h"
 
 
 // =============================================================================
