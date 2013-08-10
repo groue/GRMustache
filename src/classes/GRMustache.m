@@ -313,6 +313,10 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 - (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
+    if (block == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"Can't build a rendering object with a nil block."];
+    }
+    
     self = [super init];
     if (self) {
         _block = [block copy];
@@ -322,9 +326,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    if (!_block) {
-        return @"";
-    }
     return _block(tag, context, HTMLSafe, error);
 }
 
