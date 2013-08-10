@@ -306,7 +306,8 @@
  * Returns the value stored in the context stack for the given key.
  *
  * If you want the value for an full expression such as @"user.name" or
- * @"uppercase(user.name)", use the valueForMustacheExpression:error: method.
+ * @"uppercase(user.name)", use the hasValue:forMustacheExpression:error:
+ * method.
  *
  * ### Search Pattern for valueForMustacheKey:
  *
@@ -336,7 +337,7 @@
  * @return The value found in the context stack for the given key.
  *
  * @see valueForUndefinedMustacheKey:
- * @see valueForMustacheExpression:error:
+ * @see hasValue:forMustacheExpression:error:
  *
  * @since v6.6
  */
@@ -355,7 +356,7 @@
  * @return The value for the given key.
  *
  * @see valueForMustacheKey:
- * @see valueForMustacheExpression:error:
+ * @see hasValue:forMustacheExpression:error:
  *
  * @since v6.7
  */
@@ -395,8 +396,8 @@
  *
  * @return YES if the value could be computed.
  *
+ * @see valueForMustacheKey:
  * @see valueForUndefinedMustacheKey:
- * @see valueForMustacheExpression:error:
  *
  * @since v6.8
  */

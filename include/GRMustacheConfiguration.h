@@ -57,6 +57,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
 /**
  * A GRMustacheConfiguration instance configures GRMustache rendering.
  *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/configuration.md
+ *
  * The default configuration [GRMustacheConfiguration defaultConfiguration]
  * applies to all GRMustache rendering by default:
  *
@@ -89,8 +91,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
  * The `tagStartDelimiter` and `tagEndDelimiter` options can also be specified
  * at the template level, using a "Set Delimiters tag": see the documentation of
  * these properties.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/configuration.md
  *
  * @see GRMustacheTemplateRepository
  *

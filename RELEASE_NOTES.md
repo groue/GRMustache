@@ -3,6 +3,13 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.8.1
+
+Bug fixes:
+
+- `HTML.escape`, `javascript.escape` and `URL.escape` are now able to escape the rendering of your custom rendering objects.
+
+
 ## v6.8
 
 This version introduces a few convenience APIs, and deprecates a flawed method.
