@@ -50,7 +50,7 @@
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     
     __block BOOL success = YES;
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         success = NO;
     };
     
@@ -74,7 +74,7 @@
         preRenderingTagType = tag.type;
         return @"delegate";
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
@@ -100,7 +100,7 @@
         preRenderingTagType = tag.type;
         return object;
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderingTagType = tag.type;
     };
     
@@ -142,7 +142,7 @@
         }
         return object;
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         ++templateDidInterpretCount;
         switch (templateDidInterpretCount) {
             case 1:
@@ -740,7 +740,7 @@
         preRenderingTagType = tag.type;
         return @"delegate";
     };
-    delegate.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         postRenderedObjet = object;
         postRenderingTagType = tag.type;
     };
@@ -755,37 +755,122 @@
     STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
+- (void)testTagDidRenderObjectAs
+{
+    __block NSString *recordedRendering = nil;
+    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+        [recordedRendering autorelease];
+        recordedRendering = [rendering retain];
+    };
+    [recordedRendering autorelease];
+    
+    id data = @{ @"value" : [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"<>"; }]};
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{value}}-" error:NULL];
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"-&lt;&gt;-", @"");
+        STAssertEqualObjects(recordedRendering, @"&lt;&gt;", @"");
+    }
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{{value}}}-" error:NULL];
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertEqualObjects(rendering, @"-<>-", @"");
+        STAssertEqualObjects(recordedRendering, @"<>", @"");
+    }
+}
+
+- (void)testTagDidFailRenderObject
+{
+    __block NSError *recordedError = nil;
+    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate.mustacheTagDidFailBlock = ^(GRMustacheTag *tag, id object, NSError *error) {
+        [recordedError autorelease];
+        recordedError = [error retain];
+    };
+    [recordedError autorelease];
+    
+    id data = @{ @"value" : [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        *error = [NSError errorWithDomain:@"delegateError" code:0 userInfo:nil];
+        return nil;
+    }]};
+    
+    {
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{value}}-" error:NULL];
+        template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
+        NSString *rendering = [template renderObject:data error:NULL];
+        STAssertNil(rendering, @"");
+        STAssertNotNil(recordedError, @"");
+        STAssertEqualObjects(recordedError.domain, @"delegateError", @"");
+    }
+}
+
 - (void)testTagDelegateOrdering
 {
-    GRMustacheTestingDelegate *uppercaseDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    uppercaseDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [[object description] uppercaseString];
+    id observedObject = [[[NSObject alloc] init] autorelease];
+    __block NSUInteger willRenderIndex = 0;
+    __block NSUInteger didRenderAsIndex = 0;
+    
+    __block NSUInteger willRenderIndex1;
+    __block NSUInteger didRenderAsIndex1;
+    GRMustacheTestingDelegate *delegate1 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate1.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        if (object == observedObject) {
+            willRenderIndex1 = willRenderIndex++;
         }
         return object;
     };
+    delegate1.mustacheTagDidRenderAsBlock = ^void(GRMustacheTag *tag, id object, NSString *rendering) {
+        if (object == observedObject) {
+            didRenderAsIndex1 = didRenderAsIndex++;
+        }
+    };
     
-    GRMustacheTestingDelegate *prefixDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    prefixDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"prefix%@", object];
+    __block NSUInteger willRenderIndex2;
+    __block NSUInteger didRenderAsIndex2;
+    GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate2.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        if (object == observedObject) {
+            willRenderIndex2 = willRenderIndex++;
         }
         return object;
     };
+    delegate2.mustacheTagDidRenderAsBlock = ^void(GRMustacheTag *tag, id object, NSString *rendering) {
+        if (object == observedObject) {
+            didRenderAsIndex2 = didRenderAsIndex++;
+        }
+    };
     
-    GRMustacheTestingDelegate *wrapDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    wrapDelegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return [NSString stringWithFormat:@"(%@)", object];
+    __block NSUInteger willRenderIndex3;
+    __block NSUInteger didRenderAsIndex3;
+    GRMustacheTestingDelegate *delegate3 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    delegate3.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        if (object == observedObject) {
+            willRenderIndex3 = willRenderIndex++;
         }
         return object;
     };
+    delegate3.mustacheTagDidRenderAsBlock = ^void(GRMustacheTag *tag, id object, NSString *rendering) {
+        if (object == observedObject) {
+            didRenderAsIndex3 = didRenderAsIndex++;
+        }
+    };
     
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#prefix}}{{value}} {{#uppercase}}{{value}}{{/uppercase}}{{/prefix}} {{#uppercase}}{{value}} {{#prefix}}{{value}}{{/prefix}}{{/uppercase}} {{value}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingTagDelegate:wrapDelegate];
-    NSString *rendering = [template renderObject:@{@"prefix":prefixDelegate, @"uppercase":uppercaseDelegate, @"value":@"foo"} error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#delegate2}}{{#delegate3}}{{value}}{{/}}{{/}}" error:NULL];
+    template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate1];
+    id data = @{ @"delegate2": delegate2, @"delegate3": delegate3, @"value": observedObject };
+    [template renderObject:data error:NULL];
     
-    STAssertEqualObjects(rendering, @"(prefixfoo) (prefixFOO) (FOO) (PREFIXFOO) (foo)", @"");
+    STAssertEquals(willRenderIndex1, (NSUInteger)2, @"");
+    STAssertEquals(willRenderIndex2, (NSUInteger)1, @"");
+    STAssertEquals(willRenderIndex3, (NSUInteger)0, @"");
+    
+    STAssertEquals(didRenderAsIndex1, (NSUInteger)0, @"");
+    STAssertEquals(didRenderAsIndex2, (NSUInteger)1, @"");
+    STAssertEquals(didRenderAsIndex3, (NSUInteger)2, @"");
 }
 
 - (void)testTagDelegatePreAndPostHooksConsistency
@@ -794,7 +879,7 @@
     delegate1.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         return @"1";
     };
-    delegate1.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate1.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         STAssertEqualObjects(object, @"1", @"");
     };
 
@@ -802,7 +887,7 @@
     delegate2.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
         return @"2";
     };
-    delegate2.mustacheTagDidRenderBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
+    delegate2.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
         STAssertEqualObjects(object, @"2", @"");
     };
     

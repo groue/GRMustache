@@ -5,10 +5,6 @@ Nice to have:
 - document migration path from all previous versions to latest version
 - > But they do allow Xcode to see the symbols when creating the final executable and allow the static library symbols to get included in the final DSYM file thereby allowing full symoblication of crash reports. (https://github.com/RestKit/RestKit/issues/1277)
 
-Missing tests:
-- test mustacheTag:didRenderObject:as:
-- test mustacheTag:didFailRenderingObject:withError:
-
 Experiments:
 - {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
 - Have filters put something in the scope: in `{{ dateFormat(date, ISO_8601) }}`, ISO_8601 would be defined by the dateFormat filter.
