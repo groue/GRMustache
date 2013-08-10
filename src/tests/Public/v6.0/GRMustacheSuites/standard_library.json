@@ -8,6 +8,12 @@
       "expected": "Edgar Allan Poe"
     },
     {
+      "name": "`capitalized` filter should not mess with HTML escaping.",
+      "data": "<&lT;>",
+      "template": "{{ capitalized(.) }}",
+      "expected": "&lt;&amp;Lt;&gt;"
+    },
+    {
       "name": "`capitalized` filter should be unicode-aware.",
       "data": "éÉ πΠ ßß ﬁﬁ œŒ ΣΣ ıI",
       "template": "{{ capitalized(.) }}",
@@ -22,6 +28,12 @@
       "expected": "edgar allan poe"
     },
     {
+      "name": "`lowercase` filter should not mess with HTML escaping.",
+      "data": "<&lT;>",
+      "template": "{{ lowercase(.) }}",
+      "expected": "&lt;&amp;lt;&gt;"
+    },
+    {
       "name": "`lowercase` filter should be unicode-aware.",
       "data": "ΣÉΠŒIΣ",
       "template": "{{ lowercase(.) }}",
@@ -34,6 +46,12 @@
       "data": "EDGAR allan poE",
       "template": "{{ uppercase(.) }}",
       "expected": "EDGAR ALLAN POE"
+    },
+    {
+      "name": "`uppercase` filter should not mess with HTML escaping.",
+      "data": "<&lT;>",
+      "template": "{{ uppercase(.) }}",
+      "expected": "&lt;&amp;LT;&gt;"
     },
     {
       "name": "`uppercase` filter should be unicode-aware.",

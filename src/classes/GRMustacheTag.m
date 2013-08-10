@@ -183,10 +183,9 @@
             
             // Render value
         
-            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
             BOOL objectHTMLSafe = NO;
             NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
-            NSString *rendering = [renderingObject renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
+            NSString *rendering = [[GRMustache renderingObjectForObject:object] renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
             
             if (rendering == nil && renderingError == nil)
             {
