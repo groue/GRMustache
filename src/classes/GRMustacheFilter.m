@@ -83,6 +83,10 @@
 
 - (id)initWithBlock:(id(^)(id value))block
 {
+    if (block == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"Can't build a filter with a nil block."];
+    }
+    
     self = [self init];
     if (self) {
         _block = [block copy];
@@ -101,11 +105,7 @@
 
 - (id)transformedValue:(id)object
 {
-    if (_block) {
-        return _block(object);
-    }
-    
-    return nil;
+    return _block(object);
 }
 
 @end
@@ -118,6 +118,10 @@
 
 - (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
 {
+    if (block == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"Can't build a filter with a nil block."];
+    }
+    
     self = [self init];
     if (self) {
         _block = [block copy];
@@ -138,11 +142,8 @@
 
 - (id)transformedValue:(id)object
 {
-    if (_block) {
-        NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
-        return _block(arguments);
-    }
-    return nil;
+    NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
+    return _block(arguments);
 }
 
 - (id<GRMustacheFilter>)filterByCurryingArgument:(id)object
