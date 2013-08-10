@@ -3,6 +3,11 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.8.2
+
+Fix design bugs introduced by v6.8.1. `HTML.escape`, `javascript.escape` and `URL.escape` are no longer able to escape the rendering of your custom rendering objects: they must be given plain strings.
+
+
 ## v6.8.1
 
 Bug fixes:
