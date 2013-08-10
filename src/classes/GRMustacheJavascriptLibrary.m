@@ -42,20 +42,16 @@
  */
 - (id)transformedValue:(id)object
 {
-    // Our transformation applies to strings, not to objects of type `id`.
-    //
-    // So let's transform the *rendering* of the object, not the object itself.
-    //
-    // However, we do not have the rendering yet. So we return a rendering
-    // object that will eventually render the object, and transform the
-    // rendering.
+    // Specific case for [NSNull null]
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
-        NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-        return [self escape:rendering];
-    }];
+    if (object == [NSNull null]) {
+        return @"";
+    }
     
+    // Turns other objects into strings, and escape
+    
+    NSString *string = [object description];
+    return [self escape:string];
 }
 
 

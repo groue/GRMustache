@@ -261,29 +261,4 @@
     }
 }
 
-- (void)testLocalizerAppliesPostRendering
-{
-    id data = @{ @"localize": self.localizer,
-                 @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-                     return @"<>";
-                 }]};
-    
-    NSString *templateString = @"<{{ value }}|{{ localize(value) }}>";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<&lt;&gt;|translated_&lt;&gt;>", @"");
-}
-
-- (void)testLocalizerPreservesHTMLSafety
-{
-    id data = @{ @"localize": self.localizer,
-                 @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-                     *HTMLSafe = YES;
-                     return @"<>";
-                 }]};
-    
-    NSString *templateString = @"<{{ value }}|{{ localize(value) }}>";
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
-    STAssertEqualObjects(rendering, @"<<>|translated_<>>", @"");
-}
-
 @end

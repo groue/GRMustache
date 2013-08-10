@@ -34,18 +34,16 @@
 
 - (id)transformedValue:(id)object
 {
-    // Our transformation applies to strings, not to objects of type `id`.
-    //
-    // So let's transform the *rendering* of the object, not the object itself.
-    //
-    // However, we do not have the rendering yet. So we return a rendering
-    // object that will eventually render the object, and transform the
-    // rendering.
+    // Specific case for [NSNull null]
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *rendering = [[GRMustache renderingObjectForObject:object] renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-        return [rendering capitalizedString];
-    }];
+    if (object == [NSNull null]) {
+        return @"";
+    }
+    
+    // Turns other objects into strings, and transform
+    
+    NSString *string = [object description];
+    return [string capitalizedString];
 }
 
 @end
@@ -60,18 +58,16 @@
 
 - (id)transformedValue:(id)object
 {
-    // Our transformation applies to strings, not to objects of type `id`.
-    //
-    // So let's transform the *rendering* of the object, not the object itself.
-    //
-    // However, we do not have the rendering yet. So we return a rendering
-    // object that will eventually render the object, and transform the
-    // rendering.
+    // Specific case for [NSNull null]
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *rendering = [[GRMustache renderingObjectForObject:object] renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-        return [rendering lowercaseString];
-    }];
+    if (object == [NSNull null]) {
+        return @"";
+    }
+    
+    // Turns other objects into strings, and transform
+    
+    NSString *string = [object description];
+    return [string lowercaseString];
 }
 
 @end
@@ -86,18 +82,16 @@
 
 - (id)transformedValue:(id)object
 {
-    // Our transformation applies to strings, not to objects of type `id`.
-    //
-    // So let's transform the *rendering* of the object, not the object itself.
-    //
-    // However, we do not have the rendering yet. So we return a rendering
-    // object that will eventually render the object, and transform the
-    // rendering.
+    // Specific case for [NSNull null]
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *rendering = [[GRMustache renderingObjectForObject:object] renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-        return [rendering uppercaseString];
-    }];
+    if (object == [NSNull null]) {
+        return @"";
+    }
+    
+    // Turns other objects into strings, and transform
+    
+    NSString *string = [object description];
+    return [string uppercaseString];
 }
 
 @end
