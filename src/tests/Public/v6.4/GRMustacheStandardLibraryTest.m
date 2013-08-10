@@ -40,4 +40,52 @@
     STAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
 }
 
+- (void)testHTMLescapeAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"<>"; }]};
+    
+    {
+        NSString *templateString = @"<{{ HTML.escape(value) }}>";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"<&amp;lt;&amp;gt;>", @"");
+    }
+    {
+        NSString *templateString = @"{{# HTML.escape }}<{{ value }} {{{ value }}}>{{/}}";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"<&amp;lt;&amp;gt; &lt;&gt;>", @"");
+    }
+}
+
+- (void)testJavascriptEscapeAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"\"string\""; }]};
+    
+    {
+        NSString *templateString = @"\"{{ javascript.escape(value) }}\"";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"\"\\u0022string\\u0022\"", @"");
+    }
+    {
+        NSString *templateString = @"{{# javascript.escape }}\"{{ value }}\"{{/}}";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"\"\\u0022string\\u0022\"", @"");
+    }
+}
+
+- (void)testURLEscapeAppliesPostRendering
+{
+    id data = @{ @"value": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"?"; }]};
+    
+    {
+        NSString *templateString = @"<{{ URL.escape(value) }}>";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"<%3F>", @"");
+    }
+    {
+        NSString *templateString = @"{{# URL.escape }}<{{ value }}>{{/}}";
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:templateString error:NULL];
+        STAssertEqualObjects(rendering, @"<%3F>", @"");
+    }
+}
+
 @end

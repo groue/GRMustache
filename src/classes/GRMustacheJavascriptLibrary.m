@@ -23,10 +23,15 @@
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheTag.h"
 #import "GRMustacheContext.h"
+#import "GRMustache.h"
 
 
 // =============================================================================
 #pragma mark - GRMustacheJavascriptEscaper
+
+@interface GRMustacheJavascriptEscaper()
++ (NSString *)escape:(NSString *)string;
+@end
 
 @implementation GRMustacheJavascriptEscaper
 
@@ -37,14 +42,79 @@
  */
 - (id)transformedValue:(id)object
 {
-    // Specific case for [NSNull null] and empty strings
+    // We need to escape the rendering of the object, not the object itself.
+    //
+    // We do not have the rendering yet: so build a rendering object that
+    // will eventually be able to get the rendering of the object, and apply
+    // our escaping.
     
-    if (object == [NSNull null]) {
-        return @"";
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+        
+        if (!rendering) {
+            return nil;
+        }
+        
+        return [GRMustacheJavascriptEscaper escape:rendering];
+    }];
+    
+}
+
+
+#pragma mark - <GRMustacheRendering>
+
+/**
+ * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
+ */
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ javascript.escape }}
+            // Behave as a regular object: render self's description
+            if (HTMLSafe != NULL) { *HTMLSafe = NO; }
+            return [self description];
+            
+        case GRMustacheTagTypeInvertedSection:
+            // {{^ javascript.escape }}...{{/ javascript.escape }}
+            // Behave as a truthy object: don't render for inverted sections
+            return nil;
+            
+        default:
+            // {{# javascript.escape }}...{{/ javascript.escape }}
+            // {{$ javascript.escape }}...{{/ javascript.escape }}
+            
+            // Render normally, but listen to all inner tags rendering, so that
+            // we can format them. See mustacheTag:willRenderObject: below.
+            context = [context contextByAddingTagDelegate:self];
+            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    }
+}
+
+
+#pragma mark - <GRMustacheTagDelegate>
+
+/**
+ * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
+ */
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+{
+    // Process {{ value }}
+    if (tag.type == GRMustacheTagTypeVariable) {
+        return [self transformedValue:object];
     }
     
-    NSString *string = [object description];
-    
+    // Don't process {{# value }}, {{^ value }}, {{$ value }}
+    return object;
+}
+
+
+#pragma mark - Private
+
++ (NSString *)escape:(NSString *)string
+{
     NSUInteger length = [string length];
     if (length == 0) {
         return string;
@@ -170,54 +240,6 @@
         CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
     }
     return buffer;
-}
-
-
-#pragma mark - <GRMustacheRendering>
-
-/**
- * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
- */
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    switch (tag.type) {
-        case GRMustacheTagTypeVariable:
-            // {{ javascript.escape }}
-            // Behave as a regular object: render self's description
-            if (HTMLSafe != NULL) { *HTMLSafe = NO; }
-            return [self description];
-            
-        case GRMustacheTagTypeInvertedSection:
-            // {{^ javascript.escape }}...{{/ javascript.escape }}
-            // Behave as a truthy object: don't render for inverted sections
-            return nil;
-            
-        default:
-            // {{# javascript.escape }}...{{/ javascript.escape }}
-            // {{$ javascript.escape }}...{{/ javascript.escape }}
-            
-            // Render normally, but listen to all inner tags rendering, so that
-            // we can format them. See mustacheTag:willRenderObject: below.
-            context = [context contextByAddingTagDelegate:self];
-            return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-    }
-}
-
-
-#pragma mark - <GRMustacheTagDelegate>
-
-/**
- * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
- */
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
-{
-    // Process {{ value }}
-    if (tag.type == GRMustacheTagTypeVariable) {
-        return [self transformedValue:object];
-    }
-    
-    // Don't process {{# value }}, {{^ value }}, {{$ value }}
-    return object;
 }
 
 @end

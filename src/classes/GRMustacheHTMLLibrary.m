@@ -37,16 +37,27 @@
  */
 - (id)transformedValue:(id)object
 {
-    // Specific case for [NSNull null]
+    // We need to escape the rendering of the object, not the object itself.
+    //
+    // We do not have the rendering yet: so build a rendering object that
+    // will eventually be able to get the rendering of the object, and apply
+    // our escaping.
     
-    if (object == [NSNull null]) {
-        return @"";
-    }
-    
-    // Turns other objects into strings, and escape
-    
-    NSString *string = [object description];
-    return [GRMustache escapeHTML:string];
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        
+        // Render object
+        
+        id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+        
+        if (!rendering) {
+            return nil;
+        }
+        
+        // Escape
+        
+        return [GRMustache escapeHTML:rendering];
+    }];
 }
 
 
