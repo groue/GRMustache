@@ -399,11 +399,11 @@ struct GRPoint {
     STAssertTrue([context respondsToSelector:@selector(setAge:)], @"");
     STAssertTrue([context respondsToSelector:@selector(point)], @"");
     STAssertTrue([context respondsToSelector:@selector(setPoint:)], @"");
-    STAssertTrue([context respondsToSelector:@selector(propertyWithCustomGetter)], @"");
+    STAssertTrue([context respondsToSelector:sel_registerName("propertyWithCustomGetter")], @"");           // Use sel_registerName instead of @selector so that we avoid triggering -Wundeclared-selector
     STAssertTrue([context respondsToSelector:@selector(getPropertyWithCustomGetter)], @"");
-    STAssertTrue(![context respondsToSelector:@selector(setPropertyWithCustomSetter:)], @"");
+    STAssertTrue(![context respondsToSelector:sel_registerName("setPropertyWithCustomSetter:")], @"");      // Use sel_registerName instead of @selector so that we avoid triggering -Wundeclared-selector
     STAssertTrue([context respondsToSelector:@selector(updatePropertyWithCustomSetter:)], @"");
-    STAssertTrue(![context respondsToSelector:@selector(setPointPropertyWithCustomSetter:)], @"");
+    STAssertTrue(![context respondsToSelector:sel_registerName("setPointPropertyWithCustomSetter:")], @""); // Use sel_registerName instead of @selector so that we avoid triggering -Wundeclared-selector
     STAssertTrue([context respondsToSelector:@selector(updatePointPropertyWithCustomSetter:)], @"");
     
     [string appendString:@"bar"];
