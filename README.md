@@ -190,7 +190,7 @@ Who's using GRMustache
 * [MyInvoice](http://www.myinvoice.biz/en), an invoicing iOS app.
 * [Servus](https://servus.io) can turn any file on your computer into a branded download page hosted on Dropbox.
 
-Do you use GRMustache? [Tweet me](http://twitter.com/GRMustache) your link.
+Do you use GRMustache? [Tweet me your story and your link](http://twitter.com/GRMustache).
 
 
 Contribution wish-list
