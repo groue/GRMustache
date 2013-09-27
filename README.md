@@ -25,15 +25,27 @@ You have three options, from the simplest to the hairiest:
 
 ```objc
 #import "GRMustache.h"
+```
 
+One-liners:
+
+```objc
 // Renders "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:@{ @"name": @"Arthur" }
-                                            fromString:@"Hello {{name}}!"
-                                                 error:NULL];
+NSString *rendering = [GRMustacheTemplate renderObject:@{ @"name": @"Arthur" } fromString:@"Hello {{name}}!" error:NULL];
+```
 
-// Renders a document from the `Profile.mustache` resource
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
-NSString *rendering = [template renderObject:self.currentUser error:NULL];
+```objc
+// Renders the `Profile.mustache` resource of the main bundle
+NSString *rendering = [GRMustacheTemplate renderObject:user fromResource:@"Profile" bundle:nil error:NULL];
+```
+
+Reuse templates in order to avoid parsing the same template several times:
+
+```objc
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:nil];
+rendering = [template renderObject:arthur error:NULL];
+rendering = [template renderObject:barbara error:NULL];
+rendering = ...
 ```
 
 [GRMustachio](https://github.com/mugginsoft/GRMustachio) by Jonathan Mitchell is "A super simple, interactive GRMustache based application". It can help you design and test your templates.
