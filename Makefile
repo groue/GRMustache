@@ -15,37 +15,37 @@ lib/libGRMustache6-MacOS.a: build/MacOS/Release/libGRMustache6-MacOS.a
 
 build/GRMustache6-iOS/Release-iphoneos/libGRMustache6-iOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-               -target GRMustache6-iOS \
-               -configuration Release \
-               build SYMROOT=../build/GRMustache6-iOS
+	           -target GRMustache6-iOS \
+	           -configuration Release \
+	           build SYMROOT=../build/GRMustache6-iOS
 
 build/GRMustache6-iOS-arm64/Release-iphoneos/libGRMustache6-iOS-arm64.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-               -target GRMustache6-iOS-arm64 \
-               -configuration Release \
-               build SYMROOT=../build/GRMustache6-iOS-arm64
+	           -target GRMustache6-iOS-arm64 \
+	           -configuration Release \
+	           build SYMROOT=../build/GRMustache6-iOS-arm64
 
 build/GRMustache6-iphonesimulator/Release-iphonesimulator/libGRMustache6-iOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-               -target GRMustache6-iOS \
-               -configuration Release \
-               -sdk iphonesimulator \
-               -arch "i386" \
-               build SYMROOT=../build/GRMustache6-iphonesimulator
+	           -target GRMustache6-iOS \
+	           -configuration Release \
+	           -sdk iphonesimulator \
+	           -arch "i386" \
+	           build SYMROOT=../build/GRMustache6-iphonesimulator
 
 build/GRMustache6-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache6-iOS-arm64.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-               -target GRMustache6-iOS-arm64 \
-               -configuration Release \
-               -sdk iphonesimulator \
-               -arch "x86_64" \
-               build SYMROOT=../build/GRMustache6-iphonesimulator-x86_64
+	           -target GRMustache6-iOS-arm64 \
+	           -configuration Release \
+	           -sdk iphonesimulator \
+	           -arch "x86_64" \
+	           build SYMROOT=../build/GRMustache6-iphonesimulator-x86_64
                                                                                                                                     
 build/MacOS/Release/libGRMustache6-MacOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-               -target GRMustache6-MacOS \
-               -configuration Release \
-               build SYMROOT=../build/MacOS
+	           -target GRMustache6-MacOS \
+	           -configuration Release \
+	           build SYMROOT=../build/MacOS
 
 include/GRMustache.h: build/MacOS/Release/libGRMustache6-MacOS.a
 	cp -R build/MacOS/Release/usr/local/include .
