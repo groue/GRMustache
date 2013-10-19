@@ -634,6 +634,7 @@
 		569EB2E4164030E100C09632 /* GRMustacheAccumulatorTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheAccumulatorTag.m; sourceTree = "<group>"; };
 		56A731121805258300B8570A /* libGRMustache6-iOS-arm64.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libGRMustache6-iOS-arm64.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A731681805276A00B8570A /* GRMustache6-iOS-arm64-Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GRMustache6-iOS-arm64-Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A731B818123F1900B8570A /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../Makefile; sourceTree = "<group>"; };
 		56A8D48B15279F8A00D9C718 /* GRMustacheTagDelegateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTagDelegateTest.m; sourceTree = "<group>"; };
 		56A8D4921527A23900D9C718 /* GRMustacheTagDelegateTest.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTagDelegateTest.mustache; sourceTree = "<group>"; };
 		56A8D4951527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GRMustacheTagDelegateTest_wrapper.mustache; sourceTree = "<group>"; };
@@ -1082,6 +1083,7 @@
 			isa = PBXGroup;
 			children = (
 				5662BA3E15A05268001FD2CA /* AppledocSettings.plist */,
+				56A731B818123F1900B8570A /* Makefile */,
 				56E2F2E616BA49A500F01DC2 /* TODO.txt */,
 				567AEC4E15278C9A0009CA61 /* GRMustache */,
 				56DEC3AE152638CD0031E8DC /* Tests */,
