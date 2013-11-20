@@ -29,13 +29,6 @@
 @protocol GRMustacheTemplateComponent;
 @class GRMustacheTemplateOverride;
 
-#if !defined(NS_BLOCK_ASSERTIONS)
-/**
- * This global variable is used by GRPreventNSUndefinedKeyExceptionAttackTest.
- */
-extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
-#endif
-
 /**
  * The GRMustacheContext maintains the following stacks:
  *
@@ -101,28 +94,6 @@ extern BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
 
     NSDictionary *_depthsForAncestors;
 }
-
-/**
- * Avoids most NSUndefinedException to be raised by the invocation of
- * `valueForKey:inObject:`.
- *
- * @see valueForKey:inObject:
- */
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
-
-/**
- * Sends the `valueForKey:` message to _object_ with the provided _key_, and
- * returns the result.
- *
- * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
- *
- * @param key     The searched key
- * @param object  The queried object
- *
- * @return `[object valueForKey:key]`, or nil should an NSUndefinedKeyException
- *         be raised.
- */
-+ (id)valueForKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheContext.h
 + (instancetype)context GRMUSTACHE_API_PUBLIC;

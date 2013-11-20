@@ -22,7 +22,7 @@
 
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheKeyAccess_private.h"
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) GRMustacheExpression *baseExpression;
@@ -88,7 +88,7 @@
         *protected = NO;
     }
     if (value) {
-        *value = [GRMustacheContext valueForKey:_scopeIdentifier inObject:scopedValue];
+        *value = [GRMustacheKeyAccess valueForMustacheKey:_scopeIdentifier inObject:scopedValue];
     }
     return YES;
 }

@@ -22,6 +22,7 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustacheKeyAccess_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheStandardLibrary_private.h"
 #import "GRMustacheJavascriptLibrary_private.h"
@@ -150,7 +151,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {
-    [GRMustacheContext preventNSUndefinedKeyExceptionAttack];
+    [GRMustacheKeyAccess preventNSUndefinedKeyExceptionAttack];
 }
 
 + (GRMustacheVersion)version

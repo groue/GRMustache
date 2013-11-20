@@ -20,8 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <objc/message.h>
-#import <pthread.h>
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
@@ -29,14 +27,7 @@
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateOverride_private.h"
 #import "GRMustacheExpressionParser_private.h"
-#import "GRMustacheExpression_private.h"
-#import "JRSwizzle.h"
-
-
-#if !defined(NS_BLOCK_ASSERTIONS)
-// For testing purpose
-BOOL GRMustacheContextDidCatchNSUndefinedKeyException;
-#endif
+#import "GRMustacheKeyAccess_private.h"
 
 
 // =============================================================================
@@ -92,15 +83,6 @@ BOOL isManagedPropertyKVCKey(Class klass, NSString *key, id *zeroValue);
 
 // TODO
 NSString *canonicalKeyForKey(Class klass, NSString *key);
-
-
-// =============================================================================
-#pragma mark - NSUndefinedKeyException prevention declarations
-
-@interface NSObject(GRMustacheContextPreventionOfNSUndefinedKeyException)
-- (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key;
-- (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key;
-@end;
 
 
 // =============================================================================
@@ -480,7 +462,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     
     if (_protectedContextObject) {
         for (GRMustacheContext *context = self; context; context = context->_protectedContextParent) {
-            id value = [GRMustacheContext valueForKey:key inObject:context->_protectedContextObject];
+            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:context->_protectedContextObject];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = YES;
@@ -512,7 +494,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
                 }
             }
             if (hidden) { continue; }
-            id value = [GRMustacheContext valueForKey:key inObject:contextObject];
+            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = NO;
@@ -578,7 +560,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             // Key is not a managed property. But subclass may have defined a
             // method for that key.
             
-            id value = [GRMustacheContext valueForKey:key inObject:self];
+            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:self];
             
             if (value) {
                 if (protected != NULL) {
@@ -624,77 +606,6 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     }
     if (error) { *error = nil; }
     return value;
-}
-
-+ (id)valueForKey:(NSString *)key inObject:(id)object
-{
-    if (object == nil) {
-        return nil;
-    }
-    
-    if (preventsNSUndefinedKeyException) {
-        [GRMustacheContext startPreventingNSUndefinedKeyExceptionFromObject:object];
-    }
-    
-    @try {
-        // We don't want to use NSArray, NSSet and NSOrderedSet implementation
-        // of valueForKey:, because they return another collection: see issue #21
-        // and "anchored key should not extract properties inside an array" test
-        // in src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
-        if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
-            static IMP NSObjectIMP;
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                NSObjectIMP = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
-            });
-            return NSObjectIMP(object, @selector(valueForKey:), key);
-        } else {
-            return [object valueForKey:key];
-        }
-    }
-    
-    @catch (NSException *exception) {
-        
-        // Swallow NSUndefinedKeyException only
-        
-        if (![[exception name] isEqualToString:NSUndefinedKeyException]) {
-            [exception raise];
-        }
-#if !defined(NS_BLOCK_ASSERTIONS)
-        else {
-            // For testing purpose
-            GRMustacheContextDidCatchNSUndefinedKeyException = YES;
-        }
-#endif
-    }
-    
-    @finally {
-        if (preventsNSUndefinedKeyException) {
-            [GRMustacheContext stopPreventingNSUndefinedKeyExceptionFromObject:object];
-        }
-    }
-    
-    return nil;
-}
-
-+ (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
-{
-    static CFMutableDictionaryRef cache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-    });
-    
-    Class klass = object_getClass(object);
-    intptr_t result = (intptr_t)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
-    if (!result) {
-        Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-        result = ([klass isSubclassOfClass:[NSArray class]] ||
-                  [klass isSubclassOfClass:[NSSet class]] ||
-                  (NSOrderedSetClass && [klass isSubclassOfClass:NSOrderedSetClass])) ? 1 : 2;
-        CFDictionarySetValue(cache, klass, (const void *)result);
-    }
-    return (result == 1);
 }
 
 
@@ -1830,108 +1741,6 @@ static Class GRMustacheContextManagedPropertyClassGetter(GRMustacheContext *self
     } else {
         [super forwardInvocation:invocation];
     }
-}
-
-
-// =============================================================================
-#pragma mark - NSUndefinedKeyException prevention
-
-static BOOL preventsNSUndefinedKeyException = NO;
-
-#if TARGET_OS_IPHONE
-    // iOS never had support for Garbage Collector.
-    // Use fast pthread library.
-    static pthread_key_t GRPreventedObjectsStorageKey;
-    void freePreventedObjectsStorage(void *objects) {
-        [(NSMutableSet *)objects release];
-    }
-    #define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
-    #define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
-    #define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
-#else
-    // OSX used to have support for Garbage Collector.
-    // Use slow NSThread library.
-    static NSString *GRPreventedObjectsStorageKey = @"GRPreventedObjectsStorageKey";
-    #define setupPreventedObjectsStorage()
-    #define getCurrentThreadPreventedObjects() (NSMutableSet *)[[[NSThread currentThread] threadDictionary] objectForKey:GRPreventedObjectsStorageKey]
-    #define setCurrentThreadPreventedObjects(objects) [[[NSThread currentThread] threadDictionary] setObject:objects forKey:GRPreventedObjectsStorageKey]
-#endif
-
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self setupNSUndefinedKeyExceptionPrevention];
-    });
-}
-
-+ (void)setupNSUndefinedKeyExceptionPrevention
-{
-    preventsNSUndefinedKeyException = YES;
-    
-    // Swizzle [NSObject valueForUndefinedKey:]
-    
-    [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                    withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSObject:)
-                         error:nil];
-    
-    
-    // Swizzle [NSManagedObject valueForUndefinedKey:]
-    
-    Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
-    if (NSManagedObjectClass) {
-        [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                                    withMethod:@selector(GRMustacheContextValueForUndefinedKey_NSManagedObject:)
-                                         error:nil];
-    }
-
-    setupPreventedObjectsStorage();
-}
-
-+ (void)startPreventingNSUndefinedKeyExceptionFromObject:(id)object
-{
-    NSMutableSet *objects = getCurrentThreadPreventedObjects();
-    if (objects == NULL) {
-        // objects will be released by the garbage collector, or by pthread
-        // destructor function freePreventedObjectsStorage.
-        //
-        // Static analyzer can't see that, and emits a memory leak warning here.
-        // This is a false positive: avoid the static analyzer examine this
-        // portion of code.
-#ifndef __clang_analyzer__
-        objects = [[NSMutableSet alloc] init];
-        setCurrentThreadPreventedObjects(objects);
-#endif
-    }
-    
-    [objects addObject:object];
-}
-
-+ (void)stopPreventingNSUndefinedKeyExceptionFromObject:(id)object
-{
-    [getCurrentThreadPreventedObjects() removeObject:object];
-}
-
-@end
-
-@implementation NSObject(GRMustacheContextPreventionOfNSUndefinedKeyException)
-
-// NSObject
-- (id)GRMustacheContextValueForUndefinedKey_NSObject:(NSString *)key
-{
-    if ([getCurrentThreadPreventedObjects() containsObject:self]) {
-        return nil;
-    }
-    return [self GRMustacheContextValueForUndefinedKey_NSObject:key];
-}
-
-// NSManagedObject
-- (id)GRMustacheContextValueForUndefinedKey_NSManagedObject:(NSString *)key
-{
-    if ([getCurrentThreadPreventedObjects() containsObject:self]) {
-        return nil;
-    }
-    return [self GRMustacheContextValueForUndefinedKey_NSManagedObject:key];
 }
 
 @end
