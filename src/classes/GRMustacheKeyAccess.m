@@ -99,22 +99,13 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
 {
-    static CFMutableDictionaryRef cache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        cache = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-    });
+    Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
     
-    Class klass = object_getClass(object);
-    intptr_t result = (intptr_t)CFDictionaryGetValue(cache, klass);   // 0 = undefined, 1 = YES, 2 = NO
-    if (!result) {
-        Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-        result = ([klass isSubclassOfClass:[NSArray class]] ||
-                  [klass isSubclassOfClass:[NSSet class]] ||
-                  (NSOrderedSetClass && [klass isSubclassOfClass:NSOrderedSetClass])) ? 1 : 2;
-        CFDictionarySetValue(cache, klass, (const void *)result);
-    }
-    return (result == 1);
+    if ([object isKindOfClass:[NSArray class]]) { return YES; }
+    if ([object isKindOfClass:[NSSet class]]) { return YES; }
+    if (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]) { return YES; }
+    
+    return NO;
 }
 
 
