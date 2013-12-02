@@ -193,8 +193,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    @synchronized(self) { // protect _templateForTemplateID && _currentlyParsedTemplateID
-        return [self templateNamed:name relativeToTemplateID:_currentlyParsedTemplateID error:error];
+    @synchronized(self) {
+        return [self templateNamed:name relativeToTemplateID:nil error:error];
     }
 }
 
@@ -237,6 +237,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         // Create a Mustache compiler that loads partials from self
         GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
         compiler.templateRepository = self;
+        compiler.baseTemplateID = templateID;
         
         // Create a Mustache parser that feeds the compiler
         GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:self.configuration] autorelease];
@@ -305,21 +306,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             [_templateForTemplateID setObject:template forKey:templateID];
             
             
-            // We are about to compile templateString. GRMustacheCompiler may
-            // invoke [self templateNamed:error:] when compiling partial tags
-            // {{> name }}. Since partials are relative, we need to know the ID of
-            // the currently parsed template.
-            //
-            // And since partials may embed other partials, we need to handle the
-            // currently parsed template ID in a recursive way.
+            // Compile
             
-            GRMustacheAST *AST = nil;
-            {
-                id previousParsedTemplateID = _currentlyParsedTemplateID;
-                _currentlyParsedTemplateID = templateID;
-                AST = [self ASTFromString:templateString templateID:templateID error:error];
-                _currentlyParsedTemplateID = previousParsedTemplateID;
-            }
+            GRMustacheAST *AST = [self ASTFromString:templateString templateID:templateID error:error];
             
             
             // compiling done

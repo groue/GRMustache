@@ -134,7 +134,6 @@
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_templateForTemplateID;
-    id _currentlyParsedTemplateID;
     GRMustacheConfiguration *_configuration;
 }
 

@@ -75,6 +75,7 @@
     NSMutableArray *_tagValueStack;
     
     GRMustacheTemplateRepository *_templateRepository;
+    id _baseTemplateID;
     GRMustacheContentType _contentType;
     BOOL _contentTypeLocked;
 }
@@ -83,6 +84,11 @@
  * The template repository that provides partial templates to the compiler.
  */
 @property (nonatomic, assign) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
+
+/**
+ * ID of the currently compiled template
+ */
+@property (nonatomic, retain) id baseTemplateID GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an initialized compiler.

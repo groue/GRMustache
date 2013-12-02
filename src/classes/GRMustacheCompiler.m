@@ -142,6 +142,7 @@
 @implementation GRMustacheCompiler
 @synthesize fatalError=_fatalError;
 @synthesize templateRepository=_templateRepository;
+@synthesize baseTemplateID=_baseTemplateID;
 @synthesize currentOpeningToken=_currentOpeningToken;
 @synthesize openingTokenStack=_openingTokenStack;
 @synthesize currentTagValue=_currentTagValue;
@@ -198,6 +199,7 @@
     [_componentsStack release];
     [_tagValueStack release];
     [_openingTokenStack release];
+    [_baseTemplateID release];
     [super dealloc];
 }
 
@@ -505,7 +507,7 @@
                     
                     // Ask templateRepository for overridable template
                     NSError *templateError;
-                    GRMustacheTemplate *template = [_templateRepository templateNamed:(NSString *)_currentTagValue error:&templateError];
+                    GRMustacheTemplate *template = [_templateRepository templateNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&templateError];
                     if (template == nil) {
                         [self failWithFatalError:templateError];
                         return NO;
@@ -555,7 +557,7 @@
             
             // Ask templateRepository for partial template
             NSError *templateError;
-            GRMustacheTemplate *template = [_templateRepository templateNamed:partialName error:&templateError];
+            GRMustacheTemplate *template = [_templateRepository templateNamed:partialName relativeToTemplateID:_baseTemplateID error:&templateError];
             if (template == nil) {
                 [self failWithFatalError:templateError];
                 return NO;
