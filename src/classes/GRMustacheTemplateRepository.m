@@ -256,24 +256,25 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    @synchronized(self) { // protect _templateForTemplateID && _currentlyParsedTemplateID
-        
-        id templateID = nil;
-        if (name) {
-           templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
+    id templateID = nil;
+    if (name) {
+       templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
+    }
+    if (templateID == nil) {
+        NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                            code:GRMustacheErrorCodeTemplateNotFound
+                                                        userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                             forKey:NSLocalizedDescriptionKey]];
+        if (error != NULL) {
+            *error = missingTemplateError;
+        } else {
+            NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
         }
-        if (templateID == nil) {
-            NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
-                                                                code:GRMustacheErrorCodeTemplateNotFound
-                                                            userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
-                                                                                                 forKey:NSLocalizedDescriptionKey]];
-            if (error != NULL) {
-                *error = missingTemplateError;
-            } else {
-                NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
-            }
-            return nil;
-        }
+        return nil;
+    }
+    
+    // Protect our _templateForTemplateID dictionary
+    @synchronized(self) {
         
         GRMustacheTemplate *template = [_templateForTemplateID objectForKey:templateID];
         
