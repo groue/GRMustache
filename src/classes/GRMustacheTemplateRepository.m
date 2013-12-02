@@ -193,7 +193,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    return [self templateNamed:name relativeToTemplateID:_currentlyParsedTemplateID error:error];
+    @synchronized(self) { // protect _templateForTemplateID && _currentlyParsedTemplateID
+        return [self templateNamed:name relativeToTemplateID:_currentlyParsedTemplateID error:error];
+    }
 }
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -253,85 +255,88 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    id templateID = nil;
-    if (name) {
-       templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
-    }
-    if (templateID == nil) {
-        NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
-                                                            code:GRMustacheErrorCodeTemplateNotFound
-                                                        userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
-                                                                                             forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = missingTemplateError;
-        } else {
-            NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
+    @synchronized(self) { // protect _templateForTemplateID && _currentlyParsedTemplateID
+        
+        id templateID = nil;
+        if (name) {
+           templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
         }
-        return nil;
-    }
-    
-    GRMustacheTemplate *template = [_templateForTemplateID objectForKey:templateID];
-    
-    if (template == nil) {
-        // templateRepository:templateStringForTemplateID:error: is a dataSource method.
-        // We are not sure the dataSource will set error when not returning any templateString.
-        // We thus have to take extra care of error handling here.
-        NSError *templateStringError = nil;
-        NSString *templateString = [self.dataSource templateRepository:self templateStringForTemplateID:templateID error:&templateStringError];
-        if (!templateString) {
-            if (templateStringError == nil) {
-                templateStringError = [NSError errorWithDomain:GRMustacheErrorDomain
-                                                          code:GRMustacheErrorCodeTemplateNotFound
-                                                      userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
-                                                                                           forKey:NSLocalizedDescriptionKey]];
-            }
+        if (templateID == nil) {
+            NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                                code:GRMustacheErrorCodeTemplateNotFound
+                                                            userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                                 forKey:NSLocalizedDescriptionKey]];
             if (error != NULL) {
-                *error = templateStringError;
+                *error = missingTemplateError;
             } else {
-                NSLog(@"GRMustache error: %@", templateStringError.localizedDescription);
+                NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
             }
             return nil;
         }
         
+        GRMustacheTemplate *template = [_templateForTemplateID objectForKey:templateID];
         
-        // store an empty template before compiling, so that we support
-        // recursive partials
-        
-        template = [[[GRMustacheTemplate alloc] init] autorelease];
-        [_templateForTemplateID setObject:template forKey:templateID];
-        
-        
-        // We are about to compile templateString. GRMustacheCompiler may
-        // invoke [self templateNamed:error:] when compiling partial tags
-        // {{> name }}. Since partials are relative, we need to know the ID of
-        // the currently parsed template.
-        //
-        // And since partials may embed other partials, we need to handle the
-        // currently parsed template ID in a recursive way.
-        
-        GRMustacheAST *AST = nil;
-        {
-            id previousParsedTemplateID = _currentlyParsedTemplateID;
-            _currentlyParsedTemplateID = templateID;
-            AST = [self ASTFromString:templateString templateID:templateID error:error];
-            _currentlyParsedTemplateID = previousParsedTemplateID;
+        if (template == nil) {
+            // templateRepository:templateStringForTemplateID:error: is a dataSource method.
+            // We are not sure the dataSource will set error when not returning any templateString.
+            // We thus have to take extra care of error handling here.
+            NSError *templateStringError = nil;
+            NSString *templateString = [self.dataSource templateRepository:self templateStringForTemplateID:templateID error:&templateStringError];
+            if (!templateString) {
+                if (templateStringError == nil) {
+                    templateStringError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                              code:GRMustacheErrorCodeTemplateNotFound
+                                                          userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                               forKey:NSLocalizedDescriptionKey]];
+                }
+                if (error != NULL) {
+                    *error = templateStringError;
+                } else {
+                    NSLog(@"GRMustache error: %@", templateStringError.localizedDescription);
+                }
+                return nil;
+            }
+            
+            
+            // store an empty template before compiling, so that we support
+            // recursive partials
+            
+            template = [[[GRMustacheTemplate alloc] init] autorelease];
+            [_templateForTemplateID setObject:template forKey:templateID];
+            
+            
+            // We are about to compile templateString. GRMustacheCompiler may
+            // invoke [self templateNamed:error:] when compiling partial tags
+            // {{> name }}. Since partials are relative, we need to know the ID of
+            // the currently parsed template.
+            //
+            // And since partials may embed other partials, we need to handle the
+            // currently parsed template ID in a recursive way.
+            
+            GRMustacheAST *AST = nil;
+            {
+                id previousParsedTemplateID = _currentlyParsedTemplateID;
+                _currentlyParsedTemplateID = templateID;
+                AST = [self ASTFromString:templateString templateID:templateID error:error];
+                _currentlyParsedTemplateID = previousParsedTemplateID;
+            }
+            
+            
+            // compiling done
+            
+            if (AST) {
+                template.components = AST.templateComponents;
+                template.contentType = AST.contentType;
+                template.baseContext = self.configuration.baseContext;
+            } else {
+                // forget invalid empty template
+                [_templateForTemplateID removeObjectForKey:templateID];
+                template = nil;
+            }
         }
         
-        
-        // compiling done
-        
-        if (AST) {
-            template.components = AST.templateComponents;
-            template.contentType = AST.contentType;
-            template.baseContext = self.configuration.baseContext;
-        } else {
-            // forget invalid empty template
-            [_templateForTemplateID removeObjectForKey:templateID];
-            template = nil;
-        }
+        return template;
     }
-    
-    return template;
 }
 
 @end
