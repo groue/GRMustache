@@ -139,6 +139,9 @@
  * @see GRMustacheConfiguration
  * @see GRMustacheTemplateRepository
  * @see [GRMustache standardLibrary]
+ * @see extendBaseContextWithObject:
+ * @see extendBaseContextWithProtectedObject:
+ * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.0
  */
