@@ -44,7 +44,16 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 // =============================================================================
 #pragma mark - GRMustacheKeyAccess
 
+static IMP GRValueForKeyNSObjectIMP;
+static Class GROrderedSetClass;
+
 @implementation GRMustacheKeyAccess
+
++ (void)initialize
+{
+    GRValueForKeyNSObjectIMP = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
+    GROrderedSetClass = NSClassFromString(@"NSOrderedSet");
+}
 
 + (id)valueForMustacheKey:(NSString *)key inObject:(id)object
 {
@@ -62,12 +71,7 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
         // and "anchored key should not extract properties inside an array" test
         // in src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
         if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
-            static IMP NSObjectIMP;
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                NSObjectIMP = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
-            });
-            return NSObjectIMP(object, @selector(valueForKey:), key);
+            return GRValueForKeyNSObjectIMP(object, @selector(valueForKey:), key);
         } else {
             return [object valueForKey:key];
         }
@@ -99,12 +103,9 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
 {
-    Class NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
-    
     if ([object isKindOfClass:[NSArray class]]) { return YES; }
     if ([object isKindOfClass:[NSSet class]]) { return YES; }
-    if (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]) { return YES; }
-    
+    if (GROrderedSetClass && [object isKindOfClass:GROrderedSetClass]) { return YES; }
     return NO;
 }
 
