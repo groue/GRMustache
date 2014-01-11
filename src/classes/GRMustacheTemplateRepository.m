@@ -101,19 +101,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepository()
 
 /**
- * Returns a template or a partial template, given its name.
- * 
- * @param name            The name of the template
- * @param baseTemplateID  The template ID of the enclosing template, or nil.
- * @param error           If there is an error loading or parsing template and
- *                        partials, upon return contains an NSError object that
- *                        describes the problem.
- *
- * @return a template
- */
-- (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error;
-
-/**
  * Parses templateString and returns an abstract syntax tree.
  * 
  * @param templateString  A Mustache template string.
