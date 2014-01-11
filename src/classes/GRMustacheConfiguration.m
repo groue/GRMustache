@@ -152,6 +152,7 @@
     configuration.tagStartDelimiter = _tagStartDelimiter;
     configuration.tagEndDelimiter = _tagEndDelimiter;
     configuration.baseContext = _baseContext;
+    // Do not copy the _locked flag, so that the copy is mutable.
     return configuration;
 }
 
