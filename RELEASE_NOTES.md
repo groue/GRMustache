@@ -3,6 +3,11 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.8.4
+
+Thread-safety of non-mutating methods is guaranteed.
+
+
 ## v6.8.3
 
 The static library lib/libGRMustache6-iOS.a now includes slices for both x86_64 and arm64 architectures.
