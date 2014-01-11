@@ -405,6 +405,9 @@
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from a dictionary whose keys are template names, and values template strings.
+ *
+ * The dictionary is deeply copied: once template repository is initialized,
+ * any change to the original dictionary is ignored.
  * 
  * For example:
  * 

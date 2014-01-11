@@ -60,4 +60,28 @@
     STAssertEqualObjects(result, @"ABC", @"");
 }
 
+- (void)testTemplateRepositoryWithDictionaryIgnoresDictionaryMutation
+{
+    NSMutableString *mutableTemplateString = [NSMutableString stringWithString:@"foo"];
+    NSMutableDictionary *mutablePartials = [NSMutableDictionary dictionaryWithObjectsAndKeys:mutableTemplateString, @"a", nil];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:mutablePartials];
+    
+    [mutableTemplateString appendString:@"bar"];
+    [mutablePartials setObject:@"bar" forKey:@"b"];
+    
+    {
+        GRMustacheTemplate *template = [repository templateNamed:@"a" error:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
+        STAssertEqualObjects(rendering, @"foo", @"");
+    }
+    
+    {
+        NSError *error;
+        GRMustacheTemplate *template = [repository templateNamed:@"b" error:&error];
+        STAssertNil(template, @"");
+        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+    }
+}
+
 @end
