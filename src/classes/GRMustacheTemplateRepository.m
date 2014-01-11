@@ -179,7 +179,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     self = [super init];
     if (self) {
         _templateForTemplateID = [[NSMutableDictionary alloc] init];
-        self.configuration = [GRMustacheConfiguration defaultConfiguration];    // copy
+        _configuration = [[GRMustacheConfiguration defaultConfiguration] copy];
     }
     return self;
 }
@@ -193,9 +193,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    @synchronized(self) {
-        return [self templateNamed:name relativeToTemplateID:nil error:error];
-    }
+    return [self templateNamed:name relativeToTemplateID:nil error:error];
 }
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -208,7 +206,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.components = AST.templateComponents;
     template.contentType = AST.contentType;
-    template.baseContext = self.configuration.baseContext;
+    template.baseContext = _configuration.baseContext;
     return template;
 }
 
@@ -225,6 +223,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     }
 }
 
+
 #pragma mark Private
 
 - (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error
@@ -232,15 +231,15 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     GRMustacheAST *AST = nil;
     @autoreleasepool {
         // It's time to lock the configuration.
-        [self.configuration lock];
+        [_configuration lock];
         
         // Create a Mustache compiler that loads partials from self
-        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:self.configuration] autorelease];
+        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:_configuration] autorelease];
         compiler.templateRepository = self;
         compiler.baseTemplateID = templateID;
         
         // Create a Mustache parser that feeds the compiler
-        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:self.configuration] autorelease];
+        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:_configuration] autorelease];
         parser.delegate = compiler;
         
         // Parse and extract template components from the compiler
@@ -256,25 +255,25 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    id templateID = nil;
-    if (name) {
-       templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
-    }
-    if (templateID == nil) {
-        NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
-                                                            code:GRMustacheErrorCodeTemplateNotFound
-                                                        userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
-                                                                                             forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = missingTemplateError;
-        } else {
-            NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
-        }
-        return nil;
-    }
-    
-    // Protect our _templateForTemplateID dictionary
+    // Protect our _templateForTemplateID dictionary, and our dataSource
     @synchronized(self) {
+        
+        id templateID = nil;
+        if (name) {
+           templateID = [self.dataSource templateRepository:self templateIDForName:name relativeToTemplateID:baseTemplateID];
+        }
+        if (templateID == nil) {
+            NSError *missingTemplateError = [NSError errorWithDomain:GRMustacheErrorDomain
+                                                                code:GRMustacheErrorCodeTemplateNotFound
+                                                            userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"No such template: `%@`", name, nil]
+                                                                                                 forKey:NSLocalizedDescriptionKey]];
+            if (error != NULL) {
+                *error = missingTemplateError;
+            } else {
+                NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
+            }
+            return nil;
+        }
         
         GRMustacheTemplate *template = [_templateForTemplateID objectForKey:templateID];
         
@@ -317,7 +316,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             if (AST) {
                 template.components = AST.templateComponents;
                 template.contentType = AST.contentType;
-                template.baseContext = self.configuration.baseContext;
+                template.baseContext = _configuration.baseContext;
             } else {
                 // forget invalid empty template
                 [_templateForTemplateID removeObjectForKey:templateID];
