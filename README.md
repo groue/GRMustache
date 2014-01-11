@@ -105,6 +105,10 @@ FAQ
     
     A: Check that you have added the `-ObjC` option in the "Other Linker Flags" of your target ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
 
+- **Q: is GRMustache thread-safe?**
+    
+    A: Thread-safety of non-mutating methods is guaranteed. Thread-safety of mutating methods is not guaranteed.
+
 - **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
     A: [Yes, yes, and yes](Guides/sample_code/indexes.md)
