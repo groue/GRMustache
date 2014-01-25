@@ -24,7 +24,6 @@
 #import "GRMustachePublicAPITest.h"
 
 @interface GRMustacheKeyedSubscriptingClass : NSObject
-@property (nonatomic, retain) NSString *property;
 @property (nonatomic, retain) NSMutableDictionary *dictionary;
 @end
 
@@ -32,7 +31,6 @@
 
 - (void)dealloc
 {
-    self.property = nil;
     self.dictionary = nil;
     [super dealloc];
 }
@@ -44,6 +42,11 @@
         self.dictionary = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+- (id)valueForKey:(NSString *)key
+{
+    return @"value";
 }
 
 - (void)setObject:(id)object forKeyedSubscript:(id<NSCopying>)key
@@ -63,22 +66,26 @@
 
 @implementation GRMustacheKeyedSubscriptingTest
 
-- (void)testKeyedSubscriptingHidesProperties
-{
-    GRMustacheKeyedSubscriptingClass *object = [[[GRMustacheKeyedSubscriptingClass alloc] init] autorelease];
-    object.property = @"foo";
-    STAssertEqualObjects([object valueForKey:@"property"], @"foo", nil);
-    NSString *rendering = [GRMustacheTemplate renderObject:object fromString:@"<{{property}}>" error:NULL];
-    STAssertEqualObjects(rendering, @"<>", nil);
-}
-
 - (void)testKeyedSubscripting
 {
     id object = [[[GRMustacheKeyedSubscriptingClass alloc] init] autorelease];
-    object[@"foo"] = @"bar";
-    STAssertEqualObjects(object[@"foo"], @"bar", nil);
-    NSString *rendering = [GRMustacheTemplate renderObject:object fromString:@"<{{foo}}>" error:NULL];
-    STAssertEqualObjects(rendering, @"<bar>", nil);
+    NSString *key = @"foo";
+    NSString *value = @"value";
+    object[key] = value;
+    
+    STAssertEqualObjects(object[key], value, nil);
+    STAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), value, nil);
+}
+
+- (void)testKeyedSubscriptingOverridesValueForKey
+{
+    GRMustacheKeyedSubscriptingClass *object = [[[GRMustacheKeyedSubscriptingClass alloc] init] autorelease];
+    NSString *key = @"foo";
+    NSString *value = @"value";
+    
+    // Empty rendering for key `foo` despite [object valueForKey:@"foo"] is not empty
+    STAssertEqualObjects([object valueForKey:key], value, nil);
+    STAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), @"", nil);
 }
 
 @end
