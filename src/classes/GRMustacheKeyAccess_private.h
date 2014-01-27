@@ -44,16 +44,19 @@ extern BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
 
 /**
- * Sends the `valueForKey:` message to _object_ with the provided _key_, and
- * returns the result.
+ * Sends the `objectForKeyedSubscript:` or `valueForKey:` message to object
+ * with the provided key, and returns the result.
  *
- * Should `valueForKey:` raise an NSUndefinedKeyException, returns nil.
+ * If object responds to `objectForKeyedSubscript:`, `valueForKey:` is not
+ * invoked.
+ *
+ * If `valueForKey:` raise an NSUndefinedKeyException, the method returns nil.
  *
  * @param key     The searched key
  * @param object  The queried object
  *
- * @return `[object valueForKey:key]`, or nil should an NSUndefinedKeyException
- *         be raised.
+ * @return The value that should be handled by Mustache rendering for a given
+ *         key.
  */
 + (id)valueForMustacheKey:(NSString *)key inObject:(id)object GRMUSTACHE_API_INTERNAL;
 

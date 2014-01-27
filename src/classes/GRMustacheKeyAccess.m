@@ -61,6 +61,12 @@ static Class GROrderedSetClass;
         return nil;
     }
     
+    // https://github.com/groue/GRMustache/issues/66:
+    // 1st try objectForKeyedSubscript:, then valueForKey:
+    if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+        return [object objectForKeyedSubscript:key];
+    }
+    
     if (preventsNSUndefinedKeyException) {
         [GRMustacheKeyAccess startPreventingNSUndefinedKeyExceptionFromObject:object];
     }
