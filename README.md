@@ -209,7 +209,7 @@ Who's using GRMustache
 * [FunGolf GPS](http://itunes.com/apps/fungolf), a golf app with 3D maps.
 * [KosmicTask](http://www.mugginsoft.com/kosmictask), an integrated scripting environment for OS X that supports more than 20 scripting languages.
 * [MyInvoice](http://www.myinvoice.biz/en), an invoicing iOS app.
-* [Objective-Cloud](http://objective-cloud.com) a service that runs your Objective-C code in the cloud
+* [Objective-Cloud](http://objective-cloud.com), a service that runs your Objective-C code in the cloud.
 * [Servus](https://servus.io) can turn any file on your computer into a branded download page hosted on Dropbox.
 
 Do you use GRMustache? [Tweet me your story and your link](http://twitter.com/GRMustache).
