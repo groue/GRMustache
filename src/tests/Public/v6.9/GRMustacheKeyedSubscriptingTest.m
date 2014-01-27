@@ -23,11 +23,14 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_8
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheKeyedSubscriptingClass : NSObject
+@interface GRMustacheKeyedSubscriptingClass : NSObject {
+    NSMutableDictionary *_dictionary;
+}
 @property (nonatomic, retain) NSMutableDictionary *dictionary;
 @end
 
 @implementation GRMustacheKeyedSubscriptingClass
+@synthesize dictionary=_dictionary;
 
 - (void)dealloc
 {
@@ -51,12 +54,12 @@
 
 - (void)setObject:(id)object forKeyedSubscript:(id<NSCopying>)key
 {
-    self.dictionary[key] = object;
+    [self.dictionary setObject:object forKey:key];
 }
 
 - (id)objectForKeyedSubscript:(id)key
 {
-    return self.dictionary[key];
+    return [self.dictionary objectForKey:key];
 }
 
 @end
@@ -68,12 +71,12 @@
 
 - (void)testKeyedSubscripting
 {
-    id object = [[[GRMustacheKeyedSubscriptingClass alloc] init] autorelease];
+    GRMustacheKeyedSubscriptingClass *object = [[[GRMustacheKeyedSubscriptingClass alloc] init] autorelease];
     NSString *key = @"foo";
     NSString *value = @"value";
-    object[key] = value;
+    [object setObject:value forKeyedSubscript:key];
     
-    STAssertEqualObjects(object[key], value, nil);
+    STAssertEqualObjects([object objectForKeyedSubscript:key], value, nil);
     STAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), value, nil);
 }
 
