@@ -5,7 +5,7 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
-**January 11, 2014: GRMustache 6.8.4 is out.** [Release notes](RELEASE_NOTES.md)
+**January 27, 2014: GRMustache 6.9.0 is out.** [Release notes](RELEASE_NOTES.md)
 
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
@@ -145,15 +145,15 @@ FAQ
 
     A: [Yes](Guides/html_vs_text.md)
 
-- **Q: What is this NSUndefinedKeyException stuff?**
+- **Q: What are those NSUndefinedKeyException?**
 
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. It's likely that you wish Xcode would stop breaking on those exceptions: see the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
+    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. Those exceptions are part of the normal template rendering. You can be prevent them, though: see the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
 
 - **Q: Why does GRMustache need JRSwizzle?**
 
     A: GRMustache does not need it, and does not swizzle anything unless you explicitly ask for it. `[GRMustache preventNSUndefinedKeyExceptionAttack]` swizzles NSObject's `valueForUndefinedKey:` in order to prevent NSUndefinedKeyException during template rendering.
     
-    You will debug your application without Xcode's exception breakpoint disturbing you. You may even improve rendering performances. See the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
+    See the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention) for a detailed discussion.
 
 What other people say
 ---------------------

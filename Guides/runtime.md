@@ -19,7 +19,9 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-Any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object that responds to the `valueForKey:` method can be used.
+Any object supporting [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) via the `objectForKeyedSubscript:` method, and any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object, that responds to the `valueForKey:` method, can be used.
+
+Note that GRMustache prefers the `objectForKeyedSubscript:` method, and only invokes the `valueForKey:` method on objects that do not respond to `objectForKeyedSubscript:`.
 
 Dictionaries are such objects. So are, generally speaking, your custom models:
 
@@ -35,7 +37,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:barbara
 
 Remember that `{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values.
 
-Objects are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
+Values are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
 
 - Your custom objects that take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
 - Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (but NSDictionary):
@@ -356,7 +358,7 @@ Values extracted from the context stack are directly rendered unless you had som
 Detailed description of GRMustache handling of `valueForKey:`
 -------------------------------------------------------------
 
-As seen above, GRMustache looks for a key in your data objects with the `valueForKey:` method. With some extra bits.
+As seen above, GRMustache looks for a key in your data objects with the `objectForKeyedSubscript:` and `valueForKey:` methods. If an object responds to `objectForKeyedSubscript:`, this method is used. For other objects, `valueForKey:` is used. With some extra bits described below.
 
 
 ### NSUndefinedKeyException Handling
@@ -368,9 +370,18 @@ NSDictionary never complains when asked for an unknown key. However, the default
 
 ### NSUndefinedKeyException Prevention
 
-When debugging your project, NSUndefinedKeyException raised by template rendering may become a real annoyance, because it's likely you've told your debugger to stop on every Objective-C exceptions.
+Objective-C exceptions have several drawbacks, particularly:
 
-You can avoid that: make sure you invoke once, early in your application, the following method:
+1. they play badly with autorelease pools, and are reputed to leak memory.
+2. they usually stop your debugger when you are developping your application.
+
+The first point is indeed a matter of worry: Apple does not guarantee that exceptions raised by `valueForKey:` do not leak memory. However, I never had any evidence of such a leak from NSObject's implementation.
+
+Should you still worry, we recommend that you avoid the `valueForKey:` method altogether. Instead, implement the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) `objectForKeyedSubscript:` method on objects that you provide to GRMustache.
+
+The second point is valid also: NSUndefinedKeyException raised by template rendering may become a real annoyance when you are debugging your project, because it's likely you've told your debugger to stop on every Objective-C exceptions.
+
+You can avoid them as well: make sure you invoke once, early in your application, the following method:
 
 ```objc
 [GRMustache preventNSUndefinedKeyExceptionAttack];
