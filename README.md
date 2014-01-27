@@ -192,11 +192,16 @@ What other people say
 
 
 Who's using GRMustache
-----------------------------------------
+----------------------
+
+### Open-source software
 
 * [tomaz/appledoc](https://github.com/tomaz/appledoc): Objective-c code Apple style documentation set generator.
 * [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk): MapBox iOS SDK, an open source alternative to MapKit.
 * [CarterA/Tribo](https://github.com/CarterA/Tribo): Extremely fast static site generator written in Objective-C.
+
+### Closed-source software
+
 * [AutoLib](http://itunes.com/apps/autolib) uses GRMustache and [spullara/mustache.java](https://github.com/spullara/mustache.java) for rendering an identical set of Mustache templates on iOS and Android.
 * [Bee](http://www.neat.io/bee): Bee is a desktop bug tracker for the Mac. It currently syncs with GitHub Issues, JIRA and FogBugz.
 * [CinéObs](http://itunes.com/apps/cineobs) uses GRMustache for RSS feeds rendering.
@@ -204,6 +209,7 @@ Who's using GRMustache
 * [FunGolf GPS](http://itunes.com/apps/fungolf), a golf app with 3D maps.
 * [KosmicTask](http://www.mugginsoft.com/kosmictask), an integrated scripting environment for OS X that supports more than 20 scripting languages.
 * [MyInvoice](http://www.myinvoice.biz/en), an invoicing iOS app.
+* [Objective-Cloud](http://objective-cloud.com) a service that runs your Objective-C code in the cloud
 * [Servus](https://servus.io) can turn any file on your computer into a branded download page hosted on Dropbox.
 
 Do you use GRMustache? [Tweet me your story and your link](http://twitter.com/GRMustache).
