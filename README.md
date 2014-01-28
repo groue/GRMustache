@@ -202,6 +202,7 @@ Who's using GRMustache
 
 ### Closed-source software
 
+* [1Password](https://agilebits.com/onepassword/mac), a password manager that integrates directly with your web browser.
 * [AutoLib](http://itunes.com/apps/autolib) uses GRMustache and [spullara/mustache.java](https://github.com/spullara/mustache.java) for rendering an identical set of Mustache templates on iOS and Android.
 * [Bee](http://www.neat.io/bee): Bee is a desktop bug tracker for the Mac. It currently syncs with GitHub Issues, JIRA and FogBugz.
 * [CinéObs](http://itunes.com/apps/cineobs) uses GRMustache for RSS feeds rendering.
