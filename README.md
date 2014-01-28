@@ -101,59 +101,57 @@ Check the [FAQ](#faq) right below.
 FAQ
 ---
 
-- **Q: I get "unrecognized selector sent to instance" errors.**
+- **I get "unrecognized selector sent to instance" errors.**
     
-    A: Check that you have added the `-ObjC` option in the "Other Linker Flags" of your target ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
+    Check that you have added the `-ObjC` option in the "Other Linker Flags" of your target ([how to](http://developer.apple.com/library/mac/#qa/qa1490/_index.html)).
 
-- **Q: is GRMustache thread-safe?**
+- **is GRMustache thread-safe?**
     
-    A: Thread-safety of non-mutating methods is guaranteed. Thread-safety of mutating methods is not guaranteed.
+    Thread-safety of non-mutating methods is guaranteed. Thread-safety of mutating methods is not guaranteed.
 
-- **Q: Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
+- **Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
-    A: [Yes, yes, and yes](Guides/sample_code/indexes.md)
+    [Yes, yes, and yes](Guides/sample_code/indexes.md).
 
-- **Q: Is it possible to format numbers and dates?**
+- **Is it possible to format numbers and dates?**
     
-    A: Yes. Use [NSNumberFormatter and NSDateFormatter](Guides/NSFormatter.md).
+    Yes. Use [NSNumberFormatter and NSDateFormatter](Guides/NSFormatter.md).
 
-- **Q: Is it possible to pluralize/singularize strings?**
+- **Is it possible to pluralize/singularize strings?**
     
-    A: Yes. You have some [sample code](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912) in issue #50. You may check [@mattt's InflectorKit](https://github.com/mattt/InflectorKit) for actual inflection methods.
+    Yes. You have some [sample code](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912) in issue #50. You may check [@mattt's InflectorKit](https://github.com/mattt/InflectorKit) for actual inflection methods.
 
-- **Q: Is it possible to write Handlebars-like helpers?**
+- **Is it possible to write Handlebars-like helpers?**
     
-    A: [Yes](Guides/rendering_objects.md)
+    [Yes](Guides/rendering_objects.md)
 
-- **Q: Is it possible to localize templates?**
+- **Is it possible to localize templates?**
 
-    A: [Yes](Guides/standard_library.md#localize)
+    [Yes](Guides/standard_library.md#localize)
 
-- **Q: Is it possible to embed partial templates whose name is only known at runtime?**
+- **Is it possible to embed partial templates whose name is only known at runtime?**
 
-    A: [Yes](Guides/rendering_objects.md)
+    [Yes](Guides/rendering_objects.md)
 
-- **Q: Does GRMustache provide any layout or template inheritance facility?**
+- **Does GRMustache provide any layout or template inheritance facility?**
     
-    A: [Yes](Guides/partials.md)
+    [Yes](Guides/partials.md)
 
-- **Q: Is it possible to render a default value for missing keys?**
+- **Is it possible to render a default value for missing keys?**
 
-    A: [Yes](Guides/view_model.md#default-values).
+    [Yes](Guides/view_model.md#default-values).
 
-- **Q: Is it possible to disable HTML escaping?**
+- **Is it possible to disable HTML escaping?**
 
-    A: [Yes](Guides/html_vs_text.md)
+    [Yes](Guides/html_vs_text.md)
 
-- **Q: What are those NSUndefinedKeyException?**
+- **What are those NSUndefinedKeyException?**
 
-    A: When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. Those exceptions are part of the normal template rendering. You can be prevent them, though: see the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
+    When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. Those exceptions are part of the normal template rendering. You can be prevent them, though: see the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
 
-- **Q: Why does GRMustache need JRSwizzle?**
+- **Why does GRMustache need JRSwizzle?**
 
-    A: GRMustache does not need it, and does not swizzle anything unless you explicitly ask for it. `[GRMustache preventNSUndefinedKeyExceptionAttack]` swizzles NSObject's `valueForUndefinedKey:` in order to prevent NSUndefinedKeyException during template rendering.
-    
-    See the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention) for a detailed discussion.
+    GRMustache does not need it, and does not swizzle anything unless you explicitly ask for it. `[GRMustache preventNSUndefinedKeyExceptionAttack]` swizzles NSObject's `valueForUndefinedKey:` in order to prevent NSUndefinedKeyException during template rendering. See the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention) for a detailed discussion.
 
 What other people say
 ---------------------
