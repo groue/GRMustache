@@ -147,11 +147,11 @@ FAQ
 
 - **What are those NSUndefinedKeyException?**
 
-    When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. Those exceptions are part of the normal template rendering. You can be prevent them, though: see the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention).
+    When GRMustache has to try several objects until it finds the one that provides a `{{key}}`, several NSUndefinedKeyException may be raised and caught. Those exceptions are part of the normal template rendering. You can be prevent them, though: see the [Runtime Guide](Guides/runtime.md#detailed-description-of-grmustache-handling-of-valueforkey).
 
 - **Why does GRMustache need JRSwizzle?**
 
-    GRMustache does not need it, and does not swizzle anything unless you explicitly ask for it. `[GRMustache preventNSUndefinedKeyExceptionAttack]` swizzles NSObject's `valueForUndefinedKey:` in order to prevent NSUndefinedKeyException during template rendering. See the [Runtime Guide](Guides/runtime.md#nsundefinedkeyexception-prevention) for a detailed discussion.
+    GRMustache does not need it, and does not swizzle anything unless you explicitly ask for it. `[GRMustache preventNSUndefinedKeyExceptionAttack]` swizzles NSObject's `valueForUndefinedKey:` in order to prevent NSUndefinedKeyException during template rendering. See the [Runtime Guide](Guides/runtime.md#detailed-description-of-grmustache-handling-of-valueforkey) for a detailed discussion.
 
 What other people say
 ---------------------
