@@ -71,6 +71,10 @@
 		5648F1B318997748001F4B83 /* GRMustachePartial.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1AF18997748001F4B83 /* GRMustachePartial.m */; };
 		5648F1B418997748001F4B83 /* GRMustachePartial.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1AF18997748001F4B83 /* GRMustachePartial.m */; };
 		5648F1B518997748001F4B83 /* GRMustachePartial.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1AF18997748001F4B83 /* GRMustachePartial.m */; };
+		5648F1B718998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
+		5648F1B818998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
+		5648F1B918998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
+		5648F1BA18998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
 		564D9A9E15CA33BF00A32AA7 /* GRMustacheIdentifierExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 564D9A9C15CA33BF00A32AA7 /* GRMustacheIdentifierExpression_private.h */; };
 		564D9A9F15CA33BF00A32AA7 /* GRMustacheIdentifierExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 564D9A9C15CA33BF00A32AA7 /* GRMustacheIdentifierExpression_private.h */; };
 		564D9AA015CA33BF00A32AA7 /* GRMustacheIdentifierExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 564D9A9D15CA33BF00A32AA7 /* GRMustacheIdentifierExpression.m */; };
@@ -609,6 +613,7 @@
 		5648F1A71898DFEE001F4B83 /* GRMustacheAST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheAST.m; sourceTree = "<group>"; };
 		5648F1AE18997748001F4B83 /* GRMustachePartial_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustachePartial_private.h; sourceTree = "<group>"; };
 		5648F1AF18997748001F4B83 /* GRMustachePartial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustachePartial.m; sourceTree = "<group>"; };
+		5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryTest.m; sourceTree = "<group>"; };
 		564D9A9C15CA33BF00A32AA7 /* GRMustacheIdentifierExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheIdentifierExpression_private.h; sourceTree = "<group>"; };
 		564D9A9D15CA33BF00A32AA7 /* GRMustacheIdentifierExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheIdentifierExpression.m; sourceTree = "<group>"; };
 		564D9AA315CA36A200A32AA7 /* GRMustacheImplicitIteratorExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheImplicitIteratorExpression_private.h; sourceTree = "<group>"; };
@@ -964,6 +969,7 @@
 		5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */ = {
 			isa = PBXGroup;
 			children = (
+				5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */,
 				5682B4821528472900ADD123 /* GRMustacheTemplateRepositoryDataSourceTest.m */,
 				5682B48A1528472F00ADD123 /* GRMustacheTemplateRepositoryWithDictionaryTest.m */,
 				5682B4AE15284AC800ADD123 /* GRMustacheTemplateRepositoryWithBundleTest */,
@@ -1936,6 +1942,7 @@
 				56A7312C1805276A00B8570A /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 				56A7312D1805276A00B8570A /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				56A7312E1805276A00B8570A /* GRMustacheProxyTest.m in Sources */,
+				5648F1BA18998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
 				56A7312F1805276A00B8570A /* GRMustacheVariadicFilterTest.m in Sources */,
 				5648F1A51892E5A1001F4B83 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
 				56A731301805276A00B8570A /* GRMustacheProtectedContextTest.m in Sources */,
@@ -2025,6 +2032,7 @@
 				568140E216365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 				568140E416365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E816365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
+				5648F1B718998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
 				568140EA16365D6100310B7F /* GRMustacheVariadicFilterTest.m in Sources */,
 				5648F1A21892E5A1001F4B83 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
 				56A9686B1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */,
@@ -2114,6 +2122,7 @@
 				568140E316365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
 				568140E516365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E916365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
+				5648F1B918998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
 				568140EB16365D6100310B7F /* GRMustacheVariadicFilterTest.m in Sources */,
 				5648F1A41892E5A1001F4B83 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
 				56A9686C1642BC41009193BB /* GRMustacheProtectedContextTest.m in Sources */,
@@ -2147,6 +2156,7 @@
 				ABAF866C16A0A65A001ADE96 /* GRMustacheContextPrivateTest.m in Sources */,
 				ABAF866D16A0A65A001ADE96 /* GRMustacheExpressionParserTest.m in Sources */,
 				ABAF866E16A0A65A001ADE96 /* GRBooleanTest.m in Sources */,
+				5648F1B818998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
 				ABAF866F16A0A65A001ADE96 /* GRMustacheParsingErrorsTest.m in Sources */,
 				ABAF867016A0A65A001ADE96 /* GRPreventNSUndefinedKeyExceptionAttackTest.m in Sources */,
 				5648F1A31892E5A1001F4B83 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
