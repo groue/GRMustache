@@ -31,15 +31,7 @@
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
-
-#pragma mark - GRMustacheAST
-
-@interface GRMustacheAST()
-- (id)initWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType;
-@end
-
-
-#pragma mark - GRMustacheCompiler
+#import "GRMustacheAST_private.h"
 
 @interface GRMustacheCompiler()
 
@@ -190,7 +182,7 @@
     }
     
     // Success
-    return [[[GRMustacheAST alloc] initWithTemplateComponents:_currentComponents contentType:_contentType] autorelease];
+    return [GRMustacheAST ASTWithTemplateComponents:_currentComponents contentType:_contentType];
 }
 
 - (void)dealloc
@@ -629,31 +621,6 @@
     return [NSError errorWithDomain:GRMustacheErrorDomain
                                code:GRMustacheErrorCodeParseError
                            userInfo:[NSDictionary dictionaryWithObject:localizedDescription forKey:NSLocalizedDescriptionKey]];
-}
-
-@end
-
-
-#pragma mark - GRMustacheAST
-
-@implementation GRMustacheAST
-@synthesize templateComponents=_templateComponents;
-@synthesize contentType=_contentType;
-
-- (void)dealloc
-{
-    [_templateComponents release];
-    [super dealloc];
-}
-
-- (id)initWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType
-{
-    self = [super init];
-    if (self) {
-        _templateComponents = [templateComponents retain];
-        _contentType = contentType;
-    }
-    return self;
 }
 
 @end

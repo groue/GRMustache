@@ -29,27 +29,8 @@
 
 @class GRMustacheCompiler;
 @class GRMustacheTemplateRepository;
+@class GRMustacheAST;
 @protocol GRMustacheTemplateComponent;
-
-/**
- * The GRMustacheAST represents the abstract syntax tree of a template.
- */
-@interface GRMustacheAST : NSObject {
-@private
-    NSArray *_templateComponents;
-    GRMustacheContentType _contentType;
-}
-
-/**
- * An NSArray containing <GRMustacheTemplateComponent> instances
- */
-@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
-
-/**
- * The content type of the AST
- */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
-@end
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a

@@ -25,6 +25,7 @@
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheConfiguration_private.h"
+#import "GRMustacheAST_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
 
