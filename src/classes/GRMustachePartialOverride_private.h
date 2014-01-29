@@ -22,41 +22,44 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheConfiguration_private.h"
+#import "GRMustacheTemplateComponent_private.h"
+
+@class GRMustachePartial;
 
 /**
- * The GRMustacheAST represents the abstract syntax tree of a template.
+ * A GRMustachePartialOverride is a template component that renders overridable
+ * partials as `{{<name}}...{{/name}}`.
+ *
+ * It collaborates with rendering contexts for the resolving of template
+ * components in the context of Mustache overridable partials.
+ *
+ * @see GRMustacheTemplateComponent
+ * @see GRMustacheContext
  */
-@interface GRMustacheAST : NSObject {
+@interface GRMustachePartialOverride : NSObject<GRMustacheTemplateComponent> {
 @private
-    NSArray *_templateComponents;
-    GRMustacheContentType _contentType;
+    GRMustachePartial *_partial;
+    NSArray *_components;
 }
 
 /**
- * An NSArray containing <GRMustacheTemplateComponent> instances
+ * The overridable partial template.
  *
- * @see GRMustacheTemplateComponent
+ * This property is used by [GRMustacheContext assertAcyclicTemplateOverride:].
+ *
+ * @see GRMustacheContext
  */
-@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
 
 /**
- * The content type of the AST
+ * Builds a GRMustachePartialOverride.
+ *
+ * @param partial     The partial template that is overriden
+ * @param components  The components that may override components of the overriden
+ *                    partial template.
+ *
+ * @return A GRMustachePartialOverride
  */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a new allocated AST.
- *
- * @param templateComponents  An Array of <GRMustacheTemplateComponent>
- *                            instances.
- * @param contentType         A content type
- *
- * @return A new GRMustacheAST
- *
- * @see GRMustacheTemplateComponent
- */
-+ (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
++ (instancetype)partialOverrideWithPartial:(GRMustachePartial *)partial components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end
-

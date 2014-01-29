@@ -27,7 +27,7 @@
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateComponent;
-@class GRMustacheTemplateOverride;
+@class GRMustachePartialOverride;
 
 /**
  * The GRMustacheContext maintains the following stacks:
@@ -36,7 +36,7 @@
  * - a protected context stack,
  * - a hidden context stack,
  * - a tag delegate stack,
- * - a template override stack.
+ * - a partial override stack.
  *
  * As such, it is able to:
  *
@@ -85,12 +85,12 @@
     GRMustacheContext *_tagDelegateParent;
     id<GRMustacheTagDelegate> _tagDelegate;
     
-    // Template override stack
+    // Partial override stack
     //
-    // If _templateOverride is nil, the stack is empty.
-    // If _templateOverride is not nil, the top of the stack is _templateOverride, and the rest of the stack is _templateOverrideParent.
-    GRMustacheContext *_templateOverrideParent;
-    GRMustacheTemplateOverride *_templateOverride;
+    // If _partialOverride is nil, the stack is empty.
+    // If _partialOverride is not nil, the top of the stack is _partialOverride, and the rest of the stack is _partialOverrideParent.
+    GRMustacheContext *_partialOverrideParent;
+    GRMustachePartialOverride *_partialOverride;
 
     NSDictionary *_depthsForAncestors;
 }
@@ -159,16 +159,16 @@
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
- * template override stack that is extended with _templateOverride_.
+ * partial override stack that is extended with _partialOverride_.
  *
- * @param templateOverride  A template override object
+ * @param partialOverride  A partial template override object
  *
  * @return A GRMustacheContext object.
  *
- * @see GRMustacheTemplateOverride
- * @see [GRMustacheTemplateOverride renderWithContext:inBuffer:error:]
+ * @see GRMustachePartialOverride
+ * @see [GRMustachePartialOverride renderWithContext:inBuffer:error:]
  */
-- (instancetype)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingPartialOverride:(GRMustachePartialOverride *)partialOverride GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found

@@ -25,13 +25,13 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheRendering.h"
+#import "GRMustacheAST_private.h"
 
 @interface GRMustacheTemplate()<GRMustacheRendering>
 @end
 
 @implementation GRMustacheTemplate
-@synthesize components=_components;
-@synthesize contentType=_contentType;
+@synthesize AST=_AST;
 @synthesize baseContext=_baseContext;
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -78,7 +78,7 @@
 
 - (void)dealloc
 {
-    [_components release];
+    [_AST release];
     [_baseContext release];
     [super dealloc];
 }
@@ -116,11 +116,27 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     NSMutableString *buffer = [NSMutableString string];
-    if (![self renderContentType:self.contentType inBuffer:buffer withContext:context error:error]) {
+
+    if (!context) {
+        // With a nil context, the method would return nil without setting the
+        // error argument.
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
         return nil;
     }
+    
+    GRMustacheContentType templateContentType = _AST.contentType;
+    for (id<GRMustacheTemplateComponent> component in _AST.templateComponents) {
+        // component may be overriden by a GRMustachePartialOverride: resolve it.
+        component = [context resolveTemplateComponent:component];
+        
+        // render
+        if (![component renderContentType:templateContentType inBuffer:buffer withContext:context error:error]) {
+            return nil;
+        }
+    }
+    
     if (HTMLSafe) {
-        *HTMLSafe = (self.contentType == GRMustacheContentTypeHTML);
+        *HTMLSafe = (_AST.contentType == GRMustacheContentTypeHTML);
     }
     return buffer;
 }
@@ -136,75 +152,6 @@
         [_baseContext release];
         _baseContext = [baseContext retain];
     }
-}
-
-
-#pragma mark - <GRMustacheTemplateComponent>
-
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
-{
-    if (!context) {
-        // With a nil context, the method would return NO without setting the
-        // error argument.
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-        return NO;
-    }
-    
-    NSMutableString *needsEscapingBuffer = nil;
-    NSMutableString *renderingBuffer = nil;
-    
-    if (requiredContentType == GRMustacheContentTypeHTML && (self.contentType != GRMustacheContentTypeHTML)) {
-        // Self renders text, but is asked for HTML.
-        // This happens when self is a text partial embedded in a HTML template.
-        //
-        // We'll have to HTML escape our rendering.
-        needsEscapingBuffer = [NSMutableString string];
-        renderingBuffer = needsEscapingBuffer;
-    } else {
-        // Self renders text and is asked for text,
-        // or self renders HTML and is asked for HTML.
-        //
-        // We won't need any specific processing here.
-        renderingBuffer = buffer;
-    }
-    
-    for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustacheTemplateOverride: resolve it.
-        component = [context resolveTemplateComponent:component];
-        
-        // render
-        if (![component renderContentType:self.contentType inBuffer:renderingBuffer withContext:context error:error]) {
-            return NO;
-        }
-    }
-    
-    if (needsEscapingBuffer) {
-        [buffer appendString:[GRMustache escapeHTML:needsEscapingBuffer]];
-    }
-    
-    return YES;
-}
-
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
-{
-    // look for the last overriding component in inner components.
-    //
-    // This allows a partial do define an overriding section:
-    //
-    //    {
-    //        data: { },
-    //        expected: "partial1",
-    //        name: "Partials in overridable partials can override overridable sections",
-    //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
-    //        partials: {
-    //            partial1: "{{$overridable}}partial1{{/overridable}}";
-    //            partial2: "{{$overridable}}ignored{{/overridable}}";
-    //        },
-    //    }
-    for (id<GRMustacheTemplateComponent> innerComponent in _components) {
-        component = [innerComponent resolveTemplateComponent:component];
-    }
-    return component;
 }
 
 

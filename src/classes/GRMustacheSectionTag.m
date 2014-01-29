@@ -68,7 +68,7 @@
     NSMutableString *buffer = [NSMutableString string];
     
     for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustacheTemplateOverride: resolve it.
+        // component may be overriden by a GRMustachePartialOverride: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render

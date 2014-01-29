@@ -25,7 +25,7 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheError.h"
-#import "GRMustacheTemplateOverride_private.h"
+#import "GRMustachePartialOverride_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheKeyAccess_private.h"
 
@@ -114,9 +114,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    if (_templateOverride) {
-        for (GRMustacheContext *context = self; context; context = context->_templateOverrideParent) {
-            component = [context->_templateOverride resolveTemplateComponent:component];
+    if (_partialOverride) {
+        for (GRMustacheContext *context = self; context; context = context->_partialOverrideParent) {
+            component = [context->_partialOverride resolveTemplateComponent:component];
         }
     }
     return component;
@@ -199,8 +199,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     [_hiddenContextObject release];
     [_tagDelegateParent release];
     [_tagDelegate release];
-    [_templateOverrideParent release];
-    [_templateOverride release];
+    [_partialOverrideParent release];
+    [_partialOverride release];
     [_depthsForAncestors release];
     [super dealloc];
 }
@@ -244,8 +244,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
             extendedContext->_hiddenContextObject = [ancestor->_hiddenContextObject retain];
             extendedContext->_tagDelegateParent = [ancestor->_tagDelegateParent retain];
             extendedContext->_tagDelegate = [ancestor->_tagDelegate retain];
-            extendedContext->_templateOverrideParent = [ancestor->_templateOverrideParent retain];
-            extendedContext->_templateOverride = [ancestor->_templateOverride retain];
+            extendedContext->_partialOverrideParent = [ancestor->_partialOverrideParent retain];
+            extendedContext->_partialOverride = [ancestor->_partialOverride retain];
             
             context = extendedContext;
         };
@@ -264,8 +264,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
         context->_protectedContextObject = [parent->_protectedContextObject retain];
         context->_hiddenContextParent = [parent->_hiddenContextParent retain];
         context->_hiddenContextObject = [parent->_hiddenContextObject retain];
-        context->_templateOverrideParent = [parent->_templateOverrideParent retain];
-        context->_templateOverride = [parent->_templateOverride retain];
+        context->_partialOverrideParent = [parent->_partialOverrideParent retain];
+        context->_partialOverride = [parent->_partialOverride retain];
         
         // Update context stack
         context->_contextParent = [parent retain];
@@ -301,8 +301,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     context->_protectedContextObject = [_protectedContextObject retain];
     context->_hiddenContextParent = [_hiddenContextParent retain];
     context->_hiddenContextObject = [_hiddenContextObject retain];
-    context->_templateOverrideParent = [_templateOverrideParent retain];
-    context->_templateOverride = [_templateOverride retain];
+    context->_partialOverrideParent = [_partialOverrideParent retain];
+    context->_partialOverride = [_partialOverride retain];
     
     // update tag delegate stack
     if (_tagDelegate) { context->_tagDelegateParent = [self retain]; }
@@ -333,8 +333,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     context->_hiddenContextObject = [_hiddenContextObject retain];
     context->_tagDelegateParent = [_tagDelegateParent retain];
     context->_tagDelegate = [_tagDelegate retain];
-    context->_templateOverrideParent = [_templateOverrideParent retain];
-    context->_templateOverride = [_templateOverride retain];
+    context->_partialOverrideParent = [_partialOverrideParent retain];
+    context->_partialOverride = [_partialOverride retain];
     
     // update protected context stack
     if (_protectedContextObject) { context->_protectedContextParent = [self retain]; }
@@ -360,8 +360,8 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     context->_protectedContextObject = [_protectedContextObject retain];
     context->_tagDelegateParent = [_tagDelegateParent retain];
     context->_tagDelegate = [_tagDelegate retain];
-    context->_templateOverrideParent = [_templateOverrideParent retain];
-    context->_templateOverride = [_templateOverride retain];
+    context->_partialOverrideParent = [_partialOverrideParent retain];
+    context->_partialOverride = [_partialOverride retain];
     
     // update hidden context stack
     if (_hiddenContextObject) { context->_hiddenContextParent = [self retain]; }
@@ -370,9 +370,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     return context;
 }
 
-- (instancetype)contextByAddingTemplateOverride:(GRMustacheTemplateOverride *)templateOverride
+- (instancetype)contextByAddingPartialOverride:(GRMustachePartialOverride *)partialOverride
 {
-    if (templateOverride == nil) {
+    if (partialOverride == nil) {
         return self;
     }
     
@@ -390,9 +390,9 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
     context->_tagDelegateParent = [_tagDelegateParent retain];
     context->_tagDelegate = [_tagDelegate retain];
     
-    // update template override stack
-    if (_templateOverride) { context->_templateOverrideParent = [self retain]; }
-    context->_templateOverride = [templateOverride retain];
+    // update partial override stack
+    if (_partialOverride) { context->_partialOverrideParent = [self retain]; }
+    context->_partialOverride = [partialOverride retain];
     
     return context;
 }
@@ -424,7 +424,7 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
         [[_protectedContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
         [[_hiddenContextParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
         [[_tagDelegateParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
-        [[_templateOverrideParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
+        [[_partialOverrideParent depthsForAncestors] enumerateKeysAndObjectsUsingBlock:fill];
         
         _depthsForAncestors = (NSDictionary *)depthsForAncestors;
     }

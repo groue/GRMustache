@@ -133,7 +133,7 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    NSMutableDictionary *_templateForTemplateID;
+    NSMutableDictionary *_partialForTemplateID;
     GRMustacheConfiguration *_configuration;
 }
 

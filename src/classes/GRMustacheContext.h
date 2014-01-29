@@ -58,8 +58,8 @@
     id _hiddenContextObject;
     GRMustacheContext *_tagDelegateParent;
     id<GRMustacheTagDelegate> _tagDelegate;
-    GRMustacheContext *_templateOverrideParent;
-    id _templateOverride;
+    GRMustacheContext *_partialOverrideParent;
+    id _partialOverride;
     NSDictionary *_depthsForAncestors;
 }
 

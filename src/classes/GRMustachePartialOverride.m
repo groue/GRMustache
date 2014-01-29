@@ -20,25 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplateOverride_private.h"
-#import "GRMustacheTemplate_private.h"
+#import "GRMustachePartialOverride_private.h"
+#import "GRMustachePartial_private.h"
 #import "GRMustacheContext_private.h"
 
-@interface GRMustacheTemplateOverride()
-- (id)initWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components;
+@interface GRMustachePartialOverride()
+- (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components;
 @end
 
-@implementation GRMustacheTemplateOverride
-@synthesize template=_template;
+@implementation GRMustachePartialOverride
+@synthesize partial=_partial;
 
-+ (instancetype)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
++ (instancetype)partialOverrideWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
 {
-    return [[[self alloc] initWithTemplate:template components:components] autorelease];
+    return [[[self alloc] initWithPartial:partial components:components] autorelease];
 }
 
 - (void)dealloc
 {
-    [_template release];
+    [_partial release];
     [_components release];
     [super dealloc];
 }
@@ -47,8 +47,8 @@
 
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    context = [context contextByAddingTemplateOverride:self];
-    return [_template renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
+    context = [context contextByAddingPartialOverride:self];
+    return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
@@ -63,11 +63,11 @@
 
 #pragma mark - Private
 
-- (id)initWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components
+- (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
 {
     self = [super init];
     if (self) {
-        _template = [template retain];
+        _partial = [partial retain];
         _components = [components retain];
     }
     return self;

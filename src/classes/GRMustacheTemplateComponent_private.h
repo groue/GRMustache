@@ -82,7 +82,7 @@
  * component.
  *
  * All classes conforming to the GRMustacheTemplateComponent protocol return
- * _component_, but GRMustacheSectionTag, GRMustacheTemplateOverride, and
+ * _component_, but GRMustacheSectionTag, GRMustachePartialOverride, and
  * GRMustacheTemplate.
  *
  * @param component  A template component
@@ -92,7 +92,7 @@
  *
  * @see GRMustacheSectionTag
  * @see GRMustacheTemplate
- * @see GRMustacheTemplateOverride
+ * @see GRMustachePartialOverride
  */
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 @end

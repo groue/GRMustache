@@ -38,9 +38,8 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
-    NSArray *_components;
+    id _AST;
     GRMustacheContext *_baseContext;
-    GRMustacheContentType _contentType;
 }
 
 

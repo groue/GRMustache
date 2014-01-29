@@ -25,6 +25,7 @@
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheConfiguration_private.h"
+#import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
@@ -166,7 +167,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     self = [super init];
     if (self) {
-        _templateForTemplateID = [[NSMutableDictionary alloc] init];
+        _partialForTemplateID = [[NSMutableDictionary alloc] init];
         _configuration = [[GRMustacheConfiguration defaultConfiguration] copy];
     }
     return self;
@@ -174,14 +175,22 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (void)dealloc
 {
-    [_templateForTemplateID release];
+    [_partialForTemplateID release];
     [_configuration release];
     [super dealloc];
 }
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    return [self templateNamed:name relativeToTemplateID:nil error:error];
+    GRMustachePartial *partial = [self partialNamed:name relativeToTemplateID:nil error:error];
+    if (!partial) {
+        return nil;
+    }
+    
+    GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
+    template.AST = partial.AST;
+    template.baseContext = _configuration.baseContext;
+    return template;
 }
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -192,8 +201,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
-    template.components = AST.templateComponents;
-    template.contentType = AST.contentType;
+    template.AST = AST;
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -241,9 +249,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [AST autorelease];
 }
 
-- (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
+- (GRMustachePartial *)partialNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    // Protect our _templateForTemplateID dictionary, and our dataSource
+    // Protect our _partialForTemplateID dictionary, and our dataSource
     @synchronized(self) {
         
         id templateID = nil;
@@ -263,9 +271,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             return nil;
         }
         
-        GRMustacheTemplate *template = [_templateForTemplateID objectForKey:templateID];
+        GRMustachePartial *partial = [_partialForTemplateID objectForKey:templateID];
         
-        if (template == nil) {
+        if (partial == nil) {
             // templateRepository:templateStringForTemplateID:error: is a dataSource method.
             // We are not sure the dataSource will set error when not returning any templateString.
             // We thus have to take extra care of error handling here.
@@ -290,8 +298,8 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             // store an empty template before compiling, so that we support
             // recursive partials
             
-            template = [[[GRMustacheTemplate alloc] init] autorelease];
-            [_templateForTemplateID setObject:template forKey:templateID];
+            partial = [[[GRMustachePartial alloc] init] autorelease];
+            [_partialForTemplateID setObject:partial forKey:templateID];
             
             
             // Compile
@@ -302,17 +310,15 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             // compiling done
             
             if (AST) {
-                template.components = AST.templateComponents;
-                template.contentType = AST.contentType;
-                template.baseContext = _configuration.baseContext;
+                partial.AST = AST;
             } else {
                 // forget invalid empty template
-                [_templateForTemplateID removeObjectForKey:templateID];
-                template = nil;
+                [_partialForTemplateID removeObjectForKey:templateID];
+                partial = nil;
             }
         }
         
-        return template;
+        return partial;
     }
 }
 

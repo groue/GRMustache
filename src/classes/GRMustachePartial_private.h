@@ -20,46 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 
-@class GRMustacheTemplate;
+@class GRMustacheAST;
 
 /**
- * A GRMustacheTemplateOverride is a template component that renders overridable
- * partials as `{{<name}}...{{/name}}`.
- *
- * It collaborates with rendering contexts for the resolving of template components in the
- * context of Mustache overridable partials.
+ * A GRMustachePartial is a template component that renders partial tags such as
+ * `{{> name }}`.
  *
  * @see GRMustacheTemplateComponent
- * @see GRMustacheContext
  */
-@interface GRMustacheTemplateOverride : NSObject<GRMustacheTemplateComponent> {
+@interface GRMustachePartial : NSObject<GRMustacheTemplateComponent> {
 @private
-    GRMustacheTemplate *_template;
-    NSArray *_components;
+    GRMustacheAST *_AST;
 }
 
 /**
- * The overridable partial template.
- *
- * This property is used by [GRMustacheContext assertAcyclicTemplateOverride:].
- *
- * @see GRMustacheContext
+ * The abstract syntax tree of the partial template.
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplate *template GRMUSTACHE_API_INTERNAL;
-
-/**
- * Builds a GRMustacheTemplateOverride.
- *
- * @param template    The partial template that is overriden
- * @param components  The components that may override components of the overriden
- *                    partial template.
- *
- * @return A GRMustacheTemplateOverride
- */
-+ (instancetype)templateOverrideWithTemplate:(GRMustacheTemplate *)template components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
-
+@property (nonatomic, retain) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
 @end

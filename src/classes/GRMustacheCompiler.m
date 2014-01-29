@@ -21,12 +21,12 @@
 // THE SOFTWARE.
 
 #import "GRMustacheCompiler_private.h"
-#import "GRMustacheTemplate_private.h"
+#import "GRMustachePartial_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTextComponent_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
-#import "GRMustacheTemplateOverride_private.h"
+#import "GRMustachePartialOverride_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
@@ -498,25 +498,30 @@
                     }
                     
                     // Ask templateRepository for overridable template
-                    NSError *templateError;
-                    GRMustacheTemplate *template = [_templateRepository templateNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&templateError];
-                    if (template == nil) {
-                        [self failWithFatalError:templateError];
+                    GRMustachePartial *partial = [_templateRepository partialNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&partialError];
+                    if (partial == nil) {
+                        [self failWithFatalError:partialError];
                         return NO;
                     }
                     
                     // Check for consistency of HTML safety
                     //
-                    // If template.components is nil, this means that we are actually
+                    // If partial.AST.templateComponents is nil, this means that we are actually
                     // compiling it, and that template simply recursively refers to itself.
-                    // Consistency of HTML safety is this guaranteed.
-                    if (template.components && template.contentType != _contentType) {
+                    // Consistency of HTML safety is thus guaranteed.
+                    //
+                    // However, if partial.AST.templateComponents is not nil, then we must
+                    // ensure content type compatibility: an HTML template can not override a
+                    // text one, and vice versa.
+                    //
+                    // See test "HTML template can not override TEXT template" in GRMustacheSuites/text_rendering.json
+                    if (partial.AST.templateComponents && partial.AST.contentType != _contentType) {
                         [self failWithFatalError:[self parseErrorAtToken:_currentOpeningToken description:@"HTML safety mismatch"]];
                         return NO;
                     }
                     
-                    // Success: create new GRMustacheTemplateOverride
-                    wrapperComponent = [GRMustacheTemplateOverride templateOverrideWithTemplate:template components:_currentComponents];
+                    // Success: create new GRMustachePartialOverride
+                    wrapperComponent = [GRMustachePartialOverride partialOverrideWithPartial:partial components:_currentComponents];
                 } break;
                     
                 default:
@@ -539,7 +544,7 @@
             
             
         case GRMustacheTokenTypePartial: {
-            // Template name validation
+            // Partial name validation
             NSError *partialError;
             NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
             if (partialName == nil) {
@@ -548,15 +553,14 @@
             }
             
             // Ask templateRepository for partial template
-            NSError *templateError;
-            GRMustacheTemplate *template = [_templateRepository templateNamed:partialName relativeToTemplateID:_baseTemplateID error:&templateError];
-            if (template == nil) {
-                [self failWithFatalError:templateError];
+            GRMustachePartial *partial = [_templateRepository partialNamed:partialName relativeToTemplateID:_baseTemplateID error:&partialError];
+            if (partial == nil) {
+                [self failWithFatalError:partialError];
                 return NO;
             }
             
             // Success: append template component
-            [_currentComponents addObject:template];
+            [_currentComponents addObject:partial];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -564,7 +568,7 @@
             
             
         case GRMustacheTokenTypeOverridablePartial: {
-            // Template name validation
+            // Partial name validation
             NSError *partialError;
             NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
             if (partialName == nil) {

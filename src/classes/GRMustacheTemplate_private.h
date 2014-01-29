@@ -23,33 +23,21 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 #import "GRMustacheTagDelegate.h"
-#import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheConfiguration_private.h"
 
+@class GRMustacheAST;
+
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheTemplateComponent> {
+@interface GRMustacheTemplate: NSObject {
 @private
-    NSArray *_components;
+    GRMustacheAST *_AST;
     GRMustacheContext *_baseContext;
-    GRMustacheContentType _contentType;
 }
 
 /**
- * The GRMustacheTemplateComponent objects that make the template.
- *
- * @see GRMustacheTemplateComponent
+ * The abstract syntax tree of the partial template.
  */
-@property (nonatomic, retain) NSArray *components GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns the content type of the receiver.
- *
- * For example:
- *
- * - `{{name}}`: GRMustacheContentTypeHTML
- * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText
- */
-@property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;

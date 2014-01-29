@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustache_private.h"
 
+@class GRMustachePartial;
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 @class GRMustacheConfiguration;
@@ -43,7 +44,7 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    NSMutableDictionary *_templateForTemplateID;
+    NSMutableDictionary *_partialForTemplateID;
     GRMustacheConfiguration *_configuration;
 }
 
@@ -84,7 +85,7 @@
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**
- * Returns a template or a partial template, given its name.
+ * Returns a partial template, given its name.
  *
  * @param name            The name of the template
  * @param baseTemplateID  The template ID of the enclosing template, or nil.
@@ -92,8 +93,8 @@
  *                        partials, upon return contains an NSError object that
  *                        describes the problem.
  *
- * @return a template
+ * @return a partial template
  */
-- (GRMustacheTemplate *)templateNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (GRMustachePartial *)partialNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end
