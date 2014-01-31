@@ -728,7 +728,7 @@
 		56DEC3BF152639560031E8DC /* GRSpecificationSuitesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRSpecificationSuitesTest.m; sourceTree = "<group>"; };
 		56DEC3C415263AC80031E8DC /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		56DEC3C515263AC80031E8DC /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		56E2F2E616BA49A500F01DC2 /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = ../TODO.txt; sourceTree = "<group>"; };
+		56E2F2E616BA49A500F01DC2 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.md; path = ../TODO.md; sourceTree = "<group>"; };
 		56E2F2E716BAEB6100F01DC2 /* GRMustacheStandardLibrary_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheStandardLibrary_private.h; sourceTree = "<group>"; };
 		56E2F2EB16BB099A00F01DC2 /* GRMustacheContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextTest.m; sourceTree = "<group>"; };
 		56E2F2EF16BD180100F01DC2 /* GRMustacheConfigurationTagDelimitersTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfigurationTagDelimitersTest.m; sourceTree = "<group>"; };
@@ -1126,7 +1126,7 @@
 			children = (
 				5662BA3E15A05268001FD2CA /* AppledocSettings.plist */,
 				56A731B818123F1900B8570A /* Makefile */,
-				56E2F2E616BA49A500F01DC2 /* TODO.txt */,
+				56E2F2E616BA49A500F01DC2 /* TODO.md */,
 				567AEC4E15278C9A0009CA61 /* GRMustache */,
 				56DEC3AE152638CD0031E8DC /* Tests */,
 				56DEC1A615262FC90031E8DC /* Products */,
