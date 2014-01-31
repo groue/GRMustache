@@ -23,8 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheExpression;
-
 /**
  * The kinds of tokens
  */
