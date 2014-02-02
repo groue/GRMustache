@@ -25,7 +25,6 @@
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheScopedExpression_private.h"
 #import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheConfiguration_private.h"
 #import "GRMustacheError.h"
 
 

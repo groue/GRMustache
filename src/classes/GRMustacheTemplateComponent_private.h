@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheConfiguration_private.h"
+#import "GRMustacheContentType.h"
 
 @class GRMustacheContext;
 

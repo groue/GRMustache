@@ -21,42 +21,33 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheContentType.h"
+#import "GRMustacheAvailabilityMacros.h"
 
 /**
- * The GRMustacheAST represents the abstract syntax tree of a template.
- */
-@interface GRMustacheAST : NSObject {
-@private
-    NSArray *_templateComponents;
-    GRMustacheContentType _contentType;
-}
-
-/**
- * An NSArray containing <GRMustacheTemplateComponent> instances
+ * The content type of strings rendered by templates.
  *
- * @see GRMustacheTemplateComponent
- */
-@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
-
-/**
- * The content type of the AST
- */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a new allocated AST.
+ * @see GRMustacheConfiguration
+ * @see GRMustacheTemplateRepository
  *
- * @param templateComponents  An Array of <GRMustacheTemplateComponent>
- *                            instances.
- * @param contentType         A content type
- *
- * @return A new GRMustacheAST
- *
- * @see GRMustacheTemplateComponent
+ * @since v6.2
  */
-+ (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
-
-@end
+typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
+    /**
+     * The `GRMustacheContentTypeHTML` content type has templates render HTML.
+     * HTML template escape the input of variable tags such as `{{name}}`. Use
+     * triple mustache tags `{{{content}}}` in order to avoid the HTML-escaping.
+     *
+     * @since v6.2
+     */
+    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER,
+    
+    /**
+     * The `GRMustacheContentTypeText` content type has templates render text.
+     * They do not HTML-escape their input: `{{name}}` and `{{{name}}}` have
+     * identical renderings.
+     *
+     * @since v6.2
+     */
+    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER,
+} AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
 

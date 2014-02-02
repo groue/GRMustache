@@ -23,8 +23,9 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheParser_private.h"
-#import "GRMustacheConfiguration_private.h"
+#import "GRMustacheContentType.h"
 
+@class GRMustacheConfiguration;
 @class GRMustacheTemplateRepository;
 @class GRMustacheAST;
 

@@ -156,6 +156,7 @@ typedef struct {
 #import "GRMustacheFilter.h"
 #import "GRMustacheError.h"
 #import "GRMustacheVersion.h"
+#import "GRMustacheContentType.h"
 #import "GRMustacheContext.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheTag.h"

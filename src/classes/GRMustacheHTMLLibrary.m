@@ -23,7 +23,7 @@
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustache_private.h"
+#import "GRMustacheHTMLEscape_private.h"
 
 // =============================================================================
 #pragma mark - GRMustacheHTMLEscapeFilter
@@ -46,7 +46,7 @@
     // Turns other objects into strings, and escape
     
     NSString *string = [object description];
-    return [GRMustache escapeHTML:string];
+    return [GRMustacheHTMLEscape escapeHTML:string];
 }
 
 

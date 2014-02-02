@@ -22,18 +22,10 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheContentType.h"
 
 @class GRMustacheContext;
 @protocol GRMustacheTagDelegate;
-
-// Documented in GRMustacheConfiguration.h
-typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
-    // Documented in GRMustacheConfiguration.h
-    GRMustacheContentTypeHTML GRMUSTACHE_API_PUBLIC,
-    
-    // Documented in GRMustacheConfiguration.h
-    GRMustacheContentTypeText GRMUSTACHE_API_PUBLIC,
-} GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
 @interface GRMustacheConfiguration : NSObject<NSCopying> {

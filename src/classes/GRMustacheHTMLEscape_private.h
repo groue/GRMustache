@@ -22,41 +22,20 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheContentType.h"
+
+@interface GRMustacheHTMLEscape : NSFormatter
 
 /**
- * The GRMustacheAST represents the abstract syntax tree of a template.
- */
-@interface GRMustacheAST : NSObject {
-@private
-    NSArray *_templateComponents;
-    GRMustacheContentType _contentType;
-}
-
-/**
- * An NSArray containing <GRMustacheTemplateComponent> instances
+ * Returns the HTML-escaped version of the string parameter.
  *
- * @see GRMustacheTemplateComponent
- */
-@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
-
-/**
- * The content type of the AST
- */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a new allocated AST.
+ * Characters & < > " ' are escaped to &amp; &lt; &gt; &quot; &apos;
+ * respectively.
  *
- * @param templateComponents  An Array of <GRMustacheTemplateComponent>
- *                            instances.
- * @param contentType         A content type
+ * Be cautious with mutable string input: this method may return its input.
  *
- * @return A new GRMustacheAST
- *
- * @see GRMustacheTemplateComponent
+ * @param string  The string to be HTML-escaped
+ * @return An HTML-escaped string
  */
-+ (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
++ (NSString *)escapeHTML:(NSString *)string GRMUSTACHE_API_INTERNAL;
 
 @end
-

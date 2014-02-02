@@ -27,11 +27,12 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustachePartialOverride_private.h"
-#import "GRMustacheError.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 #import "GRMustacheAST_private.h"
+#import "GRMustacheConfiguration_private.h"
+#import "GRMustacheError.h"
 
 @interface GRMustacheCompiler()
 
