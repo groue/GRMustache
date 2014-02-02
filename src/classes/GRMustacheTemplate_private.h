@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustache_private.h"
-#import "GRMustacheTagDelegate.h"
-#import "GRMustacheConfiguration_private.h"
 
+@class GRMustacheContext;
 @class GRMustacheAST;
+@protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject {

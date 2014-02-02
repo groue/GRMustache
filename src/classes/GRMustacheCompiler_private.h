@@ -23,14 +23,10 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheParser_private.h"
-#import "GRMustache_private.h"
 #import "GRMustacheConfiguration_private.h"
 
-
-@class GRMustacheCompiler;
 @class GRMustacheTemplateRepository;
 @class GRMustacheAST;
-@protocol GRMustacheTemplateComponent;
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a

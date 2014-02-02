@@ -20,8 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustache.h"
 #import "GRMustacheLocalizer.h"
+#import "GRMustacheContext.h"
+#import "GRMustacheTag.h"
+#import "GRMustacheTagDelegate.h"
 
 static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocalizerValuePlaceholder";
 

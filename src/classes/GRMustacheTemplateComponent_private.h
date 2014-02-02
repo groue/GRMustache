@@ -25,7 +25,6 @@
 #import "GRMustacheConfiguration_private.h"
 
 @class GRMustacheContext;
-@class GRMustacheTemplateRepository;
 
 /**
  * The protocol for "template components".

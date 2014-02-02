@@ -22,6 +22,7 @@
 
 #import "GRMustacheParser_private.h"
 #import "GRMustacheConfiguration_private.h"
+#import "GRMustacheToken_private.h"
 #import "GRMustacheError.h"
 
 @interface GRMustacheParser()

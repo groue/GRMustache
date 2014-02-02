@@ -23,8 +23,8 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheSectionTag_private.h"
 #import "GRMustacheRendering.h"
+#import "GRMustacheTemplateComponent_private.h"
 #import "GRMustacheAST_private.h"
 
 @interface GRMustacheTemplate()<GRMustacheRendering>

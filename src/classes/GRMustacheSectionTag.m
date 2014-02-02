@@ -21,14 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSectionTag_private.h"
-#import "GRMustacheExpression_private.h"
-#import "GRMustacheTemplateComponent_private.h"
-#import "GRMustacheTemplate_private.h"
 #import "GRMustacheAccumulatorTag_private.h"
-#import "GRMustacheTagDelegate.h"
-#import "GRMustacheContext_private.h"
-#import "GRMustacheRendering.h"
-#import "GRMustache_private.h"
 
 @interface GRMustacheSectionTag()
 

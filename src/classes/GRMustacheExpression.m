@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheToken_private.h"
 
 @interface GRMustacheExpression()
 @end

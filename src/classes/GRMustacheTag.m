@@ -26,6 +26,7 @@
 #import "GRMustacheToken_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustache_private.h"
+#import "GRMustacheTagDelegate.h"
 #import "GRMustacheRendering.h"
 
 @implementation GRMustacheTag

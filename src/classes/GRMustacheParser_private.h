@@ -22,9 +22,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheToken_private.h"
 
-
+@class GRMustacheToken;
 @class GRMustacheParser;
 @class GRMustacheConfiguration;
 

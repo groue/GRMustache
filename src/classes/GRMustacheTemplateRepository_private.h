@@ -22,13 +22,11 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustache_private.h"
 
 @class GRMustachePartial;
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 @class GRMustacheConfiguration;
-@protocol GRMustacheTemplateComponent;
 
 // Documented in GRMustacheTemplateRepository.h
 @protocol GRMustacheTemplateRepositoryDataSource <NSObject>

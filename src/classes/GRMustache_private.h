@@ -26,7 +26,6 @@
 @protocol GRMustacheRendering;
 @class GRMustacheTag;
 @class GRMustacheContext;
-@class GRMustacheTemplateRepository;
 
 // Documented in GRMustache.h
 typedef struct {

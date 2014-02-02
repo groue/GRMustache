@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <objc/runtime.h>
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheFilter_private.h"
 #import "GRMustacheError.h"
-#import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheToken_private.h"
 

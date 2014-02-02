@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <objc/message.h>
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTagDelegate.h"
+
+@protocol GRMustacheTagDelegate;
 
 /**
  * The GRMustacheContext represents a Mustache rendering context: it internally

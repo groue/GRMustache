@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustache.h"
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;

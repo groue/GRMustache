@@ -22,10 +22,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheConfiguration.h"
 
 @class GRMustacheContext;
-@class GRMustacheTagDelegate;
 @protocol GRMustacheTagDelegate;
 
 /**

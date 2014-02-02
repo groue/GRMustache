@@ -20,18 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <objc/runtime.h>
 #import "GRMustache_private.h"
-#import "GRMustacheContext_private.h"
 #import "GRMustacheKeyAccess_private.h"
+#import "GRMustacheVersion.h"
+#import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
+#import "GRMustacheError.h"
+
 #import "GRMustacheStandardLibrary_private.h"
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
 #import "GRMustacheLocalizer.h"
-#import "GRMustacheVersion.h"
-#import "GRMustacheRendering.h"
-#import "GRMustacheError.h"
 
 
 // =============================================================================

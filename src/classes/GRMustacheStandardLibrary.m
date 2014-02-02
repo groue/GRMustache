@@ -21,8 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheStandardLibrary_private.h"
-#import "GRMustache_private.h"
-#import "GRMustacheRendering.h"
 
 
 // =============================================================================
