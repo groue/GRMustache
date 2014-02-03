@@ -495,11 +495,15 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                     [itemContext release];
                     
                     if (!rendering) {
-                        return nil;
+                        // make sure error is not released by autoreleasepool
+                        if (error != NULL) [*error retain];
+                        buffer = nil;
+                        break;
                     }
                     [buffer appendString:rendering];
                 }
             }
+            if (!buffer && error != NULL) [*error autorelease];
             return buffer;
         }
             
