@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2013 Gwendal Roué
+// Copyright (c) 2014 Gwendal Roué
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <objc/message.h>
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheTagDelegate.h"
+
+@protocol GRMustacheTagDelegate;
 
 /**
  * The GRMustacheContext represents a Mustache rendering context: it internally
@@ -58,8 +58,8 @@
     id _hiddenContextObject;
     GRMustacheContext *_tagDelegateParent;
     id<GRMustacheTagDelegate> _tagDelegate;
-    GRMustacheContext *_templateOverrideParent;
-    id _templateOverride;
+    GRMustacheContext *_partialOverrideParent;
+    id _partialOverride;
     NSDictionary *_depthsForAncestors;
 }
 

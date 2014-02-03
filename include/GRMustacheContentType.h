@@ -22,13 +22,32 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheFilter.h"
 
 /**
- * A category on NSValueTransformer that allows them to be directly used as
- * filters in GRMustache templates.
+ * The content type of strings rendered by templates.
  *
- * @since v6.4
+ * @see GRMustacheConfiguration
+ * @see GRMustacheTemplateRepository
+ *
+ * @since v6.2
  */
-@interface NSValueTransformer (GRMustache)<GRMustacheFilter>
-@end
+typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
+    /**
+     * The `GRMustacheContentTypeHTML` content type has templates render HTML.
+     * HTML template escape the input of variable tags such as `{{name}}`. Use
+     * triple mustache tags `{{{content}}}` in order to avoid the HTML-escaping.
+     *
+     * @since v6.2
+     */
+    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER,
+    
+    /**
+     * The `GRMustacheContentTypeText` content type has templates render text.
+     * They do not HTML-escape their input: `{{name}}` and `{{{name}}}` have
+     * identical renderings.
+     *
+     * @since v6.2
+     */
+    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER,
+} AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+

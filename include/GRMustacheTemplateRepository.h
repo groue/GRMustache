@@ -1,6 +1,6 @@
 // The MIT License
 // 
-// Copyright (c) 2013 Gwendal Roué
+// Copyright (c) 2014 Gwendal Roué
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustache.h"
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
@@ -133,7 +132,7 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    NSMutableDictionary *_templateForTemplateID;
+    NSMutableDictionary *_partialForTemplateID;
     GRMustacheConfiguration *_configuration;
 }
 
