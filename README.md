@@ -195,6 +195,7 @@ Who's using GRMustache
 ### Open-source software
 
 * [bnickel/AMYServer](https://github.com/bnickel/AMYServer): A mock server fully integrated with KIF-next.
+* [Awful/Awful.app](https://github.com/Awful/Awful.app): Something Awful Forums browser for iOS
 * [tomaz/appledoc](https://github.com/tomaz/appledoc): Objective-c code Apple style documentation set generator.
 * [stevestreza/Barista](https://github.com/stevestreza/Barista): A modular, embeddable web server for Objective-C.
 * [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk): MapBox iOS SDK, an open source alternative to MapKit.
