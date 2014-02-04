@@ -200,7 +200,9 @@ Who's using GRMustache
 * [stevestreza/Barista](https://github.com/stevestreza/Barista): A modular, embeddable web server for Objective-C.
 * [mapbox/mapbox-ios-sdk](https://github.com/mapbox/mapbox-ios-sdk): MapBox iOS SDK, an open source alternative to MapKit.
 * [Objective-Cloud/OCFWeb](https://github.com/Objective-Cloud/OCFWeb): A small and imperfect web application framework written in Objective-C.
+* [as-cii/PdfReportKit](https://github.com/as-cii/PdfReportKit): A library that generates a pdf report starting with HTML code.
 * [RESTmagic](http://restmagic.org): RESTmagic is a framework for that framework you already deployed, your RESTFUL/RESTish api.
+* [Codeux/Textual](https://github.com/Codeux/Textual): A lightweight IRC client for Mac OS X.
 * [CarterA/Tribo](https://github.com/CarterA/Tribo): Extremely fast static site generator written in Objective-C.
 
 ### Closed-source software
