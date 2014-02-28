@@ -3,6 +3,11 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v6.9.2
+
+[Fix](https://github.com/groue/GRMustache/pull/70) for a crash on arm64 devices.
+
+
 ## v6.9.1
 
 [Fix](https://github.com/groue/GRMustache/pull/67) for a crash in enumeration rendering.
