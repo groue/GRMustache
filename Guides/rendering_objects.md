@@ -8,7 +8,7 @@ Overview
 
 The [Runtime Guide](runtime.md) describes what happens whenever a tag such as `{{ name }}` or `{{# items }}...{{/ items }}` gets rendered. Strings are HTML-escaped, arrays are iterated, numbers control boolean sections, etc.
 
-But sometimes you need something more dynamic, you need to inject your own code into the template rendering, and extend the language. Orthodox Mustache provides with "lambda sections". [Handlebars.js]((http://handlebarsjs.com), an extended Mustache engine, has introduced "helpers".
+But sometimes you need something more dynamic, you need to inject your own code into the template rendering, and extend the language. Orthodox Mustache provides with "lambda sections". [Handlebars.js](http://handlebarsjs.com), an extended Mustache engine, has introduced "helpers".
 
 Let us introduce GRMustache "rendering objects".
 
