@@ -44,15 +44,13 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 // =============================================================================
 #pragma mark - GRMustacheKeyAccess
 
-static IMP GRValueForKeyNSObjectIMP;
-static Class GROrderedSetClass;
+static Class NSOrderedSetClass;
 
 @implementation GRMustacheKeyAccess
 
 + (void)initialize
 {
-    GRValueForKeyNSObjectIMP = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
-    GROrderedSetClass = NSClassFromString(@"NSOrderedSet");
+    NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
 }
 
 + (id)valueForMustacheKey:(NSString *)key inObject:(id)object
@@ -61,23 +59,34 @@ static Class GROrderedSetClass;
         return nil;
     }
     
-    // https://github.com/groue/GRMustache/issues/66:
-    // 1st try objectForKeyedSubscript:, then valueForKey:
+    
+    // Try objectForKeyedSubscript: first (see https://github.com/groue/GRMustache/issues/66:)
+    
     if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
         return [object objectForKeyedSubscript:key];
     }
     
-    if (preventsNSUndefinedKeyException) {
-        [GRMustacheKeyAccess startPreventingNSUndefinedKeyExceptionFromObject:object];
-    }
+    
+    // Then try valueForKey:
     
     @try {
+        
+        // valueForKey: may throw NSUndefinedKeyException, and user may want to
+        // prevent them.
+        
+        if (preventsNSUndefinedKeyException) {
+            [GRMustacheKeyAccess startPreventingNSUndefinedKeyExceptionFromObject:object];
+        }
+        
         // We don't want to use NSArray, NSSet and NSOrderedSet implementation
-        // of valueForKey:, because they return another collection: see issue #21
-        // and "anchored key should not extract properties inside an array" test
-        // in src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+        // of valueForKey:, because they return another collection: see issue
+        // #21 and "anchored key should not extract properties inside an array"
+        // test in src/tests/Public/v4.0/GRMustacheSuites/compound_keys.json
+        //
+        // Instead, we want the behavior of NSObject's implementation of valueForKey:.
+        
         if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
-            return GRValueForKeyNSObjectIMP(object, @selector(valueForKey:), key);
+            return [self valueForKey:key inFoundationCollectionObject:object];
         } else {
             return [object valueForKey:key];
         }
@@ -111,8 +120,123 @@ static Class GROrderedSetClass;
 {
     if ([object isKindOfClass:[NSArray class]]) { return YES; }
     if ([object isKindOfClass:[NSSet class]]) { return YES; }
-    if (GROrderedSetClass && [object isKindOfClass:GROrderedSetClass]) { return YES; }
+    if (NSOrderedSetClass && [object isKindOfClass:NSOrderedSetClass]) { return YES; }
     return NO;
+}
+
++ (id)valueForKey:(NSString *)key inFoundationCollectionObject:(id)object
+{
+    // Ideally, we would use NSObject's implementation for collections, so that
+    // we can access properties such as `count`, `anyObject`, etc.
+    //
+    // And so we did, until [issue #70](https://github.com/groue/GRMustache/issues/70)
+    // revealed that the direct use of NSObject's imp crashes on arm64:
+    //
+    //     IMP imp = class_getMethodImplementation([NSObject class], @selector(valueForKey:));
+    //     return imp(object, @selector(valueForKey:), key);    // crash on arm64
+    //
+    // objc_msgSendSuper fails on arm64 as well:
+    //
+    //     return objc_msgSendSuper(
+    //              &(struct objc_super){ .receiver = object, .super_class = [NSObject class] },
+    //              @selector(valueForKey:),
+    //              key);    // crash on arm64
+    //
+    // So we have to implement NSObject's valueForKey: ourselves.
+    //
+    // Quoting Apple documentation:
+    // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/SearchImplementation.html
+    //
+    // > Default Search Pattern for valueForKey:
+    // >
+    // > 1. Searches the class of the receiver for an accessor method whose
+    // > name matches the pattern get<Key>, <key>, or is<Key>, in that order.
+    //
+    // The remaining of the search pattern goes into aggregates and ivars. Let's
+    // ignore aggregates (until someone has a need for it), and ivars (since
+    // they are private).
+    
+    NSString *keyWithUppercaseInitial = [NSString stringWithFormat:@"%@%@",
+                                         [[key substringToIndex:1] uppercaseString],
+                                         [key substringFromIndex:1]];
+    NSArray *accessors = [NSArray arrayWithObjects:
+                          [NSString stringWithFormat:@"get%@", keyWithUppercaseInitial],
+                          key,
+                          [NSString stringWithFormat:@"is%@", keyWithUppercaseInitial],
+                          nil];
+    
+    for (NSString *accessor in accessors) {
+        SEL selector = NSSelectorFromString(accessor);
+        if ([object respondsToSelector:selector]) {
+            
+            // Extract the raw value into a buffer
+            
+            NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+            invocation.selector = selector;
+            [invocation invokeWithTarget:object];
+            void *buffer = malloc([methodSignature methodReturnLength]);
+            [invocation getReturnValue:buffer];
+            
+            // Turn the raw value buffer into an object
+            
+            id result = nil;
+            const char *objCType = [methodSignature methodReturnType];
+            switch(objCType[0]) {
+                case 'c':
+                    result = [NSNumber numberWithChar:*(char *)buffer];
+                    break;
+                case 'i':
+                    result = [NSNumber numberWithInt:*(int *)buffer];
+                    break;
+                case 's':
+                    result = [NSNumber numberWithShort:*(short *)buffer];
+                    break;
+                case 'l':
+                    result = [NSNumber numberWithLong:*(long *)buffer];
+                    break;
+                case 'q':
+                    result = [NSNumber numberWithLongLong:*(long long *)buffer];
+                    break;
+                case 'C':
+                    result = [NSNumber numberWithUnsignedChar:*(unsigned char *)buffer];
+                    break;
+                case 'I':
+                    result = [NSNumber numberWithUnsignedInt:*(unsigned int *)buffer];
+                    break;
+                case 'S':
+                    result = [NSNumber numberWithUnsignedShort:*(unsigned short *)buffer];
+                    break;
+                case 'L':
+                    result = [NSNumber numberWithUnsignedLong:*(unsigned long *)buffer];
+                    break;
+                case 'Q':
+                    result = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)buffer];
+                    break;
+                case 'B':
+                    result = [NSNumber numberWithBool:*(_Bool *)buffer];
+                    break;
+                case 'f':
+                    result = [NSNumber numberWithFloat:*(float *)buffer];
+                    break;
+                case 'd':
+                    result = [NSNumber numberWithDouble:*(double *)buffer];
+                    break;
+                case '@':
+                case '#':
+                    result = *(id *)buffer;
+                    break;
+                default:
+                    [NSException raise:NSInternalInconsistencyException format:@"Not implemented yet"];
+                    break;
+            }
+            
+            free(buffer);
+            return result;
+        }
+    }
+    
+    return nil;
 }
 
 
