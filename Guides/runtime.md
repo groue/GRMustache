@@ -210,10 +210,6 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 If you do not care about compatibility, you can simply use the `count` property of NSArray, and use the fact that GRMustache considers zero numbers as false:
 
-> WARNING (February 27, 2013): it looks that accessing NSArray's count crashes on arm64 (see [issue #70](https://github.com/groue/GRMustache/issues/70)).
->
-> Please avoid this technique until this issue is solved.
-
 ```objc
 NSArray *friends = ...;
 id data = @{ @"friends": friends };
