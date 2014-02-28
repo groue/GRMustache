@@ -93,6 +93,11 @@ Mustache, and beyond:
 
 - [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 
+Forking:
+
+- [Forking Guide](Guides/forking.md): general information about the library.
+
+
 ### Sample code
 
 Check the [FAQ](#faq) right below.
