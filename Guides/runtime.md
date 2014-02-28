@@ -42,7 +42,7 @@ Values are usually rendered with the [standard](http://developer.apple.com/docum
 - Your custom objects that take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
 - Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (but NSDictionary):
 
-A variable tag renders all items of enumerable objects:
+A variable tag fed with an enumerable object renders the concatenation of its elements:
 
 ```objc
 id data = @{ @"voyels": @[@"A", @"E", @"I", @"O", @"U"] };
