@@ -78,6 +78,11 @@
     return [_argumentExpression isEqual:((GRMustacheFilteredExpression *)expression).argumentExpression];
 }
 
+- (NSUInteger)hash
+{
+    return [_filterExpression hash] ^ [_argumentExpression hash];
+}
+
 
 #pragma mark GRMustacheExpression
 

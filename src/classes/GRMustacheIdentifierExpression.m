@@ -60,6 +60,11 @@
     return [_identifier isEqual:((GRMustacheIdentifierExpression *)expression).identifier];
 }
 
+- (NSUInteger)hash
+{
+    return [_identifier hash];
+}
+
 
 #pragma mark - GRMustacheExpression
 

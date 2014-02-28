@@ -74,6 +74,11 @@
     return [_scopeIdentifier isEqual:((GRMustacheScopedExpression *)expression).scopeIdentifier];
 }
 
+- (NSUInteger)hash
+{
+    return [_baseExpression hash] ^ [_scopeIdentifier hash];
+}
+
 
 #pragma mark - GRMustacheExpression
 

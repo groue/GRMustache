@@ -23,16 +23,23 @@
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheContext_private.h"
 
+static GRMustacheImplicitIteratorExpression *instance;
+
 @implementation GRMustacheImplicitIteratorExpression
+
++ (void)initialize
+{
+    instance = [[self alloc] init];
+}
 
 + (instancetype)expression
 {
-    return [[[self alloc] init] autorelease];
+    return instance;
 }
 
 - (BOOL)isEqual:(id)expression
 {
-    return [expression isKindOfClass:[GRMustacheImplicitIteratorExpression class]];
+    return expression == instance;
 }
 
 
