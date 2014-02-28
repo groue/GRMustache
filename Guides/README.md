@@ -5,7 +5,7 @@ Guides
 
 Those guides provide general documentation of GRMustache, one topic after the other.
 
-See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/), which documents each class and protocol of the library, and the [FAQ](../../../../GRMustache#faq), which links to sample code.
+See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/), which documents all classes and protocols of the library, and the [FAQ](../../../../GRMustache#faq), which links to sample code.
 
 ## Introduction
 
