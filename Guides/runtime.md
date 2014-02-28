@@ -367,6 +367,8 @@ NSDictionary never complains when asked for an unknown key. However, the default
 
 *GRMustache catches those exceptions*, so that the key lookup can continue down the context stack.
 
+Some of you may feel uncomfortable with those exceptions. See the paragraph below.
+
 
 ### NSUndefinedKeyException Prevention
 
