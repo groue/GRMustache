@@ -290,11 +290,11 @@ You can still choose the rendered partial at runtime, with simple variable tags:
     - {{ link }}
     {{/ items }}
 
-`Movie.mustache`:
+`MovieLink.mustache`:
 
     <a href="{{ url }}">{{ title }}</a>
 
-`Person.mustache`:
+`PersonLink.mustache`:
 
     <a href="{{ url }}">{{ firstName }} {{ lastName }}</a>
 
@@ -306,13 +306,13 @@ id data = @{
         @{
             @"title": @"Citizen Kane",
             @"url":@"/movies/321",
-            @"link": [GRMustacheTemplate templateFromResource:@"Movie" bundle:nil error:nil],
+            @"link": [GRMustacheTemplate templateFromResource:@"MovieLink" bundle:nil error:nil],
         },
         @{
             @"firstName": @"Orson",
             @"lastName": @"Welles",
             @"url":@"/people/123",
-            @"link": [GRMustacheTemplate templateFromResource:@"Person" bundle:nil error:nil],
+            @"link": [GRMustacheTemplate templateFromResource:@"PersonLink" bundle:nil error:nil],
         },
     ],
 };
