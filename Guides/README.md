@@ -1,4 +1,4 @@
-[up](../../../GRMustache#documentation)
+[up](../../GRMustache#documentation)
 
 Guides
 ======
@@ -41,4 +41,4 @@ See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/
 
 - [Forking Guide](forking.md): general information about the library.
 
-[up](../../../GRMustache#documentation)
+[up](../../GRMustache#documentation)
