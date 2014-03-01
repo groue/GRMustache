@@ -23,6 +23,7 @@
 #import <objc/message.h>
 #import <pthread.h>
 #import "GRMustacheKeyAccess_private.h"
+#import "GRMustacheKeyValidation.h"
 #import "JRSwizzle.h"
 
 
@@ -46,6 +47,11 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 
 static Class NSOrderedSetClass;
 
+@interface NSObject(GRMustacheCoreDataMethods)
+- (NSDictionary *)propertiesByName;
+- (id)entity;
+@end
+
 @implementation GRMustacheKeyAccess
 
 + (void)initialize
@@ -68,6 +74,10 @@ static Class NSOrderedSetClass;
     
     
     // Then try valueForKey:
+    
+    if (![self isMustacheKey:key validForObject:object]) {
+        return nil;
+    }
     
     @try {
         
@@ -115,6 +125,10 @@ static Class NSOrderedSetClass;
     
     return nil;
 }
+
+
+// =============================================================================
+#pragma mark - Foundation collections
 
 + (BOOL)objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:(id)object
 {
@@ -237,6 +251,79 @@ static Class NSOrderedSetClass;
     }
     
     return nil;
+}
+
+
+// =============================================================================
+#pragma mark - Key validation
+
++ (BOOL)isMustacheKey:(NSString *)key validForObject:(id)object
+{
+    static NSMutableDictionary *validKeysForClassName;
+    static Class NSManagedObjectClass;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        validKeysForClassName = [[NSMutableDictionary alloc] init];
+        NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
+    });
+    
+    NSSet *validKeys = nil;
+    @synchronized(validKeysForClassName) {
+        Class klass = [object class];
+        NSString *className = NSStringFromClass(klass);
+        validKeys = [validKeysForClassName objectForKey:className];
+        if (!validKeys) {
+            if ([klass respondsToSelector:@selector(validMustacheKeys)]) {
+                validKeys = [NSSet setWithArray:[klass validMustacheKeys]];
+            } else if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
+                validKeys = [self validKeysForCoreDataEntity:[object entity]];
+            } else {
+                validKeys = [self propertyGettersForClass:klass];
+            }
+            [validKeysForClassName setObject:validKeys forKey:className];
+        }
+    }
+    return [validKeys containsObject:key];
+}
+
++ (NSSet *)validKeysForCoreDataEntity:(id)entity
+{
+    return [NSSet setWithArray:[[entity propertiesByName] allKeys]];
+}
+
++ (NSSet *)propertyGettersForClass:(Class)klass
+{
+    NSMutableSet *validKeys = [NSMutableSet set];
+    while (klass) {
+        // Iterate properties
+        
+        unsigned int count;
+        objc_property_t *properties = class_copyPropertyList(klass, &count);
+        
+        for (unsigned int i=0; i<count; ++i) {
+            const char *attrs = property_getAttributes(properties[i]);
+            
+            // Valid Mustache keys are property name, and custom getter.
+            
+            const char *propertyNameCString = property_getName(properties[i]);
+            NSString *propertyName = [NSString stringWithCString:propertyNameCString encoding:NSUTF8StringEncoding];
+            [validKeys addObject:propertyName];
+            
+            char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
+            if (getterStart) {
+                getterStart += 2;                               // "customGetter,..."
+                char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
+                size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
+                NSString *customGetter = [[[NSString alloc] initWithBytes:getterStart length:getterLength encoding:NSUTF8StringEncoding] autorelease];
+                [validKeys addObject:customGetter];
+            }
+        }
+        
+        free(properties);
+        klass = class_getSuperclass(klass);
+    }
+    
+    return validKeys;
 }
 
 
