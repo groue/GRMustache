@@ -23,12 +23,13 @@
 #import "GRMustachePrivateAPITest.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
+#import "GRMustacheKeyValidation.h"
 
 @interface GRMustacheContextPrivateTest : GRMustachePrivateAPITest
 @end
 
 
-@interface GRKVCRecorder: NSObject {
+@interface GRKVCRecorder: NSObject<GRMustacheKeyValidation> {
     NSString *lastAccessedKey;
     NSArray *keys;
 }
@@ -39,18 +40,26 @@
 @implementation GRKVCRecorder
 @synthesize lastAccessedKey;
 @synthesize keys;
+
+- (BOOL)isValidMustacheKey:(NSString *)key
+{
+    return YES;
+}
+
 + (instancetype)recorderWithRecognizedKeys:(NSArray *)keys
 {
     GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
     recorder.keys = keys;
     return recorder;
 }
+
 + (instancetype)recorderWithRecognizedKey:(NSString *)key
 {
     GRKVCRecorder *recorder = [[[self alloc] init] autorelease];
     recorder.keys = [NSArray arrayWithObject:key];
     return recorder;
 }
+
 - (id)valueForKey:(NSString *)key
 {
     self.lastAccessedKey = key;
@@ -59,18 +68,25 @@
     }
     return key;
 }
+
 - (void)dealloc
 {
     [lastAccessedKey release];
     [keys release];
     [super dealloc];
 }
+
 @end
 
-@interface ThrowingObjectFromValueForKey: NSObject
+@interface ThrowingObjectFromValueForKey: NSObject<GRMustacheKeyValidation>
 @end
 
 @implementation ThrowingObjectFromValueForKey
+
+- (BOOL)isValidMustacheKey:(NSString *)key
+{
+    return YES;
+}
 
 - (id)valueForKey:(NSString *)key
 {
@@ -88,10 +104,15 @@
 
 @end
 
-@interface ThrowingObjectFromValueForUndefinedKey: NSObject
+@interface ThrowingObjectFromValueForUndefinedKey: NSObject<GRMustacheKeyValidation>
 @end
 
 @implementation ThrowingObjectFromValueForUndefinedKey
+
+- (BOOL)isValidMustacheKey:(NSString *)key
+{
+    return YES;
+}
 
 - (id)valueForUndefinedKey:(NSString *)key
 {

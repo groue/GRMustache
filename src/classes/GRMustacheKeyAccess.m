@@ -73,11 +73,13 @@ static Class NSOrderedSetClass;
     }
     
     
-    // Then try valueForKey:
+    // Then try valueForKey:, after key validation
     
-    if (![self isMustacheKey:key validForObject:object]) {
+    if (![self isValidMustacheKey:key forObject:object]) {
+        NSLog(@"GRMustache can not access key `%@` on class %@.", key, [object class]);
         return nil;
     }
+    
     
     @try {
         
@@ -257,8 +259,12 @@ static Class NSOrderedSetClass;
 // =============================================================================
 #pragma mark - Key validation
 
-+ (BOOL)isMustacheKey:(NSString *)key validForObject:(id)object
++ (BOOL)isValidMustacheKey:(NSString *)key forObject:(id)object
 {
+    if ([object respondsToSelector:@selector(isValidMustacheKey:)]) {
+        return [object isValidMustacheKey:key];
+    }
+    
     static NSMutableDictionary *validKeysForClassName;
     static Class NSManagedObjectClass;
     static dispatch_once_t onceToken;
@@ -267,31 +273,24 @@ static Class NSOrderedSetClass;
         NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
     });
     
-    NSSet *validKeys = nil;
+    NSMutableSet *validKeys = nil;
     @synchronized(validKeysForClassName) {
         Class klass = [object class];
         NSString *className = NSStringFromClass(klass);
         validKeys = [validKeysForClassName objectForKey:className];
         if (!validKeys) {
-            if ([klass respondsToSelector:@selector(validMustacheKeys)]) {
-                validKeys = [NSSet setWithArray:[klass validMustacheKeys]];
-            } else if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
-                validKeys = [self validKeysForCoreDataEntity:[object entity]];
-            } else {
-                validKeys = [self propertyGettersForClass:klass];
+            validKeys = [self propertyGettersForClass:klass];
+            if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
+                [validKeys unionSet:[NSSet setWithArray:[[[object entity] propertiesByName] allKeys]]];
             }
             [validKeysForClassName setObject:validKeys forKey:className];
         }
     }
+    
     return [validKeys containsObject:key];
 }
 
-+ (NSSet *)validKeysForCoreDataEntity:(id)entity
-{
-    return [NSSet setWithArray:[[entity propertiesByName] allKeys]];
-}
-
-+ (NSSet *)propertyGettersForClass:(Class)klass
++ (NSMutableSet *)propertyGettersForClass:(Class)klass
 {
     NSMutableSet *validKeys = [NSMutableSet set];
     while (klass) {

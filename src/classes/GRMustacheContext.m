@@ -646,6 +646,11 @@ NSString *canonicalKeyForKey(Class klass, NSString *key);
 // =============================================================================
 #pragma mark - Key-Value Coding
 
+- (BOOL)isValidMustacheKey:(NSString *)key
+{
+    return YES;
+}
+
 - (id)valueForKey:(NSString *)key
 {
     Class klass = object_getClass(self);

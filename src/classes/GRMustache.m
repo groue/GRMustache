@@ -27,6 +27,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheKeyValidation.h"
 
 #import "GRMustacheStandardLibrary_private.h"
 #import "GRMustacheJavascriptLibrary_private.h"
@@ -68,6 +69,52 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 
 // =============================================================================
+#pragma mark - Key validation declarations
+
+static NSMutableSet *validMustacheKeysForNSArray;
+static NSMutableSet *validMustacheKeysForNSAttributedString;
+static NSMutableSet *validMustacheKeysForNSData;
+static NSMutableSet *validMustacheKeysForNSDate;
+static NSMutableSet *validMustacheKeysForNSDateComponents;
+static NSMutableSet *validMustacheKeysForNSDecimalNumber;
+static NSMutableSet *validMustacheKeysForNSError;
+static NSMutableSet *validMustacheKeysForNSHashTable;
+static NSMutableSet *validMustacheKeysForNSIndexPath;
+static NSMutableSet *validMustacheKeysForNSIndexSet;
+static NSMutableSet *validMustacheKeysForNSMapTable;
+static NSMutableSet *validMustacheKeysForNSNotification;
+static NSMutableSet *validMustacheKeysForNSException;
+static NSMutableSet *validMustacheKeysForNSNumber;
+static NSMutableSet *validMustacheKeysForNSOrderedSet;
+static NSMutableSet *validMustacheKeysForNSPointerArray;
+static NSMutableSet *validMustacheKeysForNSSet;
+static NSMutableSet *validMustacheKeysForNSString;
+static NSMutableSet *validMustacheKeysForNSURL;
+static NSMutableSet *validMustacheKeysForNSValue;
+
+static BOOL isValidMustacheKeyForNSArray(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSAttributedString(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSData(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSDate(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSDateComponents(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSDecimalNumber(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSError(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSHashTable(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSIndexPath(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSIndexSet(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSMapTable(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSNotification(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSException(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSNumber(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSOrderedSet(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSPointerArray(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSSet(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSString(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSURL(id self, SEL _cmd, NSString *key);
+static BOOL isValidMustacheKeyForNSValue(id self, SEL _cmd, NSString *key);
+
+
+// =============================================================================
 #pragma mark - GRMustache
 
 @interface GRMustache()
@@ -93,6 +140,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 + (void)load
 {
     [self setupRendering];
+    [self setupKeyValidationForFoundationClasses];
 }
 
 
@@ -146,6 +194,91 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     // Add protocol conformance
     class_addProtocol(klass, protocol);
 }
+
+
+#pragma mark - Key validation for Foundation classes
+
++ (void)setupKeyValidationForFoundationClasses
+{
+    // Valid keys for Foundation classes are all non-mutating methods, plus a few safe NSObject methods.
+    
+    SEL selector = @selector(isValidMustacheKey:);
+    struct objc_method_description methodDescription = protocol_getMethodDescription(@protocol(GRMustacheKeyValidation), selector, YES, YES);
+    
+    NSSet *validMustacheNSObjectKeys = [NSSet setWithObjects:
+                                        @"class",
+                                        @"superclass",
+                                        @"self",
+                                        @"description",
+                                        @"debugDescription",
+                                        nil];
+    NSSet *invalidMustacheNSObjectKeys = [NSSet setWithObjects:
+                                          @"init",
+                                          @"dealloc",
+                                          @"finalize",
+                                          @"copy",
+                                          @"mutableCopy",
+                                          @"retain",
+                                          @"release",
+                                          @"autorelease",
+                                          nil];
+
+#define setupKeyValidationForClass(klass) do {\
+    Class cls = NSClassFromString(@#klass);\
+    if (cls) {\
+        validMustacheKeysFor ## klass = [[self allPublicKeysForClass:cls] retain];\
+        [validMustacheKeysFor ## klass unionSet:validMustacheNSObjectKeys];\
+        [validMustacheKeysFor ## klass minusSet:invalidMustacheNSObjectKeys];\
+        class_addMethod(cls, @selector(isValidMustacheKey:), (IMP)isValidMustacheKeyFor ## klass, methodDescription.types);\
+    }\
+} while(0);
+    
+    setupKeyValidationForClass(NSArray);
+    setupKeyValidationForClass(NSAttributedString);
+    setupKeyValidationForClass(NSData);
+    setupKeyValidationForClass(NSDate);
+    setupKeyValidationForClass(NSDateComponents);
+    setupKeyValidationForClass(NSDecimalNumber);
+    setupKeyValidationForClass(NSError);
+    setupKeyValidationForClass(NSHashTable);
+    setupKeyValidationForClass(NSIndexPath);
+    setupKeyValidationForClass(NSIndexSet);
+    setupKeyValidationForClass(NSMapTable);
+    setupKeyValidationForClass(NSNotification);
+    setupKeyValidationForClass(NSException);
+    setupKeyValidationForClass(NSNumber);
+    setupKeyValidationForClass(NSOrderedSet);
+    setupKeyValidationForClass(NSPointerArray);
+    setupKeyValidationForClass(NSSet);
+    setupKeyValidationForClass(NSString);
+    setupKeyValidationForClass(NSURL);
+    setupKeyValidationForClass(NSValue);
+}
+
+/**
+ * Return the set of methods without arguments, up to NSObject, non including NSObject.
+ */
++ (NSMutableSet *)allPublicKeysForClass:(Class)klass
+{
+    NSMutableSet *keys = [NSMutableSet set];
+    Class NSObjectClass = [NSObject class];
+    while (klass && klass != NSObjectClass) {
+        unsigned int methodCount;
+        Method *methods = class_copyMethodList(klass, &methodCount);
+        for (unsigned int i = 0; i < methodCount; ++i) {
+            SEL selector = method_getName(methods[i]);
+            const char *selectorName = sel_getName(selector);
+            if (selectorName[0] != '_' && selectorName[strlen(selectorName) - 1] != '_' && strstr(selectorName, ":") == NULL) {
+                [keys addObject:NSStringFromSelector(selector)];
+            }
+        }
+        free (methods);
+        klass = class_getSuperclass(klass);
+    }
+    
+    return keys;
+}
+
 
 
 #pragma mark - Global services
@@ -524,4 +657,104 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             }
         }
     }
+}
+
+static BOOL isValidMustacheKeyForNSArray(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSArray containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSAttributedString(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSAttributedString containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSData(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSData containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSDate(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSDate containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSDateComponents(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSDateComponents containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSDecimalNumber(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSDecimalNumber containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSError(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSError containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSHashTable(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSHashTable containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSIndexPath(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSIndexPath containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSIndexSet(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSIndexSet containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSMapTable(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSMapTable containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSNotification(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSNotification containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSException(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSException containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSNumber(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSNumber containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSOrderedSet(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSOrderedSet containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSPointerArray(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSPointerArray containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSSet(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSSet containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSString(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSString containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSURL(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSURL containsObject:key];
+}
+
+static BOOL isValidMustacheKeyForNSValue(id self, SEL _cmd, NSString *key)
+{
+    return [validMustacheKeysForNSValue containsObject:key];
 }

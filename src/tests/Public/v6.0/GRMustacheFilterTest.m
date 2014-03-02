@@ -134,7 +134,7 @@
     STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
 }
 
-- (void)testFilterArgumensDoNotEnterSectionContextStack
+- (void)testFilterArgumentsDoNotEnterSectionContextStack
 {
     id data = @{
         @"test": @"success",

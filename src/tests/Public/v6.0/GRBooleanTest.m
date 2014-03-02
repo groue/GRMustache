@@ -26,7 +26,7 @@
 @interface GRBooleanTest : GRMustachePublicAPITest
 @end
 
-@interface GRBooleanTestSupport: NSObject {
+@interface GRBooleanTestSupport: NSObject<GRMustacheKeyValidation> {
     BOOL _customGetterBOOLProperty;
     bool _customGetterboolProperty;
 }
@@ -67,6 +67,11 @@
 - (unsigned char)unsigned_charTrueMethod { return YES; }
 - (int)intFalseMethod { return NO; }
 - (int)intTrueMethod { return YES; }
+
+- (BOOL)isValidMustacheKey:(NSString *)key
+{
+    return YES;
+}
 @end
 
 @interface GRBooleanTestSupportSubClass: GRBooleanTestSupport

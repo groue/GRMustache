@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheKeyValidation.h"
 
 @protocol GRMustacheTagDelegate;
 
@@ -47,7 +48,7 @@
  *
  * @see GRMustacheRendering protocol
  */
-@interface GRMustacheContext : NSObject {
+@interface GRMustacheContext : NSObject<GRMustacheKeyValidation> {
 @private
     GRMustacheContext *_contextParent;
     id _contextObject;
