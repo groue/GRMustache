@@ -52,7 +52,6 @@
 @private
     GRMustacheContext *_contextParent;
     id _contextObject;
-    NSMutableDictionary *_managedPropertiesStore;
     GRMustacheContext *_protectedContextParent;
     id _protectedContextObject;
     GRMustacheContext *_hiddenContextParent;
@@ -326,14 +325,12 @@
  *    Mustache value for the key.
  *
  * 2. Otherwise (irrelevant protected context stack), search the context stack
- *    for an object that has a non-nil Mustache value for the key, or for an
- *    initialized managed property (managed properties are properties defined by
- *    GRMustacheContext subclasses as @dynamic).
+ *    for an object that has a non-nil Mustache value for the key.
  *
  * 3. Otherwise (irrelevant protected context stack, irrelevant regular context
- *    stack, no initialized managed property), fetches the Mustache value on the
- *    receiver, so that your `GRMustacheContext` subclass can provide default
- *    values. This value is returned, if non-nil.
+ *    stack), fetches the Mustache value on the receiver, so that your
+ *    `GRMustacheContext` subclass can provide default values. This value is
+ *    returned, if non-nil.
  *
  * 4. If none of the above situations occurs, returns the result of
  *    `valueForUndefinedMustacheKey:`.

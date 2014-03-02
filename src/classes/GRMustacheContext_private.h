@@ -56,12 +56,10 @@
 @private
     // Context stack
     //
-    // The top of the stack is the pair (_contextObject, _managedPropertiesStore).
-    // Both of them may be nil.
-    // The rest of the stack is _contextParent.
+    // If _contextObject is nil, the stack is empty.
+    // If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
     GRMustacheContext *_contextParent;
     id _contextObject;
-    NSMutableDictionary *_managedPropertiesStore;
     
     // Protected context stack
     //
