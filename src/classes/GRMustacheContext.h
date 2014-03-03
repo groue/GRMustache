@@ -345,28 +345,6 @@
 /**
  * Evaluates an expression such as @"name", or @"uppercase(user.name)".
  *
- * This method is deprecated. You should use the
- * hasValue:forMustacheExpression:error: method instead.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
- *
- * @param expression  An expression such as @"name", @"user.name", or
- *                    @"uppercase(user.name)".
- * @param error       If there is an error computing the value, upon return
- *                    contains an NSError object that describes the problem.
- *
- * @return The computed value
- *
- * @see hasValue:forMustacheExpression:error:
- *
- * @since v6.6
- * @deprecated v6.8
- */
-- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_6_8;
-
-/**
- * Evaluates an expression such as @"name", or @"uppercase(user.name)".
- *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
  *
  * @param value       Upon return contains the value of the expression.

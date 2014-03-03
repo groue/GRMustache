@@ -114,9 +114,6 @@
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (id)valueForMustacheExpression:(NSString *)expression error:(NSError **)error GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheContext.h
 - (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h

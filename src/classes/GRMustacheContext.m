@@ -409,19 +409,6 @@
     return [expression hasValue:value withContext:self protected:NULL error:error];
 }
 
-- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error
-{
-    // This deprecated method is flawed: it may return a valid nil result.
-    // Let's make sure error is set to nil in this case.
-    
-    id value = nil;
-    if (![self hasValue:&value forMustacheExpression:string error:error]) {
-        return nil;
-    }
-    if (error) { *error = nil; }
-    return value;
-}
-
 
 // =============================================================================
 #pragma mark - Tag Delegates Stack
