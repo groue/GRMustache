@@ -140,10 +140,11 @@ static BOOL isValidMustacheKeyForNSValue(id self, SEL _cmd, NSString *key);
 + (void)load
 {
     [self setupRendering];
-    [self setupKeyValidationForFoundationClasses];
+    [self setupKeyValidation];
 }
 
 
+// =============================================================================
 #pragma mark - Rendering
 
 + (void)setupRendering
@@ -196,11 +197,18 @@ static BOOL isValidMustacheKeyForNSValue(id self, SEL _cmd, NSString *key);
 }
 
 
-#pragma mark - Key validation for Foundation classes
+// =============================================================================
+#pragma mark - Key validation
 
-+ (void)setupKeyValidationForFoundationClasses
++ (void)setupKeyValidation
 {
-    // Valid keys for Foundation classes are all non-mutating methods, plus a few safe NSObject methods.
+    // GRMustache 7.0 introduces key validation, so that dangerous methods can
+    // not be accessed by bad templates through `valueForKey:`.
+    //
+    // However, many users may have a liberal use of KVC on Foundation classes.
+    //
+    // Valid keys for Foundation classes are all non-mutating methods, plus a
+    // few safe NSObject methods, minus dangerous NSObject methods.
     
     SEL selector = @selector(isValidMustacheKey:);
     struct objc_method_description methodDescription = protocol_getMethodDescription(@protocol(GRMustacheKeyValidation), selector, YES, YES);
@@ -280,7 +288,7 @@ static BOOL isValidMustacheKeyForNSValue(id self, SEL _cmd, NSString *key);
 }
 
 
-
+// =============================================================================
 #pragma mark - Global services
 
 + (void)preventNSUndefinedKeyExceptionAttack
@@ -658,6 +666,10 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         }
     }
 }
+
+
+// =============================================================================
+#pragma mark - Key validation implementations
 
 static BOOL isValidMustacheKeyForNSArray(id self, SEL _cmd, NSString *key)
 {
