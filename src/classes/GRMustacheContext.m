@@ -427,13 +427,4 @@
     return tagDelegateStack;
 }
 
-
-// =============================================================================
-#pragma mark - Key-Value Coding
-
-- (BOOL)isValidMustacheKey:(NSString *)key
-{
-    return YES;
-}
-
 @end

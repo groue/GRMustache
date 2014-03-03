@@ -68,10 +68,36 @@
 - (int)intFalseMethod { return NO; }
 - (int)intTrueMethod { return YES; }
 
-- (BOOL)isValidMustacheKey:(NSString *)key
++ (NSSet *)validMustacheKeys
 {
-    return YES;
+    return [NSSet setWithObjects:
+            @"boolFalseProperty",
+            @"boolTrueProperty",
+            @"BOOLFalseProperty",
+            @"BOOLTrueProperty",
+            @"charFalseProperty",
+            @"charTrueProperty",
+            @"unsigned_charFalseProperty",
+            @"unsigned_charTrueProperty",
+            @"intFalseProperty",
+            @"intTrueProperty",
+            @"customGetterBOOLProperty",
+            @"isCustomGetterBOOLProperty",
+            @"customGetterboolProperty",
+            @"isCustomGetterboolProperty",
+            @"boolFalseMethod",
+            @"boolTrueMethod",
+            @"BOOLFalseMethod",
+            @"BOOLTrueMethod",
+            @"charFalseMethod",
+            @"charTrueMethod",
+            @"unsigned_charFalseMethod",
+            @"unsigned_charTrueMethod",
+            @"intFalseMethod",
+            @"intTrueMethod",
+            nil];
 }
+
 @end
 
 @interface GRBooleanTestSupportSubClass: GRBooleanTestSupport

@@ -27,22 +27,20 @@
 @protocol GRMustacheKeyValidation <NSObject>
 
 /**
- * TODO
+ * List the name of the keys GRMustache can access on this class using the
+ * `valueForKey:` method.
  *
- * List the name of the keys GRMustache can access on this class.
+ * When objects do not respond to this method, only declared properties can be
+ * accessed. All properties of Core Data NSManagedObjects are also accessible,
+ * even without property declaration).
  *
- * Your object should implement this method to fine-tune the values GRMustache
- * can access using `valueForKey:` and `objectForKeyedSubscript:`.
- *
- * When objects do not respond to this method, all keys can be accessed through
- * `objectForKeyedSubscript:`, and only declared properties can be
- * accessed by `valueForKey:` (except for CoreData NSManagedObjects where all
- * CoreData properties are also accessible, even without property declaration).
+ * This method is not used for objects responding to `objectForKeyedSubscript:`.
+ * For those objects, all keys are accessible from templates.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
  * @return The set of accessible keys on the class.
  */
-- (BOOL)isValidMustacheKey:(NSString *)key;
++ (NSSet *)validMustacheKeys;
 
 @end

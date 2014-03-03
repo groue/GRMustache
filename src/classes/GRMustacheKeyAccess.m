@@ -261,10 +261,6 @@ static Class NSOrderedSetClass;
 
 + (BOOL)isValidMustacheKey:(NSString *)key forObject:(id)object
 {
-    if ([object respondsToSelector:@selector(isValidMustacheKey:)]) {
-        return [object isValidMustacheKey:key];
-    }
-    
     static NSMutableDictionary *validKeysForClassName;
     static Class NSManagedObjectClass;
     static dispatch_once_t onceToken;
@@ -273,15 +269,20 @@ static Class NSOrderedSetClass;
         NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
     });
     
-    NSMutableSet *validKeys = nil;
+    NSSet *validKeys = nil;
     @synchronized(validKeysForClassName) {
         Class klass = [object class];
         NSString *className = NSStringFromClass(klass);
         validKeys = [validKeysForClassName objectForKey:className];
         if (!validKeys) {
-            validKeys = [self propertyGettersForClass:klass];
-            if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
-                [validKeys unionSet:[NSSet setWithArray:[[[object entity] propertiesByName] allKeys]]];
+            if ([klass respondsToSelector:@selector(validMustacheKeys)]) {
+                validKeys = [klass validMustacheKeys] ?: [NSSet set];
+            } else {
+                NSMutableSet *keys = [self propertyGettersForClass:klass];
+                if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
+                    [keys unionSet:[NSSet setWithArray:[[[object entity] propertiesByName] allKeys]]];
+                }
+                validKeys = keys;
             }
             [validKeysForClassName setObject:validKeys forKey:className];
         }

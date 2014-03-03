@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheKeyValidation.h"
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateComponent;
@@ -52,7 +51,7 @@
  *
  * - Let partial templates override template components.
  */
-@interface GRMustacheContext : NSObject<GRMustacheKeyValidation> {
+@interface GRMustacheContext : NSObject {
 @private
     // Context stack
     //

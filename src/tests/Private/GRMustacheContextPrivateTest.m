@@ -41,9 +41,9 @@
 @synthesize lastAccessedKey;
 @synthesize keys;
 
-- (BOOL)isValidMustacheKey:(NSString *)key
++ (NSSet *)validMustacheKeys
 {
-    return YES;
+    return [NSSet setWithObjects:@"foo", @"root", @"top", @"name", nil];
 }
 
 + (instancetype)recorderWithRecognizedKeys:(NSArray *)keys
@@ -83,9 +83,9 @@
 
 @implementation ThrowingObjectFromValueForKey
 
-- (BOOL)isValidMustacheKey:(NSString *)key
++ (NSSet *)validMustacheKeys
 {
-    return YES;
+    return [NSSet setWithObjects:@"KnownKey", @"NonNSUndefinedKeyException", @"NonSelfNSUndefinedKeyException", @"SelfNSUndefinedKeyException", nil];
 }
 
 - (id)valueForKey:(NSString *)key
@@ -109,9 +109,9 @@
 
 @implementation ThrowingObjectFromValueForUndefinedKey
 
-- (BOOL)isValidMustacheKey:(NSString *)key
++ (NSSet *)validMustacheKeys
 {
-    return YES;
+    return [NSSet setWithObjects:@"KnownKey", @"NonNSUndefinedKeyException", @"NonSelfNSUndefinedKeyException", @"SelfNSUndefinedKeyException", nil];
 }
 
 - (id)valueForUndefinedKey:(NSString *)key
