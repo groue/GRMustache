@@ -493,7 +493,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             // {{# string }}...{{/}}
             // {{$ string }}...{{/}}
             if (self.length > 0) {
-                context = [[context class] newContextWithParent:context addedObject:self];
+                context = [context newContextByAddingObject:self];
                 NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
                 [context release];
                 return rendering;
@@ -526,7 +526,7 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
         case GRMustacheTagTypeOverridableSection: {
             // {{# object }}...{{/}}
             // {{$ object }}...{{/}}
-            context = [[context class] newContextWithParent:context addedObject:self];
+            context = [context newContextByAddingObject:self];
             NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             [context release];
             return rendering;
@@ -623,7 +623,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             for (id item in self) {
                 // item enters the context as a context object
                 @autoreleasepool {
-                    GRMustacheContext *itemContext = [[context class] newContextWithParent:context addedObject:item];
+                    GRMustacheContext *itemContext = [context newContextByAddingObject:item];
                     NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
                     [itemContext release];
                     

@@ -23,12 +23,6 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_6_4
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheContextSubclass : GRMustacheContext
-@end
-
-@implementation GRMustacheContextSubclass
-@end
-
 @interface GRMustacheContextTest : GRMustachePublicAPITest
 @end
 
@@ -138,34 +132,6 @@
         template.baseContext = otherContext;
         NSString *rendering = [template renderObject:nil error:NULL];
         STAssertEqualObjects(rendering, @"a,b,c,d,e,platinum", @"");
-    }
-    {
-        GRMustacheContextSubclass *context = [GRMustacheContextSubclass context];
-        GRMustacheContext *otherContext = [GRMustacheContext context];
-        STAssertNoThrow([otherContext contextByAddingObject:context], @"");
-    }
-    {
-        GRMustacheContext *context = [GRMustacheContext context];
-        GRMustacheContextSubclass *otherContext = [GRMustacheContextSubclass context];
-        STAssertThrowsSpecificNamed([otherContext contextByAddingObject:context], NSException, NSInvalidArgumentException, @"");
-    }
-}
-
-- (void)testContextWithContext
-{
-    {
-        GRMustacheContext *context = [GRMustacheContext context];
-        GRMustacheContext *otherContext = [GRMustacheContext contextWithObject:context];
-        STAssertEquals(context, otherContext, @"");
-    }
-    {
-        GRMustacheContextSubclass *context = [GRMustacheContextSubclass context];
-        GRMustacheContext *otherContext = [GRMustacheContext contextWithObject:context];
-        STAssertEquals(context, otherContext, @"");
-    }
-    {
-        GRMustacheContext *context = [GRMustacheContext context];
-        STAssertThrowsSpecificNamed([GRMustacheContextSubclass contextWithObject:context], NSException, NSInvalidArgumentException, @"");
     }
 }
 

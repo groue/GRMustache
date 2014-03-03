@@ -327,13 +327,7 @@
  * 2. Otherwise (irrelevant protected context stack), search the context stack
  *    for an object that has a non-nil Mustache value for the key.
  *
- * 3. Otherwise (irrelevant protected context stack, irrelevant regular context
- *    stack), fetches the Mustache value on the receiver, so that your
- *    `GRMustacheContext` subclass can provide default values. This value is
- *    returned, if non-nil.
- *
- * 4. If none of the above situations occurs, returns the result of
- *    `valueForUndefinedMustacheKey:`.
+ * 3. If none of the above situations occurs, returns nil.
  *
  * **Companion guides:** https://github.com/groue/GRMustache/blob/master/Guides/runtime.md,
  * https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
@@ -342,31 +336,11 @@
  *
  * @return The value found in the context stack for the given key.
  *
- * @see valueForUndefinedMustacheKey:
  * @see hasValue:forMustacheExpression:error:
  *
  * @since v6.6
  */
 - (id)valueForMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_6_6_AND_LATER;
-
-/**
- * This method is invoked when a key could not be resolved to any value.
- *
- * Subclasses can override this method to return an alternate value for
- * undefined keys. The default implementation returns nil.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
- *
- * @param key  a key such as @"name"
- *
- * @return The value for the given key.
- *
- * @see valueForMustacheKey:
- * @see hasValue:forMustacheExpression:error:
- *
- * @since v6.7
- */
-- (id)valueForUndefinedMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_6_7_AND_LATER;
 
 /**
  * Evaluates an expression such as @"name", or @"uppercase(user.name)".
@@ -403,7 +377,6 @@
  * @return YES if the value could be computed.
  *
  * @see valueForMustacheKey:
- * @see valueForUndefinedMustacheKey:
  *
  * @since v6.8
  */

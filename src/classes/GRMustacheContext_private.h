@@ -123,17 +123,14 @@
 - (id)valueForMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (id)valueForUndefinedMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheContext.h
 // @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
 @property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
 
 /**
- * Same as [parent contextByAddingObject:object], but returns a retained object.
+ * Same as [contextByAddingObject:object], but returns a retained object.
  * This method helps efficiently managing memory, and targeting slow methods.
  */
-+ (instancetype)newContextWithParent:(GRMustacheContext *)parent addedObject:(id)object GRMUSTACHE_API_INTERNAL;
+- (instancetype)newContextByAddingObject:(id)object GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the

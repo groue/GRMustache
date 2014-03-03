@@ -71,10 +71,6 @@
 + (instancetype)contextWithObject:(id)object
 {
     if ([object isKindOfClass:[GRMustacheContext class]]) {
-        // The rule is: contexts derived from class A should be instances of class A as well.
-        if (![object isKindOfClass:self]) {
-            [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [object class], self];
-        }
         return object;
     }
     
@@ -84,7 +80,7 @@
     context->_contextObject = [object retain];
         
     // initialize tag delegate stack
-    if ([self objectIsTagDelegate:object]) {
+    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
         context->_tagDelegate = [object retain];
     }
     
@@ -131,85 +127,13 @@
 // =============================================================================
 #pragma mark - Deriving Contexts
 
-+ (instancetype)newContextWithParent:(GRMustacheContext *)parent addedObject:(id)object
-{
-    if (object == nil) {
-        return [parent retain];
-    }
-    
-    GRMustacheContext *context = nil;
-    
-    if ([object isKindOfClass:[GRMustacheContext class]])
-    {
-        // Extend parent with a context
-        //
-        // Contexts are immutable stacks: we duplicate all ancestors of context,
-        // in order to build a new context stack.
-        
-        context = parent;
-        for (GRMustacheContext *ancestor in ((GRMustacheContext *)object).ancestors) {
-            
-            // The rule is: contexts derived from class A should be instances of class A as well.
-            if (![ancestor isKindOfClass:[context class]]) {
-                [NSException raise:NSInvalidArgumentException format:@"%@ is not a subclass of %@: can not extend context.", [ancestor class], [context class]];
-            }
-            
-            GRMustacheContext *extendedContext = [[[[ancestor class] alloc] init] autorelease];
-            
-            extendedContext->_contextParent = [context retain];
-            extendedContext->_contextObject = [ancestor->_contextObject retain];
-            extendedContext->_protectedContextParent = [ancestor->_protectedContextParent retain];
-            extendedContext->_protectedContextObject = [ancestor->_protectedContextObject retain];
-            extendedContext->_hiddenContextParent = [ancestor->_hiddenContextParent retain];
-            extendedContext->_hiddenContextObject = [ancestor->_hiddenContextObject retain];
-            extendedContext->_tagDelegateParent = [ancestor->_tagDelegateParent retain];
-            extendedContext->_tagDelegate = [ancestor->_tagDelegate retain];
-            extendedContext->_partialOverrideParent = [ancestor->_partialOverrideParent retain];
-            extendedContext->_partialOverride = [ancestor->_partialOverride retain];
-            
-            context = extendedContext;
-        };
-        
-        [context retain];
-    }
-    else
-    {
-        // Extend parent with a regular object
-        
-        context = [[[self class] alloc] init];
-        
-        // copy identical stacks
-        context->_protectedContextParent = [parent->_protectedContextParent retain];
-        context->_protectedContextObject = [parent->_protectedContextObject retain];
-        context->_hiddenContextParent = [parent->_hiddenContextParent retain];
-        context->_hiddenContextObject = [parent->_hiddenContextObject retain];
-        context->_partialOverrideParent = [parent->_partialOverrideParent retain];
-        context->_partialOverride = [parent->_partialOverride retain];
-        
-        // Update context stack
-        context->_contextParent = [parent retain];
-        context->_contextObject = [object retain];
-        
-        // update or copy tag delegate stack
-        if ([GRMustacheContext objectIsTagDelegate:object]) {
-            if (parent->_tagDelegate) { context->_tagDelegateParent = [parent retain]; }
-            context->_tagDelegate = [object retain];
-        } else {
-            context->_tagDelegateParent = [parent->_tagDelegateParent retain];
-            context->_tagDelegate = [parent->_tagDelegate retain];
-        }
-    }
-    
-    return context;
-}
-
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
     if (tagDelegate == nil) {
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [GRMustacheContext context];
     
     // Update context stack
     context->_contextParent = [self retain];
@@ -229,9 +153,69 @@
     return context;
 }
 
+- (instancetype)newContextByAddingObject:(id)object
+{
+    if (object == nil) {
+        return [self retain];
+    }
+    
+    if ([object isKindOfClass:[GRMustacheContext class]])
+    {
+        // Extend self with a context
+        //
+        // Contexts are immutable stacks: we duplicate all ancestors of context,
+        // in order to build a new context stack.
+        
+        GRMustacheContext *context = self;
+        for (GRMustacheContext *ancestor in ((GRMustacheContext *)object).ancestors) {
+            GRMustacheContext *extendedContext = [GRMustacheContext context];
+            extendedContext->_contextParent = [context retain];
+            extendedContext->_contextObject = [ancestor->_contextObject retain];
+            extendedContext->_protectedContextParent = [ancestor->_protectedContextParent retain];
+            extendedContext->_protectedContextObject = [ancestor->_protectedContextObject retain];
+            extendedContext->_hiddenContextParent = [ancestor->_hiddenContextParent retain];
+            extendedContext->_hiddenContextObject = [ancestor->_hiddenContextObject retain];
+            extendedContext->_tagDelegateParent = [ancestor->_tagDelegateParent retain];
+            extendedContext->_tagDelegate = [ancestor->_tagDelegate retain];
+            extendedContext->_partialOverrideParent = [ancestor->_partialOverrideParent retain];
+            extendedContext->_partialOverride = [ancestor->_partialOverride retain];
+            context = extendedContext;
+        };
+        
+        return [context retain];
+    }
+    
+    // Extend self with a regular object
+    
+    GRMustacheContext *context = [[GRMustacheContext alloc] init];
+    
+    // copy identical stacks
+    context->_protectedContextParent = [_protectedContextParent retain];
+    context->_protectedContextObject = [_protectedContextObject retain];
+    context->_hiddenContextParent = [_hiddenContextParent retain];
+    context->_hiddenContextObject = [_hiddenContextObject retain];
+    context->_partialOverrideParent = [_partialOverrideParent retain];
+    context->_partialOverride = [_partialOverride retain];
+    
+    // Update context stack
+    context->_contextParent = [self retain];
+    context->_contextObject = [object retain];
+    
+    // update or copy tag delegate stack
+    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+        if (_tagDelegate) { context->_tagDelegateParent = [self retain]; }
+        context->_tagDelegate = [object retain];
+    } else {
+        context->_tagDelegateParent = [_tagDelegateParent retain];
+        context->_tagDelegate = [_tagDelegate retain];
+    }
+    
+    return context;
+}
+
 - (instancetype)contextByAddingObject:(id)object
 {
-    return [[[self class] newContextWithParent:self addedObject:object] autorelease];
+    return [[self newContextByAddingObject:object] autorelease];
 }
 
 - (instancetype)contextByAddingProtectedObject:(id)object
@@ -240,7 +224,7 @@
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [GRMustacheContext context];
     
     // Update context stack
     context->_contextParent = [self retain];
@@ -266,7 +250,7 @@
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [GRMustacheContext context];
     
     // Update context stack
     context->_contextParent = [self retain];
@@ -292,7 +276,7 @@
         return self;
     }
     
-    GRMustacheContext *context = [[[[self class] alloc] init] autorelease];
+    GRMustacheContext *context = [GRMustacheContext context];
     
     // Update context stack
     context->_contextParent = [self retain];
@@ -361,11 +345,6 @@
     return nil;
 }
 
-- (id)valueForUndefinedMustacheKey:(NSString *)key
-{
-    return nil;
-}
-
 - (id)valueForMustacheKey:(NSString *)key
 {
     return [self valueForMustacheKey:key protected:NULL];
@@ -418,17 +397,6 @@
     }
     
     
-    // Then try valueForUndefinedMustacheKey:
-    
-    id value = [self valueForUndefinedMustacheKey:key];
-    if (value) {
-        if (protected != NULL) {
-            *protected = NO;
-        }
-        return value;
-    }
-    
-    
     // OK give up now
     
     return nil;
@@ -469,24 +437,7 @@
         }
     }
     
-    // If self is a GRMustacheContext subclass and conforms to
-    // GRMustacheTagDelegate, self behaves as the first tag delegate in the
-    // stack (before all section delegates).
-    
-    if (object_getClass(self) != [GRMustacheContext class] && [GRMustacheContext objectIsTagDelegate:self]) {
-        if (!tagDelegateStack) {
-            return [NSArray arrayWithObject:self];
-        } else {
-            [tagDelegateStack insertObject:self atIndex:0];
-        }
-    }
-    
     return tagDelegateStack;
-}
-
-+ (BOOL)objectIsTagDelegate:(id)object
-{
-    return [object conformsToProtocol:@protocol(GRMustacheTagDelegate)];
 }
 
 
