@@ -444,7 +444,7 @@
     {
         __block NSUInteger tagWillRenderCount = 0;
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             ++tagWillRenderCount;
             return object;
         };
@@ -462,7 +462,7 @@
     {
         __block NSUInteger tagWillRenderCount = 0;
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             ++tagWillRenderCount;
             return object;
         };
@@ -485,7 +485,7 @@
     }];
     
     GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+    delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
             return @"delegate";
         } else {
@@ -509,7 +509,7 @@
         }];
         
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             if (tag.type != GRMustacheTagTypeSection) {
                 return @"delegate";
             } else {
@@ -530,7 +530,7 @@
         }];
         
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-        delegate.mustacheTagWillRenderBlock = ^id(GRMustacheTag *tag, id object) {
+        delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             if (tag.type != GRMustacheTagTypeSection) {
                 return @"delegate";
             } else {

@@ -40,4 +40,30 @@
     STAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
 }
 
+- (void)testTagDelegateCanProcessRenderingObjects
+{
+    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, NSString *string) {
+        return [string uppercaseString];
+    };
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            return @"&you";
+        }];
+        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&amp;YOU", @"");
+    }
+    
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = YES;
+            return @"&you";
+        }];
+        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&YOU", @"");
+    }
+}
+
 @end

@@ -74,7 +74,7 @@
             // {{$ html.escape }}...{{/ html.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them. See mustacheTag:willRenderObject: below.
+            // we can format them. See mustacheTag:willRender: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -86,15 +86,15 @@
 /**
  * Support for {{# html.escape }}...{{ value }}...{{ value }}...{{/ html.escape }}
  */
-- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+- (NSString *)mustacheTag:(GRMustacheTag *)tag willRender:(NSString *)string
 {
     // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        return [self transformedValue:object];
+        return [GRMustacheHTMLEscape escapeHTML:string];
     }
     
     // Don't process {{# value }}, {{^ value }}, {{$ value }}
-    return object;
+    return string;
 }
 
 @end

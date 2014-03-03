@@ -65,7 +65,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{tag}}" error:NULL];
     
     GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { return @"delegate"; };
+    tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) { return @"delegate"; };
     [template extendBaseContextWithTagDelegate:tagDelegate];
     
     {
@@ -115,7 +115,7 @@
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) { return @"delegate"; };
+    tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) { return @"delegate"; };
     [configuration extendBaseContextWithTagDelegate:tagDelegate];
     
     GRMustacheTemplateRepository *repository = [[[GRMustacheTemplateRepository alloc] init] autorelease];

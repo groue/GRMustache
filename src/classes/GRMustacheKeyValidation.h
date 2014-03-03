@@ -27,6 +27,8 @@
 @protocol GRMustacheKeyValidation <NSObject>
 
 /**
+ * TODO: test
+ *
  * List the name of the keys GRMustache can access on this class using the
  * `valueForKey:` method.
  *

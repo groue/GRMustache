@@ -66,17 +66,17 @@
 
 - (void)testContextWithObjectConstructorHaveTagDelegatesEnterTagDelegateStack
 {
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{mustacheTagWillRenderBlock}}" error:NULL];
+    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{mustacheTagWillRenderObjectBlock}}" error:NULL];
     
     __block id value = nil;
     GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
         value = object;
         return object;
     };
     template.baseContext = [GRMustacheContext contextWithObject:tagDelegate];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEquals(value, (id)(tagDelegate.mustacheTagWillRenderBlock), @"");
+    STAssertEquals(value, (id)(tagDelegate.mustacheTagWillRenderObjectBlock), @"");
     STAssertTrue(rendering.length > 0, @"");
 }
 
@@ -103,7 +103,7 @@
     
     __block id value = nil;
     GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, id object) {
+    tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
         value = object;
         return object;
     };

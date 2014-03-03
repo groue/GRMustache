@@ -60,12 +60,14 @@
 @end
 
 @implementation GRMustacheTestingDelegate
+@synthesize mustacheTagWillRenderObjectBlock=_mustacheTagWillRenderObjectBlock;
 @synthesize mustacheTagWillRenderBlock=_mustacheTagWillRenderBlock;
 @synthesize mustacheTagDidRenderAsBlock=_mustacheTagDidRenderAsBlock;
 @synthesize mustacheTagDidFailBlock=_mustacheTagDidFailBlock;
 
 - (void)dealloc
 {
+    self.mustacheTagWillRenderObjectBlock = nil;
     self.mustacheTagWillRenderBlock = nil;
     self.mustacheTagDidRenderAsBlock = nil;
     self.mustacheTagDidFailBlock = nil;
@@ -74,10 +76,19 @@
 
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
-    if (self.mustacheTagWillRenderBlock) {
-        return self.mustacheTagWillRenderBlock(tag, object);
+    if (self.mustacheTagWillRenderObjectBlock) {
+        return self.mustacheTagWillRenderObjectBlock(tag, object);
     } else {
         return object;
+    }
+}
+
+- (NSString *)mustacheTag:(GRMustacheTag *)tag willRender:(NSString *)string
+{
+    if (self.mustacheTagWillRenderBlock) {
+        return self.mustacheTagWillRenderBlock(tag, string);
+    } else {
+        return string;
     }
 }
 

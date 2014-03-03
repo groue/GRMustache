@@ -56,6 +56,14 @@
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 /**
+ * TODO: document
+ * TODO: test
+ * @since TODO
+ */
+#warning Missing availability macros
+- (NSString *)mustacheTag:(GRMustacheTag *)tag willRender:(NSString *)string;
+
+/**
  * Sent after a Mustache tag has rendered.
  *
  * @param tag        The Mustache tag that has just rendered.

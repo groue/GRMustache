@@ -204,7 +204,16 @@
             
             if (rendering)
             {
-                // Success
+                // Pre-rendering hooks
+                
+                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRender: from top to bottom
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRender:)]) {
+                        rendering = [tagDelegate mustacheTag:self willRender:rendering] ?: @"";
+                    }
+                }
+                
+                
+                // render
                 
                 if (rendering.length > 0) {
                     if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {

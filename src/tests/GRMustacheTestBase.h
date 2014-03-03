@@ -29,11 +29,13 @@
 @end
 
 @interface GRMustacheTestingDelegate : NSObject<GRMustacheTagDelegate> {
-    id(^_mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
+    id(^_mustacheTagWillRenderObjectBlock)(GRMustacheTag *tag, id object);
+    id(^mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
     void(^_mustacheTagDidRenderAsBlock)(GRMustacheTag *tag, id object, NSString *rendering);
     void(^_mustacheTagDidFailBlock)(GRMustacheTag *tag, id object, NSError *error);
 }
-@property (nonatomic, copy) id(^mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
+@property (nonatomic, copy) id(^mustacheTagWillRenderObjectBlock)(GRMustacheTag *tag, id object);
+@property (nonatomic, copy) NSString *(^mustacheTagWillRenderBlock)(GRMustacheTag *tag, NSString *string);
 @property (nonatomic, copy) void(^mustacheTagDidRenderAsBlock)(GRMustacheTag *tag, id object, NSString *rendering);
 @property (nonatomic, copy) void(^mustacheTagDidFailBlock)(GRMustacheTag *tag, id object, NSError *error);
 @end
