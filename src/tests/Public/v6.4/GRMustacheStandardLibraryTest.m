@@ -40,30 +40,68 @@
     STAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
 }
 
-- (void)testTagDelegateCanProcessRenderingObjects
+- (void)testStandardLibraryHTMLEscapeDoesEscapeNonHTMLSafeRenderingObjects
 {
-    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
-    tagDelegate.mustacheTagWillRenderBlock = ^(GRMustacheTag *tag, NSString *string) {
-        return [string uppercaseString];
-    };
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            return @"&you";
+            *HTMLSafe = NO;
+            return @"<";
         }];
-        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;YOU", @"");
+        id data = @{ @"object": object };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&amp;lt;", @"");
     }
-    
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = NO;
+            return @"<";
+        }];
+        id data = @{ @"object": object };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&lt;", @"");
+    }
+}
+
+- (void)testStandardLibraryHTMLEscapeDoesEscapeHTMLSafeRenderingObjects
+{
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
-            return @"&you";
+            return @"<br>";
         }];
-        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&YOU", @"");
+        id data = @{ @"object": object };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = YES;
+            return @"<br>";
+        }];
+        id data = @{ @"object": object };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
+    }
+}
+
+- (void)testStandardLibraryJavascriptEscapeDoesEscapeRenderingObjects
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"\"double quotes\" and 'single quotes'";
+    }];
+    id data = @{ @"object": object };
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# javascript.escape }}{{ object }}{{/ }}" error:NULL];
+    STAssertEqualObjects(rendering, @"\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027", @"");
+}
+
+- (void)testStandardLibraryURLEscapeDoesEscapeRenderingObjects
+{
+    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return @"&";
+    }];
+    id data = @{ @"object": object };
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# URL.escape }}{{ object }}{{/ }}" error:NULL];
+    STAssertEqualObjects(rendering, @"%26", @"");
 }
 
 @end

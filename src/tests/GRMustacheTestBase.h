@@ -30,7 +30,6 @@
 
 @interface GRMustacheTestingDelegate : NSObject<GRMustacheTagDelegate> {
     id(^_mustacheTagWillRenderObjectBlock)(GRMustacheTag *tag, id object);
-    id(^mustacheTagWillRenderBlock)(GRMustacheTag *tag, id object);
     void(^_mustacheTagDidRenderAsBlock)(GRMustacheTag *tag, id object, NSString *rendering);
     void(^_mustacheTagDidFailBlock)(GRMustacheTag *tag, id object, NSError *error);
 }

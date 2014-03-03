@@ -924,4 +924,34 @@
     STAssertTrue(delegate2HasBeenInvoked, @"");
 }
 
+- (void)testTagDelegateCanProcessRenderingObjects
+{
+    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
+        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+            NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            return [rendering uppercaseString];
+        }];
+    };
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            return @"&you";
+        }];
+        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&amp;YOU", @"");
+    }
+    
+    {
+        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            *HTMLSafe = YES;
+            return @"&you";
+        }];
+        id data = @{ @"object": object, @"tagDelegate": tagDelegate };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
+        STAssertEqualObjects(rendering, @"&YOU", @"");
+    }
+}
+
 @end

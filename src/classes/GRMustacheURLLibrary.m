@@ -23,6 +23,7 @@
 #import "GRMustacheURLLibrary_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
+#import "GRMustache_private.h"
 
 
 // =============================================================================
@@ -76,7 +77,7 @@
             // {{$ URL.escape }}...{{/ URL.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
-            // we can format them. See mustacheTag:willRender: below.
+            // we can format them. See mustacheTag:willRenderObject: below.
             context = [context contextByAddingTagDelegate:self];
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -88,15 +89,23 @@
 /**
  * Support for {{# URL.escape }}...{{ value }}...{{ value }}...{{/ URL.escape }}
  */
-- (NSString *)mustacheTag:(GRMustacheTag *)tag willRender:(NSString *)string
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
     // Process {{ value }}
     if (tag.type == GRMustacheTagTypeVariable) {
-        return [self escape:string];
+        // We can not escape `object`, because it is not a string.
+        // We want to escape its rendering.
+        // So return a rendering object that will eventually render `object`,
+        // and escape its rendering.
+        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+            NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            return [self escape:rendering];
+        }];
     }
     
     // Don't process {{# value }}, {{^ value }}, {{$ value }}
-    return string;
+    return object;
 }
 
 
