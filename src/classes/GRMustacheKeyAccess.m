@@ -76,7 +76,6 @@ static Class NSOrderedSetClass;
     // Then try valueForKey:, after key validation
     
     if (![self isValidMustacheKey:key forObject:object]) {
-        NSLog(@"GRMustache can not access key `%@` on class %@.", key, [object class]);
         return nil;
     }
     

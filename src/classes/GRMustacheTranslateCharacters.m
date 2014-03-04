@@ -20,26 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheHTMLEscape_private.h"
+#import "GRMustacheTranslateCharacters_private.h"
 
-@implementation GRMustacheHTMLEscape
-
-+ (NSString *)escapeHTML:(NSString *)string
+NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity)
 {
     NSUInteger length = [string length];
     if (length == 0) {
         return string;
     }
-    
-    static const NSString *escapeForCharacter[] = {
-        ['&'] = @"&amp;",
-        ['<'] = @"&lt;",
-        ['>'] = @"&gt;",
-        ['"'] = @"&quot;",
-        ['\''] = @"&apos;",
-    };
-    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    
     
     // Assume most strings don't need escaping, and help performances: avoid
     // creating a NSMutableData instance if escaping in uncessary.
@@ -67,14 +55,14 @@
         characters = [data bytes];
     }
     
-    NSMutableString *buffer = [NSMutableString stringWithCapacity:length];
+    GR_CREATE_FASTER_MUTABLE_STRING(buffer, capacity);
     const UniChar *unescapedStart = characters;
     CFIndex unescapedLength = 0;
     for (NSUInteger i=0; i<length; ++i, ++characters) {
         const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
-            CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-            CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
+            GR_APPEND_CHARACTERS_TO_FASTER_MUTABLE_STRING(buffer, unescapedStart, unescapedLength);
+            GR_APPEND_STRING_TO_FASTER_MUTABLE_STRING(buffer, escape);
             unescapedStart = characters+1;
             unescapedLength = 0;
         } else {
@@ -82,9 +70,22 @@
         }
     }
     if (unescapedLength > 0) {
-        CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
+        GR_APPEND_CHARACTERS_TO_FASTER_MUTABLE_STRING(buffer, unescapedStart, unescapedLength);
     }
-    return buffer;
+    return [buffer autorelease];
 }
 
-@end
+NSString *GRMustacheTranslateHTMLCharacters(NSString *string)
+{
+    static const NSString *escapeForCharacter[] = {
+        ['&'] = @"&amp;",
+        ['<'] = @"&lt;",
+        ['>'] = @"&gt;",
+        ['"'] = @"&quot;",
+        ['\''] = @"&apos;",
+    };
+    static const size_t escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
+    
+    NSUInteger capacity = ([string length] + 20) * 1.2;
+    return GRMustacheTranslateCharacters(string, escapeForCharacter, escapeForCharacterLength, capacity);
+}

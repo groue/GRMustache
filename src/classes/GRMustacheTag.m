@@ -26,7 +26,7 @@
 #import "GRMustacheToken_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustache_private.h"
-#import "GRMustacheHTMLEscape_private.h"
+#import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheRendering.h"
 
@@ -208,7 +208,7 @@
                 
                 if (rendering.length > 0) {
                     if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {
-                        rendering = [GRMustacheHTMLEscape escapeHTML:rendering];
+                        rendering = GRMustacheTranslateHTMLCharacters(rendering);
                     }
                     [buffer appendString:rendering];
                 }

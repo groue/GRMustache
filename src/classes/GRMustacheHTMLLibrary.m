@@ -23,7 +23,7 @@
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
-#import "GRMustacheHTMLEscape_private.h"
+#import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustache_private.h"
 
 // =============================================================================
@@ -47,7 +47,7 @@
     // Turns other objects into strings, and escape
     
     NSString *string = [object description];
-    return [GRMustacheHTMLEscape escapeHTML:string];
+    return GRMustacheTranslateHTMLCharacters(string);
 }
 
 
@@ -98,7 +98,7 @@
         return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
             NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-            return [GRMustacheHTMLEscape escapeHTML:rendering];
+            return GRMustacheTranslateHTMLCharacters(rendering);
         }];
     }
     

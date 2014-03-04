@@ -22,7 +22,7 @@
 
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
-#import "GRMustacheHTMLEscape_private.h"
+#import "GRMustacheTranslateCharacters_private.h"
 
 @implementation GRMustachePartial
 @synthesize AST=_AST;
@@ -74,7 +74,7 @@
     }
     
     if (needsEscapingBuffer) {
-        [buffer appendString:[GRMustacheHTMLEscape escapeHTML:needsEscapingBuffer]];
+        [buffer appendString:GRMustacheTranslateHTMLCharacters(needsEscapingBuffer)];
     }
     
     return YES;

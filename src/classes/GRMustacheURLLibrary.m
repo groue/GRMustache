@@ -24,6 +24,7 @@
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustache_private.h"
+#import "GRMustacheTranslateCharacters_private.h"
 
 
 // =============================================================================
@@ -118,27 +119,6 @@
     
     string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    
-    // Specific case for empty strings
-    
-    NSUInteger length = [string length];
-    if (length == 0) {
-        return string;
-    }
-    
-    
-    // Extract characters
-    
-    const UniChar *characters = CFStringGetCharactersPtr((CFStringRef)string);
-    if (!characters) {
-        NSMutableData *data = [NSMutableData dataWithLength:length * sizeof(UniChar)];
-        [string getCharacters:[data mutableBytes] range:(NSRange){ .location = 0, .length = length }];
-        characters = [data bytes];
-    }
-    
-    
-    // Set up the translation table
-    
     static const NSString *escapeForCharacter[] = {
         ['$'] = @"%24",
         ['&'] = @"%26",
@@ -160,34 +140,8 @@
         ['\r'] = @"%0D",
     };
     static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    
-    
-    // Translate
-    
-    NSMutableString *buffer = nil;
-    const UniChar *unescapedStart = characters;
-    CFIndex unescapedLength = 0;
-    for (NSUInteger i=0; i<length; ++i, ++characters) {
-        const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
-        if (escape) {
-            if (!buffer) {
-                buffer = [NSMutableString stringWithCapacity:length];
-            }
-            CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-            CFStringAppend((CFMutableStringRef)buffer, (CFStringRef)escape);
-            unescapedStart = characters+1;
-            unescapedLength = 0;
-        } else {
-            ++unescapedLength;
-        }
-    }
-    if (!buffer) {
-        return string;
-    }
-    if (unescapedLength > 0) {
-        CFStringAppendCharacters((CFMutableStringRef)buffer, unescapedStart, unescapedLength);
-    }
-    return buffer;
+    NSUInteger capacity = ([string length] + 10) * 1.2;
+    return GRMustacheTranslateCharacters(string, escapeForCharacter, escapeForCharacterLength, capacity);
 }
 
 @end
