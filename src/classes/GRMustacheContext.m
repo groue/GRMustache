@@ -21,12 +21,54 @@
 // THE SOFTWARE.
 
 #import <objc/runtime.h>
+#import <pthread.h>
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheKeyAccess_private.h"
 #import "GRMustacheTagDelegate.h"
+
+
+// =============================================================================
+#pragma mark - GRMustacheTagDelegate conformance
+
+#if TARGET_OS_IPHONE
+    // iOS never had support for Garbage Collector.
+    // Use fast pthread library.
+    static pthread_key_t GRTagDelegateClassesKey;
+    void freeTagDelegateClasses(void *objects) {
+        CFRelease((CFMutableDictionaryRef)objects);
+    }
+    #define setupTagDelegateClasses() pthread_key_create(&GRTagDelegateClassesKey, freeTagDelegateClasses)
+    #define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)pthread_getspecific(GRTagDelegateClassesKey)
+    #define setCurrentThreadTagDelegateClasses(classes) pthread_setspecific(GRTagDelegateClassesKey, classes)
+#else
+    // OSX used to have support for Garbage Collector.
+    // We can't use pthread, because the Garbage Collector will destroy our non-global object.
+    // Use slow NSThread library.
+    static NSString *GRTagDelegateClassesKey = @"GRTagDelegateClassesKey";
+    #define setupTagDelegateClasses()
+    #define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)[[[NSThread currentThread] threadDictionary] objectForKey:GRTagDelegateClassesKey]
+    #define setCurrentThreadTagDelegateClasses(objects) [[[NSThread currentThread] threadDictionary] setObject:(id)objects forKey:GRTagDelegateClassesKey]
+#endif
+
+static BOOL objectConformsToTagDelegateProtocol(id object)
+{
+    CFMutableDictionaryRef classes = getCurrentThreadTagDelegateClasses();
+    if (!classes) {
+        classes = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+        setCurrentThreadTagDelegateClasses(classes);
+    }
+    
+    Class klass = [object class];
+    intptr_t conform = (intptr_t)CFDictionaryGetValue(classes, klass);
+    if (conform == 0) {
+        conform = [klass conformsToProtocol:@protocol(GRMustacheTagDelegate)] ? 1 : 2;
+        CFDictionarySetValue(classes, klass, (void *)conform);
+    }
+    return (conform == 1);
+}
 
 
 // =============================================================================
@@ -48,6 +90,11 @@
 
 
 @implementation GRMustacheContext
+
++ (void)initialize
+{
+    setupTagDelegateClasses();
+}
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
@@ -80,7 +127,7 @@
     context->_contextObject = [object retain];
         
     // initialize tag delegate stack
-    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+    if (objectConformsToTagDelegateProtocol(object)) {
         context->_tagDelegate = [object retain];
     }
     
@@ -202,7 +249,7 @@
     context->_contextObject = [object retain];
     
     // update or copy tag delegate stack
-    if ([object conformsToProtocol:@protocol(GRMustacheTagDelegate)]) {
+    if (objectConformsToTagDelegateProtocol(object)) {
         if (_tagDelegate) { context->_tagDelegateParent = [self retain]; }
         context->_tagDelegate = [object retain];
     } else {
