@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTranslateCharacters_private.h"
+#import "GRMustacheFastBuffer.h"
 
 NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity)
 {
@@ -55,14 +56,14 @@ NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCh
         characters = [data bytes];
     }
     
-    GR_CREATE_FASTER_MUTABLE_STRING(buffer, capacity);
+    GRMustacheFastBuffer buffer = GRMustacheFastBufferCreate(capacity);
     const UniChar *unescapedStart = characters;
     CFIndex unescapedLength = 0;
     for (NSUInteger i=0; i<length; ++i, ++characters) {
         const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
-            GR_APPEND_CHARACTERS_TO_FASTER_MUTABLE_STRING(buffer, unescapedStart, unescapedLength);
-            GR_APPEND_STRING_TO_FASTER_MUTABLE_STRING(buffer, escape);
+            GRMustacheFastBufferAppendCharacters(&buffer, unescapedStart, unescapedLength);
+            GRMustacheFastBufferAppendString(&buffer, (CFStringRef)escape);
             unescapedStart = characters+1;
             unescapedLength = 0;
         } else {
@@ -70,9 +71,10 @@ NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCh
         }
     }
     if (unescapedLength > 0) {
-        GR_APPEND_CHARACTERS_TO_FASTER_MUTABLE_STRING(buffer, unescapedStart, unescapedLength);
+        GRMustacheFastBufferAppendCharacters(&buffer, unescapedStart, unescapedLength);
     }
-    return [buffer autorelease];
+
+    return (NSString *)GRMustacheFastBufferGetStringAndRelease(&buffer);
 }
 
 NSString *GRMustacheTranslateHTMLCharacters(NSString *string)

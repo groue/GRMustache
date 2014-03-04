@@ -115,7 +115,7 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    NSMutableString *buffer = [NSMutableString string];
+    GRMustacheFastBuffer buffer = GRMustacheFastBufferCreate(1024);
 
     if (!context) {
         // With a nil context, the method would return nil without setting the
@@ -130,7 +130,7 @@
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderContentType:templateContentType inBuffer:buffer withContext:context error:error]) {
+        if (![component renderContentType:templateContentType inBuffer:&buffer withContext:context error:error]) {
             return nil;
         }
     }
@@ -138,7 +138,8 @@
     if (HTMLSafe) {
         *HTMLSafe = (_AST.contentType == GRMustacheContentTypeHTML);
     }
-    return buffer;
+    
+    return (NSString *)GRMustacheFastBufferGetStringAndRelease(&buffer);
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext

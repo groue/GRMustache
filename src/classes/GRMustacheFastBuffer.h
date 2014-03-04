@@ -21,7 +21,18 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
 
-extern NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity) GRMUSTACHE_API_INTERNAL;
-extern NSString *GRMustacheTranslateHTMLCharacters(NSString *string) GRMUSTACHE_API_INTERNAL;
+// Inspired by https://github.com/fotonauts/handlebars-objc/blob/master/src/handlebars-objc/astVisitors/HBAstEvaluationVisitor.m
+
+typedef struct {
+    BOOL usingCappedString;
+    NSUInteger cappedLength;
+    CFMutableStringRef string;
+} GRMustacheFastBuffer;
+
+extern GRMustacheFastBuffer GRMustacheFastBufferCreate(NSUInteger capacity);
+extern void GRMustacheFastBufferAppendString(GRMustacheFastBuffer *buffer, CFStringRef string);
+extern void GRMustacheFastBufferAppendCharacters(GRMustacheFastBuffer *buffer, const UniChar *chars, NSUInteger numChars);
+extern CFStringRef GRMustacheFastBufferGetString(GRMustacheFastBuffer *buffer);
+extern void GRMustacheFastBufferRelease(GRMustacheFastBuffer *buffer);
+extern CFStringRef GRMustacheFastBufferGetStringAndRelease(GRMustacheFastBuffer *buffer);

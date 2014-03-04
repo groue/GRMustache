@@ -58,14 +58,14 @@
         return NO;
     }
     
-    NSMutableString *buffer = [NSMutableString string];
+    GRMustacheFastBuffer buffer = GRMustacheFastBufferCreate(1024);
     
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustachePartialOverride: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
-        if (![component renderContentType:_contentType inBuffer:buffer withContext:context error:error]) {
+        if (![component renderContentType:_contentType inBuffer:&buffer withContext:context error:error]) {
             return nil;
         }
     }
@@ -73,7 +73,8 @@
     if (HTMLSafe) {
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
-    return buffer;
+    
+    return (NSString *)GRMustacheFastBufferGetStringAndRelease(&buffer);
 }
 
 - (NSString *)innerTemplateString

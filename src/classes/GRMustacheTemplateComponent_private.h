@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheFastBuffer.h"
 #import "GRMustacheContentType.h"
 
 @class GRMustacheContext;
@@ -63,7 +64,7 @@
  * Appends the rendering of the receiver to a buffer.
  * 
  * @param requiredContentType  The required content type of the rendering
- * @param buffer               A mutable string
+ * @param buffer               A buffer
  * @param context              A rendering context
  * @param error                If there is an error performing the rendering,
  *                             upon return contains an NSError object that
@@ -73,7 +74,7 @@
  *
  * @see GRMustacheContext
  */
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(NSMutableString *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheFastBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of overridable partials, return the component that should be
