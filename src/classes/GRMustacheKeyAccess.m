@@ -36,9 +36,6 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 // =============================================================================
 #pragma mark - Key validation
 
-#if TARGET_OS_IPHONE
-// iOS never had support for Garbage Collector.
-// Use fast pthread library.
 static pthread_key_t GRValidKeysForClassKey;
 void freeValidKeysForClass(void *objects) {
     CFRelease((CFMutableDictionaryRef)objects);
@@ -46,15 +43,6 @@ void freeValidKeysForClass(void *objects) {
 #define setupValidKeysForClass() pthread_key_create(&GRValidKeysForClassKey, freeValidKeysForClass)
 #define getCurrentThreadValidKeysForClass() (CFMutableDictionaryRef)pthread_getspecific(GRValidKeysForClassKey)
 #define setCurrentThreadValidKeysForClass(classes) pthread_setspecific(GRValidKeysForClassKey, classes)
-#else
-// OSX used to have support for Garbage Collector.
-// We can't use pthread, because the Garbage Collector will destroy our non-global object.
-// Use slow NSThread library.
-static NSString *GRValidKeysForClassKey = @"GRValidKeysForClassKey";
-#define setupValidKeysForClass()
-#define getCurrentThreadValidKeysForClass() (CFMutableDictionaryRef)[[[NSThread currentThread] threadDictionary] objectForKey:GRValidKeysForClassKey]
-#define setCurrentThreadValidKeysForClass(objects) [[[NSThread currentThread] threadDictionary] setObject:(id)objects forKey:GRValidKeysForClassKey]
-#endif
 
 
 // =============================================================================
@@ -355,24 +343,13 @@ static Class NSManagedObjectClass;
 
 static BOOL preventsNSUndefinedKeyException = NO;
 
-#if TARGET_OS_IPHONE
-    // iOS never had support for Garbage Collector.
-    // Use fast pthread library.
-    static pthread_key_t GRPreventedObjectsStorageKey;
-    void freePreventedObjectsStorage(void *objects) {
-        [(NSMutableSet *)objects release];
-    }
-    #define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
-    #define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
-    #define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
-#else
-    // OSX used to have support for Garbage Collector.
-    // Use slow NSThread library.
-    static NSString *GRPreventedObjectsStorageKey = @"GRPreventedObjectsStorageKey";
-    #define setupPreventedObjectsStorage()
-    #define getCurrentThreadPreventedObjects() (NSMutableSet *)[[[NSThread currentThread] threadDictionary] objectForKey:GRPreventedObjectsStorageKey]
-    #define setCurrentThreadPreventedObjects(objects) [[[NSThread currentThread] threadDictionary] setObject:(id)objects forKey:GRPreventedObjectsStorageKey]
-#endif
+static pthread_key_t GRPreventedObjectsStorageKey;
+void freePreventedObjectsStorage(void *objects) {
+    [(NSMutableSet *)objects release];
+}
+#define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
+#define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
+#define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
 
 + (void)preventNSUndefinedKeyExceptionAttack
 {

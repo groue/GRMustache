@@ -33,25 +33,13 @@
 // =============================================================================
 #pragma mark - GRMustacheTagDelegate conformance
 
-#if TARGET_OS_IPHONE
-    // iOS never had support for Garbage Collector.
-    // Use fast pthread library.
-    static pthread_key_t GRTagDelegateClassesKey;
-    void freeTagDelegateClasses(void *objects) {
-        CFRelease((CFMutableDictionaryRef)objects);
-    }
-    #define setupTagDelegateClasses() pthread_key_create(&GRTagDelegateClassesKey, freeTagDelegateClasses)
-    #define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)pthread_getspecific(GRTagDelegateClassesKey)
-    #define setCurrentThreadTagDelegateClasses(classes) pthread_setspecific(GRTagDelegateClassesKey, classes)
-#else
-    // OSX used to have support for Garbage Collector.
-    // We can't use pthread, because the Garbage Collector will destroy our non-global object.
-    // Use slow NSThread library.
-    static NSString *GRTagDelegateClassesKey = @"GRTagDelegateClassesKey";
-    #define setupTagDelegateClasses()
-    #define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)[[[NSThread currentThread] threadDictionary] objectForKey:GRTagDelegateClassesKey]
-    #define setCurrentThreadTagDelegateClasses(objects) [[[NSThread currentThread] threadDictionary] setObject:(id)objects forKey:GRTagDelegateClassesKey]
-#endif
+static pthread_key_t GRTagDelegateClassesKey;
+void freeTagDelegateClasses(void *objects) {
+    CFRelease((CFMutableDictionaryRef)objects);
+}
+#define setupTagDelegateClasses() pthread_key_create(&GRTagDelegateClassesKey, freeTagDelegateClasses)
+#define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)pthread_getspecific(GRTagDelegateClassesKey)
+#define setCurrentThreadTagDelegateClasses(classes) pthread_setspecific(GRTagDelegateClassesKey, classes)
 
 static BOOL objectConformsToTagDelegateProtocol(id object)
 {
