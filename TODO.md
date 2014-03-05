@@ -5,7 +5,6 @@
 - [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)
     - [X] for escaping methods
     - [X] for rendering buffers
-- [X] Introduce [GRMustacheTagDelegate mustacheTag:willRender:] in order to let tag delegate process the rendering of inner tags
 - [X] Remove GRMustacheContext subclasses.
 - [X] safe property access (https://github.com/fotonauts/handlebars-objc/blob/master/doc/ContextObjects.md#why-does-handlebars-limit-access-to-some-attributes-that-are-normally-accessible-using-key-value-coding)
 
