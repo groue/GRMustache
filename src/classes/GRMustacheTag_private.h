@@ -33,8 +33,7 @@
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     GRMustacheTagTypeVariable = 1 << 1 GRMUSTACHE_API_PUBLIC,
     GRMustacheTagTypeSection = 1 << 2 GRMUSTACHE_API_PUBLIC,
-    GRMustacheTagTypeOverridableSection = 1 << 3 GRMUSTACHE_API_PUBLIC,
-    GRMustacheTagTypeInvertedSection = 1 << 4 GRMUSTACHE_API_PUBLIC,
+    GRMustacheTagTypeInvertedSection = 1 << 3 GRMUSTACHE_API_PUBLIC,
 } GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
@@ -117,22 +116,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * @see contentType property
  */
 - (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * Abstract method that returns a tag that represents the receiver overrided by
- * _overridingTag_.
- *
- * This method is used in the context of overridable partials, by the
- * GRMustacheTag implementation of
- * [GRMustacheTemplateComponent resolveTemplateComponent:].
- *
- * Default implementation raises an exception. GRMustacheSectionTag and
- * GRMustacheAccumulatorTag override it.
- *
- * @param overridingTag  The overriding tag
- * @return A tag that represents the receiver overrided by _overridingTag_.
- */
-- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;

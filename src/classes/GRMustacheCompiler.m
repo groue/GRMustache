@@ -26,6 +26,7 @@
 #import "GRMustacheTextComponent_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
+#import "GRMustacheOverridableSection_private.h"
 #import "GRMustachePartialOverride_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
@@ -340,35 +341,6 @@
         } break;
             
             
-        case GRMustacheTokenTypeOverridableSectionOpening: {
-            // There is no support for `{{^foo}}...{{$foo}}...{{/foo}}`:
-            // this is a new overridable section.
-            
-            // Expression validation
-            NSError *error;
-            GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
-            if (expression == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
-                return NO;
-            }
-            
-            // Prepare a new section
-            
-            expression.token = token;
-            self.currentTagValue = expression;
-            [_tagValueStack addObject:_currentTagValue];
-            
-            self.currentOpeningToken = token;
-            [_openingTokenStack addObject:_currentOpeningToken];
-            
-            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_componentsStack addObject:_currentComponents];
-            
-            // lock _contentType
-            _contentTypeLocked = YES;
-        } break;
-            
-            
         case GRMustacheTokenTypeInvertedSectionOpening: {
             // Expression validation
             NSError *error;
@@ -434,6 +406,54 @@
         } break;
             
             
+        case GRMustacheTokenTypeOverridableSectionOpening: {
+            // Overridable section identifier validation
+            NSError *overridableSectionError;
+            NSString *identifier = [parser parseOverridableSectionIdentifier:token.tagInnerContent empty:NULL error:&overridableSectionError];
+            if (identifier == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in overridable section tag", overridableSectionError.localizedDescription]]];
+                return NO;
+            }
+            
+            // Expand stacks
+            self.currentTagValue = identifier;
+            [_tagValueStack addObject:_currentTagValue];
+            
+            self.currentOpeningToken = token;
+            [_openingTokenStack addObject:_currentOpeningToken];
+            
+            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            [_componentsStack addObject:_currentComponents];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
+        } break;
+            
+            
+        case GRMustacheTokenTypeOverridablePartial: {
+            // Partial name validation
+            NSError *partialError;
+            NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
+            if (partialName == nil) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial tag", partialError.localizedDescription]]];
+                return NO;
+            }
+            
+            // Expand stacks
+            self.currentTagValue = partialName;
+            [_tagValueStack addObject:_currentTagValue];
+            
+            self.currentOpeningToken = token;
+            [_openingTokenStack addObject:_currentOpeningToken];
+            
+            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            [_componentsStack addObject:_currentComponents];
+            
+            // lock _contentType
+            _contentTypeLocked = YES;
+        } break;
+            
+            
         case GRMustacheTokenTypeClosing: {
             if (_currentOpeningToken == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
@@ -445,8 +465,7 @@
             id<GRMustacheTemplateComponent> wrapperComponent = nil;
             switch (_currentOpeningToken.type) {
                 case GRMustacheTokenTypeSectionOpening:
-                case GRMustacheTokenTypeInvertedSectionOpening:
-                case GRMustacheTokenTypeOverridableSectionOpening: {
+                case GRMustacheTokenTypeInvertedSectionOpening: {
                     // Expression validation
                     // We need a valid expression that matches section opening,
                     // or an empty `{{/}}` closing tags.
@@ -474,7 +493,7 @@
                     // Success: create new GRMustacheSectionTag
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                    GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : ((_currentOpeningToken.type == GRMustacheTokenTypeOverridableSectionOpening) ? GRMustacheTagTypeOverridableSection : GRMustacheTagTypeSection);
+                    GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : GRMustacheTagTypeSection;
                     wrapperComponent = [GRMustacheSectionTag sectionTagWithType:type
                                                              templateRepository:_templateRepository
                                                                      expression:(GRMustacheExpression *)_currentTagValue
@@ -482,26 +501,49 @@
                                                                  templateString:token.templateString
                                                                      innerRange:innerRange
                                                                      components:_currentComponents];
+                } break;
                     
+                case GRMustacheTokenTypeOverridableSectionOpening: {
+                    // Overridable section identifier validation
+                    // We need a valid identifier that matches section opening,
+                    // or an empty `{{/}}` closing tags.
+                    NSError *error;
+                    BOOL empty;
+                    NSString *identifier = [parser parseOverridableSectionIdentifier:token.tagInnerContent empty:&empty error:&error];
+                    if (identifier && ![identifier isEqual:_currentTagValue]) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
+                        return NO;
+                    } else if (!identifier && !empty) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial closing tag", error.localizedDescription]]];
+                        return NO;
+                    }
+                    
+                    if (identifier && ![identifier isEqual:_currentTagValue]) {
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
+                        return NO;
+                    }
+                    
+                    // Success: create new GRMustacheOverridableSection
+                    wrapperComponent = [GRMustacheOverridableSection overridableSectionWithIdentifier:(NSString *)_currentTagValue components:_currentComponents];
                 } break;
                     
                 case GRMustacheTokenTypeOverridablePartial: {
                     // Validate token: overridable template ending should be missing, or match overridable template opening
-                    NSError *partialError;
+                    NSError *error;
                     BOOL empty;
-                    NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:&empty error:&partialError];
+                    NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:&empty error:&error];
                     if (partialName && ![partialName isEqual:_currentTagValue]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
                     } else if (!partialName && !empty) {
-                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial closing tag", partialError.localizedDescription]]];
+                        [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial closing tag", error.localizedDescription]]];
                         return NO;
                     }
                     
                     // Ask templateRepository for overridable template
-                    GRMustachePartial *partial = [_templateRepository partialNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&partialError];
+                    GRMustachePartial *partial = [_templateRepository partialNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&error];
                     if (partial == nil) {
-                        [self failWithFatalError:partialError];
+                        [self failWithFatalError:error];
                         return NO;
                     }
                     
@@ -531,6 +573,7 @@
             }
             
             NSAssert(wrapperComponent, @"WTF expected wrapperComponent");
+            
             [_tagValueStack removeLastObject];
             self.currentTagValue = [_tagValueStack lastObject];
             
@@ -562,30 +605,6 @@
             
             // Success: append template component
             [_currentComponents addObject:partial];
-            
-            // lock _contentType
-            _contentTypeLocked = YES;
-        } break;
-            
-            
-        case GRMustacheTokenTypeOverridablePartial: {
-            // Partial name validation
-            NSError *partialError;
-            NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
-            if (partialName == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial tag", partialError.localizedDescription]]];
-                return NO;
-            }
-            
-            // Expand stacks
-            self.currentTagValue = partialName;
-            [_tagValueStack addObject:_currentTagValue];
-            
-            self.currentOpeningToken = token;
-            [_openingTokenStack addObject:_currentOpeningToken];
-            
-            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_componentsStack addObject:_currentComponents];
             
             // lock _contentType
             _contentTypeLocked = YES;

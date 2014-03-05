@@ -20,15 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTag_private.h"
+#import "GRMustacheTemplateComponent_private.h"
+
+@interface GRMustacheOverridableSection : NSObject<GRMustacheTemplateComponent> {
+@private
+    NSString *_identifier;
+    NSArray *_components;
+}
 
 /**
- * A tag that accumulates other tags in the context of overridable partials.
+ * TODO
+ *
+ * Builds a GRMustacheOverridableSection.
  */
-@interface GRMustacheAccumulatorTag : GRMustacheTag {
-@private
-    NSArray *_tags;
-}
-+ (instancetype)accumulatorTagWithTag:(GRMustacheTag *)tag GRMUSTACHE_API_INTERNAL;
++ (instancetype)overridableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 @end

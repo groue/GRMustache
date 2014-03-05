@@ -381,9 +381,7 @@ static NSSet *validMustacheKeys_NSValue(id self, SEL _cmd);
             // {{# nil }}...{{/}}
             return @"";
             
-        case GRMustacheTagTypeOverridableSection:
         case GRMustacheTagTypeInvertedSection:
-            // {{$ nil }}...{{/}}
             // {{^ nil }}...{{/}}
             return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }
@@ -448,10 +446,8 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection:
             // {{ null }}
             // {{# null }}...{{/}}
-            // {{$ null }}...{{/}}
             return @"";
             
         case GRMustacheTagTypeInvertedSection:
@@ -472,9 +468,7 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             return [self description];
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection:
             // {{# number }}...{{/}}
-            // {{$ number }}...{{/}}
             if ([self boolValue]) {
                 // janl/mustache.js and defunkt/mustache don't push bools in the
                 // context stack. Follow their path, and avoid the creation of a
@@ -506,9 +500,7 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             return self;
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection:
             // {{# string }}...{{/}}
-            // {{$ string }}...{{/}}
             if (self.length > 0) {
                 context = [context newContextByAddingObject:self];
                 NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
@@ -540,14 +532,11 @@ static NSString *GRMustacheRenderNSObject(NSObject *self, SEL _cmd, GRMustacheTa
             return [self description];
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection: {
             // {{# object }}...{{/}}
-            // {{$ object }}...{{/}}
             context = [context newContextByAddingObject:self];
             NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             [context release];
             return rendering;
-        }
             
         case GRMustacheTagTypeInvertedSection:
             // {{^ object }}...{{/}}
@@ -630,10 +619,8 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             return buffer;
         }
             
-        case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeOverridableSection: {
+        case GRMustacheTagTypeSection: {
             // {{# list }}...{{/}}
-            // {{$ list }}...{{/}}
             // Non inverted sections render for each item in the list
             
             NSMutableString *buffer = [NSMutableString string];

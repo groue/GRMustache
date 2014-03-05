@@ -431,6 +431,37 @@
     }
 }
 
+- (NSString *)parseOverridableSectionIdentifier:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
+{
+    NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *overridableSectionName = [string stringByTrimmingCharactersInSet:whiteSpace];
+    if (overridableSectionName.length == 0) {
+        if (empty != NULL) {
+            *empty = YES;
+        }
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:GRMustacheErrorDomain
+                                         code:GRMustacheErrorCodeParseError
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing overridable section name"
+                                                                          forKey:NSLocalizedDescriptionKey]];
+        }
+        return nil;
+    }
+    if ([overridableSectionName rangeOfCharacterFromSet:whiteSpace].location != NSNotFound) {
+        if (empty != NULL) {
+            *empty = NO;
+        }
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:GRMustacheErrorDomain
+                                         code:GRMustacheErrorCodeParseError
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid overridable section name"
+                                                                          forKey:NSLocalizedDescriptionKey]];
+        }
+        return nil;
+    }
+    return overridableSectionName;
+}
+
 - (NSString *)parseTemplateName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
 {
     NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceAndNewlineCharacterSet];

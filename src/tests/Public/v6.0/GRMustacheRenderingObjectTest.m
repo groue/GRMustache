@@ -78,16 +78,6 @@
     STAssertEqualObjects(result, @"---", @"");
 }
 
-- (void)testRenderingObjectPerformsOverridableSectionRendering
-{
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return @"---";
-    }];
-    NSDictionary *context = @{ @"object": object };
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{$object}}{{/object}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"---", @"");
-}
-
 - (void)testRenderingObjectPerformsHTMLSafeVariableRendering
 {
     {
@@ -230,17 +220,12 @@
 - (void)testRenderingObjectCanAccessTagType
 {
     __block NSUInteger invertedSectionCount = 0;
-    __block NSUInteger overridableSectionCount = 0;
     __block NSUInteger regularSectionCount = 0;
     __block NSUInteger variableCount = 0;
     id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         switch (tag.type) {
             case GRMustacheTagTypeInvertedSection:
                 ++invertedSectionCount;
-                break;
-                
-            case GRMustacheTagTypeOverridableSection:
-                ++overridableSectionCount;
                 break;
                 
             case GRMustacheTagTypeSection:
@@ -260,53 +245,45 @@
     
     {
         invertedSectionCount = 0;
-        overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)1, @"");
     }
     {
         invertedSectionCount = 0;
-        overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{#object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)1, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
-        overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{$object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(overridableSectionCount, (NSUInteger)1, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
-        overridableSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{^object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
         STAssertEquals(invertedSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(overridableSectionCount, (NSUInteger)0, @"");
         STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
         STAssertEquals(variableCount, (NSUInteger)0, @"");
     }

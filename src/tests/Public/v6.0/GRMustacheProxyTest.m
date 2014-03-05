@@ -36,10 +36,8 @@
     return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         
         switch (tag.type) {
-            case GRMustacheTagTypeSection:
-            case GRMustacheTagTypeOverridableSection: {
+            case GRMustacheTagTypeSection: {
                 // {{# f(...) }}...{{/}}
-                // {{$ f(...) }}...{{/}}
                 
                 // Custom rendering for non-inverted sections:
                 

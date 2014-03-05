@@ -165,10 +165,10 @@
     {
       // Inspired by https://github.com/spullara/mustache.java/commit/d2942e39a671ee71c0427b3a963149af81bdb0a5
       "name": "Templates can override overridable sections in recursive partials",
-      "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
+      "data": { "content": "A", "nodes": [ { "content": "B", "nodes": [] } ] },
       "template": "<{{<node}}{{$nodes}}{{>node}}{{/nodes}}{{/node}}>",
       "partials": { "node": "{{content}}<{{$nodes}}overriden{{/nodes}}>" },
-      "expected": "<X<Y<>>>"
+      "expected": "<A<B<>>>"
     }
   ]
 }

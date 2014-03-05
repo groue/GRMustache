@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSectionTag_private.h"
-#import "GRMustacheAccumulatorTag_private.h"
 
 @interface GRMustacheSectionTag()
 
@@ -82,40 +81,6 @@
     return [_templateString substringWithRange:_innerRange];
 }
 
-- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
-{
-    // In the following situation, the overriden section (self) is replaced by
-    // an accumulator tag initialized with the overriding section:
-    //
-    // layout.mustache:
-    //
-    //   {{$head}}overriden{{/head}}            <- overriden section (self)
-    //
-    // base.mustache:
-    //
-    //   {{<layout}}
-    //     {{>partial1}}
-    //     {{>partial2}}
-    //   {{/}}
-    //
-    // partial1.mustache:
-    //
-    //   {{$head}}head for partial 1{{/head}}   <- overriding section
-    //
-    // partial2.mustache:
-    //
-    //   {{$head}}head for partial 2{{/head}}
-    //
-    // Rendering:
-    //
-    //   head for partial 1
-    //   head for partial 2
-    //
-    // Later, the accumulatorTag will itself be overriden by the section in
-    // partial2. See [GRMustacheAccumulatorTag tagWithOverridingTag:]
-
-    return [GRMustacheAccumulatorTag accumulatorTagWithTag:overridingTag];
-}
 
 #pragma mark - Private
 

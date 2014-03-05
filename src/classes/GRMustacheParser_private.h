@@ -132,6 +132,11 @@
 - (NSString *)parseTemplateName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
+ * TODO
+ */
+- (NSString *)parseOverridableSectionIdentifier:(NSString *)string empty:(BOOL *)empty error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+
+/**
  * Returns a pragma from a string
  *
  * @param string  A string

@@ -97,12 +97,6 @@
     return @"";
 }
 
-- (GRMustacheTag *)tagWithOverridingTag:(GRMustacheTag *)overridingTag
-{
-    NSAssert(NO, @"Subclasses must override");
-    return nil;
-}
-
 
 #pragma mark - <GRMustacheTemplateComponent>
 
@@ -251,29 +245,8 @@
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // Only overridable tags can override components
-    if (_type != GRMustacheTagTypeOverridableSection) {
-        return component;
-    }
-    
-    // Tag can only override other tag
-    if (![component isKindOfClass:[GRMustacheTag class]]) {
-        return component;
-    }
-    GRMustacheTag *otherTag = (GRMustacheTag *)component;
-    
-    // Tag can only override other overridable tag
-    if (otherTag.type != GRMustacheTagTypeOverridableSection) {
-        return otherTag;
-    }
-    
-    // Tag can only override other tag with the same expression
-    if (![otherTag.expression isEqual:_expression]) {
-        return otherTag;
-    }
-    
-    // OK, override tag with self
-    return [otherTag tagWithOverridingTag:self];
+    // tags can not override any other component
+    return component;
 }
 
 @end

@@ -47,18 +47,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
     
     /**
-     * The type for overridable section tags such as {{$ name }}...{{/}}
-     *
-     * @since v6.0
-     */
-    GRMustacheTagTypeOverridableSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
-    
-    /**
      * The type for inverted section tags such as {{^ name }}...{{/}}
      *
      * @since v6.0
      */
-    GRMustacheTagTypeInvertedSection = 1 << 4 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    GRMustacheTagTypeInvertedSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
 } AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
 
 
