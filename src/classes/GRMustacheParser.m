@@ -442,7 +442,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing overridable section name"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing overridable section identifier"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;
@@ -454,7 +454,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid overridable section name"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid overridable section identifier"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;

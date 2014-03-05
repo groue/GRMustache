@@ -70,20 +70,20 @@
       "expected": "overriden overriden"
     },
     {
-      "name": "The content of overriding sections are concatenated in the overrided section",
+      "name": "The content of the last overriding section is rendered in the overrided section",
       "data": { },
       "template": "{{<partial}}{{$overridable}}1{{/overridable}}{{$overridable}}2{{/overridable}}{{/partial}}",
       "partials": { "partial": "{{$overridable}}ignored{{/overridable}}" },
-      "expected": "12"
+      "expected": "2"
     },
     {
-      "name": "The content of overriding sections in partials are concatenated in the overrided section",
+      "name": "The content of the last overriding sections in partials is rendered in the overrided section",
       "data": { },
       "template": "{{<partial1}}{{$overridable}}1{{/overridable}}{{>partial2}}{{$overridable}}4{{/overridable}}{{/partial1}}",
       "partials": {
         "partial1": "{{$overridable}}ignored{{/overridable}}",
         "partial2": "{{$overridable}}2{{/overridable}}{{$overridable}}3{{/overridable}}" },
-      "expected": "1234"
+      "expected": "4"
     },
     {
       "name": "Overridable partials can override overridable sections in their own overridable partials",
@@ -154,6 +154,7 @@
       "expected": "success"
     },
     {
+      // Inspired by https://github.com/spullara/mustache.java/commit/d2942e39a671ee71c0427b3a963149af81bdb0a5
       "name": "Recursive overridable partials should be rendered.",
       "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
       "template": "<{{<node}}{{/node}}>",
@@ -161,14 +162,6 @@
         "node": "{{content}}<{{#nodes}}{{>node}}{{/nodes}}>"
       },
       "expected": "<X<Y<>>>"
-    },
-    {
-      // Inspired by https://github.com/spullara/mustache.java/commit/d2942e39a671ee71c0427b3a963149af81bdb0a5
-      "name": "Templates can override overridable sections in recursive partials",
-      "data": { "content": "A", "nodes": [ { "content": "B", "nodes": [] } ] },
-      "template": "<{{<node}}{{$nodes}}{{>node}}{{/nodes}}{{/node}}>",
-      "partials": { "node": "{{content}}<{{$nodes}}overriden{{/nodes}}>" },
-      "expected": "<A<B<>>>"
     }
   ]
 }

@@ -1,34 +1,34 @@
 {
   "tests": [
     {
-      "name": "Unlike regular sections, overridable sections render for missing values",
+      "name": "Overridable sections are not tied to rendered data: they render for missing values.",
       "data": { },
       "template": "{{$overridable}}rendered{{/overridable}}",
       "expected": "rendered"
     },
     {
-      "name": "Overridable sections do not render for explicitly false keys",
+      "name": "Overridable sections are not tied to rendered data: they render for false values.",
       "data": { "overridable": false },
-      "template": "<{{$overridable}}ignored{{/overridable}}>",
-      "expected": "<>"
+      "template": "<{{$overridable}}rendered{{/overridable}}>",
+      "expected": "<rendered>"
     },
     {
-      "name": "Overridable sections do not render for empty lists",
+      "name": "Overridable sections are not tied to rendered data: they render for empty lists.",
       "data": { "overridable": [] },
-      "template": "<{{$overridable}}ignored{{/overridable}}>",
-      "expected": "<>"
+      "template": "<{{$overridable}}rendered{{/overridable}}>",
+      "expected": "<rendered>"
     },
     {
-      "name": "Overridable sections open new contexts",
-      "data": { "overridable": { "subject": "rendered" } },
+      "name": "Overridable sections are not tied to rendered data: they do not open new contexts.",
+      "data": { "subject": "rendered", "overridable": { "subject": "ignored" } },
       "template": "<{{$overridable}}{{subject}}{{/overridable}}>",
       "expected": "<rendered>"
     },
     {
-      "name": "Overridable sections can render lists",
+      "name": "Overridable sections are not tied to rendered data: they do not render multiple times.",
       "data": { "overridable": [1,2,3] },
-      "template": "<{{$overridable}}{{.}}{{/overridable}}>",
-      "expected": "<123>"
+      "template": "<{{$overridable}}rendered{{/overridable}}>",
+      "expected": "<rendered>"
     }
   ]
 }

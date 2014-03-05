@@ -129,16 +129,22 @@
       "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
-      "name": "Overridable section tags can not be empty.",
+      "name": "Overridable section identifiers can not be empty.",
       "data": null,
       "template": "\n{{$}}\n{{/}}",
-      "expected_error": "Parse error.*line 2\\b.*Missing expression"
+      "expected_error": "Parse error.*line 2\\b.*Missing overridable section identifier"
     },
     {
-      "name": "Overridable section can not be blank.",
+      "name": "Overridable section identifiers can not contain white space.",
+      "data": null,
+      "template": "\n{{$ a b }}\n{{/ a b }}",
+      "expected_error": "Parse error.*line 2\\b.*Invalid overridable section identifier"
+    },
+    {
+      "name": "Overridable section identifiers can not be blank.",
       "data": null,
       "template": "\n{{$ \n\t}}\n{{/ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b.*Missing expression"
+      "expected_error": "Parse error.*line 2\\b.*Missing overridable section identifier"
     },
     {
       "name": "Partial tags can not be empty.",
