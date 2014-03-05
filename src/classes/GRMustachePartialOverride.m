@@ -45,7 +45,7 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheFastBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     context = [context contextByAddingPartialOverride:self];
     return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];

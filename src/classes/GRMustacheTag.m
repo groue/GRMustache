@@ -106,7 +106,7 @@
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheFastBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     NSAssert(requiredContentType == _contentType, @"Not implemented");
     
@@ -210,7 +210,7 @@
                     if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {
                         rendering = GRMustacheTranslateHTMLCharacters(rendering);
                     }
-                    GRMustacheFastBufferAppendString(buffer, (CFStringRef)rendering);
+                    GRMustacheBufferAppendString(buffer, (CFStringRef)rendering);
                 }
                 
                 

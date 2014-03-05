@@ -20,17 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheFastBuffer.h"
+#import <Foundation/Foundation.h>
 
-GRMustacheFastBuffer GRMustacheFastBufferCreate(NSUInteger capacity) {
-    return (GRMustacheFastBuffer){
+// Inspired by https://github.com/fotonauts/handlebars-objc/blob/master/src/handlebars-objc/astVisitors/HBAstEvaluationVisitor.m
+
+typedef struct {
+    BOOL usingCappedString;
+    NSUInteger cappedLength;
+    CFMutableStringRef string;
+} GRMustacheBuffer;
+
+static inline GRMustacheBuffer GRMustacheBufferCreate(NSUInteger capacity)
+{
+    return (GRMustacheBuffer){
         .usingCappedString = YES,
         .cappedLength = capacity,
         .string = CFStringCreateMutable(0, capacity),
     };
 }
 
-void GRMustacheFastBufferAppendString(GRMustacheFastBuffer *buffer, CFStringRef string) {
+static inline void GRMustacheBufferAppendString(GRMustacheBuffer *buffer, CFStringRef string)
+{
     if (buffer->usingCappedString && (CFStringGetLength(buffer->string) + CFStringGetLength(string) > buffer->cappedLength)) {
         CFMutableStringRef newBuffer = CFStringCreateMutableCopy(NULL, 0, buffer->string);
         CFRelease(buffer->string);
@@ -40,7 +50,7 @@ void GRMustacheFastBufferAppendString(GRMustacheFastBuffer *buffer, CFStringRef 
     CFStringAppend(buffer->string, string);
 }
 
-void GRMustacheFastBufferAppendCharacters(GRMustacheFastBuffer *buffer, const UniChar *chars, NSUInteger numChars)
+static inline void GRMustacheBufferAppendCharacters(GRMustacheBuffer *buffer, const UniChar *chars, NSUInteger numChars)
 {
     if (buffer->usingCappedString && (CFStringGetLength(buffer->string) + numChars > buffer->cappedLength)) {
         CFMutableStringRef newBuffer = CFStringCreateMutableCopy(NULL, 0, buffer->string);
@@ -51,19 +61,19 @@ void GRMustacheFastBufferAppendCharacters(GRMustacheFastBuffer *buffer, const Un
     CFStringAppendCharacters(buffer->string, chars, numChars);
 }
 
-CFStringRef GRMustacheFastBufferGetString(GRMustacheFastBuffer *buffer)
+static inline CFStringRef GRMustacheBufferGetString(GRMustacheBuffer *buffer)
 {
     CFRetain(buffer->string);
     CFAutorelease(buffer->string);
     return buffer->string;
 }
 
-void GRMustacheFastBufferRelease(GRMustacheFastBuffer *buffer)
+static inline void GRMustacheBufferRelease(GRMustacheBuffer *buffer)
 {
     CFRelease(buffer->string);
 }
 
-CFStringRef GRMustacheFastBufferGetStringAndRelease(GRMustacheFastBuffer *buffer)
+static inline CFStringRef GRMustacheBufferGetStringAndRelease(GRMustacheBuffer *buffer)
 {
     CFAutorelease(buffer->string);
     return buffer->string;

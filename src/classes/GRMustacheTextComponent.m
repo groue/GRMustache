@@ -45,9 +45,9 @@
 
 #pragma mark <GRMustacheTemplateComponent>
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheFastBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    GRMustacheFastBufferAppendString(buffer, (CFStringRef)_text);
+    GRMustacheBufferAppendString(buffer, (CFStringRef)_text);
     return YES;
 }
 

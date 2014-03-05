@@ -35,7 +35,7 @@
 
 #pragma mark <GRMustacheTemplateComponent>
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheFastBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
     if (!context) {
         // With a nil context, the method would return NO without setting the
@@ -46,8 +46,8 @@
     
     GRMustacheContentType partialContentType = _AST.contentType;
     BOOL needsEscapingBuffer = NO;
-    GRMustacheFastBuffer unescapedBuffer;
-    GRMustacheFastBuffer *renderingBuffer = nil;
+    GRMustacheBuffer unescapedBuffer;
+    GRMustacheBuffer *renderingBuffer = nil;
     
     if (requiredContentType == GRMustacheContentTypeHTML && (partialContentType != GRMustacheContentTypeHTML)) {
         // Self renders text, but is asked for HTML.
@@ -55,7 +55,7 @@
         //
         // We'll have to HTML escape our rendering.
         needsEscapingBuffer = YES;
-        unescapedBuffer = GRMustacheFastBufferCreate(1024);
+        unescapedBuffer = GRMustacheBufferCreate(1024);
         renderingBuffer = &unescapedBuffer;
     } else {
         // Self renders text and is asked for text,
@@ -76,8 +76,8 @@
     }
     
     if (needsEscapingBuffer) {
-        NSString *unescapedString = (NSString *)GRMustacheFastBufferGetStringAndRelease(&unescapedBuffer);
-        GRMustacheFastBufferAppendString(buffer, (CFStringRef)GRMustacheTranslateHTMLCharacters(unescapedString));
+        NSString *unescapedString = (NSString *)GRMustacheBufferGetStringAndRelease(&unescapedBuffer);
+        GRMustacheBufferAppendString(buffer, (CFStringRef)GRMustacheTranslateHTMLCharacters(unescapedString));
     }
     
     return YES;

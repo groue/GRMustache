@@ -58,7 +58,7 @@
         return NO;
     }
     
-    GRMustacheFastBuffer buffer = GRMustacheFastBufferCreate(1024);
+    GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
     
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustachePartialOverride: resolve it.
@@ -74,7 +74,7 @@
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
     
-    return (NSString *)GRMustacheFastBufferGetStringAndRelease(&buffer);
+    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (NSString *)innerTemplateString

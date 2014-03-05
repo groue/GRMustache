@@ -115,7 +115,7 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheFastBuffer buffer = GRMustacheFastBufferCreate(1024);
+    GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
 
     if (!context) {
         // With a nil context, the method would return nil without setting the
@@ -139,7 +139,7 @@
         *HTMLSafe = (_AST.contentType == GRMustacheContentTypeHTML);
     }
     
-    return (NSString *)GRMustacheFastBufferGetStringAndRelease(&buffer);
+    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext
