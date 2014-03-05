@@ -85,14 +85,14 @@
  *
  * @since v6.4
  */
-- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * The bundle where to look for localized strings.
  *
  * @since v6.4
  */
-@property (nonatomic, retain, readonly) NSBundle *bundle AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, retain, readonly) NSBundle *bundle AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * The table where to look for localized strings.
@@ -101,7 +101,7 @@
  *
  * @since v6.4
  */
-@property (nonatomic, retain, readonly) NSString *tableName AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, retain, readonly) NSString *tableName AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end
 

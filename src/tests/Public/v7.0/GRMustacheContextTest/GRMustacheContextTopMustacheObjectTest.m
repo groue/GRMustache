@@ -20,34 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
+#import "GRMustachePublicAPITest.h"
 
-/**
- * The content type of strings rendered by templates.
- *
- * @see GRMustacheConfiguration
- * @see GRMustacheTemplateRepository
- *
- * @since v6.2
- */
-typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
-    /**
-     * The `GRMustacheContentTypeHTML` content type has templates render HTML.
-     * HTML template escape the input of variable tags such as `{{name}}`. Use
-     * triple mustache tags `{{{content}}}` in order to avoid the HTML-escaping.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
+@interface GRMustacheContextTopMustacheObjectTest : GRMustachePublicAPITest
+@end
+
+@implementation GRMustacheContextTopMustacheObjectTest
+
+- (void)testTopMustacheObject
+{
+    GRMustacheContext *context = [GRMustacheContext context];
+    STAssertNil([context topMustacheObject], @"");
     
-    /**
-     * The `GRMustacheContentTypeText` content type has templates render text.
-     * They do not HTML-escape their input: `{{name}}` and `{{{name}}}` have
-     * identical renderings.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
-} AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+    id object = @"object";
+    context = [context contextByAddingObject:object];
+    STAssertEquals([context topMustacheObject], object, @"");
+    
+    id protectedObject = @"protectedObject";
+    context = [context contextByAddingProtectedObject:protectedObject];
+    STAssertEquals([context topMustacheObject], object, @"");
+    
+    id tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    context = [context contextByAddingTagDelegate:tagDelegate];
+    STAssertEquals([context topMustacheObject], object, @"");
 
+    id object2 = @"object2";
+    context = [context contextByAddingObject:object2];
+    STAssertEquals([context topMustacheObject], object2, @"");
+}
+
+@end

@@ -96,7 +96,7 @@
  *
  * @since v6.2
  */
-+ (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
++ (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@
  *
  * @since v6.2
  */
-+ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
++ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@
  *
  * @since v6.4
  */
-@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -163,7 +163,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;
+- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -195,7 +195,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -213,7 +213,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 
 /**
  * The content type of strings rendered by templates.
@@ -251,7 +251,7 @@
  *
  * @since v6.2
  */
-@property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+@property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * The opening delimiter for Mustache tags. Its default value is @"{{".
@@ -261,7 +261,7 @@
  *
  * @since v6.4
  */
-@property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * The closing delimiter for Mustache tags. Its default value is @"}}".
@@ -271,6 +271,6 @@
  *
  * @since v6.4
  */
-@property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

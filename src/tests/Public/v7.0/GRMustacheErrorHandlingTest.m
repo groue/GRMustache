@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2014 Gwendal Roué
+// Copyright (c) 2014 Nolan Waite
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
+#import "GRMustachePublicAPITest.h"
 
-/**
- * The content type of strings rendered by templates.
- *
- * @see GRMustacheConfiguration
- * @see GRMustacheTemplateRepository
- *
- * @since v6.2
- */
-typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
-    /**
-     * The `GRMustacheContentTypeHTML` content type has templates render HTML.
-     * HTML template escape the input of variable tags such as `{{name}}`. Use
-     * triple mustache tags `{{{content}}}` in order to avoid the HTML-escaping.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
+@interface GRMustacheErrorHandlingTest : GRMustachePublicAPITest
+@end
+
+@implementation GRMustacheErrorHandlingTest
+
+- (void)testFastEnumeration
+{
+    // https://github.com/groue/GRMustache/pull/67
     
-    /**
-     * The `GRMustacheContentTypeText` content type has templates render text.
-     * They do not HTML-escape their input: `{{name}}` and `{{{name}}}` have
-     * identical renderings.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
-} AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+    NSDictionary *repositoryDictionary = @{ @"profile": @"{{ intentionallyNonexistentFilter(name) }}",
+                                            @"list": @"{{# people}} {{> profile}} {{/}}" };
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:repositoryDictionary];
+    GRMustacheTemplate *template = [repository templateNamed:@"list" error:NULL];
+    NSError *error;
+    [template renderObject:@{ @"people": @[ @{ @"name": @"updog" } ] }  error:&error];
+    STAssertNoThrow([error code], @"EXC_BAD_ACCESS message sent to deallocated instance");
+}
 
+@end

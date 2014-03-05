@@ -57,7 +57,7 @@
  *
  * @since v4.3
  */
-- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (id)transformedValue:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end
 
@@ -94,7 +94,7 @@
  *
  * @see variadicFilterWithBlock:
  */
-+ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns a GRMustacheFilter object that executes the provided block, given an
@@ -115,6 +115,6 @@
  *
  * @see filterWithBlock:
  */
-+ (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
++ (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

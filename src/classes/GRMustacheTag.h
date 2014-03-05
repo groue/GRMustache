@@ -37,22 +37,22 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
      *
      * @since v6.0
      */
-    GRMustacheTagTypeVariable = 1 << 1 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    GRMustacheTagTypeVariable = 1 << 1 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
     /**
      * The type for section tags such as {{# name }}...{{/}}
      *
      * @since v6.0
      */
-    GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
+    GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
     /**
      * The type for inverted section tags such as {{^ name }}...{{/}}
      *
      * @since v6.0
      */
-    GRMustacheTagTypeInvertedSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER,
-} AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+    GRMustacheTagTypeInvertedSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
+} AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 /**
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * The type of the tag
  */
-@property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, readonly) GRMustacheTagType type AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns the literal and unprocessed inner content of the tag.
@@ -91,7 +91,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * Variable tags such as `{{ name }}` have no inner content: their inner
  * template string is the empty string.
  */
-@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns the description of the tag.
@@ -122,7 +122,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * @see GRMustacheRendering
  * @see GRMustacheTemplateRepository
  */
-@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns the rendering of the tag's inner content, rendering all inner
@@ -151,6 +151,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  *
  * @return The rendering of the tag's inner content.
  */
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_6_0_AND_LATER;
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

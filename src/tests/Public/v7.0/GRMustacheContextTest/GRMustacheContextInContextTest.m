@@ -20,34 +20,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros.h"
+#define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
+#import "GRMustachePublicAPITest.h"
 
-/**
- * The content type of strings rendered by templates.
- *
- * @see GRMustacheConfiguration
- * @see GRMustacheTemplateRepository
- *
- * @since v6.2
- */
-typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
-    /**
-     * The `GRMustacheContentTypeHTML` content type has templates render HTML.
-     * HTML template escape the input of variable tags such as `{{name}}`. Use
-     * triple mustache tags `{{{content}}}` in order to avoid the HTML-escaping.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
+@interface GRMustacheContextInContextTest : GRMustachePublicAPITest
+@end
+
+@implementation GRMustacheContextInContextTest
+
+- (void)testContextInContext
+{
+    GRMustacheContext *context1 = [GRMustacheContext contextWithObject:@{ @"a":@"a1" }];
+    context1 = [context1 contextByAddingObject:@{ @"b": @"b1" }];
     
-    /**
-     * The `GRMustacheContentTypeText` content type has templates render text.
-     * They do not HTML-escape their input: `{{name}}` and `{{{name}}}` have
-     * identical renderings.
-     *
-     * @since v6.2
-     */
-    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
-} AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+    GRMustacheContext *context2 = [GRMustacheContext contextWithObject:@{ @"a":@"a2" }];
+    context2 = [context2 contextByAddingObject:@{ @"c": @"c2" }];
+    
+    GRMustacheContext *context = [context1 contextByAddingObject:context2];
+    
+    STAssertEqualObjects([context valueForMustacheKey:@"a"], @"a2", @"");
+    STAssertEqualObjects([context valueForMustacheKey:@"b"], @"b1", @"");
+    STAssertEqualObjects([context valueForMustacheKey:@"c"], @"c2", @"");
+}
 
+@end
