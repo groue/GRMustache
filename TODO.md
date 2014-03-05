@@ -1,6 +1,6 @@
 ## TODO
 
-- [ ] have overridable section use their own identifiers, not expressions.
+- [X] have overridable section use their own identifiers, not expressions.
 - [ ] examine dependencies using https://github.com/nst/objc_dep $ python objc_dep.py -x "(GRMustacheAvailabilityMacros)" ~/Documents/git/groue/GRMustache/src/classes/ > ~/Desktop/GRMustacheDeps.dot
 - [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)
     - [X] for escaping methods
