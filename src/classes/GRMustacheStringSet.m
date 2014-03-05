@@ -86,7 +86,7 @@ void GRMustacheStringSetInfoRelease(const void *info) {
 {
     CFTreeContext context;
     NSUInteger index = 0;
-    CFTreeRef tree = [self blahString:string index:&index context:&context inTree:_tree];
+    CFTreeRef tree = [self searchString:string index:&index context:&context inTree:_tree];
     NSUInteger maxIndex = [string length] - 1;
     GRMustacheStringSetInfo *info;
     for (;index < maxIndex; ++index) {
@@ -109,7 +109,7 @@ void GRMustacheStringSetInfoRelease(const void *info) {
     info->endOfString = YES;
 }
 
-- (CFTreeRef)blahString:(NSString *)string index:(NSUInteger *)ioIndex context:(CFTreeContext *)outContext inTree:(CFTreeRef)tree
+- (CFTreeRef)searchString:(NSString *)string index:(NSUInteger *)ioIndex context:(CFTreeContext *)outContext inTree:(CFTreeRef)tree
 {
     unichar c = [string characterAtIndex:*ioIndex];
     for (CFTreeRef child = CFTreeGetFirstChild(tree); child; child = CFTreeGetNextSibling(child)) {
@@ -120,7 +120,7 @@ void GRMustacheStringSetInfoRelease(const void *info) {
                 return child;
             } else {
                 ++*ioIndex;
-                return [self blahString:string index:ioIndex context:outContext inTree:child];
+                return [self searchString:string index:ioIndex context:outContext inTree:child];
             }
         }
     }
