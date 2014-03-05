@@ -140,7 +140,7 @@
         ['\r'] = @"%0D",
     };
     static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    NSUInteger capacity = ([string length] + 10) * 1.2;
+    NSUInteger capacity = ([string length] + 20) * 1.2;
     return GRMustacheTranslateCharacters(string, escapeForCharacter, escapeForCharacterLength, capacity);
 }
 
