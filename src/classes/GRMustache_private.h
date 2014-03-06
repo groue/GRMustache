@@ -37,7 +37,7 @@ typedef struct {
 @interface GRMustache: NSObject
 
 // Documented in GRMustache.h
-+ (GRMustacheVersion)version GRMUSTACHE_API_PUBLIC;
++ (GRMustacheVersion)libraryVersion GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
 + (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;

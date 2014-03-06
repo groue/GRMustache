@@ -305,7 +305,7 @@ static NSSet *validMustacheKeys_NSValue(id self, SEL _cmd);
     [GRMustacheKeyAccess preventNSUndefinedKeyExceptionAttack];
 }
 
-+ (GRMustacheVersion)version
++ (GRMustacheVersion)libraryVersion
 {
     return (GRMustacheVersion){
         .major = GRMUSTACHE_MAJOR_VERSION,
