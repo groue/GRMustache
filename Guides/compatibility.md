@@ -121,7 +121,7 @@ Use this feature with great care, and simply avoid it when looking for compatibi
 Protected contexts
 ------------------
 
-GRMustache lets you [protect](protected_contexts.md) some keys so that they are always evaluated to the same value, regardless of other data that you feed your templates with.
+GRMustache lets you [protect](security.md#protected-contexts) some keys so that they are always evaluated to the same value, regardless of other data that you feed your templates with.
 
 This feature is usually implemented by other implementations with functions or methods whose name start with `register`.
 

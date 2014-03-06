@@ -31,10 +31,10 @@ See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/
 - [Filters](filters.md): `{{ uppercase(name) }}` et al.
 - [Rendering Objects](rendering_objects.md): "Mustache lambdas", and more.
 - [Tag Delegates](delegate.md): observe and alter template rendering.
-- [Protected Contexts](protected_contexts.md): protect some keys so that they always evaluate to the same value.
 
 ## Mustache, and beyond
 
+- [Security](security.md): an important matter.
 - [Compatibility](compatibility.md): compatibility with other Mustache implementations, in details.
 
 ## Forking

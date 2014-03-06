@@ -64,115 +64,40 @@ Overriding portions of partials
 
 Partials may contain *overridable sections*. Those sections start with a dollar instead of a pound. For example, let's consider the following partial:
 
-`page_layout.mustache`:
-
-    <html>
-    <head>
-        <title>{{$page_title}}Default title{{/page_title}}</title>
-    </head>
-    <body>
-        <h1>{{$page_title}}Default title{{/page_title}}</h1>
-        {{$page_content}
-            Default content
-        {{/page_content}}}
-    </body>
-    </html>
-
-You can embed such an overridable partial, and override its sections with the `{{<partial}}...{{/partial}}` syntax:
-
-`article_page.mustache`:
-
-    {{<page_layout}}
-    
-        {{! override page_title }}
-        {{$page_title}}{{article.title}}{{/page_title}}
-        
-        {{! override page_content }}
-        {{$page_content}}
-            {{#article}}
-                {{body}}
-                by {{author}}
-            {{/article}}
-        {{/page_content}}
-        
-    {{/page_layout}}
-
-When you render `article.mustache`, you will get a full HTML page.
-
-### Concatenation of overriding sections
-
-In Ruby on Rails, multiple `<% content_for :foo do %>...<% end %>` provide multiple contents for a single `<%= yield :foo %>`. You can achieve the same effect:
-
-`article_page.mustache`:
-
-    {{<page}}
-        {{$layout_javascript}}
-            <script type="text/javascript" src="article.js"></script>
-        {{/layout_javascript}}
-
-        {{$page_content}}
-            article content
-        {{/page_content}}
-    {{/page}}
-
-`page.mustache`:
-
-    {{<layout}}
-        {{$layout_javascript}}
-            <script type="text/javascript" src="page.js"></script>
-        {{/layout_javascript}}
-
-        {{>page_header}}
-
-        {{$layout_content}}
-            {{$page_content}}
-            {{/page_content}}
-        {{/layout_content}}
-    
-        {{$layout_content}}
-            page footer
-        {{/layout_content}}
-
-    {{/layout}}
-
-`page_header.mustache`:
-
-    {{$layout_javascript}}
-        <script type="text/javascript" src="header.js"></script>
-    {{/layout_javascript}}
-    {{$layout_content}}
-        page header
-    {{/layout_content}}
-
 `layout.mustache`:
 
     <html>
     <head>
-        {{$layout_javascript}}{{/layout_javascript}}
+        <title>{{$ page_title }}Default title{{/ page_title }}</title>
     </head>
     <body>
-        {{$layout_content}}{{/layout_content}}
+        <h1>{{$ page_title }}Default title{{/ page_title }}</h1>
+        {{$ page_content }}
+            Default content
+        {{/ page_content }}}
     </body>
     </html>
 
-`Render.m`:
+You can embed such an overridable partial, and override its sections with the `{{< partial }}...{{/ partial }}` syntax:
 
-    NSString *rendering = [GRMustacheTemplate renderObject:nil fromResource:@"article_page" bundle:nil error:NULL];
+`article.mustache`:
 
-Final rendering:
+    {{< layout }}
+    
+        {{! override page_title }}
+        {{$ page_title }}{{ article.title }}{{/ page_title }}
+        
+        {{! override page_content }}
+        {{$ page_content }}
+            {{# article }}
+                {{ body }}
+                by {{ author }}
+            {{/ article }}
+        {{/ page_content }}
+        
+    {{/ layout }}
 
-    <html>
-    <head>
-        <script type="text/javascript" src="page.js"></script>
-        <script type="text/javascript" src="header.js"></script>
-        <script type="text/javascript" src="article.js"></script>
-    </head>
-    <body>
-        page header
-        article content
-        page footer
-    </body>
-    </html>
+When you render `article.mustache`, you get a full HTML page.
 
 
 Dynamic partials

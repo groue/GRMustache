@@ -5,6 +5,7 @@ GRMustache runtime
 
 You'll learn here how GRMustache renders your data. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [ViewModel Guide](view_model.md).
 
+
 Variable tags
 -------------
 
@@ -21,7 +22,9 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 
 Any object supporting [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) via the `objectForKeyedSubscript:` method, and any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object, that responds to the `valueForKey:` method, can be used.
 
-Note that GRMustache prefers the `objectForKeyedSubscript:` method, and only invokes the `valueForKey:` method on objects that do not respond to `objectForKeyedSubscript:`.
+> Note that GRMustache prefers the `objectForKeyedSubscript:` method, and only invokes the `valueForKey:` method on objects that do not support keyed subscripting.
+>
+> On top of that, `valueForKey:` will only accessed declared properties, unless your class implements the `validMustacheKeys` method. See the [Security Guide](security.md) for more information.
 
 Dictionaries are such objects. So are, generally speaking, your custom models:
 
@@ -348,7 +351,7 @@ The two others are identical: they ensure the `bar` key comes from the very `foo
 
 ### Protected contexts
 
-*Protected contexts* let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Protected Contexts Guide](protected_contexts.md).
+*Protected contexts* let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Security Guide](security.md#protected-contexts).
 
 ### Tag delegates
 

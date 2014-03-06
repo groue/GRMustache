@@ -91,7 +91,7 @@ You can also reset it to a blank slate, getting rid of the whole standard librar
 repo.configuration.baseContext = [GRMustacheContext context];
 ```
 
-You may also be interested in [protected contexts](protected_contexts.md). They guarantee that a particular identifier will always evaluate to the same value.
+You may also be interested in [protected contexts](security.md#protected-contexts). They guarantee that a particular identifier will always evaluate to the same value.
 
 ```objc
 // Guarantee that {{my_important_value}} will always render the same and cannot

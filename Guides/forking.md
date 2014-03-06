@@ -50,24 +50,22 @@ The library features are described in the [guides](introduction.md). This sectio
     
     Template components are actually able to provide the rendering expected by the library user:
 
+    - `GRMustacheOverridableSection`
     - `GRMustacheTemplate`
     - `GRMustacheTemplateOverride`
     - `GRMustacheTextComponent`
     - `GRMustacheTag`
     
-    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, and *template overrides* render overridable partial tags.
+    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, *template overrides* render overridable partial tags, and *overridable sections* render sections starting with a dollar sign, such as `{{$ content }}...{{/ }}`.
     
     For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of two text elements and a tag element.
     
-    There are three subclasses of GRMustacheTag:
+    There are two subclasses of GRMustacheTag:
     
     - `GRMustacheSectionTag`
     - `GRMustacheVariableTag`
-    - `GRMustacheAccumulatorTag`
     
     *Section tags* and *Variable tags* represent their "physical" counterpart `{{#^$ name}}...{{/name}}` and `{{name}}` respectively.
-    
-    *Accumulator tags* are actually created during the rendering, not during the compilation phase. They are involved in the concatenation of multiple overridable sections `{{$name}}...{{/name}}`.
 
 - **Runtime**
     - `GRMustacheContext`

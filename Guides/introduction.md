@@ -109,7 +109,7 @@ GRMustache's core engine is extensible. Feel free to hook in:
 
 Those three hooks are lego bricks: from them you can build more complex tools, such as [NSFormatter](NSFormatter.md) and the [localize](standard_library.md#localize) helper.
 
-Should you eventually build a library of reusable code snippets, you'll find [Protected Contexts](protected_contexts.md) useful.
+Should you eventually build a library of reusable code snippets, you'll find [Protected Contexts](security.md#protected-contexts) useful.
 
 
 Getting started

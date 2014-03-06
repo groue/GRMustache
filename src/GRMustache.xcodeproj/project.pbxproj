@@ -1045,32 +1045,24 @@
 		569EB2E91640370E00C09632 /* Template components */ = {
 			isa = PBXGroup;
 			children = (
+				56DEC2A6152631300031E8DC /* GRMustacheTemplateComponent_private.h */,
 				5698B4A318C755B400D285DC /* GRMustacheOverridableSection_private.h */,
 				5698B4A418C755B400D285DC /* GRMustacheOverridableSection.m */,
 				5648F1AE18997748001F4B83 /* GRMustachePartial_private.h */,
 				5648F1AF18997748001F4B83 /* GRMustachePartial.m */,
 				56EB54C9160ED8AA006A5F57 /* GRMustachePartialOverride_private.h */,
 				56EB54D0160EEC2B006A5F57 /* GRMustachePartialOverride.m */,
-				56DEC2A6152631300031E8DC /* GRMustacheTemplateComponent_private.h */,
-				56DEC2B4152631300031E8DC /* GRMustacheTextComponent_private.h */,
-				56DEC2B3152631300031E8DC /* GRMustacheTextComponent.m */,
-				569EB2EA1640374400C09632 /* Tags */,
-			);
-			name = "Template components";
-			sourceTree = "<group>";
-		};
-		569EB2EA1640374400C09632 /* Tags */ = {
-			isa = PBXGroup;
-			children = (
+				56DEC2A9152631300031E8DC /* GRMustacheSectionTag_private.h */,
+				56148B531639CBD900ADAF75 /* GRMustacheSectionTag.m */,
 				56148B6B163BE4BD00ADAF75 /* GRMustacheTag.h */,
 				56148B6E163BEB6400ADAF75 /* GRMustacheTag_private.h */,
 				56148B71163BF17700ADAF75 /* GRMustacheTag.m */,
-				56DEC2A9152631300031E8DC /* GRMustacheSectionTag_private.h */,
-				56148B531639CBD900ADAF75 /* GRMustacheSectionTag.m */,
+				56DEC2B4152631300031E8DC /* GRMustacheTextComponent_private.h */,
+				56DEC2B3152631300031E8DC /* GRMustacheTextComponent.m */,
 				56148B61163A5B8900ADAF75 /* GRMustacheVariableTag_private.h */,
 				56DEC2B9152631300031E8DC /* GRMustacheVariableTag.m */,
 			);
-			name = Tags;
+			name = "Template components";
 			sourceTree = "<group>";
 		};
 		56B11A1116B3A4F6009F184F /* Configuration */ = {

@@ -43,7 +43,7 @@
  * - https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
  * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
- * - https://github.com/groue/GRMustache/blob/master/Guides/protected_contexts.md
+ * - https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
  * @see GRMustacheRendering protocol
  */
@@ -312,11 +312,21 @@
  *
  * The Mustache value of any object for a given key is defined as:
  *
- * - the result of `objectForKeyedSubscript:`, if the object responds to this
- *   method.
- * - the result of `valueForKey:`, if this method does not throw any
- *   NSUndefinedKeyException.
- * - otherwise, nil.
+ * 1. If the object responds to the `objectForKeyedSubscript:` instance method,
+ *    return the result of this method.
+ *
+ * 2. Otherwise, build the list of valid keys:
+ *    a. If the object responds to the `validMustacheKeys` class method defined
+ *       by the `GRMustacheKeyValidation` protocol, use this method.
+ *    b. Otherwise, use the list of Objective-C properties declared with
+ *       `@property`.
+ *    c. If object is an instance of NSManagedObject, add all the attributes of
+ *       its Core Data entity.
+ *
+ * 3. If the key belongs to the list of valid keys, return the result of the
+ *    `valueForKey:` method, unless this method throws NSUndefinedKeyException.
+ *
+ * 4. Otherwize, return nil.
  *
  * In this method, the following search pattern is used:
  *
