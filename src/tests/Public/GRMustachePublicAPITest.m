@@ -266,10 +266,6 @@ static struct {
 
 - (void)checkExpectedRendering:(NSString *)expectedRendering expectedErrorReg:(NSRegularExpression *)expectedErrorReg fromTestDescription:(NSString *)testDescription againstRenderedObject:(id)object template:(void(^)(GRMustacheTemplate **template, NSError **error))block
 {
-    NSLog(@"testDescription = %@", testDescription);
-    if ([expectedRendering isEqualToString:@"<A<B<>>>"]) {
-        NSLog(@"loop");
-    }
     NSError *error;
     GRMustacheTemplate *template;
     
