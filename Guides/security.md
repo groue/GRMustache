@@ -48,7 +48,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:document
 
 Thanks to key validation, the `deleteRecord` method would not be called.
 
-Limiting access to declared Objective-C properties by default is a good tradeoff. Your class can still implement the `validMustacheKeys` method, should more keys be allowed.
+Limiting access to declared Objective-C properties by default is a good tradeoff. Your class can still implement the `validMustacheKeys` method, should you want to allow a different set of keys.
 
 > The key validation mechanism is directly inspired by [fotonauts/handlebars-objc](https://github.com/fotonauts/handlebars-objc). Many thanks to [Bertrand Guiheneuf](https://github.com/bertrand).
 
