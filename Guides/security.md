@@ -5,7 +5,7 @@ Security
 
 GRMustache is a template engine that combines template strings and data objects into its final rendering.
 
-Both the template strings and the data objects may come from untrusted sources. For example, they may be remotely loaded from an untrusted source, or they may be user-defined.
+Both the template strings and the data objects may come from untrusted sources. For example, they may be remotely loaded from an untrusted remote host, or they may be user-defined.
 
 GRMustache ships with both built-in and opt-in features that prevent vilain templates and data to threaten your application.
 
