@@ -113,26 +113,4 @@
     STAssertEqualObjects(value, @"bar", @"");
 }
 
-- (void)testContextByAddingContext
-{
-    {
-        GRMustacheContext *context = [GRMustacheContext contextWithObject:@{@"a":@"a"}];
-        context = [context contextByAddingObject:@{@"b":@"b"}];
-        context = [context contextByAddingProtectedObject:@{@"precious":@"ignored1"}];
-        context = [context contextByAddingObject:@{@"c":@"c"}];
-        context = [context contextByAddingObject:@{@"d":@"d"}];
-        context = [context contextByAddingProtectedObject:@{@"precious":@"platinum"}];
-        
-        GRMustacheContext *otherContext = [GRMustacheContext contextWithObject:@{@"a":@"ignored2", @"e":@"e"}];
-        otherContext = [otherContext contextByAddingProtectedObject:@{@"precious":@"ignored3"}];
-        
-        otherContext = [otherContext contextByAddingObject:context];    // that is what we are testing
-        
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{a}},{{b}},{{c}},{{d}},{{e}},{{precious}}" error:NULL];
-        template.baseContext = otherContext;
-        NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"a,b,c,d,e,platinum", @"");
-    }
-}
-
 @end

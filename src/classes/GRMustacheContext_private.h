@@ -53,44 +53,20 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
-    BOOL _allowsAllKeys;
-    
-    // Context stack
-    //
-    // If _contextObject is nil, the stack is empty.
-    // If _contextObject is not nil, the top of the stack is _contextObject, and the rest of the stack is _contextParent.
-    GRMustacheContext *_contextParent;
-    id _contextObject;
-    
-    // Protected context stack
-    //
-    // If _protectedContextObject is nil, the stack is empty.
-    // If _protectedContextObject is not nil, the top of the stack is _protectedContextObject, and the rest of the stack is _protectedContextParent.
-    GRMustacheContext *_protectedContextParent;
-    id _protectedContextObject;
-    
-    // Hidden context stack
-    //
-    // If _hiddenContextObject is nil, the stack is empty.
-    // If _hiddenContextObject is not nil, the top of the stack is _hiddenContextObject, and the rest of the stack is _hiddenContextParent.
-    GRMustacheContext *_hiddenContextParent;
-    id _hiddenContextObject;
-    
-    // Tag delegate stack
-    //
-    // If _tagDelegate is nil, the stack is empty.
-    // If _tagDelegate is not nil, the top of the stack is _tagDelegate, and the rest of the stack is _tagDelegateParent.
-    GRMustacheContext *_tagDelegateParent;
-    id<GRMustacheTagDelegate> _tagDelegate;
-    
-    // Partial override stack
-    //
-    // If _partialOverride is nil, the stack is empty.
-    // If _partialOverride is not nil, the top of the stack is _partialOverride, and the rest of the stack is _partialOverrideParent.
-    GRMustacheContext *_partialOverrideParent;
-    GRMustachePartialOverride *_partialOverride;
 
-    NSDictionary *_depthsForAncestors;
+#define GRMUSTACHE_STACK_TOP_IVAR(stackName) _ ## stackName ## Object
+#define GRMUSTACHE_STACK_PARENT_IVAR(stackName) _ ## stackName ## Parent
+#define GRMUSTACHE_STACK_DECLARE_IVARS(stackName, type) \
+    GRMustacheContext *GRMUSTACHE_STACK_PARENT_IVAR(stackName); \
+    type GRMUSTACHE_STACK_TOP_IVAR(stackName)
+    
+    GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
+    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, GRMustachePartialOverride *);
+    
+    BOOL _allowsAllKeys;
 }
 
 // Documented in GRMustacheContext.h

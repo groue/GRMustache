@@ -105,13 +105,13 @@
     GRMustacheContextKeyAccess_ClassWithObjectForKeyedSubscript *object = [[[GRMustacheContextKeyAccess_ClassWithObjectForKeyedSubscript alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([[object class] respondsToSelector:@selector(validMustacheKeys)], @"");
+    STAssertTrue([[object class] respondsToSelector:@selector(validMustacheKeys)], @"");
+    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"foo"], @"");
+    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"bar"], @"");
     STAssertEqualObjects([object objectForKeyedSubscript:@"foo"], @"foo", @"");
     STAssertEqualObjects([object objectForKeyedSubscript:@"bar"], @"bar", @"");
     STAssertEqualObjects([object valueForKey:@"foo"], @"FOO", @"");
     STAssertEqualObjects([object valueForKey:@"bar"], @"BAR", @"");
-    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"foo"], @"");
-    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"bar"], @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
@@ -154,14 +154,14 @@
     GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys *object = [[[GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([[object class] respondsToSelector:@selector(validMustacheKeys)], @"");
+    STAssertTrue([[object class] respondsToSelector:@selector(validMustacheKeys)], @"");
+    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"allowedMethod"], @"");
+    STAssertFalse([[[object class] validMustacheKeys] containsObject:@"disallowedProperty"], @"");
     STAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
     STAssertEqualObjects(object.disallowedProperty, @"disallowedProperty", @"");
     STAssertEqualObjects([object allowedMethod], @"allowedMethod", @"");
     STAssertEqualObjects([object valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
     STAssertEqualObjects([object valueForKey:@"allowedMethod"], @"allowedMethod", @"");
-    STAssertTrue([[[object class] validMustacheKeys] containsObject:@"allowedMethod"], @"");
-    STAssertFalse([[[object class] validMustacheKeys] containsObject:@"disallowedProperty"], @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];

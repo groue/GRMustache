@@ -49,18 +49,19 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
+#define GRMUSTACHE_STACK_TOP_IVAR(stackName) _ ## stackName ## Object
+#define GRMUSTACHE_STACK_PARENT_IVAR(stackName) _ ## stackName ## Parent
+#define GRMUSTACHE_STACK_DECLARE_IVARS(stackName, type) \
+    GRMustacheContext *GRMUSTACHE_STACK_PARENT_IVAR(stackName); \
+    type GRMUSTACHE_STACK_TOP_IVAR(stackName)
+    
+    GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
+    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, id);
+    
     BOOL _allowsAllKeys;
-    GRMustacheContext *_contextParent;
-    id _contextObject;
-    GRMustacheContext *_protectedContextParent;
-    id _protectedContextObject;
-    GRMustacheContext *_hiddenContextParent;
-    id _hiddenContextObject;
-    GRMustacheContext *_tagDelegateParent;
-    id<GRMustacheTagDelegate> _tagDelegate;
-    GRMustacheContext *_partialOverrideParent;
-    id _partialOverride;
-    NSDictionary *_depthsForAncestors;
 }
 
 
