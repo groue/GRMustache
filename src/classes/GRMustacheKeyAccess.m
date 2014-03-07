@@ -74,7 +74,7 @@ static Class NSManagedObjectClass;
     setupValidKeysForClass();
 }
 
-+ (id)valueForMustacheKey:(NSString *)key inObject:(id)object
++ (id)valueForMustacheKey:(NSString *)key inObject:(id)object allowsAllKeys:(BOOL)allowsAllKeys
 {
     if (object == nil) {
         return nil;
@@ -90,7 +90,7 @@ static Class NSManagedObjectClass;
     
     // Then try valueForKey:, after key validation
     
-    if (![self isValidMustacheKey:key forObject:object]) {
+    if (!allowsAllKeys && ![self isValidMustacheKey:key forObject:object]) {
         return nil;
     }
     
@@ -205,64 +205,70 @@ static Class NSManagedObjectClass;
             NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
             invocation.selector = selector;
             [invocation invokeWithTarget:object];
-            void *buffer = malloc([methodSignature methodReturnLength]);
-            [invocation getReturnValue:buffer];
-            
-            // Turn the raw value buffer into an object
-            
-            id result = nil;
-            const char *objCType = [methodSignature methodReturnType];
-            switch(objCType[0]) {
-                case 'c':
-                    result = [NSNumber numberWithChar:*(char *)buffer];
-                    break;
-                case 'i':
-                    result = [NSNumber numberWithInt:*(int *)buffer];
-                    break;
-                case 's':
-                    result = [NSNumber numberWithShort:*(short *)buffer];
-                    break;
-                case 'l':
-                    result = [NSNumber numberWithLong:*(long *)buffer];
-                    break;
-                case 'q':
-                    result = [NSNumber numberWithLongLong:*(long long *)buffer];
-                    break;
-                case 'C':
-                    result = [NSNumber numberWithUnsignedChar:*(unsigned char *)buffer];
-                    break;
-                case 'I':
-                    result = [NSNumber numberWithUnsignedInt:*(unsigned int *)buffer];
-                    break;
-                case 'S':
-                    result = [NSNumber numberWithUnsignedShort:*(unsigned short *)buffer];
-                    break;
-                case 'L':
-                    result = [NSNumber numberWithUnsignedLong:*(unsigned long *)buffer];
-                    break;
-                case 'Q':
-                    result = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)buffer];
-                    break;
-                case 'B':
-                    result = [NSNumber numberWithBool:*(_Bool *)buffer];
-                    break;
-                case 'f':
-                    result = [NSNumber numberWithFloat:*(float *)buffer];
-                    break;
-                case 'd':
-                    result = [NSNumber numberWithDouble:*(double *)buffer];
-                    break;
-                case '@':
-                case '#':
-                    result = *(id *)buffer;
-                    break;
-                default:
-                    [NSException raise:NSInternalInconsistencyException format:@"Not implemented yet"];
-                    break;
+            NSUInteger methodReturnLength = [methodSignature methodReturnLength];
+            if (methodReturnLength == 0) {
+                // no value
+                return nil;
+            } else {
+                void *buffer = malloc(methodReturnLength);
+                [invocation getReturnValue:buffer];
+                
+                // Turn the raw value buffer into an object
+                
+                id result = nil;
+                const char *objCType = [methodSignature methodReturnType];
+                switch(objCType[0]) {
+                    case 'c':
+                        result = [NSNumber numberWithChar:*(char *)buffer];
+                        break;
+                    case 'i':
+                        result = [NSNumber numberWithInt:*(int *)buffer];
+                        break;
+                    case 's':
+                        result = [NSNumber numberWithShort:*(short *)buffer];
+                        break;
+                    case 'l':
+                        result = [NSNumber numberWithLong:*(long *)buffer];
+                        break;
+                    case 'q':
+                        result = [NSNumber numberWithLongLong:*(long long *)buffer];
+                        break;
+                    case 'C':
+                        result = [NSNumber numberWithUnsignedChar:*(unsigned char *)buffer];
+                        break;
+                    case 'I':
+                        result = [NSNumber numberWithUnsignedInt:*(unsigned int *)buffer];
+                        break;
+                    case 'S':
+                        result = [NSNumber numberWithUnsignedShort:*(unsigned short *)buffer];
+                        break;
+                    case 'L':
+                        result = [NSNumber numberWithUnsignedLong:*(unsigned long *)buffer];
+                        break;
+                    case 'Q':
+                        result = [NSNumber numberWithUnsignedLongLong:*(unsigned long long *)buffer];
+                        break;
+                    case 'B':
+                        result = [NSNumber numberWithBool:*(_Bool *)buffer];
+                        break;
+                    case 'f':
+                        result = [NSNumber numberWithFloat:*(float *)buffer];
+                        break;
+                    case 'd':
+                        result = [NSNumber numberWithDouble:*(double *)buffer];
+                        break;
+                    case '@':
+                    case '#':
+                        result = *(id *)buffer;
+                        break;
+                    default:
+                        [NSException raise:NSInternalInconsistencyException format:@"Not implemented yet"];
+                        break;
+                }
+                
+                free(buffer);
+                return result;
             }
-            
-            free(buffer);
-            return result;
         }
     }
     

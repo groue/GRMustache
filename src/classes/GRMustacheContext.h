@@ -49,6 +49,7 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
+    BOOL _allowsAllKeys;
     GRMustacheContext *_contextParent;
     id _contextObject;
     GRMustacheContext *_protectedContextParent;
@@ -281,6 +282,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Fetching Values from the Context Stack
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO
+ */
+@property (nonatomic) BOOL allowsAllKeys;
 
 /**
  * Returns the object at the top of the receiver's context stack.

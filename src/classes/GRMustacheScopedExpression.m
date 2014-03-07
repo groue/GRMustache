@@ -93,7 +93,7 @@
         *protected = NO;
     }
     if (value) {
-        *value = [GRMustacheKeyAccess valueForMustacheKey:_scopeIdentifier inObject:scopedValue];
+        *value = [GRMustacheKeyAccess valueForMustacheKey:_scopeIdentifier inObject:scopedValue allowsAllKeys:context.allowsAllKeys];
     }
     return YES;
 }

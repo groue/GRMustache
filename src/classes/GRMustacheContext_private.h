@@ -53,6 +53,8 @@
  */
 @interface GRMustacheContext : NSObject {
 @private
+    BOOL _allowsAllKeys;
+    
     // Context stack
     //
     // If _contextObject is nil, the stack is empty.
@@ -90,6 +92,9 @@
 
     NSDictionary *_depthsForAncestors;
 }
+
+// Documented in GRMustacheContext.h
+@property (nonatomic) BOOL allowsAllKeys;
 
 // Documented in GRMustacheContext.h
 + (instancetype)context GRMUSTACHE_API_PUBLIC;

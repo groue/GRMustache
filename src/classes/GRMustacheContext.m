@@ -43,6 +43,10 @@ void freeTagDelegateClasses(void *objects) {
 
 static BOOL objectConformsToTagDelegateProtocol(id object)
 {
+    if (object == nil) {
+        return NO;
+    }
+    
     CFMutableDictionaryRef classes = getCurrentThreadTagDelegateClasses();
     if (!classes) {
         classes = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
@@ -78,6 +82,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 
 @implementation GRMustacheContext
+@synthesize allowsAllKeys=_allowsAllKeys;
 
 + (void)initialize
 {
@@ -170,10 +175,9 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     GRMustacheContext *context = [GRMustacheContext context];
     
-    // Update context stack
-    context->_contextParent = [self retain];
-    
     // copy identical stacks
+    context->_contextParent = [_contextParent retain];
+    context->_contextObject = [_contextObject retain];
     context->_protectedContextParent = [_protectedContextParent retain];
     context->_protectedContextObject = [_protectedContextObject retain];
     context->_hiddenContextParent = [_hiddenContextParent retain];
@@ -190,10 +194,6 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)newContextByAddingObject:(id)object
 {
-    if (object == nil) {
-        return [self retain];
-    }
-    
     if ([object isKindOfClass:[GRMustacheContext class]])
     {
         // Extend self with a context
@@ -233,8 +233,13 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     context->_partialOverride = [_partialOverride retain];
     
     // Update context stack
-    context->_contextParent = [self retain];
-    context->_contextObject = [object retain];
+    if (object) {
+        if (_contextObject) { context->_contextParent = [self retain]; }
+        context->_contextObject = [object retain];
+    } else {
+        context->_contextParent = [_contextParent retain];
+        context->_contextObject = [_contextObject retain];
+    }
     
     // update or copy tag delegate stack
     if (objectConformsToTagDelegateProtocol(object)) {
@@ -255,16 +260,11 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)contextByAddingProtectedObject:(id)object
 {
-    if (object == nil) {
-        return self;
-    }
-    
     GRMustacheContext *context = [GRMustacheContext context];
     
-    // Update context stack
-    context->_contextParent = [self retain];
-    
     // copy identical stacks
+    context->_contextParent = [_contextParent retain];
+    context->_contextObject = [_contextObject retain];
     context->_hiddenContextParent = [_hiddenContextParent retain];
     context->_hiddenContextObject = [_hiddenContextObject retain];
     context->_tagDelegateParent = [_tagDelegateParent retain];
@@ -273,24 +273,24 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     context->_partialOverride = [_partialOverride retain];
     
     // update protected context stack
-    if (_protectedContextObject) { context->_protectedContextParent = [self retain]; }
-    context->_protectedContextObject = [object retain];
+    if (object) {
+        if (_protectedContextObject) { context->_protectedContextParent = [self retain]; }
+        context->_protectedContextObject = [object retain];
+    } else {
+        context->_protectedContextParent = [_protectedContextParent retain];
+        context->_protectedContextObject = [_protectedContextObject retain];
+    }
     
     return context;
 }
 
 - (instancetype)contextByAddingHiddenObject:(id)object
 {
-    if (object == nil) {
-        return self;
-    }
-    
     GRMustacheContext *context = [GRMustacheContext context];
     
-    // Update context stack
-    context->_contextParent = [self retain];
-    
     // copy identical stacks
+    context->_contextParent = [_contextParent retain];
+    context->_contextObject = [_contextObject retain];
     context->_protectedContextParent = [_protectedContextParent retain];
     context->_protectedContextObject = [_protectedContextObject retain];
     context->_tagDelegateParent = [_tagDelegateParent retain];
@@ -299,24 +299,24 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     context->_partialOverride = [_partialOverride retain];
     
     // update hidden context stack
-    if (_hiddenContextObject) { context->_hiddenContextParent = [self retain]; }
-    context->_hiddenContextObject = [object retain];
+    if (object) {
+        if (_hiddenContextObject) { context->_hiddenContextParent = [self retain]; }
+        context->_hiddenContextObject = [object retain];
+    } else {
+        context->_hiddenContextParent = [_hiddenContextParent retain];
+        context->_hiddenContextObject = [_hiddenContextObject retain];
+    }
     
     return context;
 }
 
 - (instancetype)contextByAddingPartialOverride:(GRMustachePartialOverride *)partialOverride
 {
-    if (partialOverride == nil) {
-        return self;
-    }
-    
     GRMustacheContext *context = [GRMustacheContext context];
     
-    // Update context stack
-    context->_contextParent = [self retain];
-    
     // copy identical stacks
+    context->_contextParent = [_contextParent retain];
+    context->_contextObject = [_contextObject retain];
     context->_protectedContextParent = [_protectedContextParent retain];
     context->_protectedContextObject = [_protectedContextObject retain];
     context->_hiddenContextParent = [_hiddenContextParent retain];
@@ -325,8 +325,13 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     context->_tagDelegate = [_tagDelegate retain];
     
     // update partial override stack
-    if (_partialOverride) { context->_partialOverrideParent = [self retain]; }
-    context->_partialOverride = [partialOverride retain];
+    if (partialOverride) {
+        if (_partialOverride) { context->_partialOverrideParent = [self retain]; }
+        context->_partialOverride = [partialOverride retain];
+    } else {
+        context->_partialOverrideParent = [_partialOverrideParent retain];
+        context->_partialOverride = [_partialOverride retain];
+    }
     
     return context;
 }
@@ -391,7 +396,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     if (_protectedContextObject) {
         for (GRMustacheContext *context = self; context; context = context->_protectedContextParent) {
-            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:context->_protectedContextObject];
+            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:context->_protectedContextObject allowsAllKeys:context->_allowsAllKeys];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = YES;
@@ -421,7 +426,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
                 }
             }
             if (hidden) { continue; }
-            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject];
+            id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject allowsAllKeys:context->_allowsAllKeys];
             if (value != nil) {
                 if (protected != NULL) {
                     *protected = NO;

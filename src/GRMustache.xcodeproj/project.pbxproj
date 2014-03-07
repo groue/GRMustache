@@ -398,6 +398,10 @@
 		56BA24AE18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24AC18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m */; };
 		56BA24AF18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24AC18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m */; };
 		56BA24B018C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24AC18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m */; };
+		56BA24B318C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */; };
+		56BA24B418C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */; };
+		56BA24B518C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */; };
+		56BA24B618C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */; };
 		56CD618F15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */; };
 		56CD619015C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */; };
 		56CD619115C5536F0067E2E7 /* GRMustacheFilteredExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */; };
@@ -710,6 +714,7 @@
 		56BA24A218C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfigurationExtendBaseContextTest.m; sourceTree = "<group>"; };
 		56BA24A718C7A6D4006DA5F3 /* GRMustacheTemplateExtendBaseContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateExtendBaseContextTest.m; sourceTree = "<group>"; };
 		56BA24AC18C7A6F8006DA5F3 /* GRMustacheKeyedSubscriptingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheKeyedSubscriptingTest.m; sourceTree = "<group>"; };
+		56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextKeyAccessTest.m; sourceTree = "<group>"; };
 		56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilteredExpression_private.h; sourceTree = "<group>"; };
 		56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilteredExpression.m; sourceTree = "<group>"; };
 		56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheStandardLibrary.m; sourceTree = "<group>"; };
@@ -1115,6 +1120,7 @@
 				56BA248518C7A62E006DA5F3 /* GRMustacheContextTest.m */,
 				56BA249318C7A648006DA5F3 /* GRMustacheContextTopMustacheObjectTest.m */,
 				56BA248618C7A62E006DA5F3 /* GRMustacheContextValueForMustacheKeyTest.m */,
+				56BA24B218C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m */,
 			);
 			path = GRMustacheContextTest;
 			sourceTree = "<group>";
@@ -1961,6 +1967,7 @@
 				56BA24A618C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m in Sources */,
 				56BA243B18C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,
 				56A7312C1805276A00B8570A /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
+				56BA24B618C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */,
 				56A7312D1805276A00B8570A /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				56A7312E1805276A00B8570A /* GRMustacheProxyTest.m in Sources */,
 				5648F1BA18998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
@@ -2052,6 +2059,7 @@
 				56BA24A318C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m in Sources */,
 				56BA243818C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,
 				568140E216365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
+				56BA24B318C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */,
 				568140E416365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E816365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
 				5648F1B718998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
@@ -2143,6 +2151,7 @@
 				56BA24A518C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m in Sources */,
 				56BA243A18C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,
 				568140E316365D3000310B7F /* GRMustacheTemplateRepositoryWithBaseURLTest.m in Sources */,
+				56BA24B518C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */,
 				568140E516365D3000310B7F /* GRMustacheTemplateRepositoryWithDirectoryTest.m in Sources */,
 				568140E916365D6100310B7F /* GRMustacheProxyTest.m in Sources */,
 				5648F1B918998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */,
@@ -2175,6 +2184,7 @@
 				ABAF867116A0A65A001ADE96 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld in Sources */,
 				ABAF867216A0A65A001ADE96 /* GRMustacheTagDelegateTest.m in Sources */,
 				ABAF867316A0A65A001ADE96 /* GRMustacheTemplateFromMethodsTest.m in Sources */,
+				56BA24B418C9A2EE006DA5F3 /* GRMustacheContextKeyAccessTest.m in Sources */,
 				ABAF867416A0A65A001ADE96 /* GRMustacheTemplateRenderMethodsTest.m in Sources */,
 				ABAF867516A0A65A001ADE96 /* GRMustacheTemplateRepositoryDataSourceTest.m in Sources */,
 				56BA243918C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,
