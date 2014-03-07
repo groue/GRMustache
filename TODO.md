@@ -1,6 +1,12 @@
 ## TODO
 
 - [ ] Remove all GRMustacheContext subclassing documentation
+- [ ] Document secure key access to Foundation classes
+- [ ] Document the drop of context in context support
+- [X] Add GRMustacheContext.allowsAllKeys
+- [ ] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
+- [ ] Rename "protected context" to something that rings a bell. "Protected keys"? "Locked keys"? "Priority keys"?
+- [-] Tests for secure key access
 - [X] change version method
 - [X] have overridable section use their own identifiers, not expressions.
 - [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)
