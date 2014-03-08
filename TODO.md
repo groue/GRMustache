@@ -4,7 +4,7 @@
 - [ ] Document secure key access to Foundation classes
 - [ ] Document the drop of context in context support
 - [X] Add GRMustacheContext.allowsAllKeys
-- [ ] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
+- [X] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
 - [ ] Rename "protected context" to something that rings a bell. "Protected keys"? "Locked keys"? "Priority keys"?
 - [-] Tests for secure key access
 - [X] change version method
