@@ -1,12 +1,10 @@
 ## TODO
 
-- [ ] Remove all GRMustacheContext subclassing documentation
+- [ ] Rewrite documentation for default values for any keys
+- [X] Remove all GRMustacheContext subclassing documentation
 - [ ] Document secure key access to Foundation classes
-- [ ] Document the drop of context in context support
-- [X] Add GRMustacheContext.allowsAllKeys
-- [X] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
+- [ ] Document the drop of support for adding context into another context
 - [ ] Rename "protected context" to something that rings a bell. "Protected keys"? "Locked keys"? "Priority keys"?
-- [-] Tests for secure key access
 - [X] change version method
 - [X] have overridable section use their own identifiers, not expressions.
 - [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)
@@ -14,6 +12,9 @@
     - [X] for rendering buffers
 - [X] Remove GRMustacheContext subclasses.
 - [X] safe property access (https://github.com/fotonauts/handlebars-objc/blob/master/doc/ContextObjects.md#why-does-handlebars-limit-access-to-some-attributes-that-are-normally-accessible-using-key-value-coding)
+  - [X] Add GRMustacheContext.allowsAllKeys
+  - [X] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
+  - [X] Tests for secure key access
 - [ ] examine dependencies using https://github.com/nst/objc_dep $ python objc_dep.py -x "(GRMustacheAvailabilityMacros)" ~/Documents/git/groue/GRMustache/src/classes/ > ~/Desktop/GRMustacheDeps.dot
 
 ## Nice to have
