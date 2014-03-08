@@ -52,13 +52,13 @@ extern BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
  *
  * If `valueForKey:` raise an NSUndefinedKeyException, the method returns nil.
  *
- * @param key            The searched key
- * @param object         The queried object
- * @param allowsAllKeys  TODO
+ * @param key              The searched key
+ * @param object           The queried object
+ * @param unsafeKeyAccess  TODO
  *
  * @return The value that should be handled by Mustache rendering for a given
  *         key.
  */
-+ (id)valueForMustacheKey:(NSString *)key inObject:(id)object allowsAllKeys:(BOOL)allowsAllKeys GRMUSTACHE_API_INTERNAL;
++ (id)valueForMustacheKey:(NSString *)key inObject:(id)object unsafeKeyAccess:(BOOL)unsafeKeyAccess GRMUSTACHE_API_INTERNAL;
 
 @end

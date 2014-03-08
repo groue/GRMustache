@@ -24,11 +24,9 @@
 
 #warning Missing availibility macros
 
-@protocol GRMustacheKeyValidation <NSObject>
+@protocol GRMustacheSafeKeyAccess <NSObject>
 
 /**
- * TODO: test
- *
  * List the name of the keys GRMustache can access on this class using the
  * `valueForKey:` method.
  *
@@ -43,6 +41,6 @@
  *
  * @return The set of accessible keys on the class.
  */
-+ (NSSet *)validMustacheKeys;
++ (NSSet *)safeMustacheKeys;
 
 @end

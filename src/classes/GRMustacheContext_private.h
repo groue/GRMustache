@@ -66,14 +66,14 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
     GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, GRMustachePartialOverride *);
     
-    BOOL _allowsAllKeys;
+    BOOL _unsafeKeyAccess;
 }
 
 // Documented in GRMustacheContext.h
-@property (nonatomic) BOOL allowsAllKeys;
++ (instancetype)context GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-+ (instancetype)context GRMUSTACHE_API_PUBLIC;
++ (instancetype)contextWithUnsafeKeyAccess GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 + (instancetype)contextWithObject:(id)object GRMUSTACHE_API_PUBLIC;
@@ -94,6 +94,9 @@
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
+- (instancetype)contextWithUnsafeKeyAccess GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheContext.h
 - (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
@@ -102,6 +105,9 @@
 // Documented in GRMustacheContext.h
 // @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
 @property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheContext.h
+@property (nonatomic, readonly) BOOL unsafeKeyAccess GRMUSTACHE_API_PUBLIC;
 
 /**
  * Same as [contextByAddingObject:object], but returns a retained object.

@@ -404,9 +404,9 @@
 		56CD619215C5536F0067E2E7 /* GRMustacheFilteredExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */; };
 		56CD619E15C5C7840067E2E7 /* GRMustacheStandardLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */; };
 		56CD619F15C5C7840067E2E7 /* GRMustacheStandardLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */; };
-		56D1BC8318C24E0C00396EB8 /* GRMustacheKeyValidation.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheKeyValidation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56D1BC8418C24E0E00396EB8 /* GRMustacheKeyValidation.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheKeyValidation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56D1BC8518C24E1200396EB8 /* GRMustacheKeyValidation.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheKeyValidation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56D1BC8318C24E0C00396EB8 /* GRMustacheSafeKeyAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheSafeKeyAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56D1BC8418C24E0E00396EB8 /* GRMustacheSafeKeyAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheSafeKeyAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		56D1BC8518C24E1200396EB8 /* GRMustacheSafeKeyAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D1BC8218C24E0400396EB8 /* GRMustacheSafeKeyAccess.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DEC256152631040031E8DC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1C915262FF70031E8DC /* SenTestingKit.framework */; };
 		56DEC257152631040031E8DC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC1F4152630710031E8DC /* Cocoa.framework */; };
 		56DEC25A152631040031E8DC /* libGRMustache6-MacOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DEC248152631040031E8DC /* libGRMustache6-MacOS.a */; };
@@ -713,7 +713,7 @@
 		56CD618D15C5536F0067E2E7 /* GRMustacheFilteredExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheFilteredExpression_private.h; sourceTree = "<group>"; };
 		56CD618E15C5536F0067E2E7 /* GRMustacheFilteredExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFilteredExpression.m; sourceTree = "<group>"; };
 		56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheStandardLibrary.m; sourceTree = "<group>"; };
-		56D1BC8218C24E0400396EB8 /* GRMustacheKeyValidation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustacheKeyValidation.h; sourceTree = "<group>"; };
+		56D1BC8218C24E0400396EB8 /* GRMustacheSafeKeyAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GRMustacheSafeKeyAccess.h; sourceTree = "<group>"; };
 		56DEC1C915262FF70031E8DC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1CB15262FF70031E8DC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		56DEC1F4152630710031E8DC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -1223,7 +1223,7 @@
 				567C1A1715C41F420044C91F /* GRMustacheFilter.m */,
 				56F4B1F7183D302400D6BE42 /* GRMustacheKeyAccess_private.h */,
 				56F4B1F8183D302400D6BE42 /* GRMustacheKeyAccess.m */,
-				56D1BC8218C24E0400396EB8 /* GRMustacheKeyValidation.h */,
+				56D1BC8218C24E0400396EB8 /* GRMustacheSafeKeyAccess.h */,
 				56AC19B9163852CB009AAC1A /* GRMustacheRendering.h */,
 				56DEC2AD152631300031E8DC /* GRMustacheTagDelegate.h */,
 			);
@@ -1350,7 +1350,7 @@
 			files = (
 				56A730E41805258300B8570A /* GRMustache.h in Headers */,
 				56A730E51805258300B8570A /* GRMustache_private.h in Headers */,
-				56D1BC8518C24E1200396EB8 /* GRMustacheKeyValidation.h in Headers */,
+				56D1BC8518C24E1200396EB8 /* GRMustacheSafeKeyAccess.h in Headers */,
 				56A730E61805258300B8570A /* GRMustacheAvailabilityMacros.h in Headers */,
 				56A730E71805258300B8570A /* GRMustacheAvailabilityMacros_private.h in Headers */,
 				56A730E81805258300B8570A /* GRMustacheError.h in Headers */,
@@ -1407,7 +1407,7 @@
 			files = (
 				56DEC2BC152631300031E8DC /* GRMustache.h in Headers */,
 				56DEC2C0152631300031E8DC /* GRMustache_private.h in Headers */,
-				56D1BC8318C24E0C00396EB8 /* GRMustacheKeyValidation.h in Headers */,
+				56D1BC8318C24E0C00396EB8 /* GRMustacheSafeKeyAccess.h in Headers */,
 				56DEC2C2152631300031E8DC /* GRMustacheAvailabilityMacros.h in Headers */,
 				56DEC2C4152631300031E8DC /* GRMustacheAvailabilityMacros_private.h in Headers */,
 				56DEC2CC152631300031E8DC /* GRMustacheError.h in Headers */,
@@ -1464,7 +1464,7 @@
 			files = (
 				56DEC2BD152631300031E8DC /* GRMustache.h in Headers */,
 				56DEC2C1152631300031E8DC /* GRMustache_private.h in Headers */,
-				56D1BC8418C24E0E00396EB8 /* GRMustacheKeyValidation.h in Headers */,
+				56D1BC8418C24E0E00396EB8 /* GRMustacheSafeKeyAccess.h in Headers */,
 				56DEC2C3152631300031E8DC /* GRMustacheAvailabilityMacros.h in Headers */,
 				56DEC2C5152631300031E8DC /* GRMustacheAvailabilityMacros_private.h in Headers */,
 				56DEC2CD152631300031E8DC /* GRMustacheError.h in Headers */,

@@ -23,13 +23,13 @@
 #import "GRMustachePrivateAPITest.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplate_private.h"
-#import "GRMustacheKeyValidation.h"
+#import "GRMustacheSafeKeyAccess.h"
 
 @interface GRMustacheContextPrivateTest : GRMustachePrivateAPITest
 @end
 
 
-@interface GRKVCRecorder: NSObject<GRMustacheKeyValidation> {
+@interface GRKVCRecorder: NSObject<GRMustacheSafeKeyAccess> {
     NSString *lastAccessedKey;
     NSArray *keys;
 }
@@ -41,7 +41,7 @@
 @synthesize lastAccessedKey;
 @synthesize keys;
 
-+ (NSSet *)validMustacheKeys
++ (NSSet *)safeMustacheKeys
 {
     return [NSSet setWithObjects:@"foo", @"root", @"top", @"name", nil];
 }
@@ -78,12 +78,12 @@
 
 @end
 
-@interface ThrowingObjectFromValueForKey: NSObject<GRMustacheKeyValidation>
+@interface ThrowingObjectFromValueForKey: NSObject<GRMustacheSafeKeyAccess>
 @end
 
 @implementation ThrowingObjectFromValueForKey
 
-+ (NSSet *)validMustacheKeys
++ (NSSet *)safeMustacheKeys
 {
     return [NSSet setWithObjects:@"KnownKey", @"NonNSUndefinedKeyException", @"NonSelfNSUndefinedKeyException", @"SelfNSUndefinedKeyException", nil];
 }
@@ -104,12 +104,12 @@
 
 @end
 
-@interface ThrowingObjectFromValueForUndefinedKey: NSObject<GRMustacheKeyValidation>
+@interface ThrowingObjectFromValueForUndefinedKey: NSObject<GRMustacheSafeKeyAccess>
 @end
 
 @implementation ThrowingObjectFromValueForUndefinedKey
 
-+ (NSSet *)validMustacheKeys
++ (NSSet *)safeMustacheKeys
 {
     return [NSSet setWithObjects:@"KnownKey", @"NonNSUndefinedKeyException", @"NonSelfNSUndefinedKeyException", @"SelfNSUndefinedKeyException", nil];
 }

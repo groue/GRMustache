@@ -23,7 +23,7 @@
 #import <objc/message.h>
 #import <pthread.h>
 #import "GRMustacheKeyAccess_private.h"
-#import "GRMustacheKeyValidation.h"
+#import "GRMustacheSafeKeyAccess.h"
 #import "JRSwizzle.h"
 
 
@@ -34,15 +34,15 @@ BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
 
 
 // =============================================================================
-#pragma mark - Key validation
+#pragma mark - Safe key access
 
-static pthread_key_t GRValidKeysForClassKey;
-void freeValidKeysForClass(void *objects) {
+static pthread_key_t GRSafeKeysForClassKey;
+void freeSafeKeysForClass(void *objects) {
     CFRelease((CFMutableDictionaryRef)objects);
 }
-#define setupValidKeysForClass() pthread_key_create(&GRValidKeysForClassKey, freeValidKeysForClass)
-#define getCurrentThreadValidKeysForClass() (CFMutableDictionaryRef)pthread_getspecific(GRValidKeysForClassKey)
-#define setCurrentThreadValidKeysForClass(classes) pthread_setspecific(GRValidKeysForClassKey, classes)
+#define setupSafeKeysForClass() pthread_key_create(&GRSafeKeysForClassKey, freeSafeKeysForClass)
+#define getCurrentThreadSafeKeysForClass() (CFMutableDictionaryRef)pthread_getspecific(GRSafeKeysForClassKey)
+#define setCurrentThreadSafeKeysForClass(classes) pthread_setspecific(GRSafeKeysForClassKey, classes)
 
 
 // =============================================================================
@@ -71,10 +71,10 @@ static Class NSManagedObjectClass;
 {
     NSOrderedSetClass = NSClassFromString(@"NSOrderedSet");
     NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
-    setupValidKeysForClass();
+    setupSafeKeysForClass();
 }
 
-+ (id)valueForMustacheKey:(NSString *)key inObject:(id)object allowsAllKeys:(BOOL)allowsAllKeys
++ (id)valueForMustacheKey:(NSString *)key inObject:(id)object unsafeKeyAccess:(BOOL)unsafeKeyAccess
 {
     if (object == nil) {
         return nil;
@@ -88,9 +88,9 @@ static Class NSManagedObjectClass;
     }
     
     
-    // Then try valueForKey:, after key validation
+    // Then try valueForKey: for safe keys
     
-    if (!allowsAllKeys && ![self isValidMustacheKey:key forObject:object]) {
+    if (!unsafeKeyAccess && ![self isSafeMustacheKey:key forObject:object]) {
         return nil;
     }
     
@@ -277,40 +277,40 @@ static Class NSManagedObjectClass;
 
 
 // =============================================================================
-#pragma mark - Key validation
+#pragma mark - Safe key access
 
-+ (BOOL)isValidMustacheKey:(NSString *)key forObject:(id)object
++ (BOOL)isSafeMustacheKey:(NSString *)key forObject:(id)object
 {
-    NSSet *validKeys = nil;
+    NSSet *safeKeys = nil;
     {
-        CFMutableDictionaryRef validKeysForClass = getCurrentThreadValidKeysForClass();
-        if (!validKeysForClass) {
-            validKeysForClass = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
-            setCurrentThreadValidKeysForClass(validKeysForClass);
+        CFMutableDictionaryRef safeKeysForClass = getCurrentThreadSafeKeysForClass();
+        if (!safeKeysForClass) {
+            safeKeysForClass = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+            setCurrentThreadSafeKeysForClass(safeKeysForClass);
         }
         
         Class klass = [object class];
-        validKeys = (NSSet *)CFDictionaryGetValue(validKeysForClass, klass);
-        if (validKeys == nil) {
-            if ([klass respondsToSelector:@selector(validMustacheKeys)]) {
-                validKeys = [klass validMustacheKeys] ?: [NSSet set];
+        safeKeys = (NSSet *)CFDictionaryGetValue(safeKeysForClass, klass);
+        if (safeKeys == nil) {
+            if ([klass respondsToSelector:@selector(safeMustacheKeys)]) {
+                safeKeys = [klass safeMustacheKeys] ?: [NSSet set];
             } else {
                 NSMutableSet *keys = [self propertyGettersForClass:klass];
                 if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
                     [keys unionSet:[NSSet setWithArray:[[[object entity] propertiesByName] allKeys]]];
                 }
-                validKeys = keys;
+                safeKeys = keys;
             }
-            CFDictionarySetValue(validKeysForClass, klass, validKeys);
+            CFDictionarySetValue(safeKeysForClass, klass, safeKeys);
         }
     }
     
-    return [validKeys containsObject:key];
+    return [safeKeys containsObject:key];
 }
 
 + (NSMutableSet *)propertyGettersForClass:(Class)klass
 {
-    NSMutableSet *validKeys = [NSMutableSet set];
+    NSMutableSet *safeKeys = [NSMutableSet set];
     while (klass) {
         // Iterate properties
         
@@ -320,11 +320,11 @@ static Class NSManagedObjectClass;
         for (unsigned int i=0; i<count; ++i) {
             const char *attrs = property_getAttributes(properties[i]);
             
-            // Valid Mustache keys are property name, and custom getter.
+            // Safe Mustache keys are property name, and custom getter.
             
             const char *propertyNameCString = property_getName(properties[i]);
             NSString *propertyName = [NSString stringWithCString:propertyNameCString encoding:NSUTF8StringEncoding];
-            [validKeys addObject:propertyName];
+            [safeKeys addObject:propertyName];
             
             char *getterStart = strstr(attrs, ",G");            // ",GcustomGetter,..." or NULL if there is no custom getter
             if (getterStart) {
@@ -332,7 +332,7 @@ static Class NSManagedObjectClass;
                 char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
                 size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
                 NSString *customGetter = [[[NSString alloc] initWithBytes:getterStart length:getterLength encoding:NSUTF8StringEncoding] autorelease];
-                [validKeys addObject:customGetter];
+                [safeKeys addObject:customGetter];
             }
         }
         
@@ -340,7 +340,7 @@ static Class NSManagedObjectClass;
         klass = class_getSuperclass(klass);
     }
     
-    return validKeys;
+    return safeKeys;
 }
 
 

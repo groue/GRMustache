@@ -41,27 +41,19 @@
     GRMUSTACHE_STACK_PARENT(stackName, targetContext) = [GRMUSTACHE_STACK_PARENT(stackName, sourceContext) retain]
 
 #define GRMUSTACHE_STACK_PUSH(stackName, sourceContext, targetContext, object) \
-    if (object) { \
-        if (GRMUSTACHE_STACK_TOP(stackName, sourceContext)) { \
-            GRMUSTACHE_STACK_PARENT(stackName, targetContext) = [sourceContext retain]; \
-        } \
-        GRMUSTACHE_STACK_TOP(stackName, targetContext) = [object retain]; \
-    } else { \
+    NSAssert(object, @"WTF"); \
+    if (GRMUSTACHE_STACK_TOP(stackName, sourceContext)) { \
         GRMUSTACHE_STACK_PARENT(stackName, targetContext) = [sourceContext retain]; \
-    }
+    } \
+    GRMUSTACHE_STACK_TOP(stackName, targetContext) = [object retain];
 
 #define GRMUSTACHE_STACK_TOP(stackName, context) context->GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 #define GRMUSTACHE_STACK_PARENT(stackName, context) context->GRMUSTACHE_STACK_PARENT_IVAR(stackName)
 
-#define GRMUSTACHE_STACK_BEGIN_FOR(stackName, context) \
-    if (GRMUSTACHE_STACK_TOP_IVAR(stackName) || GRMUSTACHE_STACK_PARENT_IVAR(stackName)) { \
-        GRMustacheContext *context = self; \
-        while (context && GRMUSTACHE_STACK_TOP(stackName, context) == nil) context = GRMUSTACHE_STACK_PARENT(stackName, context); \
-        for (; context; context = GRMUSTACHE_STACK_PARENT(stackName, context)) { \
-            if (GRMUSTACHE_STACK_TOP(stackName, context)) { \
-
-#define GRMUSTACHE_STACK_END_FOR }}}
+#define GRMUSTACHE_STACK_ENUMERATE(stackName, sourceContext, context) \
+    if (GRMUSTACHE_STACK_TOP(stackName, sourceContext)) \
+        for (GRMustacheContext *context = sourceContext; context; context = GRMUSTACHE_STACK_PARENT(stackName, context))
 
 // =============================================================================
 #pragma mark - GRMustacheTagDelegate conformance
@@ -100,7 +92,6 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 #pragma mark - GRMustacheContext
 
 @implementation GRMustacheContext
-@synthesize allowsAllKeys=_allowsAllKeys;
 
 + (void)initialize
 {
@@ -109,10 +100,15 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    GRMUSTACHE_STACK_BEGIN_FOR(partialOverrideStack, context) {
+    GRMUSTACHE_STACK_ENUMERATE(partialOverrideStack, self, context) {
         component = [GRMUSTACHE_STACK_TOP(partialOverrideStack, context) resolveTemplateComponent:component];
-    } GRMUSTACHE_STACK_END_FOR
+    }
     return component;
+}
+
+- (BOOL)unsafeKeyAccess
+{
+    return _unsafeKeyAccess;
 }
 
 
@@ -122,6 +118,13 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 + (instancetype)context
 {
     return [[[self alloc] init] autorelease];
+}
+
++ (instancetype)contextWithUnsafeKeyAccess
+{
+    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    context->_unsafeKeyAccess = YES;
+    return context;
 }
 
 + (instancetype)contextWithObject:(id)object
@@ -164,8 +167,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
+    if (tagDelegate == nil) {
+        return self;
+    }
+    
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_allowsAllKeys = _allowsAllKeys;
+    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -179,8 +186,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)newContextByAddingObject:(id)object
 {
+    if (object == nil) {
+        return [self retain];
+    }
+    
     GRMustacheContext *context = [[GRMustacheContext alloc] init];
-    context->_allowsAllKeys = _allowsAllKeys;
+    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
@@ -205,8 +216,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)contextByAddingProtectedObject:(id)object
 {
+    if (object == nil) {
+        return self;
+    }
+    
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_allowsAllKeys = _allowsAllKeys;
+    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
@@ -220,8 +235,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)contextByAddingHiddenObject:(id)object
 {
+    if (object == nil) {
+        return self;
+    }
+    
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_allowsAllKeys = _allowsAllKeys;
+    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -235,8 +254,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (instancetype)contextByAddingPartialOverride:(GRMustachePartialOverride *)partialOverride
 {
+    if (partialOverride == nil) {
+        return self;
+    }
+    
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_allowsAllKeys = _allowsAllKeys;
+    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -248,16 +271,72 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     return context;
 }
 
+- (instancetype)contextWithUnsafeKeyAccess
+{
+#define GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(stackName) \
+    GRMUSTACHE_STACK_ENUMERATE(stackName, self, __context) { \
+        GRMustacheContext *__unsafeContext = CFDictionaryGetValue(unsafeContextForContext, __context); \
+        if (!__unsafeContext) { \
+            __unsafeContext = [GRMustacheContext contextWithUnsafeKeyAccess]; \
+            GRMUSTACHE_STACK_COPY(contextStack, __context, __unsafeContext); \
+            GRMUSTACHE_STACK_COPY(protectedContextStack, __context, __unsafeContext); \
+            GRMUSTACHE_STACK_COPY(hiddenContextStack, __context, __unsafeContext); \
+            GRMUSTACHE_STACK_COPY(tagDelegateStack, __context, __unsafeContext); \
+            GRMUSTACHE_STACK_COPY(partialOverrideStack, __context, __unsafeContext); \
+            CFDictionarySetValue(unsafeContextForContext, __context, __unsafeContext); \
+        } \
+    }
+
+#define GRMUSTACHE_UPDATE_UNSAFE_PARENT(stackName, context) { \
+    GRMustacheContext *__safeParent = GRMUSTACHE_STACK_PARENT(stackName, context); \
+    if (__safeParent) { \
+        GRMustacheContext *__unsafeParent = CFDictionaryGetValue(unsafeContextForContext, __safeParent); \
+        [__safeParent release]; \
+        GRMUSTACHE_STACK_PARENT(stackName, context) = [__unsafeParent retain]; \
+    } \
+}
+
+    // Duplicate contexts of all stacks into unsafe contexts.
+    // The parents of unsafe contexts are still the safe ones, that we'll update later.
+    
+    CFMutableDictionaryRef unsafeContextForContext = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
+    
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(contextStack);
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(protectedContextStack);
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(hiddenContextStack);
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(tagDelegateStack);
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(partialOverrideStack);
+    
+    
+    // Update safe parents of unsafe contexts with unsafe ones
+    
+    CFIndex count = CFDictionaryGetCount(unsafeContextForContext);
+    GRMustacheContext **unsafeContexts = malloc(count * sizeof(GRMustacheContext *));
+    CFDictionaryGetKeysAndValues(unsafeContextForContext, NULL, (const void **)unsafeContexts);
+    for (CFIndex i = 0; i < count; ++i) {
+        GRMustacheContext *unsafeContext = unsafeContexts[i];
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(contextStack, unsafeContext);
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(protectedContextStack, unsafeContext);
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(hiddenContextStack, unsafeContext);
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(tagDelegateStack, unsafeContext);
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(partialOverrideStack, unsafeContext);
+    }
+    free(unsafeContexts);
+    
+    
+    // Done
+    
+    GRMustacheContext *unsafeContext = CFDictionaryGetValue(unsafeContextForContext, self);
+    CFRelease(unsafeContextForContext);
+    return unsafeContext;
+}
 
 // =============================================================================
 #pragma mark - Context Stack
 
 - (id)topMustacheObject
 {
-    GRMUSTACHE_STACK_BEGIN_FOR(contextStack, context) {
-        return [[GRMUSTACHE_STACK_TOP(contextStack, context) retain] autorelease];
-    } GRMUSTACHE_STACK_END_FOR
-    return nil;
+    return [[GRMUSTACHE_STACK_TOP(contextStack, self) retain] autorelease];
 }
 
 - (id)valueForMustacheKey:(NSString *)key
@@ -269,41 +348,41 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 {
     // First look for in the protected context stack
     
-    GRMUSTACHE_STACK_BEGIN_FOR(protectedContextStack, context) {
-        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:GRMUSTACHE_STACK_TOP(protectedContextStack, context) allowsAllKeys:context->_allowsAllKeys];
+    GRMUSTACHE_STACK_ENUMERATE(protectedContextStack, self, context) {
+        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:GRMUSTACHE_STACK_TOP(protectedContextStack, context) unsafeKeyAccess:context->_unsafeKeyAccess];
         if (value != nil) {
             if (protected != NULL) {
                 *protected = YES;
             }
             return value;
         }
-    } GRMUSTACHE_STACK_END_FOR
+    }
     
     
     // Then look for in the regular context stack
     
-    GRMUSTACHE_STACK_BEGIN_FOR(contextStack, context) {
+    GRMUSTACHE_STACK_ENUMERATE(contextStack, self, context) {
         // First check for contextObject:
         //
         // context = [GRMustacheContext contextWithObject:@{key:value}];
         // assert([context valueForKey:key] == value);
         id contextObject = GRMUSTACHE_STACK_TOP(contextStack, context);
         BOOL hidden = NO;
-        GRMUSTACHE_STACK_BEGIN_FOR(hiddenContextStack, hiddenContext) {
+        GRMUSTACHE_STACK_ENUMERATE(hiddenContextStack, self, hiddenContext) {
             if (contextObject == GRMUSTACHE_STACK_TOP(hiddenContextStack, hiddenContext)) {
                 hidden = YES;
                 break;
             }
-        } GRMUSTACHE_STACK_END_FOR
+        }
         if (hidden) { continue; }
-        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject allowsAllKeys:context->_allowsAllKeys];
+        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject unsafeKeyAccess:context->_unsafeKeyAccess];
         if (value != nil) {
             if (protected != NULL) {
                 *protected = NO;
             }
             return value;
         }
-    } GRMUSTACHE_STACK_END_FOR
+    }
     
     
     // OK give up now
@@ -326,12 +405,12 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 {
     NSMutableArray *tagDelegateStack = nil;
 
-    GRMUSTACHE_STACK_BEGIN_FOR(tagDelegateStack, context) {
+    GRMUSTACHE_STACK_ENUMERATE(tagDelegateStack, self, context) {
         if (!tagDelegateStack) {
             tagDelegateStack = [NSMutableArray array];
         }
         [tagDelegateStack insertObject:GRMUSTACHE_STACK_TOP(tagDelegateStack, context) atIndex:0];
-    } GRMUSTACHE_STACK_END_FOR
+    }
     
     return tagDelegateStack;
 }
