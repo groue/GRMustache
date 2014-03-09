@@ -82,7 +82,7 @@ Introduction:
 Basics:
 
 - [Templates](Guides/templates.md): how to load templates.
-- [Runtime](Guides/runtime.md): how GRMustache renders your data.
+- [Runtime](Guides/runtime.md): how your data is rendered.
 - [ViewModel](Guides/view_model.md): an overview of various techniques to feed templates.
 
 Services:

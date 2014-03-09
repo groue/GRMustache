@@ -3,8 +3,8 @@
 Patterns For Feeding GRMustache Templates
 =========================================
 
-ViewModels
-----------
+ViewModel Objects
+-----------------
 
 GRMustache fetches values with the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) `objectForKeyedSubscript:` method and the [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) `valueForKey:` method. Any compliant object can provide values to templates. Dictionaries are, and generally all your objects (see the [Runtime Guide](runtime.md) for more information):
 
@@ -33,7 +33,7 @@ However, templates sometimes need some very specific data that are uneasy to fit
 - values derived from others, such as formatted numbers and dates, or custom properties.
 - default values when one is missing.
 
-A genuine ViewModel class eventually comes to the mind. For example, consider the following template:
+A dedicated ViewModel class eventually comes to the mind. For example, consider the following template:
 
 `Document.mustache`
 
@@ -47,8 +47,12 @@ Let's design a custom ViewModel for it.
 `Document.h`
 
 ```objc
-// The interface to the Document.mustache template, with declared properties
-// for all keys accessed from the template.
+/**
+ * The Document class is the interface to the Document.mustache template.
+ *
+ * Declare properties for all the keys used from the template, so that
+ * GRMustache can access them.
+ */
 @interface Document : NSObject
 @property (nonatomic, strong) User *user;
 @property (nonatomic, readonly) NSString *name;
@@ -93,27 +97,37 @@ Let's design a custom ViewModel for it.
 The rendering:
 
 ```objc
-- (NSString *)rendering
-{
-    // Load Document.mustache
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
-    
-    // Initialize Document object
-    Document *document = [[Document alloc] init];
-    document.user = self.user;
-    
-    // Render
-    return [template renderObject:document error:NULL];
-}
+// Load Document.mustache
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
+
+// Initialize Document object
+Document *document = [[Document alloc] init];
+document.user = self.user;
+
+// Render
+NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-### Default values
 
-When you know the name of the key you want to provide a default value to, just implement a property with the same name in your view model:
+Default values
+--------------
+
+When you know the name of the key you want to provide a default value to, just implement a property with the same name in your ViewModel object.
+
+For exemple, let's provide a default name for the following template, which render some users' names:
+
+`Document.mustache`
+
+    {{# users }}
+        - {{ name }}
+    {{/ users }}
 
 ```objc
 @interface Document : NSObject
+// Declare properties for all the keys used from the template, so that
+// GRMustache can access them.
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic) NSArray *users;
 @end
 
 @implementation Document
@@ -126,16 +140,23 @@ When you know the name of the key you want to provide a default value to, just i
 
 @end
 
-// Document will provide a default name:
-Document *document = [Document ...];
+// Initialize Document object
+Document *document = [[Document alloc] init];
+document.users = ...;
+
+// Render
 NSString *rendering = [template renderObject:document error:NULL];
 ```
 
-Note that a `{{ user.name }}` tag would not trigger the `name` property of your view model. The GRMustache [runtime](Runtime.md) would extract the `name` key right from the very object given for `user`, even if user is nil or has no name. That is the behavior of Mustache compound expressions.
+The Document class will provide the default `Anonymous` name because Mustache rendering looks for an object in the current [context stack](runtime.md#the-context-stack) for the first one providing the required key. If a user has no name, GRMustache will dig in the context stack, and eventually find the root Document object, which will provide the name.
 
-If you want to provide a default value for all expressions that feed Mustache tags, `{{ name }}`, `{{ user.name }}`, `{{ format(last(events).date) }}`, etc., you need the `GRMustacheTagDelegate` protocol. Go check the [Tag Delegates Guide](delegate.md#default-values).
+**Warning**: A `{{ user.name }}` tag would not trigger the `name` property of the Document object. Instead, the `name` key would be fetched right from the very object given for `user`, even if user is nil or has no name. That is the behavior of Mustache compound expressions.
 
-When you want to provide a default value for unknown keys, the `GRMustacheTagDelegate` protocol is also the way to go. This is because GRMustache would not, for security reasons, render values for non-declared properties. Check the [Runtime](Guides/runtime.md#key-access) and the [Security](Guides/security.md#safe-key-access) Guides for more information.
+In order to provide a default value for all expressions that feed Mustache tags, `{{ name }}`, `{{ user.name }}`, `{{ format(last(events).date) }}`, etc., you need to implement the `GRMustacheTagDelegate` protocol. Go check the [Tag Delegates Guide](delegate.md#default-values).
+
+Providing a default value for unknown keys also requires using the `GRMustacheTagDelegate` protocol. This is because GRMustache would not, for security reasons, render values for non-declared properties.
+
+Check the [Runtime](Guides/runtime.md), [Security](Guides/security.md#safe-key-access) and [Tag Delegates](delegate.md#default-values) Guides for more information.
 
 
 Compatibility with other Mustache implementations

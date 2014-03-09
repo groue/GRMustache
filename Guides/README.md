@@ -14,7 +14,7 @@ See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/
 ## Basics
 
 - [Templates](templates.md): how to load templates.
-- [Runtime](runtime.md): how GRMustache renders your data.
+- [Runtime](runtime.md): how your data is rendered.
 - [ViewModel](view_model.md): an overview of various techniques to feed templates.
 
 ## Services
