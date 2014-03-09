@@ -38,8 +38,8 @@
     [self runTestsFromResource:@"general.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"implicit_iterator.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"inverted_sections.json" subdirectory:@"GRMustacheSuites"];
-    [self runTestsFromResource:@"overridable_partials.json" subdirectory:@"GRMustacheSuites"];
-    [self runTestsFromResource:@"overridable_sections.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"inheritable_partials.json" subdirectory:@"GRMustacheSuites"];
+    [self runTestsFromResource:@"inheritable_sections.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"partials.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"sections.json" subdirectory:@"GRMustacheSuites"];
     [self runTestsFromResource:@"variables.json" subdirectory:@"GRMustacheSuites"];

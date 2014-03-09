@@ -59,10 +59,10 @@ The latter always references the same partial, with an *absolute path*.
 Absolute partial paths need a root, and the objects that set this root are `GRMustacheTemplateRepository` objects. The rest of the story is documented at [Template Repositories Guide](template_repositories.md).
 
 
-Overriding portions of partials
--------------------------------
+Template inheritance
+--------------------
 
-Partials may contain *overridable sections*. Those sections start with a dollar instead of a pound. For example, let's consider the following partial:
+Partials may contain *inheritable sections*. Those sections start with a dollar instead of a pound. For example, let's consider the following partial:
 
 `layout.mustache`:
 
@@ -78,7 +78,7 @@ Partials may contain *overridable sections*. Those sections start with a dollar 
     </body>
     </html>
 
-You can embed such an overridable partial, and override its sections with the `{{< partial }}...{{/ partial }}` syntax:
+You can embed such an inheritable partial, and override its sections with the `{{< partial }}...{{/ partial }}` syntax:
 
 `article.mustache`:
 
@@ -111,7 +111,7 @@ You may want to choose the rendered partial at runtime: this use case is covered
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
-The [Mustache specification](https://github.com/mustache/spec) does not have the concepts of relative vs. absolute partial paths, overridable sections, or dynamic partials.
+The [Mustache specification](https://github.com/mustache/spec) does not have the concepts of relative vs. absolute partial paths, template inheritance, or dynamic partials.
 
 **As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use those features with great care.**
 

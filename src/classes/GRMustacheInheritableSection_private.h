@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 
-@interface GRMustacheOverridableSection : NSObject<GRMustacheTemplateComponent> {
+@interface GRMustacheInheritableSection : NSObject<GRMustacheTemplateComponent> {
 @private
     NSString *_identifier;
     NSArray *_components;
@@ -33,7 +33,7 @@
 /**
  * TODO
  *
- * Builds a GRMustacheOverridableSection.
+ * Builds a GRMustacheInheritableSection.
  */
-+ (instancetype)overridableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 @end

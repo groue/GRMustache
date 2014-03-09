@@ -126,7 +126,7 @@
     
     GRMustacheContentType templateContentType = _AST.contentType;
     for (id<GRMustacheTemplateComponent> component in _AST.templateComponents) {
-        // component may be overriden by a GRMustachePartialOverride: resolve it.
+        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render

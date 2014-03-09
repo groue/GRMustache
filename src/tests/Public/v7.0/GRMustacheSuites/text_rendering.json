@@ -61,7 +61,7 @@
       "expected_error": "Parse error"
     },
     {
-      "name": "CONTENT_TYPE:TEXT pragma can not follow overridable section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not follow inheritable section tag.",
       "data": null,
       "template": "{{$foo}}{{/foo}}{{% CONTENT_TYPE:TEXT }}",
       "expected_error": "Parse error"
@@ -79,7 +79,7 @@
       "expected_error": "Parse error"
     },
     {
-      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable section tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter inheritable section tag.",
       "data": null,
       "template": "{{$foo}}{{% CONTENT_TYPE:TEXT }}{{/foo}}",
       "expected_error": "Parse error"
@@ -92,7 +92,7 @@
       "expected_error": "Parse error"
     },
     {
-      "name": "CONTENT_TYPE:TEXT pragma can not enter overridable partial tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter inheritable partial tag.",
       "data": null,
       "template": "{{<layout}}{{% CONTENT_TYPE:TEXT }}{{/layout}}",
       "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },

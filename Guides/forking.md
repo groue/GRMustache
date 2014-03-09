@@ -50,13 +50,13 @@ The library features are described in the [guides](introduction.md). This sectio
     
     Template components are actually able to provide the rendering expected by the library user:
 
-    - `GRMustacheOverridableSection`
+    - `GRMustacheInheritableSection`
+    - `GRMustacheInheritablePartial`
     - `GRMustacheTemplate`
-    - `GRMustacheTemplateOverride`
     - `GRMustacheTextComponent`
     - `GRMustacheTag`
     
-    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, *template overrides* render overridable partial tags, and *overridable sections* render sections starting with a dollar sign, such as `{{$ content }}...{{/ }}`.
+    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, *inheritable templates* render inheritable partial tags, and *inheritable sections* render sections starting with a dollar sign, such as `{{$ content }}...{{/ }}`.
     
     For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of two text elements and a tag element.
     
@@ -75,7 +75,7 @@ The library features are described in the [guides](introduction.md). This sectio
     - a *context stack*.
     - a *priority context stack*.
     - a *tag delegate stack*.
-    - a *template override stack*, that grows when a template override element renders.
+    - a *inheritable partial stack*, that grows when a inheritable partial renders.
     
     A rendering context is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not directly responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the context in order to compute their values.
 

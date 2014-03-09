@@ -20,21 +20,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheOverridableSection_private.h"
+#import "GRMustacheInheritableSection_private.h"
 
-@interface GRMustacheOverridableSection()
+@interface GRMustacheInheritableSection()
 @property (nonatomic, readonly) NSString *identifier;
 /**
- * @see +[GRMustacheOverridableSection overridableSectionWithComponents:]
+ * @see +[GRMustacheInheritableSection inheritableSectionWithComponents:]
  */
 - (instancetype)initWithIdentifier:(NSString *)identifier components:(NSArray *)components;
 
 @end
 
-@implementation GRMustacheOverridableSection
+@implementation GRMustacheInheritableSection
 @synthesize identifier=_identifier;
 
-+ (instancetype)overridableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components
 {
     return [[[self alloc] initWithIdentifier:identifier components:components] autorelease];
 }
@@ -59,7 +59,7 @@
     }
     
     for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustachePartialOverride: resolve it.
+        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
@@ -73,11 +73,11 @@
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // Overridable section can only override overridable section
-    if (![component isKindOfClass:[GRMustacheOverridableSection class]]) {
+    // Inheritable section can only override inheritable section
+    if (![component isKindOfClass:[GRMustacheInheritableSection class]]) {
         return component;
     }
-    GRMustacheOverridableSection *otherSection = (GRMustacheOverridableSection *)component;
+    GRMustacheInheritableSection *otherSection = (GRMustacheInheritableSection *)component;
     
     // Identifiers must match
     if (![otherSection.identifier isEqual:_identifier]) {

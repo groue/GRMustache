@@ -27,24 +27,25 @@
 @class GRMustachePartial;
 
 /**
- * A GRMustachePartialOverride is a template component that renders overridable
+ * A GRMustacheInheritablePartial is a template component that renders inheritable
  * partials as `{{<name}}...{{/name}}`.
  *
  * It collaborates with rendering contexts for the resolving of template
- * components in the context of Mustache overridable partials.
+ * components in the context of Mustache template inheritance.
  *
  * @see GRMustacheTemplateComponent
  * @see GRMustacheContext
  */
-@interface GRMustachePartialOverride : NSObject<GRMustacheTemplateComponent> {
+@interface GRMustacheInheritablePartial : NSObject<GRMustacheTemplateComponent> {
 @private
     GRMustachePartial *_partial;
     NSArray *_components;
 }
 
 /**
- * The overridable partial template.
+ * The partial template.
  *
+ * TODO: what is this assert method?
  * This property is used by [GRMustacheContext assertAcyclicTemplateOverride:].
  *
  * @see GRMustacheContext
@@ -52,14 +53,14 @@
 @property (nonatomic, retain, readonly) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
 
 /**
- * Builds a GRMustachePartialOverride.
+ * Builds a GRMustacheInheritablePartial.
  *
- * @param partial     The partial template that is overriden
- * @param components  The components that may override components of the overriden
- *                    partial template.
+ * @param partial     The partial template that is inherited
+ * @param components  The components that may override components of the
+ *                    inherited partial template.
  *
- * @return A GRMustachePartialOverride
+ * @return A GRMustacheInheritablePartial
  */
-+ (instancetype)partialOverrideWithPartial:(GRMustachePartial *)partial components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 
 @end

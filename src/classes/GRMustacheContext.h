@@ -59,7 +59,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(priorityContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, id);
     
     BOOL _unsafeKeyAccess;
 }

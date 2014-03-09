@@ -39,7 +39,7 @@
       "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
     },
     {
-      "name": "Overridable section tags must be closed.",
+      "name": "Inheritable section tags must be closed.",
       "data": null,
       "template": "\n{{$\n",
       "expected_error": "Parse error.*line 2\\b.*Unclosed Mustache tag"
@@ -129,22 +129,22 @@
       "expected_error": "Parse error.*line 2\\b.*Missing expression"
     },
     {
-      "name": "Overridable section identifiers can not be empty.",
+      "name": "Inheritable section identifiers can not be empty.",
       "data": null,
       "template": "\n{{$}}\n{{/}}",
-      "expected_error": "Parse error.*line 2\\b.*Missing overridable section identifier"
+      "expected_error": "Parse error.*line 2\\b.*Missing inheritable section identifier"
     },
     {
-      "name": "Overridable section identifiers can not contain white space.",
+      "name": "Inheritable section identifiers can not contain white space.",
       "data": null,
       "template": "\n{{$ a b }}\n{{/ a b }}",
-      "expected_error": "Parse error.*line 2\\b.*Invalid overridable section identifier"
+      "expected_error": "Parse error.*line 2\\b.*Invalid inheritable section identifier"
     },
     {
-      "name": "Overridable section identifiers can not be blank.",
+      "name": "Inheritable section identifiers can not be blank.",
       "data": null,
       "template": "\n{{$ \n\t}}\n{{/ \n\t}}",
-      "expected_error": "Parse error.*line 2\\b.*Missing overridable section identifier"
+      "expected_error": "Parse error.*line 2\\b.*Missing inheritable section identifier"
     },
     {
       "name": "Partial tags can not be empty.",

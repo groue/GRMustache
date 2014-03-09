@@ -20,18 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePartialOverride_private.h"
+#import "GRMustacheInheritablePartial_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheContext_private.h"
 
-@interface GRMustachePartialOverride()
+@interface GRMustacheInheritablePartial()
 - (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components;
 @end
 
-@implementation GRMustachePartialOverride
+@implementation GRMustacheInheritablePartial
 @synthesize partial=_partial;
 
-+ (instancetype)partialOverrideWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
++ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
 {
     return [[[self alloc] initWithPartial:partial components:components] autorelease];
 }
@@ -47,13 +47,13 @@
 
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    context = [context contextByAddingPartialOverride:self];
+    context = [context contextByAddingInheritablePartial:self];
     return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
 }
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // look for the last overriding component in inner components
+    // look for the last inheritable component in inner components
     for (id<GRMustacheTemplateComponent> innerComponent in _components) {
         component = [innerComponent resolveTemplateComponent:component];
     }

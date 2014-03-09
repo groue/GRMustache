@@ -19,7 +19,7 @@ This guide is here to tell you where the border line is, topic by topic:
 - Text templates
 - File system hierarchy of template and partials
 - Dynamic partials
-- Template inheritance, layouts, overridable partials
+- Template inheritance
 - Priority keys
 - Custom rendering objects
 - Filters
@@ -106,10 +106,8 @@ The Mustache specification does not cover this use case, and provides with lambd
 Generally speaking, writing cross-language templates requires you to avoid this feature.
 
 
-Template inheritance, layouts, overridable partials
----------------------------------------------------
-
-Forgive the name dropping in this section title, but this feature has many names.
+Template inheritance
+--------------------
 
 This [GRMustache feature](partials.md) is directly inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
 

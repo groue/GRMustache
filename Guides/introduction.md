@@ -62,7 +62,7 @@ ViewModel classes let you implement specific keys for your templates. Check the 
     
     Use relative `{{> header }}` or absolute paths `{{> /shared/header }}` to your partial templates: see the [Partials Guide](partials.md).
 
-- **"Overridable partials"**, aka "template inheritance", inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts:
+- **Template inheritance**, inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java), allow you to define reusable template layouts:
     
         {{< page }}      {{! page.mustache defines the layout.  }}
           {{$ content }} {{! this template defines the content. }}
@@ -70,7 +70,7 @@ ViewModel classes let you implement specific keys for your templates. Check the 
           {{/ content }}
         {{/ page }}
     
-    Overridable partials are documented in the [Partials Guide](partials.md).
+    Template inheritance are documented in the [Partials Guide](partials.md).
 
 
 ### Text templates

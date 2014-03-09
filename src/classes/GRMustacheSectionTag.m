@@ -25,7 +25,7 @@
 @interface GRMustacheSectionTag()
 
 /**
- * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:overridable:components:]
+ * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:components:]
  */
 - (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components;
 @end
@@ -60,7 +60,7 @@
     GRMustacheBuffer buffer = GRMustacheBufferCreate((_innerRange.length + 50) * 1.32);
     
     for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustachePartialOverride: resolve it.
+        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render

@@ -66,7 +66,7 @@
     }
     
     for (id<GRMustacheTemplateComponent> component in _AST.templateComponents) {
-        // component may be overriden by a GRMustachePartialOverride: resolve it.
+        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
@@ -85,18 +85,18 @@
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    // look for the last overriding component in inner components.
+    // Look for the last inheritable component in inner components.
     //
-    // This allows a partial do define an overriding section:
+    // This allows a partial do define an inheritable section:
     //
     //    {
     //        data: { },
     //        expected: "partial1",
-    //        name: "Partials in overridable partials can override overridable sections",
+    //        name: "Partials in inheritable partials can override inheritable sections",
     //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
     //        partials: {
-    //            partial1: "{{$overridable}}partial1{{/overridable}}";
-    //            partial2: "{{$overridable}}ignored{{/overridable}}";
+    //            partial1: "{{$inheritable}}partial1{{/inheritable}}";
+    //            partial2: "{{$inheritable}}ignored{{/inheritable}}";
     //        },
     //    }
     for (id<GRMustacheTemplateComponent> innerComponent in _AST.templateComponents) {

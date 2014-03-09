@@ -51,7 +51,7 @@
  *   render the concatenation of their renderings.
  * 
  * Template components are able to override other template components, in the
- * context of Mustache overridable partials. This feature is backed on the
+ * context of Mustache template inheritance. This feature is backed on the
  * `resolveTemplateComponent:` method.
  *
  * @see GRMustacheCompiler
@@ -77,22 +77,22 @@
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of overridable partials, return the component that should be
+ * In the context of template inheritance, return the component that should be
  * rendered in lieu of _component_, should _component_ be overriden by another
  * component.
  *
  * All classes conforming to the GRMustacheTemplateComponent protocol return
- * _component_, but GRMustacheSectionTag, GRMustachePartialOverride, and
- * GRMustacheTemplate.
+ * _component_, but GRMustacheInheritableSectionTag and
+ * GRMustacheInheritablePartial.
  *
  * @param component  A template component
  *
  * @return The resolution of the component in the context of Mustache
- *         overridable partials.
+ *         template inheritance.
  *
  * @see GRMustacheSectionTag
  * @see GRMustacheTemplate
- * @see GRMustachePartialOverride
+ * @see GRMustacheInheritablePartial
  */
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 @end

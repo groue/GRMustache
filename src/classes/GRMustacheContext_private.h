@@ -25,7 +25,7 @@
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateComponent;
-@class GRMustachePartialOverride;
+@class GRMustacheInheritablePartial;
 
 /**
  * The GRMustacheContext maintains the following stacks:
@@ -34,7 +34,7 @@
  * - a priority context stack,
  * - a hidden context stack,
  * - a tag delegate stack,
- * - a partial override stack.
+ * - an inheritable partial stack.
  *
  * As such, it is able to:
  *
@@ -49,7 +49,7 @@
  *
  * - Let tag delegates interpret rendered values.
  *
- * - Let partial templates override template components.
+ * - Let inheritable partial templates override template components.
  */
 @interface GRMustacheContext : NSObject {
 @private
@@ -64,7 +64,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(priorityContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, GRMustachePartialOverride *);
+    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, GRMustacheInheritablePartial *);
     
     BOOL _unsafeKeyAccess;
 }
@@ -136,16 +136,16 @@
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
- * partial override stack that is extended with _partialOverride_.
+ * inheritable partial stack that is extended with _inheritablePartial_.
  *
- * @param partialOverride  A partial template override object
+ * @param inheritablePartial  An inheritable partial
  *
  * @return A GRMustacheContext object.
  *
- * @see GRMustachePartialOverride
- * @see [GRMustachePartialOverride renderWithContext:inBuffer:error:]
+ * @see GRMustacheInheritablePartial
+ * @see [GRMustacheInheritablePartial renderWithContext:inBuffer:error:]
  */
-- (instancetype)contextByAddingPartialOverride:(GRMustachePartialOverride *)partialOverride GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found
@@ -162,14 +162,14 @@
 - (id)valueForMustacheKey:(NSString *)key priority:(BOOL *)priority GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of overridable partials, return the component that should be
+ * In the context of template inheritance, return the component that should be
  * rendered in lieu of _component_, should _component_ be overriden by another
  * component.
  *
  * @param component  A template component
  *
  * @return The resolution of the component in the context of Mustache
- *         overridable partials.
+ *         template inheritance.
  */
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
 
