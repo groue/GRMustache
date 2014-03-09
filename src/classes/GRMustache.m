@@ -33,6 +33,7 @@
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
+#import "GRMustacheBuffer_private.h"
 #import "GRMustacheLocalizer.h"
 
 
@@ -405,7 +406,8 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             // {{ list }}
             // Render the concatenation of the rendering of each item
             
-            NSMutableString *buffer = [NSMutableString string];
+            BOOL success = YES;
+            GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
             BOOL oneItemHasRenderedHTMLSafe = NO;
             BOOL oneItemHasRenderedHTMLUnescaped = NO;
             
@@ -428,57 +430,57 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                         rendering = @"";
                     }
                     
-                    if (rendering)
-                    {
-                        // Success
-                        
-                        if (rendering.length > 0)
-                        {
-                            // check consistency of HTML escaping before appending the rendering to the buffer
-                            
-                            if (itemHasRenderedHTMLSafe) {
-                                oneItemHasRenderedHTMLSafe = YES;
-                                if (oneItemHasRenderedHTMLUnescaped) {
-                                    [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
-                                }
-                            } else {
-                                oneItemHasRenderedHTMLUnescaped = YES;
-                                if (oneItemHasRenderedHTMLSafe) {
-                                    [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
-                                }
-                            }
-                            
-                            [buffer appendString:rendering];
-                        }
+                    if (!rendering) {
+                        // make sure error is not released by autoreleasepool
+                        if (error != NULL) [*error retain];
+                        success = NO;
+                        break;
                     }
-                    else
-                    {
-                        // Error
+                    
+                    if (rendering.length > 0) {
+                        // check consistency of HTML escaping before appending the rendering to the buffer
                         
-                        if (error != NULL) {
-                            *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+                        if (itemHasRenderedHTMLSafe) {
+                            oneItemHasRenderedHTMLSafe = YES;
+                            if (oneItemHasRenderedHTMLUnescaped) {
+                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                            }
                         } else {
-                            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+                            oneItemHasRenderedHTMLUnescaped = YES;
+                            if (oneItemHasRenderedHTMLSafe) {
+                                [NSException raise:GRMustacheRenderingException format:@"Inconsistant HTML escaping of items in enumeration"];
+                            }
                         }
                         
-                        return nil;
+                        GRMustacheBufferAppendString(&buffer, (CFStringRef)rendering);
                     }
                 }
             }
             
-            if (HTMLSafe != NULL) {
-                *HTMLSafe = !oneItemHasRenderedHTMLUnescaped;   // YES if list is empty
+            if (!success) {
+                if (error != NULL) [*error autorelease];
+                GRMustacheBufferRelease(&buffer);
+                return nil;
             }
-            return buffer;
+            if (HTMLSafe != NULL) {
+                *HTMLSafe = !oneItemHasRenderedHTMLUnescaped;   // oneItemHasRenderedHTMLUnescaped is initialized to NO: we assume safest (YES) if list is empty.
+            }
+            return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
         }
             
         case GRMustacheTagTypeSection: {
             // {{# list }}...{{/}}
             // Non inverted sections render for each item in the list
             
-            NSMutableString *buffer = [NSMutableString string];
+            BOOL success = YES;
+            BOOL bufferCreated = NO;
+            GRMustacheBuffer buffer;
             for (id item in self) {
-                // item enters the context as a context object
+                if (!bufferCreated) {
+                    buffer = GRMustacheBufferCreate(1024);
+                    bufferCreated = YES;
+                }
+                // Each item enters a new context
                 @autoreleasepool {
                     GRMustacheContext *itemContext = [context newContextByAddingObject:item];
                     NSString *rendering = [tag renderContentWithContext:itemContext HTMLSafe:HTMLSafe error:error];
@@ -487,14 +489,25 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                     if (!rendering) {
                         // make sure error is not released by autoreleasepool
                         if (error != NULL) [*error retain];
-                        buffer = nil;
+                        success = NO;
                         break;
                     }
-                    [buffer appendString:rendering];
+                    
+                    GRMustacheBufferAppendString(&buffer, (CFStringRef)rendering);
                 }
             }
-            if (!buffer && error != NULL) [*error autorelease];
-            return buffer;
+            if (!success) {
+                if (error != NULL) [*error autorelease];
+                GRMustacheBufferRelease(&buffer);   // buffer exists, because we have an error, and errors come from items.
+                return nil;
+            } else if (bufferCreated) {
+                return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+            } else {
+                if (HTMLSafe != NULL) {
+                    *HTMLSafe = YES;   // assume safest (YES) if list is empty.
+                }
+                return @"";
+            }
         }
             
         case GRMustacheTagTypeInvertedSection: {

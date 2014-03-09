@@ -72,3 +72,8 @@ static inline CFStringRef GRMustacheBufferGetStringAndRelease(GRMustacheBuffer *
     return buffer->string;
 } GRMUSTACHE_API_INTERNAL
 
+static inline void GRMustacheBufferRelease(GRMustacheBuffer *buffer)
+{
+    CFRelease(buffer->string);
+} GRMUSTACHE_API_INTERNAL
+
