@@ -1,5 +1,6 @@
 ## TODO
 
+- [X] Consistent use of the "template inheritance" wording.
 - [X] Rewrite documentation for default values for any keys
 - [X] Remove all GRMustacheContext subclassing documentation
 - [X] Document secure key access to Foundation classes

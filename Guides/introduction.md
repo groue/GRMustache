@@ -70,7 +70,7 @@ ViewModel classes let you implement specific keys for your templates. Check the 
           {{/ content }}
         {{/ page }}
     
-    Template inheritance are documented in the [Partials Guide](partials.md).
+    Template inheritance is documented in the [Template Inheritance Guide](template_inheritance.md).
 
 
 ### Text templates

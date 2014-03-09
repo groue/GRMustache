@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](template_repositories.md)
 
 Patterns For Feeding GRMustache Templates
 =========================================
@@ -150,4 +150,4 @@ However, this topic is not mentioned in the [Mustache specification](https://git
 **If your goal is to design ViewModels that remain compatible with other Mustache implementations, check their documentation.**
 
 
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](template_repositories.md)

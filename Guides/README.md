@@ -14,13 +14,14 @@ See also the [GRMustache reference](http://groue.github.io/GRMustache/Reference/
 ## Basics
 
 - [Templates](templates.md): how to load templates.
-- [Partials](partials.md): decompose your templates into components named "partials".
-- [Templates Repositories](template_repositories.md): manage groups of templates.
 - [Runtime](runtime.md): how GRMustache renders your data.
 - [ViewModel](view_model.md): an overview of various techniques to feed templates.
 
 ## Services
 
+- [Partials](partials.md): decompose your templates into components named "partials".
+- [Templates Repositories](template_repositories.md): manage groups of templates.
+- [Template Inheritance](template_inheritance.md): have templates inherit other ones, and reuse common layouts, for example.
 - [Configuration](configuration.md)
 - [HTML vs. Text templates](html_vs_text.md)
 - [Standard Library](standard_library.md): built-in candy, for your convenience.

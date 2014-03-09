@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](partials.md)
+[up](../../../../GRMustache#documentation), [next](runtime.md)
 
 Templates
 =========
@@ -109,4 +109,4 @@ More loading options
 
 All methods above cover the most common use cases. If you have more needs, check the [Template Repositories Guide](template_repositories.md).
 
-[up](../../../../GRMustache#documentation), [next](partials.md)
+[up](../../../../GRMustache#documentation), [next](runtime.md)

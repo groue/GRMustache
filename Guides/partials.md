@@ -59,47 +59,6 @@ The latter always references the same partial, with an *absolute path*.
 Absolute partial paths need a root, and the objects that set this root are `GRMustacheTemplateRepository` objects. The rest of the story is documented at [Template Repositories Guide](template_repositories.md).
 
 
-Template inheritance
---------------------
-
-Partials may contain *inheritable sections*. Those sections start with a dollar instead of a pound. For example, let's consider the following partial:
-
-`layout.mustache`:
-
-    <html>
-    <head>
-        <title>{{$ page_title }}Default title{{/ page_title }}</title>
-    </head>
-    <body>
-        <h1>{{$ page_title }}Default title{{/ page_title }}</h1>
-        {{$ page_content }}
-            Default content
-        {{/ page_content }}}
-    </body>
-    </html>
-
-You can embed such an inheritable partial, and override its sections with the `{{< partial }}...{{/ partial }}` syntax:
-
-`article.mustache`:
-
-    {{< layout }}
-    
-        {{! override page_title }}
-        {{$ page_title }}{{ article.title }}{{/ page_title }}
-        
-        {{! override page_content }}
-        {{$ page_content }}
-            {{# article }}
-                {{ body }}
-                by {{ author }}
-            {{/ article }}
-        {{/ page_content }}
-        
-    {{/ layout }}
-
-When you render `article.mustache`, you get a full HTML page.
-
-
 Dynamic partials
 ----------------
 

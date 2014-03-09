@@ -82,13 +82,14 @@ Introduction:
 Basics:
 
 - [Templates](Guides/templates.md): how to load templates.
-- [Partials](Guides/partials.md): decompose your templates into components named "partials".
-- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
 - [Runtime](Guides/runtime.md): how GRMustache renders your data.
 - [ViewModel](Guides/view_model.md): an overview of various techniques to feed templates.
 
 Services:
 
+- [Partials](Guides/partials.md): decompose your templates into components named "partials".
+- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
+- [Template Inheritance](Guides/template_inheritance.md): have templates inherit other ones, and reuse common layouts, for example.
 - [Configuration](Guides/configuration.md)
 - [HTML vs. Text templates](Guides/html_vs_text.md)
 - [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
