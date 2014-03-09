@@ -91,13 +91,13 @@ You can also reset it to a blank slate, getting rid of the whole standard librar
 repo.configuration.baseContext = [GRMustacheContext context];
 ```
 
-You may also be interested in [protected contexts](security.md#protected-contexts). They guarantee that a particular identifier will always evaluate to the same value.
+You may also be interested in [priority keys](security.md#priority-keys). They guarantee that a particular identifier will always evaluate to the same value.
 
 ```objc
 // Guarantee that {{my_important_value}} will always render the same and cannot
 // be overriden by custom data:
 id library = @{ @"my_important_value": ... };
-[repo.configuration extendBaseContextWithProtectedObject:library];
+[repo.configuration extendBaseContextWithPriorityObject:library];
 ```
 
 See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.

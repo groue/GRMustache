@@ -59,7 +59,7 @@
 - (void)extendBaseContextWithObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
-- (void)extendBaseContextWithProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (void)extendBaseContextWithPriorityObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
 - (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;

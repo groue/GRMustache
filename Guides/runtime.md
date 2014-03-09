@@ -355,9 +355,9 @@ The first will look for `bar` anywhere in the context stack, starting with the `
 
 The two others are identical: they ensure the `bar` key comes from the very `foo` object. If `foo` is not found, the `bar` lookup will fail as well, regardless of `bar` keys defined by enclosing contexts.
 
-### Protected contexts
+### Priority keys
 
-*Protected contexts* let you make sure some keys get always evaluated to the same value, regardless of objects that enter the context stack. Check the [Security Guide](security.md#protected-contexts).
+A *priority key* is always evaluated to the same value, regardless of objects that enter the context stack. Check the [Security Guide](security.md#priority-keys).
 
 ### Tag delegates
 

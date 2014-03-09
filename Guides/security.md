@@ -11,7 +11,7 @@ Safe Key Access
 
 The [Runtime Guide](runtime.md) describes how GRMustache looks for a key in your data objects:
 
-1. If the object responds to the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) `objectForKeyedSubscript:` method, this method is used.
+1. If the object responds to the `objectForKeyedSubscript:` method, this method is used.
 2. Otherwise, if the key is safe, then the `valueForKey:` method is used.
 3. Otherwise, the key is considered missed.
 
@@ -38,7 +38,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:document
                                                  error:NULL];
 ```
 
-Not being declared as a property, `deleteRecord` is not considered safe. The `deleteRecord` method is not called.
+Not being declared as a property, the `deleteRecord` key is not considered safe. The `deleteRecord` method is not called.
 
 
 ### Custom list of safe keys
@@ -83,10 +83,10 @@ See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Re
 > The safe key access mechanism is directly inspired by [fotonauts/handlebars-objc](https://github.com/fotonauts/handlebars-objc). Many thanks to [Bertrand Guiheneuf](https://github.com/bertrand).
 
 
-Protected Contexts
-------------------
+Priority keys
+-------------
 
-### The Mustache key shadowing
+### The trouble: the Mustache key shadowing
 
 As Mustache sections get nested, the [context stack](runtime.md#the-context-stack) expands:
 
@@ -112,34 +112,34 @@ Because of untrusted data, you can not be sure that your precious keys won't be 
 Because of untrusted templates, you can not be sure that your precious keys will be invoked with the correct syntax, should a syntax for navigating the context stack exist.
 
 
-### Protected objects
+### Priority keys
 
-GRMustache addresses this concern by letting you store *protected objects* in the *base context* of a template.
+GRMustache addresses this concern by letting you store *priority objects* in the *base context* of a template.
 
 The base context contains [context stack values](runtime.md#the-context-stack) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
-You can extend it with a protected object with the `extendBaseContextWithProtectedObject:` method:
+You can extend it with a priority object with the `extendBaseContextWithPriorityObject:` method:
 
 ```objc
 
-id protectedData = @{
+id priorityObject = @{
     @"safe": @"important",
 };
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-[template extendBaseContextWithProtectedObject:protectedData];
+[template extendBaseContextWithPriorityObject:priorityObject];
 ```
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
-See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithProtectedObject:`.
+See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithPriorityObject:`.
 
 
-### Protected namespaces
+### Priority namespaces
 
-In order to explain how GRMustache behaves when you protect an object than contains other objects, let's use a metaphor:
+In order to explain how GRMustache behaves when you give priority to an object than contains other objects, let's use a metaphor:
 
-Think of a protected object as a module in a programming language, and consider this Python snippet:
+Think of a priority object as a module in a programming language, and consider this Python snippet:
 
 ```python
 import string
@@ -147,7 +147,7 @@ print string.digits # 0123456789
 print digits        # NameError: "name 'digits' is not defined"
 ```
 
-In Python, you need to provide the full path to an object inside a module, or you get an error. With GRMustache, access to objects inside protected objects is similar. Deep protected objects must be accessed via their full path:
+In Python, you need to provide the full path to an object inside a module, or you get an error. With GRMustache, access to objects inside priority objects is similar. Deep priority objects must be accessed via their full path:
 
 `Document.mustache`
 
@@ -168,7 +168,7 @@ id modules = @{
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // "import string"
-[template extendBaseContextWithProtectedObject:modules];
+[template extendBaseContextWithPriorityObject:modules];
 
 NSString *rendering = [template renderObject:nil error:NULL];
 ```
@@ -182,7 +182,7 @@ Final rendering:
 
 See how the `digits` key, alone on the third and fourth line, has not been rendered.
 
-Conclusion: you must use full paths to your deep protected objects, or they won't be found.
+Conclusion: you must use full paths to your deep priority objects, or they won't be found.
 
 
 Compatibility with other Mustache implementations
@@ -190,7 +190,7 @@ Compatibility with other Mustache implementations
 
 The [Mustache specification](https://github.com/mustache/spec) does not have any concept of security.
 
-In particular, **if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use protected objects with great care.**
+In particular, **if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use priority objects with great care.**
 
 
 [up](../../../../GRMustache#documentation), [next](compatibility.md)

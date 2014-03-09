@@ -1,1 +1,1 @@
-This document has been [superseded](security.md#protected-contexts).
+This document has been [superseded](security.md#priority-keys).

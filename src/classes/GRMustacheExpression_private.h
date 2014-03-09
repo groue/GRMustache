@@ -53,25 +53,25 @@
 /**
  * Evaluates an expression against a rendering context.
  *
- * @param value      Upon return contains the value of the expression
- * @param context    A Mustache rendering context
- * @param protected  Upon return contains YES if the computed value comes from
- *                   the protected stack of the context, NO otherwise.
- * @param error      If there is an error computing the value, upon return
- *                   contains an NSError object that describes the problem.
+ * @param value     Upon return contains the value of the expression
+ * @param context   A Mustache rendering context
+ * @param priority  Upon return contains YES if the computed value comes from
+ *                  the priority stack of the context, NO otherwise.
+ * @param error     If there is an error computing the value, upon return
+ *                  contains an NSError object that describes the problem.
  *
  * @return YES if the value could be computed
  *
  * @see GRMustacheContext
  */
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context priority:(BOOL *)priority error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
  * Expressions are equal if and only if the result of their
- * `hasValue:withContext:protected:error:` implementation would return the same
+ * `hasValue:withContext:priority:error:` implementation would return the same
  * value in a given rendering context.
  *
  * Default implementation is NSObject's one: subclasses must override.

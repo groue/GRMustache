@@ -20,7 +20,7 @@ This guide is here to tell you where the border line is, topic by topic:
 - File system hierarchy of template and partials
 - Dynamic partials
 - Template inheritance, layouts, overridable partials
-- Protected contexts
+- Priority keys
 - Custom rendering objects
 - Filters
 - Tag delegates
@@ -118,10 +118,10 @@ There is no guarantee that our implementations are identical, though.
 Use this feature with great care, and simply avoid it when looking for compatibility with other implementations.
 
 
-Protected contexts
-------------------
+Priority keys
+-------------
 
-GRMustache lets you [protect](security.md#protected-contexts) some keys so that they are always evaluated to the same value, regardless of other data that you feed your templates with.
+GRMustache lets you give priority to some keys so that they are always evaluated to the same value, regardless of other data that you feed your templates with. See the [Security Guide](security.md#priority-keys) for more information.
 
 This feature is usually implemented by other implementations with functions or methods whose name start with `register`.
 

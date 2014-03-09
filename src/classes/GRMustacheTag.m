@@ -110,10 +110,10 @@
         
         // Evaluate expression
         
-        BOOL protected;
+        BOOL priority;
         __block id object;
         NSError *valueError;
-        if (![_expression hasValue:&object withContext:context protected:&protected error:&valueError]) {
+        if (![_expression hasValue:&object withContext:context priority:&priority error:&valueError]) {
             
             // Error
             
@@ -125,10 +125,10 @@
             
         } else {
         
-            // Hide object if it is protected
+            // Hide object if it is priority
             
-            if (protected) {
-                // Object is protected: it may enter the context stack, and provide
+            if (priority) {
+                // Object has priority: it may enter the context stack, and provide
                 // value for `.` and `.name`. However, it must not expose its keys.
                 //
                 // The goal is to have `{{ safe.name }}` and `{{#safe}}{{.name}}{{/safe}}`
@@ -138,7 +138,7 @@
                 //
                 // Let's look at `{{#safe}}{{#hacker}}{{name}}{{/hacker}}{{/safe}}`:
                 //
-                // The protected context stack contains the "protected root":
+                // The priority context stack contains the "priority root":
                 // { safe : { name: "important } }.
                 //
                 // Since the user has used the key `safe`, he expects `name` to be
@@ -146,12 +146,12 @@
                 //
                 // So we need to have `name` come from `safe`, not from `hacker`.
                 // We should thus start looking in `safe` first. But `safe` was
-                // not initially in the protected context stack. Only the protected
-                // root was. Hence somebody had `safe` in the protected context
+                // not initially in the priority context stack. Only the priority
+                // root was. Hence somebody had `safe` in the priority context
                 // stack.
                 //
                 // Who has objects enter the context stack? Rendering objects do. So
-                // rendering objects have to know that values are protected or not,
+                // rendering objects have to know that values are priority or not,
                 // and choose the correct bucket accordingly.
                 //
                 // Who can write his own rendering objects? The end user does. So
@@ -160,8 +160,8 @@
                 // conform to this safety notice.
                 //
                 // Of course this is not what we want. So `name` can not be
-                // protected. Since we don't want to let the user think he is data
-                // is protected when it is not, we prevent this whole pattern, and
+                // priority. Since we don't want to let the user think he is data
+                // is given priority when it is not, we prevent this whole pattern, and
                 // forbid `{{#safe}}{{name}}{{/safe}}`.
                 context = [context contextByAddingHiddenObject:object];
             }

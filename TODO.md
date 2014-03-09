@@ -4,7 +4,7 @@
 - [X] Remove all GRMustacheContext subclassing documentation
 - [X] Document secure key access to Foundation classes
 - [ ] Document the drop of support for adding context into another context
-- [ ] Rename "protected context" to something that rings a bell. "Protected keys"? "Locked keys"? "Priority keys"?
+- [X] Rename "protected context" to "Priority keys"
 - [X] change version method
 - [X] have overridable section use their own identifiers, not expressions.
 - [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)

@@ -37,8 +37,8 @@
     context = [context contextByAddingObject:object];
     STAssertEquals([context topMustacheObject], object, @"");
     
-    id protectedObject = @"protectedObject";
-    context = [context contextByAddingProtectedObject:protectedObject];
+    id priorityObject = @"priorityObject";
+    context = [context contextByAddingPriorityObject:priorityObject];
     STAssertEquals([context topMustacheObject], object, @"");
     
     id tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];

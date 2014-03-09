@@ -73,7 +73,7 @@ The library features are described in the [guides](introduction.md). This sectio
     A *rendering context* implements a state of four different stacks:
     
     - a *context stack*.
-    - a *protected context stack*.
+    - a *priority context stack*.
     - a *tag delegate stack*.
     - a *template override stack*, that grows when a template override element renders.
     

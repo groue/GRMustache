@@ -32,7 +32,7 @@
  * - a *context stack*, that makes it able to provide the current context
  *   object, and to perform key lookup.
  *
- * - a *protected context stack*, whose objects define important keys that
+ * - a *priority context stack*, whose objects define important keys that
  *   should not be overriden.
  *
  * - a *tag delegate stack*, so that tag delegates are notified when a Mustache
@@ -56,7 +56,7 @@
     type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     
     GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(priorityContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
     GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideStack, id);
@@ -136,31 +136,31 @@
 + (instancetype)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * Returns a context containing a single protected object.
+ * Returns a context containing a single priority object.
  *
- * Keys defined by _object_ gets "protected", which means that they can not be
+ * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
- *     // Create a context with a protected `precious` key
- *     context = [GRMustacheContext contextWithProtectedObject:@{ @"precious": @"gold" }];
+ *     // Create a context with a priority `precious` key
+ *     context = [GRMustacheContext contextWithPriorityObject:@{ @"precious": @"gold" }];
  *
  *     // Derive a new context by attempting to override the `precious` key:
  *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
  *
- *     // Protected keys can't be overriden
+ *     // Priority keys can't be overriden
  *     [context valueForMustacheKey:@"precious"];   // @"gold"
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md#priority-keys
  *
  * @param object  An object
  *
  * @return A rendering context.
  *
- * @see contextByAddingProtectedObject:
+ * @see contextByAddingPriorityObject:
  *
  * @since v6.4
  */
-+ (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns a context containing a single tag delegate.
@@ -168,7 +168,7 @@
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
  *
- * Unlike contextWithObject: and contextWithProtectedObject:, _tagDelegate_ will
+ * Unlike contextWithObject: and contextWithPriorityObject:, _tagDelegate_ will
  * not provide any key to the templates. It will only be notified of the
  * rendering of tags.
  *
@@ -207,9 +207,9 @@
  *     // `b` is inherited
  *     [context valueForMustacheKey:@"b"];   // @"foo"
  *
- * _object_ can not override keys defined by the objects of the protected
- * context stack, though. See contextWithProtectedObject: and
- * contextByAddingProtectedObject:.
+ * _object_ can not override keys defined by the objects of the priority
+ * context stack, though. See contextWithPriorityObject: and
+ * contextByAddingPriorityObject:.
  *
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * added at the top of the tag delegate stack.
@@ -232,21 +232,21 @@
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
- * given object added at the top of the protected context stack.
+ * given object added at the top of the priority context stack.
  *
- * Keys defined by _object_ gets "protected", which means that they can not be
+ * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
- *     // Derive a context with a protected `precious` key
- *     context = [context contextByAddingProtectedObject:@{ @"precious": @"gold" }];
+ *     // Derive a context with a priority `precious` key
+ *     context = [context contextByAddingPriorityObject:@{ @"precious": @"gold" }];
  *
  *     // Derive a new context by attempting to override the `precious` key:
  *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
  *
- *     // Protected keys can't be overriden
+ *     // Priority keys can't be overriden
  *     [context valueForMustacheKey:@"precious"];   // @"gold"
  *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md#priority-keys
  *
  * @param object  An object
  *
@@ -254,7 +254,7 @@
  *
  * @since v6.0
  */
-- (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextByAddingPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -263,7 +263,7 @@
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
  *
- * Unlike contextByAddingObject: and contextByAddingProtectedObject:,
+ * Unlike contextByAddingObject: and contextByAddingPriorityObject:,
  * _tagDelegate_ will not provide any key to the templates. It will only be
  * notified of the rendering of tags.
  *
@@ -334,10 +334,10 @@
  *
  * In this method, the following search pattern is used:
  *
- * 1. Searches the protected context stack for an object that has a non-nil
+ * 1. Searches the priority context stack for an object that has a non-nil
  *    Mustache value for the key.
  *
- * 2. Otherwise (irrelevant protected context stack), search the context stack
+ * 2. Otherwise (irrelevant priority context stack), search the context stack
  *    for an object that has a non-nil Mustache value for the key.
  *
  * 3. If none of the above situations occurs, returns nil.

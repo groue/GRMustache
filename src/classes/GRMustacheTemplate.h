@@ -137,7 +137,7 @@
  * @see GRMustacheTemplateRepository
  * @see [GRMustache standardLibrary]
  * @see extendBaseContextWithObject:
- * @see extendBaseContextWithProtectedObject:
+ * @see extendBaseContextWithPriorityObject:
  * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.0
@@ -172,7 +172,7 @@
  * @param object  An object
  *
  * @see baseContext
- * @see extendBaseContextWithProtectedObject:
+ * @see extendBaseContextWithPriorityObject:
  * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.8
@@ -183,23 +183,23 @@
  * Extends the base context of the receiver with the provided object, making its
  * keys available for all renderings. 
  *
- * Keys defined by _object_ gets "protected", which means that they can not be
+ * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
  * For example:
  *
  *     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
  *
- *     // Have the `precious` key defined, and protected, for all renderings of the template:
+ *     // Have the `precious` key defined, and given priority, for all renderings of the template:
  *     id object = @{ @"precious": @"gold" };
- *     [template importProtectedObject:object];
+ *     [template importPriorityObject:object];
  *
  *     // Renders "gold"
  *     [template renderObject:@{ @"precious": @"lead" } error:NULL];
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     template.baseContext = [template.baseContext contextByAddingProtectedObject:object];
+ *     template.baseContext = [template.baseContext contextByAddingPriorityObject:object];
  *
  * @param object  An object
  *
@@ -209,7 +209,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (void)extendBaseContextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -223,7 +223,7 @@
  *
  * @see baseContext
  * @see extendBaseContextWithObject:
- * @see extendBaseContextWithProtectedObject:
+ * @see extendBaseContextWithPriorityObject:
  *
  * @since v6.8
  */

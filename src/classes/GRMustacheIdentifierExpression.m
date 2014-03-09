@@ -68,10 +68,10 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context priority:(BOOL *)priority error:(NSError **)error
 {
     if (value != NULL) {
-        *value = [context valueForMustacheKey:_identifier protected:protected];
+        *value = [context valueForMustacheKey:_identifier priority:priority];
     }
     return YES;
 }
