@@ -13,17 +13,17 @@ That being said, you may use GRMustache to its full extent, and build templates 
 
 This guide is here to tell you where the border line is, topic by topic:
 
-- Syntax extensions
-- Sections and inverted sections
-- Standard Library
-- Text templates
-- File system hierarchy of template and partials
-- Dynamic partials
-- Template inheritance
-- Priority keys
-- Custom rendering objects
-- Filters
-- Tag delegates
+- [Syntax extensions](#syntax-extensions)
+- [Sections and inverted sections](#sections-and-inverted-sections)
+- [Standard Library](#standard-library)
+- [Text templates](#text-templates)
+- [File system hierarchy of template and partials](#file-system-hierarchy-of-template-and-partials)
+- [Dynamic partials](#dynamic-partials)
+- [Template inheritance](#template-inheritance)
+- [Priority keys](#priority-keys)
+- [Custom rendering objects](#custom-rendering-objects)
+- [Filters](#filters)
+- [Tag delegates](#tag-delegates)
 
 
 Syntax extensions

@@ -11,13 +11,17 @@ HTML templates return HTML: their `{{ name }}` variable tags escape their input.
 
 Text templates return text: their `{{ name }}` and `{{{ name }}}` tags do not escape their input: they have identical rendering.
 
-The [GRMustacheConfiguration](configuration.md) class is your vector to text & HTML templates.
+- [Global configuration](#global-configuration)
+- [Template Repository Configuration](#template-repository-configuration)
+- [Content Type Of Individual Templates](#content-type-of-individual-templates)
+- [Mixing HTML And Text Templates](#mixing-html-and-text-templates)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
 
 
 Global configuration
 --------------------
 
-The default configuration `[GRMustacheConfiguration defaultConfiguration]`
+The default [configuration](configuration.md) `[GRMustacheConfiguration defaultConfiguration]`
 applies to all GRMustache rendering unless specified otherwise:
 
 ```objc
@@ -57,6 +61,7 @@ NSString *rendering = [template renderObject:...];
 
 Template repository configuration has higher priority than the default configuration.
 
+
 Content Type Of Individual Templates
 ------------------------------------
 
@@ -75,6 +80,7 @@ For example:
     ...
 
 Pragma tags have higher priority than repository and default configurations.
+
 
 Mixing HTML And Text Templates
 ------------------------------
@@ -147,6 +153,7 @@ document:
     </pre>
 
 See the [Rendering Objects Guide](rendering_objects.md) for more information about inclusion of partials chosen at runtime.
+
 
 Compatibility with other Mustache implementations
 -------------------------------------------------

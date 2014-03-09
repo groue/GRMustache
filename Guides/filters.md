@@ -3,6 +3,15 @@
 Filters
 =======
 
+- [Overview](#overview)
+- [Defining your own filters](#defining-your-own-filters)
+- [Variadic filters](#variadic-filters)
+- [Filters that return rendering objects](#filters-that-return-rendering-objects)
+- [Filters namespaces](#filters-namespaces)
+- [Filters errors](#filters-errors)
+- [Sample code](#sample-code)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
+
 Overview
 --------
 
@@ -181,6 +190,12 @@ The message describes the exact place where the error occur has occurred:
     Object for key `f` in tag `{{ f(foo) }}` at line 13 of /path/to/template does not conform to GRMustacheFilter protocol: "blah"
 
 
+Sample code
+-----------
+
+Custom filters are used in the [Collection Indexes](sample_code/indexes.md) sample code, and in many items of the [standard library](standard_library.md). [NSFormatter](NSFormatter.md) are ready-made filters in GRMustache. Go check inspiration there.
+
+
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
@@ -191,12 +206,6 @@ The topic is under [discussion](http://github.com/mustache/spec/issues/41) with 
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), do NOT use filters.**
 
 Instead, have a look at tag delegates, especially the [Tag Delegates as Cross-Platform Filters](delegate.md#tag-delegates-as-cross-platform-filters) section of the Tag Delegates Guide.
-
-
-Sample code
------------
-
-Custom filters are used in the [Collection Indexes](sample_code/indexes.md) sample code, and in many items of the [standard library](standard_library.md). [NSFormatter](NSFormatter.md) are ready-made filters in GRMustache. Go check inspiration there.
 
 
 [up](../../../../GRMustache#documentation), [next](rendering_objects.md)

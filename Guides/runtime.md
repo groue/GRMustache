@@ -5,9 +5,17 @@ GRMustache runtime
 
 You'll learn here how your data is rendered. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [ViewModel Guide](view_model.md).
 
+- [How keys are accessed](#how-keys-are-accessed)
+- [Variable tags](#variable-tags)
+- [Expressions](#expressions)
+- [Section tags](#section-tags)
+- [The context stack](#the-context-stack)
+- [Fine tuning of key lookup](#fine-tuning-of-key-lookup)
+- [Detailed description of GRMustache handling of `valueForKey:`](#detailed-description-of-grmustache-handling-of-valueforkey)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
 
-Key Access
-----------
+How keys are accessed
+---------------------
 
 Most Mustache tags will look for keys in your rendered objects. In the example below, the `{{name}}` tag fetches the key `name` from a dictionary, leading to the "Hello Arthur!" rendering:
 
@@ -309,7 +317,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
 The `withPosition` filter returns a [rendering object](rendering_objects.md) that makes the `position` key available inside the section. It is described in the [Collection Indexes Sample Code](sample_code/indexes.md).
 
 
-The Context Stack
+The context stack
 -----------------
 
 We have seen that values rendered by sections are made available for the key lookup inside the section.

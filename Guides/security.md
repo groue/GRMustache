@@ -5,6 +5,10 @@ Security
 
 GRMustache ships with security features that help preventing untrusted templates and data to threaten your application.
 
+- [Safe Key Access](#safe-key-access)
+- [Priority keys](#priority-keys)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
+
 
 Safe Key Access
 ---------------

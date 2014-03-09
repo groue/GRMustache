@@ -19,6 +19,10 @@ This class helps you solving cases that are not covered by other high-level meth
 
 The first two use cases are covered by this guide. See the [Configuration Guide](configuration.md) for the latter.
 
+- [Loading templates and partials from the file system](#loading-templates-and-partials-from-the-file-system)
+- [Loading templates and partials from a dictionary of template strings](#loading-templates-and-partials-from-a-dictionary-of-template-strings)
+- [GRMustacheTemplateRepository Data Source](#grmustachetemplaterepository-data-source)
+
 
 Loading templates and partials from the file system
 ---------------------------------------------------

@@ -3,11 +3,22 @@
 Configuration
 =============
 
-GRMustache has options: they are properties of a GRMustacheConfiguration instance. You basically have three levels of tuning:
+GRMustache has options: they are properties of a GRMustacheConfiguration instance.
 
-- global configuration for all templates,
-- configuration for all templates of a [template repository](template_repositories.md),
-- configuration for a single template.
+- [Three levels of tuning](#three-levels-of-tuning)
+- [Factory configuration](#factory-configuration)
+- [Configuration properties](#configuration-properties)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
+
+
+Three levels of tuning
+----------------------
+
+You can tune GRMustache at three different levels:
+
+- Globally
+- For all templates of a [template repository](template_repositories.md),
+- For a single template.
 
 The global default configuration is `[GRMustacheConfiguration defaultConfiguration]`:
 
@@ -49,8 +60,8 @@ GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepos
 repo.configuration = [GRMustacheConfiguration configuration];
 ```
 
-GRMustacheConfiguration properties
-----------------------------------
+Configuration properties
+------------------------
 
 - [baseContext](#basecontext)
 - [contentType](#contenttype)

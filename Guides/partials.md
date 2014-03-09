@@ -7,9 +7,14 @@ When a `{{> name }}` Mustache tag occurs in a template, GRMustache renders in pl
 
 You can write recursive partials. Just avoid infinite loops in your context objects.
 
+- [Sources of partials](#sources-of-partials)
+- [Partials in the file system](#partials-in-the-file-system)
+- [Dynamic partials](#dynamic-partials)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
 
-Source of partials
-------------------
+
+Sources of partials
+-------------------
 
 Depending on the method which has been used to create the original template, partials will be searched in different places :
 
@@ -43,6 +48,7 @@ The a.mustache template can embed b.mustache with the `{{> partials/b }}` tag, a
 
 *Never use file extensions in your partial tags.* `{{> partials/b.mustache }}` would try to load the `b.mustache.mustache` file which does not exist: you'd get an error of domain `GRMustacheErrorDomain` and code `GRMustacheErrorCodeTemplateNotFound`.
 
+
 ### Absolute paths to partials
 
 When your templates are stored in a hierarchy of directories, you sometimes need to refer to a partial template in an absolute way, that does not depend on the location of the embedding template.
@@ -70,7 +76,7 @@ You may want to choose the rendered partial at runtime: this use case is covered
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
-The [Mustache specification](https://github.com/mustache/spec) does not have the concepts of relative vs. absolute partial paths, template inheritance, or dynamic partials.
+The [Mustache specification](https://github.com/mustache/spec) does not have the concepts of relative vs. absolute partial paths, or dynamic partials.
 
 **As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use those features with great care.**
 

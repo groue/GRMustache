@@ -5,11 +5,12 @@ NSFormatter
 
 GRMustache provides built-in support for NSFormatter and its subclasses such as NSNumberFormatter and NSDateFormatter.
 
-There are ready-made [filters](filters.md) and [rendering objects](rendering_objects.md) (aka "lambdas").
+- [Formatting a value](#formatting-a-value)
+- [Formatting all values in a section](#formatting-all-values-in-a-section)
 
 
-Filter facet
-------------
+Formatting a value
+------------------
 
 Just add your formatters to the data you render: they get ready to be used as filters:
 
@@ -39,10 +40,10 @@ Rendering:
     50%
 
 
-Rendering object facet
-----------------------
+Formatting all values in a section
+----------------------------------
 
-[Rendering objects](rendering_objects.md) are able to render a full Mustache section as they want. NSFormatters take the opportunity to *format all variable tags* inside the section:
+NSFormatters are ably to *format all variable tags* inside the section:
 
 `Document.mustache`:
 

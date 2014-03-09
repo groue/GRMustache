@@ -3,6 +3,19 @@
 Rendering Objects
 =================
 
+- [Overview](#overview)
+- [GRMustacheRendering protocol](#grmustacherendering-protocol)
+- [Trivial Example](#trivial-example)
+- [Example: Wrapping the content of a section tag](#example-wrapping-the-content-of-a-section-tag)
+- [Example: Have a section render an alternate template string](#example-have-a-section-render-an-alternate-template-string)
+- [Example: Dynamic partials](#example-dynamic-partials)
+- [Example: Objects that render themselves](#example-objects-that-render-themselves)
+- [Example: Render collections of objects](#example-render-collections-of-objects)
+- [Example: A Handlebars.js Helper](#example-a-handlebarsjs-helper)
+- [More Sample Code](#more-sample-code)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
+
+
 Overview
 --------
 
@@ -275,8 +288,8 @@ GRMustacheTemplate *template = [tag.templateRepository templateFromString:templa
 This is because the section that should be wrapped in a link may embed a partial tag `{{> partial }}`. Our code will be more robust if we make sure that we use the same template repository as the one that did provide the original template. Check the [GRMustacheTag Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html#//api/name/templateRepository) for more information.
 
 
-Example: Dynamic partials, take 1
----------------------------------
+Example: Dynamic partials
+-------------------------
 
 When a `{{> name }}` Mustache tag occurs in a template, GRMustache renders in place the content of another template, the *partial*, identified by its name.
 
@@ -333,8 +346,8 @@ Final rendering:
 Let's say a handy technique: we haven't use the `GRMustacheRendering` protocol here, because `GRMustacheTemplate` does it for us.
 
 
-Example: Dynamic partials, take 2: objects that "render themselves"
--------------------------------------------------------------------
+Example: Objects that render themselves
+---------------------------------------
 
 Let's implement something similar to Ruby on Rails's `<%= render @movie %>`:
 
@@ -599,8 +612,8 @@ You have more sample code in [issue #50](https://github.com/groue/GRMustache/iss
     I have {{ cats.count }} {{# pluralize(cats.count) }}cat{{/ }}.
 
 
-Sample code
------------
+More Sample Code
+----------------
 
 The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
 

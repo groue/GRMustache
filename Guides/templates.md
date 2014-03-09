@@ -5,6 +5,11 @@ Templates
 
 You'll learn here how to load, and render templates. The [Runtime Guide](runtime.md) talks about what happens *during* the rendering itself. Common patterns for feeding templates are described in the [ViewModel Guides](view_model.md).
 
+- [Errors](#errors)
+- [On-the-fly rendering methods](#on-the-fly-rendering-methods)
+- [Parse-once-and-render-many-times methods](#parse-once-and-render-many-times-methods)
+- [More loading options](#more-loading-options)
+
 Errors
 ------
 

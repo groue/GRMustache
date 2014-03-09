@@ -1,7 +1,16 @@
 [up](../../../../GRMustache#documentation), [next](security.md)
 
-GRMustacheTagDelegate protocol
-==============================
+Tag Delegates
+=============
+
+- [The GRMustacheTagDelegate protocol](#the-grmustachetagdelegate-protocol)
+- [Providing Tag Delegates](#providing-tag-delegates)
+- [Use Cases for Tag Delegates](#use-cases-for-tag-delegates)
+- [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
+
+
+The GRMustacheTagDelegate protocol
+----------------------------------
 
 This protocol lets you observe, and possibly alter the rendering of the Mustache tags that consume your data.
 
