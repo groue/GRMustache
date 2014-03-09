@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] Update the documentation to de-emphasize KVC exceptions.
 - [X] Consistent use of the "template inheritance" wording.
 - [X] Rewrite documentation for default values for any keys
 - [X] Remove all GRMustacheContext subclassing documentation

@@ -7,13 +7,6 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
-- [System requirements](#system-requirements)
-- [How To](#how-to)
-- [Documentation](#documentation)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Contribution wish-list](#contribution-wish-list)
-
 
 System requirements
 -------------------
@@ -132,7 +125,7 @@ Troubleshooting
 FAQ
 ---
 
-- **is GRMustache thread-safe?**
+- **Is GRMustache thread-safe?**
     
     Thread-safety of non-mutating methods is guaranteed. Thread-safety of mutating methods is not guaranteed.
 
@@ -150,7 +143,7 @@ FAQ
 
 - **Is it possible to write Handlebars-like helpers?**
     
-    [Yes](Guides/rendering_objects.md)
+    [Yes](Guides/rendering_objects.md#example-a-handlebarsjs-helper)
 
 - **Is it possible to localize templates?**
 
