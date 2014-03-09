@@ -77,7 +77,7 @@ As soon as the `{{# user }}...{{/ user }}` section renders, the user enters the 
 
 ### By Entering the Base Context of a Template
 
-As soon as an object enters the [context stack](runtime.md#the-context-stack), all its methods, properties, and generally speaking, values returned by the `objectForKeyedSubscript:` and `valueForKey:` methods are available for the templates (see the [Runtime Guide](runtime.md)).
+As soon as an object enters the [context stack](runtime.md#the-context-stack), values returned by the `objectForKeyedSubscript:` and `valueForKey:` methods are available for the templates (see the [Runtime Guide](runtime.md)).
 
 This may be undesirable. You may want an object to be a tag delegate while not providing any value to the templates.
 

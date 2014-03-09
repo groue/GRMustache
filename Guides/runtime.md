@@ -6,46 +6,51 @@ GRMustache runtime
 You'll learn here how GRMustache renders your data. The loading of templates is covered in the [Templates Guide](templates.md). Common patterns for feeding templates are described in the [ViewModel Guide](view_model.md).
 
 
+Key Access
+----------
+
+Most Mustache tags will look for keys in your rendered objects. In the example below, the `{{name}}` tag fetches the key `name` from a dictionary, leading to the "Hello Arthur!" rendering:
+
+```objc
+NSDictionary *dictionary = @{ @"name": @"Arthur" };
+NSString *rendering = [GRMustacheTemplate renderObject:dictionary fromString:@"Hello {{name}}!" error:NULL];
+```
+
+Dictionaries are an easy way to provide keys. Your own custom objects can be rendered as well, as long as they declare properties for keys used in templates:
+
+```objc
+@interface Person : NSObject
+@property (nonatomic) NSString *name;
+@end
+
+NSDictionary *person = [[Person alloc] init];
+person.name = @"Arthur";
+
+// "Hello Arthur!"
+NSString *rendering = [GRMustacheTemplate renderObject:person fromString:@"Hello {{name}}!" error:NULL];
+```
+
+Precisely, here is how keys are fetched:
+
+1. If the object responds to the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) `objectForKeyedSubscript:` method, this method is used.
+2. Otherwise, if the key is safe, then the `valueForKey:` method is used.
+3. Otherwise, the key is considered missed.
+
+By default, a key is *safe* if it is backed by a declared Objective-C property, or a Core Data attribute (for managed objects).
+
+You can mitigate this limitation, though. For example, `-[NSArray count]` is a method, not a property. However, GRMustache can render `{{ items.count }}`. This is because NSArray conforms to the `GRMustacheSafeKeyAccess` protocol. Check the [Security Guide](security.md) for more information.
+
+
 Variable tags
 -------------
 
-Variable tags `{{ name }}` and `{{{ name }}}` look for the `name` key in the object you provide:
+Variable tags `{{ name }}`, `{{{ name }}}` and `{{& name }}` look for the `name` key in the object you provide, and render the returned value.
 
-```objc
-id data = @{ @"name": @"Arthur" };
+`{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values (the two last forms are equivalent).
 
-// Renders "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                            fromString:@"Hello {{name}}!"
-                                                 error:NULL];
-```
+Most objects are rendered with the `description` [standard method](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html).
 
-Any object supporting [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) via the `objectForKeyedSubscript:` method, and any [Key-Value Coding](http://developer.apple.com/documentation/Cocoa/Conceptual/KeyValueCoding/Articles/KeyValueCoding.html) compliant object, that responds to the `valueForKey:` method, can be used.
-
-> Note that GRMustache prefers the `objectForKeyedSubscript:` method, and only invokes the `valueForKey:` method on objects that do not support keyed subscripting.
->
-> On top of that, `valueForKey:` will only accessed declared properties, unless your class implements the `validMustacheKeys` method. See the [Security Guide](security.md) for more information.
-
-Dictionaries are such objects. So are, generally speaking, your custom models:
-
-```objc
-// The Person class defines the `name` property:
-Person *barbara = [Person personWithName:@"Barbara"];
-
-// Renders "Hello Barbara!"
-NSString *rendering = [GRMustacheTemplate renderObject:barbara
-                                            fromString:@"Hello {{name}}!"
-                                                 error:NULL];
-```
-
-Remember that `{{ name }}` renders HTML-escaped values, when `{{{ name }}}` and `{{& name }}` render unescaped values.
-
-Values are usually rendered with the [standard](http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Protocols/NSObject_Protocol/Reference/NSObject.html) `description` method, with two exceptions:
-
-- Your custom objects that take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
-- Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (but NSDictionary):
-
-A variable tag fed with an enumerable object renders the concatenation of its elements:
+Objects conforming to the [NSFastEnumeration](http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Chapters/ocFastEnumeration.html) protocol (but NSDictionary), such as NSArray are rendered as the concatenation of their elements:
 
 ```objc
 id data = @{ @"voyels": @[@"A", @"E", @"I", @"O", @"U"] };
@@ -56,7 +61,8 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-This especially comes handy with your custom [rendering objects](rendering_objects.md): you may think of Ruby on Rails' `<%= render @items %>`.
+Finally, objects that implement the `GRMustacheRendering` protocol take full charge of their own rendering. See the [Rendering Objects Guide](rendering_objects.md) for further details.
+
 
 Expressions
 -----------

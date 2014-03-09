@@ -3,29 +3,21 @@
 Security
 ========
 
-GRMustache is a template engine that combines template strings and data objects into its final rendering.
-
-Both the template strings and the data objects may come from untrusted sources. For example, they may be loaded from an untrusted remote host, or they may be user-defined.
-
-GRMustache ships with both built-in and opt-in features that prevent vilain templates and data to threaten your application.
+GRMustache ships with security features that help preventing malicious templates and data to threaten your application.
 
 
-Secure Key Access
------------------
+Safe Key Access
+---------------
 
-Here is how GRMustache looks for a key in your data objects:
+The [Runtime Guide](runtime.md) describes how GRMustache looks for a key in your data objects:
 
-1. If the object responds to the `objectForKeyedSubscript:` instance method, return the result of this method.
-2. Otherwise, build the list of valid keys:
-  1. If the object responds to the `validMustacheKeys` class method defined by the `GRMustacheKeyValidation` protocol, use this method.
-  2. Otherwise, use the list of Objective-C properties declared with `@property`.
-  3. If object is an instance of NSManagedObject, add all the attributes of its Core Data entity.
-3. If the key belongs to the list of valid keys, return the result of the `valueForKey:` method (catching NSUndefinedKeyException, as described in the [Runtime Guide](runtime.md#detailed-description-of-grmustache-handling-of-valueforkey).
-4. Otherwise, this is a key miss.
+1. If the object responds to the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting) `objectForKeyedSubscript:` method, this method is used.
+2. Otherwise, if the key is safe, then the `valueForKey:` method is used.
+3. Otherwise, the key is considered missed.
 
-The goal is to prevent `valueForKey:` from accessing dangerous methods.
+By default, a key is *safe* if it is backed by a declared Objective-C property, or a Core Data attribute (for managed objects).
 
-Consider the code below:
+The goal is to prevent `valueForKey:` from accessing dangerous methods. Consider the code below:
 
 ```objc
 @interface DBRecord : NSObject
@@ -46,11 +38,49 @@ NSString *rendering = [GRMustacheTemplate renderObject:document
                                                  error:NULL];
 ```
 
-Thanks to key validation, the `deleteRecord` method would not be called.
+Not being declared as a property, `deleteRecord` is not considered safe. The `deleteRecord` method is not called.
 
-Limiting access to declared Objective-C properties by default is a good tradeoff. Your class can still implement the `validMustacheKeys` method, should you want to allow a different set of keys.
 
-> The key validation mechanism is directly inspired by [fotonauts/handlebars-objc](https://github.com/fotonauts/handlebars-objc). Many thanks to [Bertrand Guiheneuf](https://github.com/bertrand).
+### Custom list of safe keys
+
+If this default secure behavior does not fit your need, you can implement the `safeMustacheKeys` method of the `GRMustacheSafeKeyAccess` protocol in your object class:
+
+```objc
++ (NSSet *)safeMustacheKeys;
+```
+
+This method returns the set of all keys you want to allow access to.
+
+GRMustache ships with built-in implementation of `safeMustacheKeys` for most immutable Foundation classes, so that you can freely use them in your templates: `{{ array.count }}`, `{{ set.anyObject}}`, `{{ url.host }}`, etc. work as expected.
+
+> The full list of handled Foundation classes are: NSArray, NSAttributedString, NSData, NSDate, NSDateComponents, NSDecimalNumber, NSError, NSHashTable, NSIndexPath, NSIndexSet, NSMapTable, NSNotification, NSException, NSNumber, NSOrderedSet, NSPointerArray, NSSet, NSString, NSURL, and NSValue.
+
+The `objectForKeyedSubscript:` method is another way to go: it is considered safe, and there is no limitation on keys that can be accessed through this method.
+
+
+### Disabling safe key access
+
+If you know what you are doing, you can disable safe key access altogether, removing all limitations on the keys that can be accessed via the `valueForKey:` method.
+
+This can be done globally for all renderings:
+
+```objc
+GRMustacheConfiguration *config = [GRMustacheConfiguration defaultConfiguration];
+config.baseContext = [config.baseContext contextWithUnsafeKeyAccess];
+```
+
+`GRMustacheConfiguration` is described in the [Configuration Guide](configuration.md).
+
+Safe key access can be disabled for a single template as well:
+
+```objc
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+template.baseContext = [template.baseContext contextWithUnsafeKeyAccess];
+```
+
+See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
+
+> The safe key access mechanism is directly inspired by [fotonauts/handlebars-objc](https://github.com/fotonauts/handlebars-objc). Many thanks to [Bertrand Guiheneuf](https://github.com/bertrand).
 
 
 Protected Contexts

@@ -2,7 +2,7 @@
 
 - [ ] Rewrite documentation for default values for any keys
 - [X] Remove all GRMustacheContext subclassing documentation
-- [ ] Document secure key access to Foundation classes
+- [X] Document secure key access to Foundation classes
 - [ ] Document the drop of support for adding context into another context
 - [ ] Rename "protected context" to something that rings a bell. "Protected keys"? "Locked keys"? "Priority keys"?
 - [X] change version method
