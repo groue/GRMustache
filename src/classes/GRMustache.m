@@ -69,52 +69,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
 
 
 // =============================================================================
-#pragma mark - Safe key access declarations
-
-static NSMutableSet *safeMustacheKeysForNSArray;
-static NSMutableSet *safeMustacheKeysForNSAttributedString;
-static NSMutableSet *safeMustacheKeysForNSData;
-static NSMutableSet *safeMustacheKeysForNSDate;
-static NSMutableSet *safeMustacheKeysForNSDateComponents;
-static NSMutableSet *safeMustacheKeysForNSDecimalNumber;
-static NSMutableSet *safeMustacheKeysForNSError;
-static NSMutableSet *safeMustacheKeysForNSHashTable;
-static NSMutableSet *safeMustacheKeysForNSIndexPath;
-static NSMutableSet *safeMustacheKeysForNSIndexSet;
-static NSMutableSet *safeMustacheKeysForNSMapTable;
-static NSMutableSet *safeMustacheKeysForNSNotification;
-static NSMutableSet *safeMustacheKeysForNSException;
-static NSMutableSet *safeMustacheKeysForNSNumber;
-static NSMutableSet *safeMustacheKeysForNSOrderedSet;
-static NSMutableSet *safeMustacheKeysForNSPointerArray;
-static NSMutableSet *safeMustacheKeysForNSSet;
-static NSMutableSet *safeMustacheKeysForNSString;
-static NSMutableSet *safeMustacheKeysForNSURL;
-static NSMutableSet *safeMustacheKeysForNSValue;
-
-static NSSet *safeMustacheKeys_NSArray(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSAttributedString(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSData(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSDate(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSDateComponents(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSDecimalNumber(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSError(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSHashTable(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSIndexPath(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSIndexSet(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSMapTable(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSNotification(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSException(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSNumber(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSOrderedSet(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSPointerArray(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSSet(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSString(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSURL(id self, SEL _cmd);
-static NSSet *safeMustacheKeys_NSValue(id self, SEL _cmd);
-
-
-// =============================================================================
 #pragma mark - GRMustache
 
 @interface GRMustache()
@@ -137,10 +91,9 @@ static NSSet *safeMustacheKeys_NSValue(id self, SEL _cmd);
 
 @implementation GRMustache
 
-+ (void)load
++ (void)initialize
 {
     [self setupRendering];
-    [self setupSafeKeyAccess];
 }
 
 
@@ -194,106 +147,6 @@ static NSSet *safeMustacheKeys_NSValue(id self, SEL _cmd);
     
     // Add protocol conformance
     class_addProtocol(klass, protocol);
-}
-
-
-// =============================================================================
-#pragma mark - Safe key access
-
-+ (void)setupSafeKeyAccess
-{
-    // Safe key access prevents dangerous methods from being accessed by bad
-    // templates through `valueForKey:`.
-    //
-    // By default, only declared properties can be accessed, unless classes
-    // conform to the GRMustacheSafeKeyAccess protocol.
-    //
-    // We want to let users have a liberal use of KVC on Foundation classes:
-    // `{{# array.count }}`, `{{ dateComponents.year }}`, etc. Those classes
-    // do not always declare properties for those accessors.
-    //
-    // So let's setup safe keys for common Foundation classes, by allowing
-    // all their non-mutating methods, plus a few safe NSObject methods,
-    // minus dangerous NSObject methods.
-    
-    NSSet *safeMustacheNSObjectKeys = [NSSet setWithObjects:
-                                       @"class",
-                                       @"superclass",
-                                       @"self",
-                                       @"description",
-                                       @"debugDescription",
-                                       nil];
-    NSSet *unsafeMustacheNSObjectKeys = [NSSet setWithObjects:
-                                         @"init",
-                                         @"dealloc",
-                                         @"finalize",
-                                         @"copy",
-                                         @"mutableCopy",
-                                         @"retain",
-                                         @"release",
-                                         @"autorelease",
-                                         nil];
-
-    SEL selector = @selector(safeMustacheKeys);
-    Protocol *protocol = @protocol(GRMustacheSafeKeyAccess);
-    struct objc_method_description methodDescription = protocol_getMethodDescription(protocol, selector, YES, NO);
-    
-#define setupSafeKeyAccessForClass(klassName) do {\
-    Class klass = NSClassFromString(@#klassName);\
-    if (klass) {\
-        Class metaKlass = object_getClass(klass);\
-        safeMustacheKeysFor ## klassName = [[self allPublicKeysForClass:klass] retain];\
-        [safeMustacheKeysFor ## klassName unionSet:safeMustacheNSObjectKeys];\
-        [safeMustacheKeysFor ## klassName minusSet:unsafeMustacheNSObjectKeys];\
-        class_addMethod(metaKlass, selector, (IMP)safeMustacheKeys_ ## klassName, methodDescription.types);\
-        class_addProtocol(klass, protocol);\
-    }\
-} while(0);
-    
-    setupSafeKeyAccessForClass(NSArray);
-    setupSafeKeyAccessForClass(NSAttributedString);
-    setupSafeKeyAccessForClass(NSData);
-    setupSafeKeyAccessForClass(NSDate);
-    setupSafeKeyAccessForClass(NSDateComponents);
-    setupSafeKeyAccessForClass(NSDecimalNumber);
-    setupSafeKeyAccessForClass(NSError);
-    setupSafeKeyAccessForClass(NSHashTable);
-    setupSafeKeyAccessForClass(NSIndexPath);
-    setupSafeKeyAccessForClass(NSIndexSet);
-    setupSafeKeyAccessForClass(NSMapTable);
-    setupSafeKeyAccessForClass(NSNotification);
-    setupSafeKeyAccessForClass(NSException);
-    setupSafeKeyAccessForClass(NSNumber);
-    setupSafeKeyAccessForClass(NSOrderedSet);
-    setupSafeKeyAccessForClass(NSPointerArray);
-    setupSafeKeyAccessForClass(NSSet);
-    setupSafeKeyAccessForClass(NSString);
-    setupSafeKeyAccessForClass(NSURL);
-    setupSafeKeyAccessForClass(NSValue);
-}
-
-/**
- * Return the set of methods without arguments, up to NSObject, non including NSObject.
- */
-+ (NSMutableSet *)allPublicKeysForClass:(Class)klass
-{
-    NSMutableSet *keys = [NSMutableSet set];
-    Class NSObjectClass = [NSObject class];
-    while (klass && klass != NSObjectClass) {
-        unsigned int methodCount;
-        Method *methods = class_copyMethodList(klass, &methodCount);
-        for (unsigned int i = 0; i < methodCount; ++i) {
-            SEL selector = method_getName(methods[i]);
-            const char *selectorName = sel_getName(selector);
-            if (selectorName[0] != '_' && selectorName[strlen(selectorName) - 1] != '_' && strstr(selectorName, ":") == NULL) {
-                [keys addObject:NSStringFromSelector(selector)];
-            }
-        }
-        free (methods);
-        klass = class_getSuperclass(klass);
-    }
-    
-    return keys;
 }
 
 
@@ -661,108 +514,4 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             }
         }
     }
-}
-
-
-// =============================================================================
-#pragma mark - Safe key access implementations
-
-static NSSet *safeMustacheKeys_NSArray(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSArray;
-}
-
-static NSSet *safeMustacheKeys_NSAttributedString(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSAttributedString;
-}
-
-static NSSet *safeMustacheKeys_NSData(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSData;
-}
-
-static NSSet *safeMustacheKeys_NSDate(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSDate;
-}
-
-static NSSet *safeMustacheKeys_NSDateComponents(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSDateComponents;
-}
-
-static NSSet *safeMustacheKeys_NSDecimalNumber(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSDecimalNumber;
-}
-
-static NSSet *safeMustacheKeys_NSError(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSError;
-}
-
-static NSSet *safeMustacheKeys_NSHashTable(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSHashTable;
-}
-
-static NSSet *safeMustacheKeys_NSIndexPath(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSIndexPath;
-}
-
-static NSSet *safeMustacheKeys_NSIndexSet(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSIndexSet;
-}
-
-static NSSet *safeMustacheKeys_NSMapTable(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSMapTable;
-}
-
-static NSSet *safeMustacheKeys_NSNotification(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSNotification;
-}
-
-static NSSet *safeMustacheKeys_NSException(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSException;
-}
-
-static NSSet *safeMustacheKeys_NSNumber(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSNumber;
-}
-
-static NSSet *safeMustacheKeys_NSOrderedSet(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSOrderedSet;
-}
-
-static NSSet *safeMustacheKeys_NSPointerArray(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSPointerArray;
-}
-
-static NSSet *safeMustacheKeys_NSSet(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSSet;
-}
-
-static NSSet *safeMustacheKeys_NSString(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSString;
-}
-
-static NSSet *safeMustacheKeys_NSURL(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSURL;
-}
-
-static NSSet *safeMustacheKeys_NSValue(id self, SEL _cmd)
-{
-    return safeMustacheKeysForNSValue;
 }
