@@ -1,6 +1,6 @@
 ## TODO
 
-- [ ] Rewrite documentation for default values for any keys
+- [X] Rewrite documentation for default values for any keys
 - [X] Remove all GRMustacheContext subclassing documentation
 - [X] Document secure key access to Foundation classes
 - [ ] Document the drop of support for adding context into another context

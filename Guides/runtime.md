@@ -38,7 +38,7 @@ Precisely, here is how keys are fetched:
 
 By default, a key is *safe* if it is backed by a declared Objective-C property, or a Core Data attribute (for managed objects).
 
-You can mitigate this limitation, though. For example, `-[NSArray count]` is a method, not a property. However, GRMustache can render `{{ items.count }}`. This is because NSArray conforms to the `GRMustacheSafeKeyAccess` protocol. Check the [Security Guide](security.md) for more information.
+You can mitigate this limitation, though. For example, `-[NSArray count]` is a method, not a property. However, GRMustache can render `{{ items.count }}`. This is because NSArray conforms to the `GRMustacheSafeKeyAccess` protocol. Check the [Security Guide](security.md#safe-key-access) for more information.
 
 
 Variable tags
