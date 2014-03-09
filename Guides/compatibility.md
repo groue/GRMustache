@@ -14,7 +14,7 @@ That being said, you may use GRMustache to its full extent, and build templates 
 This guide is here to tell you where the border line is, topic by topic:
 
 - [Syntax extensions](#syntax-extensions)
-- [Sections and inverted sections](#sections-and-inverted-sections)
+- [Boolean interpretation](#boolean-interpretation)
 - [Standard Library](#standard-library)
 - [Text templates](#text-templates)
 - [File system hierarchy of template and partials](#file-system-hierarchy-of-template-and-partials)
@@ -48,8 +48,8 @@ GRMustache introduces syntax that is not defined by the Mustache specification. 
 - **Loops in variable tags**: a simple variable tag `{{items}}` renders a concatenation of the rendering of each individual item. You may think of Ruby on Rails' `<%= render @items %>`: check the [Rendering Objects Guide](rendering_objects.md).
 
 
-Sections and inverted sections
-------------------------------
+Boolean interpretation
+----------------------
 
 The Mustache specification does not enforce the list of *false* values, the values that trigger or prevent the rendering of sections and inverted sections:
 
