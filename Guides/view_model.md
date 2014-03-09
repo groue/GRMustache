@@ -3,6 +3,12 @@
 Patterns For Feeding GRMustache Templates
 =========================================
 
+- [ViewModel Objects](#viewmodel-objects)
+- [Custom ViewModel Classes](#custom-viewmodel-classes)
+- [Default Values](#default-values)
+- [Designing a library of reusable components](#designing-a-library-of-reusable-components)
+
+
 ViewModel Objects
 -----------------
 
@@ -159,16 +165,40 @@ Providing a default value for unknown keys also requires using the `GRMustacheTa
 Check the [Runtime](Guides/runtime.md), [Security](Guides/security.md#safe-key-access) and [Tag Delegates](delegate.md#default-values) Guides for more information.
 
 
-Compatibility with other Mustache implementations
--------------------------------------------------
+Designing a library of reusable components
+------------------------------------------
 
-[Many Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations) foster the ViewModel concept, and encourage you to write your custom subclasses.
+GRMustache ships with a built-in [standard library](standard_library.md). This standard library covers common use cases, such as:
 
-By subclassing GRMustacheContext, you'll get a behavior that is as close as possible to the [canonical Ruby implementation](https://github.com/defunkt/mustache).
+- transforming strings
+    
+        {{ uppercase(name) }}
+- localizing templates:
+    
+        {{# localize }}Hello, {{ name }}!{{/ }}
+- etc.
 
-However, this topic is not mentioned in the [Mustache specification](https://github.com/mustache/spec).
+You may eventually write your own reusable components, such as:
 
-**If your goal is to design ViewModels that remain compatible with other Mustache implementations, check their documentation.**
+- pluralizing strings (see sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912)):
+    
+        You have {{# pluralize(items.count )}}item{{/ }}.
+- accessing array indexes (see sample code in the [Indexes Sample Code](sample_code/indexes.md)):
+    
+        {{# withPosition(items) }}{{ position }}: {{name}}{{/ }}
+- etc.
 
+You can make those reusable components available for all your Mustache renderings by extending the default configuration, once and early in your application:
+
+```objc
+NSDictionary *myCustomLibrary = @{
+  @"pluralize": ...,
+  @"withPosition": ...,
+};
+GRMustacheConfiguration* configuration = [GRMustacheConfiguration defaultConfiguration];
+[configuration extendBaseContextWithObject:myCustomLibrary];
+```
+
+See the [Configuration Guide](configuration.md) for more information.
 
 [up](../../../../GRMustache#documentation), [next](template_repositories.md)
