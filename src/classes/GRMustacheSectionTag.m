@@ -57,7 +57,7 @@
         return NO;
     }
     
-    GRMustacheBuffer buffer = GRMustacheBufferCreate((_innerRange.length + 50) * 1.32);
+    GRMustacheBuffer buffer = GRMustacheBufferCreate(MAX(1024, (_innerRange.length + 50) * 1.3));
     
     for (id<GRMustacheTemplateComponent> component in _components) {
         // component may be overriden by a GRMustacheInheritablePartial: resolve it.
