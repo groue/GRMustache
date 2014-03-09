@@ -112,9 +112,9 @@ Troubleshooting
 
 - **GRMustache does not render my object keys.**
 
-    Check that you have declared Objective-C properties for those keys.
+    Check that you have declared Objective-C properties (with `@property`) for those keys.
     
-    For security reasons, GRMustache, starting v7.0, does not blindly run the `valueForKey:` method. Check the [Runtime](Guides/runtime.md#key-access) and the [Security](Guides/security.md#safe-key-access) Guides for more information.
+    For security reasons, GRMustache, starting v7.0, does not blindly run the `valueForKey:` method when accessing keys. Check the [Runtime](Guides/runtime.md#key-access) and the [Security](Guides/security.md#safe-key-access) Guides for more information.
 
 
 FAQ
