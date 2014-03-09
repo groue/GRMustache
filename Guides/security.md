@@ -3,7 +3,7 @@
 Security
 ========
 
-GRMustache ships with security features that help preventing malicious templates and data to threaten your application.
+GRMustache ships with security features that help preventing untrusted templates and data to threaten your application.
 
 
 Safe Key Access
@@ -38,7 +38,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:document
                                                  error:NULL];
 ```
 
-Not being declared as a property, the `deleteRecord` key is not considered safe. The `deleteRecord` method is not called.
+Not being declared as a property, the `deleteRecord` key is considered unsafe. The `deleteRecord` method is not called.
 
 
 ### Custom list of safe keys
@@ -51,7 +51,7 @@ If this default secure behavior does not fit your need, you can implement the `s
 
 This method returns the set of all keys you want to allow access to.
 
-GRMustache ships with built-in implementation of `safeMustacheKeys` for most immutable Foundation classes, so that you can freely use them in your templates: `{{ array.count }}`, `{{ set.anyObject}}`, `{{ url.host }}`, etc. work as expected.
+GRMustache ships with built-in implementation of `safeMustacheKeys` for most immutable Foundation classes, so that you can freely use them in your templates: `{{ array.count }}`, `{{ set.anyObject}}`, `{{ url.host }}`, etc. render as expected.
 
 > The full list of handled Foundation classes are: NSArray, NSAttributedString, NSData, NSDate, NSDateComponents, NSDecimalNumber, NSError, NSHashTable, NSIndexPath, NSIndexSet, NSMapTable, NSNotification, NSException, NSNumber, NSOrderedSet, NSPointerArray, NSSet, NSString, NSURL, and NSValue.
 

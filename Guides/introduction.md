@@ -3,22 +3,22 @@
 GRMustache introduction
 =======================
 
-Core Mustache
--------------
+- [The Mustache language](#the-mustache-language)
+- [Beyond Mustache](#beyond-mustache)
+
+
+The Mustache language
+---------------------
 
 Make sure you get familiar with the Mustache syntax and features first: http://mustache.github.io/mustache.5.html.
 
-- **variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
-- **section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
-- **partial tags**, as `{{> partial}}`
-- **comment tag**, as `{{! comment }}`
-- **"set delimiter tags"**, as `{{=<% %>=}}`
+- **Variable tags**, as `{{name}}`, `{{{name}}}` and `{{&name}}` (HTML-escaped or not)
+- **Section tags** (boolean, loop, lambda, inverted), as `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`
+- **Partial tags**, as `{{> partial}}`
+- **Comment tag**, as `{{! comment }}`
+- **"Set delimiter tags"**, as `{{=<% %>=}}`
 
-
-Overlooked Mustache
--------------------
-
-Those are not documented in [mustache.5.html](http://mustache.github.io/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
+Features below are not documented in [mustache.5.html](http://mustache.github.io/mustache.5.html), despite their inclusion in the [Mustache specification](https://github.com/mustache/spec):
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
@@ -30,12 +30,9 @@ Beyond Mustache
 
 Genuine Mustache falls short on a few topics.
 
-GRMustache core engine implements syntaxes and features that are not in the specification (see the [Compatibility Guide](compatibility.md) for details).
+GRMustache addresses most of these issues by implementing syntaxes and features that go beyond the [Mustache specification](https://github.com/mustache/spec).
 
-### ViewModel classes
-
-ViewModel classes let you implement specific keys for your templates. Check the [ViewModel Guide](view_model.md).
-
+Check the [Compatibility Guide](compatibility.md) whenever you want to render templates compatible with other Mustache implementations.
 
 ### Syntax extensions
 
@@ -85,21 +82,19 @@ GRMustache also supports text templates, that do not escape anything. Check the 
 Filters, as `{{ uppercase(name) }}`, are documented in the [Filters Guide](filters.md).
 
 
-### Lambdas that work
+### Powerful Lambdas
 
-Forget everything you know about genuine Mustache lambdas, and give GRMustache [rendering objects](rendering_objects.md) a try.
+Forget everything you know about the stifled genuine Mustache lambdas, and give GRMustache [rendering objects](rendering_objects.md) a try.
 
 
-Services
---------
+### Services
 
-GRMustache ships with a [standard library](standard_library.md) of various filters and tools for rendering your data.
+The library ships with a [standard library](standard_library.md) of various filters and tools for rendering your data.
 
 Our old friend [NSFormatter](NSFormatter.md) is also welcome to the party.
 
 
-Flexibility
------------
+### Flexibility
 
 GRMustache's core engine is extensible. Feel free to hook in:
 
@@ -109,64 +104,10 @@ GRMustache's core engine is extensible. Feel free to hook in:
 
 Those three hooks are lego bricks: from them you can build more complex tools, such as [NSFormatter](NSFormatter.md) and the [localize](standard_library.md#localize) helper.
 
-Should you eventually build a library of reusable code snippets, you'll find [Priority Keys](security.md#priority-keys) useful.
 
+### Security
 
-Getting started
----------------
+GRMustache has built-in features that prevents it from threatening your application whenever you render untrusted templates or data. See the [Security Guide](security.md) for more information.
 
-### Rendering dictionaries from template strings
-
-You'll generally gather a template and a data object that will fill the "holes" in the template.
-
-The shortest way to render a template is to mix a literal template string and a dictionary:
-
-```objc
-#import "GRMustache.h"
-
-// Render "Hello Arthur!"
-NSString *rendering = [GRMustacheTemplate renderObject:@{ @"name": @"Arthur" }
-                                            fromString:@"Hello {{name}}!"
-                                                 error:NULL];
-```
-
-`+[GRMustacheTemplate renderObject:fromString:error:]` is documented in the [Templates Guide](templates.md).
-
-### Rendering model objects from template resources
-
-However, your templates will often be stored as *resources* in your application bundle, and your data will come from your *model objects*. It turns out the following code should be more common:
-
-```objc
-#import "GRMustache.h"
-
-// Render a profile document from the `Profile.mustache` resource:
-Person *person = [Person personWithName:@"Arthur"];
-NSString *profile = [GRMustacheTemplate renderObject:person
-                                        fromResource:@"Profile"
-                                              bundle:nil
-                                               error:NULL];
-```
-
-`+[GRMustacheTemplate renderObject:fromResource:bundle:error:]` is documented in the [Templates Guide](templates.md).
-
-### Reusing templates
-
-You will spare CPU cycles by creating and reusing template objects:
-
-```objc
-#import "GRMustache.h"
-
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Profile" bundle:nil error:NULL];
-
-// Render ad nauseam
-NSString *arthurProfile = [template renderObject:arthur error:NULL];
-NSString *barbaraProfile = [template renderObject:barbara error:NULL];
-```
-
-`+[GRMustacheTemplate templateFromResource:bundle:error:]` and `-[GRMustacheTemplate renderObject:error:]` are documented in the [Templates Guide](templates.md).
-
-### Other use cases
-
-Examples above are common use cases for MacOS and iOS applications. The library does [much more](../../../../GRMustache#documentation).
 
 [up](../../../../GRMustache), [next](templates.md)
