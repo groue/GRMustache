@@ -8,7 +8,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ### Safe Key Access
 
-This is the feature that has GRMustache bump its major version: GRMustache no longer blindly evaluates `valueForKey:` on your objects.
+This is the feature that had GRMustache bump its major version: GRMustache no longer blindly evaluates `valueForKey:` on your objects.
 
 The default behavior now only fetches keys that are declared as properties (with `@property`).
 
@@ -16,10 +16,9 @@ See the [Security Guide](Guides/security.md) for more information.
 
 **Upgrading from earlier version of GRMustache**
 
-You can restore the previous behavior by:
+You can, if you want, restore the previous behavior of the library (see the [Security Guide](Guides/security.md)).
 
-1. disabling safe key access (see the [Security Guide](Guides/security.md)),
-2. should you provide default values for missing keys, reading the updated [View Model Guide](Guides/view_model.md#default-values).
+Also, should you provide default values for missing keys, read the updated [View Model Guide](Guides/view_model.md#default-values).
 
 **New APIs**
 
