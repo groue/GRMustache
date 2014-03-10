@@ -21,7 +21,7 @@ You can restore the previous behavior by:
 1. disabling safe key access (see the [Security Guide](Guides/security.md)),
 2. should you provide default values for missing keys, reading the updated [View Model Guide](Guides/view_model.md#default-values).
 
-**New API**
+**New APIs**
 
 ```objc
 @interface GRMustacheContext
@@ -38,7 +38,7 @@ Priority keys always evaluate to the same value, and prevent untrusted templates
 
 This feature used to be documented under the name "protected contexts". It's now part of the [Security Guide](Guides/security.md#priority-keys).
 
-**New API**
+**New APIs**
 
 ```objc
 @interface GRMustacheContext
@@ -88,16 +88,18 @@ GRMustache implementation of inheritable templates is now closer from [hogan.js]
 
 - Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
 
-    This is a breaking change, but your template will very likely render as before.
+    This is a breaking change, but your template will render as before is you did not use any data key as an inheritable section identifier.
 - Inheritable sections that were overridden several times used to be rendered several times as well. This is no longer the case. Now the deeper overriding wins, and the inheritable section is rendered once.
 
     This is a breaking change, but your template will render as before if you did not rely on concatenation of inheritable sections.
 
-** Removed APIs**
+**Removed APIs**
 
+```objc
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     GRMustacheTagTypeOverridableSection;   // not replaced
 }
+```
 
 
 ### Misc
