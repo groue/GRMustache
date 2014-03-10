@@ -45,6 +45,8 @@
  * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
  * - https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
+ * @warning GRMustacheContext is not suitable for subclassing.
+ *
  * @see GRMustacheRendering protocol
  */
 @interface GRMustacheContext : NSObject {
@@ -158,7 +160,7 @@
  *
  * @see contextByAddingPriorityObject:
  *
- * @since v6.4
+ * @since v7.0
  */
 + (instancetype)contextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
@@ -252,7 +254,7 @@
  *
  * @return A new rendering context.
  *
- * @since v6.0
+ * @since v7.0
  */
 - (instancetype)contextByAddingPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
@@ -465,6 +467,6 @@
  *
  * @since v7.0
  */
-- (GRMustacheContext *)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

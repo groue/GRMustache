@@ -3,6 +3,17 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+
+## v7.0.0
+
+- safeKeyAccess
+- protected->priority (context, template, configuration)
+- GRMustacheTagTypeOverridableSection
+- inheritable templates
+- libraryVersion
+- GRMustacheContext can no longer be subclassed
+
+
 ## v6.9.2
 
 [Fix](https://github.com/groue/GRMustache/pull/70) for a crash on arm64 devices.

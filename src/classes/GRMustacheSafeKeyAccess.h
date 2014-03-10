@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros.h"
 
-#warning Missing availibility macros
 
 @protocol GRMustacheSafeKeyAccess <NSObject>
 
@@ -40,7 +40,9 @@
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
  * @return The set of accessible keys on the class.
+ *
+ * @since v7.0
  */
-+ (NSSet *)safeMustacheKeys;
++ (NSSet *)safeMustacheKeys AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

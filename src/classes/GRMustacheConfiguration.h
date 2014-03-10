@@ -140,7 +140,7 @@
  *
  *     // Have the `name` key defined for all template renderings:
  *     id object = @{ @"name": @"Arthur" };
- *     [configuration importObject:object];
+ *     [configuration extendBaseContextWithObject:object];
  *
  *     // Renders "Arthur"
  *     [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
@@ -177,7 +177,7 @@
  *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
  *     // The `precious` key is given priority:
- *     [configuration importObject:@{ @"precious": @"gold" }];
+ *     [configuration extendBaseContextWithObject:@{ @"precious": @"gold" }];
  *
  *     // Renders "gold", not "lead".
  *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
@@ -192,7 +192,7 @@
  * @see extendBaseContextWithObject:
  * @see extendBaseContextWithTagDelegate:
  *
- * @since v6.8
+ * @since v7.0
  */
 - (void)extendBaseContextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 

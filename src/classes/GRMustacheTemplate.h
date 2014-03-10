@@ -154,7 +154,7 @@
  *
  *     // Have the `name` key defined for all renderings of the template:
  *     id object = @{ @"name": @"Arthur" };
- *     [template importObject:object];
+ *     [template extendBaseContextWithObject:object];
  *
  *     // Renders "Arthur"
  *     [template renderObject:nil error:NULL];
@@ -192,7 +192,7 @@
  *
  *     // Have the `precious` key defined, and given priority, for all renderings of the template:
  *     id object = @{ @"precious": @"gold" };
- *     [template importPriorityObject:object];
+ *     [template extendBaseContextWithPriorityObject:object];
  *
  *     // Renders "gold"
  *     [template renderObject:@{ @"precious": @"lead" } error:NULL];
@@ -207,7 +207,7 @@
  * @see extendBaseContextWithObject:
  * @see extendBaseContextWithTagDelegate:
  *
- * @since v6.8
+ * @since v7.0
  */
 - (void)extendBaseContextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
