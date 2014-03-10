@@ -6,29 +6,136 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v7.0.0
 
-- safeKeyAccess
-- protected->priority (context, template, configuration)
-- GRMustacheTagTypeOverridableSection
-- inheritable templates
-- libraryVersion
-- GRMustacheContext can no longer be subclassed
+### Safe Key Access
+
+This is the feature that has GRMustache bump its major version: GRMustache no longer blindly evaluates `valueForKey:` on your objects.
+
+The default behavior now only fetches keys that are declared as properties (with `@property`).
+
+See the [Security Guide](Guides/security.md) for more information.
+
+**Upgrading from earlier version of GRMustache**
+
+You can restore the previous behavior by:
+
+1. disabling safe key access (see the [Security Guide](Guides/security.md)),
+2. should you provide default values for missing keys, reading the updated [View Model Guide](Guides/view_model.md#default-values).
+
+**New API**
+
+```objc
+@interface GRMustacheContext
+@property (nonatomic, readonly) BOOL unsafeKeyAccess;
++ (instancetype)contextWithUnsafeKeyAccess;
+- (instancetype)contextWithUnsafeKeyAccess;
+@end
+```
+
+
+### Priority Keys
+
+Priority keys always evaluate to the same value, and prevent untrusted templates from overriding critical objects.
+
+This feature used to be documented under the name "protected contexts". It's now part of the [Security Guide](Guides/security.md#priority-keys).
+
+**New API**
+
+```objc
+@interface GRMustacheContext
++ (instancetype)contextWithPriorityObject:(id)object;
+- (instancetype)contextByAddingPriorityObject:(id)object;
+@end
+
+@interface GRMustacheTemplate
+- (void)extendBaseContextWithPriorityObject:(id)object;
+@end
+
+@interface GRMustacheConfiguration
+- (void)extendBaseContextWithPriorityObject:(id)object;
+@end
+```
+
+**Removed APIs**
+
+```objc
+@interface GRMustacheContext
++ (instancetype)contextWithProtectedObject:(id)object;      // use contextWithPriorityObject instead
+- (instancetype)contextByAddingProtectedObject:(id)object;  // use contextByAddingPriorityObject instead
+@end
+
+@interface GRMustacheTemplate
+- (void)extendBaseContextWithProtectedObject:(id)object;    // use extendBaseContextWithPriorityObject instead
+@end
+
+@interface GRMustacheConfiguration
+- (void)extendBaseContextWithProtectedObject:(id)object;    // use extendBaseContextWithPriorityObject instead
+@end
+```
+
+
+### View Models
+
+Previous versions of the library would let you subclass GRMustacheContext. This is no longer the case.
+
+**Upgrading from earlier version of GRMustache**
+
+Should you rely on this dropped feature, and experiment difficulties migrating to the latest version of the library, please open an issue: we'll fix it together.
+
+
+### Inheritable Templates
+
+GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+
+- Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
+
+    This is a breaking change, but your template will very likely render as before.
+- Inheritable sections that were overridden several times used to be rendered several times as well. This is no longer the case. Now the deeper overriding wins, and the inheritable section is rendered once.
+
+    This is a breaking change, but your template will render as before if you did not rely on concatenation of inheritable sections.
+
+** Removed APIs**
+
+typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
+    GRMustacheTagTypeOverridableSection;   // not replaced
+}
+
+
+### Misc
+
+**New APIs**
+
+```objc
+@interface GRMustache
++ (GRMustacheVersion)libraryVersion;
+@end
+```
+
+**Removed APIS**
+
+```objc
+@interface GRMustache
++ (GRMustacheVersion)version;   // Use libraryVersion instead
+@end
+
+@interface GRMustacheContext
+- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;    // use hasValue:forMustacheExpression:error: instead
+@end
+```
 
 
 ## v6.9.2
 
-[Fix](https://github.com/groue/GRMustache/pull/70) for a crash on arm64 devices.
+- Fix for [issue #70](https://github.com/groue/GRMustache/issues/70): crash on arm64 devices
 
 
 ## v6.9.1
 
-[Fix](https://github.com/groue/GRMustache/pull/67) for a crash in enumeration rendering.
+- Fix for [issue #67](https://github.com/groue/GRMustache/pull/67): crash in enumeration rendering
 
 
 ## v6.9.0
 
-GRMustache now supports [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting): the `objectForKeyedSubscript:` method is preferred to the classic Key-Value-Coding `valueForKey:` method, when extracting values from your view models.
-
-This change fixes the issue [#66](https://github.com/groue/GRMustache/issues/66).
+- Fix for [issue #66](https://github.com/groue/GRMustache/issues/66): GRMustache now supports [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting). The `objectForKeyedSubscript:` method is preferred to the classic Key-Value-Coding `valueForKey:` method, when extracting values from your view models.
 
 
 ## v6.8.4
@@ -90,7 +197,7 @@ Full documentation of the new APIs: [GRMustacheTemplate](http://groue.github.io/
 
 ## v6.7.5
 
-Fix for issue [#56](https://github.com/groue/GRMustache/issues/56) (nil template strings have GRMustache return an error instead of crashing).
+Fix for [issue #56](https://github.com/groue/GRMustache/issues/56) (nil template strings have GRMustache return an error instead of crashing).
 
 ## v6.7.4
 
