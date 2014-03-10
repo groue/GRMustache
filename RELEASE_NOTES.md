@@ -105,6 +105,8 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 ### Misc
 
+- Fixes [issue #71](https://github.com/groue/GRMustache/issues/71): `+[GRMustache version]` improperly overrides NSObject with different return type.
+
 **New APIs**
 
 ```objc
