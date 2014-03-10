@@ -43,16 +43,6 @@
 }
 
 /**
- * The partial template.
- *
- * TODO: what is this assert method?
- * This property is used by [GRMustacheContext assertAcyclicTemplateOverride:].
- *
- * @see GRMustacheContext
- */
-@property (nonatomic, retain, readonly) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
-
-/**
  * Builds a GRMustacheInheritablePartial.
  *
  * @param partial     The partial template that is inherited

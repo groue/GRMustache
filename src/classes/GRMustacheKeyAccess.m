@@ -159,7 +159,7 @@ static Class NSManagedObjectClass;
         // Instead, we want the behavior of NSObject's implementation of valueForKey:.
         
         if ([self objectIsFoundationCollectionWhoseImplementationOfValueForKeyReturnsAnotherCollection:object]) {
-            return [self valueForKey:key inFoundationCollectionObject:object];
+            return [self valueForMustacheKey:key inFoundationCollectionObject:object];
         } else {
             return [object valueForKey:key];
         }
@@ -201,7 +201,7 @@ static Class NSManagedObjectClass;
     return NO;
 }
 
-+ (id)valueForKey:(NSString *)key inFoundationCollectionObject:(id)object
++ (id)valueForMustacheKey:(NSString *)key inFoundationCollectionObject:(id)object
 {
     // Ideally, we would use NSObject's implementation for collections, so that
     // we can access properties such as `count`, `anyObject`, etc.

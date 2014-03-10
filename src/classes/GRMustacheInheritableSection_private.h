@@ -31,9 +31,14 @@
 }
 
 /**
- * TODO
+ * Returns a new inheritable section.
  *
- * Builds a GRMustacheInheritableSection.
+ * @param identifier  The identifier of the inheritable section
+ * @param components  array of GRMustacheTemplateComponent objects
+ *
+ * @return a new GRMustacheInheritableSection.
+ *
+ * @see GRMustacheTemplateComponent
  */
 + (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
 @end

@@ -132,7 +132,15 @@
 - (NSString *)parseTemplateName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns an inheritable section identifier from a string.
+ *
+ * @param string  A string.
+ * @param empty   If there is an error parsing an identifier, upon return
+ *                contains YES if the string contains no information.
+ * @param error   If there is an error parsing an identifier, upon return
+ *                contains an NSError object that describes the problem.
+ *
+ * @return a template name, or nil if the string is not a partial name.
  */
 - (NSString *)parseInheritableSectionIdentifier:(NSString *)string empty:(BOOL *)empty error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
