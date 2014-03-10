@@ -93,6 +93,7 @@ GRMustache implementation of inheritable templates is now closer from [hogan.js]
 
     This is a breaking change, but your template will render as before if you did not rely on concatenation of inheritable sections.
 
+
 **Removed APIs**
 
 ```objc
