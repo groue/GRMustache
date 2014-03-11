@@ -197,7 +197,23 @@ NSDictionary *myCustomLibrary = @{
 };
 GRMustacheConfiguration* configuration = [GRMustacheConfiguration defaultConfiguration];
 [configuration extendBaseContextWithObject:myCustomLibrary];
+
+// myCustomLibrary is now available right away:
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+NSString *rendering = [template render...];
 ```
+
+You can also inject your custom library at the template repository level:
+
+```obc
+GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:pathToTemplates];
+[repository.configuration extendBaseContextWithObject:myCustomLibrary];
+
+// myCustomLibrary is now available for templates loaded from the repository:
+GRMustacheTemplate *template = [repository templateFrom...];
+NSString *rendering = [template render...];
+```
+
 
 See the [Configuration Guide](configuration.md) for more information.
 
