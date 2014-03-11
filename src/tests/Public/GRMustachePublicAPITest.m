@@ -59,7 +59,10 @@ static struct {
     NSError *error;
     NSData *testSuiteData = [NSData dataWithContentsOfFile:path];
     XCTAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
-    if (!testSuiteData) return;
+    if (!testSuiteData) {
+        // Allow breakpoint for failing tests
+        return;
+    }
     
     NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
     XCTAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
