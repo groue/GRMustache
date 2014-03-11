@@ -26,8 +26,6 @@
 @interface GRMustacheConfigurationTagDelimitersTest : GRMustachePublicAPITest
 @end
 
-static BOOL defaultConfigurationHasBeenTouched = NO;
-
 @implementation GRMustacheConfigurationTagDelimitersTest
 
 - (void)tearDown
@@ -37,20 +35,6 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     // Restore default configuration
     [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter = @"{{";
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"}}";
-    
-    // Help test1DefaultConfigurationHasDoubleBracesTagDelimiters test the *real* default
-    // configuration.
-    defaultConfigurationHasBeenTouched = YES;
-}
-
-// The goal is to have this test run first.
-// It looks that alphabetical order is applied: hence the digit 1 in the method name.
-- (void)test1DefaultConfigurationHasDoubleBracesTagDelimiters
-{
-    XCTAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
-    XCTAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
-    XCTAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagStartDelimiter, @"{{", @"");
-    XCTAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"}}", @"");
 }
 
 - (void)testFactoryConfigurationHasMustacheTagDelimitersRegardlessOfDefaultConfiguration

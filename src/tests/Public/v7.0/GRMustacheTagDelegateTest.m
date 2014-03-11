@@ -84,8 +84,8 @@
     NSString *rendering = [template renderObject:@{@"foo": @"value"} error:NULL];
     
     XCTAssertEqualObjects(rendering, @"---delegate---", @"");
-    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
-    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
+    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeVariable, @"");
+    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeVariable, @"");
     XCTAssertEqualObjects(preRenderedObjet, @"value", @"");
     XCTAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
@@ -109,8 +109,8 @@
     NSString *rendering = [template renderObject:nil error:NULL];
     
     XCTAssertEqualObjects(rendering, @"<>", @"");
-    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeSection, @"", @"");
-    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeSection, @"");
+    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeSection, @"");
 }
 
 - (void)testMultipleTagsDelegate
@@ -168,10 +168,10 @@
     XCTAssertEqualObjects(preRenderedObjet2, (id)nil, @"");
     XCTAssertEqualObjects(postRenderedObjet1, @"delegate", @"");
     XCTAssertEqualObjects(postRenderedObjet2, @(YES), @"");
-    XCTAssertEqual(preRenderingTagType1, GRMustacheTagTypeSection, @"", @"");
-    XCTAssertEqual(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
-    XCTAssertEqual(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
-    XCTAssertEqual(postRenderingTagType2, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqual(preRenderingTagType1, GRMustacheTagTypeSection, @"");
+    XCTAssertEqual(preRenderingTagType2, GRMustacheTagTypeVariable, @"");
+    XCTAssertEqual(postRenderingTagType1, GRMustacheTagTypeVariable, @"");
+    XCTAssertEqual(postRenderingTagType2, GRMustacheTagTypeSection, @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue

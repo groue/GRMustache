@@ -1,53 +1,46 @@
-all: lib/libGRMustache6-iOS.a lib/libGRMustache6-MacOS.a include/GRMustache.h Reference
+all: lib/libGRMustache7-iOS.a lib/libGRMustache7-MacOS.a include/GRMustache.h Reference
 
-lib/libGRMustache6-iOS.a: build/GRMustache6-iOS/Release-iphoneos/libGRMustache6-iOS.a build/GRMustache6-iOS-arm64/Release-iphoneos/libGRMustache6-iOS-arm64.a build/GRMustache6-iphonesimulator/Release-iphonesimulator/libGRMustache6-iOS.a build/GRMustache6-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache6-iOS-arm64.a
+lib/libGRMustache7-iOS.a: build/GRMustache7-iOS/Release-iphoneos/libGRMustache7-iOS.a build/GRMustache7-iphonesimulator/Release-iphonesimulator/libGRMustache7-iOS.a build/GRMustache7-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache7-iOS.a
 	mkdir -p lib
 	lipo -create \
-	  "build/GRMustache6-iphonesimulator/Release-iphonesimulator/libGRMustache6-iOS.a" \
-	  "build/GRMustache6-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache6-iOS-arm64.a" \
-	  "build/GRMustache6-iOS/Release-iphoneos/libGRMustache6-iOS.a" \
-	  "build/GRMustache6-iOS-arm64/Release-iphoneos/libGRMustache6-iOS-arm64.a" \
-	  -output "lib/libGRMustache6-iOS.a"
+	  "build/GRMustache7-iphonesimulator/Release-iphonesimulator/libGRMustache7-iOS.a" \
+	  "build/GRMustache7-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache7-iOS.a" \
+	  "build/GRMustache7-iOS/Release-iphoneos/libGRMustache7-iOS.a" \
+	  -output "lib/libGRMustache7-iOS.a"
 
-lib/libGRMustache6-MacOS.a: build/MacOS/Release/libGRMustache6-MacOS.a
+lib/libGRMustache7-MacOS.a: build/MacOS/Release/libGRMustache7-MacOS.a
 	mkdir -p lib
-	cp build/MacOS/Release/libGRMustache6-MacOS.a lib/libGRMustache6-MacOS.a
+	cp build/MacOS/Release/libGRMustache7-MacOS.a lib/libGRMustache7-MacOS.a
 
-build/GRMustache6-iOS/Release-iphoneos/libGRMustache6-iOS.a:
+build/GRMustache7-iOS/Release-iphoneos/libGRMustache7-iOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-	           -target GRMustache6-iOS \
+	           -target GRMustache7-iOS \
 	           -configuration Release \
-	           build SYMROOT=../build/GRMustache6-iOS
+	           build SYMROOT=../build/GRMustache7-iOS
 
-build/GRMustache6-iOS-arm64/Release-iphoneos/libGRMustache6-iOS-arm64.a:
+build/GRMustache7-iphonesimulator/Release-iphonesimulator/libGRMustache7-iOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-	           -target GRMustache6-iOS-arm64 \
-	           -configuration Release \
-	           build SYMROOT=../build/GRMustache6-iOS-arm64
-
-build/GRMustache6-iphonesimulator/Release-iphonesimulator/libGRMustache6-iOS.a:
-	xcodebuild -project src/GRMustache.xcodeproj \
-	           -target GRMustache6-iOS \
+	           -target GRMustache7-iOS \
 	           -configuration Release \
 	           -sdk iphonesimulator \
 	           -arch "i386" \
-	           build SYMROOT=../build/GRMustache6-iphonesimulator
+	           build SYMROOT=../build/GRMustache7-iphonesimulator
 
-build/GRMustache6-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache6-iOS-arm64.a:
+build/GRMustache7-iphonesimulator-x86_64/Release-iphonesimulator/libGRMustache7-iOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-	           -target GRMustache6-iOS-arm64 \
+	           -target GRMustache7-iOS \
 	           -configuration Release \
 	           -sdk iphonesimulator \
 	           -arch "x86_64" \
-	           build SYMROOT=../build/GRMustache6-iphonesimulator-x86_64
+	           build SYMROOT=../build/GRMustache7-iphonesimulator-x86_64
                                                                                                                                     
-build/MacOS/Release/libGRMustache6-MacOS.a:
+build/MacOS/Release/libGRMustache7-MacOS.a:
 	xcodebuild -project src/GRMustache.xcodeproj \
-	           -target GRMustache6-MacOS \
+	           -target GRMustache7-MacOS \
 	           -configuration Release \
 	           build SYMROOT=../build/MacOS
 
-include/GRMustache.h: build/MacOS/Release/libGRMustache6-MacOS.a
+include/GRMustache.h: build/MacOS/Release/libGRMustache7-MacOS.a
 	cp -R build/MacOS/Release/usr/local/include .
 
 Reference: include/GRMustache.h
