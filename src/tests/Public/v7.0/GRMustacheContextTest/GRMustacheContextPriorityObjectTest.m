@@ -23,10 +23,10 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustachePriorityContextTest : GRMustachePublicAPITest
+@interface GRMustacheContextPriorityObjectTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustachePriorityContextTest
+@implementation GRMustacheContextPriorityObjectTest
 
 - (void)testPriorityObjectCanBeAccessed
 {
