@@ -8,19 +8,21 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ### Safe Key Access
 
-This is the feature that had GRMustache bump its major version: GRMustache no longer blindly evaluates `valueForKey:` on your objects.
+GRMustache no longer blindly evaluates `valueForKey:` on your objects.
 
-The default behavior now only fetches keys that are declared as properties (with `@property`).
+The default behavior now only fetches keys that are declared as properties (with `@property`), or Core Data attributes (for managed objects).
 
 See the [Security Guide](Guides/security.md) for more information.
 
 **Upgrading from earlier version of GRMustache**
 
-You can, if you want, restore the previous behavior of the library (see the [Security Guide](Guides/security.md)).
+You can, if you want, restore the previous behavior of the library: see the [Security Guide](Guides/security.md).
 
 Also, should you provide default values for missing keys, read the updated [View Model Guide](Guides/view_model.md#default-values).
 
 **New APIs**
+
+GRMustacheContext provides methods for creating or deriving new contexts with unsafe key access.
 
 ```objc
 @interface GRMustacheContext
@@ -35,9 +37,13 @@ Also, should you provide default values for missing keys, read the updated [View
 
 Priority keys always evaluate to the same value, and prevent untrusted templates from overriding critical objects.
 
-This feature used to be documented under the name "protected contexts". It's now part of the [Security Guide](Guides/security.md#priority-keys).
+This feature used to be documented under the name "protected contexts". The "priority keys" wording is hopefully clearer. Check the [Security Guide](Guides/security.md#priority-keys).
 
 **New APIs**
+
+GRMustacheContext has methods for creating or deriving new contexts with objects providing priority keys.
+
+GRMustacheTemplate and GRMustacheConfiguration have methods for inserting priority objects into their root base context.
 
 ```objc
 @interface GRMustacheContext
@@ -55,6 +61,8 @@ This feature used to be documented under the name "protected contexts". It's now
 ```
 
 **Removed APIs**
+
+`...Protected...` methods are removed. Use their `...Priority...` counterpart instead.
 
 ```objc
 @interface GRMustacheContext
@@ -74,7 +82,7 @@ This feature used to be documented under the name "protected contexts". It's now
 
 ### View Models
 
-Previous versions of the library would let you subclass GRMustacheContext. This is no longer the case.
+Previous versions of the library would let you subclass GRMustacheContext, and declare properties with direct access to the context stack. This is no longer the case: GRMustacheContext is no longer suitable for subclassing.
 
 **Upgrading from earlier version of GRMustache**
 
@@ -88,16 +96,21 @@ GRMustache implementation of inheritable templates is now closer from [hogan.js]
 - Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
 
     This is a breaking change, but your template will render as before is you did not use any data key as an inheritable section identifier.
+
+- Your objects conforming to the GRMustacheTagDelegate and GRMustacheRendering protocols can no longer perform custom rendering of those inheritable sections.
+
+  This is a breaking change, but it is very unlikely your code did rely on this.
+
 - Inheritable sections that were overridden several times used to be rendered several times as well. This is no longer the case. Now the deeper overriding wins, and the inheritable section is rendered once.
 
-    This is a breaking change, but your template will render as before if you did not rely on concatenation of inheritable sections.
+    This is a breaking change, but your template will render as before if you did not rely on the concatenation of inheritable sections.
 
 
 **Removed APIs**
 
 ```objc
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
-    GRMustacheTagTypeOverridableSection;   // not replaced
+    GRMustacheTagTypeOverridableSection;   // constant not replaced
 }
 ```
 
@@ -118,11 +131,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 ```objc
 @interface GRMustache
-+ (GRMustacheVersion)version;   // Use libraryVersion instead
++ (GRMustacheVersion)version;   // Use libraryVersion instead.
 @end
 
 @interface GRMustacheContext
-- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;    // use hasValue:forMustacheExpression:error: instead
+- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;    // This method used to be deprecated. Use hasValue:forMustacheExpression:error: instead.
 @end
 ```
 
