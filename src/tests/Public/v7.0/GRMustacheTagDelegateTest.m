@@ -42,7 +42,7 @@
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     [template renderObject:nil error:NULL];
     
-    STAssertEquals(success, YES, @"");
+    XCTAssertEqual(success, YES, @"");
 }
 
 - (void)testMustacheTagDidRenderIsNotTriggeredByText
@@ -58,7 +58,7 @@
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     [template renderObject:nil error:NULL];
     
-    STAssertEquals(success, YES, @"");
+    XCTAssertEqual(success, YES, @"");
 }
 
 - (void)testVariableTagDelegate
@@ -83,11 +83,11 @@
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:@{@"foo": @"value"} error:NULL];
     
-    STAssertEqualObjects(rendering, @"---delegate---", @"");
-    STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEqualObjects(preRenderedObjet, @"value", @"");
-    STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
+    XCTAssertEqualObjects(rendering, @"---delegate---", @"");
+    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
+    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeVariable, @"", @"");
+    XCTAssertEqualObjects(preRenderedObjet, @"value", @"");
+    XCTAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
 - (void)testSectionTagDelegate
@@ -108,9 +108,9 @@
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:nil error:NULL];
     
-    STAssertEqualObjects(rendering, @"<>", @"");
-    STAssertEquals(preRenderingTagType, GRMustacheTagTypeSection, @"", @"");
-    STAssertEquals(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqualObjects(rendering, @"<>", @"");
+    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeSection, @"", @"");
 }
 
 - (void)testMultipleTagsDelegate
@@ -161,17 +161,17 @@
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *rendering = [template renderObject:nil error:NULL];
     
-    STAssertEqualObjects(rendering, @"<delegate>", @"");
-    STAssertEquals(templateWillInterpretCount, (NSUInteger)2, @"");
-    STAssertEquals(templateDidInterpretCount, (NSUInteger)2, @"");
-    STAssertEqualObjects(preRenderedObjet1, (id)nil, @"");
-    STAssertEqualObjects(preRenderedObjet2, (id)nil, @"");
-    STAssertEqualObjects(postRenderedObjet1, @"delegate", @"");
-    STAssertEqualObjects(postRenderedObjet2, @(YES), @"");
-    STAssertEquals(preRenderingTagType1, GRMustacheTagTypeSection, @"", @"");
-    STAssertEquals(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEquals(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
-    STAssertEquals(postRenderingTagType2, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqualObjects(rendering, @"<delegate>", @"");
+    XCTAssertEqual(templateWillInterpretCount, (NSUInteger)2, @"");
+    XCTAssertEqual(templateDidInterpretCount, (NSUInteger)2, @"");
+    XCTAssertEqualObjects(preRenderedObjet1, (id)nil, @"");
+    XCTAssertEqualObjects(preRenderedObjet2, (id)nil, @"");
+    XCTAssertEqualObjects(postRenderedObjet1, @"delegate", @"");
+    XCTAssertEqualObjects(postRenderedObjet2, @(YES), @"");
+    XCTAssertEqual(preRenderingTagType1, GRMustacheTagTypeSection, @"", @"");
+    XCTAssertEqual(preRenderingTagType2, GRMustacheTagTypeVariable, @"", @"");
+    XCTAssertEqual(postRenderingTagType1, GRMustacheTagTypeVariable, @"", @"");
+    XCTAssertEqual(postRenderingTagType2, GRMustacheTagTypeSection, @"", @"");
 }
 
 - (void)testDelegateInterpretsRenderedValue
@@ -190,9 +190,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:nil error:NULL];
         
-        STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(renderedObject, (id)nil, @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqual(renderedObject, (id)nil, @"");
     }
     
     {
@@ -209,9 +209,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
-        STAssertEqualObjects(rendering, @"foo", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(renderedObject, @"foo", @"");
+        XCTAssertEqualObjects(rendering, @"foo", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(renderedObject, @"foo", @"");
     }
     
     {
@@ -228,9 +228,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:nil error:NULL];
         
-        STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(renderedObject, (id)nil, @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqual(renderedObject, (id)nil, @"");
     }
     
     {
@@ -247,9 +247,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo"} error:NULL];
         
-        STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(renderedObject, (id)nil, @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqual(renderedObject, (id)nil, @"");
     }
     
     {
@@ -266,9 +266,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@{@"foo":@"bar"}} error:NULL];
         
-        STAssertEqualObjects(rendering, @"bar", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(renderedObject, @"bar", @"");
+        XCTAssertEqualObjects(rendering, @"bar", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(renderedObject, @"bar", @"");
     }
     
     {
@@ -289,9 +289,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"filter": filter} error:NULL];
         
-        STAssertEqualObjects(rendering, @"", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEquals(renderedObject, (id)nil, @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqual(renderedObject, (id)nil, @"");
     }
     
     {
@@ -313,9 +313,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo", @"filter":filter} error:NULL];
         
-        STAssertEqualObjects(rendering, @"FOO", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(renderedObject, @"FOO", @"");
+        XCTAssertEqualObjects(rendering, @"FOO", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(renderedObject, @"FOO", @"");
     }
     
     {
@@ -336,9 +336,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:@{@"subject":@"foo", @"filter":filter} error:NULL];
         
-        STAssertEqualObjects(rendering, @"4", @"");
-        STAssertEquals(templateWillInterpretCount, (NSUInteger)1, @"");
-        STAssertEqualObjects(renderedObject, @4, @"");
+        XCTAssertEqualObjects(rendering, @"4", @"");
+        XCTAssertEqual(templateWillInterpretCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(renderedObject, @4, @"");
     }
 }
 
@@ -357,9 +357,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{name}}"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -374,9 +374,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{#name}}"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -391,9 +391,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"{{   name\t}}"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -412,9 +412,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 1"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -429,9 +429,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 2"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -446,9 +446,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:@"line 3"];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -467,9 +467,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -485,9 +485,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -506,9 +506,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -524,9 +524,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -545,9 +545,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -563,9 +563,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -584,9 +584,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -602,9 +602,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -620,9 +620,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -641,9 +641,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -659,9 +659,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -677,9 +677,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -698,9 +698,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -716,9 +716,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
         GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -734,9 +734,9 @@
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
-        STAssertNotNil(description, @"");
+        XCTAssertNotNil(description, @"");
         NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
-        STAssertTrue(range.location != NSNotFound, @"");
+        XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
 
@@ -760,11 +760,11 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#delegate}}{{value}}{{/delegate}}" error:NULL];
     NSString *rendering = [template renderObject:@{@"delegate":delegate, @"value":@"foo"} error:NULL];
     
-    STAssertEqualObjects(rendering, @"delegate", @"");
-    STAssertEquals(preRenderingTagType, GRMustacheTagTypeVariable, @"");
-    STAssertEquals(postRenderingTagType, GRMustacheTagTypeVariable, @"");
-    STAssertEqualObjects(preRenderedObjet, @"foo", @"");
-    STAssertEqualObjects(postRenderedObjet, @"delegate", @"");
+    XCTAssertEqualObjects(rendering, @"delegate", @"");
+    XCTAssertEqual(preRenderingTagType, GRMustacheTagTypeVariable, @"");
+    XCTAssertEqual(postRenderingTagType, GRMustacheTagTypeVariable, @"");
+    XCTAssertEqualObjects(preRenderedObjet, @"foo", @"");
+    XCTAssertEqualObjects(postRenderedObjet, @"delegate", @"");
 }
 
 - (void)testTagDidRenderObjectAs
@@ -783,15 +783,15 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{value}}-" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"-&lt;&gt;-", @"");
-        STAssertEqualObjects(recordedRendering, @"&lt;&gt;", @"");
+        XCTAssertEqualObjects(rendering, @"-&lt;&gt;-", @"");
+        XCTAssertEqualObjects(recordedRendering, @"&lt;&gt;", @"");
     }
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{{value}}}-" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"-<>-", @"");
-        STAssertEqualObjects(recordedRendering, @"<>", @"");
+        XCTAssertEqualObjects(rendering, @"-<>-", @"");
+        XCTAssertEqualObjects(recordedRendering, @"<>", @"");
     }
 }
 
@@ -814,9 +814,9 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{value}}-" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertNil(rendering, @"");
-        STAssertNotNil(recordedError, @"");
-        STAssertEqualObjects(recordedError.domain, @"delegateError", @"");
+        XCTAssertNil(rendering, @"");
+        XCTAssertNotNil(recordedError, @"");
+        XCTAssertEqualObjects(recordedError.domain, @"delegateError", @"");
     }
 }
 
@@ -876,13 +876,13 @@
     id data = @{ @"delegate2": delegate2, @"delegate3": delegate3, @"value": observedObject };
     [template renderObject:data error:NULL];
     
-    STAssertEquals(willRenderIndex1, (NSUInteger)2, @"");
-    STAssertEquals(willRenderIndex2, (NSUInteger)1, @"");
-    STAssertEquals(willRenderIndex3, (NSUInteger)0, @"");
+    XCTAssertEqual(willRenderIndex1, (NSUInteger)2, @"");
+    XCTAssertEqual(willRenderIndex2, (NSUInteger)1, @"");
+    XCTAssertEqual(willRenderIndex3, (NSUInteger)0, @"");
     
-    STAssertEquals(didRenderAsIndex1, (NSUInteger)0, @"");
-    STAssertEquals(didRenderAsIndex2, (NSUInteger)1, @"");
-    STAssertEquals(didRenderAsIndex3, (NSUInteger)2, @"");
+    XCTAssertEqual(didRenderAsIndex1, (NSUInteger)0, @"");
+    XCTAssertEqual(didRenderAsIndex2, (NSUInteger)1, @"");
+    XCTAssertEqual(didRenderAsIndex3, (NSUInteger)2, @"");
 }
 
 - (void)testTagDelegatePreAndPostHooksConsistency
@@ -892,7 +892,7 @@
         return @"1";
     };
     delegate1.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
-        STAssertEqualObjects(object, @"1", @"");
+        XCTAssertEqualObjects(object, @"1", @"");
     };
 
     GRMustacheTestingDelegate *delegate2 = [[[GRMustacheTestingDelegate alloc] init] autorelease];
@@ -900,7 +900,7 @@
         return @"2";
     };
     delegate2.mustacheTagDidRenderAsBlock = ^(GRMustacheTag *tag, id object, NSString *rendering) {
-        STAssertEqualObjects(object, @"2", @"");
+        XCTAssertEqualObjects(object, @"2", @"");
     };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#d1}}{{#d2}}{{value}}{{/}}{{/}} {{#d2}}{{#d1}}{{value}}{{/}}{{/}}" error:NULL];
@@ -920,8 +920,8 @@
     id items = @{@"items": @[delegate1, delegate2] };
     [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
     
-    STAssertTrue(delegate1HasBeenInvoked, @"");
-    STAssertTrue(delegate2HasBeenInvoked, @"");
+    XCTAssertTrue(delegate1HasBeenInvoked, @"");
+    XCTAssertTrue(delegate2HasBeenInvoked, @"");
 }
 
 - (void)testTagDelegateCanProcessRenderingObjects
@@ -940,7 +940,7 @@
         }];
         id data = @{ @"object": object, @"tagDelegate": tagDelegate };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;YOU", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;YOU", @"");
     }
     
     {
@@ -950,7 +950,7 @@
         }];
         id data = @{ @"object": object, @"tagDelegate": tagDelegate };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# tagDelegate }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&YOU", @"");
+        XCTAssertEqualObjects(rendering, @"&YOU", @"");
     }
 }
 

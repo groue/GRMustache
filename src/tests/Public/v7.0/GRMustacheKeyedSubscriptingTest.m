@@ -76,8 +76,8 @@
     NSString *value = @"value";
     [object setObject:value forKeyedSubscript:key];
     
-    STAssertEqualObjects([object objectForKeyedSubscript:key], value, nil);
-    STAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), value, nil);
+    XCTAssertEqualObjects([object objectForKeyedSubscript:key], value);
+    XCTAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), value);
 }
 
 - (void)testKeyedSubscriptingOverridesValueForKey
@@ -87,8 +87,8 @@
     NSString *value = @"value";
     
     // Empty rendering for key `foo` despite [object valueForKey:@"foo"] is not empty
-    STAssertEqualObjects([object valueForKey:key], value, nil);
-    STAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), @"", nil);
+    XCTAssertEqualObjects([object valueForKey:key], value);
+    XCTAssertEqualObjects(([GRMustacheTemplate renderObject:object fromString:[NSString stringWithFormat:@"{{%@}}", key] error:NULL]), @"");
 }
 
 @end

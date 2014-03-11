@@ -36,22 +36,22 @@
     {
         // '.' is an expression, not a key
         id value = [context valueForMustacheKey:@"."];
-        STAssertNil(value, @"");
+        XCTAssertNil(value, @"");
     }
     {
         // 'name' is a key
         id value = [context valueForMustacheKey:@"name"];
-        STAssertEqualObjects(value, @"name1", @"");
+        XCTAssertEqualObjects(value, @"name1", @"");
     }
     {
         // 'a.name' is an expression, not a key
         id value = [context valueForMustacheKey:@"a.name"];
-        STAssertNil(value, @"");
+        XCTAssertNil(value, @"");
     }
     {
         // 'uppercase' is a key
         id value = [context valueForMustacheKey:@"uppercase"];
-        STAssertTrue([value conformsToProtocol:@protocol(GRMustacheFilter)], @"");
+        XCTAssertTrue([value conformsToProtocol:@protocol(GRMustacheFilter)], @"");
     }
 }
 

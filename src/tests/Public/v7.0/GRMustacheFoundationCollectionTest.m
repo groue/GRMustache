@@ -35,25 +35,25 @@
     {
         // Content of NSArray should be iterated
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSArray should not be iterated via NSArray's implementation of valueForKey:
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSArray count] should be accessible (test for method returning a scalar)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"1", @"");
+        XCTAssertEqualObjects(rendering, @"1", @"");
     }
     
     {
         // [NSArray lastObject] should be accessible (test for method returning an object)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.lastObject.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }
 
@@ -64,25 +64,25 @@
     {
         // Content of NSSet should be iterated
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSSet should not be iterated via NSSet's implementation of valueForKey:
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSSet count] should be accessible (test for method returning a scalar)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"1", @"");
+        XCTAssertEqualObjects(rendering, @"1", @"");
     }
     
     {
         // [NSSet anyObject] should be accessible (test for method returning an object)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.anyObject.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }
 
@@ -93,25 +93,25 @@
     {
         // Content of NSOrderedSet should be iterated
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection}}{{key}}{{/collection}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
     
     {
         // Content of NSOrderedSet should not be iterated via NSOrderedSet's implementation of valueForKey:
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#collection.key}}{{.}}{{/collection.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
     }
     
     {
         // [NSOrderedSet count] should be accessible (test for method returning a scalar)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.count}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"1", @"");
+        XCTAssertEqualObjects(rendering, @"1", @"");
     }
     
     {
         // [NSOrderedSet firstObject] should be accessible (test for method returning an object)
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.firstObject.key}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"value", @"");
+        XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }
 

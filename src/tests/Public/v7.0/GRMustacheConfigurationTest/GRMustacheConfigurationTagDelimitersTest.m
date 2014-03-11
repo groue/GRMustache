@@ -47,10 +47,10 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
 // It looks that alphabetical order is applied: hence the digit 1 in the method name.
 - (void)test1DefaultConfigurationHasDoubleBracesTagDelimiters
 {
-    STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
-    STAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
-    STAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagStartDelimiter, @"{{", @"");
-    STAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"}}", @"");
+    XCTAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
+    XCTAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
+    XCTAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagStartDelimiter, @"{{", @"");
+    XCTAssertEqualObjects([GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"}}", @"");
 }
 
 - (void)testFactoryConfigurationHasMustacheTagDelimitersRegardlessOfDefaultConfiguration
@@ -58,9 +58,9 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter = @"<%";
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"%>";
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    STAssertNotNil(configuration, @"");
-    STAssertEqualObjects(configuration.tagStartDelimiter, @"{{", @"");
-    STAssertEqualObjects(configuration.tagEndDelimiter, @"}}", @"");
+    XCTAssertNotNil(configuration, @"");
+    XCTAssertEqualObjects(configuration.tagStartDelimiter, @"{{", @"");
+    XCTAssertEqualObjects(configuration.tagEndDelimiter, @"}}", @"");
 }
 
 - (void)testDefaultConfigurationMustacheTagDelimiters
@@ -69,7 +69,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"%>";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<%subject%>" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-    STAssertEqualObjects(rendering, @"---", @"");
+    XCTAssertEqualObjects(rendering, @"---", @"");
 }
 
 - (void)testSetDelimitersTagOverridesDefaultConfigurationDelimiters
@@ -78,7 +78,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"%>";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<%=[[ ]]=%>[[subject]]" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-    STAssertEqualObjects(rendering, @"---", @"");
+    XCTAssertEqualObjects(rendering, @"---", @"");
 }
 
 - (void)testDefaultRepositoryConfigurationHasDefaultConfigurationTagDelimiters
@@ -86,8 +86,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter = @"<%";
     [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter = @"%>";
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-    STAssertEqualObjects(repo.configuration.tagStartDelimiter, [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter, @"");
-    STAssertEqualObjects(repo.configuration.tagEndDelimiter, [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"");
+    XCTAssertEqualObjects(repo.configuration.tagStartDelimiter, [GRMustacheConfiguration defaultConfiguration].tagStartDelimiter, @"");
+    XCTAssertEqualObjects(repo.configuration.tagEndDelimiter, [GRMustacheConfiguration defaultConfiguration].tagEndDelimiter, @"");
 }
 
 - (void)testRepositoryConfigurationTagDelimiters
@@ -103,7 +103,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"<%subject%>" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
     {
         // Setting configuration property
@@ -113,7 +113,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"<%subject%>" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
 }
 
@@ -133,7 +133,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"[[subject]]" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
     {
         // Setting configuration property
@@ -146,7 +146,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"[[subject]]" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
 }
 
@@ -163,7 +163,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"<%=[[ ]]=%>[[subject]]" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
     {
         // Setting configuration property
@@ -173,19 +173,19 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"<%=[[ ]]=%>[[subject]]" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"---"} error:NULL];
-        STAssertEqualObjects(rendering, @"---", @"");
+        XCTAssertEqualObjects(rendering, @"---", @"");
     }
 }
 
 - (void)testRepositoryConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-    STAssertNoThrow([repo.configuration setTagStartDelimiter:@"<%"], @"");
-    STAssertNoThrow([repo.configuration setTagStartDelimiter:@"{{"], @"");
-    STAssertNoThrow([repo.configuration setTagStartDelimiter:@"[["], @"");
-    STAssertNoThrow([repo.configuration setTagEndDelimiter:@"%>"], @"");
-    STAssertNoThrow([repo.configuration setTagEndDelimiter:@"}}"], @"");
-    STAssertNoThrow([repo.configuration setTagEndDelimiter:@"]]"], @"");
+    XCTAssertNoThrow([repo.configuration setTagStartDelimiter:@"<%"], @"");
+    XCTAssertNoThrow([repo.configuration setTagStartDelimiter:@"{{"], @"");
+    XCTAssertNoThrow([repo.configuration setTagStartDelimiter:@"[["], @"");
+    XCTAssertNoThrow([repo.configuration setTagEndDelimiter:@"%>"], @"");
+    XCTAssertNoThrow([repo.configuration setTagEndDelimiter:@"}}"], @"");
+    XCTAssertNoThrow([repo.configuration setTagEndDelimiter:@"]]"], @"");
 }
 
 - (void)testDefaultConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
@@ -193,37 +193,37 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
     
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"<%"], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"{{"], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"[["], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"%>"], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"}}"], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"]]"], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"<%"], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"{{"], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagStartDelimiter:@"[["], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"%>"], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"}}"], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setTagEndDelimiter:@"]]"], @"");
 }
 
 - (void)testRepositoryConfigurationCanNotBeMutatedAfterATemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
-    STAssertThrows([repo.configuration setTagStartDelimiter:@"<%"], @"");
-    STAssertThrows([repo.configuration setTagStartDelimiter:@"{{"], @"");
-    STAssertThrows([repo.configuration setTagEndDelimiter:@"%>"], @"");
-    STAssertThrows([repo.configuration setTagEndDelimiter:@"}}"], @"");
-    STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
+    XCTAssertThrows([repo.configuration setTagStartDelimiter:@"<%"], @"");
+    XCTAssertThrows([repo.configuration setTagStartDelimiter:@"{{"], @"");
+    XCTAssertThrows([repo.configuration setTagEndDelimiter:@"%>"], @"");
+    XCTAssertThrows([repo.configuration setTagEndDelimiter:@"}}"], @"");
+    XCTAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
 - (void)testConfigurationTagDelimitersCanNotBeSetToNil
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    STAssertThrows([configuration setTagStartDelimiter:nil], @"");
-    STAssertThrows([configuration setTagEndDelimiter:nil], @"");
+    XCTAssertThrows([configuration setTagStartDelimiter:nil], @"");
+    XCTAssertThrows([configuration setTagEndDelimiter:nil], @"");
 }
 
 - (void)testConfigurationTagDelimitersCanNotBeSetToEmptyString
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    STAssertThrows([configuration setTagStartDelimiter:@""], @"");
-    STAssertThrows([configuration setTagEndDelimiter:@""], @"");
+    XCTAssertThrows([configuration setTagStartDelimiter:@""], @"");
+    XCTAssertThrows([configuration setTagEndDelimiter:@""], @"");
 }
 
 @end

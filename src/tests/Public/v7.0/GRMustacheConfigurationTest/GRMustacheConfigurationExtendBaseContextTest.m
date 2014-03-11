@@ -39,11 +39,11 @@
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"Arthur", @"");
+        XCTAssertEqualObjects(rendering, @"Arthur", @"");
     }
     {
         NSString *rendering = [template renderObject:@{ @"name": @"Bobby" } error:NULL];
-        STAssertEqualObjects(rendering, @"Bobby", @"");
+        XCTAssertEqualObjects(rendering, @"Bobby", @"");
     }
 }
 
@@ -57,11 +57,11 @@
     GRMustacheTemplate *template = [repository templateFromString:@"{{precious}}" error:NULL];
     {
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"Gold", @"");
+        XCTAssertEqualObjects(rendering, @"Gold", @"");
     }
     {
         NSString *rendering = [template renderObject:@{ @"precious": @"Lead" } error:NULL];
-        STAssertEqualObjects(rendering, @"Gold", @"");
+        XCTAssertEqualObjects(rendering, @"Gold", @"");
     }
 }
 
@@ -78,7 +78,7 @@
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"delegate", @"");
+        XCTAssertEqualObjects(rendering, @"delegate", @"");
     }
 }
 

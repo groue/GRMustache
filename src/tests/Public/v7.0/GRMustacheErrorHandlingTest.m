@@ -38,7 +38,7 @@
     GRMustacheTemplate *template = [repository templateNamed:@"list" error:NULL];
     NSError *error;
     [template renderObject:@{ @"people": @[ @{ @"name": @"updog" } ] }  error:&error];
-    STAssertNoThrow([error code], @"EXC_BAD_ACCESS message sent to deallocated instance");
+    XCTAssertNoThrow([error code], @"EXC_BAD_ACCESS message sent to deallocated instance");
 }
 
 @end

@@ -59,7 +59,7 @@
     
     NSString *templateString = @"<{{name}}> <{{prefix(name)}}> <{{uppercase(name)}}> <{{prefix(uppercase(name))}}> <{{uppercase(prefix(name))}}>";
     NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>", nil);
+    XCTAssertEqualObjects(rendering, @"<Name> <prefixName> <NAME> <prefixNAME> <PREFIXNAME>");
 }
 
 - (void)testScopedValueAreExtractedOutOfAFilterExpression
@@ -78,7 +78,7 @@
             }],
         };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"<objectName> <objectName>", nil);
+        XCTAssertEqualObjects(rendering, @"<objectName> <objectName>");
     }
     
     {
@@ -92,7 +92,7 @@
             }],
         };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"<filterName> <filterName>", nil);
+        XCTAssertEqualObjects(rendering, @"<filterName> <filterName>");
     }
     
     {
@@ -106,7 +106,7 @@
             }],
         };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"<> <rootName>", nil);
+        XCTAssertEqualObjects(rendering, @"<> <rootName>");
     }
 }
 
@@ -114,24 +114,24 @@
 {
     NSString *templateString = @"{{#a(b)}}{{/ \t\na \t\n( \t\nb \t\n) \t\n}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    STAssertNotNil(template, nil);
+    XCTAssertNotNil(template);
 }
 
 - (void)testFilteredSectionClosingTagCanBeBlank
 {
     NSString *templateString = @"<{{#uppercase(.)}}{{.}}{{/}}> <{{#uppercase(.)}}{{.}}{{/ }}>";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    STAssertNotNil(template, nil);
+    XCTAssertNotNil(template);
     NSString *rendering = [template renderObject:@"foo" error:NULL];
-    STAssertEqualObjects(rendering, @"<FOO> <FOO>", nil);
+    XCTAssertEqualObjects(rendering, @"<FOO> <FOO>");
 }
 
 - (void)testFilteredSectionClosingTagCanNotBeInvalid
 {
     NSString *templateString = @"<{{#uppercase(.)}}{{.}}{{/uppercase(.}}>";
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:templateString error:&error], nil);
-    STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);
+    XCTAssertNil([GRMustacheTemplate templateFromString:templateString error:&error]);
+    XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);
 }
 
 - (void)testFilterArgumentsDoNotEnterSectionContextStack
@@ -147,7 +147,7 @@
     };
     NSString *templateString = @"{{#filter(filtered)}}<{{test}} instead of {{#filtered}}{{test}}{{/filtered}}>{{/filter(filtered)}}";
     NSString *rendering = [[GRMustacheTemplate templateFromString:templateString error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"<success instead of failure>", nil);
+    XCTAssertEqualObjects(rendering, @"<success instead of failure>");
 }
 
 - (void)testFilterNameSpace
@@ -161,7 +161,7 @@
         },
     };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{ math.double(x) }}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"1", nil);
+    XCTAssertEqualObjects(rendering, @"1");
 }
 
 - (void)testFiltersCanReturnFilters
@@ -176,7 +176,7 @@
         }],
     };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(prefix)(value)}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"prefixvalue", @"");
+    XCTAssertEqualObjects(rendering, @"prefixvalue", @"");
 }
 
 - (void)testImplicitIteratorCanReturnFilter
@@ -184,12 +184,12 @@
     {
         id data = [GRMustacheFilter filterWithBlock:^id(id value) { return @"filter"; }];
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{.(a)}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"filter", @"");
+        XCTAssertEqualObjects(rendering, @"filter", @"");
     }
     {
         id data = @{ @"f": [GRMustacheFilter filterWithBlock:^id(id value) { return @"filter"; }] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{.f(a)}}" error:NULL] renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"filter", @"");
+        XCTAssertEqualObjects(rendering, @"filter", @"");
     }
 }
 
@@ -206,7 +206,7 @@
         @"foo": @{ @"a":@"a", @"b":@"b", @"c":@"c" },
     };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(foo,.)}} {{f(.,foo)}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"32 23", @"");
+    XCTAssertEqualObjects(rendering, @"32 23", @"");
 }
 
 - (void)testMissingFilterError
@@ -220,39 +220,39 @@
     
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{missing(missing)}}>" error:NULL];
-        STAssertNotNil(template, @"");
+        XCTAssertNotNil(template, @"");
         NSError *error;
         NSString *rendering = [template renderObject:data error:&error];
-        STAssertNil(rendering, @"WTF");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+        XCTAssertNil(rendering, @"WTF");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
     }
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{missing(name)}}>" error:NULL];
-        STAssertNotNil(template, @"");
+        XCTAssertNotNil(template, @"");
         NSError *error;
         NSString *rendering = [template renderObject:data error:&error];
-        STAssertNil(rendering, @"WTF");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+        XCTAssertNil(rendering, @"WTF");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
     }
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{replace(missing(name))}}>" error:NULL];
-        STAssertNotNil(template, @"");
+        XCTAssertNotNil(template, @"");
         NSError *error;
         NSString *rendering = [template renderObject:data error:&error];
-        STAssertNil(rendering, @"WTF");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+        XCTAssertNil(rendering, @"WTF");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
     }
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{missing(replace(name))}}>" error:NULL];
-        STAssertNotNil(template, @"");
+        XCTAssertNotNil(template, @"");
         NSError *error;
         NSString *rendering = [template renderObject:data error:&error];
-        STAssertNil(rendering, @"WTF");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+        XCTAssertNil(rendering, @"WTF");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
     }
 }
 
@@ -264,12 +264,12 @@
                 };
     
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{filter(name)}}>" error:NULL];
-    STAssertNotNil(template, @"");
+    XCTAssertNotNil(template, @"");
     NSError *error;
     NSString *rendering = [template renderObject:data error:&error];
-    STAssertNil(rendering, @"WTF");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+    XCTAssertNil(rendering, @"WTF");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
 }
 
 @end

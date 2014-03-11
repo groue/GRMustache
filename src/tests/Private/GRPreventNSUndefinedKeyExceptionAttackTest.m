@@ -70,10 +70,10 @@
         [template renderObject:object error:NULL];
         
         // make sure object did not raise any exception
-        STAssertEquals(NO, GRMustacheKeyAccessDidCatchNSUndefinedKeyException, @"");
+        XCTAssertFalse(GRMustacheKeyAccessDidCatchNSUndefinedKeyException, @"");
         
         // make sure object raises exception again
-        STAssertThrowsSpecificNamed([object valueForKey:@"foo"], NSException, NSUndefinedKeyException, nil);
+        XCTAssertThrowsSpecificNamed([object valueForKey:@"foo"], NSException, NSUndefinedKeyException, @"");
     }
     
     {
@@ -82,16 +82,16 @@
         [template renderObject:managedObject error:NULL];
         
         // make sure object did not raise any exception
-        STAssertEquals(NO, GRMustacheKeyAccessDidCatchNSUndefinedKeyException, @"");
+        XCTAssertFalse(GRMustacheKeyAccessDidCatchNSUndefinedKeyException, @"");
         
         // make sure object raises exception again
-        STAssertThrowsSpecificNamed([managedObject valueForKey:@"foo"], NSException, NSUndefinedKeyException, nil);
+        XCTAssertThrowsSpecificNamed([managedObject valueForKey:@"foo"], NSException, NSUndefinedKeyException, @"");
     }
     
     // Regression test: until 1.7.2, NSUndefinedKeyException prevention would fail with nil object
     
-    STAssertEqualObjects([template renderObject:nil error:NULL], @"foo:", nil);
-    STAssertEqualObjects([template renderObject:nil error:NULL], @"foo:", nil);
+    XCTAssertEqualObjects([template renderObject:nil error:NULL], @"foo:");
+    XCTAssertEqualObjects([template renderObject:nil error:NULL], @"foo:");
 }
 
 - (void)testNSUndefinedKeyExceptionPreventionInThread

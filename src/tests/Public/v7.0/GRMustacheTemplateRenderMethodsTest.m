@@ -74,14 +74,14 @@
     
     NSData *data = [rendering dataUsingEncoding:NSUTF8StringEncoding];
     id object = [self JSONObjectWithData:data error:&error];
-    STAssertNotNil(object, @"%@", error);
+    XCTAssertNotNil(object, @"%@", error);
     return [object valueForKey:key];
 }
 
 - (BOOL)valueForBOOLPropertyInRendering:(NSString *)rendering
 {
     id value = [self valueForKey:@"BOOLProperty" inRendering:rendering];
-    STAssertNotNil(value, @"nil BOOLProperty");
+    XCTAssertNotNil(value, @"nil BOOLProperty");
     return [(NSNumber *)value boolValue];
 }
 
@@ -99,17 +99,17 @@
 - (void)testGRMustacheTemplateRenderObjectFromNilString
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate renderObject:nil fromString:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate renderObject:nil fromString:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplateRenderObjectFromNilResource
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate renderObject:nil fromResource:nil bundle:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate renderObject:nil fromResource:nil bundle:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplate_renderObject
@@ -118,7 +118,7 @@
     GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
-    STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
 }
 
 - (void)testGRMustacheTemplate_renderObjectsFromArray
@@ -131,12 +131,12 @@
     
     {
         NSString *rendering = [template renderObjectsFromArray:@[context, extraContext] error:NULL];
-        STAssertEqualObjects(@"bar", [self valueForStringPropertyInRendering:rendering], nil);
-        STAssertEquals(YES, [self valueForBOOLPropertyInRendering:rendering], nil);
+        XCTAssertEqualObjects(@"bar", [self valueForStringPropertyInRendering:rendering]);
+        XCTAssertTrue([self valueForBOOLPropertyInRendering:rendering]);
     }
     {
         NSString *rendering = [template renderObjectsFromArray:@[extraContext, context] error:NULL];
-        STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
+        XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
     }
 }
 
@@ -144,8 +144,8 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(@"", [self valueForStringPropertyInRendering:rendering], nil);
-    STAssertEquals(NO, [self valueForBOOLPropertyInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"", [self valueForStringPropertyInRendering:rendering]);
+    XCTAssertFalse([self valueForBOOLPropertyInRendering:rendering]);
 }
 
 @end

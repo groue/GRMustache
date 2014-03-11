@@ -105,18 +105,18 @@
     GRMustacheContextKeyAccess_ClassWithObjectForKeyedSubscript *object = [[[GRMustacheContextKeyAccess_ClassWithObjectForKeyedSubscript alloc] init] autorelease];
     
     // test setup
-    STAssertTrue([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
-    STAssertTrue([[[object class] safeMustacheKeys] containsObject:@"foo"], @"");
-    STAssertTrue([[[object class] safeMustacheKeys] containsObject:@"bar"], @"");
-    STAssertEqualObjects([object objectForKeyedSubscript:@"foo"], @"foo", @"");
-    STAssertEqualObjects([object objectForKeyedSubscript:@"bar"], @"bar", @"");
-    STAssertEqualObjects([object valueForKey:@"foo"], @"FOO", @"");
-    STAssertEqualObjects([object valueForKey:@"bar"], @"BAR", @"");
+    XCTAssertTrue([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
+    XCTAssertTrue([[[object class] safeMustacheKeys] containsObject:@"foo"], @"");
+    XCTAssertTrue([[[object class] safeMustacheKeys] containsObject:@"bar"], @"");
+    XCTAssertEqualObjects([object objectForKeyedSubscript:@"foo"], @"foo", @"");
+    XCTAssertEqualObjects([object objectForKeyedSubscript:@"bar"], @"bar", @"");
+    XCTAssertEqualObjects([object valueForKey:@"foo"], @"FOO", @"");
+    XCTAssertEqualObjects([object valueForKey:@"bar"], @"BAR", @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-    STAssertEqualObjects([context valueForMustacheKey:@"foo"], @"foo", @"");
-    STAssertEqualObjects([context valueForMustacheKey:@"bar"], @"bar", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"foo"], @"foo", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"bar"], @"bar", @"");
 }
 
 - (void)testPropertiesAreAllowed
@@ -124,14 +124,14 @@
     GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
-    STAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects(object.property, @"property", @"");
-    STAssertEqualObjects([object valueForKey:@"property"], @"property", @"");
+    XCTAssertFalse([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
+    XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects(object.property, @"property", @"");
+    XCTAssertEqualObjects([object valueForKey:@"property"], @"property", @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-    STAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
 }
 
 - (void)testMethodAreDisallowed
@@ -139,14 +139,14 @@
     GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
-    STAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects([object method], @"method", @"");
-    STAssertEqualObjects([object valueForKey:@"method"], @"method", @"");
+    XCTAssertFalse([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
+    XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects([object method], @"method", @"");
+    XCTAssertEqualObjects([object valueForKey:@"method"], @"method", @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-    STAssertNil([context valueForMustacheKey:@"method"], @"");
+    XCTAssertNil([context valueForMustacheKey:@"method"], @"");
 }
 
 - (void)testCustomSafeMustacheKeys
@@ -154,19 +154,19 @@
     GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys *object = [[[GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys alloc] init] autorelease];
     
     // test setup
-    STAssertTrue([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
-    STAssertTrue([[[object class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
-    STAssertFalse([[[object class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
-    STAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects(object.disallowedProperty, @"disallowedProperty", @"");
-    STAssertEqualObjects([object allowedMethod], @"allowedMethod", @"");
-    STAssertEqualObjects([object valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
-    STAssertEqualObjects([object valueForKey:@"allowedMethod"], @"allowedMethod", @"");
+    XCTAssertTrue([[object class] respondsToSelector:@selector(safeMustacheKeys)], @"");
+    XCTAssertTrue([[[object class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
+    XCTAssertFalse([[[object class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
+    XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects(object.disallowedProperty, @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object allowedMethod], @"allowedMethod", @"");
+    XCTAssertEqualObjects([object valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object valueForKey:@"allowedMethod"], @"allowedMethod", @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-    STAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
-    STAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
+    XCTAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
 }
 
 - (void)testUnsafeKeyAccess
@@ -174,19 +174,19 @@
     GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys *object = [[[GRMustacheContextKeyAccess_ClassWithCustomAllowedKeys alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects(object.disallowedProperty, @"disallowedProperty", @"");
-    STAssertEqualObjects([object allowedMethod], @"allowedMethod", @"");
-    STAssertEqualObjects([object valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
-    STAssertEqualObjects([object valueForKey:@"allowedMethod"], @"allowedMethod", @"");
-    STAssertTrue([[[object class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
-    STAssertFalse([[[object class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
+    XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects(object.disallowedProperty, @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object allowedMethod], @"allowedMethod", @"");
+    XCTAssertEqualObjects([object valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object valueForKey:@"allowedMethod"], @"allowedMethod", @"");
+    XCTAssertTrue([[[object class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
+    XCTAssertFalse([[[object class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
     
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
     context = [context contextWithUnsafeKeyAccess];
-    STAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
-    STAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
 }
 
 - (void)testUnsafeKeyAccessInDerivedContexts
@@ -195,18 +195,18 @@
     GRMustacheContextKeyAccess_ClassWithProperties *object2 = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
     
     // test setup
-    STAssertFalse([object1 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects(object1.disallowedProperty, @"disallowedProperty", @"");
-    STAssertEqualObjects([object1 allowedMethod], @"allowedMethod", @"");
-    STAssertEqualObjects([object1 valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
-    STAssertEqualObjects([object1 valueForKey:@"allowedMethod"], @"allowedMethod", @"");
-    STAssertTrue([[[object1 class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
-    STAssertFalse([[[object1 class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
+    XCTAssertFalse([object1 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects(object1.disallowedProperty, @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object1 allowedMethod], @"allowedMethod", @"");
+    XCTAssertEqualObjects([object1 valueForKey:@"disallowedProperty"], @"disallowedProperty", @"");
+    XCTAssertEqualObjects([object1 valueForKey:@"allowedMethod"], @"allowedMethod", @"");
+    XCTAssertTrue([[[object1 class] safeMustacheKeys] containsObject:@"allowedMethod"], @"");
+    XCTAssertFalse([[[object1 class] safeMustacheKeys] containsObject:@"disallowedProperty"], @"");
     
-    STAssertFalse([[object2 class] respondsToSelector:@selector(safeMustacheKeys)], @"");
-    STAssertFalse([object2 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    STAssertEqualObjects(object2.property, @"property", @"");
-    STAssertEqualObjects([object2 valueForKey:@"property"], @"property", @"");
+    XCTAssertFalse([[object2 class] respondsToSelector:@selector(safeMustacheKeys)], @"");
+    XCTAssertFalse([object2 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
+    XCTAssertEqualObjects(object2.property, @"property", @"");
+    XCTAssertEqualObjects([object2 valueForKey:@"property"], @"property", @"");
     
     // test context
     {
@@ -214,28 +214,28 @@
         
         GRMustacheContext *context = [GRMustacheContext contextWithUnsafeKeyAccess];
         context = [context contextByAddingObject:object1];
-        STAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
-        STAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
+        XCTAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
+        XCTAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
     }
     {
         // Context derived from safe context is safe.
         
         GRMustacheContext *context = [GRMustacheContext context];
         context = [context contextByAddingObject:object1];
-        STAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
-        STAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
+        XCTAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
+        XCTAssertEqualObjects([context valueForMustacheKey:@"allowedMethod"], @"allowedMethod", @"");
     }
     {
         // Derived unsafe context is fully unsafe
         
         GRMustacheContext *context = [GRMustacheContext contextWithObject:object1];
-        STAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
+        XCTAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
         context = [context contextByAddingObject:object2];
-        STAssertNil([context valueForMustacheKey:@"method"], @"");
-        STAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
+        XCTAssertNil([context valueForMustacheKey:@"method"], @"");
+        XCTAssertNil([context valueForMustacheKey:@"disallowedProperty"], @"");
         context = [context contextWithUnsafeKeyAccess];
-        STAssertEqualObjects([context valueForMustacheKey:@"method"], @"method", @"");
-        STAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
+        XCTAssertEqualObjects([context valueForMustacheKey:@"method"], @"method", @"");
+        XCTAssertEqualObjects([context valueForMustacheKey:@"disallowedProperty"], @"disallowedProperty", @"");
     }
 }
 

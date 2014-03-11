@@ -42,22 +42,22 @@
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
     
     template = [repository templateNamed:@"not found" error:&error];
-    STAssertNil(template, @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil(template, @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
     template = [repository templateFromString:@"{{>not_found}}" error:&error];
-    STAssertNil(template, @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil(template, @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
     template = [repository templateNamed:@"a" error:&error];
     result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"ABC", @"");
+    XCTAssertEqualObjects(result, @"ABC", @"");
     
     template = [repository templateFromString:@"{{>a}}" error:&error];
     result = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"ABC", @"");
+    XCTAssertEqualObjects(result, @"ABC", @"");
 }
 
 - (void)testTemplateRepositoryWithDictionaryIgnoresDictionaryMutation
@@ -72,15 +72,15 @@
     {
         GRMustacheTemplate *template = [repository templateNamed:@"a" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"foo", @"");
+        XCTAssertEqualObjects(rendering, @"foo", @"");
     }
     
     {
         NSError *error;
         GRMustacheTemplate *template = [repository templateNamed:@"b" error:&error];
-        STAssertNil(template, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     }
 }
 

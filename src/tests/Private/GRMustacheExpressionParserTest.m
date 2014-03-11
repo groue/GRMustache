@@ -51,7 +51,7 @@
 
     GRMustacheIdentifierExpression *expression = [GRMustacheIdentifierExpression expressionWithIdentifier:@"name"];
     
-    STAssertEqualObjects(expression, parsedExpression, nil);
+    XCTAssertEqualObjects(expression, parsedExpression);
 }
 
 - (void)testParserParsesEscapedVariableTokenWithCompoundKey
@@ -60,7 +60,7 @@
     
     GRMustacheScopedExpression *expression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"foo"] scopeIdentifier:@"bar"];
     
-    STAssertEqualObjects(expression, parsedExpression, nil);
+    XCTAssertEqualObjects(expression, parsedExpression);
 }
 
 - (void)testParserParsesEscapedVariableTokenWithFilter
@@ -71,7 +71,7 @@
     GRMustacheScopedExpression *filterExpression = [GRMustacheScopedExpression expressionWithBaseExpression:[GRMustacheIdentifierExpression expressionWithIdentifier:@"toto"] scopeIdentifier:@"titi"];
     GRMustacheFilteredExpression *expression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:argumentExpression curry:NO];
     
-    STAssertEqualObjects(expression, parsedExpression, nil);
+    XCTAssertEqualObjects(expression, parsedExpression);
 }
 
 - (void)testParserParsesEscapedVariableTokenWithComplexExpression
@@ -91,7 +91,7 @@
     GRMustacheExpression *expression_abcdefghi = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefgh scopeIdentifier:@"i"];
     GRMustacheExpression *expression_abcdefghij = [GRMustacheScopedExpression expressionWithBaseExpression:expression_abcdefghi scopeIdentifier:@"j"];
     
-    STAssertEqualObjects(expression_abcdefghij, parsedExpression, nil);
+    XCTAssertEqualObjects(expression_abcdefghij, parsedExpression);
 }
 
 @end

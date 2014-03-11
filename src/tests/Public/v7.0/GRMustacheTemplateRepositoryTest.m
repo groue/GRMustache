@@ -38,9 +38,9 @@
     
     GRMustacheTemplate *template2 = [repository templateNamed:@"name" error:NULL];
     
-    STAssertTrue(template1 != template2, @"");
-    STAssertEqualObjects([template1 renderObject:nil error:NULL], @"value: foo", nil);
-    STAssertEqualObjects([template2 renderObject:nil error:NULL], @"value: ", nil);
+    XCTAssertTrue(template1 != template2, @"");
+    XCTAssertEqualObjects([template1 renderObject:nil error:NULL], @"value: foo");
+    XCTAssertEqualObjects([template2 renderObject:nil error:NULL], @"value: ");
 }
 
 @end

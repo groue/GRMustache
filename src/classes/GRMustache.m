@@ -515,7 +515,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             // Inverted section render if and only if self is empty.
             
             BOOL empty = YES;
-            for (id item in self) {
+            for (id _ __attribute__((unused)) in self) {
                 empty = NO;
                 break;
             }

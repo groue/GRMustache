@@ -71,25 +71,25 @@
     GRMustacheTemplateRepositoryTestDataSource *dataSource = [[[GRMustacheTemplateRepositoryTestDataSource alloc] init] autorelease];
     repository.dataSource = dataSource;
     
-    STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)0, @"");
-    STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)0, @"");
+    XCTAssertEqual(dataSource.templateIDForNameCount, (NSUInteger)0, @"");
+    XCTAssertEqual(dataSource.templateStringForTemplateIDCount, (NSUInteger)0, @"");
     
     result = [[repository templateNamed:@"foo" error:NULL] renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"foo", @"");
-    STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)1, @"");
-    STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
+    XCTAssertEqualObjects(result, @"foo", @"");
+    XCTAssertEqual(dataSource.templateIDForNameCount, (NSUInteger)1, @"");
+    XCTAssertEqual(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
     
     result = [[repository templateFromString:@"{{>foo}}" error:NULL] renderObject:nil error:NULL];
-    STAssertEqualObjects(result, @"foo", @"");
-    STAssertEquals(dataSource.templateIDForNameCount, (NSUInteger)2, @"");
-    STAssertEquals(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
+    XCTAssertEqualObjects(result, @"foo", @"");
+    XCTAssertEqual(dataSource.templateIDForNameCount, (NSUInteger)2, @"");
+    XCTAssertEqual(dataSource.templateStringForTemplateIDCount, (NSUInteger)1, @"");
     
     [repository templateFromString:@"{{> not_found }}" error:&error];
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
     
     [repository templateFromString:@"{{> error }}" error:&error];
-    STAssertEqualObjects(error.domain, @"GRMustacheTemplateRepositoryTestDataSource", @"");
+    XCTAssertEqualObjects(error.domain, @"GRMustacheTemplateRepositoryTestDataSource", @"");
 }
 
 @end

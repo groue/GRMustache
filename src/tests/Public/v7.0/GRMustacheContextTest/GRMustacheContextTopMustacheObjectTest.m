@@ -31,23 +31,23 @@
 - (void)testTopMustacheObject
 {
     GRMustacheContext *context = [GRMustacheContext context];
-    STAssertNil([context topMustacheObject], @"");
+    XCTAssertNil([context topMustacheObject], @"");
     
     id object = @"object";
     context = [context contextByAddingObject:object];
-    STAssertEquals([context topMustacheObject], object, @"");
+    XCTAssertEqual([context topMustacheObject], object, @"");
     
     id priorityObject = @"priorityObject";
     context = [context contextByAddingPriorityObject:priorityObject];
-    STAssertEquals([context topMustacheObject], object, @"");
+    XCTAssertEqual([context topMustacheObject], object, @"");
     
     id tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     context = [context contextByAddingTagDelegate:tagDelegate];
-    STAssertEquals([context topMustacheObject], object, @"");
+    XCTAssertEqual([context topMustacheObject], object, @"");
 
     id object2 = @"object2";
     context = [context contextByAddingObject:object2];
-    STAssertEquals([context topMustacheObject], object2, @"");
+    XCTAssertEqual([context topMustacheObject], object2, @"");
 }
 
 @end

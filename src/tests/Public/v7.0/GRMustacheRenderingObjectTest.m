@@ -55,7 +55,7 @@
     }];
     NSDictionary *context = @{ @"object": object };
     NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"---", @"");
+    XCTAssertEqualObjects(result, @"---", @"");
 }
 
 - (void)testRenderingObjectPerformsSectionRendering
@@ -65,7 +65,7 @@
     }];
     NSDictionary *context = @{ @"object": object };
     NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"---", @"");
+    XCTAssertEqualObjects(result, @"---", @"");
 }
 
 - (void)testRenderingObjectPerformsInvertedSectionRendering
@@ -75,7 +75,7 @@
     }];
     NSDictionary *context = @{ @"object": object };
     NSString *result = [[GRMustacheTemplate templateFromString:@"{{^object}}{{/object}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"---", @"");
+    XCTAssertEqualObjects(result, @"---", @"");
 }
 
 - (void)testRenderingObjectPerformsHTMLSafeVariableRendering
@@ -87,7 +87,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -96,7 +96,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -105,7 +105,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -114,7 +114,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -123,7 +123,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -132,7 +132,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{{object}}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
 }
 
@@ -145,7 +145,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&<>{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&<>{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -154,7 +154,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -163,7 +163,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
+        XCTAssertEqualObjects(result, @"&amp;&lt;&gt;{{foo}}", @"");
     }
 }
 
@@ -179,8 +179,8 @@
         NSError *error;
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:&error];
-        STAssertNil(result, @"");
-        STAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
+        XCTAssertNil(result, @"");
+        XCTAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -192,8 +192,8 @@
         NSError *error;
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:&error];
-        STAssertNil(result, @"");
-        STAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
+        XCTAssertNil(result, @"");
+        XCTAssertEqualObjects(error.domain, @"GRMustacheRenderingObjectDomain", @"");
     }
 }
 
@@ -205,7 +205,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"", @"");
+        XCTAssertEqualObjects(result, @"", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -213,7 +213,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"", @"");
+        XCTAssertEqualObjects(result, @"", @"");
     }
 }
 
@@ -237,7 +237,7 @@
                 break;
                 
             default:
-                STAssertTrue(NO, @"");
+                XCTAssertTrue(NO, @"");
                 break;
         }
         return nil;
@@ -250,9 +250,9 @@
         
         [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(variableCount, (NSUInteger)1, @"");
+        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(variableCount, (NSUInteger)1, @"");
     }
     {
         invertedSectionCount = 0;
@@ -261,9 +261,9 @@
         
         [[GRMustacheTemplate templateFromString:@"{{#object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(regularSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(variableCount, (NSUInteger)0, @"");
+        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(regularSectionCount, (NSUInteger)1, @"");
+        XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
@@ -272,9 +272,9 @@
         
         [[GRMustacheTemplate templateFromString:@"{{$object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        STAssertEquals(invertedSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(variableCount, (NSUInteger)0, @"");
+        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
     {
         invertedSectionCount = 0;
@@ -283,9 +283,9 @@
         
         [[GRMustacheTemplate templateFromString:@"{{^object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        STAssertEquals(invertedSectionCount, (NSUInteger)1, @"");
-        STAssertEquals(regularSectionCount, (NSUInteger)0, @"");
-        STAssertEquals(variableCount, (NSUInteger)0, @"");
+        XCTAssertEqual(invertedSectionCount, (NSUInteger)1, @"");
+        XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
+        XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
 }
 
@@ -299,7 +299,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(lastInnerTemplateString, @"", @"");
+        XCTAssertEqualObjects(lastInnerTemplateString, @"", @"");
     }
     {
         __block NSString *lastInnerTemplateString = nil;
@@ -310,7 +310,7 @@
         }];
         NSDictionary *context = @{ @"object": object };
         [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
+        XCTAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
         [lastInnerTemplateString release];
     }
 }
@@ -325,7 +325,7 @@
     }];
     NSDictionary *context = @{ @"object": object, @"subject": @"---" };
     [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}==={{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
-    STAssertEqualObjects(lastRenderedContent, @"---===---", @"");
+    XCTAssertEqualObjects(lastRenderedContent, @"---===---", @"");
     [lastRenderedContent release];
 }
 
@@ -338,7 +338,7 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---", @"");
+        XCTAssertEqualObjects(result, @"---", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -347,7 +347,7 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---", @"");
+        XCTAssertEqualObjects(result, @"---", @"");
     }
 }
 
@@ -362,7 +362,7 @@
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[repository templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---", @"");
+        XCTAssertEqualObjects(result, @"---", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -373,7 +373,7 @@
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[repository templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---", @"");
+        XCTAssertEqualObjects(result, @"---", @"");
     }
 }
 
@@ -383,13 +383,13 @@
         GRMustacheAttributedSectionTagHelper *object = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
         object.attribute = @"---";
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
-        STAssertEqualObjects(result, @"attribute:", @"");
+        XCTAssertEqualObjects(result, @"attribute:", @"");
     }
     {
         GRMustacheAttributedSectionTagHelper *object = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
         object.attribute = @"---";
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
-        STAssertEqualObjects(result, @"attribute:", @"");
+        XCTAssertEqualObjects(result, @"attribute:", @"");
     }
 }
 
@@ -403,7 +403,7 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:NULL] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---+++", @"");
+        XCTAssertEqualObjects(result, @"---+++", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -412,7 +412,7 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{subject2}}{{/object}}" error:NULL] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---+++", @"");
+        XCTAssertEqualObjects(result, @"---+++", @"");
     }
 }
 
@@ -433,8 +433,8 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{subject}}{{object}}{{subject}}" error:NULL] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---------", @"");
-        STAssertEquals(tagWillRenderCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(result, @"---------", @"");
+        XCTAssertEqual(tagWillRenderCount, (NSUInteger)1, @"");
     }
     {
         __block NSUInteger tagWillRenderCount = 0;
@@ -450,8 +450,8 @@
         }];
         NSDictionary *context = @{ @"object": object, @"subject": @"---" };
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{subject}}{{#object}}{{subject}}{{/object}}{{subject}}" error:NULL] renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"---------", @"");
-        STAssertEquals(tagWillRenderCount, (NSUInteger)1, @"");
+        XCTAssertEqualObjects(result, @"---------", @"");
+        XCTAssertEqual(tagWillRenderCount, (NSUInteger)1, @"");
     }
 }
 
@@ -474,7 +474,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:NULL];
     template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
     NSString *result = [template renderObject:context error:NULL];
-    STAssertEqualObjects(result, @"delegate", @"");
+    XCTAssertEqualObjects(result, @"delegate", @"");
 }
 
 - (void)testTagDelegateCallbacksAreCalledWithinAlternateTemplateRendering
@@ -498,7 +498,7 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{object}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *result = [template renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"delegate", @"");
+        XCTAssertEqualObjects(result, @"delegate", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -519,7 +519,7 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         NSString *result = [template renderObject:context error:NULL];
-        STAssertEqualObjects(result, @"delegate", @"");
+        XCTAssertEqualObjects(result, @"delegate", @"");
     }
 }
 
@@ -534,7 +534,7 @@
     
     id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
-    STAssertEqualObjects(rendering, @"12", @"");
+    XCTAssertEqualObjects(rendering, @"12", @"");
 }
 
 - (void)testArrayOfRenderingObjectsInSectionTagNeedsExplicitInvocation
@@ -550,7 +550,7 @@
     
     id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}---{{/items}},{{#items}}{{#.}}---{{/.}}{{/items}}" error:NULL] renderObject:items error:NULL];
-    STAssertEqualObjects(rendering, @"------,[1:---][2:---]", @"");
+    XCTAssertEqualObjects(rendering, @"------,[1:---][2:---]", @"");
 }
 
 - (void)testArrayOfRenderingObjectsInVariableTag
@@ -564,7 +564,7 @@
     
     id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL];
-    STAssertEqualObjects(rendering, @"12", @"");
+    XCTAssertEqualObjects(rendering, @"12", @"");
 }
 
 - (void)testArrayOfHTMLSafeRenderingObjectsInVariableTag
@@ -580,7 +580,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"<1><2>", @"");
+        XCTAssertEqualObjects(rendering, @"<1><2>", @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -593,7 +593,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"<1><2>", @"");
+        XCTAssertEqualObjects(rendering, @"<1><2>", @"");
     }
 }
 
@@ -610,7 +610,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"&lt;1&gt;&lt;2&gt;", @"");
+        XCTAssertEqualObjects(rendering, @"&lt;1&gt;&lt;2&gt;", @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -623,7 +623,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"<1><2>", @"");
+        XCTAssertEqualObjects(rendering, @"<1><2>", @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -636,7 +636,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"&lt;1&gt;&lt;2&gt;", @"");
+        XCTAssertEqualObjects(rendering, @"&lt;1&gt;&lt;2&gt;", @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -649,7 +649,7 @@
         }];
         id items = @{@"items": @[object1, object2] };
         NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL];
-        STAssertEqualObjects(rendering, @"<1><2>", @"");
+        XCTAssertEqualObjects(rendering, @"<1><2>", @"");
     }
 }
 
@@ -666,7 +666,7 @@
         }];
         
         id items = @{@"items": @[object1, object2] };
-        STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, nil);
+        XCTAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -679,7 +679,7 @@
         }];
         
         id items = @{@"items": @[object1, object2] };
-        STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, nil);
+        XCTAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{items}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -692,7 +692,7 @@
         }];
         
         id items = @{@"items": @[object1, object2] };
-        STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, nil);
+        XCTAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, @"");
     }
     {
         id object1 = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -705,7 +705,7 @@
         }];
         
         id items = @{@"items": @[object1, object2] };
-        STAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, nil);
+        XCTAssertThrowsSpecificNamed([[GRMustacheTemplate templateFromString:@"{{{items}}}" error:NULL] renderObject:items error:NULL], NSException, GRMustacheRenderingException, @"");
     }
 }
 
@@ -717,7 +717,7 @@
     NSDictionary *context = @{ @"partial": [repository templateNamed:@"partial" error:NULL] };
     NSString *result = [[repository templateFromString:@"{{partial}}" error:NULL] renderObject:context error:NULL];
     
-    STAssertEqualObjects(result, @"In partial.", @"");
+    XCTAssertEqualObjects(result, @"In partial.", @"");
 }
 
 - (void)testTemplateAreNotHTMLEscaped
@@ -728,7 +728,7 @@
     NSDictionary *context = @{ @"partial": [repository templateNamed:@"partial" error:NULL] };
     NSString *result = [[repository templateFromString:@"{{partial}}{{{partial}}}" error:NULL] renderObject:context error:NULL];
     
-    STAssertEqualObjects(result, @"&<>&<>", @"");
+    XCTAssertEqualObjects(result, @"&<>&<>", @"");
 }
 
 @end

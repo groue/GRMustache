@@ -34,14 +34,14 @@
     
     // test transformer
     NSNumber *number = [NSNumber numberWithBool:YES];
-    STAssertEqualObjects([transformer transformedValue:number], [NSNumber numberWithBool:NO], @"");
+    XCTAssertEqualObjects([transformer transformedValue:number], [NSNumber numberWithBool:NO], @"");
     
     // test rendering
     id data = @{ @"number": number, @"transformer": transformer };
     NSString *rendering = [GRMustacheTemplate renderObject:data
                                                 fromString:@"{{ transformer(number) }}"
                                                      error:NULL];
-    STAssertEqualObjects(rendering, @"0", @"");
+    XCTAssertEqualObjects(rendering, @"0", @"");
 }
 
 - (void)testValueTransformerRendersSelfAsSomething
@@ -52,7 +52,7 @@
     NSString *rendering = [GRMustacheTemplate renderObject:data
                                                 fromString:@"{{ transformer }}"
                                                      error:NULL];
-    STAssertTrue(rendering.length > 0, @"");
+    XCTAssertTrue(rendering.length > 0, @"");
 }
 
 @end

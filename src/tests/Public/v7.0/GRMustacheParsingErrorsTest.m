@@ -31,58 +31,58 @@
 - (void)testNullErrorDoesNotCrash
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:NULL];
-    STAssertNotNil(template, @"");
+    XCTAssertNotNil(template, @"");
     
-    STAssertNotNil([template renderObject:@"" error:NULL], @"");
+    XCTAssertNotNil([template renderObject:@"" error:NULL], @"");
     
     id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
     }];
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:NULL], @"");
+    XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:NULL], @"");
     
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:NULL], @"");
+    XCTAssertNil([GRMustacheTemplate templateFromString:@"{{" error:NULL], @"");
 }
 
 - (void)testNilInitializedErrorDoesNotCrash
 {
     NSError *error = nil;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:&error];
-    STAssertNotNil(template, @"");
+    XCTAssertNotNil(template, @"");
     
     error = nil;
-    STAssertNotNil([template renderObject:@"" error:&error], @"");
+    XCTAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = nil;
     id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
     }];
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
-    STAssertNotNil(error.domain, nil);
+    XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
+    XCTAssertNotNil(error.domain);
     
     error = nil;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
-    STAssertNotNil(error.domain, nil);
+    XCTAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
+    XCTAssertNotNil(error.domain);
 }
 
 - (void)testUninitializedErrorDoesNotCrash
 {
     NSError *error = (NSError *)0xdeadbeef;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:&error];
-    STAssertNotNil(template, @"");
+    XCTAssertNotNil(template, @"");
     
     error = (NSError *)0xdeadbeef;
-    STAssertNotNil([template renderObject:@"" error:&error], @"");
+    XCTAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = (NSError *)0xdeadbeef;
     id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
     }];
-    STAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
-    STAssertNotNil(error.domain, nil);
+    XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
+    XCTAssertNotNil(error.domain);
     
     error = (NSError *)0xdeadbeef;
-    STAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
-    STAssertNotNil(error.domain, nil);
+    XCTAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
+    XCTAssertNotNil(error.domain);
 }
 
 - (void)testIdentifiersCanNotStartWithMustacheTagCharacters
@@ -94,42 +94,42 @@
     NSError *error;
     
     for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@ }}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@}}}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@}}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@}}{{/%@}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@ }}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@}}}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@}}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@}}{{/%@}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
         
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@a }}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@a}}}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@a}}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
-        STAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@a}}{{/%@a}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeParseError, nil);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ %@a }}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{%@a}}}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&%@a}}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
+        XCTAssertNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#%@a}}{{/%@a}}", mustacheTagCharacter, mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeParseError);    // expect template not found, not parse error
     }
     
     // Identifiers can have forbidden characters *inside*
     
     for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
-        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ a%@ }}", mustacheTagCharacter] error:NULL]), nil);
-        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{a%@}}}", mustacheTagCharacter] error:NULL]), nil);
-        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&a%@}}", mustacheTagCharacter] error:NULL]), nil);
-        STAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#a%@}}{{/a%@}}", mustacheTagCharacter, mustacheTagCharacter] error:NULL]), nil);
+        XCTAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{ a%@ }}", mustacheTagCharacter] error:NULL]));
+        XCTAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{{a%@}}}", mustacheTagCharacter] error:NULL]));
+        XCTAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{&a%@}}", mustacheTagCharacter] error:NULL]));
+        XCTAssertNotNil(([GRMustacheTemplate templateFromString:[NSString stringWithFormat:@"{{#a%@}}{{/a%@}}", mustacheTagCharacter, mustacheTagCharacter] error:NULL]));
     }
     
     // Partial names can start with a forbidden character
     
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:@{ }];
     for (NSString *mustacheTagCharacter in mustacheTagCharacters) {
-        STAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{> %@ }}", mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);    // expect template not found, not parse error
-        STAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{< %@ }}{{/ %@ }}", mustacheTagCharacter, mustacheTagCharacter] error:&error]), nil);
-        STAssertEquals(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, nil);    // expect template not found, not parse error
+        XCTAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{> %@ }}", mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound);    // expect template not found, not parse error
+        XCTAssertNil(([repository templateFromString:[NSString stringWithFormat:@"{{< %@ }}{{/ %@ }}", mustacheTagCharacter, mustacheTagCharacter] error:&error]));
+        XCTAssertEqual(error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound);    // expect template not found, not parse error
     }
 
 }

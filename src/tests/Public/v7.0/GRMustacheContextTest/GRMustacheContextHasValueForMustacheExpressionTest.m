@@ -39,23 +39,23 @@
     id value;
     {
         BOOL success = [context hasValue:&value forMustacheExpression:@"." error:NULL];
-        STAssertTrue(success, @"");
-        STAssertEquals(value, data, @"");
+        XCTAssertTrue(success, @"");
+        XCTAssertEqual(value, data, @"");
     }
     {
         BOOL success = [context hasValue:&value forMustacheExpression:@"name" error:NULL];
-        STAssertTrue(success, @"");
-        STAssertEqualObjects(value, @"name1", @"");
+        XCTAssertTrue(success, @"");
+        XCTAssertEqualObjects(value, @"name1", @"");
     }
     {
         BOOL success = [context hasValue:&value forMustacheExpression:@"a.name" error:NULL];
-        STAssertTrue(success, @"");
-        STAssertEqualObjects(value, @"name2", @"");
+        XCTAssertTrue(success, @"");
+        XCTAssertEqualObjects(value, @"name2", @"");
     }
     {
         BOOL success = [context hasValue:&value forMustacheExpression:@"filter(a.name)" error:NULL];
-        STAssertTrue(success, @"");
-        STAssertEqualObjects(value, @"NAME2", @"");
+        XCTAssertTrue(success, @"");
+        XCTAssertEqualObjects(value, @"NAME2", @"");
     }
 }
 
@@ -66,23 +66,23 @@
     {
         NSError *error;
         BOOL success = [context hasValue:&value forMustacheExpression:@"a." error:&error];
-        STAssertFalse(success, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeParseError, @"");
+        XCTAssertFalse(success, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeParseError, @"");
     }
     {
         NSError *error;
         BOOL success = [context hasValue:&value forMustacheExpression:@"a(b)" error:&error];
-        STAssertFalse(success, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @""); // missing filter a
+        XCTAssertFalse(success, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @""); // missing filter a
     }
     {
         NSError *error;
         BOOL success = [context hasValue:&value forMustacheExpression:@"foo(bar)" error:&error];
-        STAssertFalse(success, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @""); // not a filter
+        XCTAssertFalse(success, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @""); // not a filter
     }
 }
 

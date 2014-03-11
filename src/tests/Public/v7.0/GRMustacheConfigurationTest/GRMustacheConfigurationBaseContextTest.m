@@ -26,8 +26,6 @@
 @interface GRMustacheConfigurationBaseContextTest : GRMustachePublicAPITest
 @end
 
-static BOOL defaultConfigurationHasBeenTouched = NO;
-
 @implementation GRMustacheConfigurationBaseContextTest
 
 - (void)tearDown
@@ -36,22 +34,6 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     
     // Restore default configuration
     [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheConfiguration configuration].baseContext;
-    
-    // Help test1DefaultConfigurationHasStandardLibraryInBaseContext test the *real* default
-    // configuration.
-    defaultConfigurationHasBeenTouched = YES;
-}
-
-// The goal is to have this test run first.
-// It looks that alphabetical order is applied: hence the digit 1 in the method name.
-- (void)test1DefaultConfigurationHasStandardLibraryInBaseContext
-{
-    STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
-    STAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
-    NSString *rendering = [GRMustacheTemplate renderObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]
-                                                fromString:@"{{uppercase(foo)}}"
-                                                     error:NULL];
-    STAssertEqualObjects(rendering, @"SUCCESS", @"");
 }
 
 - (void)testFactoryConfigurationHasStandardLibraryInBaseContextRegardlessOfDefaultConfiguration
@@ -61,7 +43,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     repo.configuration = [GRMustacheConfiguration configuration];
     GRMustacheTemplate *template = [repo templateFromString:@"{{uppercase(foo)}}" error:NULL];
     NSString *rendering = [template renderObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"] error:NULL];
-    STAssertEqualObjects(rendering, @"SUCCESS", @"");
+    XCTAssertEqualObjects(rendering, @"SUCCESS", @"");
 }
 
 - (void)testDefaultConfigurationMustacheBaseContext
@@ -72,16 +54,16 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         // check presence of foo
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // check absence of standard library
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(foo)}}" error:NULL];
         NSError *error;
         NSString *rendering = [template renderObject:NULL error:&error];
-        STAssertNil(rendering, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @""); // no such filter
+        XCTAssertNil(rendering, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @""); // no such filter
     }
 }
 
@@ -91,7 +73,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
     template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"success", @"");
+    XCTAssertEqualObjects(rendering, @"success", @"");
 }
 
 - (void)testDefaultRepositoryConfigurationHasDefaultConfigurationBaseContext
@@ -100,7 +82,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"success", @"");
+    XCTAssertEqualObjects(rendering, @"success", @"");
 }
 
 - (void)testRepositoryConfigurationBaseContext
@@ -115,7 +97,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
@@ -124,7 +106,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
@@ -142,7 +124,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
@@ -153,7 +135,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{foo}}" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
@@ -170,7 +152,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
         template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
     {
         // Setting configuration property
@@ -180,14 +162,14 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
         template.baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"success", @"");
+        XCTAssertEqualObjects(rendering, @"success", @"");
     }
 }
 
 - (void)testRepositoryConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-    STAssertNoThrow([repo.configuration setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
+    XCTAssertNoThrow([repo.configuration setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
 }
 
 - (void)testDefaultConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
@@ -195,27 +177,27 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
     
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
 }
 
 - (void)testRepositoryConfigurationCanNotBeMutatedAfterATemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
-    STAssertThrows([repo.configuration setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
-    STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
+    XCTAssertThrows([repo.configuration setBaseContext:[GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"]]], @"");
+    XCTAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
 - (void)testConfigurationBaseContextCanNotBeSetToNil
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    STAssertThrows([configuration setBaseContext:nil], @"");
+    XCTAssertThrows([configuration setBaseContext:nil], @"");
 }
 
 - (void)testTemplateBaseContextCanNotBeSetToNil
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:NULL];
-    STAssertThrows([template setBaseContext:nil], @"");
+    XCTAssertThrows([template setBaseContext:nil], @"");
 }
 
 @end

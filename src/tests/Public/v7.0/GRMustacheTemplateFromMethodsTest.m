@@ -96,7 +96,7 @@
 
     NSData *data = [rendering dataUsingEncoding:NSUTF8StringEncoding];
     id object = [self JSONObjectWithData:data error:&error];
-    STAssertNotNil(object, @"%@", error);
+    XCTAssertNotNil(object, @"%@", error);
     return [object valueForKey:key];
 }
 
@@ -114,33 +114,33 @@
 - (void)testGRMustacheTemplateFromNilString
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromString:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate templateFromString:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplateFromNilResource
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromResource:nil bundle:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate templateFromResource:nil bundle:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplateFromNilFile
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromContentsOfFile:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate templateFromContentsOfFile:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 - (void)testGRMustacheTemplateFromNilURL
 {
     NSError *error;
-    STAssertNil([GRMustacheTemplate templateFromContentsOfURL:nil error:&error], @"");
-    STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-    STAssertEquals(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
+    XCTAssertNil([GRMustacheTemplate templateFromContentsOfURL:nil error:&error], @"");
+    XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+    XCTAssertEqual(error.code, GRMustacheErrorCodeTemplateNotFound, @"");
 }
 
 
@@ -151,7 +151,7 @@
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
-    STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
 }
 
 - (void)test_templateFromContentsOfFile_error
@@ -161,7 +161,7 @@
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
-    STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
 }
 
 - (void)test_templateFromContentsOfURL_error
@@ -171,7 +171,7 @@
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
-    STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
 }
 
 - (void)test_templateFromResource_bundle_error
@@ -182,8 +182,8 @@
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
-    STAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering], nil);
-    STAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering], nil);
+    XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
+    XCTAssertEqualObjects(@"mustache", [self extensionOfTemplateFileInRendering:rendering]);
 }
 
 - (void)testParserError_templateFromString_error
@@ -191,11 +191,11 @@
     NSError *error;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.parserErrorTemplateString
                                                                     error:&error];
-    STAssertNil(template, @"");
-    STAssertNotNil(error, @"");
-    STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+    XCTAssertNil(template, @"");
+    XCTAssertNotNil(error, @"");
+    XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
     NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-    STAssertTrue(range.location != NSNotFound, @"");
+    XCTAssertTrue(range.location != NSNotFound, @"");
 }
 
 - (void)testParserError_templateFromContentsOfFile_error
@@ -204,32 +204,32 @@
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:self.parserErrorTemplatePath
                                                                                 error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:self.parserErrorTemplateWrapperPath
                                                                                 error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }
@@ -240,32 +240,32 @@
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:self.parserErrorTemplateURL
                                                                                error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:self.parserErrorTemplateWrapperURL
                                                                                error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }
@@ -277,16 +277,16 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.parserErrorTemplateName
                                                                          bundle:self.testBundle
                                                                           error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
@@ -294,16 +294,16 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.parserErrorTemplateWrapperName
                                                                          bundle:self.testBundle
                                                                           error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.parserErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }
@@ -313,11 +313,11 @@
     NSError *error;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.compilerErrorTemplateString
                                                                     error:&error];
-    STAssertNil(template, @"");
-    STAssertNotNil(error, @"");
-    STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+    XCTAssertNil(template, @"");
+    XCTAssertNotNil(error, @"");
+    XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
     NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-    STAssertTrue(range.location != NSNotFound, @"");
+    XCTAssertTrue(range.location != NSNotFound, @"");
 }
 
 - (void)testCompilerError_templateFromContentsOfFile_error
@@ -326,32 +326,32 @@
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:self.compilerErrorTemplatePath
                                                                                 error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:self.compilerErrorTemplateWrapperPath
                                                                                 error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }
@@ -362,32 +362,32 @@
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:self.compilerErrorTemplateURL
                                                                                error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:self.compilerErrorTemplateWrapperURL
                                                                                error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }
@@ -399,16 +399,16 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.compilerErrorTemplateName
                                                                          bundle:self.testBundle
                                                                           error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
     {
@@ -416,16 +416,16 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.compilerErrorTemplateWrapperName
                                                                          bundle:self.testBundle
                                                                           error:&error];
-        STAssertNil(template, @"");
-        STAssertNotNil(error, @"");
-        STAssertEquals((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
+        XCTAssertNil(template, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqual((NSInteger)GRMustacheErrorCodeParseError, error.code, @"");
         {
             NSRange range = [error.localizedDescription rangeOfString:@"line 2"];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
         {
             NSRange range = [error.localizedDescription rangeOfString:self.compilerErrorTemplatePath];
-            STAssertTrue(range.location != NSNotFound, @"");
+            XCTAssertTrue(range.location != NSNotFound, @"");
         }
     }
 }

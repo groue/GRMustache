@@ -51,7 +51,7 @@
 - (void)testLocalizableBundle
 {
     NSString *testable = [self.localizableBundle localizedStringForKey:@"testable?" value:@"" table:nil];
-    STAssertEqualObjects(testable, @"YES", @"");
+    XCTAssertEqualObjects(testable, @"YES", @"");
 }
 
 - (void)testLocalizer
@@ -60,7 +60,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     id data = @{ @"localize": self.localizer, @"string": @"testable?" };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"YES", @"");
+    XCTAssertEqualObjects(rendering, @"YES", @"");
 }
 
 - (void)testLocalizerFromTable
@@ -70,7 +70,7 @@
     GRMustacheLocalizer *localizer = [[[GRMustacheLocalizer alloc] initWithBundle:self.localizableBundle tableName:@"Table"] autorelease];
     id data = @{ @"localize": localizer, @"string": @"table_testable?" };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"YES", @"");
+    XCTAssertEqualObjects(rendering, @"YES", @"");
 }
 
 - (void)testDefaultLocalizerAsFilter
@@ -79,7 +79,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     id data = @{ @"foo": @"bar" };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"bar", @"");
+    XCTAssertEqualObjects(rendering, @"bar", @"");
 }
 
 - (void)testDefaultLocalizerAsRenderingObject
@@ -87,7 +87,7 @@
     NSString *templateString = @"{{#localize}}...{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEqualObjects(rendering, @"...", @"");
+    XCTAssertEqualObjects(rendering, @"...", @"");
 }
 
 - (void)testDefaultLocalizerAsRenderingObjectWithArgument
@@ -96,7 +96,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     id data = @{ @"foo": @"bar" };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"..bar..", @"");
+    XCTAssertEqualObjects(rendering, @"..bar..", @"");
 }
 
 - (void)testDefaultLocalizerAsRenderingObjectWithArgumentAndConditions
@@ -105,7 +105,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     id data = @{ @"foo": @"bar", @"baz": @"truc" };
     NSString *rendering = [template renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @".bar.truc.", @"");
+    XCTAssertEqualObjects(rendering, @".bar.truc.", @"");
 }
 
 - (void)testLocalizerAsRenderingObjectWithoutArgumentDoesNotNeedPercentEscapedLocalizedString
@@ -117,10 +117,10 @@
         NSString *rendering = [template renderObject:nil error:NULL];
         
         // test the raw localization
-        STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%d" value:nil table:nil], @"ha ha percent d %d", @"");
+        XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%d" value:nil table:nil], @"ha ha percent d %d", @"");
         
         // test the GRMustache localization
-        STAssertEqualObjects(rendering, @"ha ha percent d %d", @"");
+        XCTAssertEqualObjects(rendering, @"ha ha percent d %d", @"");
     }
     {
         NSString *templateString = @"{{#localize}}%@{{/}}";
@@ -129,10 +129,10 @@
         NSString *rendering = [template renderObject:nil error:NULL];
         
         // test the raw localization
-        STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%@" value:nil table:nil], @"ha ha percent @ %@", @"");
+        XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%@" value:nil table:nil], @"ha ha percent @ %@", @"");
         
         // test the GRMustache localization
-        STAssertEqualObjects(rendering, @"ha ha percent @ %@", @"");
+        XCTAssertEqualObjects(rendering, @"ha ha percent @ %@", @"");
     }
 }
 
@@ -146,10 +146,10 @@
         NSString *rendering = [template renderObject:data error:NULL];
         
         // test the raw localization
-        STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%d %@" value:nil table:nil], @"ha ha percent d %%d %@", @"");
+        XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%d %@" value:nil table:nil], @"ha ha percent d %%d %@", @"");
         
         // test the GRMustache localization
-        STAssertEqualObjects(rendering, @"ha ha percent d %d bar", @"");
+        XCTAssertEqualObjects(rendering, @"ha ha percent d %d bar", @"");
     }
     {
         NSString *templateString = @"{{#localize}}%@ {{foo}}{{/}}";
@@ -159,10 +159,10 @@
         NSString *rendering = [template renderObject:data error:NULL];
         
         // test the raw localization
-        STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%@ %@" value:nil table:nil], @"ha ha percent @ %%@ %@", @"");
+        XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"%%@ %@" value:nil table:nil], @"ha ha percent @ %%@ %@", @"");
         
         // test the GRMustache localization
-        STAssertEqualObjects(rendering, @"ha ha percent @ %@ bar", @"");
+        XCTAssertEqualObjects(rendering, @"ha ha percent @ %@ bar", @"");
     }
 }
 
@@ -175,10 +175,10 @@
     NSString *rendering = [template renderObject:data error:NULL];
     
     // test the raw localization
-    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"bar" value:nil table:nil], @"translated_bar", @"");
+    XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"bar" value:nil table:nil], @"translated_bar", @"");
 
     // test the GRMustache localization
-    STAssertEqualObjects(rendering, @"translated_bar", @"");
+    XCTAssertEqualObjects(rendering, @"translated_bar", @"");
 }
 
 - (void)testCustomLocalizerAsRenderingObject
@@ -189,10 +189,10 @@
     NSString *rendering = [template renderObject:nil error:NULL];
 
     // test the raw localization
-    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"..." value:nil table:nil], @"!!!", @"");
+    XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"..." value:nil table:nil], @"!!!", @"");
     
     // test the GRMustache localization
-    STAssertEqualObjects(rendering, @"!!!", @"");
+    XCTAssertEqualObjects(rendering, @"!!!", @"");
 }
 
 - (void)testCustomLocalizerAsRenderingObjectWithArgument
@@ -204,10 +204,10 @@
     NSString *rendering = [template renderObject:data error:NULL];
     
     // test the raw localization
-    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"..%@.." value:nil table:nil], @"!!%@!!", @"");
+    XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@"..%@.." value:nil table:nil], @"!!%@!!", @"");
     
     // test the GRMustache localization
-    STAssertEqualObjects(rendering, @"!!bar!!", @"");
+    XCTAssertEqualObjects(rendering, @"!!bar!!", @"");
 }
 
 - (void)testCustomLocalizerAsRenderingObjectWithArgumentAndConditions
@@ -219,10 +219,10 @@
     NSString *rendering = [template renderObject:data error:NULL];
     
     // test the raw localization
-    STAssertEqualObjects([self.localizer.bundle localizedStringForKey:@".%@.%@." value:nil table:nil], @"!%@!%@!", @"");
+    XCTAssertEqualObjects([self.localizer.bundle localizedStringForKey:@".%@.%@." value:nil table:nil], @"!%@!%@!", @"");
     
     // test the GRMustache localization
-    STAssertEqualObjects(rendering, @"!bar!truc!", @"");
+    XCTAssertEqualObjects(rendering, @"!bar!truc!", @"");
 }
 
 - (void)testLocalizerRendersHTMLEscapedValuesOfHTMLTemplates
@@ -232,14 +232,14 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         id data = @{ @"foo": @"&" };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"..&amp;..", @"");
+        XCTAssertEqualObjects(rendering, @"..&amp;..", @"");
     }
     {
         NSString *templateString = @"{{#localize}}..{{{foo}}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         id data = @{ @"foo": @"&" };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"..&..", @"");
+        XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
 }
 
@@ -250,14 +250,14 @@
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         id data = @{ @"foo": @"&" };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"..&..", @"");
+        XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
     {
         NSString *templateString = @"{{% CONTENT_TYPE:TEXT }}{{#localize}}..{{{foo}}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
         id data = @{ @"foo": @"&" };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"..&..", @"");
+        XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
 }
 

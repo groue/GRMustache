@@ -26,8 +26,6 @@
 @interface GRMustacheConfigurationTest : GRMustachePublicAPITest
 @end
 
-static BOOL defaultConfigurationHasBeenTouched = NO;
-
 @implementation GRMustacheConfigurationTest
 
 - (void)tearDown
@@ -36,19 +34,6 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     
     // Restore default configuration
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
-    
-    // Help test1DefaultConfigurationHasHTMLContentType test the *real* default
-    // configuration.
-    defaultConfigurationHasBeenTouched = YES;
-}
-
-// The goal is to have this test run first.
-// It looks that alphabetical order is applied: hence the digit 1 in the method name.
-- (void)test1DefaultConfigurationHasHTMLContentType
-{
-    STAssertFalse(defaultConfigurationHasBeenTouched, @"this test should run first.");
-    STAssertNotNil([GRMustacheConfiguration defaultConfiguration], @"");
-    STAssertEquals([GRMustacheConfiguration defaultConfiguration].contentType, GRMustacheContentTypeHTML, @"");
 }
 
 - (void)testFactoryConfigurationHasHTMLContentTypeRegardlessOfDefaultConfiguration
@@ -56,14 +41,14 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     {
         [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
         GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-        STAssertNotNil(configuration, @"");
-        STAssertEquals(configuration.contentType, GRMustacheContentTypeHTML, @"");
+        XCTAssertNotNil(configuration, @"");
+        XCTAssertEqual(configuration.contentType, GRMustacheContentTypeHTML, @"");
     }
     {
         [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
         GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-        STAssertNotNil(configuration, @"");
-        STAssertEquals(configuration.contentType, GRMustacheContentTypeHTML, @"");
+        XCTAssertNotNil(configuration, @"");
+        XCTAssertEqual(configuration.contentType, GRMustacheContentTypeHTML, @"");
     }
 }
 
@@ -72,7 +57,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-    STAssertEqualObjects(rendering, @"&amp;", @"");
+    XCTAssertEqualObjects(rendering, @"&amp;", @"");
 }
 
 - (void)testDefaultConfigurationContentTypeTextHasTemplateRenderRawInput
@@ -80,7 +65,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{subject}}" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-    STAssertEqualObjects(rendering, @"&", @"");
+    XCTAssertEqualObjects(rendering, @"&", @"");
 }
 
 - (void)testDefaultConfigurationContentTypeHTMLHasTemplateRenderHTMLSafeStrings
@@ -105,8 +90,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertTrue(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertTrue(testedHTMLSafe, @"WTF");
 }
 
 - (void)testDefaultConfigurationContentTypeTextHasTemplateRenderHTMLUnsafeStrings
@@ -131,8 +116,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertFalse(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertFalse(testedHTMLSafe, @"WTF");
 }
 
 - (void)testDefaultConfigurationContentTypeHTMLHasSectionTagRenderHTMLSafeStrings
@@ -149,8 +134,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{#object}}{{/object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertTrue(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertTrue(testedHTMLSafe, @"WTF");
 }
 
 - (void)testDefaultConfigurationContentTypeTextHasSectionTagRenderHTMLUnsafeStrings
@@ -167,8 +152,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{#object}}{{/object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertFalse(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertFalse(testedHTMLSafe, @"WTF");
 }
 
 - (void)testDefaultConfigurationContentTypeHTMLHasVariableTagRenderHTMLSafeStrings
@@ -185,8 +170,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertTrue(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertTrue(testedHTMLSafe, @"WTF");
 }
 
 - (void)testDefaultConfigurationContentTypeTextHasVariableTagRenderHTMLUnsafeStrings
@@ -203,8 +188,8 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     }];
     id data = @{@"object": object};
     [GRMustacheTemplate renderObject:data fromString:@"{{object}}" error:NULL];
-    STAssertTrue(testedHTMLSafeDefined, @"WTF");
-    STAssertFalse(testedHTMLSafe, @"WTF");
+    XCTAssertTrue(testedHTMLSafeDefined, @"WTF");
+    XCTAssertFalse(testedHTMLSafe, @"WTF");
 }
 
 - (void)testCONTENT_TYPE_TEXTPragmaTagOverridesDefaultConfigurationContentTypeHTML
@@ -212,7 +197,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{subject}}" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-    STAssertEqualObjects(rendering, @"&", @"");
+    XCTAssertEqualObjects(rendering, @"&", @"");
 }
 
 - (void)testCONTENT_TYPE_HTMLPragmaTagOverridesDefaultConfigurationContentTypeText
@@ -220,7 +205,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:HTML}}{{subject}}" error:NULL];
     NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-    STAssertEqualObjects(rendering, @"&amp;", @"");
+    XCTAssertEqualObjects(rendering, @"&amp;", @"");
 }
 
 - (void)testDefaultRepositoryConfigurationHasDefaultConfigurationContentType
@@ -228,12 +213,12 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     {
         [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeHTML;
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-        STAssertEquals(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
+        XCTAssertEqual(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
     }
     {
         [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-        STAssertEquals(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
+        XCTAssertEqual(repo.configuration.contentType, [GRMustacheConfiguration defaultConfiguration].contentType, @"");
     }
 }
 
@@ -249,7 +234,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
     {
         // Setting configuration property
@@ -258,7 +243,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
 }
 
@@ -274,7 +259,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
     {
         // Setting configuration property
@@ -283,7 +268,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
 }
 
@@ -301,7 +286,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
     {
         // Setting configuration property
@@ -312,7 +297,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
 }
 
@@ -330,7 +315,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
     {
         // Setting configuration property
@@ -341,7 +326,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
 }
 
@@ -357,7 +342,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
     {
         // Setting configuration property
@@ -366,7 +351,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&", @"");
+        XCTAssertEqualObjects(rendering, @"&", @"");
     }
 }
 
@@ -382,7 +367,7 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:HTML}}{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
     {
         // Setting configuration property
@@ -391,16 +376,16 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
         
         GRMustacheTemplate *template = [repo templateFromString:@"{{%CONTENT_TYPE:HTML}}{{subject}}" error:NULL];
         NSString *rendering = [template renderObject:@{@"subject":@"&"} error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;", @"");
     }
 }
 
 - (void)testRepositoryConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
-    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
-    STAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+    XCTAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+    XCTAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
+    XCTAssertNoThrow([repo.configuration setContentType:GRMustacheContentTypeText], @"");
 }
 
 - (void)testDefaultConfigurationCanBeMutatedBeforeAnyTemplateHasBeenCompiled
@@ -408,18 +393,18 @@ static BOOL defaultConfigurationHasBeenTouched = NO;
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
     
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeHTML], @"");
-    STAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeHTML], @"");
+    XCTAssertNoThrow([[GRMustacheConfiguration defaultConfiguration] setContentType:GRMustacheContentTypeText], @"");
 }
 
 - (void)testRepositoryConfigurationCanNotBeMutatedAfterATemplateHasBeenCompiled
 {
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
     [repo templateFromString:@"" error:NULL];
-    STAssertThrows([repo.configuration setContentType:GRMustacheContentTypeText], @"");
-    STAssertThrows([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
-    STAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
+    XCTAssertThrows([repo.configuration setContentType:GRMustacheContentTypeText], @"");
+    XCTAssertThrows([repo.configuration setContentType:GRMustacheContentTypeHTML], @"");
+    XCTAssertThrows([repo setConfiguration:[GRMustacheConfiguration configuration]], @"");
 }
 
 

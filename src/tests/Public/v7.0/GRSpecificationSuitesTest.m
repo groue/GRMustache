@@ -46,15 +46,15 @@
 {
     NSError *error;
     NSData *testSuiteData = [NSData dataWithContentsOfFile:path];
-    STAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
+    XCTAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
     if (!testSuiteData) return;
     
     NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
-    STAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
+    XCTAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
     if (!testSuite) return;
     
     NSArray *tests = [testSuite objectForKey:@"tests"];
-    STAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
+    XCTAssertTrue((tests.count > 0), @"Empty test suite at %@", path);
     
     for (NSDictionary *test in tests) {
         id data = [test objectForKey:@"data"];
@@ -71,7 +71,7 @@
         NSCharacterSet *w = [NSCharacterSet whitespaceAndNewlineCharacterSet];
         rendering = [[rendering componentsSeparatedByCharactersInSet:w] componentsJoinedByString:@""];
         expected = [[expected componentsSeparatedByCharactersInSet:w] componentsJoinedByString:@""];
-        STAssertEqualObjects(rendering, expected, @"Failed specification test in suite %@: %@", path, test);
+        XCTAssertEqualObjects(rendering, expected, @"Failed specification test in suite %@: %@", path, test);
     }
 }
      

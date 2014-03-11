@@ -37,7 +37,7 @@
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"join": joinFilter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{join(a,b)}} {{join(a,b,c)}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"a,b a,b,c", @"");
+    XCTAssertEqualObjects(rendering, @"a,b a,b,c", @"");
 }
 
 - (void)testVariadicFiltersHaveNSNullArgumentForNilInput
@@ -54,7 +54,7 @@
     
     id data = @{ @"f": filter };
     [[GRMustacheTemplate templateFromString:@"{{f(a,b,c)}}" error:NULL] renderObject:data error:NULL];
-    STAssertEquals(NSNullCount, (NSUInteger)3, @"");
+    XCTAssertEqual(NSNullCount, (NSUInteger)3, @"");
 }
 
 - (void)testVariadicFiltersCanReturnFilters
@@ -67,7 +67,7 @@
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"d": @"d", @"f": filter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a)(d)}} {{f(a,b)(d)}} {{f(a,b,c)(d)}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"a+d a,b+d a,b,c+d", @"");
+    XCTAssertEqualObjects(rendering, @"a+d a,b+d a,b,c+d", @"");
 }
 
 - (void)testVariadicFiltersCanBeRootOfScopedExpression
@@ -78,7 +78,7 @@
     
     id data = @{ @"f": filter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{f(a,b).foo}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"bar", @"");
+    XCTAssertEqualObjects(rendering, @"bar", @"");
 }
 
 - (void)testVariadicFiltersCanBeUsedForObjectSections
@@ -89,7 +89,7 @@
     
     id data = @{ @"f": filter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{foo}}{{/}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"bar", @"");
+    XCTAssertEqualObjects(rendering, @"bar", @"");
 }
 
 - (void)testVariadicFiltersCanBeUsedForEnumerableSections
@@ -100,7 +100,7 @@
     
     id data = @{ @"a": @"a", @"b": @"b", @"c": @"c", @"f": filter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(a,b)}}{{.}}{{/}} {{#f(a,b,c)}}{{.}}{{/}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"ab abc", @"");
+    XCTAssertEqualObjects(rendering, @"ab abc", @"");
 }
 
 - (void)testVariadicFiltersCanBeUsedForBooleanSections
@@ -111,7 +111,7 @@
     
     id data = @{ @"yes": @YES, @"no": @NO, @"f": identityFilter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(yes)}}YES{{/}} {{^f(no)}}NO{{/}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"YES NO", @"");
+    XCTAssertEqualObjects(rendering, @"YES NO", @"");
 }
 
 - (void)testVariadicFiltersThatReturnNilCanBeUsedInBooleanSections
@@ -122,7 +122,7 @@
     
     id data = @{ @"f": nilFilter };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{^f(x)}}nil{{/}}" error:NULL] renderObject:data error:NULL];
-    STAssertEqualObjects(rendering, @"nil", @"");
+    XCTAssertEqualObjects(rendering, @"nil", @"");
 }
 
 @end

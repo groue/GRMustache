@@ -30,14 +30,14 @@
 
 - (void)testStandardLibraryExists
 {
-    STAssertNotNil([GRMustache standardLibrary], @"");
+    XCTAssertNotNil([GRMustache standardLibrary], @"");
 }
 
 - (void)testStandardLibraryHasUppercaseKey
 {
     id filter = [[GRMustache standardLibrary] valueForKey:@"uppercase"];
-    STAssertNotNil(filter, @"");
-    STAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
+    XCTAssertNotNil(filter, @"");
+    XCTAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
 }
 
 - (void)testStandardLibraryHTMLEscapeDoesEscapeNonHTMLSafeRenderingObjects
@@ -49,7 +49,7 @@
         }];
         id data = @{ @"object": object };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&amp;lt;", @"");
+        XCTAssertEqualObjects(rendering, @"&amp;lt;", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -58,7 +58,7 @@
         }];
         id data = @{ @"object": object };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&lt;", @"");
+        XCTAssertEqualObjects(rendering, @"&lt;", @"");
     }
 }
 
@@ -71,7 +71,7 @@
         }];
         id data = @{ @"object": object };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
+        XCTAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
     {
         id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -80,7 +80,7 @@
         }];
         id data = @{ @"object": object };
         NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
-        STAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
+        XCTAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
 }
 
@@ -91,7 +91,7 @@
     }];
     id data = @{ @"object": object };
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# javascript.escape }}{{ object }}{{/ }}" error:NULL];
-    STAssertEqualObjects(rendering, @"\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027", @"");
+    XCTAssertEqualObjects(rendering, @"\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027", @"");
 }
 
 - (void)testStandardLibraryURLEscapeDoesEscapeRenderingObjects
@@ -101,7 +101,7 @@
     }];
     id data = @{ @"object": object };
     NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# URL.escape }}{{ object }}{{/ }}" error:NULL];
-    STAssertEqualObjects(rendering, @"%26", @"");
+    XCTAssertEqualObjects(rendering, @"%26", @"");
 }
 
 @end

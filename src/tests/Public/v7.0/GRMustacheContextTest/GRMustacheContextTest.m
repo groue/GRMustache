@@ -35,16 +35,16 @@
     
     {
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"BAR", @"");
+        XCTAssertEqualObjects(rendering, @"BAR", @"");
     }
     {
         template.baseContext = [GRMustacheContext context];
         NSError *error;
         NSString *rendering = [template renderObject:data error:&error];
-        STAssertNil(rendering, @"");
-        STAssertNotNil(error, @"");
-        STAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        STAssertEquals(error.code, GRMustacheErrorCodeRenderingError, @"");
+        XCTAssertNil(rendering, @"");
+        XCTAssertNotNil(error, @"");
+        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
+        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
     }
 }
 
@@ -54,13 +54,13 @@
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @"", @"");
+        XCTAssertEqualObjects(rendering, @"", @"");
     }
     {
         id data = @{ @"foo": @"bar" };
         template.baseContext = [GRMustacheContext contextWithObject:data];
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"bar", @"");
+        XCTAssertEqualObjects(rendering, @"bar", @"");
     }
 }
 
@@ -76,8 +76,8 @@
     };
     template.baseContext = [GRMustacheContext contextWithObject:tagDelegate];
     NSString *rendering = [template renderObject:nil error:NULL];
-    STAssertEquals(value, (id)(tagDelegate.mustacheTagWillRenderObjectBlock), @"");
-    STAssertTrue(rendering.length > 0, @"");
+    XCTAssertEqual(value, (id)(tagDelegate.mustacheTagWillRenderObjectBlock), @"");
+    XCTAssertTrue(rendering.length > 0, @"");
 }
 
 - (void)testContextWithPriorityObjectConstructor
@@ -86,14 +86,14 @@
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];
-        STAssertEqualObjects(rendering, @" ", @"");
+        XCTAssertEqualObjects(rendering, @" ", @"");
     }
     {
         id priorityData = @{ @"safe": @"success" };
         template.baseContext = [GRMustacheContext contextWithPriorityObject:priorityData];
         id data = @{ @"safe": @"failure", @"foo": @"bar" };
         NSString *rendering = [template renderObject:data error:NULL];
-        STAssertEqualObjects(rendering, @"success bar", @"");
+        XCTAssertEqualObjects(rendering, @"success bar", @"");
     }
 }
 
@@ -110,7 +110,7 @@
     template.baseContext = [GRMustacheContext contextWithTagDelegate:tagDelegate];
     id data = @{ @"foo": @"bar" };
     [template renderObject:data error:NULL];
-    STAssertEqualObjects(value, @"bar", @"");
+    XCTAssertEqualObjects(value, @"bar", @"");
 }
 
 @end

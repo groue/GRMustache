@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "GRMustacheTagDelegate.h"
 
-@interface GRMustacheTestBase: SenTestCase
+@interface GRMustacheTestBase: XCTestCase
 @property (nonatomic, readonly) NSBundle *testBundle;
 - (id)JSONObjectWithData:(NSData *)data error:(NSError **)error;
 @end
