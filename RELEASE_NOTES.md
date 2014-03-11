@@ -6,6 +6,13 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v7.0.0
 
+### Dropped support for Garbage Collection
+
+GRMustache is now compiled and tested with Xcode 5.1, which does no longer support garbage collection.
+
+The last version of GRMustache supporting garbage collection is [GRMustache v6.9.2](https://github.com/groue/GRMustache/tree/v6.9.2).
+
+
 ### Safe Key Access
 
 GRMustache no longer blindly evaluates `valueForKey:` on your objects.

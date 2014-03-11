@@ -5,13 +5,10 @@ GRMustache is a flexible and production-ready implementation of [Mustache](http:
 
 **February 28, 2014: GRMustache 6.9.2 is out.** [Release notes](RELEASE_NOTES.md)
 
+**System requirements**: GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (without garbage collection), and only depends on the Foundation framework.
+
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
-
-System requirements
--------------------
-
-GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (with or without garbage collection), and only depends on the Foundation framework.
 
 
 How To

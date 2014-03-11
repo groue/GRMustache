@@ -1,6 +1,6 @@
 ## TODO
 
-- [ ] document dropped support for garbage collection
+- [X] document dropped support for garbage collection
 - [ ] run http://twitter.github.com/hogan.js/ inheritable template tests
 - [ ] run https://github.com/spullara/mustache.java inheritable template tests
 - [ ] Update the documentation to de-emphasize KVC exceptions.
