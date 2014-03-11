@@ -111,7 +111,7 @@ Template inheritance
 
 This [GRMustache feature](partials.md) is directly inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
 
-There is no guarantee that our implementations are identical, though.
+GRMustache pass all template inheritance tests from hogan.js, but those about white-space (GRMustache doesn't honor Mustache line suppression, indentation and other white-space niceties neither).
 
 Use this feature with great care, and simply avoid it when looking for compatibility with other implementations.
 

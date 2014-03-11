@@ -87,12 +87,6 @@ static struct {
         NSRegularExpression *expectedErrorReg = nil;
         
         
-        // data is mandatory
-        
-        XCTAssertTrue((data != nil), @"Missing `%@` key in %@", GRMustachePublicAPITestItemKeys.data, testDescription);
-        if (!(data != nil)) continue;
-        
-        
         // expected rendering, if present, must be a string
         
         if (expectedRendering) {

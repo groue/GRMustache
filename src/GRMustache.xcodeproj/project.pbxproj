@@ -183,6 +183,10 @@
 		56B4778F18CF8A7C00EFF629 /* GRMustacheKeyedSubscriptingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B4778C18CF8A7600EFF629 /* GRMustacheKeyedSubscriptingTest.m */; };
 		56B4779118CF8AD100EFF629 /* GRMustacheContextPriorityObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B4779018CF8AD100EFF629 /* GRMustacheContextPriorityObjectTest.m */; };
 		56B4779218CF8AD100EFF629 /* GRMustacheContextPriorityObjectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B4779018CF8AD100EFF629 /* GRMustacheContextPriorityObjectTest.m */; };
+		56B4779718CF8D2A00EFF629 /* GRHoganSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */; };
+		56B4779818CF8D2A00EFF629 /* GRHoganSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */; };
+		56B4779A18CF8D3300EFF629 /* GRHoganSuites in Resources */ = {isa = PBXBuildFile; fileRef = 56B4779918CF8D3300EFF629 /* GRHoganSuites */; };
+		56B4779B18CF8D3300EFF629 /* GRHoganSuites in Resources */ = {isa = PBXBuildFile; fileRef = 56B4779918CF8D3300EFF629 /* GRHoganSuites */; };
 		56BA241218C67D0F006DA5F3 /* GRMustacheBuffer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */; };
 		56BA241318C67D0F006DA5F3 /* GRMustacheBuffer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */; };
 		56BA242618C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA242518C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m */; };
@@ -440,6 +444,8 @@
 		56B283D016B44A4E007C1A33 /* GRMustacheConfiguration_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheConfiguration_private.h; sourceTree = "<group>"; };
 		56B4778C18CF8A7600EFF629 /* GRMustacheKeyedSubscriptingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheKeyedSubscriptingTest.m; sourceTree = "<group>"; };
 		56B4779018CF8AD100EFF629 /* GRMustacheContextPriorityObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextPriorityObjectTest.m; sourceTree = "<group>"; };
+		56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRHoganSuitesTest.m; sourceTree = "<group>"; };
+		56B4779918CF8D3300EFF629 /* GRHoganSuites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRHoganSuites; sourceTree = "<group>"; };
 		56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBuffer_private.h; sourceTree = "<group>"; };
 		56BA242518C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheErrorHandlingTest.m; sourceTree = "<group>"; };
 		56BA243518C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfigurationBaseContextTest.m; sourceTree = "<group>"; };
@@ -802,6 +808,15 @@
 			path = GRMustacheTemplateTest;
 			sourceTree = "<group>";
 		};
+		56B4779418CF8D2A00EFF629 /* twitter:hogan.js */ = {
+			isa = PBXGroup;
+			children = (
+				56B4779918CF8D3300EFF629 /* GRHoganSuites */,
+				56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */,
+			);
+			path = "twitter:hogan.js";
+			sourceTree = "<group>";
+		};
 		56BA243418C7A550006DA5F3 /* GRMustacheConfigurationTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -1028,6 +1043,7 @@
 				56B4779318CF8BB500EFF629 /* GRMustacheTemplateTest */,
 				5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */,
 				5682B47F1528399100ADD123 /* mustache/spec */,
+				56B4779418CF8D2A00EFF629 /* twitter:hogan.js */,
 			);
 			path = v7.0;
 			sourceTree = "<group>";
@@ -1307,6 +1323,7 @@
 				5682B4991528486C00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 in Resources */,
 				5682B49E152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache in Resources */,
 				5682B4A0152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.mustache in Resources */,
+				56B4779A18CF8D3300EFF629 /* GRHoganSuites in Resources */,
 				5682B4A415284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest in Resources */,
 				5682B4A615284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text in Resources */,
 				5682B4A915284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial in Resources */,
@@ -1343,6 +1360,7 @@
 				5682B49A1528486C00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 in Resources */,
 				5682B49F152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache in Resources */,
 				5682B4A1152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.mustache in Resources */,
+				56B4779B18CF8D3300EFF629 /* GRHoganSuites in Resources */,
 				5682B4A515284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest in Resources */,
 				5682B4A715284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text in Resources */,
 				5682B4AA15284AB600ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial in Resources */,
@@ -1465,6 +1483,7 @@
 				563A5EA7163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				56B4778E18CF8A7C00EFF629 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
 				56BA248F18C7A62E006DA5F3 /* GRMustacheContextValueForMustacheKeyTest.m in Sources */,
+				56B4779718CF8D2A00EFF629 /* GRHoganSuitesTest.m in Sources */,
 				568140D9163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				56BA24A318C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m in Sources */,
 				56BA243818C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,
@@ -1556,6 +1575,7 @@
 				563A5EA8163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */,
 				56B4778F18CF8A7C00EFF629 /* GRMustacheKeyedSubscriptingTest.m in Sources */,
 				56BA249118C7A62E006DA5F3 /* GRMustacheContextValueForMustacheKeyTest.m in Sources */,
+				56B4779818CF8D2A00EFF629 /* GRHoganSuitesTest.m in Sources */,
 				568140DA163659CC00310B7F /* GRMustacheRenderingObjectTest.m in Sources */,
 				56BA24A518C7A6B2006DA5F3 /* GRMustacheConfigurationExtendBaseContextTest.m in Sources */,
 				56BA243A18C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m in Sources */,

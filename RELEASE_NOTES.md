@@ -98,7 +98,7 @@ Should you rely on this dropped feature, and experiment difficulties migrating t
 
 ### Inheritable Templates
 
-GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java) (see the [Compatibility Guide](Guides/compatibility.md#template-inheritance)).
 
 - Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
 

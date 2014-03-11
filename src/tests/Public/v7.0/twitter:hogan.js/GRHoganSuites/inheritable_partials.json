@@ -1,0 +1,139 @@
+{
+  // This suite contains template inheritance tests taken from
+  // https://github.com/twitter/hogan.js/blob/master/test/index.js
+  
+  "tests": [
+    {
+      "name": "Default content",
+      "template": "{{$title}}Default title{{/title}}",
+      "expected": "Default title"
+    },
+    {
+      "name": "Default content renders variables",
+      "data": { "bar": "baz" },
+      "template": "{{$foo}}default {{bar}} content{{/foo}}",
+      "expected": "default baz content"
+    },
+    {
+      "name": "Default content renders triple stache variables",
+      "data": { "bar": "<baz>" },
+      "template": "{{$foo}}default {{{bar}}} content{{/foo}}",
+      "expected": "default <baz> content"
+    },
+    {
+      "name": "Default content renders sections",
+      "data": { "bar": { "baz": "qux" } },
+      "template": "{{$foo}}default {{#bar}}{{baz}}{{/bar}} content{{/foo}}",
+      "expected": "default qux content"
+    },
+    {
+      "name": "Default content renders negative sections",
+      "data": { "foo": { "baz": "qux" } },
+      "template": "{{$foo}}default{{^bar}}{{baz}}{{/bar}} content{{/foo}}",
+      "expected": "default content"
+    },
+    {
+      "name": "Mustache injection in default content",
+      "data": { "bar": { "baz": "{{qux}}" } },
+      "template": "{{$foo}}default {{#bar}}{{baz}}{{/bar}} content{{/foo}}",
+      "expected": "default {{qux}} content"
+    },
+    {
+      "name": "Default content rendered inside included templates",
+      "template": "{{<include}}{{/include}}",
+      "partials": { "include": "{{$foo}}default content{{/foo}}" },
+      "expected": "default content"
+    },
+    {
+      "name": "Overridden content",
+      "template": "{{<super}}{{$title}}sub template title{{/title}}{{/super}}",
+      "partials": { "super": "...{{$title}}Default title{{/title}}..." },
+      "expected": "...sub template title..."
+    },
+    {
+      "name": "Overridden partial",
+      "template": "test {{<partial}}{{$stuff}}override{{/stuff}}{{/partial}}",
+      "partials": { "partial": "{{$stuff}}...{{/stuff}}" },
+      "expected": "test override"
+    },
+    {
+      "name": "Two overridden partials with different content",
+      "template": "test {{<partial}}{{$stuff}}override1{{/stuff}}{{/partial}} {{<partial}}{{$stuff}}override2{{/stuff}}{{/partial}}",
+      "partials": { "partial": "|{{$stuff}}...{{/stuff}}{{$default}} default{{/default}}|" },
+      "expected": "test |override1 default| |override2 default|"
+    },
+    // Missing test: "Override partial with newlines"
+    // Missing test: "Inherit indentation when overriding a partial"
+    {
+      "name": "Override one substitution but not the other",
+      "template": "{{<partial}}{{$stuff2}}override two{{/stuff2}}{{/partial}}",
+      "partials": { "partial": "{{$stuff}}default one{{/stuff}}, {{$stuff2}}default two{{/stuff2}}" },
+      "expected": "default one, override two"
+    },
+    {
+      "name": "Super templates behave identically to partials when called with no parameters",
+      "template": "{{>include}}|{{<include}}{{/include}}",
+      "partials": { "include": "{{$foo}}default content{{/foo}}" },
+      "expected": "default content|default content"
+    },
+    {
+      "name": "Recursion in inherited templates",
+      "template": "{{<include}}{{$foo}}override{{/foo}}{{/include}}",
+      "partials": {
+          "include": "{{$foo}}default content{{/foo}} {{$bar}}{{<include2}}{{/include2}}{{/bar}}",
+          "include2": "{{$foo}}include2 default content{{/foo}} {{<include}}{{$bar}}don't recurse{{/bar}}{{/include}}" },
+      "expected": "override override override don't recurse"
+    },
+    {
+      "name": "Cache contains old partials instances (1)",
+      "template": "{{<parent}}{{$a}}c{{/a}}{{/parent}}",
+      "partials": {
+          "parent": "{{<grandParent}}{{$a}}p{{/a}}{{/grandParent}}",
+          "grandParent": "{{$a}}g{{/a}}" },
+      "expected": "c"
+    },
+    {
+      "name": "Cache contains old partials instances (2)",
+      "template": "{{<parent}}{{/parent}}",
+      "partials": {
+          "parent": "{{<grandParent}}{{$a}}p{{/a}}{{/grandParent}}",
+          "grandParent": "{{$a}}g{{/a}}" },
+      "expected": "p"
+    },
+    // Missing test: "Doesn't parse templates that have non-$ tags inside super template tags"
+    {
+      "name": "Allows text inside a super tag, but ignores it",
+      "template": "{{<include}} asdfasd asdfasdfasdf {{/include}}",
+      "partials": { "include": "{{$foo}}default content{{/foo}}" },
+      "expected": "default content"
+    },
+    {
+      "name": "Ignores text inside super templates, but does parse $ tags",
+      "template": "{{<include}} asdfasd {{$foo}}hmm{{/foo}} asdfasdfasdf {{/include}}",
+      "partials": { "include": "{{$foo}}default content{{/foo}}" },
+      "expected": "hmm"
+    },
+    // Missing test: "Issue #62: partial references inside substitutions should work"
+    {
+      "name": "Top-level substitutions take precedence in multi-level inheritance (1)",
+      "template": "{{<parent}}{{$a}}c{{/a}}{{/parent}}",
+      "partials:" {
+        "parent": "{{<older}}{{$a}}p{{/a}}{{/older}}",
+        "older": "{{<grandParent}}{{$a}}o{{/a}}{{/grandParent}}",
+        "grandParent": "{{$a}}g{{/a}}" },
+      "expected": "c"
+    },
+    {
+      "name": "Top-level substitutions take precedence in multi-level inheritance (2)",
+      "template": "{{<parent}}{{/parent}}",
+      "partials:" {
+        "parent": "{{<older}}{{$a}}p{{/a}}{{/older}}",
+        "older": "{{<grandParent}}{{$a}}o{{/a}}{{/grandParent}}",
+        "grandParent": "{{$a}}g{{/a}}" },
+      "expected": "p"
+    }
+    // Missing test: "Stringified templates survive a round trip"
+    // Implemented in Obj-C code: "Lambda expression in inherited template subsections"
+    // Implemented in Obj-C code: "Lambda expression in included partial templates"
+  ]
+}
