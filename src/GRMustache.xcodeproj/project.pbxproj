@@ -337,14 +337,14 @@
 			containerPortal = 56DEC19C15262FC80031E8DC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 56DEC247152631040031E8DC;
-			remoteInfo = "GRMustache6-MacOS";
+			remoteInfo = "GRMustache7-MacOS";
 		};
 		56DEC27F1526311C0031E8DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 56DEC19C15262FC80031E8DC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 56DEC26D1526311B0031E8DC;
-			remoteInfo = "GRMustache6-iOS";
+			remoteInfo = "GRMustache7-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1186,7 +1186,7 @@
 			dependencies = (
 			);
 			name = "GRMustache7-MacOS";
-			productName = "GRMustache6-MacOS";
+			productName = "GRMustache7-MacOS";
 			productReference = 56DEC248152631040031E8DC /* libGRMustache7-MacOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
@@ -1205,7 +1205,7 @@
 				56DEC259152631040031E8DC /* PBXTargetDependency */,
 			);
 			name = "GRMustache7-MacOSTests";
-			productName = "GRMustache6-MacOSTests";
+			productName = "GRMustache7-MacOSTests";
 			productReference = 56DEC255152631040031E8DC /* GRMustache7-MacOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -1222,7 +1222,7 @@
 			dependencies = (
 			);
 			name = "GRMustache7-iOS";
-			productName = "GRMustache6-iOS";
+			productName = "GRMustache7-iOS";
 			productReference = 56DEC26E1526311B0031E8DC /* libGRMustache7-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
@@ -1241,7 +1241,7 @@
 				56DEC2801526311C0031E8DC /* PBXTargetDependency */,
 			);
 			name = "GRMustache7-iOSTests";
-			productName = "GRMustache6-iOSTests";
+			productName = "GRMustache7-iOSTests";
 			productReference = 56DEC27B1526311C0031E8DC /* GRMustache7-iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle";
 		};
