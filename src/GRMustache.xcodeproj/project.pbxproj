@@ -29,18 +29,6 @@
 		56353F8D1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 56353F8A1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodeld */; };
 		563A5EA7163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */; };
 		563A5EA8163403C000E7E810 /* GRMustacheFoundationCollectionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */; };
-		563D66D715264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
-		563D66D815264739008628C5 /* comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D115264739008628C5 /* comments.json */; };
-		563D66D915264739008628C5 /* delimiters.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D215264739008628C5 /* delimiters.json */; };
-		563D66DA15264739008628C5 /* delimiters.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D215264739008628C5 /* delimiters.json */; };
-		563D66DB15264739008628C5 /* interpolation.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D315264739008628C5 /* interpolation.json */; };
-		563D66DC15264739008628C5 /* interpolation.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D315264739008628C5 /* interpolation.json */; };
-		563D66DD15264739008628C5 /* inverted.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D415264739008628C5 /* inverted.json */; };
-		563D66DE15264739008628C5 /* inverted.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D415264739008628C5 /* inverted.json */; };
-		563D66DF15264739008628C5 /* partials.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D515264739008628C5 /* partials.json */; };
-		563D66E015264739008628C5 /* partials.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D515264739008628C5 /* partials.json */; };
-		563D66E115264739008628C5 /* sections.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D615264739008628C5 /* sections.json */; };
-		563D66E215264739008628C5 /* sections.json in Resources */ = {isa = PBXBuildFile; fileRef = 563D66D615264739008628C5 /* sections.json */; };
 		563D66E91526497E008628C5 /* GRMustacheSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */; };
 		563D66EA1526497E008628C5 /* GRMustacheSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */; };
 		563D66EF152649DF008628C5 /* GRMustacheContextPrivateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EC152649DF008628C5 /* GRMustacheContextPrivateTest.m */; };
@@ -191,6 +179,8 @@
 		56B477A218CF9F6100EFF629 /* GRMustacheJavaSuitesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B477A018CF9F6100EFF629 /* GRMustacheJavaSuitesTest.m */; };
 		56B477A418CF9F6E00EFF629 /* GRMustacheJavaSuites in Resources */ = {isa = PBXBuildFile; fileRef = 56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */; };
 		56B477A518CF9F6E00EFF629 /* GRMustacheJavaSuites in Resources */ = {isa = PBXBuildFile; fileRef = 56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */; };
+		56B477A718D0E41A00EFF629 /* specs in Resources */ = {isa = PBXBuildFile; fileRef = 56B477A618D0E41A00EFF629 /* specs */; };
+		56B477A818D0E41A00EFF629 /* specs in Resources */ = {isa = PBXBuildFile; fileRef = 56B477A618D0E41A00EFF629 /* specs */; };
 		56BA241218C67D0F006DA5F3 /* GRMustacheBuffer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */; };
 		56BA241318C67D0F006DA5F3 /* GRMustacheBuffer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */; };
 		56BA242618C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BA242518C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m */; };
@@ -368,12 +358,6 @@
 		5623B795152731B600DF16A6 /* GRMustacheParsingErrorsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheParsingErrorsTest.m; sourceTree = "<group>"; };
 		56353F8B1527963B00226C92 /* GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GRPreventNSUndefinedKeyExceptionAttackTest.xcdatamodel; sourceTree = "<group>"; };
 		563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheFoundationCollectionTest.m; sourceTree = "<group>"; };
-		563D66D115264739008628C5 /* comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comments.json; sourceTree = "<group>"; };
-		563D66D215264739008628C5 /* delimiters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delimiters.json; sourceTree = "<group>"; };
-		563D66D315264739008628C5 /* interpolation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = interpolation.json; sourceTree = "<group>"; };
-		563D66D415264739008628C5 /* inverted.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = inverted.json; sourceTree = "<group>"; };
-		563D66D515264739008628C5 /* partials.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = partials.json; sourceTree = "<group>"; };
-		563D66D615264739008628C5 /* sections.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sections.json; sourceTree = "<group>"; };
 		563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheSuitesTest.m; sourceTree = "<group>"; };
 		563D66EC152649DF008628C5 /* GRMustacheContextPrivateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextPrivateTest.m; sourceTree = "<group>"; };
 		563D66EE152649DF008628C5 /* GRMustacheExpressionParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExpressionParserTest.m; sourceTree = "<group>"; };
@@ -452,6 +436,7 @@
 		56B4779918CF8D3300EFF629 /* GRHoganSuites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRHoganSuites; sourceTree = "<group>"; };
 		56B477A018CF9F6100EFF629 /* GRMustacheJavaSuitesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheJavaSuitesTest.m; sourceTree = "<group>"; };
 		56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheJavaSuites; sourceTree = "<group>"; };
+		56B477A618D0E41A00EFF629 /* specs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = specs; path = tests/vendor/mustache/spec/specs; sourceTree = SOURCE_ROOT; };
 		56BA241018C67D0F006DA5F3 /* GRMustacheBuffer_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheBuffer_private.h; sourceTree = "<group>"; };
 		56BA242518C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheErrorHandlingTest.m; sourceTree = "<group>"; };
 		56BA243518C7A550006DA5F3 /* GRMustacheConfigurationBaseContextTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheConfigurationBaseContextTest.m; sourceTree = "<group>"; };
@@ -579,35 +564,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		563D669F15263CF0008628C5 /* spec */ = {
-			isa = PBXGroup;
-			children = (
-				563D66D01526471B008628C5 /* specs */,
-			);
-			path = spec;
-			sourceTree = "<group>";
-		};
-		563D66CF152646FC008628C5 /* mustache */ = {
-			isa = PBXGroup;
-			children = (
-				563D669F15263CF0008628C5 /* spec */,
-			);
-			path = mustache;
-			sourceTree = "<group>";
-		};
-		563D66D01526471B008628C5 /* specs */ = {
-			isa = PBXGroup;
-			children = (
-				563D66D115264739008628C5 /* comments.json */,
-				563D66D215264739008628C5 /* delimiters.json */,
-				563D66D315264739008628C5 /* interpolation.json */,
-				563D66D415264739008628C5 /* inverted.json */,
-				563D66D515264739008628C5 /* partials.json */,
-				563D66D615264739008628C5 /* sections.json */,
-			);
-			path = specs;
-			sourceTree = "<group>";
-		};
 		563D66FE15264EDA008628C5 /* vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -643,13 +599,14 @@
 			name = GRMustache;
 			sourceTree = "<group>";
 		};
-		5682B47A1528392300ADD123 /* GRMustacheSuitesTest */ = {
+		5682B47A1528392300ADD123 /* groue/GRMustache */ = {
 			isa = PBXGroup;
 			children = (
 				563D66F315264B40008628C5 /* GRMustacheSuites */,
 				563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */,
 			);
-			path = GRMustacheSuitesTest;
+			name = groue/GRMustache;
+			path = "groue:GRMustache";
 			sourceTree = "<group>";
 		};
 		5682B47B1528393200ADD123 /* GRMustacheTagDelegateTest */ = {
@@ -692,19 +649,10 @@
 			isa = PBXGroup;
 			children = (
 				56DEC3BF152639560031E8DC /* GRSpecificationSuitesTest.m */,
-				5682B480152839A400ADD123 /* vendor */,
+				56B477A618D0E41A00EFF629 /* specs */,
 			);
 			name = mustache/spec;
 			path = "mustache:spec";
-			sourceTree = "<group>";
-		};
-		5682B480152839A400ADD123 /* vendor */ = {
-			isa = PBXGroup;
-			children = (
-				563D66CF152646FC008628C5 /* mustache */,
-			);
-			name = vendor;
-			path = ../../../vendor;
 			sourceTree = "<group>";
 		};
 		5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */ = {
@@ -814,22 +762,35 @@
 			path = GRMustacheTemplateTest;
 			sourceTree = "<group>";
 		};
-		56B4779418CF8D2A00EFF629 /* twitter:hogan.js */ = {
+		56B4779418CF8D2A00EFF629 /* twitter/hogan.js */ = {
 			isa = PBXGroup;
 			children = (
-				56B4779918CF8D3300EFF629 /* GRHoganSuites */,
 				56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */,
+				56B4779918CF8D3300EFF629 /* GRHoganSuites */,
 			);
+			name = twitter/hogan.js;
 			path = "twitter:hogan.js";
 			sourceTree = "<group>";
 		};
-		56B4779E18CF9F6100EFF629 /* spullara:mustache.java */ = {
+		56B4779E18CF9F6100EFF629 /* spullara/mustache.java */ = {
 			isa = PBXGroup;
 			children = (
-				56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */,
 				56B477A018CF9F6100EFF629 /* GRMustacheJavaSuitesTest.m */,
+				56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */,
 			);
+			name = spullara/mustache.java;
 			path = "spullara:mustache.java";
+			sourceTree = "<group>";
+		};
+		56B477A918D0E55A00EFF629 /* Suites */ = {
+			isa = PBXGroup;
+			children = (
+				5682B47A1528392300ADD123 /* groue/GRMustache */,
+				5682B47F1528399100ADD123 /* mustache/spec */,
+				56B4779E18CF9F6100EFF629 /* spullara/mustache.java */,
+				56B4779418CF8D2A00EFF629 /* twitter/hogan.js */,
+			);
+			path = Suites;
 			sourceTree = "<group>";
 		};
 		56BA243418C7A550006DA5F3 /* GRMustacheConfigurationTest */ = {
@@ -1043,6 +1004,7 @@
 		56DEC3BD152639420031E8DC /* v7.0 */ = {
 			isa = PBXGroup;
 			children = (
+				56B477A918D0E55A00EFF629 /* Suites */,
 				560CE88E1526EEF4004F935E /* GRBooleanTest.m */,
 				56BA242518C7A494006DA5F3 /* GRMustacheErrorHandlingTest.m */,
 				563A5EA6163403C000E7E810 /* GRMustacheFoundationCollectionTest.m */,
@@ -1053,13 +1015,9 @@
 				56BA248318C7A62E006DA5F3 /* GRMustacheContextTest */,
 				56BA247818C7A5F8006DA5F3 /* GRMustacheFilterTest */,
 				56BA245318C7A5BE006DA5F3 /* GRMustacheServicesTest */,
-				5682B47A1528392300ADD123 /* GRMustacheSuitesTest */,
 				5682B47B1528393200ADD123 /* GRMustacheTagDelegateTest */,
 				56B4779318CF8BB500EFF629 /* GRMustacheTemplateTest */,
 				5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */,
-				5682B47F1528399100ADD123 /* mustache/spec */,
-				56B4779E18CF9F6100EFF629 /* spullara:mustache.java */,
-				56B4779418CF8D2A00EFF629 /* twitter:hogan.js */,
 			);
 			path = v7.0;
 			sourceTree = "<group>";
@@ -1319,12 +1277,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				563D66D715264739008628C5 /* comments.json in Resources */,
-				563D66D915264739008628C5 /* delimiters.json in Resources */,
-				563D66DB15264739008628C5 /* interpolation.json in Resources */,
-				563D66DD15264739008628C5 /* inverted.json in Resources */,
-				563D66DF15264739008628C5 /* partials.json in Resources */,
-				563D66E115264739008628C5 /* sections.json in Resources */,
+				56B477A718D0E41A00EFF629 /* specs in Resources */,
 				563D66F415264B40008628C5 /* GRMustacheSuites in Resources */,
 				56A8D4931527A23900D9C718 /* GRMustacheTagDelegateTest.mustache in Resources */,
 				56A8D4961527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache in Resources */,
@@ -1357,12 +1310,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				563D66D815264739008628C5 /* comments.json in Resources */,
-				563D66DA15264739008628C5 /* delimiters.json in Resources */,
-				563D66DC15264739008628C5 /* interpolation.json in Resources */,
-				563D66DE15264739008628C5 /* inverted.json in Resources */,
-				563D66E015264739008628C5 /* partials.json in Resources */,
-				563D66E215264739008628C5 /* sections.json in Resources */,
+				56B477A818D0E41A00EFF629 /* specs in Resources */,
 				563D66F515264B40008628C5 /* GRMustacheSuites in Resources */,
 				56A8D4941527A23900D9C718 /* GRMustacheTagDelegateTest.mustache in Resources */,
 				56A8D4971527A3CE00D9C718 /* GRMustacheTagDelegateTest_wrapper.mustache in Resources */,

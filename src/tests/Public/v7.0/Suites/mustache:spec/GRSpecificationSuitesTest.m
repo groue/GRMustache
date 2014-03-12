@@ -34,16 +34,18 @@
 
 - (void)testSpecificationSuites
 {
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"comments" ofType:@"json"]];
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"delimiters" ofType:@"json"]];
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"interpolation" ofType:@"json"]];
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"inverted" ofType:@"json"]];
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"partials" ofType:@"json"]];
-    [self testSuiteFromContentsOfJSONFile:[self.testBundle pathForResource:@"sections" ofType:@"json"]];
+    [self runTestsFromResource:@"comments.json" subdirectory:@"specs"];
+    [self runTestsFromResource:@"delimiters.json" subdirectory:@"specs"];
+    [self runTestsFromResource:@"interpolation.json" subdirectory:@"specs"];
+    [self runTestsFromResource:@"inverted.json" subdirectory:@"specs"];
+    [self runTestsFromResource:@"partials.json" subdirectory:@"specs"];
+    [self runTestsFromResource:@"sections.json" subdirectory:@"specs"];
 }
 
-- (void)testSuiteFromContentsOfJSONFile:(NSString *)path
+- (void)runTestsFromResource:(NSString *)name subdirectory:(NSString *)subpath
 {
+    NSString *path = [[self.testBundle pathForResource:subpath ofType:nil] stringByAppendingPathComponent:name];
+    
     NSError *error;
     NSData *testSuiteData = [NSData dataWithContentsOfFile:path];
     XCTAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
