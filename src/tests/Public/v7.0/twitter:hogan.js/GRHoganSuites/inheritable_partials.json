@@ -117,7 +117,7 @@
     {
       "name": "Top-level substitutions take precedence in multi-level inheritance (1)",
       "template": "{{<parent}}{{$a}}c{{/a}}{{/parent}}",
-      "partials:" {
+      "partials": {
         "parent": "{{<older}}{{$a}}p{{/a}}{{/older}}",
         "older": "{{<grandParent}}{{$a}}o{{/a}}{{/grandParent}}",
         "grandParent": "{{$a}}g{{/a}}" },
@@ -126,7 +126,7 @@
     {
       "name": "Top-level substitutions take precedence in multi-level inheritance (2)",
       "template": "{{<parent}}{{/parent}}",
-      "partials:" {
+      "partials": {
         "parent": "{{<older}}{{$a}}p{{/a}}{{/older}}",
         "older": "{{<grandParent}}{{$a}}o{{/a}}{{/grandParent}}",
         "grandParent": "{{$a}}g{{/a}}" },
