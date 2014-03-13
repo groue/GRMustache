@@ -89,7 +89,7 @@
     XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
 }
 
-#warning Disabled test
+#warning Disabled failing test
 //// com.github.mustachejava.ExtensionTest.testNested
 //- (void)testExtensionNested
 //{
@@ -212,6 +212,16 @@
         NSString *expectedRendering = [self expectedRenderingNamed:@"subsubchild3.txt"];
         XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
     }
+}
+
+// com.github.mustachejava.InterpreterTest.testPartialRecursionWithInheritance
+- (void)testInterpreterPartialRecursionWithInheritance
+{
+    GRMustacheTemplate *template = [self templateNamed:@"recursive_partial_inheritance"];
+    id data = @{ @"test": @{ @"test" : @NO } };
+    NSString *rendering = [template renderObject:data error:NULL];
+    NSString *expectedRendering = [self expectedRenderingNamed:@"recursive_partial_inheritance.txt"];
+    XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
 }
 
 @end
