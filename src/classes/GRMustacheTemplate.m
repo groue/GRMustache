@@ -25,13 +25,14 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheRendering.h"
 #import "GRMustacheTemplateComponent_private.h"
+#import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
 
 @interface GRMustacheTemplate()<GRMustacheRendering>
 @end
 
 @implementation GRMustacheTemplate
-@synthesize AST=_AST;
+@synthesize partial=_partial;
 @synthesize baseContext=_baseContext;
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -78,7 +79,7 @@
 
 - (void)dealloc
 {
-    [_AST release];
+    [_partial release];
     [_baseContext release];
     [super dealloc];
 }
@@ -115,28 +116,15 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
+    GRMustacheContentType contentType = _partial.AST.contentType;
     GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
-
-    if (!context) {
-        // With a nil context, the method would return nil without setting the
-        // error argument.
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+    if (![_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error]) {
+        GRMustacheBufferRelease(&buffer);
         return nil;
     }
-    
-    GRMustacheContentType templateContentType = _AST.contentType;
-    for (id<GRMustacheTemplateComponent> component in _AST.templateComponents) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        component = [context resolveTemplateComponent:component];
-        
-        // render
-        if (![component renderContentType:templateContentType inBuffer:&buffer withContext:context error:error]) {
-            return nil;
-        }
-    }
-    
+
     if (HTMLSafe) {
-        *HTMLSafe = (_AST.contentType == GRMustacheContentTypeHTML);
+        *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
     }
     
     return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);

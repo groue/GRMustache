@@ -36,7 +36,7 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
-    id _AST;
+    id _partial;
     GRMustacheContext *_baseContext;
 }
 

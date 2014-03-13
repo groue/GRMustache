@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] have GRMustacheTemplate retain its repository
 - [X] document dropped support for garbage collection
 - [X] run http://twitter.github.com/hogan.js/ inheritable template tests
 - [ ] run https://github.com/spullara/mustache.java inheritable template tests

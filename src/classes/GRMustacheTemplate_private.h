@@ -24,20 +24,20 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheContext;
-@class GRMustacheAST;
+@class GRMustachePartial;
 @protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject {
 @private
-    GRMustacheAST *_AST;
+    GRMustachePartial *_partial;
     GRMustacheContext *_baseContext;
 }
 
 /**
- * The abstract syntax tree of the partial template.
+ * The underlying partial
  */
-@property (nonatomic, retain) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
