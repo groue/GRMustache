@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheRendering.h"
-#import "GRMustacheFilter.h"
+#import "GRMustacheRendering_private.h"
+#import "GRMustacheFilter_private.h"
 #import "GRMustacheTagDelegate.h"
 
 

@@ -20,6 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#ifndef GRMUSTACHE_FILTER
+#define GRMUSTACHE_FILTER
+
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
@@ -118,3 +121,5 @@
 + (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end
+
+#endif

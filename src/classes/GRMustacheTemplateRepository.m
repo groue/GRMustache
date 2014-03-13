@@ -106,6 +106,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * Parses templateString and returns an abstract syntax tree.
  * 
  * @param templateString  A Mustache template string.
+ * @param contentType     TODO
  * @param templateID      The template ID of the template, or nil if the
  *                        template string is not tied to any identified template.
  * @param error           If there is an error, upon return contains an NSError
@@ -115,7 +116,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * 
  * @see GRMustacheTemplateRepository
  */
-- (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error;
+- (GRMustacheAST *)ASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error;
 
 @end
 
@@ -196,7 +197,12 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
 {
-    GRMustachePartial *partial = [self partialFromString:templateString error:error];
+    return [self templateFromString:templateString contentType:_configuration.contentType error:error];
+}
+
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
+{
+    GRMustachePartial *partial = [self partialFromString:templateString contentType:contentType error:error];
     if (!partial) {
         return nil;
     }
@@ -224,7 +230,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark Private
 
-- (GRMustacheAST *)ASTFromString:(NSString *)templateString templateID:(id)templateID error:(NSError **)error
+- (GRMustacheAST *)ASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error
 {
     GRMustacheAST *AST = nil;
     @autoreleasepool {
@@ -232,7 +238,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         [_configuration lock];
         
         // Create a Mustache compiler that loads partials from self
-        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithConfiguration:_configuration] autorelease];
+        GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithContentType:contentType] autorelease];
         compiler.templateRepository = self;
         compiler.baseTemplateID = templateID;
         
@@ -306,7 +312,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             
             // Compile
             
-            GRMustacheAST *AST = [self ASTFromString:templateString templateID:templateID error:error];
+            GRMustacheAST *AST = [self ASTFromString:templateString contentType:_configuration.contentType templateID:templateID error:error];
             
             
             // compiling done
@@ -324,9 +330,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     }
 }
 
-- (GRMustachePartial *)partialFromString:(NSString *)templateString error:(NSError **)error
+- (GRMustachePartial *)partialFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
 {
-    GRMustacheAST *AST = [self ASTFromString:templateString templateID:nil error:error];
+    GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
     if (!AST) {
         return nil;
     }

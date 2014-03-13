@@ -26,7 +26,6 @@
 #import "GRMustacheContentType.h"
 
 @class GRMustacheExpression;
-@class GRMustacheTemplateRepository;
 @class GRMustacheContext;
 
 // Documented in GRMustacheTag.h
@@ -41,16 +40,12 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @public
     GRMustacheTagType _type;
     GRMustacheExpression *_expression;
-    GRMustacheTemplateRepository *_templateRepository;
     GRMustacheContentType _contentType;
 }
 
 // Abstract method whose default implementation raises an exception.
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
-
-// Documented in GRMustacheTag.h
-@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
@@ -102,20 +97,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * Returns a new GRMustacheTag.
  *
- * @param type                The tag type
- * @param templateRepository  The template repository exposed to the library
- *                            user via the public `templateRepository` property.
- *                            It is the template repository that provides the
- *                            template to which the tag belongs.
- * @param expression          The expression to be evaluated when rendering the
- *                            tag.
- * @param contentType         The content type of the tag rendering.
- *
- * @see templateRepository property
- * @see expression property
- * @see contentType property
+ * @param type         The tag type
+ * @param expression   The expression to be evaluated when rendering the tag.
+ * @param contentType  The content type of the tag rendering.
  */
-- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;

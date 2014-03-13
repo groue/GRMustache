@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheContentType.h"
 
 @class GRMustachePartial;
 @class GRMustacheTemplate;
@@ -81,6 +82,11 @@
 
 // Documented in GRMustacheTemplateRepository.h
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+
+/**
+ * TODO
+ */
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a partial template, given its name.

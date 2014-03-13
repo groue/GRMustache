@@ -271,21 +271,7 @@ You can derive new template strings from this raw content, even by appending new
 
 From those template strings, you create template objects, just as you usually do. Their `renderContentWithContext:HTMLSafe:error:` method render in the given context.
 
-The template also sets the `HTMLSafe` boolean for you, so that you do not have to worry about it. GRMustache templates render HTML by default, so `HTMLSafe` will generally be YES (see the [HTML vs. Text Templates Guide](html_vs_text.md)).
-
-Not all of you load their templates from the main bundle. If you use [template repositories](template_repositories.md), consider replacing the following line:
-
-```objc
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-```
-
-by this one:
-
-```objc
-GRMustacheTemplate *template = [tag.templateRepository templateFromString:templateString error:NULL];
-```
-
-This is because the section that should be wrapped in a link may embed a partial tag `{{> partial }}`. Our code will be more robust if we make sure that we use the same template repository as the one that did provide the original template. Check the [GRMustacheTag Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html#//api/name/templateRepository) for more information.
+The template sets the `HTMLSafe` boolean for you, so that you do not have to worry about it.
 
 
 Example: Dynamic partials
@@ -401,14 +387,14 @@ We have to explicitely have our Movie and Person classes render with their dedic
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // Extract the "Movie.mustache" partial from the original templateRepository:
-    GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Movie" error:NULL];
+    // Extract the "Movie.mustache" partial:
+    GRMustacheTemplate *partial = [GRMustacheTemplate templateFromResource:@"Movie" bundle:nil error:NULL];
 
     // Add self to the top of the context stack, so that the partial
     // can access our keys:
     context = [context contextByAddingObject:self];
 
-    // Return the rendering of the partial
+    // Return the rendering of the partial:
     return [partial renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 
@@ -418,15 +404,15 @@ We have to explicitely have our Movie and Person classes render with their dedic
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    // Extract the "Person.mustache" partial from the original templateRepository:
-    GRMustacheTemplate *partial = [tag.templateRepository templateNamed:@"Person" error:NULL];
+    // Extract the "Person.mustache" partial:
+    GRMustacheTemplate *partial = [GRMustacheTemplate templateFromResource:@"Person" bundle:nil error:NULL];
 
     // Add self to the top of the context stack, so that the partial
     // can access our keys:
     context = [context contextByAddingObject:self];
 
-    // Return the rendering of the partial
-    return [partial renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    // Return the rendering of the partial:
+    return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
 }
 
 @end

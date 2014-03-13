@@ -108,45 +108,27 @@ typedef struct {
 + (NSObject *)standardLibrary AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
-////////////////////////////////////////////////////////////////////////////////
-/// @name Building rendering objects
-////////////////////////////////////////////////////////////////////////////////
-
 /**
- * Returns a rendering object that is able to render the argument _object_ for
- * the various Mustache tags.
+ * This method is deprecated. Use
+ * `+[GRMustacheRendering renderingObjectForObject:]` instead.
  *
- * If _object_ already conforms to the GRMustacheRendering protocol, this method
- * returns _object_ itself: it is already able to render.
- *
- * For other values, including `nil`, this method returns a rendering object
- * that provides the default GRMustache rendering.
- *
- * @param object  An object.
- *
- * @return A rendering object able to render the argument.
- *
- * @see GRMustacheRendering protocol
+ * @see GRMustacheRendering class
  *
  * @since v6.0
+ * @deprecated v7.0
  */
-+ (id<GRMustacheRendering>)renderingObjectForObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectForObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED;
 
 /**
- * Returns a rendering object that renders with the provided block.
+ * This method is deprecated. Use
+ * `+[GRMustacheRendering renderingObjectWithBlock:]` instead.
  *
- * @param block  A block that follows the semantics of the
- *               renderForMustacheTag:context:HTMLSafe:error: method defined by
- *               the GRMustacheRendering protocol. See the documentation of this
- *               method.
- *
- * @return A rendering object
- *
- * @see GRMustacheRendering protocol
+ * @see GRMustacheRendering class
  *
  * @since v6.0
+ * @deprecated v7.0
  */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED;
 
 @end
 

@@ -35,9 +35,9 @@
 
 - (void)testRenderingObjectInInheritedTemplateSubsections
 {
-    id lambda = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id lambda = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *alteredContent = [NSString stringWithFormat:@"altered %@", tag.innerTemplateString];
-        GRMustacheTemplate *template = [tag.templateRepository templateFromString:alteredContent error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:alteredContent error:NULL];
         return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
@@ -52,9 +52,9 @@
 
 - (void)testRenderingObjectInIncludedPartialTemplates
 {
-    id lambda = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id lambda = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *alteredContent = [NSString stringWithFormat:@"changed %@", tag.innerTemplateString];
-        GRMustacheTemplate *template = [tag.templateRepository templateFromString:alteredContent error:NULL];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:alteredContent error:NULL];
         return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     

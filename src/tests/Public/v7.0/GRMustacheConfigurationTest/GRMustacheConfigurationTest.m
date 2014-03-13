@@ -82,7 +82,7 @@
     GRMustacheTemplate *testedTemplate = [GRMustacheTemplate templateFromString:@"" error:NULL];
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [testedTemplate renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
@@ -108,7 +108,7 @@
     GRMustacheTemplate *testedTemplate = [GRMustacheTemplate templateFromString:@"" error:NULL];
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [testedTemplate renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
@@ -126,7 +126,7 @@
     
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
@@ -144,7 +144,7 @@
     
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
@@ -162,7 +162,7 @@
     
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;
@@ -180,7 +180,7 @@
     
     __block BOOL testedHTMLSafeDefined = NO;
     __block BOOL testedHTMLSafe = NO;
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         testedHTMLSafe = *HTMLSafe;
         testedHTMLSafeDefined = YES;

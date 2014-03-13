@@ -777,7 +777,7 @@
     };
     [recordedRendering autorelease];
     
-    id data = @{ @"value" : [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"<>"; }]};
+    id data = @{ @"value" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) { return @"<>"; }]};
     
     {
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"-{{value}}-" error:NULL];
@@ -805,7 +805,7 @@
     };
     [recordedError autorelease];
     
-    id data = @{ @"value" : [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id data = @{ @"value" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         *error = [NSError errorWithDomain:@"delegateError" code:0 userInfo:nil];
         return nil;
     }]};
@@ -928,14 +928,14 @@
 {
     GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
     tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
-        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
             NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
             return [rendering uppercaseString];
         }];
     };
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             return @"&you";
         }];
         id data = @{ @"object": object, @"tagDelegate": tagDelegate };
@@ -944,7 +944,7 @@
     }
     
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"&you";
         }];

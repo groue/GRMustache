@@ -43,7 +43,7 @@
 - (void)testStandardLibraryHTMLEscapeDoesEscapeNonHTMLSafeRenderingObjects
 {
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = NO;
             return @"<";
         }];
@@ -52,7 +52,7 @@
         XCTAssertEqualObjects(rendering, @"&amp;lt;", @"");
     }
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = NO;
             return @"<";
         }];
@@ -65,7 +65,7 @@
 - (void)testStandardLibraryHTMLEscapeDoesEscapeHTMLSafeRenderingObjects
 {
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"<br>";
         }];
@@ -74,7 +74,7 @@
         XCTAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
     {
-        id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             *HTMLSafe = YES;
             return @"<br>";
         }];
@@ -86,7 +86,7 @@
 
 - (void)testStandardLibraryJavascriptEscapeDoesEscapeRenderingObjects
 {
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"\"double quotes\" and 'single quotes'";
     }];
     id data = @{ @"object": object };
@@ -96,7 +96,7 @@
 
 - (void)testStandardLibraryURLEscapeDoesEscapeRenderingObjects
 {
-    id object = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"&";
     }];
     id data = @{ @"object": object };

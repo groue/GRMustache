@@ -23,6 +23,7 @@
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
+#import "GRMustacheRendering_private.h"
 
 @implementation GRMustachePartial
 @synthesize AST=_AST;
@@ -65,14 +66,26 @@
         renderingBuffer = buffer;
     }
     
+    BOOL success = YES;
+    
+    [GRMustacheRendering pushCurrentContentType:partialContentType];
     for (id<GRMustacheTemplateComponent> component in _AST.templateComponents) {
         // component may be overriden by a GRMustacheInheritablePartial: resolve it.
         component = [context resolveTemplateComponent:component];
         
         // render
         if (![component renderContentType:partialContentType inBuffer:renderingBuffer withContext:context error:error]) {
-            return NO;
+            success = NO;
+            break;
         }
+    }
+    [GRMustacheRendering popCurrentContentType];
+    
+    if (!success) {
+        if (needsEscapingBuffer) {
+            GRMustacheBufferRelease(&unescapedBuffer);
+        }
+        return NO;
     }
     
     if (needsEscapingBuffer) {

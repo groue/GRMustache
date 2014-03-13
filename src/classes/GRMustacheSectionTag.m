@@ -27,15 +27,15 @@
 /**
  * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:components:]
  */
-- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components;
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components;
 @end
 
 
 @implementation GRMustacheSectionTag
 
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
 {
-    return [[[self alloc] initWithType:type templateRepository:templateRepository expression:expression contentType:contentType templateString:templateString innerRange:innerRange components:components] autorelease];
+    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange components:components] autorelease];
 }
 
 - (void)dealloc
@@ -84,9 +84,9 @@
 
 #pragma mark - Private
 
-- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
 {
-    self = [super initWithType:type templateRepository:templateRepository expression:expression contentType:contentType];
+    self = [super initWithType:type expression:expression contentType:contentType];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;

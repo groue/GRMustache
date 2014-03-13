@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
+// prevent GRMustacheFilter.h to load
+#define GRMUSTACHE_FILTER
 
 // Documented in GRMustacheFilter.h
 @protocol GRMustacheFilter <NSObject>

@@ -32,7 +32,6 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 #import "GRMustacheAST_private.h"
-#import "GRMustacheConfiguration_private.h"
 #import "GRMustacheError.h"
 
 @interface GRMustacheCompiler()
@@ -144,7 +143,7 @@
 @synthesize currentComponents=_currentComponents;
 @synthesize componentsStack=_componentsStack;
 
-- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration
+- (id)initWithContentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
@@ -153,7 +152,7 @@
         [_componentsStack addObject:_currentComponents];
         _openingTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
         _tagValueStack = [[NSMutableArray alloc] initWithCapacity:20];
-        _contentType = configuration.contentType;
+        _contentType = contentType;
         _contentTypeLocked = NO;
     }
     return self;
@@ -253,7 +252,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:expression contentType:_contentType escapesHTML:YES]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:YES]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -271,7 +270,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithTemplateRepository:_templateRepository expression:expression contentType:_contentType escapesHTML:NO]];
+            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:NO]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -297,7 +296,6 @@
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithType:GRMustacheTagTypeInvertedSection
-                                                                         templateRepository:_templateRepository
                                                                                  expression:(GRMustacheExpression *)_currentTagValue
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
@@ -362,7 +360,6 @@
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithType:GRMustacheTagTypeSection
-                                                                         templateRepository:_templateRepository
                                                                                  expression:(GRMustacheExpression *)_currentTagValue
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
@@ -495,7 +492,6 @@
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : GRMustacheTagTypeSection;
                     wrapperComponent = [GRMustacheSectionTag sectionTagWithType:type
-                                                             templateRepository:_templateRepository
                                                                      expression:(GRMustacheExpression *)_currentTagValue
                                                                     contentType:_contentType
                                                                  templateString:token.templateString

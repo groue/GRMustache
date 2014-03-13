@@ -23,7 +23,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheRendering.h"
+#import "GRMustacheRendering_private.h"
 #import "GRMustacheTemplateComponent_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
@@ -38,8 +38,12 @@
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
 {
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
-    return [templateRepository templateFromString:templateString error:error];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheRendering currentTemplateRepository];
+    if (templateRepository == nil) {
+        templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
+    }
+    GRMustacheContentType contentType = [GRMustacheRendering currentContentType];
+    return [templateRepository templateFromString:templateString contentType:contentType error:error];
 }
 
 + (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
@@ -119,16 +123,20 @@
 {
     GRMustacheContentType contentType = _partial.AST.contentType;
     GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
-    if (![_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error]) {
+    
+    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
+    BOOL success = [_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error];
+    [GRMustacheRendering popCurrentTemplateRepository];
+    
+    if (!success) {
         GRMustacheBufferRelease(&buffer);
         return nil;
+    } else {
+        if (HTMLSafe) {
+            *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
+        }
+        return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
     }
-
-    if (HTMLSafe) {
-        *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
-    }
-    
-    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext

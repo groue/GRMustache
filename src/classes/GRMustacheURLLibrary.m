@@ -98,8 +98,8 @@
         // We want to escape its rendering.
         // So return a rendering object that will eventually render `object`,
         // and escape its rendering.
-        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            id<GRMustacheRendering> renderingObject = [GRMustache renderingObjectForObject:object];
+        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
             NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
             return [self escape:rendering];
         }];

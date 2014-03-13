@@ -28,12 +28,11 @@
 #import "GRMustache_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustacheTagDelegate.h"
-#import "GRMustacheRendering.h"
+#import "GRMustacheRendering_private.h"
 
 @implementation GRMustacheTag
 @synthesize type=_type;
 @synthesize expression=_expression;
-@synthesize templateRepository=_templateRepository;
 @synthesize contentType=_contentType;
 
 - (void)dealloc
@@ -42,12 +41,11 @@
     [super dealloc];
 }
 
-- (id)initWithType:(GRMustacheTagType)type templateRepository:(GRMustacheTemplateRepository *)templateRepository expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
         _type = type;
-        _templateRepository = templateRepository;   // do not retain, since templateRepository retains the template that retains self.
         _expression = [expression retain];
         _contentType = contentType;
     }
@@ -181,7 +179,7 @@
         
             BOOL objectHTMLSafe = NO;
             NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
-            NSString *rendering = [[GRMustache renderingObjectForObject:object] renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
+            NSString *rendering = [[GRMustacheRendering renderingObjectForObject:object] renderForMustacheTag:self context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
             
             if (rendering == nil && renderingError == nil)
             {

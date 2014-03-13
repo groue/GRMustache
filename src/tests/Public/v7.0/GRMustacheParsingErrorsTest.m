@@ -35,8 +35,8 @@
     
     XCTAssertNotNil([template renderObject:@"" error:NULL], @"");
     
-    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    id fail = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[GRMustacheTemplate templateFromString:@"{{> missing }}" error:error] renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:NULL], @"");
     
@@ -53,8 +53,8 @@
     XCTAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = nil;
-    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    id fail = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[GRMustacheTemplate templateFromString:@"{{> missing }}" error:error] renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
     XCTAssertNotNil(error.domain);
@@ -74,8 +74,8 @@
     XCTAssertNotNil([template renderObject:@"" error:&error], @"");
     
     error = (NSError *)0xdeadbeef;
-    id fail = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return [[tag.templateRepository templateNamed:@"missing" error:error] renderObject:nil error:NULL];
+    id fail = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [[GRMustacheTemplate templateFromString:@"{{> missing }}" error:error] renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
     XCTAssertNotNil(error.domain);
