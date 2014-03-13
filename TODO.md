@@ -2,9 +2,7 @@
 
 - [?] have [GRMustacheTemplate templateFromString:error:] use current repository, and remove public GRMustacheTag.templateRepository
 - [?] have GRMustacheTemplateRepository cache template from string (for faster rendering objects)
-- [ ] expose GRMustacheTemplate.templateID && GRMustacheTemplate.templateRepository
-- [ ] have GRMustachePartial retain its templateID
-- [ ] have GRMustacheTemplate retain its repository
+- [ ] expose GRMustacheTemplate.templateRepository
 - [X] document dropped support for garbage collection
 - [X] run http://twitter.github.com/hogan.js/ inheritable template tests
 - [ ] run https://github.com/spullara/mustache.java inheritable template tests
