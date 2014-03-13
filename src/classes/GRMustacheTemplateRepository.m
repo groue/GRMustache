@@ -188,6 +188,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
+    template.templateRepository = self;
     template.partial = partial;
     template.baseContext = _configuration.baseContext;
     return template;
@@ -195,14 +196,13 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error
 {
-    GRMustacheAST *AST = [self ASTFromString:templateString templateID:nil error:error];
-    if (!AST) {
+    GRMustachePartial *partial = [self partialFromString:templateString error:error];
+    if (!partial) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
-    GRMustachePartial *partial = [[[GRMustachePartial alloc] init] autorelease];
-    partial.AST = AST;
+    template.templateRepository = self;
     template.partial = partial;
     template.baseContext = _configuration.baseContext;
     return template;
@@ -322,6 +322,18 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         return partial;
     }
+}
+
+- (GRMustachePartial *)partialFromString:(NSString *)templateString error:(NSError **)error
+{
+    GRMustacheAST *AST = [self ASTFromString:templateString templateID:nil error:error];
+    if (!AST) {
+        return nil;
+    }
+    
+    GRMustachePartial *partial = [[[GRMustachePartial alloc] init] autorelease];
+    partial.AST = AST;
+    return partial;
 }
 
 @end

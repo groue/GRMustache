@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheContext;
+@class GRMustacheTemplateRepository;
 @protocol GRMustacheTagDelegate;
 
 /**
@@ -36,6 +37,7 @@
  */
 @interface GRMustacheTemplate: NSObject {
 @private
+    GRMustacheTemplateRepository *_templateRepository;
     id _partial;
     GRMustacheContext *_baseContext;
 }
@@ -322,5 +324,47 @@
  * @since v6.0
  */
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Accessing Sibling Templates
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns the template repository that issued the receiver.
+ *
+ * All templates belong a template repository:
+ *
+ * - Templates returned by `+[GRMustacheTemplate templateFromString:error:]`
+ *   have a template repository that loads templates and partials stored as
+ *   resources in the main bundle, with extension ".mustache", encoded in UTF8.
+ *
+ * - Templates returned by `+[GRMustacheTemplate templateFromContentsOfFile:error:]`
+ *   have a template repository that loads templates and partials stored in the
+ *   directory of the receiver, with the same file extension ".mustache",
+ *   encoded in UTF8.
+ *
+ * - Templates returned by `+[GRMustacheTemplate templateFromContentsOfURL:error:]`
+ *   have a template repository that loads templates and partials stored in the
+ *   directory of the receiver, with the same file extension ".mustache",
+ *   encoded in UTF8.
+ *
+ * - Templates returned by `+[GRMustacheTemplate templateFromResource:bundle:error:]`
+ *   have a template repository that loads templates and partials stored as
+ *   resources in the specified bundle, with extension ".mustache", encoded in
+ *   UTF8.
+ *
+ * - Templates returned by `-[GRMustacheTemplateRepository templateNamed:error:]`
+ *   and `-[GRMustacheTemplateRepository templateFromString:error:]` belong to
+ *   the invoked repository.
+ *
+ * @see GRMustacheTemplateRepository
+ * @see templateFromString:error:
+ * @see templateFromContentsOfFile:error:
+ * @see templateFromContentsOfURL:error:
+ * @see templateFromResource:bundle:error:
+ *
+ * @since v7.0
+ */
+@property (nonatomic, retain) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

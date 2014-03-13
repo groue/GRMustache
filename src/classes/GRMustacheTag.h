@@ -114,11 +114,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * protocol who deal with templates including partial templates that come from
  * various template repositories.
  *
- * Caveat: Make sure you own (retain) template repositories. Don't use templates
- * returned by methods like `[GRMustacheTemplate templateFrom...]`: they return
- * autoreleased templates with an implicit autoreleased repository that will
- * eventually be deallocated when your rendering object tries to access it.
- *
  * @see GRMustacheRendering
  * @see GRMustacheTemplateRepository
  */

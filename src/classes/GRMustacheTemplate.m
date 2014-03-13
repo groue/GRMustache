@@ -32,6 +32,7 @@
 @end
 
 @implementation GRMustacheTemplate
+@synthesize templateRepository=_templateRepository;
 @synthesize partial=_partial;
 @synthesize baseContext=_baseContext;
 
