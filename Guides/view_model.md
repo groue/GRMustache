@@ -162,7 +162,7 @@ In order to provide a default value for all expressions that feed Mustache tags,
 
 Providing a default value for unknown keys also requires using the `GRMustacheTagDelegate` protocol. This is because GRMustache would not, for security reasons, render values for non-declared properties.
 
-Check the [Runtime](Guides/runtime.md), [Security](Guides/security.md#safe-key-access) and [Tag Delegates](delegate.md#default-values) Guides for more information.
+Check the [Runtime](runtime.md), [Security](security.md#safe-key-access) and [Tag Delegates](delegate.md#default-values) Guides for more information.
 
 
 Designing a library of reusable components
