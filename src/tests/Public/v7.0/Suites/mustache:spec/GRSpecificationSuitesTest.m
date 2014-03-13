@@ -26,10 +26,6 @@
 @interface GRSpecificationSuitesTest : GRMustachePublicAPITest
 @end
 
-@interface GRSpecificationSuitesTest()
-- (void)testSuiteFromContentsOfJSONFile:(NSString *)path;
-@end
-
 @implementation GRSpecificationSuitesTest
 
 - (void)testSpecificationSuites
