@@ -109,12 +109,9 @@
     }
     
     if (![object isKindOfClass:[NSDictionary class]] && [object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-        for (id _ in object) {
+        for (id item __attribute__((unused)) in object) {
             return [NSNumber numberWithBool:NO];
         }
-#pragma clang diagnostic pop
 
         return [NSNumber numberWithBool:YES];
     }
@@ -140,12 +137,9 @@
     }
     
     if (![object isKindOfClass:[NSDictionary class]] && [object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-        for (id _ in object) {
+        for (id item __attribute__((unused)) in object) {
             return [NSNumber numberWithBool:NO];
         }
-#pragma clang diagnostic pop
 
         return [NSNumber numberWithBool:YES];
     }

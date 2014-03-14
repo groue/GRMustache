@@ -510,14 +510,11 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         case GRMustacheTagTypeInvertedSection: {
             // {{^ list }}...{{/}}
             // Inverted section render if and only if self is empty.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
             BOOL empty = YES;
-            for (id item in self) {
+            for (id item __attribute__((unused)) in self) {
                 empty = NO;
                 break;
             }
-#pragma clang diagnostic pop
 
             if (empty) {
                 return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
