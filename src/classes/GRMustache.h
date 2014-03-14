@@ -108,6 +108,10 @@ typedef struct {
 + (NSObject *)standardLibrary AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
+////////////////////////////////////////////////////////////////////////////////
+/// @name Building rendering objects
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * This method is deprecated. Use
  * `+[GRMustacheRendering renderingObjectForObject:]` instead.
