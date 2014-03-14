@@ -162,6 +162,13 @@
         "node": "{{content}}<{{#nodes}}{{>node}}{{/nodes}}>"
       },
       "expected": "<X<Y<>>>"
+    },
+    {
+      "name": "Templates can override inheritable sections in recursive partials",
+      "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
+      "template": "<{{<node}}{{$value}}{{>node}}{{/value}}{{/node}}>",
+      "partials": { "node": "{{content}}<{{#nodes}}{{$value}}overriden{{/value}}{{/nodes}}>" },
+      "expected": "<X<Y<>>>"
     }
   ]
 }
