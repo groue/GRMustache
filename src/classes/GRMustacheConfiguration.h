@@ -192,7 +192,7 @@
  * @see extendBaseContextWithObject:
  * @see extendBaseContextWithTagDelegate:
  *
- * @since v7.0
+ * @since v6.8
  */
 - (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 

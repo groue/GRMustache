@@ -160,7 +160,7 @@
  *
  * @see contextByAddingProtectedObject:
  *
- * @since v7.0
+ * @since v6.4
  */
 + (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
@@ -254,7 +254,7 @@
  *
  * @return A new rendering context.
  *
- * @since v7.0
+ * @since v6.0
  */
 - (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
