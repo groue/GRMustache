@@ -406,22 +406,29 @@
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
  * from a dictionary whose keys are template names, and values template strings.
  *
- * The dictionary is deeply copied: once template repository is initialized,
- * any change to the original dictionary is ignored.
- * 
  * For example:
- * 
- *     NSDictionary *templates = [NSDictionary dictionaryWithObject:@"It works." forKey:@"partial"];
+ *
+ *     NSDictionary *templates = @{ @"partial": @"It works." };
  *     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
- *     
- *     // Two templates that would render "It works."
+ *
+ *     // Two templates that render "It works."
  *     GRMustacheTemplate *template1 = [repository templateNamed:@"partial" error:NULL];
- *     GRMustacheTemplate *template2 = [repository templateFromString:@"{{>partial}}" error:NULL];
- * 
+ *     GRMustacheTemplate *template2 = [repository templateFromString:@"{{> partial }}" error:NULL];
+ *
+ * The dictionary is not copied, but retained: changes to the original
+ * dictionary may affect the loading of templates.
+ *
+ * You can stay immune to any change by providing a copy of the dictionary.
+ *
+ * Or you may embrace the changes, and invoke the `reloadTemplates` method
+ * whenever the changes should be applied.
+ *
  * @param templates  A dictionary whose keys are template names, and values
  *                   Mustache template strings.
  *
  * @return a GRMustacheTemplateRepository
+ *
+ * @see reloadTemplates
  *
  * @since v1.13
  */

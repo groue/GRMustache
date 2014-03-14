@@ -550,17 +550,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     self = [super init];
     if (self) {
-        NSMutableDictionary *deepCopy = [[NSMutableDictionary alloc] init];
-        [partialsDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *templateName, NSString *templateString, BOOL *stop) {
-            if (![templateName isKindOfClass:[NSString class]]) {
-                [NSException raise:NSInvalidArgumentException format:@"Template name is not a string: %@", templateName];
-            }
-            if (![templateString isKindOfClass:[NSString class]]) {
-                [NSException raise:NSInvalidArgumentException format:@"Template is not a string: %@", templateString];
-            }
-            [deepCopy setObject:[[templateString copy] autorelease] forKey:templateName];
-        }];
-        _partialsDictionary = deepCopy;
+        _partialsDictionary = [partialsDictionary retain];
         self.dataSource = self;
     }
     return self;

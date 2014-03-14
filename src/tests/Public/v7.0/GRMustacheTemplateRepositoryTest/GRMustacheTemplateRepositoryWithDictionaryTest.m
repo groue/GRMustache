@@ -60,27 +60,19 @@
     XCTAssertEqualObjects(result, @"ABC", @"");
 }
 
-- (void)testTemplateRepositoryWithDictionaryIgnoresDictionaryMutation
+- (void)testTemplateRepositoryWithDictionaryDoesNotIgnoreDictionaryMutation
 {
     NSMutableString *mutableTemplateString = [NSMutableString stringWithString:@"foo"];
     NSMutableDictionary *mutablePartials = [NSMutableDictionary dictionaryWithObjectsAndKeys:mutableTemplateString, @"a", nil];
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:mutablePartials];
     
-    [mutableTemplateString appendString:@"bar"];
-    [mutablePartials setObject:@"bar" forKey:@"b"];
+    [mutableTemplateString appendString:@"{{>bar}}"];
+    [mutablePartials setObject:@"bar" forKey:@"bar"];
     
     {
         GRMustacheTemplate *template = [repository templateNamed:@"a" error:NULL];
         NSString *rendering = [template renderObject:nil error:NULL];
-        XCTAssertEqualObjects(rendering, @"foo", @"");
-    }
-    
-    {
-        NSError *error;
-        GRMustacheTemplate *template = [repository templateNamed:@"b" error:&error];
-        XCTAssertNil(template, @"");
-        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        XCTAssertEqual((NSInteger)error.code, (NSInteger)GRMustacheErrorCodeTemplateNotFound, @"");
+        XCTAssertEqualObjects(rendering, @"foobar", @"");
     }
 }
 

@@ -43,4 +43,34 @@
     XCTAssertEqualObjects([template2 renderObject:nil error:NULL], @"value: ");
 }
 
+- (void)testReloadTemplates
+{
+    NSMutableDictionary *templates = [@{ @"template": @"foo{{>partial}}",
+                                         @"partial": @"bar" } mutableCopy];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
+    
+    {
+        GRMustacheTemplate *template = [repository templateNamed:@"template" error:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
+        XCTAssertEqualObjects(rendering, @"foobar");
+    }
+    
+    templates[@"template"] = @"baz{{>partial}}";
+    templates[@"partial"] = @"qux";
+    
+    {
+        GRMustacheTemplate *template = [repository templateNamed:@"template" error:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
+        XCTAssertEqualObjects(rendering, @"foobar");
+    }
+    
+    [repository reloadTemplates];
+    
+    {
+        GRMustacheTemplate *template = [repository templateNamed:@"template" error:NULL];
+        NSString *rendering = [template renderObject:nil error:NULL];
+        XCTAssertEqualObjects(rendering, @"bazqux");
+    }
+}
+
 @end

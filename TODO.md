@@ -1,7 +1,8 @@
 ## TODO
 
+- [ ] Document [GRMustacheTemplateRepository templateRepositoryWithDictionary:] changes (mutability of the dictionary)
 - [ ] Document [GRMustacheTemplateRepository reloadTemplates] in release notes.
-- [ ] Test [GRMustacheTemplateRepository reloadTemplates].
+- [X] Test [GRMustacheTemplateRepository reloadTemplates].
 - [X] have [GRMustacheTemplate templateFromString:error:] use current repository & content type, and deprecate GRMustacheTag.templateRepository
 - [?] have GRMustacheTemplateRepository cache template from string (for faster rendering objects)
 - [X] expose GRMustacheTemplate.templateRepository
