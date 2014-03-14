@@ -510,13 +510,12 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         case GRMustacheTagTypeInvertedSection: {
             // {{^ list }}...{{/}}
             // Inverted section render if and only if self is empty.
-            
             BOOL empty = YES;
-            for (id item in self) {
+            for (id item __attribute__((unused)) in self) {
                 empty = NO;
                 break;
             }
-            
+
             if (empty) {
                 return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
             } else {
