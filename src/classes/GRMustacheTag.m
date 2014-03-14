@@ -95,6 +95,11 @@
     return @"";
 }
 
+- (GRMustacheTemplateRepository *)templateRepository
+{
+    return [GRMustacheRendering currentTemplateRepository];
+}
+
 
 #pragma mark - <GRMustacheTemplateComponent>
 

@@ -73,16 +73,27 @@ GRMustacheTemplate and GRMustacheConfiguration have methods for inserting priori
 
 ```objc
 @interface GRMustacheContext
-+ (instancetype)contextWithProtectedObject:(id)object;      // use contextWithPriorityObject instead
-- (instancetype)contextByAddingProtectedObject:(id)object;  // use contextByAddingPriorityObject instead
+
+// use contextWithPriorityObject instead
++ (instancetype)contextWithProtectedObject:(id)object;
+
+// use contextByAddingPriorityObject instead
+- (instancetype)contextByAddingProtectedObject:(id)object;
+
 @end
 
 @interface GRMustacheTemplate
-- (void)extendBaseContextWithProtectedObject:(id)object;    // use extendBaseContextWithPriorityObject instead
+
+// use extendBaseContextWithPriorityObject instead
+- (void)extendBaseContextWithProtectedObject:(id)object;
+
 @end
 
 @interface GRMustacheConfiguration
-- (void)extendBaseContextWithProtectedObject:(id)object;    // use extendBaseContextWithPriorityObject instead
+
+// Use extendBaseContextWithPriorityObject instead
+- (void)extendBaseContextWithProtectedObject:(id)object;
+
 @end
 ```
 
@@ -117,7 +128,10 @@ GRMustache implementation of inheritable templates is now closer from [hogan.js]
 
 ```objc
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
-    GRMustacheTagTypeOverridableSection;   // constant not replaced
+  
+    // This constant is not replaced.
+    GRMustacheTagTypeOverridableSection,
+    
 }
 ```
 
@@ -130,19 +144,59 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 ```objc
 @interface GRMustache
+
 + (GRMustacheVersion)libraryVersion;
+
+@end
+
+@interface GRMustacheRendering
+
++ (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
+  
 @end
 ```
 
-**Removed APIS**
+**Deprecated APIs**
 
 ```objc
 @interface GRMustache
-+ (GRMustacheVersion)version;   // Use libraryVersion instead.
+
+// Use `+[GRMustacheRendering renderingObjectForObject:]` instead.
++ (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
+
+  // Use `+[GRMustacheRendering renderingObjectWithBlock:]` instead.
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
+
+@end
+
+@interface GRMustacheTag
+
+// Replace `[tag.templateRepository templateFromString:... error:...]` by
+// `[GRMustacheTemplate templateFromString:... error:...]`.
+//
+// Replace `[tag.templateRepository templateNamed:... error:...]` by explicit
+// invocation of the targeted template repository.
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository;
+
+@end
+```
+
+**Removed APIs**
+
+```objc
+@interface GRMustache
+
+// Use +[GRMustache libraryVersion] instead.
++ (GRMustacheVersion)version;
+
 @end
 
 @interface GRMustacheContext
-- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;    // This method used to be deprecated. Use hasValue:forMustacheExpression:error: instead.
+
+// Use -[GRMustacheContext hasValue:forMustacheExpression:error:] instead.
+- (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;
+
 @end
 ```
 

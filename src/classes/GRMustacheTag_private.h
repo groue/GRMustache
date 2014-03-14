@@ -27,6 +27,7 @@
 
 @class GRMustacheExpression;
 @class GRMustacheContext;
+@class GRMustacheTemplateRepository;
 
 // Documented in GRMustacheTag.h
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
@@ -49,6 +50,9 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTag.h
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 /**
  * Returns the content type of the receiver.

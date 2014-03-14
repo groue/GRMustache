@@ -24,6 +24,8 @@
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheConfiguration.h"
 
+@class GRMustacheTemplateRepository;
+
 /**
  * The types of Mustache tags
  *
@@ -102,6 +104,20 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Methods Dedicated to the GRMustacheRendering Protocol
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * This method is deprecated.
+ *
+ * Replace `[tag.templateRepository templateFromString:... error:...]` by
+ * `[GRMustacheTemplate templateFromString:... error:...]`.
+ *
+ * Replace `[tag.templateRepository templateNamed:... error:...]` by explicit
+ * invocation of the targeted template repository.
+ *
+ * @since v6.0
+ * @deprecated v7.0
+ */
+@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED;
 
 /**
  * Returns the rendering of the tag's inner content, rendering all inner

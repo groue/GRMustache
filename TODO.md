@@ -1,7 +1,6 @@
 ## TODO
 
-- [ ] document dropped support for GRMustacheTag.templateRepository
-- [X] have [GRMustacheTemplate templateFromString:error:] use current repository & content type, and remove public GRMustacheTag.templateRepository
+- [X] have [GRMustacheTemplate templateFromString:error:] use current repository & content type, and deprecate GRMustacheTag.templateRepository
 - [?] have GRMustacheTemplateRepository cache template from string (for faster rendering objects)
 - [X] expose GRMustacheTemplate.templateRepository
 - [X] document dropped support for garbage collection
