@@ -122,21 +122,21 @@ GRMustache addresses this concern by letting you store *priority objects* in the
 
 The base context contains [context stack values](runtime.md#the-context-stack) and [tag delegates](delegate.md) that are always available for the template rendering. It contains all the ready for use tools of the [standard library](standard_library.md), for example. Context objects are detailed in the [Rendering Objects Guide](rendering_objects.md).
 
-You can extend it with a priority object with the `extendBaseContextWithPriorityObject:` method:
+You can extend it with a priority object with the `extendBaseContextWithProtectedObject:` method:
 
 ```objc
 
-id priorityObject = @{
+id object = @{
     @"safe": @"important",
 };
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
-[template extendBaseContextWithPriorityObject:priorityObject];
+[template extendBaseContextWithProtectedObject:object];
 ```
 
 Now the `safe` key can not be shadowed: it will always evaluate to the `important` value.
 
-See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithPriorityObject:`.
+See the [GRMustacheTemplate Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html) for a full discussion of `extendBaseContextWithProtectedObject:`.
 
 
 ### Priority namespaces
@@ -172,7 +172,7 @@ id modules = @{
 GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 // "import string"
-[template extendBaseContextWithPriorityObject:modules];
+[template extendBaseContextWithProtectedObject:modules];
 
 NSString *rendering = [template renderObject:nil error:NULL];
 ```

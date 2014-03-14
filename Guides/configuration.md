@@ -108,7 +108,7 @@ You may also be interested in [priority keys](security.md#priority-keys). They g
 // Guarantee that {{my_important_value}} will always render the same and cannot
 // be overriden by custom data:
 id library = @{ @"my_important_value": ... };
-[repo.configuration extendBaseContextWithPriorityObject:library];
+[repo.configuration extendBaseContextWithProtectedObject:library];
 ```
 
 See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
