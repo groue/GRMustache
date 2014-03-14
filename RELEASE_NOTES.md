@@ -10,7 +10,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 GRMustache is now compiled and tested with Xcode 5.1, which does no longer support garbage collection.
 
-The last version of GRMustache supporting garbage collection is [GRMustache v6.9.2](https://github.com/groue/GRMustache/tree/v6.9.2).
+The last version which supports garbage collection is [GRMustache v6.9.2](https://github.com/groue/GRMustache/tree/v6.9.2).
 
 
 ### Safe Key Access
@@ -102,20 +102,20 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 ```objc
 @interface GRMustache
 
-// Use `+[GRMustacheRendering renderingObjectForObject:]` instead.
+// Use +[GRMustacheRendering renderingObjectForObject:] instead.
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
 
-  // Use `+[GRMustacheRendering renderingObjectWithBlock:]` instead.
+// Use +[GRMustacheRendering renderingObjectWithBlock:] instead.
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 
 @end
 
 @interface GRMustacheTag
 
-// Replace `[tag.templateRepository templateFromString:... error:...]` by
-// `[GRMustacheTemplate templateFromString:... error:...]`.
+// Replace [tag.templateRepository templateFromString:... error:...] with
+// [GRMustacheTemplate templateFromString:... error:...].
 //
-// Replace `[tag.templateRepository templateNamed:... error:...]` by explicit
+// Replace [tag.templateRepository templateNamed:... error:...] with explicit
 // invocation of the targeted template repository.
 @property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository;
 
