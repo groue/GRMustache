@@ -169,6 +169,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     self = [super init];
     if (self) {
         _partialForTemplateID = [[NSMutableDictionary alloc] init];
+        _partialForTemplateString = [[NSMutableDictionary alloc] init];
         _configuration = [[GRMustacheConfiguration defaultConfiguration] copy];
     }
     return self;
@@ -177,6 +178,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)dealloc
 {
     [_partialForTemplateID release];
+    [_partialForTemplateString release];
     [_configuration release];
     [super dealloc];
 }
@@ -212,6 +214,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     template.partial = partial;
     template.baseContext = _configuration.baseContext;
     return template;
+}
+
+- (void)reloadTemplates
+{
+    @synchronized(self) {
+        [_partialForTemplateID removeAllObjects];
+        [_partialForTemplateString removeAllObjects];
+    }
 }
 
 - (void)setConfiguration:(GRMustacheConfiguration *)configuration
@@ -332,14 +342,24 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustachePartial *)partialFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
 {
-    GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
-    if (!AST) {
-        return nil;
+    // Protect our _partialForTemplateString dictionary
+    @synchronized(self) {
+        GRMustachePartial *partial = [_partialForTemplateID objectForKey:templateString];
+        
+        if (partial == nil) {
+            GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
+            if (!AST) {
+                return nil;
+            }
+            
+            partial = [[[GRMustachePartial alloc] init] autorelease];
+            partial.AST = AST;
+            
+            [_partialForTemplateString setObject:partial forKey:templateString];
+        }
+        
+        return partial;
     }
-    
-    GRMustachePartial *partial = [[[GRMustachePartial alloc] init] autorelease];
-    partial.AST = AST;
-    return partial;
 }
 
 @end

@@ -133,6 +133,7 @@
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_partialForTemplateID;
+    NSMutableDictionary *_partialForTemplateString;
     GRMustacheConfiguration *_configuration;
 }
 
@@ -431,16 +432,6 @@
 /// @name Configuring Template Repositories
 ////////////////////////////////////////////////////////////////////////////////
 
-
-/**
- * The repository's data source.
- *
- * @see GRMustacheTemplateRepositoryDataSource
- *
- * @since v1.13
- */
-@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
-
 /**
  * The configuration for all templates and partials built by the repository.
  *
@@ -467,6 +458,32 @@
  * @since v6.2
  */
 @property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Managing The Data Source
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * The repository's data source.
+ *
+ * @see GRMustacheTemplateRepositoryDataSource
+ *
+ * @since v1.13
+ */
+@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * Have the template repository reload its templates.
+ *
+ * Use this method when the data source has updated its content.
+ *
+ * @warning Previously GRMustacheTemplate instances extracted from the
+ * repository are not reloaded.
+ *
+ * @since v7.0
+ */
+- (void)reloadTemplates AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -167,7 +167,30 @@ And finally render:
 GRMustacheTemplateRepository Data Source
 ----------------------------------------
 
-Finally, you may implement the `GRMustacheTemplateRepositoryDataSource` protocol in order to load templates for unimagined sources.
+All template repositories have a data source, whose responsability is to provide template strings.
+
+
+### Cache
+
+A template repository *caches* the parsing of its templates. This speeds up the loading of already parsed templates.
+
+However, changes to the underlying template strings won't be visible until you explicitely ask for a reloading:
+
+```objc
+// May reuse a cached parsing:
+template = [repository templateNamed:@"profile" error:NULL];
+
+// Forces the template reloading:
+[repository reloadTemplates];
+template = [repository templateNamed:@"profile" error:NULL];
+```
+
+Beware that previously created instances of GRMustacheTemplate are not reloaded.
+
+
+### Custom data source
+
+You may implement your own object conforming to the `GRMustacheTemplateRepositoryDataSource` protocol, in order to load templates for custom sources.
 
 ```objc
 /**

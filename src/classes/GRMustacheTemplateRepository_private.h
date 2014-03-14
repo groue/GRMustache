@@ -44,6 +44,7 @@
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
     NSMutableDictionary *_partialForTemplateID;
+    NSMutableDictionary *_partialForTemplateString;
     GRMustacheConfiguration *_configuration;
 }
 
@@ -82,6 +83,9 @@
 
 // Documented in GRMustacheTemplateRepository.h
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheTemplateRepository.h
+- (void)reloadTemplates;
 
 /**
  * TODO
