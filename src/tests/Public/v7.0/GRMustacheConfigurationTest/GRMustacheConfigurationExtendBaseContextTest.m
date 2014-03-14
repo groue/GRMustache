@@ -47,10 +47,10 @@
     }
 }
 
-- (void)testConfigurationExtendBaseContextWithPriorityObject
+- (void)testConfigurationExtendBaseContextWithProtectedObject
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    [configuration extendBaseContextWithPriorityObject:@{ @"precious": @"Gold" }];
+    [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"Gold" }];
     
     GRMustacheTemplateRepository *repository = [[[GRMustacheTemplateRepository alloc] init] autorelease];
     repository.configuration = configuration;

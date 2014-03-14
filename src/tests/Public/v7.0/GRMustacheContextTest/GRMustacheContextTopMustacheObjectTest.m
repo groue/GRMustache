@@ -37,8 +37,8 @@
     context = [context contextByAddingObject:object];
     XCTAssertEqual([context topMustacheObject], object, @"");
     
-    id priorityObject = @"priorityObject";
-    context = [context contextByAddingPriorityObject:priorityObject];
+    id protectedObject = @"protectedObject";
+    context = [context contextByAddingProtectedObject:protectedObject];
     XCTAssertEqual([context topMustacheObject], object, @"");
     
     id tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];

@@ -58,7 +58,7 @@
     type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     
     GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(priorityContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
     GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, id);
@@ -144,7 +144,7 @@
  * overriden by other objects that will eventually enter the context stack.
  *
  *     // Create a context with a priority `precious` key
- *     context = [GRMustacheContext contextWithPriorityObject:@{ @"precious": @"gold" }];
+ *     context = [GRMustacheContext contextWithProtectedObject:@{ @"precious": @"gold" }];
  *
  *     // Derive a new context by attempting to override the `precious` key:
  *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
@@ -158,11 +158,11 @@
  *
  * @return A rendering context.
  *
- * @see contextByAddingPriorityObject:
+ * @see contextByAddingProtectedObject:
  *
  * @since v7.0
  */
-+ (instancetype)contextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns a context containing a single tag delegate.
@@ -170,7 +170,7 @@
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
  *
- * Unlike contextWithObject: and contextWithPriorityObject:, _tagDelegate_ will
+ * Unlike contextWithObject: and contextWithProtectedObject:, _tagDelegate_ will
  * not provide any key to the templates. It will only be notified of the
  * rendering of tags.
  *
@@ -210,8 +210,8 @@
  *     [context valueForMustacheKey:@"b"];   // @"foo"
  *
  * _object_ can not override keys defined by the objects of the priority
- * context stack, though. See contextWithPriorityObject: and
- * contextByAddingPriorityObject:.
+ * context stack, though. See contextWithProtectedObject: and
+ * contextByAddingProtectedObject:.
  *
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * added at the top of the tag delegate stack.
@@ -240,7 +240,7 @@
  * overriden by other objects that will eventually enter the context stack.
  *
  *     // Derive a context with a priority `precious` key
- *     context = [context contextByAddingPriorityObject:@{ @"precious": @"gold" }];
+ *     context = [context contextByAddingProtectedObject:@{ @"precious": @"gold" }];
  *
  *     // Derive a new context by attempting to override the `precious` key:
  *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
@@ -256,7 +256,7 @@
  *
  * @since v7.0
  */
-- (instancetype)contextByAddingPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -265,7 +265,7 @@
  * _tagDelegate_ will be notified of the rendering of all tags rendered from the
  * receiver or from contexts derived from the receiver.
  *
- * Unlike contextByAddingObject: and contextByAddingPriorityObject:,
+ * Unlike contextByAddingObject: and contextByAddingProtectedObject:,
  * _tagDelegate_ will not provide any key to the templates. It will only be
  * notified of the rendering of tags.
  *

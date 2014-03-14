@@ -170,7 +170,7 @@
     GRKVCRecorder *recorder = [GRKVCRecorder recorderWithRecognizedKey:@"foo"];
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
     context = [context contextByAddingObject:recorder];
-    [context valueForMustacheKey:@"foo" priority:NULL];
+    [context valueForMustacheKey:@"foo" protected:NULL];
     XCTAssertEqualObjects(recorder.lastAccessedKey, @"foo");
 }
 
@@ -181,7 +181,7 @@
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"top" priority:NULL], @"top");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"top" protected:NULL], @"top");
     XCTAssertEqualObjects(topRecorder.lastAccessedKey, @"top");
     XCTAssertNil(rootRecorder.lastAccessedKey);
 }
@@ -193,7 +193,7 @@
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"root" priority:NULL], @"root");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"root" protected:NULL], @"root");
     XCTAssertEqualObjects(topRecorder.lastAccessedKey, @"root");
     XCTAssertEqualObjects(rootRecorder.lastAccessedKey, @"root");
 }
@@ -205,7 +205,7 @@
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
     context = [context contextByAddingObject:rootRecorder];
     context = [context contextByAddingObject:topRecorder];
-    XCTAssertNil([context valueForMustacheKey:@"foo" priority:NULL]);
+    XCTAssertNil([context valueForMustacheKey:@"foo" protected:NULL]);
     XCTAssertEqualObjects(topRecorder.lastAccessedKey, @"foo");
     XCTAssertEqualObjects(rootRecorder.lastAccessedKey, @"foo");
 }
@@ -217,7 +217,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionary];
     context = [context contextByAddingObject:dictionary];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"key" priority:NULL], @"foo");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"key" protected:NULL], @"foo");
 }
 
 - (void)testNSNullDoesStopExploration
@@ -227,7 +227,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"key" priority:NULL], [NSNull null]);
+    XCTAssertEqualObjects([context valueForMustacheKey:@"key" protected:NULL], [NSNull null]);
 }
 
 - (void)testNSNumberWithBoolNODoesStopExploration
@@ -237,7 +237,7 @@
     context = [context contextByAddingObject:dictionary];
     dictionary = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"key"];
     context = [context contextByAddingObject:dictionary];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"key" priority:NULL], [NSNumber numberWithBool:NO]);
+    XCTAssertEqualObjects([context valueForMustacheKey:@"key" protected:NULL], [NSNumber numberWithBool:NO]);
 }
 
 - (void)testOneDepthRuntimeTemplate
@@ -271,7 +271,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        value = [context valueForMustacheKey:@"KnownKey" priority:NULL];
+        value = [context valueForMustacheKey:@"KnownKey" protected:NULL];
         XCTAssertEqualObjects(value, @"KnownValue");
     }
     {
@@ -281,7 +281,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        value = [context valueForMustacheKey:@"KnownKey" priority:NULL];
+        value = [context valueForMustacheKey:@"KnownKey" protected:NULL];
         XCTAssertEqualObjects(value, @"KnownValue");
     }
 }
@@ -294,7 +294,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" priority:NULL]);
+        XCTAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" protected:NULL]);
     }
     {
         id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
@@ -302,7 +302,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" priority:NULL]);
+        XCTAssertThrows([context valueForMustacheKey:@"NonNSUndefinedKeyException" protected:NULL]);
     }
 }
 
@@ -314,7 +314,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" priority:NULL]);
+        XCTAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" protected:NULL]);
     }
     {
         id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
@@ -322,7 +322,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" priority:NULL]);
+        XCTAssertNoThrow([context valueForMustacheKey:@"NonSelfNSUndefinedKeyException" protected:NULL]);
     }
 }
 
@@ -334,7 +334,7 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" priority:NULL]);
+        XCTAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" protected:NULL]);
     }
     {
         id throwingObject = [[[ThrowingObjectFromValueForUndefinedKey alloc] init] autorelease];
@@ -342,21 +342,21 @@
         
         GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
         context = [context contextByAddingObject:throwingObject];
-        XCTAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" priority:NULL]);
+        XCTAssertNoThrow([context valueForMustacheKey:@"SelfNSUndefinedKeyException" protected:NULL]);
     }
 }
 
-- (void)testContextByAddingPriorityObject
+- (void)testContextByAddingProtectedObject
 {
     GRMustacheContext *context = [[[GRMustacheContext alloc] init] autorelease];
-    context = [context contextByAddingPriorityObject:@{ @"safe": @"important" }];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" priority:NULL], @"important", @"");
+    context = [context contextByAddingProtectedObject:@{ @"safe": @"important" }];
+    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" protected:NULL], @"important", @"");
     context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"A" }];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" priority:NULL], @"important", @"");
-    XCTAssertEqualObjects([context valueForMustacheKey:@"fragile" priority:NULL], @"A", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" protected:NULL], @"important", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"fragile" protected:NULL], @"A", @"");
     context = [context contextByAddingObject:@{ @"safe": @"hack", @"fragile": @"B" }];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" priority:NULL], @"important", @"");
-    XCTAssertEqualObjects([context valueForMustacheKey:@"fragile" priority:NULL], @"B", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"safe" protected:NULL], @"important", @"");
+    XCTAssertEqualObjects([context valueForMustacheKey:@"fragile" protected:NULL], @"B", @"");
 }
 
 @end

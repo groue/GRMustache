@@ -44,11 +44,11 @@
     }
 }
 
-- (void)testTemplateExtendBaseContextWithPriorityObject
+- (void)testTemplateExtendBaseContextWithProtectedObject
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
     
-    [template extendBaseContextWithPriorityObject:@{ @"precious": @"Gold" }];
+    [template extendBaseContextWithProtectedObject:@{ @"precious": @"Gold" }];
     
     {
         NSString *rendering = [template renderObject:nil error:NULL];

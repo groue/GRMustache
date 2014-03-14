@@ -45,10 +45,10 @@ static GRMustacheImplicitIteratorExpression *instance;
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context priority:(BOOL *)priority error:(NSError **)error
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
-    if (priority != NULL) {
-        *priority = NO;
+    if (protected != NULL) {
+        *protected = NO;
     }
     if (value != NULL) {
         *value = [context topMustacheObject];

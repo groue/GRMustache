@@ -40,67 +40,9 @@ GRMustacheContext provides methods for creating or deriving new contexts with un
 ```
 
 
-### Priority Keys
-
-Priority keys always evaluate to the same value, and prevent untrusted templates from overriding critical objects.
-
-This feature used to be documented under the name "protected contexts". The "priority keys" wording is hopefully clearer. Check the [Security Guide](Guides/security.md#priority-keys).
-
-**New APIs**
-
-GRMustacheContext has methods for creating or deriving new contexts with objects providing priority keys.
-
-GRMustacheTemplate and GRMustacheConfiguration have methods for inserting priority objects into their root base context.
-
-```objc
-@interface GRMustacheContext
-+ (instancetype)contextWithPriorityObject:(id)object;
-- (instancetype)contextByAddingPriorityObject:(id)object;
-@end
-
-@interface GRMustacheTemplate
-- (void)extendBaseContextWithPriorityObject:(id)object;
-@end
-
-@interface GRMustacheConfiguration
-- (void)extendBaseContextWithPriorityObject:(id)object;
-@end
-```
-
-**Removed APIs**
-
-`...Protected...` methods are removed. Use their `...Priority...` counterpart instead.
-
-```objc
-@interface GRMustacheContext
-
-// use contextWithPriorityObject instead
-+ (instancetype)contextWithProtectedObject:(id)object;
-
-// use contextByAddingPriorityObject instead
-- (instancetype)contextByAddingProtectedObject:(id)object;
-
-@end
-
-@interface GRMustacheTemplate
-
-// use extendBaseContextWithPriorityObject instead
-- (void)extendBaseContextWithProtectedObject:(id)object;
-
-@end
-
-@interface GRMustacheConfiguration
-
-// Use extendBaseContextWithPriorityObject instead
-- (void)extendBaseContextWithProtectedObject:(id)object;
-
-@end
-```
-
-
 ### View Models
 
-Previous versions of the library would let you subclass GRMustacheContext, and declare properties with direct access to the context stack. This is no longer the case: GRMustacheContext is no longer suitable for subclassing.
+Previous versions of the library would let you subclass `GRMustacheContext`, and declare properties with direct access to the context stack. This is no longer the case: GRMustacheContext is no longer suitable for subclassing.
 
 **Upgrading from earlier version of GRMustache**
 
@@ -137,8 +79,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 
 ### Misc
-
-- Fixes [issue #71](https://github.com/groue/GRMustache/issues/71): `+[GRMustache version]` improperly overrides NSObject with different return type.
 
 **New APIs**
 

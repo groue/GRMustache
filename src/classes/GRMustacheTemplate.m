@@ -94,9 +94,9 @@
     self.baseContext = [self.baseContext contextByAddingObject:object];
 }
 
-- (void)extendBaseContextWithPriorityObject:(id)object
+- (void)extendBaseContextWithProtectedObject:(id)object
 {
-    self.baseContext = [self.baseContext contextByAddingPriorityObject:object];
+    self.baseContext = [self.baseContext contextByAddingProtectedObject:object];
 }
 
 - (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate

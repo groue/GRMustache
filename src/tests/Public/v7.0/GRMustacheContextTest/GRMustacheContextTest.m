@@ -80,7 +80,7 @@
     XCTAssertTrue(rendering.length > 0, @"");
 }
 
-- (void)testContextWithPriorityObjectConstructor
+- (void)testContextWithProtectedObjectConstructor
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe}} {{foo}}" error:NULL];
     
@@ -89,8 +89,8 @@
         XCTAssertEqualObjects(rendering, @" ", @"");
     }
     {
-        id priorityData = @{ @"safe": @"success" };
-        template.baseContext = [GRMustacheContext contextWithPriorityObject:priorityData];
+        id protectedData = @{ @"safe": @"success" };
+        template.baseContext = [GRMustacheContext contextWithProtectedObject:protectedData];
         id data = @{ @"safe": @"failure", @"foo": @"bar" };
         NSString *rendering = [template renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"success bar", @"");

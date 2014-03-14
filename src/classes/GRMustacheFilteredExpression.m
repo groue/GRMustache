@@ -86,15 +86,15 @@
 
 #pragma mark GRMustacheExpression
 
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context priority:(BOOL *)priority error:(NSError **)error
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
     id filter;
-    if (![_filterExpression hasValue:&filter withContext:context priority:NULL error:error]) {
+    if (![_filterExpression hasValue:&filter withContext:context protected:NULL error:error]) {
         return NO;
     }
     
     id argument;
-    if (![_argumentExpression hasValue:&argument withContext:context priority:NULL error:error]) {
+    if (![_argumentExpression hasValue:&argument withContext:context protected:NULL error:error]) {
         return NO;
     }
     
@@ -140,8 +140,8 @@
         return NO;
     }
     
-    if (priority != NULL) {
-        *priority = NO;
+    if (protected != NULL) {
+        *protected = NO;
     }
     
     if (value != NULL) {

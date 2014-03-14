@@ -82,15 +82,15 @@
 
 #pragma mark - GRMustacheExpression
 
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context priority:(BOOL *)priority error:(NSError **)error
+- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
 {
     id scopedValue;
-    if (![_baseExpression hasValue:&scopedValue withContext:context priority:NULL error:error]) {
+    if (![_baseExpression hasValue:&scopedValue withContext:context protected:NULL error:error]) {
         return NO;
     }
     
-    if (priority != NULL) {
-        *priority = NO;
+    if (protected != NULL) {
+        *protected = NO;
     }
     if (value) {
         *value = [GRMustacheKeyAccess valueForMustacheKey:_scopeIdentifier inObject:scopedValue unsafeKeyAccess:context.unsafeKeyAccess];

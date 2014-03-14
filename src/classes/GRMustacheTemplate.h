@@ -139,7 +139,7 @@
  * @see GRMustacheTemplateRepository
  * @see [GRMustache standardLibrary]
  * @see extendBaseContextWithObject:
- * @see extendBaseContextWithPriorityObject:
+ * @see extendBaseContextWithProtectedObject:
  * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.0
@@ -174,7 +174,7 @@
  * @param object  An object
  *
  * @see baseContext
- * @see extendBaseContextWithPriorityObject:
+ * @see extendBaseContextWithProtectedObject:
  * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.8
@@ -192,16 +192,16 @@
  *
  *     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
  *
- *     // Have the `precious` key defined, and given priority, for all renderings of the template:
+ *     // The `precious` key is given priority:
  *     id object = @{ @"precious": @"gold" };
- *     [template extendBaseContextWithPriorityObject:object];
+ *     [template extendBaseContextWithProtectedObject:object];
  *
- *     // Renders "gold"
+ *     // Renders "gold", not "lead".
  *     [template renderObject:@{ @"precious": @"lead" } error:NULL];
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     template.baseContext = [template.baseContext contextByAddingPriorityObject:object];
+ *     template.baseContext = [template.baseContext contextByAddingProtectedObject:object];
  *
  * @param object  An object
  *
@@ -211,7 +211,7 @@
  *
  * @since v7.0
  */
-- (void)extendBaseContextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -225,7 +225,7 @@
  *
  * @see baseContext
  * @see extendBaseContextWithObject:
- * @see extendBaseContextWithPriorityObject:
+ * @see extendBaseContextWithProtectedObject:
  *
  * @since v6.8
  */

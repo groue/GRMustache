@@ -31,7 +31,7 @@
  * The GRMustacheContext maintains the following stacks:
  *
  * - a context stack,
- * - a priority context stack,
+ * - a protected context stack,
  * - a hidden context stack,
  * - a tag delegate stack,
  * - an inheritable partial stack.
@@ -40,10 +40,10 @@
  *
  * - Provide the current context object (the top of the context stack).
  *
- * - Perform a key lookup, starting with the priority context stack, then
+ * - Perform a key lookup, starting with the protected context stack, then
  *   looking in the context stack, avoiding objects in the hidden context stack.
  *
- *   For a full discussion of the interaction between the priority and the
+ *   For a full discussion of the interaction between the protected and the
  *   hidden stacks, see the implementation of
  *   [GRMustacheTag renderContentType:inBuffer:withContext:error:].
  *
@@ -61,7 +61,7 @@
     type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     
     GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(priorityContextStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
     GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, GRMustacheInheritablePartial *);
@@ -79,7 +79,7 @@
 + (instancetype)contextWithObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-+ (instancetype)contextWithPriorityObject:(id)object GRMUSTACHE_API_PUBLIC;
++ (instancetype)contextWithProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 + (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
@@ -88,7 +88,7 @@
 - (instancetype)contextByAddingObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (instancetype)contextByAddingPriorityObject:(id)object GRMUSTACHE_API_PUBLIC;
+- (instancetype)contextByAddingProtectedObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
@@ -103,7 +103,7 @@
 - (id)valueForMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-// @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:priority:error:]
+// @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
 @property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
@@ -119,10 +119,10 @@
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * hidden object stack that is extended with _object_.
  *
- * Hidden objects can not be queried by the valueForMustacheKey:priority:
+ * Hidden objects can not be queried by the valueForMustacheKey:protected:
  * method.
  *
- * For a full discussion of the interaction between the priority and the hidden
+ * For a full discussion of the interaction between the protected and the hidden
  * stacks, see the implementation of
  * [GRMustacheTag renderContentType:inBuffer:withContext:error:].
  *
@@ -130,7 +130,7 @@
  *
  * @return A GRMustacheContext object.
  *
- * @see [GRMustacheContext valueForMustacheKey:priority:]
+ * @see [GRMustacheContext valueForMustacheKey:protected:]
  */
 - (instancetype)contextByAddingHiddenObject:(id)object GRMUSTACHE_API_INTERNAL;
 
@@ -152,14 +152,14 @@
  * value.
  *
  * @param key       The searched key.
- * @param priority  Upon return, is YES if the value comes from the priority
+ * @param protected Upon return, is YES if the value comes from the protected
  *                  context stack.
  *
  * @return The value found in the context stack.
  *
- * @see -[GRMustacheIdentifierExpression hasValue:withContext:priority:error:]
+ * @see -[GRMustacheIdentifierExpression hasValue:withContext:protected:error:]
  */
-- (id)valueForMustacheKey:(NSString *)key priority:(BOOL *)priority GRMUSTACHE_API_INTERNAL;
+- (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of template inheritance, return the component that should be

@@ -23,64 +23,64 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRMustacheContextPriorityObjectTest : GRMustachePublicAPITest
+@interface GRMustacheContextProtectedObjectTest : GRMustachePublicAPITest
 @end
 
-@implementation GRMustacheContextPriorityObjectTest
+@implementation GRMustacheContextProtectedObjectTest
 
-- (void)testPriorityObjectCanBeAccessed
+- (void)testProtectedObjectCanBeAccessed
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @"important" }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @"important" }];
     NSString *rendering = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(rendering, @"important", @"");
 }
 
-- (void)testMultiplePriorityObjectCanBeAccessed
+- (void)testMultipleProtectedObjectCanBeAccessed
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe1}}, {{safe2}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe1": @"important1" }];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe2": @"important2" }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe1": @"important1" }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe2": @"important2" }];
     NSString *rendering = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(rendering, @"important1, important2", @"");
 }
 
-- (void)testPriorityObjectCanNotBeShadowed
+- (void)testProtectedObjectCanNotBeShadowed
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe}}, {{fragile}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @"important" }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @"important" }];
     NSString *rendering = [template renderObject:@{ @"safe": @"error", @"fragile": @"not important" } error:NULL];
     XCTAssertEqualObjects(rendering, @"important, not important", @"");
 }
 
-- (void)testDeepPriorityObjectCanBeAccessedViaFullKeyPath
+- (void)testDeepProtectedObjectCanBeAccessedViaFullKeyPath
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{safe.name}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @{ @"name": @"important" } }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(rendering, @"important", @"");
 }
 
-- (void)testDeepPriorityObjectCanBeAccessedViaScope
+- (void)testDeepProtectedObjectCanBeAccessedViaScope
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{.name}}{{/safe}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @{ @"name": @"important" } }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(rendering, @"important", @"");
 }
 
-- (void)testDeepPriorityObjectCanNotBeAccessedViaIdentifier
+- (void)testDeepProtectedObjectCanNotBeAccessedViaIdentifier
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{name}}{{/safe}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @{ @"name": @"important" } }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(rendering, @"", @"");
 }
 
-- (void)testUnreachableDeepPriorityObjectCanBeShadowed
+- (void)testUnreachableDeepProtectedObjectCanBeShadowed
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#safe}}{{name}}{{/safe}}" error:NULL];
-    template.baseContext = [template.baseContext contextByAddingPriorityObject:@{ @"safe": @{ @"name": @"important" } }];
+    template.baseContext = [template.baseContext contextByAddingProtectedObject:@{ @"safe": @{ @"name": @"important" } }];
     NSString *rendering = [template renderObject:@{ @"name": @"not important" } error:NULL];
     XCTAssertEqualObjects(rendering, @"not important", @"");
 }

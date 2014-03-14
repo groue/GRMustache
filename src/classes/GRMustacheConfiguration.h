@@ -158,7 +158,7 @@
  * @param object  An object
  *
  * @see baseContext
- * @see extendBaseContextWithPriorityObject:
+ * @see extendBaseContextWithProtectedObject:
  * @see extendBaseContextWithTagDelegate:
  *
  * @since v6.8
@@ -177,14 +177,14 @@
  *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
  *     // The `precious` key is given priority:
- *     [configuration extendBaseContextWithObject:@{ @"precious": @"gold" }];
+ *     [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"gold" }];
  *
  *     // Renders "gold", not "lead".
  *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingPriorityObject:object];
+ *     configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
  *
  * @param object  An object
  *
@@ -194,7 +194,7 @@
  *
  * @since v7.0
  */
-- (void)extendBaseContextWithPriorityObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -208,7 +208,7 @@
  *
  * @see baseContext
  * @see extendBaseContextWithObject:
- * @see extendBaseContextWithPriorityObject:
+ * @see extendBaseContextWithProtectedObject:
  *
  * @since v6.8
  */
