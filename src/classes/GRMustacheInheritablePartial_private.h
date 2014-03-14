@@ -43,6 +43,11 @@
 }
 
 /**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
+
+/**
  * Builds a GRMustacheInheritablePartial.
  *
  * @param partial     The partial template that is inherited

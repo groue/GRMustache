@@ -27,6 +27,7 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheKeyAccess_private.h"
+#import "GRMustacheInheritablePartial_private.h"
 #import "GRMustacheTagDelegate.h"
 
 #define GRMUSTACHE_STACK_RELEASE(stackName) \
@@ -100,9 +101,24 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
-    GRMUSTACHE_STACK_ENUMERATE(inheritablePartialStack, self, context) {
-        component = [GRMUSTACHE_STACK_TOP(inheritablePartialStack, context) resolveTemplateComponent:component];
+    if (!GRMUSTACHE_STACK_TOP(inheritablePartialStack, self)) {
+        return component;
     }
+    
+    NSMutableSet *usedPartials = [[NSMutableSet alloc] init];
+    GRMUSTACHE_STACK_ENUMERATE(inheritablePartialStack, self, context) {
+        GRMustacheInheritablePartial *inheritablePartial = GRMUSTACHE_STACK_TOP(inheritablePartialStack, context);
+        if ([usedPartials containsObject:inheritablePartial.partial]) {
+            continue;
+        }
+        id<GRMustacheTemplateComponent> resolvedComponent = [inheritablePartial resolveTemplateComponent:component];
+        if (resolvedComponent != component) {
+            [usedPartials addObject:inheritablePartial.partial];
+        }
+        component = resolvedComponent;
+    }
+    [usedPartials release];
+    
     return component;
 }
 

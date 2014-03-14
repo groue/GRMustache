@@ -29,6 +29,7 @@
 @end
 
 @implementation GRMustacheInheritablePartial
+@synthesize partial=_partial;
 
 + (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
 {

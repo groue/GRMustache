@@ -89,16 +89,15 @@
     XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
 }
 
-#warning Disabled failing test
-//// com.github.mustachejava.ExtensionTest.testNested
-//- (void)testExtensionNested
-//{
-//    GRMustacheTemplate *template = [self templateNamed:@"nested_inheritance"];
-//    id data = nil;
-//    NSString *rendering = [template renderObject:data error:NULL];
-//    NSString *expectedRendering = [self expectedRenderingNamed:@"nested_inheritance.txt"];
-//    XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
-//}
+// com.github.mustachejava.ExtensionTest.testNested
+- (void)testExtensionNested
+{
+    GRMustacheTemplate *template = [self templateNamed:@"nested_inheritance"];
+    id data = nil;
+    NSString *rendering = [template renderObject:data error:NULL];
+    NSString *expectedRendering = [self expectedRenderingNamed:@"nested_inheritance.txt"];
+    XCTAssertTrue([self rendering:rendering isEqualToRendering:expectedRendering], @"");
+}
 
 // com.github.mustachejava.ExtensionTest.testPartialInSub
 - (void)testExtensionPartialInSub

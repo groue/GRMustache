@@ -6,8 +6,8 @@
 - [?] have GRMustacheTemplateRepository cache template from string (for faster rendering objects)
 - [X] expose GRMustacheTemplate.templateRepository
 - [X] document dropped support for garbage collection
-- [X] run http://twitter.github.com/hogan.js/ inheritable template tests
-- [ ] run https://github.com/spullara/mustache.java inheritable template tests
+- [X] pass http://twitter.github.com/hogan.js/ inheritable template tests
+- [X] pass https://github.com/spullara/mustache.java inheritable template tests
 - [ ] Update the documentation to de-emphasize KVC exceptions.
 - [X] Consistent use of the "template inheritance" wording.
 - [X] Rewrite documentation for default values for any keys
