@@ -375,7 +375,12 @@ Values extracted from the context stack are directly rendered unless you had som
 Detailed description of GRMustache handling of `valueForKey:`
 -------------------------------------------------------------
 
-As seen above, GRMustache looks for a key in your data objects with the `objectForKeyedSubscript:` and `valueForKey:` methods. If an object responds to `objectForKeyedSubscript:`, this method is used. For other objects, `valueForKey:` is used. With some extra bits described below.
+As seen above, GRMustache looks for a key in your data objects with the `objectForKeyedSubscript:` and `valueForKey:` methods. If an object responds to `objectForKeyedSubscript:`, this method is used. For other objects, `valueForKey:` is used, as long as the key is safe (see the [Security Guide](security.md)).
+
+
+### NSArray, NSSet, NSOrderedSet
+
+GRMustache does not use `valueForKey:` for NSArray, NSSet, and NSOrderedSet. Instead, it directly invokes methods of those objects. As a consequence, keys like `count`, `firstObject`, etc. can be used in templates.
 
 
 ### NSUndefinedKeyException Handling
@@ -416,21 +421,6 @@ Since the main use case for this method is to avoid Xcode breaks on rendering ex
 [GRMustache preventNSUndefinedKeyExceptionAttack];
 #endif
 ```
-
-
-### NSArray, NSSet, NSOrderedSet
-
-*GRMustache shunts the valueForKey: implementation of Foundation collections to NSObject's one*.
-
-It is little know that the implementation of `valueForKey:` of Foundation collections return another collection containing the results of invoking `valueForKey:` using the key on each of the collection's objects.
-
-This is very handy, but this clashes with the [rule of least surprise](http://www.catb.org/~esr/writings/taoup/html/ch01s06.html#id2878339) in the context of Mustache template rendering.
-
-First, `{{collection.count}}` would not render the number of objects in the collection. `{{#collection.count}}...{{/}}` would not conditionally render if and only if the array is not empty. This has bitten at least [one GRMustache user](https://github.com/groue/GRMustache/issues/21), and this should not happen again.
-
-Second, `{{#collection.name}}{{.}}{{/}}` would render the same as `{{#collection}}{{name}}{{/}}`. No sane user would ever try to use the convoluted first syntax. But sane users want a clean and clear failure when their code has a bug, leading to GRMustache not render the object they expect. When `object` resolves to an unexpected collection, `object.name` should behave like a missing key, not like a key that returns an unexpected collection with weird and hard-to-debug side effects.
-
-Based on this rationale, GRMustache uses the implementation of `valueForKey:` of `NSObject` for arrays, sets, and ordered sets. As a consequence, the `count` key can be used in templates, and no unexpected collections comes messing with the rendering.
 
 
 Compatibility with other Mustache implementations
