@@ -63,7 +63,7 @@ Documentation
 -------------
 
 - http://mustache.github.io/mustache.5.html
-- [Guides](Guides#guides): a guided tour to the library
+- [Guides](Guides/README.md): a guided tour to the library
 - [Reference](http://groue.github.io/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation.
 
 
