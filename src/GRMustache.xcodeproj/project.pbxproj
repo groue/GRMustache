@@ -1621,6 +1621,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = YES;
+				PUBLIC_HEADERS_FOLDER_PATH = include/GRMustache;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1648,6 +1649,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				MACOSX_DEPLOYMENT_TARGET = "";
+				PUBLIC_HEADERS_FOLDER_PATH = include/GRMustache;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1660,7 +1662,6 @@
 				DSTROOT = "/tmp/$(TARGET_NAME).dst";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = include/GRMustache;
 			};
 			name = Debug;
 		};
@@ -1673,7 +1674,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = include/GRMustache;
 			};
 			name = Release;
 		};
