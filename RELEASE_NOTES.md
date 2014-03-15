@@ -69,7 +69,7 @@ Check their updated documentations in the header files.
 
 **Deprecated APIs**
 
-Those APIs are not discontinued, but they will have your code emit deprecation warnings. Check their updated documentations in the header files in order to get the upgrade path.
+Those APIs are not discontinued, but they will have your code emit deprecation warnings. Check their documentations in the header files in order to get the upgrade path.
 
 ```objc
 @interface GRMustache
