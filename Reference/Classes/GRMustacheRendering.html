@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
-		<title>GRMustacheFilter Protocol Reference</title>
+		<title>GRMustacheRendering Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
@@ -16,7 +16,7 @@
 			</div>
 			
 			<div id="title" role="banner">
-				<h1 class="hideInXcode">GRMustacheFilter Protocol Reference</h1>
+				<h1 class="hideInXcode">GRMustacheRendering Class Reference</h1>
 			</div>
 			<ul id="headerButtons" role="toolbar">
 				<li id="toc_button">
@@ -39,11 +39,13 @@
 	
 	
 	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/renderingObjectForObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectForObject:</option>
+	
+	<option value="//api/name/renderingObjectWithBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectWithBlock:</option>
 	
 	
-	<option value="instance_methods">Instance Methods</option>
-	
-	<option value="//api/name/transformedValue:">&nbsp;&nbsp;&nbsp;&nbsp;- transformedValue:</option>
 	
 	
 	
@@ -61,7 +63,7 @@
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Transforming Values">Transforming Values</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creating Rendering Objects">Creating Rendering Objects</a></span></li>
 	
 </ul></li>
 
@@ -71,20 +73,22 @@
 
 
 
-
-
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/transformedValue:">transformedValue:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectForObject:">renderingObjectForObject:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectWithBlock:">renderingObjectWithBlock:</a></span></li>
 	
 </ul></li>
+
+
 
 
 			</ul>
 		</nav>
 		<article>
 			<div id="contents" class="isShowingTOC" role="main">
-				<a title="GRMustacheFilter Protocol Reference" name="top"></a>
+				<a title="GRMustacheRendering Class Reference" name="top"></a>
 				<div class="main-navigation navigation-top">
 					<ul>
 	<li><a href="../index.html">Index</a></li>
@@ -93,18 +97,21 @@
 				</div>
 				<div id="header">
 					<div class="section-header">
-						<h1 class="title title-header">GRMustacheFilter Protocol Reference</h1>
+						<h1 class="title title-header">GRMustacheRendering Class Reference</h1>
 					</div>		
 				</div>
 				<div id="container">	
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
-	<td class="specification-title">Conforms to</td>
+	<td class="specification-title">Inherits from</td>
 	<td class="specification-value">NSObject</td>
 </tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value"><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a></td>
+</tr><tr>
 	<td class="specification-title">Declared in</td>
-	<td class="specification-value">GRMustacheFilter.h</td>
+	<td class="specification-value">GRMustacheRendering.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -114,15 +121,10 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>The protocol for implementing <a href="../Classes/GRMustache.html">GRMustache</a> filters.</p>
+						<p>The GRMustacheRendering class helps building rendering objects without
+writing a custom class that conforms to the GRMustacheRendering protocol.</p>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime/filters.md</a></p>
-
-<p>The responsability of a GRMustacheFilter is to transform a value into
-another.</p>
-
-<p>For example, the tag <code>{{ uppercase(name) }}</code> uses a filter object that
-returns the uppercase version of its input.</p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md">https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md</a></p>
 					</div>
 					
 					
@@ -134,16 +136,22 @@ returns the uppercase version of its input.</p>
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
-						<a title="Transforming Values" name="task_Transforming Values"></a>
+						<a title="Creating Rendering Objects" name="task_Creating Rendering Objects"></a>
 						
-<h3 class="subsubtitle task-title">Transforming Values</h3>
+<h3 class="subsubtitle task-title">Creating Rendering Objects</h3>
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/transformedValue:">&ndash;&nbsp;transformedValue:</a></code>
+		<code><a href="#//api/name/renderingObjectForObject:">+&nbsp;renderingObjectForObject:</a></code>
 	</span>
 	
-	<span class="task-item-suffix">required method</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/renderingObjectWithBlock:">+&nbsp;renderingObjectWithBlock:</a></code>
+	</span>
+	
+	
 </li>
 						</ul>
 						
@@ -155,25 +163,24 @@ returns the uppercase version of its input.</p>
 					
 					
 					
-					
-					
 					<div class="section section-methods">
-						<a title="Instance Methods" name="instance_methods"></a>
-						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/transformedValue:" title="transformedValue:"></a>
-	<h3 class="subsubtitle method-title">transformedValue:</h3>
+	<a name="//api/name/renderingObjectForObject:" title="renderingObjectForObject:"></a>
+	<h3 class="subsubtitle method-title">renderingObjectForObject:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Applies some transformation to its input, and returns the transformed value.</p>
+		<p>Returns a rendering object that is able to render the argument <em>object</em> for
+the various Mustache tags.</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>- (id)transformedValue:(id)<em>object</em></code></div>
+	<div class="method-subsection method-declaration"><code>+ (id&lt;GRMustacheRendering&gt;)renderingObjectForObject:(id)<em>object</em></code></div>
 
     
 	
@@ -182,7 +189,7 @@ returns the uppercase version of its input.</p>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>object</em></dt>
-			<dd><p>An object to be processed by the filter.</p></dd>
+			<dd><p>An object.</p></dd>
 		</dl>
 		
 	</div>
@@ -191,14 +198,14 @@ returns the uppercase version of its input.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A transformed value.</p>
+		<p>A rendering object able to render the argument.</p>
 	</div>
 	
 	
 	
 	<div class="method-subsection availability">
 		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v4.3</p>
+		<p>v7.0</p>
 	</div>
 	
 	
@@ -211,13 +218,74 @@ returns the uppercase version of its input.</p>
 	
 	<div class="method-subsection declared-in-section">
 		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheFilter.h</code><br />
+		<code class="declared-in-ref">GRMustacheRendering.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/renderingObjectWithBlock:" title="renderingObjectWithBlock:"></a>
+	<h3 class="subsubtitle method-title">renderingObjectWithBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a rendering object that renders with the provided block.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (id&lt;GRMustacheRendering&gt;)renderingObjectWithBlock:(NSString *( ^ ) ( GRMustacheTag *tag , GRMustacheContext *context , BOOL *HTMLSafe , NSError **error ))<em>block</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>block</em></dt>
+			<dd><p>A block that follows the semantics of the
+renderForMustacheTag:context:HTMLSafe:error: method defined by
+the GRMustacheRendering protocol. See the documentation of this
+method.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A rendering object</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheRendering.h</code><br />
 	</div>				
 	
 	
 </div>
 						
 					</div>
+					
+					
 					
 					
                     
