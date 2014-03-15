@@ -86,24 +86,18 @@ Those APIs are not discontinued, but they will have your code emit deprecation w
 
 ```objc
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
-  
     // This constant is not replaced.
     GRMustacheTagTypeOverridableSection,
-    
 }
 
 @interface GRMustache
-
 // Use +[GRMustache libraryVersion] instead.
 + (GRMustacheVersion)version;
-
 @end
 
 @interface GRMustacheContext
-
 // Use -[GRMustacheContext hasValue:forMustacheExpression:error:] instead.
 - (id)valueForMustacheExpression:(NSString *)string error:(NSError **)error;
-
 @end
 ```
 
