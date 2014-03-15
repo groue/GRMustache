@@ -78,7 +78,7 @@ Compatibility with other Mustache implementations
 
 The [Mustache specification](https://github.com/mustache/spec) does not have the concepts of relative vs. absolute partial paths, or dynamic partials.
 
-**As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use those features with great care.**
+**As a consequence, if your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use those features with great care.**
 
 
 [up](../../../../GRMustache#documentation), [next](template_inheritance.md)

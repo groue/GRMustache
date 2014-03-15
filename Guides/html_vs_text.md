@@ -160,6 +160,6 @@ Compatibility with other Mustache implementations
 
 The [Mustache specification](https://github.com/mustache/spec) does not have any concept of "text template".
 
-**If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use {{{ triple }}} mustache tags, and don't mix text with HTML.**
+**If your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use {{{ triple }}} mustache tags, and don't mix text with HTML.**
 
 [up](../../../../GRMustache#documentation), [next](NSFormatter.md)

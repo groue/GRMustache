@@ -50,7 +50,7 @@ The [Mustache specification](https://github.com/mustache/spec) does not have the
 
 There is no guarantee that our implementations are identical, though.
 
-**As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use template inheritance with great care.**
+**As a consequence, if your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use template inheritance with great care.**
 
 
 [up](../../../../GRMustache#documentation), [next](standard_library.md)

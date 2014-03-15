@@ -159,7 +159,7 @@ Compatibility with other Mustache implementations
 
 The [Mustache specification](https://github.com/mustache/spec) does not talk about any of the options above.
 
-**If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), check their documentation.**
+**If your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), check their documentation.**
 
 
 [up](../../../../GRMustache#documentation), [next](forking.md)

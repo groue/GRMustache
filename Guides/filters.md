@@ -203,7 +203,7 @@ The [Mustache specification](https://github.com/mustache/spec) does not have any
 
 The topic is under [discussion](http://github.com/mustache/spec/issues/41) with other implementors of Mustache. A detailed explanation of the ideas behind the filtering API described above is available at [WhyMustacheFilters.md](../Articles/WhyMustacheFilters.md).
 
-**If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), do NOT use filters.**
+**If your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), do NOT use filters.**
 
 Instead, have a look at tag delegates, especially the [Tag Delegates as Cross-Platform Filters](delegate.md#tag-delegates-as-cross-platform-filters) section of the Tag Delegates Guide.
 
