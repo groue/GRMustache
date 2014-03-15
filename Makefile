@@ -41,7 +41,7 @@ build/MacOS/Release/libGRMustache7-MacOS.a:
 	           build SYMROOT=../build/MacOS
 
 include/GRMustache.h: build/MacOS/Release/libGRMustache7-MacOS.a
-	cp -R build/MacOS/Release/usr/local/include .
+	cp -R build/MacOS/Release/include/GRMustache include
 
 Reference: include/GRMustache.h
 	# Appledoc does not parse availability macros: create a temporary directory
