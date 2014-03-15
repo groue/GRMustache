@@ -34,16 +34,16 @@
 #pragma mark - Rendering declarations
 
 
-// GRMustacheNilRenderer renders for nil
+// GRMustacheNilRendering renders for nil
 
-@interface GRMustacheNilRenderer : NSObject<GRMustacheRendering>
+@interface GRMustacheNilRendering : NSObject<GRMustacheRendering>
 @end
-static GRMustacheNilRenderer *nilRenderingObject;
+static GRMustacheNilRendering *nilRendering;
 
 
-// GRMustacheBlockRenderer renders with a block
+// GRMustacheBlockRendering renders with a block
 
-@interface GRMustacheBlockRenderer:NSObject<GRMustacheRendering> {
+@interface GRMustacheBlockRendering : NSObject<GRMustacheRendering> {
 @private
     NSString *(^_block)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 }
@@ -96,7 +96,7 @@ void freeCurrentContentTypeStack(void *objects) {
     setupCurrentTemplateRepositoryStack();
     setupCurrentContentTypeStack();
     
-    nilRenderingObject = [[GRMustacheNilRenderer alloc] init];
+    nilRendering = [[GRMustacheNilRendering alloc] init];
     
     // We could have declared categories on NSNull, NSNumber, NSString and
     // NSDictionary.
@@ -121,12 +121,12 @@ void freeCurrentContentTypeStack(void *objects) {
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object
 {
     // All objects but nil know how to render (see setupRendering).
-    return object ?: nilRenderingObject;
+    return object ?: nilRendering;
 }
 
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
-    return [[[GRMustacheBlockRenderer alloc] initWithBlock:block] autorelease];
+    return [[[GRMustacheBlockRendering alloc] initWithBlock:block] autorelease];
 }
 
 
@@ -227,7 +227,7 @@ void freeCurrentContentTypeStack(void *objects) {
 // =============================================================================
 #pragma mark - Rendering Implementations
 
-@implementation GRMustacheNilRenderer
+@implementation GRMustacheNilRendering
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
@@ -247,7 +247,7 @@ void freeCurrentContentTypeStack(void *objects) {
 @end
 
 
-@implementation GRMustacheBlockRenderer
+@implementation GRMustacheBlockRendering
 
 - (void)dealloc
 {
