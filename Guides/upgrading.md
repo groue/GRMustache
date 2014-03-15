@@ -64,13 +64,13 @@ The fix is to add a `dateFormat` property:
 
 ### Customizing key access
 
-You can, if you want, customize the list of safe keys, or restore the previous behavior of the library: see the [Security Guide](Guides/security.md).
+You can, if you want, customize the list of safe keys, or restore the previous behavior of the library: see the [Security Guide](security.md).
 
 
 Default values
 --------------
 
-Safe key access may affect your existing code which provide default values for missing keys. Please read the updated [View Model Guide](Guides/view_model.md#default-values).
+Safe key access may affect your existing code which provide default values for missing keys. Please read the updated [View Model Guide](view_model.md#default-values).
 
 
 GRMustacheContext does no longer support subclassing
@@ -84,7 +84,7 @@ Should you rely on this dropped feature, and experiment difficulties migrating t
 Template Inheritance
 --------------------
 
-GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java) (see the [Compatibility Guide](Guides/compatibility.md#template-inheritance)):
+GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java) (see the [Compatibility Guide](compatibility.md#template-inheritance)):
 
 - Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
 - Your objects conforming to the GRMustacheTagDelegate and GRMustacheRendering protocols can no longer perform custom rendering of inheritable sections.
