@@ -273,7 +273,7 @@
 @property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * The opening delimiter for Mustache tags. Its default value is @"{{".
+ * The opening delimiter for Mustache tags. Its default value is `{{`.
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
@@ -283,7 +283,7 @@
 @property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * The closing delimiter for Mustache tags. Its default value is @"}}".
+ * The closing delimiter for Mustache tags. Its default value is `}}`.
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].

@@ -38,7 +38,7 @@
  * ### Localizing data:
  *
  * `{{ localize(greeting) }}` renders `NSLocalizedString(@"Hello", nil)`,
- * assuming the `greeting` key resolves to the @"Hello" string.
+ * assuming the `greeting` key resolves to the `Hello` string.
  *
  * ### Localizing sections:
  *
@@ -47,13 +47,13 @@
  * ### Localizing sections with arguments:
  *
  * `{{#localize}}Hello {{name}}{{/localize}}` builds the format string
- * @"Hello %@", localizes it with NSLocalizedString, and finally
+ * `Hello %@`, localizes it with NSLocalizedString, and finally
  * injects the name with `[NSString stringWithFormat:]`.
  *
  * ### Localize sections with arguments and conditions:
  *
  * `{{#localize}}Good morning {{#title}}{{title}}{{/title}} {{name}}{{/localize}}`
- * build the format string @"Good morning %@" or @"Good morning %@ %@",
+ * build the format string `Good morning %@" or @"Good morning %@ %@`,
  * depending on the presence of the `title` key. It then injects the name, or
  * both title and name, with `[NSString stringWithFormat:]`, to build the final
  * rendering.

@@ -322,8 +322,8 @@
 /**
  * Returns the value stored in the context stack for the given key.
  *
- * If you want the value for an full expression such as @"user.name" or
- * @"uppercase(user.name)", use the hasValue:forMustacheExpression:error:
+ * If you want the value for an full expression such as `user.name` or
+ * `uppercase(user.name)`, use the hasValue:forMustacheExpression:error:
  * method.
  *
  * ### Search Pattern for valueForMustacheKey
@@ -373,7 +373,7 @@
 - (id)valueForMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * Evaluates an expression such as @"name", or @"uppercase(user.name)".
+ * Evaluates an expression such as `name`, or `uppercase(user.name)`.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/view_model.md
  *

@@ -85,7 +85,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * Returns the literal and unprocessed inner content of the tag.
  *
- * A section tag such as `{{# name }}...{{/}}` returns @"...".
+ * A section tag such as `{{# name }}inner content{{/}}` returns `inner content`.
  *
  * Variable tags such as `{{ name }}` have no inner content: their inner
  * template string is the empty string.
