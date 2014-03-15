@@ -67,26 +67,47 @@ typedef struct {
  * Have GRMustache avoid most `NSUndefinedKeyExceptions` when rendering
  * templates.
  * 
- * The rendering of a GRMustache template can lead to many
- * `NSUndefinedKeyExceptions` to be raised, because of the heavy usage of
- * Key-Value Coding. Those exceptions are nicely handled by GRMustache, and are
- * part of the regular rendering of a template.
+ * The rendering of a GRMustache template can lead to `NSUndefinedKeyExceptions`
+ * to be raised, because of the heavy usage of Key-Value Coding. Those
+ * exceptions are nicely handled by GRMustache, and are part of the regular
+ * rendering of a template.
+ *
+ * Unfortunately, Objective-C exceptions have several drawbacks, particularly:
  * 
- * Unfortunately, when debugging a project, developers usually set their
- * debugger to stop on every Objective-C exceptions. GRMustache rendering can
- * thus become a huge annoyance. This method prevents it.
+ * 1. they play badly with autorelease pools, and are reputed to leak memory.
+ * 2. they usually stop your debugger when you are developping your application.
  * 
- * You'll get a slight performance hit, so you'd probably make sure this call
- * does not enter your Release configuration.
+ * The first point is indeed a matter of worry: Apple does not guarantee that
+ * exceptions raised by `valueForKey:` do not leak memory. However, I never had
+ * any evidence of such a leak from NSObject's implementation.
  * 
- * One way to achieve this is to add `-DDEBUG` to the "Other C Flags" setting of
- * your development configuration, and to wrap the
- * `preventNSUndefinedKeyExceptionAttack` method call in a #if block, like:
+ * Should you still worry, we recommend that you avoid the `valueForKey:` method
+ * altogether. Instead, implement the [keyed subscripting](http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting)
+ * `objectForKeyedSubscript:` method on objects that you provide to GRMustache.
  * 
- *     #ifdef DEBUG
- *     [GRMustache preventNSUndefinedKeyExceptionAttack];
- *     #endif
+ * The second point is valid also: NSUndefinedKeyException raised by template
+ * rendering may become a real annoyance when you are debugging your project,
+ * because it's likely you've told your debugger to stop on every Objective-C
+ * exceptions.
  * 
+ * You can avoid them as well: make sure you invoke once, early in your
+ * application, the `preventNSUndefinedKeyExceptionAttack` method.
+ * 
+ * Depending on the number of NSUndefinedKeyException that get prevented, you
+ * will experience a slight performance hit, or a performance improvement.
+ * 
+ * Since the main use case for this method is to avoid Xcode breaks on rendering
+ * exceptions, the best practice is to conditionally invoke this method, using
+ * the [NS_BLOCK_ASSERTIONS](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html)
+ * that helps identifying the Debug configuration of your targets:
+ * 
+ * ```
+ * #if !defined(NS_BLOCK_ASSERTIONS)
+ * // Debug configuration: keep GRMustache quiet
+ * [GRMustache preventNSUndefinedKeyExceptionAttack];
+ * #endif
+ * ```
+ *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime.md
  * 
  * @since v1.7

@@ -84,24 +84,26 @@
  *
  * For example:
  *
- *     // Create a Mustache compiler
- *     GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithContentType:...] autorelease];
+ * ```
+ * // Create a Mustache compiler
+ * GRMustacheCompiler *compiler = [[[GRMustacheCompiler alloc] initWithContentType:...] autorelease];
  *
- *     // Some GRMustacheCompilerDataSource tells the compiler where are the
- *     // partials.
- *     compiler.dataSource = ...;
+ * // Some GRMustacheCompilerDataSource tells the compiler where are the
+ * // partials.
+ * compiler.dataSource = ...;
  *
- *     // Create a Mustache parser
- *     GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithContentType:...] autorelease];
+ * // Create a Mustache parser
+ * GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithContentType:...] autorelease];
  *
- *     // The parser feeds the compiler
- *     parser.delegate = compiler;
+ * // The parser feeds the compiler
+ * parser.delegate = compiler;
  *
- *     // Parse some string
- *     [parser parseTemplateString:... templateID:...];
+ * // Parse some string
+ * [parser parseTemplateString:... templateID:...];
  *
- *     // Extract template components from the compiler
- *     GRMustacheAST *AST = [compiler ASTReturningError:...];
+ * // Extract template components from the compiler
+ * GRMustacheAST *AST = [compiler ASTReturningError:...];
+ * ```
  *
  * @param error  If there is an error building the abstract syntax tree, upon
  *               return contains an NSError object that describes the problem.

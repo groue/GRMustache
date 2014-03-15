@@ -38,7 +38,7 @@
  *
  * When objects do not respond to this method, only declared properties can be
  * accessed. All properties of Core Data NSManagedObjects are also accessible,
- * even without property declaration).
+ * even without property declaration.
  *
  * This method is not used for objects responding to `objectForKeyedSubscript:`.
  * For those objects, all keys are accessible from templates.

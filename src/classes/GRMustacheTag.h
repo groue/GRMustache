@@ -97,7 +97,9 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  *
  * For example:
  *
- *     <GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache>
+ * ```
+ * <GRMustacheVariableTag `{{ name }}` at line 18 of template /path/to/Document.mustache>
+ * ```
  */
 - (NSString *)description;
 
@@ -108,10 +110,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 /**
  * This method is deprecated.
  *
- * Replace `[tag.templateRepository templateFromString:... error:...]` by
+ * Replace `[tag.templateRepository templateFromString:... error:...]` with
  * `[GRMustacheTemplate templateFromString:... error:...]`.
  *
- * Replace `[tag.templateRepository templateNamed:... error:...]` by explicit
+ * Replace `[tag.templateRepository templateNamed:... error:...]` with explicit
  * invocation of the targeted template repository.
  *
  * @since v6.0

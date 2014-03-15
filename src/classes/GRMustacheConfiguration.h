@@ -35,27 +35,33 @@
  * The default configuration [GRMustacheConfiguration defaultConfiguration]
  * applies to all GRMustache rendering by default:
  *
- *     // Have GRMustache templates render text by default,
- *     // and do not HTML-escape their input.
- *     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+ * ```
+ * // Have GRMustache templates render text by default,
+ * // and do not HTML-escape their input.
+ * [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+ * ```
  *
  * You can also alter the configuration of a specific template repository: its
  * configuration only applies to the templates built by this very template
  * repository:
  *
- *     // All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
- *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration.tagStartDelimiter = @"[[";
- *     repo.configuration.tagEndDelimiter = @"]]";
+ * ```
+ * // All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
+ * GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ * repo.configuration.tagStartDelimiter = @"[[";
+ * repo.configuration.tagEndDelimiter = @"]]";
+ * ```
  *
  * A third option is to create a new configuration, and assign it to the template:
  *
- *     // Create a configuration
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
- *     configuration.... // setup
+ * ```
+ * // Create a configuration
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+ * configuration.... // setup
  *
- *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration = configuration;
+ * GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ * repo.configuration = configuration;
+ * ```
  *
  * The `contentType` option can be specified at the template level, so that your
  * repositories can mix HTML and text templates: see the documentation of this
@@ -136,24 +142,30 @@
  *
  * For example:
  *
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ * ```
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
- *     // Have the `name` key defined for all template renderings:
- *     id object = @{ @"name": @"Arthur" };
- *     [configuration extendBaseContextWithObject:object];
+ * // Have the `name` key defined for all template renderings:
+ * id object = @{ @"name": @"Arthur" };
+ * [configuration extendBaseContextWithObject:object];
  *
- *     // Renders "Arthur"
- *     [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+ * // Renders "Arthur"
+ * [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+ * ```
  *
  * Keys defined by _object_ can be overriden by other objects that will
  * eventually enter the context stack:
  *
- *     // Renders "Billy", not "Arthur"
- *     [GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+ * ```
+ * // Renders "Billy", not "Arthur"
+ * [GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -174,17 +186,21 @@
  *
  * For example:
  *
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ * ```
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
- *     // The `precious` key is given priority:
- *     [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"gold" }];
+ * // The `precious` key is given priority:
+ * [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"gold" }];
  *
- *     // Renders "gold", not "lead".
- *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
+ * // Renders "gold", not "lead".
+ * [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -202,7 +218,9 @@
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
  *
  * @param tagDelegate  A tag delegate
  *
@@ -241,10 +259,12 @@
  *
  * Insert those pragma tags early in your templates. For example:
  *
- *     {{! This template renders a bash script. }}
- *     {{% CONTENT_TYPE:TEXT }}
- *     export LANG={{ENV.LANG}}
- *     ...
+ * ```
+ * {{! This template renders a bash script. }}
+ * {{% CONTENT_TYPE:TEXT }}
+ * export LANG={{ENV.LANG}}
+ * ...
+ * ```
  *
  * Should two such pragmas be found in a template content, the last one wins.
  *

@@ -152,24 +152,30 @@
  *
  * For example:
  *
- *     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
+ * ```
+ * GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
  *
- *     // Have the `name` key defined for all renderings of the template:
- *     id object = @{ @"name": @"Arthur" };
- *     [template extendBaseContextWithObject:object];
+ * // Have the `name` key defined for all renderings of the template:
+ * id object = @{ @"name": @"Arthur" };
+ * [template extendBaseContextWithObject:object];
  *
- *     // Renders "Arthur"
- *     [template renderObject:nil error:NULL];
+ * // Renders "Arthur"
+ * ```
+ * [template renderObject:nil error:NULL];
  *
  * Keys defined by _object_ can be overriden by other objects that will
  * eventually enter the context stack:
  *
- *     // Renders "Billy", not "Arthur"
- *     [template renderObject:@{ @"name": @"Billy" } error:NULL];
+ * ```
+ * // Renders "Billy", not "Arthur"
+ * [template renderObject:@{ @"name": @"Billy" } error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     template.baseContext = [template.baseContext contextByAddingObject:object];
+ * ```
+ * template.baseContext = [template.baseContext contextByAddingObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -190,18 +196,22 @@
  *
  * For example:
  *
- *     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
+ * ```
+ * GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
  *
- *     // The `precious` key is given priority:
- *     id object = @{ @"precious": @"gold" };
- *     [template extendBaseContextWithProtectedObject:object];
+ * // The `precious` key is given priority:
+ * id object = @{ @"precious": @"gold" };
+ * [template extendBaseContextWithProtectedObject:object];
  *
- *     // Renders "gold", not "lead".
- *     [template renderObject:@{ @"precious": @"lead" } error:NULL];
+ * // Renders "gold", not "lead".
+ * [template renderObject:@{ @"precious": @"lead" } error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     template.baseContext = [template.baseContext contextByAddingProtectedObject:object];
+ * ```
+ * template.baseContext = [template.baseContext contextByAddingProtectedObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -219,7 +229,9 @@
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     template.baseContext = [template.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
+ * template.baseContext = [template.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
  *
  * @param tagDelegate  A tag delegate
  *

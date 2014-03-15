@@ -80,7 +80,9 @@
  * you should create a context with the +[GRMustacheContext contextWithObject:]
  * method, like this:
  *
- *     [GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+ * ```
+ * [GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+ * ```
  *
  * @return A rendering context.
  *
@@ -97,7 +99,9 @@
  * you should create a context with the +[GRMustacheContext contextWithObject:]
  * method, like this:
  *
- *     [GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+ * ```
+ * [GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+ * ```
  *
  * @return A rendering context.
  *
@@ -113,8 +117,10 @@
  *
  * Keys defined by _object_ gets available for template rendering.
  *
- *     context = [GRMustacheContext contextWithObject:@{ @"name": @"Arthur" }];
- *     [context valueForMustacheKey:@"name"];   // @"Arthur"
+ * ```
+ * context = [GRMustacheContext contextWithObject:@{ @"name": @"Arthur" }];
+ * [context valueForMustacheKey:@"name"];   // @"Arthur"
+ * ```
  *
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * made the top of the tag delegate stack.
@@ -143,14 +149,16 @@
  * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
- *     // Create a context with a priority `precious` key
- *     context = [GRMustacheContext contextWithProtectedObject:@{ @"precious": @"gold" }];
+ * ```
+ * // Create a context with a priority `precious` key
+ * context = [GRMustacheContext contextWithProtectedObject:@{ @"precious": @"gold" }];
  *
- *     // Derive a new context by attempting to override the `precious` key:
- *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
+ * // Derive a new context by attempting to override the `precious` key:
+ * context = [context contextByAddingObject:@{ @"precious": @"lead" }];
  *
- *     // Priority keys can't be overriden
- *     [context valueForMustacheKey:@"precious"];   // @"gold"
+ * // Priority keys can't be overriden
+ * [context valueForMustacheKey:@"precious"];   // @"gold"
+ * ```
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md#priority-keys
  *
@@ -200,14 +208,16 @@
  * the values defined by objects already contained in the context stack. Keys
  * unknown to _object_ will be looked up deeper in the context stack.
  *
- *     context = [GRMustacheContext contextWithObject:@{ @"a": @"ignored", @"b": @"foo" }];
- *     context = [context contextByAddingObject:@{ @"a": @"bar" }];
+ * ```
+ * context = [GRMustacheContext contextWithObject:@{ @"a": @"ignored", @"b": @"foo" }];
+ * context = [context contextByAddingObject:@{ @"a": @"bar" }];
  *
- *     // `a` is overriden
- *     [context valueForMustacheKey:@"a"];   // @"bar"
+ * // `a` is overriden
+ * [context valueForMustacheKey:@"a"];   // @"bar"
  *
- *     // `b` is inherited
- *     [context valueForMustacheKey:@"b"];   // @"foo"
+ * // `b` is inherited
+ * [context valueForMustacheKey:@"b"];   // @"foo"
+ * ```
  *
  * _object_ can not override keys defined by the objects of the priority
  * context stack, though. See contextWithProtectedObject: and
@@ -239,14 +249,16 @@
  * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
- *     // Derive a context with a priority `precious` key
- *     context = [context contextByAddingProtectedObject:@{ @"precious": @"gold" }];
+ * ```
+ * // Derive a context with a priority `precious` key
+ * context = [context contextByAddingProtectedObject:@{ @"precious": @"gold" }];
  *
- *     // Derive a new context by attempting to override the `precious` key:
- *     context = [context contextByAddingObject:@{ @"precious": @"lead" }];
+ * // Derive a new context by attempting to override the `precious` key:
+ * context = [context contextByAddingObject:@{ @"precious": @"lead" }];
  *
- *     // Priority keys can't be overriden
- *     [context valueForMustacheKey:@"precious"];   // @"gold"
+ * // Priority keys can't be overriden
+ * [context valueForMustacheKey:@"precious"];   // @"gold"
+ * ```
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md#priority-keys
  *
@@ -292,9 +304,11 @@
  * The returned object is the same as the one that would be rendered by a
  * `{{ . }}` tag.
  *
- *     user = ...;
- *     context = [GRMustacheContext contextWithObject:user];
- *     context.topMustacheObject;  // user
+ * ```
+ * user = ...;
+ * context = [GRMustacheContext contextWithObject:user];
+ * context.topMustacheObject;  // user
+ * ```
  *
  * @return The object at the top of the receiver's context stack.
  *
@@ -398,27 +412,29 @@
  *
  * Compare:
  *
- *     @interface DBRecord : NSObject
- *     - (void)deleteRecord;
- *     @end
+ * ```
+ * @interface DBRecord : NSObject
+ * - (void)deleteRecord;
+ * @end
  *
- *     @implementation DBRecord
- *     - (void)deleteRecord
- *     {
- *         NSLog(@"Oooops, your record was just deleted!");
- *     }
- *     @end
+ * @implementation DBRecord
+ * - (void)deleteRecord
+ * {
+ *     NSLog(@"Oooops, your record was just deleted!");
+ * }
+ * @end
  *
- *     DBRecord *record = ...;
- *     NSString *templateString = @"{{ deleteRecord }}";
- *     GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
+ * DBRecord *record = ...;
+ * NSString *templateString = @"{{ deleteRecord }}";
+ * GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
  *
- *     // Safe rendering of the dangerous template: record is not deleted.
- *     [template renderObject:record error:NULL];
+ * // Safe rendering of the dangerous template: record is not deleted.
+ * [template renderObject:record error:NULL];
  *
- *     // Unsafe rendering of the dangerous template: record is deleted.
- *     template.baseContext = [GRMustacheContext contextWithUnsafeKeyAccess];
- *     [template renderObject:record error:NULL];
+ * // Unsafe rendering of the dangerous template: record is deleted.
+ * template.baseContext = [GRMustacheContext contextWithUnsafeKeyAccess];
+ * [template renderObject:record error:NULL];
+ * ```
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
@@ -439,27 +455,29 @@
  *
  * Compare:
  *
- *     @interface DBRecord : NSObject
- *     - (void)deleteRecord;
- *     @end
+ * ```
+ * @interface DBRecord : NSObject
+ * - (void)deleteRecord;
+ * @end
  *
- *     @implementation DBRecord
- *     - (void)deleteRecord
- *     {
- *         NSLog(@"Oooops, your record was just deleted!");
- *     }
- *     @end
+ * @implementation DBRecord
+ * - (void)deleteRecord
+ * {
+ *     NSLog(@"Oooops, your record was just deleted!");
+ * }
+ * @end
  *
- *     DBRecord *record = ...;
- *     NSString *templateString = @"{{ deleteRecord }}";
- *     GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
+ * DBRecord *record = ...;
+ * NSString *templateString = @"{{ deleteRecord }}";
+ * GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
  *
- *     // Safe rendering of the dangerous template: record is not deleted.
- *     [template renderObject:record error:NULL];
+ * // Safe rendering of the dangerous template: record is not deleted.
+ * [template renderObject:record error:NULL];
  *
- *     // Unsafe rendering of the dangerous template: record is deleted.
- *     template.baseContext = [template.baseContext contextWithUnsafeKeyAccess];
- *     [template renderObject:record error:NULL];
+ * // Unsafe rendering of the dangerous template: record is deleted.
+ * template.baseContext = [template.baseContext contextWithUnsafeKeyAccess];
+ * [template renderObject:record error:NULL];
+ * ```
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
  *
