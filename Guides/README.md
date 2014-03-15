@@ -3,8 +3,6 @@
 GRMustache Guides
 =================
 
-The guides provide general documentation of GRMustache, one topic after the other.
-
 
 ## Introduction
 
