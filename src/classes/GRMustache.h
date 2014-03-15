@@ -68,7 +68,7 @@ typedef struct {
  * templates.
  * 
  * The rendering of a GRMustache template can lead to `NSUndefinedKeyExceptions`
- * to be raised, because of the heavy usage of Key-Value Coding. Those
+ * to be raised, because of the usage of the `valueForKey:` method. Those
  * exceptions are nicely handled by GRMustache, and are part of the regular
  * rendering of a template.
  *
