@@ -525,7 +525,6 @@ void freePreventedObjectsStorage(void *objects) {
     
     // Swizzle [NSManagedObject valueForUndefinedKey:]
     
-    Class NSManagedObjectClass = NSClassFromString(@"NSManagedObject");
     if (NSManagedObjectClass) {
         [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
                                     withMethod:@selector(GRMustacheKeyAccessValueForUndefinedKey_NSManagedObject:)
