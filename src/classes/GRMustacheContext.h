@@ -125,10 +125,6 @@
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * made the top of the tag delegate stack.
  *
- * If _object_ is an instance of GRMustacheContext, its class must be the class
- * of the receiver, or any subclass, and the returned context is _object.
- * An exception is raised otherwise.
- *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
  * @param object  An object
@@ -225,10 +221,6 @@
  *
  * If _object_ conforms to the GRMustacheTemplateDelegate protocol, it is also
  * added at the top of the tag delegate stack.
- *
- * If _object_ is an instance of GRMustacheContext, its class must be the class
- * of the receiver, or any subclass, and the returned context will be an
- * instance of the class of _object_. An exception is raised otherwise.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  *
