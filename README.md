@@ -62,55 +62,10 @@ rendering = ...
 Documentation
 -------------
 
-### Mustache syntax
-
-- http://mustache.github.io/mustache.5.html
-
-### Reference
-
+- The Mustache syntax: http://mustache.github.io/mustache.5.html
+- [Guides](Guides): a guided tour to the library
 - [Reference](http://groue.github.io/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
-
-### Guides
-
-**Introduction**
-
-- [Introduction](Guides/introduction.md): a tour of the library features, and most common use cases.
-
-**Basics**
-
-The core Mustache:
-
-- [Templates](Guides/templates.md): how to load templates.
-- [Runtime](Guides/runtime.md): how your data is rendered.
-- [ViewModel](Guides/view_model.md): an overview of various techniques to feed templates.
-- [Partials](Guides/partials.md): decompose your templates into components named "partials".
-
-**Mustache, and beyond**
-
-GRMustache offers services on top of the minimalistic genuine Mustache:
-
-- [Template Inheritance](Guides/template_inheritance.md): have templates inherit other ones, and reuse common layouts, for example.
-- [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
-- [HTML vs. Text templates](Guides/html_vs_text.md)
-- [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
-- [Filters](Guides/filters.md): `{{ uppercase(name) }}` et al.
-- [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
-- [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
-- [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
-
-**Application tools**
-
-- [Security](Guides/security.md): an important matter.
-- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
-- [Configuration](Guides/configuration.md)
-
-**Forking**
-
-- [Forking Guide](Guides/forking.md): general information about the library.
-
-**Sample code**
-
-- Check the [FAQ](#faq) below.
+- Sample code: check the [FAQ](#faq) below.
 
 
 Troubleshooting
