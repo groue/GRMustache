@@ -8,7 +8,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 GRMustache 7.0 introduces several changes to the previous release, focusing on security, compatibility with other Mustache implementations, and API simplification. Those changes may break your existing applications.
 
-The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition
+The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition.
 
 ### Breaking changes
 
