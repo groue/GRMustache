@@ -498,11 +498,6 @@
  */
 @property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Managing The Data Source
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * The repository's data source.
  *
@@ -512,23 +507,10 @@
  */
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
-/**
- * Have the template repository reload its templates.
- *
- * Use this method when the data source has updated its content.
- *
- * @warning Previously GRMustacheTemplate instances extracted from the
- * repository are not reloaded.
- *
- * @since v7.0
- */
-- (void)reloadTemplates AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Getting Templates out of a Repository
 ////////////////////////////////////////////////////////////////////////////////
-
 
 /**
  * Returns a template identified by its name.
@@ -565,5 +547,31 @@
  * @since v1.13
  */
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * Have the template repository reload its templates.
+ *
+ * A template repository *caches* the parsing of its templates. This speeds up
+ * the loading of already parsed templates.
+ *
+ * However, changes to the underlying template strings won't be visible until
+ * you explicitely ask for a reloading:
+ *
+ * ```
+ * // May reuse a cached parsing:
+ * template = [repository templateNamed:@"profile" error:NULL];
+ *
+ * // Forces the template reloading:
+ * [repository reloadTemplates];
+ * template = [repository templateNamed:@"profile" error:NULL];
+ * ```
+ *
+ * @warning Previously created instances of GRMustacheTemplate are not reloaded.
+ *
+ * @see dataSource
+ *
+ * @since v7.0
+ */
+- (void)reloadTemplates AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end
