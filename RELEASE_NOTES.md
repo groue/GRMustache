@@ -6,30 +6,28 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v7.0.0
 
-### Dropped support for Garbage Collection
+### Breaking changes
 
-GRMustache is now compiled and tested with Xcode 5.1, which does no longer support garbage collection.
+The only breaking change which may well affect your existing code is the following:
 
-The last version which supports garbage collection is [GRMustache v6.9.2](https://github.com/groue/GRMustache/tree/v6.9.2).
+- Keys accessed through the Key-Value-Coding method `valueForKey:` are now limited by default to keys that are explicitly declared as properties (with `@property`), or Core Data attributes (for managed objects). See the [Security Guide](Guides/security.md) for more information.
+
+The following breaking changes have low chance to affect your code:
+
+- Support for garbage-collected Objective-C is dropped.
+- Support for subclassing the `GRMustacheContext` class is dropped.
+- Template inheritance is more compatible with [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+- `[GRMustacheTemplateRepository templateRepositoryWithDictionary:]` no longer copies its dictionary. The repository may have a different behavior if the dictionary gets mutated.
 
 
-### Safe Key Access
+### New features
 
-GRMustache no longer blindly evaluates `valueForKey:` on your objects.
+- GRMustacheTemplateRepository caches templates. The `reloadTemplates` method clears this cache.
 
-The default behavior now only fetches keys that are declared as properties (with `@property`), or Core Data attributes (for managed objects).
 
-See the [Security Guide](Guides/security.md) for more information.
-
-**Upgrading from earlier version of GRMustache**
-
-You can, if you want, restore the previous behavior of the library: see the [Security Guide](Guides/security.md).
-
-Also, should you provide default values for missing keys, read the updated [View Model Guide](Guides/view_model.md#default-values).
+### API changes
 
 **New APIs**
-
-GRMustacheContext provides methods for creating or deriving new contexts with unsafe key access.
 
 ```objc
 @interface GRMustacheContext
@@ -37,63 +35,18 @@ GRMustacheContext provides methods for creating or deriving new contexts with un
 + (instancetype)contextWithUnsafeKeyAccess;
 - (instancetype)contextWithUnsafeKeyAccess;
 @end
-```
 
-
-### View Models
-
-Previous versions of the library would let you subclass `GRMustacheContext`, and declare properties with direct access to the context stack. This is no longer the case: GRMustacheContext is no longer suitable for subclassing.
-
-**Upgrading from earlier version of GRMustache**
-
-Should you rely on this dropped feature, and experiment difficulties migrating to the latest version of the library, please open an issue: we'll fix it together.
-
-
-### Inheritable Templates
-
-GRMustache implementation of inheritable templates is now closer from [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java) (see the [Compatibility Guide](Guides/compatibility.md#template-inheritance)).
-
-- Inheritable sections are no longer evaluated against your data: `{{$ item }}...{{/ item }}` does no longer load the `item` key from the context stack.
-
-    This is a breaking change, but your template will render as before is you did not use any data key as an inheritable section identifier.
-
-- Your objects conforming to the GRMustacheTagDelegate and GRMustacheRendering protocols can no longer perform custom rendering of those inheritable sections.
-
-  This is a breaking change, but it is very unlikely your code did rely on this.
-
-- Inheritable sections that were overridden several times used to be rendered several times as well. This is no longer the case. Now the deeper overriding wins, and the inheritable section is rendered once.
-
-    This is a breaking change, but your template will render as before if you did not rely on the concatenation of inheritable sections.
-
-
-**Removed APIs**
-
-```objc
-typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
-  
-    // This constant is not replaced.
-    GRMustacheTagTypeOverridableSection,
-    
-}
-```
-
-
-### Misc
-
-**New APIs**
-
-```objc
 @interface GRMustache
-
 + (GRMustacheVersion)libraryVersion;
-
 @end
 
 @interface GRMustacheRendering
-
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
-  
+@end
+
+@interface GRMustacheTemplateRepository
+- (void)reloadTemplates;
 @end
 ```
 
@@ -125,6 +78,13 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 **Removed APIs**
 
 ```objc
+typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
+  
+    // This constant is not replaced.
+    GRMustacheTagTypeOverridableSection,
+    
+}
+
 @interface GRMustache
 
 // Use +[GRMustache libraryVersion] instead.
