@@ -62,10 +62,9 @@ rendering = ...
 Documentation
 -------------
 
-- The Mustache syntax: http://mustache.github.io/mustache.5.html
-- [Guides](Guides): a guided tour to the library
+- http://mustache.github.io/mustache.5.html
+- [Guides](Guides#guides): a guided tour to the library
 - [Reference](http://groue.github.io/GRMustache/Reference/): the GRMustache reference, automatically generated from inline documentation, for fun and profit, by [appledoc](http://gentlebytes.com/appledoc/).
-- Sample code: check the [FAQ](#faq) below.
 
 
 Troubleshooting
