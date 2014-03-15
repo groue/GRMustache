@@ -11,7 +11,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.9 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 7.0 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -40,6 +40,8 @@
 	<option value="properties">Properties</option>
 	
 	<option value="//api/name/baseContext">&nbsp;&nbsp;&nbsp;&nbsp;baseContext</option>
+	
+	<option value="//api/name/templateRepository">&nbsp;&nbsp;&nbsp;&nbsp;templateRepository</option>
 	
 	
 	
@@ -97,6 +99,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Rendering Templates">Rendering Templates</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Accessing Sibling Templates">Accessing Sibling Templates</a></span></li>
+	
 </ul></li>
 
 
@@ -106,6 +110,8 @@
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/baseContext">baseContext</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/templateRepository">templateRepository</a></span></li>
 	
 </ul></li>
 
@@ -296,6 +302,20 @@ services.</p>
 </li>
 						</ul>
 						
+						
+						<a title="Accessing Sibling Templates" name="task_Accessing Sibling Templates"></a>
+						<h3 class="subsubtitle task-title">Accessing Sibling Templates</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/templateRepository">&nbsp;&nbsp;templateRepository</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
 					</div>
 					
 					
@@ -360,6 +380,91 @@ repository. Unless specified, it contains the <a href="../Classes/GRMustache.htm
 			<li><code><p><a href="#//api/name/extendBaseContextWithProtectedObject:">- extendBaseContextWithProtectedObject:</a></p></code></li>
 			
 			<li><code><p><a href="#//api/name/extendBaseContextWithTagDelegate:">- extendBaseContextWithTagDelegate:</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheTemplate.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/templateRepository" title="templateRepository"></a>
+	<h3 class="subsubtitle method-title">templateRepository</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the template repository that issued the receiver.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>All templates belong a template repository:</p>
+
+<ul>
+<li><p>Templates returned by <a href="#//api/name/templateFromString:error:"><code>[GRMustacheTemplate templateFromString:error:]</code></a>
+have a template repository that loads templates and partials stored as
+resources in the main bundle, with extension &ldquo;.mustache&rdquo;, encoded in UTF8.</p></li>
+<li><p>Templates returned by <a href="#//api/name/templateFromContentsOfFile:error:"><code>[GRMustacheTemplate templateFromContentsOfFile:error:]</code></a>
+have a template repository that loads templates and partials stored in the
+directory of the receiver, with the same file extension &ldquo;.mustache&rdquo;,
+encoded in UTF8.</p></li>
+<li><p>Templates returned by <a href="#//api/name/templateFromContentsOfURL:error:"><code>[GRMustacheTemplate templateFromContentsOfURL:error:]</code></a>
+have a template repository that loads templates and partials stored in the
+directory of the receiver, with the same file extension &ldquo;.mustache&rdquo;,
+encoded in UTF8.</p></li>
+<li><p>Templates returned by <a href="#//api/name/templateFromResource:bundle:error:"><code>[GRMustacheTemplate templateFromResource:bundle:error:]</code></a>
+have a template repository that loads templates and partials stored as
+resources in the specified bundle, with extension &ldquo;.mustache&rdquo;, encoded in
+UTF8.</p></li>
+<li><p>Templates returned by <a href="../Classes/GRMustacheTemplateRepository.html#//api/name/templateNamed:error:"><code>[GRMustacheTemplateRepository templateNamed:error:]</code></a>
+and <a href="../Classes/GRMustacheTemplateRepository.html#//api/name/templateFromString:error:"><code>[GRMustacheTemplateRepository templateFromString:error:]</code></a> belong to
+the invoked repository.</p></li>
+</ul>
+
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/templateFromString:error:">+ templateFromString:error:</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/templateFromContentsOfFile:error:">+ templateFromContentsOfFile:error:</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/templateFromContentsOfURL:error:">+ templateFromContentsOfURL:error:</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/templateFromResource:bundle:error:">+ templateFromResource:bundle:error:</a></p></code></li>
 			
 		</ul>
 	</div>
@@ -896,24 +1001,28 @@ keys available for all renderings.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>For example:</p>
 
-<p>GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@&ldquo;{{name}}&rdquo; error:NULL];</p>
+<pre><code>GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{name}}" error:NULL];
 
-<p>// Have the <code>name</code> key defined for all renderings of the template:
-id object = @{ @&ldquo;name&rdquo;: @&ldquo;Arthur&rdquo; };
-[template importObject:object];</p>
+// Have the `name` key defined for all renderings of the template:
+id object = @{ @"name": @"Arthur" };
+[template extendBaseContextWithObject:object];
 
-<p>// Renders &ldquo;Arthur&rdquo;
-[template renderObject:nil error:NULL];</p>
+// Renders "Arthur"
+</code></pre>
+
+<p>[template renderObject:nil error:NULL];</p>
 
 <p>Keys defined by <em>object</em> can be overriden by other objects that will
 eventually enter the context stack:</p>
 
-<p>// Renders &ldquo;Billy&rdquo;, not &ldquo;Arthur&rdquo;
-[template renderObject:@{ @&ldquo;name&rdquo;: @&ldquo;Billy&rdquo; } error:NULL];</p>
+<pre><code>// Renders "Billy", not "Arthur"
+[template renderObject:@{ @"name": @"Billy" } error:NULL];
+</code></pre>
 
 <p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>template.baseContext = [template.baseContext contextByAddingObject:object];</p>
+<pre><code>template.baseContext = [template.baseContext contextByAddingObject:object];
+</code></pre>
 	</div>
 	
 	
@@ -983,23 +1092,25 @@ keys available for all renderings.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Keys defined by <em>object</em> gets &ldquo;protected&rdquo;, which means that they can not be
+		<p>Keys defined by <em>object</em> are given priority, which means that they can not be
 overriden by other objects that will eventually enter the context stack.</p>
 
 <p>For example:</p>
 
-<p>GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@&ldquo;{{precious}}&rdquo; error:NULL];</p>
+<pre><code>GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{precious}}" error:NULL];
 
-<p>// Have the <code>precious</code> key defined, and protected, for all renderings of the template:
-id object = @{ @&ldquo;precious&rdquo;: @&ldquo;gold&rdquo; };
-[template importProtectedObject:object];</p>
+// The `precious` key is given priority:
+id object = @{ @"precious": @"gold" };
+[template extendBaseContextWithProtectedObject:object];
 
-<p>// Renders &ldquo;gold&rdquo;
-[template renderObject:@{ @&ldquo;precious&rdquo;: @&ldquo;lead&rdquo; } error:NULL];</p>
+// Renders "gold", not "lead".
+[template renderObject:@{ @"precious": @"lead" } error:NULL];
+</code></pre>
 
 <p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>template.baseContext = [template.baseContext contextByAddingProtectedObject:object];</p>
+<pre><code>template.baseContext = [template.baseContext contextByAddingProtectedObject:object];
+</code></pre>
 	</div>
 	
 	
@@ -1071,7 +1182,8 @@ of the rendering of all tags in the template.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>template.baseContext = [template.baseContext contextByAddingTagDelegate:tagDelegate];</p>
+<pre><code>template.baseContext = [template.baseContext contextByAddingTagDelegate:tagDelegate];
+</code></pre>
 	</div>
 	
 	
@@ -1325,7 +1437,7 @@ describes the problem.</p></dd>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-01-27)</span><br />
+						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-03-15)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

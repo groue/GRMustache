@@ -35,27 +35,33 @@
  * The default configuration [GRMustacheConfiguration defaultConfiguration]
  * applies to all GRMustache rendering by default:
  *
- *     // Have GRMustache templates render text by default,
- *     // and do not HTML-escape their input.
- *     [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+ * ```
+ * // Have GRMustache templates render text by default,
+ * // and do not HTML-escape their input.
+ * [GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+ * ```
  *
  * You can also alter the configuration of a specific template repository: its
  * configuration only applies to the templates built by this very template
  * repository:
  *
- *     // All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
- *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration.tagStartDelimiter = @"[[";
- *     repo.configuration.tagEndDelimiter = @"]]";
+ * ```
+ * // All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
+ * GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ * repo.configuration.tagStartDelimiter = @"[[";
+ * repo.configuration.tagEndDelimiter = @"]]";
+ * ```
  *
  * A third option is to create a new configuration, and assign it to the template:
  *
- *     // Create a configuration
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
- *     configuration.... // setup
+ * ```
+ * // Create a configuration
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+ * configuration.... // setup
  *
- *     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
- *     repo.configuration = configuration;
+ * GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+ * repo.configuration = configuration;
+ * ```
  *
  * The `contentType` option can be specified at the template level, so that your
  * repositories can mix HTML and text templates: see the documentation of this
@@ -96,7 +102,7 @@
  *
  * @since v6.2
  */
-+ (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
++ (GRMustacheConfiguration *)defaultConfiguration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +118,7 @@
  *
  * @since v6.2
  */
-+ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
++ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +134,7 @@
  *
  * @since v6.4
  */
-@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -136,24 +142,30 @@
  *
  * For example:
  *
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ * ```
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
- *     // Have the `name` key defined for all template renderings:
- *     id object = @{ @"name": @"Arthur" };
- *     [configuration importObject:object];
+ * // Have the `name` key defined for all template renderings:
+ * id object = @{ @"name": @"Arthur" };
+ * [configuration extendBaseContextWithObject:object];
  *
- *     // Renders "Arthur"
- *     [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+ * // Renders "Arthur"
+ * [GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+ * ```
  *
  * Keys defined by _object_ can be overriden by other objects that will
  * eventually enter the context stack:
  *
- *     // Renders "Billy", not "Arthur"
- *     [GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+ * ```
+ * // Renders "Billy", not "Arthur"
+ * [GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -163,29 +175,32 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;
+- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
  * keys available for all renderings.
  *
- * Keys defined by _object_ gets "protected", which means that they can not be
+ * Keys defined by _object_ are given priority, which means that they can not be
  * overriden by other objects that will eventually enter the context stack.
  *
  * For example:
  *
- *     GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+ * ```
+ * GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
  *
- *     // Have the `precious` key defined, and protected, for all template renderings:
- *     id object = @{ @"precious": @"gold" };
- *     [configuration importObject:object];
+ * // The `precious` key is given priority:
+ * [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"gold" }];
  *
- *     // Renders "gold"
- *     [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
+ * // Renders "gold", not "lead".
+ * [GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
+ * ```
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+ * ```
  *
  * @param object  An object
  *
@@ -195,7 +210,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -203,7 +218,9 @@
  *
  * This method is a shortcut. It is equivalent to the following line of code:
  *
- *     configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
+ * configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+ * ```
  *
  * @param tagDelegate  A tag delegate
  *
@@ -213,7 +230,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_6_8_AND_LATER;;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
 
 /**
  * The content type of strings rendered by templates.
@@ -242,35 +259,37 @@
  *
  * Insert those pragma tags early in your templates. For example:
  *
- *     {{! This template renders a bash script. }}
- *     {{% CONTENT_TYPE:TEXT }}
- *     export LANG={{ENV.LANG}}
- *     ...
+ * ```
+ * {{! This template renders a bash script. }}
+ * {{% CONTENT_TYPE:TEXT }}
+ * export LANG={{ENV.LANG}}
+ * ...
+ * ```
  *
  * Should two such pragmas be found in a template content, the last one wins.
  *
  * @since v6.2
  */
-@property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_6_2_AND_LATER;
+@property (nonatomic) GRMustacheContentType contentType AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * The opening delimiter for Mustache tags. Its default value is @"{{".
+ * The opening delimiter for Mustache tags. Its default value is `{{`.
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
  *
  * @since v6.4
  */
-@property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, copy) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
- * The closing delimiter for Mustache tags. Its default value is @"}}".
+ * The closing delimiter for Mustache tags. Its default value is `}}`.
  *
  * You can also change the delimiters right in your templates using a "Set
  * Delimiter tag": {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
  *
  * @since v6.4
  */
-@property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_6_4_AND_LATER;
+@property (nonatomic, copy) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

@@ -11,7 +11,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.9 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 7.0 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -172,29 +172,32 @@
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/configuration.md">https://github.com/groue/GRMustache/blob/master/Guides/configuration.md</a></p>
 
 <p>The default configuration <a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>
-applies to all GRMustache rendering by default:</p>
+applies to all <a href="../Classes/GRMustache.html">GRMustache</a> rendering by default:</p>
 
-<p>// Have GRMustache templates render text by default,
+<pre><code>// Have GRMustache templates render text by default,
 // and do not HTML-escape their input.
-<a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>.<a href="#//api/name/contentType">contentType</a> = GRMustacheContentTypeText;</p>
+[GRMustacheConfiguration defaultConfiguration].contentType = GRMustacheContentTypeText;
+</code></pre>
 
 <p>You can also alter the <a href="#//api/name/configuration">configuration</a> of a specific template repository: its
 <a href="#//api/name/configuration">configuration</a> only applies to the templates built by this very template
 repository:</p>
 
-<p>// All templates loaded from <em>repo</em> will use [[ and ]] as tag delimiters.
-<a href="../Classes/GRMustacheTemplateRepository.html">GRMustacheTemplateRepository</a> *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
-repo.<a href="#//api/name/configuration">configuration</a>.<a href="#//api/name/tagStartDelimiter">tagStartDelimiter</a> = @&ldquo;[[&rdquo;;
-repo.<a href="#//api/name/configuration">configuration</a>.<a href="#//api/name/tagEndDelimiter">tagEndDelimiter</a> = @&ldquo;]]&rdquo;;</p>
+<pre><code>// All templates loaded from _repo_ will use [[ and ]] as tag delimiters.
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.configuration.tagStartDelimiter = @"[[";
+repo.configuration.tagEndDelimiter = @"]]";
+</code></pre>
 
 <p>A third option is to create a new <a href="#//api/name/configuration">configuration</a>, and assign it to the template:</p>
 
-<p>// Create a <a href="#//api/name/configuration">configuration</a>
-GRMustacheConfiguration *<a href="#//api/name/configuration">configuration</a> = <a href="#//api/name/configuration">[GRMustacheConfiguration configuration]</a>;
-<a href="#//api/name/configuration">configuration</a>&hellip;. // setup</p>
+<pre><code>// Create a configuration
+GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
+configuration.... // setup
 
-<p>GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
-repo.<a href="#//api/name/configuration">configuration</a> = <a href="#//api/name/configuration">configuration</a>;</p>
+GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil];
+repo.configuration = configuration;
+</code></pre>
 
 <p>The <a href="#//api/name/contentType"><code>contentType</code></a> option can be specified at the template level, so that your
 repositories can mix HTML and text templates: see the documentation of this
@@ -408,10 +411,11 @@ you can use pragma tags right in the content of your templates:</p>
 
 <p>Insert those pragma tags early in your templates. For example:</p>
 
-<p>{{! This template renders a bash script. }}
+<pre><code>{{! This template renders a bash script. }}
 {{% CONTENT_TYPE:TEXT }}
 export LANG={{ENV.LANG}}
-&hellip;</p>
+...
+</code></pre>
 
 <p>Should two such pragmas be found in a template content, the last one wins.</p>
 	</div>
@@ -437,7 +441,7 @@ export LANG={{ENV.LANG}}
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The closing delimiter for Mustache tags. Its default value is @&ldquo;}}&rdquo;.</p>
+		<p>The closing delimiter for Mustache tags. Its default value is <code>}}</code>.</p>
 	</div>		
 	
     
@@ -484,7 +488,7 @@ Delimiter tag&rdquo;: {{=[[ ]]=}} changes start and end delimiters to [[ and ]].
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The opening delimiter for Mustache tags. Its default value is @&ldquo;{{&rdquo;.</p>
+		<p>The opening delimiter for Mustache tags. Its default value is <code>{{</code>.</p>
 	</div>		
 	
     
@@ -686,24 +690,27 @@ keys available for all renderings.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>For example:</p>
 
-<p>GRMustacheConfiguration *configuration = <a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>;</p>
+<pre><code>GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
 
-<p>// Have the <code>name</code> key defined for all template renderings:
-id object = @{ @&ldquo;name&rdquo;: @&ldquo;Arthur&rdquo; };
-[configuration importObject:object];</p>
+// Have the `name` key defined for all template renderings:
+id object = @{ @"name": @"Arthur" };
+[configuration extendBaseContextWithObject:object];
 
-<p>// Renders &ldquo;Arthur&rdquo;
-[<a href="../Classes/GRMustacheTemplate.html">GRMustacheTemplate</a> renderObject:nil fromString:@&ldquo;{{name}}&rdquo; error:NULL];</p>
+// Renders "Arthur"
+[GRMustacheTemplate renderObject:nil fromString:@"{{name}}" error:NULL];
+</code></pre>
 
 <p>Keys defined by <em>object</em> can be overriden by other objects that will
 eventually enter the context stack:</p>
 
-<p>// Renders &ldquo;Billy&rdquo;, not &ldquo;Arthur&rdquo;
-[GRMustacheTemplate renderObject:nil:@{ @&ldquo;name&rdquo;: @&ldquo;Billy&rdquo; } fromString:@&ldquo;{{name}}&rdquo; error:NULL];</p>
+<pre><code>// Renders "Billy", not "Arthur"
+[GRMustacheTemplate renderObject:nil:@{ @"name": @"Billy" } fromString:@"{{name}}" error:NULL];
+</code></pre>
 
 <p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>configuration.baseContext = [configuration.baseContext contextByAddingObject:object];</p>
+<pre><code>configuration.baseContext = [configuration.baseContext contextByAddingObject:object];
+</code></pre>
 	</div>
 	
 	
@@ -773,23 +780,24 @@ keys available for all renderings.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Keys defined by <em>object</em> gets &ldquo;protected&rdquo;, which means that they can not be
+		<p>Keys defined by <em>object</em> are given priority, which means that they can not be
 overriden by other objects that will eventually enter the context stack.</p>
 
 <p>For example:</p>
 
-<p>GRMustacheConfiguration *configuration = <a href="#//api/name/defaultConfiguration">[GRMustacheConfiguration defaultConfiguration]</a>;</p>
+<pre><code>GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
 
-<p>// Have the <code>precious</code> key defined, and protected, for all template renderings:
-id object = @{ @&ldquo;precious&rdquo;: @&ldquo;gold&rdquo; };
-[configuration importObject:object];</p>
+// The `precious` key is given priority:
+[configuration extendBaseContextWithProtectedObject:@{ @"precious": @"gold" }];
 
-<p>// Renders &ldquo;gold&rdquo;
-[GRMustacheTemplate renderObject:nil:@{ @&ldquo;precious&rdquo;: @&ldquo;lead&rdquo; } fromString:@&ldquo;{{precious}}&rdquo; error:NULL];</p>
+// Renders "gold", not "lead".
+[GRMustacheTemplate renderObject:nil:@{ @"precious": @"lead" } fromString:@"{{precious}}" error:NULL];
+</code></pre>
 
 <p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];</p>
+<pre><code>configuration.baseContext = [configuration.baseContext contextByAddingProtectedObject:object];
+</code></pre>
 	</div>
 	
 	
@@ -861,7 +869,8 @@ of the rendering of all template tags.</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>This method is a shortcut. It is equivalent to the following line of code:</p>
 
-<p>configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];</p>
+<pre><code>configuration.baseContext = [configuration.baseContext contextByAddingTagDelegate:tagDelegate];
+</code></pre>
 	</div>
 	
 	
@@ -906,7 +915,7 @@ of the rendering of all template tags.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-01-27)</span><br />
+						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-03-15)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

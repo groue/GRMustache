@@ -11,7 +11,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.9 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 7.0 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -41,6 +41,8 @@
 	
 	<option value="//api/name/topMustacheObject">&nbsp;&nbsp;&nbsp;&nbsp;topMustacheObject</option>
 	
+	<option value="//api/name/unsafeKeyAccess">&nbsp;&nbsp;&nbsp;&nbsp;unsafeKeyAccess</option>
+	
 	
 	
 	
@@ -54,6 +56,8 @@
 	
 	<option value="//api/name/contextWithTagDelegate:">&nbsp;&nbsp;&nbsp;&nbsp;+ contextWithTagDelegate:</option>
 	
+	<option value="//api/name/contextWithUnsafeKeyAccess">&nbsp;&nbsp;&nbsp;&nbsp;+ contextWithUnsafeKeyAccess</option>
+	
 	
 	
 	
@@ -65,15 +69,13 @@
 	
 	<option value="//api/name/contextByAddingTagDelegate:">&nbsp;&nbsp;&nbsp;&nbsp;- contextByAddingTagDelegate:</option>
 	
+	<option value="//api/name/contextWithUnsafeKeyAccess">&nbsp;&nbsp;&nbsp;&nbsp;- contextWithUnsafeKeyAccess</option>
+	
 	<option value="//api/name/hasValue:forMustacheExpression:error:">&nbsp;&nbsp;&nbsp;&nbsp;- hasValue:forMustacheExpression:error:</option>
 	
 	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
 	
-	<option value="//api/name/valueForMustacheExpression:error:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForMustacheExpression:error:</option>
-	
 	<option value="//api/name/valueForMustacheKey:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForMustacheKey:</option>
-	
-	<option value="//api/name/valueForUndefinedMustacheKey:">&nbsp;&nbsp;&nbsp;&nbsp;- valueForUndefinedMustacheKey:</option>
 	
 	
 	
@@ -97,6 +99,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Fetching Values from the Context Stack">Fetching Values from the Context Stack</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Unsafe Key Access">Unsafe Key Access</a></span></li>
+	
 </ul></li>
 
 
@@ -106,6 +110,8 @@
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/topMustacheObject">topMustacheObject</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/unsafeKeyAccess">unsafeKeyAccess</a></span></li>
 	
 </ul></li>
 
@@ -121,6 +127,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithTagDelegate:">contextWithTagDelegate:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithUnsafeKeyAccess">contextWithUnsafeKeyAccess</a></span></li>
+	
 </ul></li>
 
 
@@ -133,15 +141,13 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextByAddingTagDelegate:">contextByAddingTagDelegate:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contextWithUnsafeKeyAccess">contextWithUnsafeKeyAccess</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasValue:forMustacheExpression:error:">hasValue:forMustacheExpression:error:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForMustacheExpression:error:">valueForMustacheExpression:error:</a></span></li>
-	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForMustacheKey:">valueForMustacheKey:</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/valueForUndefinedMustacheKey:">valueForUndefinedMustacheKey:</a></span></li>
 	
 </ul></li>
 
@@ -186,7 +192,7 @@ maintains three stacks:</p>
 <ul>
 <li><p>a <em><a href="#//api/name/context">context</a> stack</em>, that makes it able to provide the current <a href="#//api/name/context">context</a>
 object, and to perform key lookup.</p></li>
-<li><p>a <em>protected <a href="#//api/name/context">context</a> stack</em>, whose objects define important keys that
+<li><p>a <em>priority <a href="#//api/name/context">context</a> stack</em>, whose objects define important keys that
 should not be overriden.</p></li>
 <li><p>a <em>tag delegate stack</em>, so that tag delegates are notified when a Mustache
 tag is rendered.</p></li>
@@ -199,9 +205,9 @@ tag is rendered.</p></li>
 <li><a href="https://github.com/groue/GRMustache/blob/master/Guides/view">https://github.com/groue/GRMustache/blob/master/Guides/view</a>_model.md</li>
 <li><a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></li>
 <li><a href="https://github.com/groue/GRMustache/blob/master/Guides/rendering">https://github.com/groue/GRMustache/blob/master/Guides/rendering</a>_objects.md</li>
-<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/protected_contexts.md">https://github.com/groue/GRMustache/blob/master/Guides/protected_contexts.md</a></li>
+<li><a href="https://github.com/groue/GRMustache/blob/master/Guides/security.md">https://github.com/groue/GRMustache/blob/master/Guides/security.md</a></li>
 </ul>
-
+<div class="warning"><p><strong>Warning:</strong> GRMustacheContext is not suitable for subclassing.</p></div>
 					</div>
 					
 					
@@ -295,19 +301,33 @@ tag is rendered.</p></li>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/valueForUndefinedMustacheKey:">&ndash;&nbsp;valueForUndefinedMustacheKey:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
-		<code><a href="#//api/name/valueForMustacheExpression:error:">&ndash;&nbsp;valueForMustacheExpression:error:</a></code>
-	</span>
-	
-	
-</li><li>
-	<span class="tooltip">
 		<code><a href="#//api/name/hasValue:forMustacheExpression:error:">&ndash;&nbsp;hasValue:forMustacheExpression:error:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Unsafe Key Access" name="task_Unsafe Key Access"></a>
+						<h3 class="subsubtitle task-title">Unsafe Key Access</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/unsafeKeyAccess">&nbsp;&nbsp;unsafeKeyAccess</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contextWithUnsafeKeyAccess">+&nbsp;contextWithUnsafeKeyAccess</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contextWithUnsafeKeyAccess">&ndash;&nbsp;contextWithUnsafeKeyAccess</a></code>
 	</span>
 	
 	
@@ -361,9 +381,10 @@ tag is rendered.</p></li>
 		<p>The returned object is the same as the one that would be rendered by a
 <code>{{ . }}</code> tag.</p>
 
-<p>user = &hellip;;
+<pre><code>user = ...;
 context = [GRMustacheContext contextWithObject:user];
-<a href="#//api/name/context">context</a>.topMustacheObject;  // user</p>
+context.topMustacheObject;  // user
+</code></pre>
 	</div>
 	
 	
@@ -380,6 +401,47 @@ context = [GRMustacheContext contextWithObject:user];
 			
 		</ul>
 	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/unsafeKeyAccess" title="unsafeKeyAccess"></a>
+	<h3 class="subsubtitle method-title">unsafeKeyAccess</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns whether this <a href="#//api/name/context">context</a> allows unsafe key access or not.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BOOL unsafeKeyAccess</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -439,7 +501,8 @@ context = [GRMustacheContext contextWithObject:user];
 you should create a context with the <a href="#//api/name/contextWithObject:">[GRMustacheContext contextWithObject:]</a>
 method, like this:</p>
 
-<p>[GRMustacheContext contextWithObject:<a href="../Classes/GRMustache.html#//api/name/standardLibrary">[GRMustache standardLibrary]</a>]</p>
+<pre><code>[GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+</code></pre>
 	</div>
 	
 	
@@ -513,15 +576,12 @@ method, like this:</p>
 		<h4 class="method-subtitle">Discussion</h4>
 		<p>Keys defined by <em>object</em> gets available for template rendering.</p>
 
-<p>context = [GRMustacheContext contextWithObject:@{ @&ldquo;name&rdquo;: @&ldquo;Arthur&rdquo; }];
-[context valueForMustacheKey:@&ldquo;name&rdquo;];   // @&ldquo;Arthur&rdquo;</p>
+<pre><code>context = [GRMustacheContext contextWithObject:@{ @"name": @"Arthur" }];
+[context valueForMustacheKey:@"name"];   // @"Arthur"
+</code></pre>
 
 <p>If <em>object</em> conforms to the GRMustacheTemplateDelegate protocol, it is also
 made the top of the tag delegate stack.</p>
-
-<p>If <em>object</em> is an instance of GRMustacheContext, its class must be the class
-of the receiver, or any subclass, and the returned <a href="#//api/name/context">context</a> is _object.
-An exception is raised otherwise.</p>
 
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></p>
 	</div>
@@ -556,7 +616,7 @@ An exception is raised otherwise.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a <a href="#//api/name/context">context</a> containing a single protected object.</p>
+		<p>Returns a <a href="#//api/name/context">context</a> containing a single priority object.</p>
 	</div>		
 	
     
@@ -593,19 +653,20 @@ An exception is raised otherwise.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Keys defined by <em>object</em> gets &ldquo;protected&rdquo;, which means that they can not be
+		<p>Keys defined by <em>object</em> are given priority, which means that they can not be
 overriden by other objects that will eventually enter the <a href="#//api/name/context">context</a> stack.</p>
 
-<p>// Create a <a href="#//api/name/context">context</a> with a protected <code>precious</code> key
-<a href="#//api/name/context">context</a> = [GRMustacheContext contextWithProtectedObject:@{ @&ldquo;precious&rdquo;: @&ldquo;gold&rdquo; }];</p>
+<pre><code>// Create a context with a priority `precious` key
+context = [GRMustacheContext contextWithProtectedObject:@{ @"precious": @"gold" }];
 
-<p>// Derive a new <a href="#//api/name/context">context</a> by attempting to override the <code>precious</code> key:
-context = [context contextByAddingObject:@{ @&ldquo;precious&rdquo;: @&ldquo;lead&rdquo; }];</p>
+// Derive a new context by attempting to override the `precious` key:
+context = [context contextByAddingObject:@{ @"precious": @"lead" }];
 
-<p>// Protected keys can&rsquo;t be overriden
-[context valueForMustacheKey:@&ldquo;precious&rdquo;];   // @&ldquo;gold&rdquo;</p>
+// Priority keys can't be overriden
+[context valueForMustacheKey:@"precious"];   // @"gold"
+</code></pre>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md">https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/security.md">https://github.com/groue/GRMustache/blob/master/Guides/security.md</a>#priority-keys</p>
 	</div>
 	
 	
@@ -708,6 +769,91 @@ rendering of tags.</p>
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/contextWithUnsafeKeyAccess" title="contextWithUnsafeKeyAccess"></a>
+	<h3 class="subsubtitle method-title">contextWithUnsafeKeyAccess</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a new <a href="#//api/name/context">context</a> with unsafe key access.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)contextWithUnsafeKeyAccess</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Unsafe key access allows this <a href="#//api/name/context">context</a>, and all contexts derived from it, to
+access keys that are normally forbidden: keys that are not declared as
+Objective-C properties, or keys that do not belong to the result of the
+<code>safeMustacheKeys</code> method.</p>
+
+<p>Compare:</p>
+
+<pre><code>@interface DBRecord : NSObject
+- (void)deleteRecord;
+@end
+
+@implementation DBRecord
+- (void)deleteRecord
+{
+    NSLog(@"Oooops, your record was just deleted!");
+}
+@end
+
+DBRecord *record = ...;
+NSString *templateString = @"{{ deleteRecord }}";
+GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
+
+// Safe rendering of the dangerous template: record is not deleted.
+[template renderObject:record error:NULL];
+
+// Unsafe rendering of the dangerous template: record is deleted.
+template.baseContext = [GRMustacheContext contextWithUnsafeKeyAccess];
+[template renderObject:record error:NULL];
+</code></pre>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/security.md">https://github.com/groue/GRMustache/blob/master/Guides/security.md</a></p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Protocols/GRMustacheSafeKeyAccess.html">GRMustacheSafeKeyAccess</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
 					</div>
 					
 					
@@ -765,25 +911,22 @@ given object added at the top of the <a href="#//api/name/context">context</a> s
 the values defined by objects already contained in the <a href="#//api/name/context">context</a> stack. Keys
 unknown to <em>object</em> will be looked up deeper in the <a href="#//api/name/context">context</a> stack.</p>
 
-<p><a href="#//api/name/context">context</a> = [GRMustacheContext contextWithObject:@{ @&ldquo;a&rdquo;: @&ldquo;ignored&rdquo;, @&ldquo;b&rdquo;: @&ldquo;foo&rdquo; }];
-<a href="#//api/name/context">context</a> = [<a href="#//api/name/context">context</a> contextByAddingObject:@{ @&ldquo;a&rdquo;: @&ldquo;bar&rdquo; }];</p>
+<pre><code>context = [GRMustacheContext contextWithObject:@{ @"a": @"ignored", @"b": @"foo" }];
+context = [context contextByAddingObject:@{ @"a": @"bar" }];
 
-<p>// <code>a</code> is overriden
-[context valueForMustacheKey:@&ldquo;a&rdquo;];   // @&ldquo;bar&rdquo;</p>
+// `a` is overriden
+[context valueForMustacheKey:@"a"];   // @"bar"
 
-<p>// <code>b</code> is inherited
-[context valueForMustacheKey:@&ldquo;b&rdquo;];   // @&ldquo;foo&rdquo;</p>
+// `b` is inherited
+[context valueForMustacheKey:@"b"];   // @"foo"
+</code></pre>
 
-<p><em>object</em> can not override keys defined by the objects of the protected
+<p><em>object</em> can not override keys defined by the objects of the priority
 <a href="#//api/name/context">context</a> stack, though. See <a href="#//api/name/contextWithProtectedObject:">contextWithProtectedObject:</a> and
 <a href="#//api/name/contextByAddingProtectedObject:">contextByAddingProtectedObject:</a>.</p>
 
 <p>If <em>object</em> conforms to the GRMustacheTemplateDelegate protocol, it is also
 added at the top of the tag delegate stack.</p>
-
-<p>If <em>object</em> is an instance of GRMustacheContext, its class must be the class
-of the receiver, or any subclass, and the returned <a href="#//api/name/context">context</a> will be an
-instance of the class of <em>object</em>. An exception is raised otherwise.</p>
 
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/delegate.md">https://github.com/groue/GRMustache/blob/master/Guides/delegate.md</a></p>
 	</div>
@@ -810,7 +953,7 @@ instance of the class of <em>object</em>. An exception is raised otherwise.</p>
 	
 	<div class="method-subsection brief-description">
 		<p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, and the
-given object added at the top of the protected <a href="#//api/name/context">context</a> stack.</p>
+given object added at the top of the priority <a href="#//api/name/context">context</a> stack.</p>
 	</div>		
 	
     
@@ -847,19 +990,20 @@ given object added at the top of the protected <a href="#//api/name/context">con
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Keys defined by <em>object</em> gets &ldquo;protected&rdquo;, which means that they can not be
+		<p>Keys defined by <em>object</em> are given priority, which means that they can not be
 overriden by other objects that will eventually enter the <a href="#//api/name/context">context</a> stack.</p>
 
-<p>// Derive a <a href="#//api/name/context">context</a> with a protected <code>precious</code> key
-<a href="#//api/name/context">context</a> = [<a href="#//api/name/context">context</a> contextByAddingProtectedObject:@{ @&ldquo;precious&rdquo;: @&ldquo;gold&rdquo; }];</p>
+<pre><code>// Derive a context with a priority `precious` key
+context = [context contextByAddingProtectedObject:@{ @"precious": @"gold" }];
 
-<p>// Derive a new <a href="#//api/name/context">context</a> by attempting to override the <code>precious</code> key:
-context = [context contextByAddingObject:@{ @&ldquo;precious&rdquo;: @&ldquo;lead&rdquo; }];</p>
+// Derive a new context by attempting to override the `precious` key:
+context = [context contextByAddingObject:@{ @"precious": @"lead" }];
 
-<p>// Protected keys can&rsquo;t be overriden
-[context valueForMustacheKey:@&ldquo;precious&rdquo;];   // @&ldquo;gold&rdquo;</p>
+// Priority keys can't be overriden
+[context valueForMustacheKey:@"precious"];   // @"gold"
+</code></pre>
 
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md">https://github.com/groue/GRMustache/blob/master/Guides/protected_context.md</a></p>
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/security.md">https://github.com/groue/GRMustache/blob/master/Guides/security.md</a>#priority-keys</p>
 	</div>
 	
 	
@@ -955,13 +1099,99 @@ notified of the rendering of tags.</p>
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/contextWithUnsafeKeyAccess" title="contextWithUnsafeKeyAccess"></a>
+	<h3 class="subsubtitle method-title">contextWithUnsafeKeyAccess</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns a new rendering <a href="#//api/name/context">context</a> that is the copy of the receiver, with unsafe
+key access.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)contextWithUnsafeKeyAccess</code></div>
+
+    
+	
+	
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Unsafe key access allows this <a href="#//api/name/context">context</a>, and all contexts derived from it, to
+access keys that are normally forbidden: keys that are not declared as
+Objective-C properties, or keys that do not belong to the result of the
+<code>safeMustacheKeys</code> method.</p>
+
+<p>Compare:</p>
+
+<pre><code>@interface DBRecord : NSObject
+- (void)deleteRecord;
+@end
+
+@implementation DBRecord
+- (void)deleteRecord
+{
+    NSLog(@"Oooops, your record was just deleted!");
+}
+@end
+
+DBRecord *record = ...;
+NSString *templateString = @"{{ deleteRecord }}";
+GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
+
+// Safe rendering of the dangerous template: record is not deleted.
+[template renderObject:record error:NULL];
+
+// Unsafe rendering of the dangerous template: record is deleted.
+template.baseContext = [template.baseContext contextWithUnsafeKeyAccess];
+[template renderObject:record error:NULL];
+</code></pre>
+
+<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/security.md">https://github.com/groue/GRMustache/blob/master/Guides/security.md</a></p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Protocols/GRMustacheSafeKeyAccess.html">GRMustacheSafeKeyAccess</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustacheContext.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/hasValue:forMustacheExpression:error:" title="hasValue:forMustacheExpression:error:"></a>
 	<h3 class="subsubtitle method-title">hasValue:forMustacheExpression:error:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Evaluates an expression such as @&ldquo;name&rdquo;, or @&ldquo;uppercase(user.name)&rdquo;.</p>
+		<p>Evaluates an expression such as <code>name</code>, or <code>uppercase(user.name)</code>.</p>
 	</div>		
 	
     
@@ -1022,8 +1252,6 @@ contains an NSError object that describes the problem.</p></dd>
 			
 			<li><code><p><a href="#//api/name/valueForMustacheKey:">- valueForMustacheKey:</a></p></code></li>
 			
-			<li><code><p><a href="#//api/name/valueForUndefinedMustacheKey:">- valueForUndefinedMustacheKey:</a></p></code></li>
-			
 		</ul>
 	</div>
 	
@@ -1072,7 +1300,8 @@ contains an NSError object that describes the problem.</p></dd>
 you should create a context with the <a href="#//api/name/contextWithObject:">[GRMustacheContext contextWithObject:]</a>
 method, like this:</p>
 
-<p>[GRMustacheContext contextWithObject:<a href="../Classes/GRMustache.html#//api/name/standardLibrary">[GRMustache standardLibrary]</a>]</p>
+<pre><code>[GRMustacheContext contextWithObject:[GRMustache standardLibrary]]
+</code></pre>
 	</div>
 	
 	
@@ -1084,86 +1313,6 @@ method, like this:</p>
 		<ul>
 			
 			<li><code><p><a href="../Classes/GRMustache.html#//api/name/standardLibrary">[GRMustache standardLibrary]</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheContext.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/valueForMustacheExpression:error:" title="valueForMustacheExpression:error:"></a>
-	<h3 class="subsubtitle method-title">valueForMustacheExpression:error:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>Evaluates an expression such as @&ldquo;name&rdquo;, or @&ldquo;uppercase(user.name)&rdquo;. (<b class="deprecated">Deprecated:</b><span class="deprecated"> v6.8</span>)</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (id)valueForMustacheExpression:(NSString *)<em>expression</em> error:(NSError **)<em>error</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>expression</em></dt>
-			<dd><p>An expression such as @&ldquo;name&rdquo;, @&ldquo;user.name&rdquo;, or
-@&ldquo;uppercase(user.name)&rdquo;.</p></dd>
-		</dl>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>error</em></dt>
-			<dd><p>If there is an error computing the value, upon return
-contains an NSError object that describes the problem.</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The computed value</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.6</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>This method is deprecated. You should use the
-<a href="#//api/name/hasValue:forMustacheExpression:error:">hasValue:forMustacheExpression:error:</a> method instead.</p>
-
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/view_model.md">https://github.com/groue/GRMustache/blob/master/Guides/view_model.md</a></p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/hasValue:forMustacheExpression:error:">- hasValue:forMustacheExpression:error:</a></p></code></li>
 			
 		</ul>
 	</div>
@@ -1222,38 +1371,40 @@ contains an NSError object that describes the problem.</p></dd>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>If you want the value for an full expression such as @&ldquo;user.name&rdquo; or
-@&ldquo;uppercase(user.name)&rdquo;, use the <a href="#//api/name/hasValue:forMustacheExpression:error:">hasValue:forMustacheExpression:error:</a>
+		<p>If you want the value for an full expression such as <code>user.name</code> or
+<code>uppercase(user.name)</code>, use the <a href="#//api/name/hasValue:forMustacheExpression:error:">hasValue:forMustacheExpression:error:</a>
 method.</p>
 
 <h3>Search Pattern for valueForMustacheKey</h3>
 
 <p>The Mustache value of any object for a given key is defined as:</p>
 
-<ul>
-<li>the result of <code>objectForKeyedSubscript:</code>, if the object responds to this
-method.</li>
-<li>the result of <code>valueForKey:</code>, if this method does not throw any
-NSUndefinedKeyException.</li>
-<li>otherwise, nil.</li>
-</ul>
+<ol>
+<li><p>If the object responds to the <code>objectForKeyedSubscript:</code> instance method,
+return the result of this method.</p></li>
+<li><p>Otherwise, build the list of safe keys:</p></li>
+<li>If the object responds to the <code>safeMustacheKeys</code> class method defined
+by the <a href="../Protocols/GRMustacheSafeKeyAccess.html"><code>GRMustacheSafeKeyAccess</code></a> protocol, use this method.</li>
+<li>Otherwise, use the list of Objective-C properties declared with
+<code>@property</code>.</li>
+<li><p>If object is an instance of NSManagedObject, add all the attributes of
+its Core Data entity.</p></li>
+<li><p>If the key belongs to the list of safe keys, return the result of the
+<code>valueForKey:</code> method, unless this method throws NSUndefinedKeyException.</p></li>
+<li><p>Otherwise, return nil.</p></li>
+</ol>
 
+
+<p>Contexts with unsafe key access skip the key validation step.</p>
 
 <p>In this method, the following search pattern is used:</p>
 
 <ol>
-<li><p>Searches the protected <a href="#//api/name/context">context</a> stack for an object that has a non-nil
+<li><p>Searches the priority <a href="#//api/name/context">context</a> stack for an object that has a non-nil
 Mustache value for the key.</p></li>
-<li><p>Otherwise (irrelevant protected <a href="#//api/name/context">context</a> stack), search the <a href="#//api/name/context">context</a> stack
-for an object that has a non-nil Mustache value for the key, or for an
-initialized managed property (managed properties are properties defined by
-GRMustacheContext subclasses as @dynamic).</p></li>
-<li><p>Otherwise (irrelevant protected <a href="#//api/name/context">context</a> stack, irrelevant regular <a href="#//api/name/context">context</a>
-stack, no initialized managed property), fetches the Mustache value on the
-receiver, so that your <code>GRMustacheContext</code> subclass can provide default
-values. This value is returned, if non-nil.</p></li>
-<li><p>If none of the above situations occurs, returns the result of
-<a href="#//api/name/valueForUndefinedMustacheKey:"><code>valueForUndefinedMustacheKey:</code></a>.</p></li>
+<li><p>Otherwise (irrelevant priority <a href="#//api/name/context">context</a> stack), search the <a href="#//api/name/context">context</a> stack
+for an object that has a non-nil Mustache value for the key.</p></li>
+<li><p>If none of the above situations occurs, returns nil.</p></li>
 </ol>
 
 
@@ -1269,82 +1420,7 @@ values. This value is returned, if non-nil.</p></li>
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
 			
-			<li><code><p><a href="#//api/name/valueForUndefinedMustacheKey:">- valueForUndefinedMustacheKey:</a></p></code></li>
-			
-			<li><code><p><a href="#//api/name/hasValue:forMustacheExpression:error:">- hasValue:forMustacheExpression:error:</a></p></code></li>
-			
-		</ul>
-	</div>
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustacheContext.h</code><br />
-	</div>				
-	
-	
-</div>
-						
-						<div class="section-method">
-	<a name="//api/name/valueForUndefinedMustacheKey:" title="valueForUndefinedMustacheKey:"></a>
-	<h3 class="subsubtitle method-title">valueForUndefinedMustacheKey:</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>This method is invoked when a key could not be resolved to any value.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>- (id)valueForUndefinedMustacheKey:(NSString *)<em>key</em></code></div>
-
-    
-	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>key</em></dt>
-			<dd><p>a key such as @&ldquo;name&rdquo;</p></dd>
-		</dl>
-		
-	</div>
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The value for the given key.</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v6.7</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>Subclasses can override this method to return an alternate value for
-undefined keys. The default implementation returns nil.</p>
-
-<p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/view_model.md">https://github.com/groue/GRMustache/blob/master/Guides/view_model.md</a></p>
-	</div>
-	
-	
-	
-	
-	
-	<div class="method-subsection see-also-section">
-		<h4 class="method-subtitle">See Also</h4>
-		<ul>
-			
-			<li><code><p><a href="#//api/name/valueForMustacheKey:">- valueForMustacheKey:</a></p></code></li>
+			<li><code><p><a href="#//api/name/contextWithUnsafeKeyAccess">- contextWithUnsafeKeyAccess</a></p></code></li>
 			
 			<li><code><p><a href="#//api/name/hasValue:forMustacheExpression:error:">- hasValue:forMustacheExpression:error:</a></p></code></li>
 			
@@ -1376,7 +1452,7 @@ undefined keys. The default implementation returns nil.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-01-27)</span><br />
+						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-03-15)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

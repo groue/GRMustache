@@ -11,7 +11,7 @@
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
-				<h1><a id="libraryTitle" href="../index.html">GRMustache 6.9 </a></h1>
+				<h1><a id="libraryTitle" href="../index.html">GRMustache 7.0 </a></h1>
 				<a id="developerHome" href="../index.html">Gwendal Roué</a>
 			</div>
 			
@@ -41,6 +41,8 @@
 	
 	<option value="class_methods">Class Methods</option>
 	
+	<option value="//api/name/libraryVersion">&nbsp;&nbsp;&nbsp;&nbsp;+ libraryVersion</option>
+	
 	<option value="//api/name/preventNSUndefinedKeyExceptionAttack">&nbsp;&nbsp;&nbsp;&nbsp;+ preventNSUndefinedKeyExceptionAttack</option>
 	
 	<option value="//api/name/renderingObjectForObject:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectForObject:</option>
@@ -48,8 +50,6 @@
 	<option value="//api/name/renderingObjectWithBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ renderingObjectWithBlock:</option>
 	
 	<option value="//api/name/standardLibrary">&nbsp;&nbsp;&nbsp;&nbsp;+ standardLibrary</option>
-	
-	<option value="//api/name/version">&nbsp;&nbsp;&nbsp;&nbsp;+ version</option>
 	
 	
 	
@@ -87,6 +87,8 @@
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/libraryVersion">libraryVersion</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/preventNSUndefinedKeyExceptionAttack">preventNSUndefinedKeyExceptionAttack</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectForObject:">renderingObjectForObject:</a></span></li>
@@ -94,8 +96,6 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/renderingObjectWithBlock:">renderingObjectWithBlock:</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/standardLibrary">standardLibrary</a></span></li>
-	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/version">version</a></span></li>
 	
 </ul></li>
 
@@ -155,7 +155,7 @@ of the GRMustache library.</p>
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/version">+&nbsp;version</a></code>
+		<code><a href="#//api/name/libraryVersion">+&nbsp;libraryVersion</a></code>
 	</span>
 	
 	
@@ -223,6 +223,52 @@ of the GRMustache library.</p>
 						<h2 class="subtitle subtitle-methods">Class Methods</h2>
 						
 						<div class="section-method">
+	<a name="//api/name/libraryVersion" title="libraryVersion"></a>
+	<h3 class="subsubtitle method-title">libraryVersion</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The version of GRMustache as a GRMustacheVersion struct.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (GRMustacheVersion)libraryVersion</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The version of GRMustache as a GRMustacheVersion struct.</p>
+	</div>
+	
+	
+	
+	<div class="method-subsection availability">
+		<h4 class="method-subtitle parameter-title">Availability</h4>
+		<p>v7.0</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">GRMustache.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/preventNSUndefinedKeyExceptionAttack" title="preventNSUndefinedKeyExceptionAttack"></a>
 	<h3 class="subsubtitle method-title">preventNSUndefinedKeyExceptionAttack</h3>
 	
@@ -252,27 +298,48 @@ templates.</p>
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>The rendering of a GRMustache template can lead to many
-<code>NSUndefinedKeyExceptions</code> to be raised, because of the heavy usage of
-Key-Value Coding. Those exceptions are nicely handled by GRMustache, and are
-part of the regular rendering of a template.</p>
+		<p>The rendering of a GRMustache template can lead to <code>NSUndefinedKeyExceptions</code>
+to be raised, because of the usage of the <code>valueForKey:</code> method. Those
+exceptions are nicely handled by GRMustache, and are part of the regular
+rendering of a template.</p>
 
-<p>Unfortunately, when debugging a project, developers usually set their
-debugger to stop on every Objective-C exceptions. GRMustache rendering can
-thus become a huge annoyance. This method prevents it.</p>
+<p>Unfortunately, Objective-C exceptions have several drawbacks, particularly:</p>
 
-<p>You&rsquo;ll get a slight performance hit, so you&rsquo;d probably make sure this call
-does not enter your Release configuration.</p>
+<ol>
+<li>they play badly with autorelease pools, and are reputed to leak memory.</li>
+<li>they usually stop your debugger when you are developping your application.</li>
+</ol>
 
-<p>One way to achieve this is to add <code>-DDEBUG</code> to the &ldquo;Other C Flags&rdquo; setting of
-your development configuration, and to wrap the
-<code>preventNSUndefinedKeyExceptionAttack</code> method call in a #if block, like:</p>
 
-<h1>ifdef DEBUG</h1>
+<p>The first point is indeed a matter of worry: Apple does not guarantee that
+exceptions raised by <code>valueForKey:</code> do not leak memory. However, I never had
+any evidence of such a leak from NSObject&rsquo;s implementation.</p>
 
-<p><a href="#//api/name/preventNSUndefinedKeyExceptionAttack">[GRMustache preventNSUndefinedKeyExceptionAttack]</a>;</p>
+<p>Should you still worry, we recommend that you avoid the <code>valueForKey:</code> method
+altogether. Instead, implement the <a href="http://clang.llvm.org/docs/ObjectiveCLiterals.html#dictionary-style-subscripting">keyed subscripting</a>
+<code>objectForKeyedSubscript:</code> method on objects that you provide to GRMustache.</p>
 
-<h1>endif</h1>
+<p>The second point is valid also: NSUndefinedKeyException raised by template
+rendering may become a real annoyance when you are debugging your project,
+because it&rsquo;s likely you&rsquo;ve told your debugger to stop on every Objective-C
+exceptions.</p>
+
+<p>You can avoid them as well: make sure you invoke once, early in your
+application, the <code>preventNSUndefinedKeyExceptionAttack</code> method.</p>
+
+<p>Depending on the number of NSUndefinedKeyException that get prevented, you
+will experience a slight performance hit, or a performance improvement.</p>
+
+<p>Since the main use case for this method is to avoid Xcode breaks on rendering
+exceptions, the best practice is to conditionally invoke this method, using
+the <a href="[http://developer.apple.com/library/mac/](http://developer.apple.com/library/mac/">NS_BLOCK_ASSERTIONS</a>#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Functions/Reference/reference.html)
+that helps identifying the Debug configuration of your targets:</p>
+
+<pre><code>#if !defined(NS_BLOCK_ASSERTIONS)
+// Debug configuration: keep GRMustache quiet
+[GRMustache preventNSUndefinedKeyExceptionAttack];
+#endif
+</code></pre>
 
 <p><strong>Companion guide:</strong> <a href="https://github.com/groue/GRMustache/blob/master/Guides/runtime.md">https://github.com/groue/GRMustache/blob/master/Guides/runtime.md</a></p>
 	</div>
@@ -298,8 +365,8 @@ your development configuration, and to wrap the
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a rendering object that is able to render the argument <em>object</em> for
-the various Mustache tags.</p>
+		<p>This method is deprecated. Use
+<a href="../Classes/GRMustacheRendering.html#//api/name/renderingObjectForObject:"><code>[GRMustacheRendering renderingObjectForObject:]</code></a> instead. (<b class="deprecated">Deprecated:</b><span class="deprecated"> v7.0</span>)</p>
 	</div>		
 	
     
@@ -308,22 +375,7 @@ the various Mustache tags.</p>
 
     
 	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>object</em></dt>
-			<dd><p>An object.</p></dd>
-		</dl>
-		
-	</div>
 	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A rendering object able to render the argument.</p>
-	</div>
 	
 	
 	
@@ -334,15 +386,6 @@ the various Mustache tags.</p>
 	
 	
 	
-	<div class="method-subsection discussion-section">
-		<h4 class="method-subtitle">Discussion</h4>
-		<p>If <em>object</em> already conforms to the <a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol, this method
-returns <em>object</em> itself: it is already able to render.</p>
-
-<p>For other values, including <code>nil</code>, this method returns a rendering object
-that provides the default GRMustache rendering.</p>
-	</div>
-	
 	
 	
 	
@@ -351,7 +394,7 @@ that provides the default GRMustache rendering.</p>
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
 			
-			<li><code><p><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol</p></code></li>
+			<li><code><p><a href="../Classes/GRMustacheRendering.html">GRMustacheRendering</a> class</p></code></li>
 			
 		</ul>
 	</div>
@@ -373,7 +416,8 @@ that provides the default GRMustache rendering.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Returns a rendering object that renders with the provided block.</p>
+		<p>This method is deprecated. Use
+<a href="../Classes/GRMustacheRendering.html#//api/name/renderingObjectWithBlock:"><code>[GRMustacheRendering renderingObjectWithBlock:]</code></a> instead. (<b class="deprecated">Deprecated:</b><span class="deprecated"> v7.0</span>)</p>
 	</div>		
 	
     
@@ -382,25 +426,7 @@ that provides the default GRMustache rendering.</p>
 
     
 	
-	<div class="method-subsection arguments-section parameters">
-		<h4 class="method-subtitle parameter-title">Parameters</h4>
-		
-		<dl class="argument-def parameter-def">
-			<dt><em>block</em></dt>
-			<dd><p>A block that follows the semantics of the
-renderForMustacheTag:context:HTMLSafe:error: method defined by
-the <a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol. See the documentation of this
-method.</p></dd>
-		</dl>
-		
-	</div>
 	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A rendering object</p>
-	</div>
 	
 	
 	
@@ -419,7 +445,7 @@ method.</p></dd>
 		<h4 class="method-subtitle">See Also</h4>
 		<ul>
 			
-			<li><code><p><a href="../Protocols/GRMustacheRendering.html">GRMustacheRendering</a> protocol</p></code></li>
+			<li><code><p><a href="../Classes/GRMustacheRendering.html">GRMustacheRendering</a> class</p></code></li>
 			
 		</ul>
 	</div>
@@ -482,52 +508,6 @@ method.</p></dd>
 	
 </div>
 						
-						<div class="section-method">
-	<a name="//api/name/version" title="version"></a>
-	<h3 class="subsubtitle method-title">version</h3>
-	
-	
-	
-	<div class="method-subsection brief-description">
-		<p>The version of GRMustache as a GRMustacheVersion struct.</p>
-	</div>		
-	
-    
-
-	<div class="method-subsection method-declaration"><code>+ (GRMustacheVersion)version</code></div>
-
-    
-	
-	
-	
-	<div class="method-subsection return">
-		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The version of GRMustache as a GRMustacheVersion struct.</p>
-	</div>
-	
-	
-	
-	<div class="method-subsection availability">
-		<h4 class="method-subtitle parameter-title">Availability</h4>
-		<p>v1.0</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<div class="method-subsection declared-in-section">
-		<h4 class="method-subtitle">Declared In</h4>
-		<code class="declared-in-ref">GRMustache.h</code><br />
-	</div>				
-	
-	
-</div>
-						
 					</div>
 					
 					
@@ -545,7 +525,7 @@ method.</p></dd>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-01-27)</span><br />
+						<p><span class="copyright">&copy; 2014 Gwendal Roué. All rights reserved. (Last updated: 2014-03-15)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
 						

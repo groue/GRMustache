@@ -44,7 +44,9 @@
  *
  * A formatter can be used to format all values in a section of a template:
  *
- *     {{# percent }}...{{ value1 }}...{{ value2 }}...{{/ percent }}
+ * ```
+ * {{# percent }}...{{ value1 }}...{{ value2 }}...{{/ percent }}
+ * ```
  *
  * The formatting then applies to all inner variable tags that evaluate to a
  * value that can be processed by the filter (see
@@ -53,12 +55,14 @@
  * Inner loops and boolean sections are unaffected. However their inner variable
  * tags are:
  *
- *     {{# percent }}
- *       {{ value1 }}        {{! format applies }}
- *       {{# condition }}    {{! format does not apply }}
- *         {{ value2 }}      {{! format applies }}
- *       {{/ condition }}
- *     {{/ percent }}
+ * ```
+ * {{# percent }}
+ *   {{ value1 }}      {{! format applies }}
+ *   {{# condition }}  {{! format does not apply }}
+ *     {{ value2 }}    {{! format applies }}
+ *   {{/ condition }}
+ * {{/ percent }}
+ * ```
  *
  * @since v6.4
  */
