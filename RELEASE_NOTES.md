@@ -12,7 +12,7 @@ GRMustache 7.0 introduces several changes to the previous release, focusing on s
 
 The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition.
 
-- Keys accessed through the Key-Value-Coding method `valueForKey:` are now limited by default to keys that are explicitly declared as properties (with `@property`), or Core Data attributes (for managed objects). See the [Security Guide](Guides/security.md) for more information.
+- For security reasons, keys accessed through the Key-Value-Coding method `valueForKey:` are now limited by default to keys that are explicitly declared as properties (with `@property`), or Core Data attributes (for managed objects). See the [Security Guide](Guides/security.md) for more information.
 - Support for garbage-collected Objective-C is dropped.
 - Support for subclassing the `GRMustacheContext` class is dropped.
 - Template inheritance is more compatible with [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
