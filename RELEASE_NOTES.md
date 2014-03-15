@@ -8,16 +8,11 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 GRMustache 7.0 introduces several changes to the previous release, focusing on security, compatibility with other Mustache implementations, and API simplification. Those changes may break your existing applications.
 
-The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition.
-
 ### Breaking changes
 
-The main breaking change which may well affect your existing code is the following:
+The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition.
 
 - Keys accessed through the Key-Value-Coding method `valueForKey:` are now limited by default to keys that are explicitly declared as properties (with `@property`), or Core Data attributes (for managed objects). See the [Security Guide](Guides/security.md) for more information.
-
-The following breaking changes have low chance to affect your code:
-
 - Support for garbage-collected Objective-C is dropped.
 - Support for subclassing the `GRMustacheContext` class is dropped.
 - Template inheritance is more compatible with [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
