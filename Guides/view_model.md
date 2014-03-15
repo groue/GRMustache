@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](template_repositories.md)
+[up](../../../../GRMustache#documentation), [next](partials.md)
 
 Patterns For Feeding GRMustache Templates
 =========================================
@@ -217,4 +217,4 @@ NSString *rendering = [template render...];
 
 See the [Configuration Guide](configuration.md) for more information.
 
-[up](../../../../GRMustache#documentation), [next](template_repositories.md)
+[up](../../../../GRMustache#documentation), [next](partials.md)

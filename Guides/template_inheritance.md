@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](standard_library.md)
 
 Template inheritance
 ====================
@@ -53,4 +53,4 @@ There is no guarantee that our implementations are identical, though.
 **As a consequence, if your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use template inheritance with great care.**
 
 
-[up](../../../../GRMustache#documentation), [next](configuration.md)
+[up](../../../../GRMustache#documentation), [next](standard_library.md)

@@ -72,42 +72,43 @@ Documentation
 
 ### Guides
 
-Introduction:
+**Introduction**
 
 - [Introduction](Guides/introduction.md): a tour of the library features, and most common use cases.
 
-Basics:
+**Basics**
+
+The core Mustache:
 
 - [Templates](Guides/templates.md): how to load templates.
 - [Runtime](Guides/runtime.md): how your data is rendered.
 - [ViewModel](Guides/view_model.md): an overview of various techniques to feed templates.
-
-Services:
-
 - [Partials](Guides/partials.md): decompose your templates into components named "partials".
-- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
+
+**Mustache, and beyond**
+
+GRMustache offers services on top of the minimalistic genuine Mustache:
+
 - [Template Inheritance](Guides/template_inheritance.md): have templates inherit other ones, and reuse common layouts, for example.
-- [Configuration](Guides/configuration.md)
-- [HTML vs. Text templates](Guides/html_vs_text.md)
 - [Standard Library](Guides/standard_library.md): built-in candy, for your convenience.
+- [HTML vs. Text templates](Guides/html_vs_text.md)
 - [NSFormatter](Guides/NSFormatter.md), NSNumberFormatter, NSDateFormatter, etc. Use them.
-
-Hooks:
-
 - [Filters](Guides/filters.md): `{{ uppercase(name) }}` et al.
 - [Rendering Objects](Guides/rendering_objects.md): "Mustache lambdas", and more.
 - [Tag Delegates](Guides/delegate.md): observe and alter template rendering.
-
-Mustache, and beyond:
-
-- [Security](Guides/security.md): an important matter.
 - [Compatibility](Guides/compatibility.md): compatibility with other Mustache implementations, in details.
 
-Forking:
+**Application tools**
+
+- [Security](Guides/security.md): an important matter.
+- [Templates Repositories](Guides/template_repositories.md): manage groups of templates.
+- [Configuration](Guides/configuration.md)
+
+**Forking**
 
 - [Forking Guide](Guides/forking.md): general information about the library.
 
-Sample code:
+**Sample code**
 
 - Check the [FAQ](#faq) below.
 

@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](html_vs_text.md)
+[up](../../../../GRMustache#documentation), [next](forking.md)
 
 Configuration
 =============
@@ -162,4 +162,4 @@ The [Mustache specification](https://github.com/mustache/spec) does not talk abo
 **If your goal is to design templates that remain compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), check their documentation.**
 
 
-[up](../../../../GRMustache#documentation), [next](html_vs_text.md)
+[up](../../../../GRMustache#documentation), [next](forking.md)

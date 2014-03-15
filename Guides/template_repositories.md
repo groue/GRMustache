@@ -1,4 +1,4 @@
-[up](../../../../GRMustache#documentation), [next](template_inheritance.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)
 
 Template repositories
 =====================
@@ -279,4 +279,4 @@ GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templat
 repository.dataSource = mars;
 ```
 
-[up](../../../../GRMustache#documentation), [next](template_inheritance.md)
+[up](../../../../GRMustache#documentation), [next](configuration.md)
