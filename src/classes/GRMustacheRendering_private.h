@@ -61,22 +61,12 @@
 // Documented in GRMustacheRendering.h
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
 
-/**
- * TODO
- */
 + (void)pushCurrentTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
-+ (void)pushCurrentContentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
 + (void)popCurrentTemplateRepository GRMUSTACHE_API_INTERNAL;
-+ (void)popCurrentContentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
 + (GRMustacheTemplateRepository *)currentTemplateRepository GRMUSTACHE_API_INTERNAL;
+
++ (void)pushCurrentContentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
++ (void)popCurrentContentType GRMUSTACHE_API_INTERNAL;
 + (GRMustacheContentType)currentContentType GRMUSTACHE_API_INTERNAL;
 
 @end

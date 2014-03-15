@@ -24,6 +24,12 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 
+/**
+ * Your data classes should conform to the GRMustacheSafeKeyAccess protocol
+ * to filter the keys that can be accessed by GRMustache templates.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/security.md
+ */
 @protocol GRMustacheSafeKeyAccess <NSObject>
 
 /**

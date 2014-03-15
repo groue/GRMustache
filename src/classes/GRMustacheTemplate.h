@@ -365,6 +365,6 @@
  *
  * @since v7.0
  */
-@property (nonatomic, retain) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 @end

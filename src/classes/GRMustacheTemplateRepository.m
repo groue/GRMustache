@@ -106,7 +106,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * Parses templateString and returns an abstract syntax tree.
  * 
  * @param templateString  A Mustache template string.
- * @param contentType     TODO
+ * @param contentType     The content type of the returned AST.
  * @param templateID      The template ID of the template, or nil if the
  *                        template string is not tied to any identified template.
  * @param error           If there is an error, upon return contains an NSError

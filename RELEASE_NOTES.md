@@ -6,9 +6,13 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v7.0.0
 
+GRMustache 7.0 introduces several changes to the previous release, focusing on security, compatibility with other Mustache implementations, and API simplification. Those changes may break your existing applications.
+
+The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition
+
 ### Breaking changes
 
-The only breaking change which may well affect your existing code is the following:
+The main breaking change which may well affect your existing code is the following:
 
 - Keys accessed through the Key-Value-Coding method `valueForKey:` are now limited by default to keys that are explicitly declared as properties (with `@property`), or Core Data attributes (for managed objects). See the [Security Guide](Guides/security.md) for more information.
 
@@ -30,14 +34,14 @@ The following breaking changes have low chance to affect your code:
 **New APIs**
 
 ```objc
+@interface GRMustache
++ (GRMustacheVersion)libraryVersion;
+@end
+
 @interface GRMustacheContext
 @property (nonatomic, readonly) BOOL unsafeKeyAccess;
 + (instancetype)contextWithUnsafeKeyAccess;
 - (instancetype)contextWithUnsafeKeyAccess;
-@end
-
-@interface GRMustache
-+ (GRMustacheVersion)libraryVersion;
 @end
 
 @interface GRMustacheRendering
@@ -45,33 +49,41 @@ The following breaking changes have low chance to affect your code:
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 @end
 
+@protocol GRMustacheSafeKeyAccess
++ (NSSet *)safeMustacheKeys;
+@end
+
+@interface GRMustacheTemplate
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository;
+@end
+
 @interface GRMustacheTemplateRepository
 - (void)reloadTemplates;
 @end
 ```
 
+**Modified APIs**
+
+Check their updated documentations in the header files.
+
+```objc
+@interface GRMustacheTemplateRepository
++ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)templates;
+@end
+```
+
 **Deprecated APIs**
+
+Those APIs are not discontinued, but they will have your code emit deprecation warnings. Check their updated documentations in the header files in order to get the upgrade path.
 
 ```objc
 @interface GRMustache
-
-// Use +[GRMustacheRendering renderingObjectForObject:] instead.
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
-
-// Use +[GRMustacheRendering renderingObjectWithBlock:] instead.
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
-
 @end
 
 @interface GRMustacheTag
-
-// Replace [tag.templateRepository templateFromString:... error:...] with
-// [GRMustacheTemplate templateFromString:... error:...].
-//
-// Replace [tag.templateRepository templateNamed:... error:...] with explicit
-// invocation of the targeted template repository.
 @property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository;
-
 @end
 ```
 

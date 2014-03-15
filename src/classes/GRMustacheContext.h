@@ -330,7 +330,7 @@
  * 3. If the key belongs to the list of safe keys, return the result of the
  *    `valueForKey:` method, unless this method throws NSUndefinedKeyException.
  *
- * 4. Otherwize, return nil.
+ * 4. Otherwise, return nil.
  *
  * Contexts with unsafe key access skip the key validation step.
  *

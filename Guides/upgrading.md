@@ -6,6 +6,7 @@ GRMustache 7.0 introduces several changes to the previous release, focusing on s
 This guide is provided in order to ease your transition to GRMustache 7.0:
 
 - [New requirements](#new-requirements)
+- [Deprecated methods](#deprecated-methods)
 - [Safe Key Access](#safe-key-access)
 - [Default values](#default-values)
 - [GRMustacheContext does no longer support subclassing](#grmustachecontext-does-no-longer-support-subclassing)
@@ -18,6 +19,14 @@ New requirements
 GRMustache does no longer support garbage collection.
 
 The last version of the library which supports garbage collection is [GRMustache v6.9.2](https://github.com/groue/GRMustache/tree/v6.9.2).
+
+
+Deprecated methods
+------------------
+
+When compiling your code, you may get deprecation warnings. Those warnings are harmless: your application is not broken.
+
+In order to restore the pristine warning-free state of your project, read the upgrade path from those deprecated methods in the GRMustache headers.
 
 
 Safe Key Access
