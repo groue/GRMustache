@@ -55,8 +55,8 @@
         XCTAssertEqualObjects(rendering, @"foobar");
     }
     
-    templates[@"template"] = @"baz{{>partial}}";
-    templates[@"partial"] = @"qux";
+    [templates setObject:@"baz{{>partial}}" forKey:@"template"];
+    [templates setObject:@"qux" forKey:@"partial"];
     
     {
         GRMustacheTemplate *template = [repository templateNamed:@"template" error:NULL];
