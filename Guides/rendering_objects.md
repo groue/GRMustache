@@ -84,10 +84,10 @@ This protocol declares the method that all rendering objects must implement:
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext.
 
-You may declare and implement your own conforming classes. The `+[GRMustache renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
+You may declare and implement your own conforming classes. The `+[GRMustacheRendering renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
 
 ```objc
-id renderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     return @"I'm rendered!";
 }];
@@ -107,7 +107,7 @@ Trivial Example
 `Render.m`:
 
 ```objc
-id nameRenderingObject = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id nameRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     return @"Arthur & Cie";
 }];
@@ -146,7 +146,7 @@ Let's write a rendering object which wraps a section in a `<strong>` HTML tag:
 `Render.m`:
 
 ```objc
-id strong = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id strong = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     // First perform a raw rendering of the tag, using its
     // `renderContentWithContext:HTMLSafe:error` method.
@@ -195,7 +195,7 @@ Your rendering objects can thus delegate their rendering to the tag they are giv
 
 ```objc
 id data = @{
-    @"twice": [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+    @"twice": [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
         NSMutableString *buffer = [NSMutableString string];
         [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
         [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
@@ -227,7 +227,7 @@ Let's write a rendering object that wraps a section in a HTML link. The URL of t
 `Render.m`:
 
 ```objc
-id link = [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id link = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     // Build an alternate template string by wrapping the inner content of
     // the section in a `<a>` HTML tag:
@@ -428,7 +428,7 @@ Two useful things:
 
 1. *`GRMustacheRendering` is a protocol*.
     
-    Surely `+[GRMustache renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the GRMustacheRendering protocol is available for you to use on your custom classes.
+    Surely `+[GRMustacheRendering renderingObjectWithBlock:]` is convenient since it lets us create rendering objects from scratch. Yet the GRMustacheRendering protocol is available for you to use on your custom classes.
     
     You can even mix it with the [GRMustacheFilter protocol](filters.md). The conformance to both protocols gives you objects with multiple facets. For example, the [NSFormatter](NSFormatter.md) class takes this opportunity to format values, as in `{{ format(value) }}`, and to format all variable tags in a section, when used as in `{{# format }}...{{ value1 }}...{{ value2 }}...{{/ }}`.
 
@@ -519,7 +519,7 @@ id customHelperLibrary = @{
     // `list` is a filter that takes an array, and returns a rendering object:
     @"list": [GRMustacheFilter filterWithBlock:^id(NSArray *items) {
         
-        return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
             
             NSMutableString *buffer = [NSMutableString string];
             
