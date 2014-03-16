@@ -1,7 +1,7 @@
 GRMustache
 ==========
 
-GRMustache is a flexible and production-ready implementation of [Mustache](http://mustache.github.io/) templates for MacOS Cocoa and iOS.
+GRMustache is a flexible and production-ready implementation of [Mustache templates](http://mustache.github.io/) for MacOS Cocoa and iOS.
 
 **March 15, 2014: GRMustache 7.0.0 is out.** [Release notes](RELEASE_NOTES.md)
 
