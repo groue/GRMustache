@@ -22,15 +22,15 @@ Features below are not documented in [mustache.5.html](http://mustache.github.io
 
 - **Key paths**, as `{{ person.name }}`, for direct access to an object's property.
 - **"Implicit iterator"**, aka `{{.}}`, directly renders the current object (useful when looping over strings, for instance).
-- **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to invoke your own rendering code. This is documented in the [Rendering Objects Guide](rendering_objects.md).
+- **"Mustache lambdas"**, allow both `{{name}}` and `{{#name}}...{{/name}}` tags to perform custom rendering.
 
 
 Beyond Mustache
 ---------------
 
-GRMustache goes beyond the [Mustache specification](https://github.com/mustache/spec), and adds many services on top of the minimalistic template engine.
+GRMustache adds many services on top of the minimalistic template engine.
 
-Check the [Compatibility Guide](compatibility.md) whenever you want to render templates compatible with other Mustache implementations.
+Check the [Compatibility Guide](compatibility.md) whenever you want to keep your templates compatible with other Mustache implementations.
 
 
 ### Syntax extensions
