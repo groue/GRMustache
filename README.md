@@ -65,8 +65,8 @@ Documentation
 
 If you don't know Mustache, start here: http://mustache.github.io/mustache.5.html
 
-- [Guides](Guides/README.md): a guided tour
-- [Reference](http://groue.github.io/GRMustache/Reference/): all classes & protocols of the library
+- [Guides](Guides/README.md): a guided tour of GRMustache
+- [Reference](http://groue.github.io/GRMustache/Reference/): all classes & protocols
 - [Troubleshooting](Guides/troubleshooting.md)
 - [FAQ](Guides/faq.md)
 
