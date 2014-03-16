@@ -70,9 +70,8 @@
             // Behave as a truthy object: don't render for inverted sections
             return nil;
             
-        default:
+        case GRMustacheTagTypeSection:
             // {{# HTML.escape }}...{{/ HTML.escape }}
-            // {{$ HTML.escape }}...{{/ HTML.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
             // we can format them. See mustacheTag:willRenderObject: below.

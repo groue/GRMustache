@@ -235,10 +235,6 @@
             case GRMustacheTagTypeVariable:
                 ++variableCount;
                 break;
-                
-            default:
-                XCTAssertTrue(NO, @"");
-                break;
         }
         return nil;
     }];
