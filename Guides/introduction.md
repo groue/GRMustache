@@ -28,9 +28,9 @@ Features below are not documented in [mustache.5.html](http://mustache.github.io
 Beyond Mustache
 ---------------
 
-GRMustache goes beyond the [Mustache specification](https://github.com/mustache/spec), and fix many usability issues of the original minimalistic template language.
+GRMustache goes beyond the [Mustache specification](https://github.com/mustache/spec), and adds many services on top of the minimalistic template engine.
 
-Check the [Compatibility Guide](compatibility.md) whenever you want to render templates compatible with other Mustache implementations, and the [FAQ](../../../../GRMustache#faq) for a list of things you can do with GRMustache.
+Check the [Compatibility Guide](compatibility.md) whenever you want to render templates compatible with other Mustache implementations.
 
 
 ### Syntax extensions
