@@ -31,7 +31,7 @@ GRMustache FAQ
 
 - **Does GRMustache provide any layout or template inheritance facility?**
     
-    [Yes](partials.md)
+    [Yes](template_inheritance.md)
 
 - **Is it possible to render a default value for missing keys?**
 
