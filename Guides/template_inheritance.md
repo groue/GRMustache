@@ -46,9 +46,13 @@ The loading of inherited template follow the same rules as the partial loading t
 Compatibility with other Mustache implementations
 -------------------------------------------------
 
-The [Mustache specification](https://github.com/mustache/spec) does not have the concept of template inheritance. Our support for this feature was inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+The [Mustache specification](https://github.com/mustache/spec) does not have the concept of template inheritance.
 
-There is no guarantee that our implementations are identical, though.
+Our support for this feature was inspired by [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
+
+GRMustache passes all template inheritance tests from hogan.js & mustache.java, without exact white-space conformance: GRMustache doesn't honor line suppression, indentation and other white-space niceties.
+
+The reciprocal is not sure: hogan.js & mustache.jave may, or not, pass all template inheritance tests of GRMustache.
 
 **As a consequence, if your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use template inheritance with great care.**
 
