@@ -28,30 +28,52 @@ The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your t
 
 **New APIs**
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustache.html
+
 ```objc
 @interface GRMustache
 + (GRMustacheVersion)libraryVersion;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html
+
+```objc
 @interface GRMustacheContext
 @property (nonatomic, readonly) BOOL unsafeKeyAccess;
 + (instancetype)contextWithUnsafeKeyAccess;
 - (instancetype)contextWithUnsafeKeyAccess;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheRendering.html
+
+```objc
 @interface GRMustacheRendering
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Protocols/GRMustacheSafeKeyAccess.html
+
+```objc
 @protocol GRMustacheSafeKeyAccess
 + (NSSet *)safeMustacheKeys;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplate.html
+
+```objc
 @interface GRMustacheTemplate
 @property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplateRepository.html
+
+```objc
 @interface GRMustacheTemplateRepository
 - (void)reloadTemplates;
 @end
@@ -60,6 +82,8 @@ The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your t
 **Modified APIs**
 
 Check their updated documentations in the header files.
+
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTemplateRepository.html
 
 ```objc
 @interface GRMustacheTemplateRepository
@@ -71,12 +95,18 @@ Check their updated documentations in the header files.
 
 Those APIs are not discontinued, but they will have your code emit deprecation warnings. Check their documentations in the header files in order to get the upgrade path.
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustache.html
+
 ```objc
 @interface GRMustache
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object;
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 @end
+```
 
+See http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html
+
+```objc
 @interface GRMustacheTag
 @property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository;
 @end
