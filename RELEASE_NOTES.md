@@ -16,7 +16,7 @@ The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your t
 - Support for garbage-collected Objective-C is dropped.
 - Support for subclassing the `GRMustacheContext` class is dropped.
 - Template inheritance is more compatible with [hogan.js](http://twitter.github.com/hogan.js/) and [spullara/mustache.java](https://github.com/spullara/mustache.java).
-- `[GRMustacheTemplateRepository templateRepositoryWithDictionary:]` no longer copies its dictionary. The repository may have a different behavior if the dictionary gets mutated.
+- `[GRMustacheTemplateRepository templateRepositoryWithDictionary:]` no longer copies its partials dictionary. The repository may have a different behavior if the dictionary gets mutated.
 
 
 ### New features
