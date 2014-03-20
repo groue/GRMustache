@@ -45,7 +45,7 @@ static GRMustacheImplicitIteratorExpression *instance;
     return expression == instance;
 }
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitImplicitIteratorExpression:self value:value error:error];
 }

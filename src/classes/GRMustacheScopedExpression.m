@@ -81,7 +81,7 @@
 {
     return [_baseExpression hash] ^ [_scopeIdentifier hash];
 }
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitScopedExpression:self value:value error:error];
 }

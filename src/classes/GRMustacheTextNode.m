@@ -43,9 +43,9 @@
     [super dealloc];
 }
 
-#pragma mark <GRMustacheASTNode>
+#pragma mark - <GRMustacheASTNode>
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitTextNode:self error:error];
 }
@@ -55,7 +55,8 @@
     return ASTNode;
 }
 
-#pragma mark Private
+
+#pragma mark - Private
 
 - (id)initWithText:(NSString *)text
 {

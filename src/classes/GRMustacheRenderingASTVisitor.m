@@ -78,7 +78,7 @@
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
 {
     self.context = [_context contextByAddingInheritablePartial:inheritablePartial];
-    return [inheritablePartial.partial accept:self error:error];
+    return [inheritablePartial.partial acceptVisitor:self error:error];
 }
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
@@ -88,7 +88,7 @@
         ASTNode = [_context resolveASTNode:ASTNode];
 
         // render
-        if (![ASTNode accept:self error:error]) {
+        if (![ASTNode acceptVisitor:self error:error]) {
             return NO;
         }
     }
@@ -104,7 +104,7 @@
     if (_contentType != partialContentType)
     {
         GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:partialContentType context:_context] autorelease];
-        if (![visitor visitPartial:partial error:error]) {
+        if (![partial acceptVisitor:visitor error:error]) {
             return NO;
         }
         BOOL HTMLSafe;
@@ -127,7 +127,7 @@
             ASTNode = [_context resolveASTNode:ASTNode];
             
             // render
-            if (![ASTNode accept:self error:error]) {
+            if (![ASTNode acceptVisitor:self error:error]) {
                 success = NO;
                 break;
             }
@@ -152,7 +152,7 @@
         // Evaluate expression
 
         __block id object;
-        if (![tag.expression accept:self value:&object error:error]) {  // this sets _protected
+        if (![tag.expression acceptVisitor:self value:&object error:error]) {  // this sets _protected
 
             // Error
 
@@ -291,12 +291,12 @@
 - (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error
 {
     id filter;
-    if (![expression.filterExpression accept:self value:&filter error:error]) {
+    if (![expression.filterExpression acceptVisitor:self value:&filter error:error]) {
         return NO;
     }
     
     id argument;
-    if (![expression.argumentExpression accept:self value:&argument error:error]) {
+    if (![expression.argumentExpression acceptVisitor:self value:&argument error:error]) {
         return NO;
     }
     
@@ -361,7 +361,7 @@
 - (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error
 {
     id scopedValue;
-    if (![expression.baseExpression accept:self value:&scopedValue error:error]) {
+    if (![expression.baseExpression acceptVisitor:self value:&scopedValue error:error]) {
         return NO;
     }
     

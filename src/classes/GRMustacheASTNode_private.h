@@ -50,7 +50,7 @@
 /**
  * TODO
  */
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
 
 /**
  * In the context of template inheritance, return the AST node that should be

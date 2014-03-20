@@ -68,7 +68,7 @@
     return [_identifier hash];
 }
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitIdentifierExpression:self value:value error:error];
 }

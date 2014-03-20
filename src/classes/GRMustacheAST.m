@@ -49,10 +49,10 @@
     return self;
 }
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
     for (id<GRMustacheASTNode> ASTNode in _ASTNodes) {
-        if (![ASTNode accept:visitor error:error]) {
+        if (![ASTNode acceptVisitor:visitor error:error]) {
             return NO;
         }
     }

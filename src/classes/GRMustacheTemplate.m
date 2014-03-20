@@ -124,7 +124,7 @@
     GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context] autorelease];
 
     [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-    BOOL success = [_partial accept:visitor error:error];
+    BOOL success = [_partial acceptVisitor:visitor error:error];
     [GRMustacheRendering popCurrentTemplateRepository];
 
     if (!success) {

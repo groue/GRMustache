@@ -37,12 +37,16 @@
 
 @protocol GRMustacheASTVisitor <NSObject>
 
+// AST nodes
+// Don't use these methods directly. Use -[<GRMustacheASTNode acceptVisitor:error:] instead
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error;
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
 - (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error;
 - (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error;
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
 
+// Expressions
+// Don't use these methods directly. Use -[GRMustacheExpression acceptVisitor:error:] instead
 - (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error;
 - (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error;
 - (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error;

@@ -61,7 +61,7 @@
 /**
  * TODO
  */
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
 
 @end
 

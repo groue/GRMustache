@@ -94,7 +94,7 @@
 
 #pragma mark - <GRMustacheASTNode>
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitTag:self error:error];
 }

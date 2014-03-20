@@ -59,7 +59,7 @@
         ASTNode = [context resolveASTNode:ASTNode];
         
         // render
-        if (![ASTNode accept:visitor error:error]) {
+        if (![ASTNode acceptVisitor:visitor error:error]) {
             return nil;
         }
     }

@@ -84,7 +84,7 @@
     return [_filterExpression hash] ^ [_argumentExpression hash];
 }
 
-- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitFilteredExpression:self value:value error:error];
 }
