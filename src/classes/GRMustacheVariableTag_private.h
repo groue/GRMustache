@@ -21,22 +21,19 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheASTNode_private.h"
 #import "GRMustacheTag_private.h"
 
 /**
- * A GRMustacheVariableTag is a template component that renders variable
- * tags such as `{{name}}` and `{{{name}}}`.
+ * A GRMustacheVariableTag is an AST node that represents a variable tag, such
+ * as `{{name}}` and `{{{name}}}`.
  *
  * For example, the template string "{{name}} is {{age}} years old." would give
- * two GRMustacheVariableTag instances:
+ * two GRMustacheVariableTag instances.
  *
- * - a GRMustacheVariableTag that renders the `name` key in a context.
- * - a GRMustacheVariableTag that renders the `age` key in a context.
- *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  */
-@interface GRMustacheVariableTag: GRMustacheTag<GRMustacheTemplateComponent> {
+@interface GRMustacheVariableTag: GRMustacheTag<GRMustacheASTNode> {
 @private
     BOOL _escapesHTML;
 }

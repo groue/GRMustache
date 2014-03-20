@@ -20,40 +20,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheTextNode_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
-/**
- * A GRMustacheTextComponent is a template component that renders raw template
- * text.
- *
- * For example, the template string "hello {{name}}!" would give two
- * GRMustacheTextComponent instances:
- *
- * - a GRMustacheTextComponent that renders "hello ".
- * - a GRMustacheTextComponent that renders "!".
- *
- * @see GRMustacheTemplateComponent
- */
-@interface GRMustacheTextComponent: NSObject<GRMustacheTemplateComponent> {
-@private
-    NSString *_text;
-}
-
-/**
- * TODO
- */
-@property (nonatomic, retain, readonly) NSString *text;
-
-/**
- * Builds and returns a GRMustacheTextComponent.
- *
- * @param string  The string that should be rendered.
- * @return a GRMustacheTextComponent
- */
-+ (instancetype)textComponentWithString:(NSString *)string GRMUSTACHE_API_INTERNAL;
-
+@interface GRMustacheTextNode()
+@property (nonatomic, retain) NSString *text;
+- (id)initWithText:(NSString *)text;
 @end
 
 
+@implementation GRMustacheTextNode
+@synthesize text=_text;
+
++ (instancetype)textNodeWithText:(NSString *)text
+{
+    return [[[self alloc] initWithText:text] autorelease];
+}
+
+- (void)dealloc
+{
+    [_text release];
+    [super dealloc];
+}
+
+#pragma mark <GRMustacheASTNode>
+
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+{
+    return [visitor visitTextNode:self error:error];
+}
+
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+{
+    return ASTNode;
+}
+
+#pragma mark Private
+
+- (id)initWithText:(NSString *)text
+{
+    NSAssert(text, @"WTF");
+    self = [self init];
+    if (self) {
+        self.text = text;
+    }
+    return self;
+}
+
+@end

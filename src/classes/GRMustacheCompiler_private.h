@@ -31,10 +31,9 @@
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
  * GRMustacheParser, and outputs a syntax tree of objects conforming to the
- * GRMustacheTemplateComponent protocol, the template components that make a
- * Mustache template.
+ * GRMustacheASTNode protocol.
  *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  * @see GRMustacheToken
  * @see GRMustacheParser
  */
@@ -42,8 +41,8 @@
 @private
     NSError *_fatalError;
     
-    NSMutableArray *_currentComponents;
-    NSMutableArray *_componentsStack;
+    NSMutableArray *_currentASTNodes;
+    NSMutableArray *_ASTNodesStack;
     
     GRMustacheToken *_currentOpeningToken;
     NSMutableArray *_openingTokenStack;
@@ -101,7 +100,7 @@
  * // Parse some string
  * [parser parseTemplateString:... templateID:...];
  *
- * // Extract template components from the compiler
+ * // Extract template ASTNodes from the compiler
  * GRMustacheAST *AST = [compiler ASTReturningError:...];
  * ```
  *

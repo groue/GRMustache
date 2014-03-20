@@ -23,7 +23,7 @@
 #import "GRMustacheCompiler_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheTextComponent_private.h"
+#import "GRMustacheTextNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheInheritableSection_private.h"
@@ -38,9 +38,9 @@
 
 /**
  * The fatal error that should be returned by the public method
- * templateComponentsReturningError:.
+ * ASTNodesReturningError:.
  *
- * @see currentComponents
+ * @see currentASTNodes
  */
 @property (nonatomic, retain) NSError *fatalError;
 
@@ -67,31 +67,31 @@
 @property (nonatomic, assign) NSObject *currentTagValue;
 
 /**
- * An array where template components are appended as tokens are yielded
+ * An array where AST nodes are appended as tokens are yielded
  * by a parser.
  *
  * This array is also the one that would be returned by the public method
- * templateComponentsReturningError:.
+ * ASTNodesReturningError:.
  *
  * As such, it is nil whenever an error occurs.
  *
- * This object is always identical to [self.componentsStack lastObject].
+ * This object is always identical to [self.ASTNodesStack lastObject].
  *
- * @see componentsStack
+ * @see ASTNodesStack
  * @see fatalError
  */
-@property (nonatomic, assign) NSMutableArray *currentComponents;
+@property (nonatomic, assign) NSMutableArray *currentASTNodes;
 
 /**
- * The stack of arrays where template components should be appended as tokens are
+ * The stack of arrays where AST nodes should be appended as tokens are
  * yielded by a parser.
  *
  * This stack grows with section opening tokens, and shrinks with section
  * closing tokens.
  *
- * @see currentComponents
+ * @see currentASTNodes
  */
-@property (nonatomic, retain) NSMutableArray *componentsStack;
+@property (nonatomic, retain) NSMutableArray *ASTNodesStack;
 
 /**
  * This stack grows with section opening tokens, and shrinks with section
@@ -140,16 +140,16 @@
 @synthesize openingTokenStack=_openingTokenStack;
 @synthesize currentTagValue=_currentTagValue;
 @synthesize tagValueStack=_tagValueStack;
-@synthesize currentComponents=_currentComponents;
-@synthesize componentsStack=_componentsStack;
+@synthesize currentASTNodes=_currentASTNodes;
+@synthesize ASTNodesStack=_ASTNodesStack;
 
 - (id)initWithContentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
-        _currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-        _componentsStack = [[NSMutableArray alloc] initWithCapacity:20];
-        [_componentsStack addObject:_currentComponents];
+        _currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+        _ASTNodesStack = [[NSMutableArray alloc] initWithCapacity:20];
+        [_ASTNodesStack addObject:_currentASTNodes];
         _openingTokenStack = [[NSMutableArray alloc] initWithCapacity:20];
         _tagValueStack = [[NSMutableArray alloc] initWithCapacity:20];
         _contentType = contentType;
@@ -161,8 +161,8 @@
 - (GRMustacheAST *)ASTReturningError:(NSError **)error
 {
     // Has a fatal error occurred?
-    if (_currentComponents == nil) {
-        NSAssert(_fatalError, @"We should have an error when _currentComponents is nil");
+    if (_currentASTNodes == nil) {
+        NSAssert(_fatalError, @"We should have an error when _currentASTNodes is nil");
         if (error != NULL) {
             *error = [[_fatalError retain] autorelease];
         } else {
@@ -183,13 +183,13 @@
     }
     
     // Success
-    return [GRMustacheAST ASTWithTemplateComponents:_currentComponents contentType:_contentType];
+    return [GRMustacheAST ASTWithASTNodes:_currentASTNodes contentType:_contentType];
 }
 
 - (void)dealloc
 {
     [_fatalError release];
-    [_componentsStack release];
+    [_ASTNodesStack release];
     [_tagValueStack release];
     [_openingTokenStack release];
     [_baseTemplateID release];
@@ -202,7 +202,7 @@
 - (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
     // Refuse tokens after a fatal error has occurred.
-    if (_currentComponents == nil) {
+    if (_currentASTNodes == nil) {
         return NO;
     }
     
@@ -236,8 +236,8 @@
             // Parser validation
             NSAssert(token.templateSubstring.length > 0, @"WTF empty GRMustacheTokenTypeContent");
             
-            // Success: append GRMustacheTextComponent
-            [_currentComponents addObject:[GRMustacheTextComponent textComponentWithString:token.templateSubstring]];
+            // Success: append GRMustacheTextASTNode
+            [_currentASTNodes addObject:[GRMustacheTextNode textNodeWithText:token.templateSubstring]];
             break;
             
             
@@ -252,7 +252,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:YES]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:YES]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -270,7 +270,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentComponents addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:NO]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression contentType:_contentType escapesHTML:NO]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -300,17 +300,17 @@
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
                                                                                  innerRange:innerRange
-                                                                         templateComponents:_currentComponents];
+                                                                                   ASTNodes:_currentASTNodes];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
-                [_componentsStack removeLastObject];
-                [[_componentsStack lastObject] addObject:sectionTag];
+                [_ASTNodesStack removeLastObject];
+                [[_ASTNodesStack lastObject] addObject:sectionTag];
                 
-                self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_componentsStack addObject:_currentComponents];
+                self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+                [_ASTNodesStack addObject:_currentASTNodes];
                 
             } else {
                 // This is a new regular section
@@ -330,8 +330,8 @@
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
-                self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_componentsStack addObject:_currentComponents];
+                self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+                [_ASTNodesStack addObject:_currentASTNodes];
                 
                 // lock _contentType
                 _contentTypeLocked = YES;
@@ -364,17 +364,17 @@
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
                                                                                  innerRange:innerRange
-                                                                         templateComponents:_currentComponents];
+                                                                                   ASTNodes:_currentASTNodes];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
-                [_componentsStack removeLastObject];
-                [[_componentsStack lastObject] addObject:sectionTag];
+                [_ASTNodesStack removeLastObject];
+                [[_ASTNodesStack lastObject] addObject:sectionTag];
                 
-                self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_componentsStack addObject:_currentComponents];
+                self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+                [_ASTNodesStack addObject:_currentASTNodes];
                 
             } else {
                 // This is a new inverted section
@@ -394,8 +394,8 @@
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
-                self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-                [_componentsStack addObject:_currentComponents];
+                self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+                [_ASTNodesStack addObject:_currentASTNodes];
                 
                 // lock _contentType
                 _contentTypeLocked = YES;
@@ -419,8 +419,8 @@
             self.currentOpeningToken = token;
             [_openingTokenStack addObject:_currentOpeningToken];
             
-            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_componentsStack addObject:_currentComponents];
+            self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            [_ASTNodesStack addObject:_currentASTNodes];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -443,8 +443,8 @@
             self.currentOpeningToken = token;
             [_openingTokenStack addObject:_currentOpeningToken];
             
-            self.currentComponents = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-            [_componentsStack addObject:_currentComponents];
+            self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+            [_ASTNodesStack addObject:_currentASTNodes];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -459,7 +459,7 @@
             
             // What are we closing?
             
-            id<GRMustacheTemplateComponent> wrapperComponent = nil;
+            id<GRMustacheASTNode> wrapperASTNode = nil;
             switch (_currentOpeningToken.type) {
                 case GRMustacheTokenTypeSectionOpening:
                 case GRMustacheTokenTypeInvertedSectionOpening: {
@@ -491,12 +491,12 @@
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
                     GRMustacheTagType type = (_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening) ? GRMustacheTagTypeInvertedSection : GRMustacheTagTypeSection;
-                    wrapperComponent = [GRMustacheSectionTag sectionTagWithType:type
-                                                                     expression:(GRMustacheExpression *)_currentTagValue
-                                                                    contentType:_contentType
-                                                                 templateString:token.templateString
-                                                                     innerRange:innerRange
-                                                             templateComponents:_currentComponents];
+                    wrapperASTNode = [GRMustacheSectionTag sectionTagWithType:type
+                                                                   expression:(GRMustacheExpression *)_currentTagValue
+                                                                  contentType:_contentType
+                                                               templateString:token.templateString
+                                                                   innerRange:innerRange
+                                                                     ASTNodes:_currentASTNodes];
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {
@@ -520,7 +520,7 @@
                     }
                     
                     // Success: create new GRMustacheInheritableSection
-                    wrapperComponent = [GRMustacheInheritableSection inheritableSectionWithIdentifier:(NSString *)_currentTagValue templateComponents:_currentComponents];
+                    wrapperASTNode = [GRMustacheInheritableSection inheritableSectionWithIdentifier:(NSString *)_currentTagValue ASTNodes:_currentASTNodes];
                 } break;
                     
                 case GRMustacheTokenTypeInheritablePartial: {
@@ -545,22 +545,22 @@
                     
                     // Check for consistency of HTML safety
                     //
-                    // If partial.AST.templateComponents is nil, this means that we are actually
+                    // If partial.AST.ASTNodes is nil, this means that we are actually
                     // compiling it, and that template simply recursively refers to itself.
                     // Consistency of HTML safety is thus guaranteed.
                     //
-                    // However, if partial.AST.templateComponents is not nil, then we must
+                    // However, if partial.AST.ASTNodes is not nil, then we must
                     // ensure content type compatibility: an HTML template can not override a
                     // text one, and vice versa.
                     //
                     // See test "HTML template can not override TEXT template" in GRMustacheSuites/text_rendering.json
-                    if (partial.AST.templateComponents && partial.AST.contentType != _contentType) {
+                    if (partial.AST.ASTNodes && partial.AST.contentType != _contentType) {
                         [self failWithFatalError:[self parseErrorAtToken:_currentOpeningToken description:@"HTML safety mismatch"]];
                         return NO;
                     }
                     
                     // Success: create new GRMustacheInheritablePartial
-                    wrapperComponent = [GRMustacheInheritablePartial inheritablePartialWithPartial:partial templateComponents:_currentComponents];
+                    wrapperASTNode = [GRMustacheInheritablePartial inheritablePartialWithPartial:partial ASTNodes:_currentASTNodes];
                 } break;
                     
                 default:
@@ -568,7 +568,7 @@
                     break;
             }
             
-            NSAssert(wrapperComponent, @"WTF expected wrapperComponent");
+            NSAssert(wrapperASTNode, @"WTF expected wrapperASTNode");
             
             [_tagValueStack removeLastObject];
             self.currentTagValue = [_tagValueStack lastObject];
@@ -576,10 +576,10 @@
             [_openingTokenStack removeLastObject];
             self.currentOpeningToken = [_openingTokenStack lastObject];
             
-            [_componentsStack removeLastObject];
-            self.currentComponents = [_componentsStack lastObject];
+            [_ASTNodesStack removeLastObject];
+            self.currentASTNodes = [_ASTNodesStack lastObject];
             
-            [_currentComponents addObject:wrapperComponent];
+            [_currentASTNodes addObject:wrapperASTNode];
         } break;
             
             
@@ -599,8 +599,8 @@
                 return NO;
             }
             
-            // Success: append template component
-            [_currentComponents addObject:partial];
+            // Success: append ASTNode
+            [_currentASTNodes addObject:partial];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -619,14 +619,14 @@
 
 - (void)failWithFatalError:(NSError *)fatalError
 {
-    // Make sure templateComponentsReturningError: returns correct results:
+    // Make sure ASTNodesReturningError: returns correct results:
     self.fatalError = fatalError;
-    self.currentComponents = nil;
+    self.currentASTNodes = nil;
     
     // All those objects are useless, now
     self.currentOpeningToken = nil;
     self.currentTagValue = nil;
-    self.componentsStack = nil;
+    self.ASTNodesStack = nil;
     self.openingTokenStack = nil;
 }
 

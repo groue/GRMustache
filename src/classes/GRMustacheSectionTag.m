@@ -22,29 +22,28 @@
 
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheRenderingASTVisitor_private.h"
-//#import "GRMustacheBuffer_private.h"
-//#import "GRMustacheContext_private.h"
+
 
 @interface GRMustacheSectionTag()
 
 /**
- * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:templateComponents:]
+ * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:ASTNodes:]
  */
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents;
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes;
 @end
 
 
 @implementation GRMustacheSectionTag
 
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
-    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange templateComponents:templateComponents] autorelease];
+    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange ASTNodes:ASTNodes] autorelease];
 }
 
 - (void)dealloc
 {
     [_templateString release];
-    [_templateComponents release];
+    [_ASTNodes release];
     [super dealloc];
 }
 
@@ -55,42 +54,17 @@
 {
     GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context] autorelease];
 
-    for (id<GRMustacheTemplateComponent> templateComponent in _templateComponents) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        templateComponent = [context resolveTemplateComponent:templateComponent];
+    for (id<GRMustacheASTNode> ASTNode in _ASTNodes) {
+        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
+        ASTNode = [context resolveASTNode:ASTNode];
         
         // render
-        if (![templateComponent accept:visitor error:error]) {
+        if (![ASTNode accept:visitor error:error]) {
             return nil;
         }
     }
     
     return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
-
-//    if (!context) {
-//        // With a nil context, the method would return nil without setting the
-//        // error argument.
-//        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-//        return NO;
-//    }
-//    
-//    GRMustacheBuffer buffer = GRMustacheBufferCreate(MAX(1024, (_innerRange.length + 50) * 1.3));
-//    
-//    for (id<GRMustacheTemplateComponent> component in _templateComponents) {
-//        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-//        component = [context resolveTemplateComponent:component];
-//        
-//        // render
-//        if (![component renderContentType:_contentType inBuffer:&buffer withContext:context error:error]) {
-//            return nil;
-//        }
-//    }
-//    
-//    if (HTMLSafe) {
-//        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
-//    }
-//    
-//    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (NSString *)innerTemplateString
@@ -101,13 +75,13 @@
 
 #pragma mark - Private
 
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
     self = [super initWithType:type expression:expression contentType:contentType];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _templateComponents = [templateComponents retain];
+        _ASTNodes = [ASTNodes retain];
     }
     return self;
 }

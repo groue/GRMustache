@@ -22,53 +22,53 @@
 
 #import "GRMustacheInheritablePartial_private.h"
 #import "GRMustachePartial_private.h"
-//#import "GRMustacheContext_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheInheritablePartial()
-- (id)initWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents;
+- (id)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes;
 @end
 
 @implementation GRMustacheInheritablePartial
 @synthesize partial=_partial;
 
-+ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents
++ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
 {
-    return [[[self alloc] initWithPartial:partial templateComponents:templateComponents] autorelease];
+    return [[[self alloc] initWithPartial:partial ASTNodes:ASTNodes] autorelease];
 }
 
 - (void)dealloc
 {
     [_partial release];
-    [_templateComponents release];
+    [_ASTNodes release];
     [super dealloc];
 }
 
-#pragma mark - GRMustacheTemplateComponent
+
+#pragma mark - GRMustacheASTNode
 
 - (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitInheritablePartial:self error:error];
 }
 
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)templateComponent
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
-    // look for the last inheritable component in inner templateComponents
-    for (id<GRMustacheTemplateComponent> innerTemplateComponent in _templateComponents) {
-        templateComponent = [innerTemplateComponent resolveTemplateComponent:templateComponent];
+    // look for the last inheritable ASTNode in inner ASTNodes
+    for (id<GRMustacheASTNode> innerASTNode in _ASTNodes) {
+        ASTNode = [innerASTNode resolveASTNode:ASTNode];
     }
-    return templateComponent;
+    return ASTNode;
 }
 
 
 #pragma mark - Private
 
-- (id)initWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents
+- (id)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
 {
     self = [super init];
     if (self) {
         _partial = [partial retain];
-        _templateComponents = [templateComponents retain];
+        _ASTNodes = [ASTNodes retain];
     }
     return self;
 }

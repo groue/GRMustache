@@ -30,7 +30,7 @@
 #import "GRMustacheInheritablePartial_private.h"
 #import "GRMustacheInheritableSection_private.h"
 #import "GRMustachePartial_private.h"
-#import "GRMustacheTextComponent_private.h"
+#import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
 
 @interface GRMustacheRenderingASTVisitor()
@@ -49,6 +49,11 @@
 
 - (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
 {
+    if (!context) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+        return NO;
+    }
+    
     self = [super init];
     if (self) {
         _contentType = contentType;
@@ -71,12 +76,12 @@
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
 {
-    for (id<GRMustacheTemplateComponent> templateComponent in inheritableSection.templateComponents) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        templateComponent = [_context resolveTemplateComponent:templateComponent];
+    for (id<GRMustacheASTNode> ASTNode in inheritableSection.ASTNodes) {
+        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
+        ASTNode = [_context resolveASTNode:ASTNode];
 
         // render
-        if (![templateComponent accept:self error:error]) {
+        if (![ASTNode accept:self error:error]) {
             return NO;
         }
     }
@@ -110,12 +115,12 @@
     {
         BOOL success = YES;
         [GRMustacheRendering pushCurrentContentType:partialContentType];
-        for (id<GRMustacheTemplateComponent> templateComponent in AST.templateComponents) {
-            // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-            templateComponent = [_context resolveTemplateComponent:templateComponent];
+        for (id<GRMustacheASTNode> ASTNode in AST.ASTNodes) {
+            // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
+            ASTNode = [_context resolveASTNode:ASTNode];
             
             // render
-            if (![templateComponent accept:self error:error]) {
+            if (![ASTNode accept:self error:error]) {
                 success = NO;
                 break;
             }
@@ -272,9 +277,9 @@
     return success;
 }
 
-- (BOOL)visitTextComponent:(GRMustacheTextComponent *)textComponent error:(NSError **)error
+- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error
 {
-    GRMustacheBufferAppendString(&_buffer, (CFStringRef)textComponent.text);
+    GRMustacheBufferAppendString(&_buffer, (CFStringRef)textNode.text);
     return YES;
 }
 

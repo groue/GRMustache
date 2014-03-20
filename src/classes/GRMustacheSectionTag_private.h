@@ -21,20 +21,20 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheASTNode_private.h"
 #import "GRMustacheTag_private.h"
 
 /**
- * A GRMustacheSectionTag is a template component that renders sections
+ * A GRMustacheSectionTag is a AST node that represents a section
  * such as `{{#name}}...{{/name}}`.
  *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  */
-@interface GRMustacheSectionTag: GRMustacheTag<GRMustacheTemplateComponent> {
+@interface GRMustacheSectionTag: GRMustacheTag<GRMustacheASTNode> {
 @private
     NSString *_templateString;
     NSRange _innerRange;
-    NSArray *_templateComponents;
+    NSArray *_ASTNodes;
 }
 
 // Documented in GRMustacheSectionTag.h
@@ -48,18 +48,17 @@
  * The value is fetched by evaluating the _expression_ parameter against a
  * rendering context.
  *
- * The _templateComponents_ array contains the GRMustacheTemplateComponent
- * objects that make the section (texts, variables, other sections, etc.)
+ * The ASTNodes array contains the GRMustacheASTNode objects that make the
+ * section (texts, variables, other sections, etc.)
  * 
- * @param type                The type of the section.
- * @param expression          The expression that would evaluate against a
- *                            rendering context.
- * @param contentType         The content type of the tag rendering.
- * @param templateString      A Mustache template string.
- * @param innerRange          The range of the inner template string of the
- *                            section in _templateString_.
- * @param templateComponents  An array of GRMustacheTemplateComponent that make
- *                            the section.
+ * @param type            The type of the section.
+ * @param expression      The expression that would evaluate against a rendering
+ *                        context.
+ * @param contentType     The content type of the tag rendering.
+ * @param templateString  A Mustache template string.
+ * @param innerRange      The range of the inner template string of the section
+ *                        in _templateString_.
+ * @param ASTNodes        An array of GRMustacheASTNode that make the section.
  *
  * @return A GRMustacheSectionTag
  * 
@@ -67,6 +66,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
 
 @end

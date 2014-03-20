@@ -21,29 +21,29 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAST_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheASTNode_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
 @implementation GRMustacheAST
-@synthesize templateComponents=_templateComponents;
+@synthesize ASTNodes=_ASTNodes;
 @synthesize contentType=_contentType;
 
 - (void)dealloc
 {
-    [_templateComponents release];
+    [_ASTNodes release];
     [super dealloc];
 }
 
-+ (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType
++ (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
 {
-    return [[[self alloc] initWithTemplateComponents:templateComponents contentType:contentType] autorelease];
+    return [[[self alloc] initWithASTNodes:ASTNodes contentType:contentType] autorelease];
 }
 
-- (id)initWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType
+- (id)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
-        _templateComponents = [templateComponents retain];
+        _ASTNodes = [ASTNodes retain];
         _contentType = contentType;
     }
     return self;
@@ -51,8 +51,8 @@
 
 - (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    for (id<GRMustacheTemplateComponent> templateComponent in _templateComponents) {
-        if (![templateComponent accept:visitor error:error]) {
+    for (id<GRMustacheASTNode> ASTNode in _ASTNodes) {
+        if (![ASTNode accept:visitor error:error]) {
             return NO;
         }
     }

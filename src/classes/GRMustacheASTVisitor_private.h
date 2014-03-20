@@ -28,7 +28,7 @@
 @class GRMustacheInheritableSection;
 @class GRMustachePartial;
 @class GRMustacheTag;
-@class GRMustacheTextComponent;
+@class GRMustacheTextNode;
 
 @protocol GRMustacheASTVisitor <NSObject>
 
@@ -36,6 +36,6 @@
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
 - (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error;
 - (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error;
-- (BOOL)visitTextComponent:(GRMustacheTextComponent *)textComponent error:(NSError **)error;
+- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
 
 @end

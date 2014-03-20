@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @protocol GRMustacheTagDelegate;
-@protocol GRMustacheTemplateComponent;
+@protocol GRMustacheASTNode;
 @class GRMustacheInheritablePartial;
 
 /**
@@ -49,7 +49,7 @@
  *
  * - Let tag delegates interpret rendered values.
  *
- * - Let inheritable partial templates override template components.
+ * - Let inheritable partial templates override AST nodes.
  */
 @interface GRMustacheContext : NSObject {
 @private
@@ -162,16 +162,15 @@
 - (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of template inheritance, return the component that should be
- * rendered in lieu of _component_, should _component_ be overriden by another
- * component.
+ * In the context of template inheritance, return the node that should be
+ * rendered in lieu of the node argument.
  *
- * @param component  A template component
+ * @param ASTNode  A node
  *
- * @return The resolution of the component in the context of Mustache
- *         template inheritance.
+ * @return The resolution of the node in the context of Mustache template
+ *         inheritance.
  */
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an array containing all tag delegates in the delegate stack.

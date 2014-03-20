@@ -99,10 +99,10 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     setupTagDelegateClasses();
 }
 
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
     if (!GRMUSTACHE_STACK_TOP(inheritablePartialStack, self)) {
-        return component;
+        return ASTNode;
     }
     
     NSMutableSet *usedPartials = [[NSMutableSet alloc] init];
@@ -111,15 +111,15 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
         if ([usedPartials containsObject:inheritablePartial.partial]) {
             continue;
         }
-        id<GRMustacheTemplateComponent> resolvedComponent = [inheritablePartial resolveTemplateComponent:component];
-        if (resolvedComponent != component) {
+        id<GRMustacheASTNode> resolvedASTNode = [inheritablePartial resolveASTNode:ASTNode];
+        if (resolvedASTNode != ASTNode) {
             [usedPartials addObject:inheritablePartial.partial];
         }
-        component = resolvedComponent;
+        ASTNode = resolvedASTNode;
     }
     [usedPartials release];
     
-    return component;
+    return ASTNode;
 }
 
 - (BOOL)unsafeKeyAccess

@@ -1,17 +1,17 @@
 // The MIT License
-//
+// 
 // Copyright (c) 2014 Gwendal Roué
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,24 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTNode_private.h"
 
-@class GRMustacheAST;
-
 /**
- * A GRMustachePartial is a AST node that renders partial tags such as
- * `{{> name }}`.
+ * A GRMustacheTextNode is an AST node that renders raw template
+ * text.
+ *
+ * For example, the template string "hello {{name}}!" would give two
+ * GRMustacheTextNode instances:
+ *
+ * - a GRMustacheTextNode that renders "hello ".
+ * - a GRMustacheTextNode that renders "!".
  *
  * @see GRMustacheASTNode
  */
-@interface GRMustachePartial : NSObject<GRMustacheASTNode> {
+@interface GRMustacheTextNode: NSObject<GRMustacheASTNode> {
 @private
-    GRMustacheAST *_AST;
+    NSString *_text;
 }
 
 /**
- * The abstract syntax tree of the partial template.
+ * TODO
  */
-@property (nonatomic, retain) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSString *text;
+
+/**
+ * Builds and returns a GRMustacheTextNode.
+ *
+ * @param string  The string that should be rendered.
+ * @return a GRMustacheTextNode
+ */
++ (instancetype)textNodeWithText:(NSString *)string GRMUSTACHE_API_INTERNAL;
+
 @end
+
+

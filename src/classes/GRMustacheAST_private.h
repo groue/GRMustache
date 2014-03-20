@@ -30,16 +30,16 @@
  */
 @interface GRMustacheAST : NSObject {
 @private
-    NSArray *_templateComponents;
+    NSArray *_ASTNodes;
     GRMustacheContentType _contentType;
 }
 
 /**
- * An NSArray containing <GRMustacheTemplateComponent> instances
+ * An NSArray containing <GRMustacheASTNode> instances
  *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  */
-@property (nonatomic, retain, readonly) NSArray *templateComponents GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
  * The content type of the AST
@@ -49,15 +49,14 @@
 /**
  * Returns a new allocated AST.
  *
- * @param templateComponents  An Array of <GRMustacheTemplateComponent>
- *                            instances.
- * @param contentType         A content type
+ * @param ASTNodes     An array of <GRMustacheASTNode> instances.
+ * @param contentType  A content type
  *
  * @return A new GRMustacheAST
  *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  */
-+ (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
++ (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

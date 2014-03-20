@@ -22,28 +22,28 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheASTNode_private.h"
 
-@interface GRMustacheInheritableSection : NSObject<GRMustacheTemplateComponent> {
+@interface GRMustacheInheritableSection : NSObject<GRMustacheASTNode> {
 @private
     NSString *_identifier;
-    NSArray *_templateComponents;
+    NSArray *_ASTNodes;
 }
 
 /**
  * TODO
  */
-@property (nonatomic, retain, readonly) NSArray *templateComponents;
+@property (nonatomic, retain, readonly) NSArray *ASTNodes;
 
 /**
  * Returns a new inheritable section.
  *
  * @param identifier  The identifier of the inheritable section
- * @param components  array of GRMustacheTemplateComponent objects
+ * @param ASTNodes    Array of GRMustacheASTNode objects
  *
  * @return a new GRMustacheInheritableSection.
  *
- * @see GRMustacheTemplateComponent
+ * @see GRMustacheASTNode
  */
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
 @end

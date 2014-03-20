@@ -25,62 +25,40 @@
 
 @interface GRMustacheInheritableSection()
 @property (nonatomic, readonly) NSString *identifier;
-- (instancetype)initWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents;
+- (instancetype)initWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes;
 @end
 
 @implementation GRMustacheInheritableSection
 @synthesize identifier=_identifier;
-@synthesize templateComponents=_templateComponents;
+@synthesize ASTNodes=_ASTNodes;
 
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes
 {
-    return [[[self alloc] initWithIdentifier:identifier templateComponents:templateComponents] autorelease];
+    return [[[self alloc] initWithIdentifier:identifier ASTNodes:ASTNodes] autorelease];
 }
 
 - (void)dealloc
 {
     [_identifier release];
-    [_templateComponents release];
+    [_ASTNodes release];
     [super dealloc];
 }
 
 
-#pragma mark - <GRMustacheTemplateComponent>
+#pragma mark - <GRMustacheASTNode>
 
 - (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitInheritableSection:self error:error];
 }
 
-//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
-//{
-//    if (!context) {
-//        // With a nil context, the method would return NO without setting the
-//        // error argument.
-//        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-//        return NO;
-//    }
-//    
-//    for (id<GRMustacheTemplateComponent> component in _templateComponents) {
-//        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-//        component = [context resolveTemplateComponent:component];
-//        
-//        // render
-//        if (![component renderContentType:requiredContentType inBuffer:buffer withContext:context error:error]) {
-//            return NO;
-//        }
-//    }
-//    
-//    return YES;
-//}
-
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
     // Inheritable section can only override inheritable section
-    if (![component isKindOfClass:[GRMustacheInheritableSection class]]) {
-        return component;
+    if (![ASTNode isKindOfClass:[GRMustacheInheritableSection class]]) {
+        return ASTNode;
     }
-    GRMustacheInheritableSection *otherSection = (GRMustacheInheritableSection *)component;
+    GRMustacheInheritableSection *otherSection = (GRMustacheInheritableSection *)ASTNode;
     
     // Identifiers must match
     if (![otherSection.identifier isEqual:_identifier]) {
@@ -94,12 +72,12 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents
+- (instancetype)initWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes
 {
     self = [self init];
     if (self) {
         _identifier = [identifier retain];
-        _templateComponents = [templateComponents retain];
+        _ASTNodes = [ASTNodes retain];
     }
     return self;
 }

@@ -28,7 +28,6 @@
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
-#import "GRMustacheBuffer_private.h"
 #import "GRMustacheLocalizer.h"
 
 
