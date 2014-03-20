@@ -30,6 +30,11 @@
 @class GRMustacheTag;
 @class GRMustacheTextNode;
 
+@class GRMustacheFilteredExpression;
+@class GRMustacheIdentifierExpression;
+@class GRMustacheImplicitIteratorExpression;
+@class GRMustacheScopedExpression;
+
 @protocol GRMustacheASTVisitor <NSObject>
 
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error;
@@ -37,5 +42,10 @@
 - (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error;
 - (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error;
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
+
+- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error;
 
 @end

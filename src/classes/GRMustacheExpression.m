@@ -34,15 +34,14 @@
     [super dealloc];
 }
 
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
-{
-    NSAssert(NO, @"Subclasses must override");
-    return NO;
-}
-
 - (BOOL)isEqual:(id)anObject
 {
     return [super isEqual:anObject];
+}
+
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+{
+    return YES;
 }
 
 @end

@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheScopedExpression_private.h"
-#import "GRMustacheContext_private.h"
-#import "GRMustacheKeyAccess_private.h"
+#import "GRMustacheASTVisitor_private.h"
+
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) GRMustacheExpression *baseExpression;
@@ -57,6 +57,9 @@
     [super dealloc];
 }
 
+
+#pragma mark - GRMustacheExpression
+
 - (void)setToken:(GRMustacheToken *)token
 {
     [super setToken:token];
@@ -78,24 +81,9 @@
 {
     return [_baseExpression hash] ^ [_scopeIdentifier hash];
 }
-
-
-#pragma mark - GRMustacheExpression
-
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
-    id scopedValue;
-    if (![_baseExpression hasValue:&scopedValue withContext:context protected:NULL error:error]) {
-        return NO;
-    }
-    
-    if (protected != NULL) {
-        *protected = NO;
-    }
-    if (value) {
-        *value = [GRMustacheKeyAccess valueForMustacheKey:_scopeIdentifier inObject:scopedValue unsafeKeyAccess:context.unsafeKeyAccess];
-    }
-    return YES;
+    return [visitor visitScopedExpression:self value:value error:error];
 }
 
 @end

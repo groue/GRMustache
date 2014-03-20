@@ -23,8 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheContext;
 @class GRMustacheToken;
+@protocol GRMustacheASTVisitor;
 
 /**
  * The GRMustacheExpression is the base class for objects that can provide
@@ -51,22 +51,6 @@
 @property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 
 /**
- * Evaluates an expression against a rendering context.
- *
- * @param value      Upon return contains the value of the expression
- * @param context    A Mustache rendering context
- * @param protected  Upon return contains YES if the computed value comes from
- *                   the protected stack of the context, NO otherwise.
- * @param error      If there is an error computing the value, upon return
- *                   contains an NSError object that describes the problem.
- *
- * @return YES if the value could be computed
- *
- * @see GRMustacheContext
- */
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-
-/**
  * Returns a Boolean value that indicates whether the receiver and a given
  * object are equal.
  *
@@ -81,4 +65,10 @@
  * @return YES if the receiver and anObject are equal, otherwise NO.
  */
 - (BOOL)isEqual:(id)anObject; // no availability macro for Foundation method declaration
+
+/**
+ * TODO
+ */
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error;
+
 @end

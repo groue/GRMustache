@@ -32,6 +32,13 @@
 #import "GRMustachePartial_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
+#import "GRMustacheScopedExpression_private.h"
+#import "GRMustacheIdentifierExpression_private.h"
+#import "GRMustacheFilteredExpression_private.h"
+#import "GRMustacheToken_private.h"
+#import "GRMustacheKeyAccess_private.h"
+#import "GRMustacheFilter_private.h"
+#import "GRMustacheError.h"
 
 @interface GRMustacheRenderingASTVisitor()
 @property (nonatomic, retain) GRMustacheContext *context;
@@ -71,7 +78,7 @@
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
 {
     self.context = [_context contextByAddingInheritablePartial:inheritablePartial];
-    return [self visitPartial:inheritablePartial.partial error:error];
+    return [inheritablePartial.partial accept:self error:error];
 }
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
@@ -144,15 +151,13 @@
 
         // Evaluate expression
 
-        BOOL protected;
         __block id object;
-        NSError *valueError;
-        if (![tag.expression hasValue:&object withContext:context protected:&protected error:&valueError]) {
+        if (![tag.expression accept:self value:&object error:error]) {  // this sets _protected
 
             // Error
 
             if (error != NULL) {
-                *error = [valueError retain];   // retain error so that it survives the @autoreleasepool block
+                [*error retain];   // retain error so that it survives the @autoreleasepool block
             }
 
             success = NO;
@@ -161,7 +166,7 @@
 
             // Hide object if it is protected
 
-            if (protected) {
+            if (_protected) {
                 // Object is protected: it may enter the context stack, and provide
                 // value for `.` and `.name`. However, it must not expose its keys.
                 //
@@ -282,6 +287,98 @@
     GRMustacheBufferAppendString(&_buffer, (CFStringRef)textNode.text);
     return YES;
 }
+
+- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error
+{
+    id filter;
+    if (![expression.filterExpression accept:self value:&filter error:error]) {
+        return NO;
+    }
+    
+    id argument;
+    if (![expression.argumentExpression accept:self value:&argument error:error]) {
+        return NO;
+    }
+    
+    if (filter == nil) {
+        GRMustacheToken *token = expression.token;
+        NSString *renderingErrorDescription = nil;
+        if (token) {
+            if (token.templateID) {
+                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
+            } else {
+                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
+            }
+        } else {
+            renderingErrorDescription = [NSString stringWithFormat:@"Missing filter"];
+        }
+        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
+        if (error != NULL) {
+            *error = renderingError;
+        } else {
+            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+        }
+        return NO;
+    }
+    
+    if (![filter respondsToSelector:@selector(transformedValue:)]) {
+        GRMustacheToken *token = expression.token;
+        NSString *renderingErrorDescription = nil;
+        if (token) {
+            if (token.templateID) {
+                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
+            } else {
+                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
+            }
+        } else {
+            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol: %@", filter];
+        }
+        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
+        if (error != NULL) {
+            *error = renderingError;
+        } else {
+            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+        }
+        return NO;
+    }
+    
+    if (expression.isCurried && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
+        *value = [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
+    } else {
+        *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
+    }
+    
+    _protected = NO;
+    return YES;
+}
+
+- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error
+{
+    *value = [_context valueForMustacheKey:expression.identifier protected:&_protected];
+    return YES;
+}
+
+- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error
+{
+    id scopedValue;
+    if (![expression.baseExpression accept:self value:&scopedValue error:error]) {
+        return NO;
+    }
+    
+    *value = [GRMustacheKeyAccess valueForMustacheKey:expression.scopeIdentifier inObject:scopedValue unsafeKeyAccess:_context.unsafeKeyAccess];
+    _protected = NO;
+    return YES;
+}
+
+- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error
+{
+    *value = [_context topMustacheObject];
+    _protected = NO;
+    return YES;
+}
+
+
+#pragma mark - Private
 
 - (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {

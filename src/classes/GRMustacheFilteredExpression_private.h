@@ -33,8 +33,23 @@
 @private
     GRMustacheExpression *_filterExpression;
     GRMustacheExpression *_argumentExpression;
-    BOOL _curry;
+    BOOL _curried;
 }
+
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) GRMustacheExpression *filterExpression;
+
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) GRMustacheExpression *argumentExpression;
+
+/**
+ * TODO
+ */
+@property (nonatomic, getter=isCurried, readonly) BOOL curried;
 
 /**
  * Returns a filtered expression, given an expression that returns a filter, and
@@ -49,9 +64,9 @@
  *                            to the <GRMustacheFilter> protocol.
  * @param argumentExpression  An expression whose value is the argument of the
  *                            filter.
- * @param curry               If YES, this expression must evaluate to a filter.
+ * @param curried             If YES, this expression must evaluate to a filter.
  *
  * @return A GRMustacheFilteredExpression.
  */
-+ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried GRMUSTACHE_API_INTERNAL;
 @end

@@ -160,7 +160,7 @@
                             state = stateFilterDone;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:NO];
+                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:NO];
                         } else {
                             state = stateError;
                         }
@@ -174,7 +174,7 @@
                             state = stateInitial;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:YES]];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:YES]];
                             currentExpression = nil;
                         } else {
                             state = stateError;
@@ -262,7 +262,7 @@
                             state = stateFilterDone;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:NO];
+                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:NO];
                         } else {
                             state = stateError;
                         }
@@ -283,7 +283,7 @@
                             state = stateInitial;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:YES]];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:YES]];
                             currentExpression = nil;
                         } else {
                             state = stateError;
@@ -369,7 +369,7 @@
                             state = stateFilterDone;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:NO];
+                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:NO];
                         } else {
                             state = stateError;
                         }
@@ -382,7 +382,7 @@
                             state = stateInitial;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:YES]];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:YES]];
                             currentExpression = nil;
                         } else {
                             state = stateError;
@@ -421,7 +421,7 @@
                             state = stateFilterDone;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:NO];
+                            currentExpression = [GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:NO];
                         } else {
                             state = stateError;
                         }
@@ -434,7 +434,7 @@
                             state = stateInitial;
                             GRMustacheExpression *filterExpression = [filterExpressionStack lastObject];
                             [filterExpressionStack removeLastObject];
-                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curry:YES]];
+                            [filterExpressionStack addObject:[GRMustacheFilteredExpression expressionWithFilterExpression:filterExpression argumentExpression:currentExpression curried:YES]];
                             currentExpression = nil;
                         } else {
                             state = stateError;

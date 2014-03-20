@@ -34,6 +34,11 @@
 }
 
 /**
+ * TODO
+ */
+@property (nonatomic, copy, readonly) NSString *identifier;
+
+/**
  * Returns an identifier expression, given an identifier.
  *
  * For example, the Mustache tag `{{ name }}` contains an identifier

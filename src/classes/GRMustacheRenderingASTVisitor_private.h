@@ -32,6 +32,7 @@
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;
     GRMustacheContext *_context;
+    BOOL _protected;
 }
 
 /**

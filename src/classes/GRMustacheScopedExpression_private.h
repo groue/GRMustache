@@ -34,6 +34,16 @@
 }
 
 /**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression;
+
+/**
+ * TODO
+ */
+@property (nonatomic, copy, readonly) NSString *scopeIdentifier;
+
+/**
  * Returns a scoped expression, given an expression that returns a value, and
  * an identifier.
  *

@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheIdentifierExpression()
 @property (nonatomic, copy) NSString *identifier;
@@ -41,7 +41,7 @@
 {
     self = [super init];
     if (self) {
-        self.identifier = identifier;
+        _identifier = [identifier copy];
     }
     return self;
 }
@@ -51,6 +51,9 @@
     [_identifier release];
     [super dealloc];
 }
+
+
+#pragma mark - GRMustacheExpression
 
 - (BOOL)isEqual:(id)expression
 {
@@ -65,15 +68,9 @@
     return [_identifier hash];
 }
 
-
-#pragma mark - GRMustacheExpression
-
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
-    if (value != NULL) {
-        *value = [context valueForMustacheKey:_identifier protected:protected];
-    }
-    return YES;
+    return [visitor visitIdentifierExpression:self value:value error:error];
 }
 
 @end

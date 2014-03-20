@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheContext_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 static GRMustacheImplicitIteratorExpression *instance;
 
@@ -37,23 +37,17 @@ static GRMustacheImplicitIteratorExpression *instance;
     return instance;
 }
 
+
+#pragma mark - GRMustacheExpression
+
 - (BOOL)isEqual:(id)expression
 {
     return expression == instance;
 }
 
-
-#pragma mark - GRMustacheExpression
-
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
-    if (protected != NULL) {
-        *protected = NO;
-    }
-    if (value != NULL) {
-        *value = [context topMustacheObject];
-    }
-    return YES;
+    return [visitor visitImplicitIteratorExpression:self value:value error:error];
 }
 
 @end

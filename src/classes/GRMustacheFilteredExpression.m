@@ -22,33 +22,31 @@
 
 #import <objc/runtime.h>
 #import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheFilter_private.h"
-#import "GRMustacheError.h"
-#import "GRMustacheContext_private.h"
-#import "GRMustacheToken_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheFilteredExpression()
 @property (nonatomic, retain) GRMustacheExpression *filterExpression;
 @property (nonatomic, retain) GRMustacheExpression *argumentExpression;
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry;
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried;
 @end
 
 @implementation GRMustacheFilteredExpression
 @synthesize filterExpression=_filterExpression;
 @synthesize argumentExpression=_argumentExpression;
+@synthesize curried=_curried;
 
-+ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry
++ (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
 {
-    return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curry:curry] autorelease];
+    return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curried:curried] autorelease];
 }
 
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curry:(BOOL)curry
+- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
 {
     self = [super init];
     if (self) {
         _filterExpression = [filterExpression retain];
         _argumentExpression = [argumentExpression retain];
-        _curry = curry;
+        _curried = curried;
     }
     return self;
 }
@@ -59,6 +57,9 @@
     [_argumentExpression release];
     [super dealloc];
 }
+
+
+#pragma mark - GRMustacheExpression
 
 - (void)setToken:(GRMustacheToken *)token
 {
@@ -83,75 +84,9 @@
     return [_filterExpression hash] ^ [_argumentExpression hash];
 }
 
-
-#pragma mark GRMustacheExpression
-
-- (BOOL)hasValue:(id *)value withContext:(GRMustacheContext *)context protected:(BOOL *)protected error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
-    id filter;
-    if (![_filterExpression hasValue:&filter withContext:context protected:NULL error:error]) {
-        return NO;
-    }
-    
-    id argument;
-    if (![_argumentExpression hasValue:&argument withContext:context protected:NULL error:error]) {
-        return NO;
-    }
-    
-    if (filter == nil) {
-        GRMustacheToken *token = self.token;
-        NSString *renderingErrorDescription = nil;
-        if (token) {
-            if (token.templateID) {
-                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
-            } else {
-                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
-            }
-        } else {
-            renderingErrorDescription = [NSString stringWithFormat:@"Missing filter"];
-        }
-        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-        }
-        return NO;
-    }
-    
-    if (![filter respondsToSelector:@selector(transformedValue:)]) {
-        GRMustacheToken *token = self.token;
-        NSString *renderingErrorDescription = nil;
-        if (token) {
-            if (token.templateID) {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol in tag `%@` at line %lu of template %@: %@", protocol_getName(@protocol(GRMustacheFilter)), token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
-            } else {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol in tag `%@` at line %lu: %@", protocol_getName(@protocol(GRMustacheFilter)), token.templateSubstring, (unsigned long)token.line, filter];
-            }
-        } else {
-            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to %s protocol: %@", protocol_getName(@protocol(GRMustacheFilter)), filter];
-        }
-        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-        }
-        return NO;
-    }
-    
-    if (protected != NULL) {
-        *protected = NO;
-    }
-    
-    if (value != NULL) {
-        if (_curry && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
-            *value = [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
-        } else {
-            *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
-        }
-    }
-    return YES;
+    return [visitor visitFilteredExpression:self value:value error:error];
 }
 
 @end
