@@ -34,7 +34,7 @@
 @private
     NSString *_templateString;
     NSRange _innerRange;
-    NSArray *_components;
+    NSArray *_templateComponents;
 }
 
 // Documented in GRMustacheSectionTag.h
@@ -48,18 +48,18 @@
  * The value is fetched by evaluating the _expression_ parameter against a
  * rendering context.
  *
- * The _components_ array contains the GRMustacheTemplateComponent objects
- * that make the section (texts, variables, other sections, etc.)
+ * The _templateComponents_ array contains the GRMustacheTemplateComponent
+ * objects that make the section (texts, variables, other sections, etc.)
  * 
- * @param type            The type of the section.
- * @param expression      The expression that would evaluate against a
- *                        rendering context.
- * @param contentType     The content type of the tag rendering.
- * @param templateString  A Mustache template string.
- * @param innerRange      The range of the inner template string of the section
- *                        in _templateString_.
- * @param components      An array of GRMustacheTemplateComponent that make the
- *                        section.
+ * @param type                The type of the section.
+ * @param expression          The expression that would evaluate against a
+ *                            rendering context.
+ * @param contentType         The content type of the tag rendering.
+ * @param templateString      A Mustache template string.
+ * @param innerRange          The range of the inner template string of the
+ *                            section in _templateString_.
+ * @param templateComponents  An array of GRMustacheTemplateComponent that make
+ *                            the section.
  *
  * @return A GRMustacheSectionTag
  * 
@@ -67,6 +67,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -88,57 +88,41 @@
 {
     GRMustacheAST *AST = partial.AST;
     GRMustacheContentType partialContentType = AST.contentType;
-    BOOL needsEscapingBuffer = NO;
-    GRMustacheBuffer unescapedBuffer;
-    GRMustacheBuffer *renderingBuffer = nil;
-
-    if (_contentType == GRMustacheContentTypeHTML && (partialContentType != GRMustacheContentTypeHTML)) {
-        // Self renders text, but is asked for HTML.
-        // This happens when self is a text partial embedded in a HTML template.
-        //
-        // We'll have to HTML escape our rendering.
-        needsEscapingBuffer = YES;
-        unescapedBuffer = GRMustacheBufferCreate(1024);
-        renderingBuffer = &unescapedBuffer;
-    } else {
-        // Self renders text and is asked for text,
-        // or self renders HTML and is asked for HTML.
-        //
-        // We won't need any specific processing here.
-        renderingBuffer = &_buffer;
-    }
-
-    BOOL success = YES;
-
-    GRMustacheContentType previousContentType = _contentType;
-    _contentType = partialContentType;
-    [GRMustacheRendering pushCurrentContentType:partialContentType];
-    for (id<GRMustacheTemplateComponent> templateComponent in AST.templateComponents) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        templateComponent = [_context resolveTemplateComponent:templateComponent];
-
-        // render
-        if (![templateComponent accept:self error:error]) {
-            success = NO;
-            break;
-        }
-    }
-    [GRMustacheRendering popCurrentContentType];
-    _contentType = previousContentType;
-
-    if (!success) {
-        if (needsEscapingBuffer) {
-            GRMustacheBufferRelease(&unescapedBuffer);
-        }
-        return NO;
-    }
-
-    if (needsEscapingBuffer) {
-        NSString *unescapedString = (NSString *)GRMustacheBufferGetStringAndRelease(&unescapedBuffer);
-        GRMustacheBufferAppendString(&_buffer, (CFStringRef)GRMustacheTranslateHTMLCharacters(unescapedString));
-    }
     
-    return YES;
+    if (_contentType != partialContentType)
+    {
+        GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:partialContentType context:_context] autorelease];
+        if (![visitor visitPartial:partial error:error]) {
+            return NO;
+        }
+        BOOL HTMLSafe;
+        NSString *rendering = [visitor renderingWithHTMLSafe:&HTMLSafe error:error];
+        if (!rendering) {
+            return NO;
+        }
+        if (_contentType == GRMustacheContentTypeHTML && !HTMLSafe) {
+            rendering = GRMustacheTranslateHTMLCharacters(rendering);
+        }
+        GRMustacheBufferAppendString(&_buffer, (CFStringRef)rendering);
+        return YES;
+    }
+    else
+    {
+        BOOL success = YES;
+        [GRMustacheRendering pushCurrentContentType:partialContentType];
+        for (id<GRMustacheTemplateComponent> templateComponent in AST.templateComponents) {
+            // component may be overriden by a GRMustacheInheritablePartial: resolve it.
+            templateComponent = [_context resolveTemplateComponent:templateComponent];
+            
+            // render
+            if (![templateComponent accept:self error:error]) {
+                success = NO;
+                break;
+            }
+        }
+        [GRMustacheRendering popCurrentContentType];
+        return success;
+    }
 }
 
 - (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error

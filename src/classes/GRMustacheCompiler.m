@@ -300,7 +300,7 @@
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
                                                                                  innerRange:innerRange
-                                                                                 components:_currentComponents];
+                                                                         templateComponents:_currentComponents];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -364,7 +364,7 @@
                                                                                 contentType:_contentType
                                                                              templateString:token.templateString
                                                                                  innerRange:innerRange
-                                                                                 components:_currentComponents];
+                                                                         templateComponents:_currentComponents];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -496,7 +496,7 @@
                                                                     contentType:_contentType
                                                                  templateString:token.templateString
                                                                      innerRange:innerRange
-                                                                     components:_currentComponents];
+                                                             templateComponents:_currentComponents];
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {
@@ -560,7 +560,7 @@
                     }
                     
                     // Success: create new GRMustacheInheritablePartial
-                    wrapperComponent = [GRMustacheInheritablePartial inheritablePartialWithPartial:partial components:_currentComponents];
+                    wrapperComponent = [GRMustacheInheritablePartial inheritablePartialWithPartial:partial templateComponents:_currentComponents];
                 } break;
                     
                 default:

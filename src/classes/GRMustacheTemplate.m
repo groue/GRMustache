@@ -123,29 +123,16 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context] autorelease];
-    
-    if (![_partial.AST accept:visitor error:error]) {
+
+    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
+    BOOL success = [_partial accept:visitor error:error];
+    [GRMustacheRendering popCurrentTemplateRepository];
+
+    if (!success) {
         return nil;
     }
     
     return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
-
-//    GRMustacheContentType contentType = _partial.AST.contentType;
-//    GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
-//    
-//    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-//    BOOL success = [_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error];
-//    [GRMustacheRendering popCurrentTemplateRepository];
-//    
-//    if (!success) {
-//        GRMustacheBufferRelease(&buffer);
-//        return nil;
-//    } else {
-//        if (HTMLSafe) {
-//            *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
-//        }
-//        return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
-//    }
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext

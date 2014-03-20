@@ -28,23 +28,23 @@
 @interface GRMustacheSectionTag()
 
 /**
- * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:components:]
+ * @see +[GRMustacheSectionTag sectionTagWithExpression:templateString:innerRange:inverted:inheritable:templateComponents:]
  */
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components;
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents;
 @end
 
 
 @implementation GRMustacheSectionTag
 
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
++ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents
 {
-    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange components:components] autorelease];
+    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange templateComponents:templateComponents] autorelease];
 }
 
 - (void)dealloc
 {
     [_templateString release];
-    [_components release];
+    [_templateComponents release];
     [super dealloc];
 }
 
@@ -55,7 +55,11 @@
 {
     GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context] autorelease];
 
-    for (id<GRMustacheTemplateComponent> templateComponent in _components) {
+    for (id<GRMustacheTemplateComponent> templateComponent in _templateComponents) {
+        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
+        templateComponent = [context resolveTemplateComponent:templateComponent];
+        
+        // render
         if (![templateComponent accept:visitor error:error]) {
             return nil;
         }
@@ -72,7 +76,7 @@
 //    
 //    GRMustacheBuffer buffer = GRMustacheBufferCreate(MAX(1024, (_innerRange.length + 50) * 1.3));
 //    
-//    for (id<GRMustacheTemplateComponent> component in _components) {
+//    for (id<GRMustacheTemplateComponent> component in _templateComponents) {
 //        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
 //        component = [context resolveTemplateComponent:component];
 //        
@@ -97,13 +101,13 @@
 
 #pragma mark - Private
 
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange components:(NSArray *)components
+- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateComponents:(NSArray *)templateComponents
 {
     self = [super initWithType:type expression:expression contentType:contentType];
     if (self) {
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _components = [components retain];
+        _templateComponents = [templateComponents retain];
     }
     return self;
 }

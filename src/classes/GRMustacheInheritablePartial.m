@@ -26,21 +26,21 @@
 #import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheInheritablePartial()
-- (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components;
+- (id)initWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents;
 @end
 
 @implementation GRMustacheInheritablePartial
 @synthesize partial=_partial;
 
-+ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
++ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents
 {
-    return [[[self alloc] initWithPartial:partial components:components] autorelease];
+    return [[[self alloc] initWithPartial:partial templateComponents:templateComponents] autorelease];
 }
 
 - (void)dealloc
 {
     [_partial release];
-    [_components release];
+    [_templateComponents release];
     [super dealloc];
 }
 
@@ -51,30 +51,24 @@
     return [visitor visitInheritablePartial:self error:error];
 }
 
-//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
-//{
-//    context = [context contextByAddingInheritablePartial:self];
-//    return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
-//}
-
-- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
+- (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)templateComponent
 {
-    // look for the last inheritable component in inner components
-    for (id<GRMustacheTemplateComponent> innerComponent in _components) {
-        component = [innerComponent resolveTemplateComponent:component];
+    // look for the last inheritable component in inner templateComponents
+    for (id<GRMustacheTemplateComponent> innerTemplateComponent in _templateComponents) {
+        templateComponent = [innerTemplateComponent resolveTemplateComponent:templateComponent];
     }
-    return component;
+    return templateComponent;
 }
 
 
 #pragma mark - Private
 
-- (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components
+- (id)initWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents
 {
     self = [super init];
     if (self) {
         _partial = [partial retain];
-        _components = [components retain];
+        _templateComponents = [templateComponents retain];
     }
     return self;
 }

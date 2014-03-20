@@ -39,7 +39,7 @@
 @interface GRMustacheInheritablePartial : NSObject<GRMustacheTemplateComponent> {
 @private
     GRMustachePartial *_partial;
-    NSArray *_components;
+    NSArray *_templateComponents;
 }
 
 /**
@@ -50,12 +50,12 @@
 /**
  * Builds a GRMustacheInheritablePartial.
  *
- * @param partial     The partial template that is inherited
- * @param components  The components that may override components of the
- *                    inherited partial template.
+ * @param partial             The partial template that is inherited
+ * @param templateComponents  The components that may override components of the
+ *                            inherited partial template.
  *
  * @return A GRMustacheInheritablePartial
  */
-+ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial templateComponents:(NSArray *)templateComponents GRMUSTACHE_API_INTERNAL;
 
 @end
