@@ -25,16 +25,7 @@
 #import "GRMustacheASTNode_private.h"
 
 /**
- * A GRMustacheTextNode is an AST node that renders raw template
- * text.
- *
- * For example, the template string "hello {{name}}!" would give two
- * GRMustacheTextNode instances:
- *
- * - a GRMustacheTextNode that renders "hello ".
- * - a GRMustacheTextNode that renders "!".
- *
- * @see GRMustacheASTNode
+ * A GRMustacheTextNode is an AST node that represents raw text.
  */
 @interface GRMustacheTextNode: NSObject<GRMustacheASTNode> {
 @private

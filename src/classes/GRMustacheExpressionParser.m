@@ -212,7 +212,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -224,7 +224,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -236,7 +236,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -251,7 +251,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -272,7 +272,7 @@
                         // leave stateIdentifier
                         NSString *identifier = [string substringWithRange:(NSRange){ .location = identifierStart, .length = i - identifierStart }];
                         if (currentExpression) {
-                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                            currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
                         } else {
                             currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
                         }
@@ -478,7 +478,7 @@
             // leave stateIdentifier
             NSString *identifier = [string substringFromIndex:identifierStart];
             if (currentExpression) {
-                currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression scopeIdentifier:identifier];
+                currentExpression = [GRMustacheScopedExpression expressionWithBaseExpression:currentExpression identifier:identifier];
             } else {
                 currentExpression = [GRMustacheIdentifierExpression expressionWithIdentifier:identifier];
             }

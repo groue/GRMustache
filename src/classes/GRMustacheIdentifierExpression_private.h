@@ -23,19 +23,14 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * The GRMustacheIdentifierExpression is able to perform the deep lookup of an
- * identifier in a rendering context.
- *
- * @see GRMustacheExpression
+ * The GRMustacheIdentifierExpression represents expressions such as
+ * `identifier`.
  */
 @interface GRMustacheIdentifierExpression : GRMustacheExpression {
 @private
     NSString *_identifier;
 }
 
-/**
- * TODO
- */
 @property (nonatomic, copy, readonly) NSString *identifier;
 
 /**

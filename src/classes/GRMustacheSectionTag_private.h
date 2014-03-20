@@ -25,10 +25,8 @@
 #import "GRMustacheTag_private.h"
 
 /**
- * A GRMustacheSectionTag is a AST node that represents a section
- * such as `{{#name}}...{{/name}}`.
- *
- * @see GRMustacheASTNode
+ * A GRMustacheSectionTag is an AST node that represents section tags as
+ * `{{#name}}...{{/name}}` and `{{^name}}...{{/name}}`.
  */
 @interface GRMustacheSectionTag: GRMustacheTag<GRMustacheASTNode> {
 @private

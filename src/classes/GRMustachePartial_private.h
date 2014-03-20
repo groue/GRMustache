@@ -26,10 +26,8 @@
 @class GRMustacheAST;
 
 /**
- * A GRMustachePartial is a AST node that renders partial tags such as
- * `{{> name }}`.
- *
- * @see GRMustacheASTNode
+ * A GRMustachePartial is an AST node that represents partial tags as
+ * `{{>name}}`.
  */
 @interface GRMustachePartial : NSObject<GRMustacheASTNode> {
 @private

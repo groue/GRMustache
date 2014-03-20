@@ -26,26 +26,26 @@
 
 @interface GRMustacheScopedExpression()
 @property (nonatomic, retain) GRMustacheExpression *baseExpression;
-@property (nonatomic, copy) NSString *scopeIdentifier;
+@property (nonatomic, copy) NSString *identifier;
 
-- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier;
+- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier;
 @end
 
 @implementation GRMustacheScopedExpression
 @synthesize baseExpression=_baseExpression;
-@synthesize scopeIdentifier=_scopeIdentifier;
+@synthesize identifier=_identifier;
 
-+ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
++ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
 {
-    return [[[self alloc] initWithBaseExpression:baseExpression scopeIdentifier:scopeIdentifier] autorelease];
+    return [[[self alloc] initWithBaseExpression:baseExpression identifier:identifier] autorelease];
 }
 
-- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier
+- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
 {
     self = [super init];
     if (self) {
         self.baseExpression = baseExpression;
-        self.scopeIdentifier = scopeIdentifier;
+        self.identifier = identifier;
     }
     return self;
 }
@@ -53,7 +53,7 @@
 - (void)dealloc
 {
     [_baseExpression release];
-    [_scopeIdentifier release];
+    [_identifier release];
     [super dealloc];
 }
 
@@ -74,13 +74,14 @@
     if (![_baseExpression isEqual:((GRMustacheScopedExpression *)expression).baseExpression]) {
         return NO;
     }
-    return [_scopeIdentifier isEqual:((GRMustacheScopedExpression *)expression).scopeIdentifier];
+    return [_identifier isEqual:((GRMustacheScopedExpression *)expression).identifier];
 }
 
 - (NSUInteger)hash
 {
-    return [_baseExpression hash] ^ [_scopeIdentifier hash];
+    return [_baseExpression hash] ^ [_identifier hash];
 }
+
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitScopedExpression:self value:value error:error];

@@ -23,11 +23,7 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * The GRMustacheImplicitIteratorExpression is able to return the current
- * context object of a rendering context.
- *
- * @see GRMustacheContext
- * @see GRMustacheExpression
+ * The GRMustacheImplicitIteratorExpression represents the `.` expression.
  */
 @interface GRMustacheImplicitIteratorExpression : GRMustacheExpression
 

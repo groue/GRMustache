@@ -23,11 +23,8 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * The GRMustacheFilteredExpression is able to apply a filter to a value, and
- * to return the result.
- *
- * @see GRMustacheExpression
- * @see GRMustacheFilter
+ * The GRMustacheFilteredExpression represents expressions such as
+ * `<expression>(<expression>)`.
  */
 @interface GRMustacheFilteredExpression : GRMustacheExpression {
 @private
@@ -36,19 +33,8 @@
     BOOL _curried;
 }
 
-/**
- * TODO
- */
 @property (nonatomic, retain, readonly) GRMustacheExpression *filterExpression;
-
-/**
- * TODO
- */
 @property (nonatomic, retain, readonly) GRMustacheExpression *argumentExpression;
-
-/**
- * TODO
- */
 @property (nonatomic, getter=isCurried, readonly) BOOL curried;
 
 /**

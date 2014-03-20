@@ -25,13 +25,8 @@
 #import "GRMustacheTag_private.h"
 
 /**
- * A GRMustacheVariableTag is an AST node that represents a variable tag, such
- * as `{{name}}` and `{{{name}}}`.
- *
- * For example, the template string "{{name}} is {{age}} years old." would give
- * two GRMustacheVariableTag instances.
- *
- * @see GRMustacheASTNode
+ * A GRMustacheVariableTag is an AST node that represents variable tags as
+ * `{{name}}`.
  */
 @interface GRMustacheVariableTag: GRMustacheTag<GRMustacheASTNode> {
 @private

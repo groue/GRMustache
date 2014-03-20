@@ -27,16 +27,8 @@
 @protocol GRMustacheASTVisitor;
 
 /**
- * The GRMustacheExpression is the base class for objects that can provide
- * values out of a Mustache rendering context.
- *
- * GRMustacheExpression instances are built by GRMustacheParser. For example,
- * the `{{ name }}` tag would yield a GRMustacheIdentifierExpression.
- *
- * @see GRMustacheFilteredExpression
- * @see GRMustacheIdentifierExpression
- * @see GRMustacheImplicitIteratorExpression
- * @see GRMustacheScopedExpression
+ * The GRMustacheExpression is the base class for objects that represent
+ * Mustache expression such as `name`, `uppercase(name)`, or `user.name`.
  */
 @interface GRMustacheExpression : NSObject {
 @private

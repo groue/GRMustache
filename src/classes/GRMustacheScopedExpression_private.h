@@ -23,25 +23,17 @@
 #import "GRMustacheExpression_private.h"
 
 /**
- * The GRMustacheScopedExpression extracts a key out of a value.
- *
- * @see GRMustacheExpression
+ * The GRMustacheScopedExpression represents expressions such as
+ * `<expression>.identifier`.
  */
 @interface GRMustacheScopedExpression : GRMustacheExpression {
 @private
     GRMustacheExpression *_baseExpression;
-    NSString *_scopeIdentifier;
+    NSString *_identifier;
 }
 
-/**
- * TODO
- */
 @property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression;
-
-/**
- * TODO
- */
-@property (nonatomic, copy, readonly) NSString *scopeIdentifier;
+@property (nonatomic, copy, readonly) NSString *identifier;
 
 /**
  * Returns a scoped expression, given an expression that returns a value, and
@@ -52,9 +44,9 @@
  * identifier `person`), and whose identifier is `name`.
  *
  * @param baseExpression   An expression.
- * @param scopeIdentifier  An identifier.
+ * @param identifier       An identifier.
  *
  * @return A GRMustacheScopedExpression.
  */
-+ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression scopeIdentifier:(NSString *)scopeIdentifier GRMUSTACHE_API_INTERNAL;
++ (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier GRMUSTACHE_API_INTERNAL;
 @end

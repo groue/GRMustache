@@ -365,7 +365,7 @@
         return NO;
     }
     
-    *value = [GRMustacheKeyAccess valueForMustacheKey:expression.scopeIdentifier inObject:scopedValue unsafeKeyAccess:_context.unsafeKeyAccess];
+    *value = [GRMustacheKeyAccess valueForMustacheKey:expression.identifier inObject:scopedValue unsafeKeyAccess:_context.unsafeKeyAccess];
     _protected = NO;
     return YES;
 }

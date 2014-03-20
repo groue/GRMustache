@@ -27,14 +27,8 @@
 @class GRMustachePartial;
 
 /**
- * A GRMustacheInheritablePartial is a AST node that renders inheritable
+ * A GRMustacheInheritablePartial is an AST node that represents inheritable
  * partials as `{{<name}}...{{/name}}`.
- *
- * It collaborates with rendering contexts for the resolving of AST nodes in the
- * context of Mustache template inheritance.
- *
- * @see GRMustacheASTNode
- * @see GRMustacheContext
  */
 @interface GRMustacheInheritablePartial : NSObject<GRMustacheASTNode> {
 @private

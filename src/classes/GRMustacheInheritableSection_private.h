@@ -24,6 +24,11 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTNode_private.h"
 
+
+/**
+ * A GRMustacheInheritableSection is an AST node that represents inheritable
+ * sections as `{{$name}}...{{/name}}`.
+ */
 @interface GRMustacheInheritableSection : NSObject<GRMustacheASTNode> {
 @private
     NSString *_identifier;
