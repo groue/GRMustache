@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
+#import "GRMustacheASTVisitor_private.h"
 
 /**
  * The GRMustacheAST represents the abstract syntax tree of a template.
@@ -57,6 +58,11 @@
  * @see GRMustacheTemplateComponent
  */
 + (instancetype)ASTWithTemplateComponents:(NSArray *)templateComponents contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
 
 @end
 

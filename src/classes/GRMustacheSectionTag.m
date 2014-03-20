@@ -21,6 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheSectionTag_private.h"
+#import "GRMustacheRenderingASTVisitor_private.h"
+//#import "GRMustacheBuffer_private.h"
+//#import "GRMustacheContext_private.h"
 
 @interface GRMustacheSectionTag()
 
@@ -50,30 +53,40 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    if (!context) {
-        // With a nil context, the method would return nil without setting the
-        // error argument.
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-        return NO;
-    }
-    
-    GRMustacheBuffer buffer = GRMustacheBufferCreate(MAX(1024, (_innerRange.length + 50) * 1.3));
-    
-    for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        component = [context resolveTemplateComponent:component];
-        
-        // render
-        if (![component renderContentType:_contentType inBuffer:&buffer withContext:context error:error]) {
+    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context] autorelease];
+
+    for (id<GRMustacheTemplateComponent> templateComponent in _components) {
+        if (![templateComponent accept:visitor error:error]) {
             return nil;
         }
     }
     
-    if (HTMLSafe) {
-        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
-    }
-    
-    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+
+//    if (!context) {
+//        // With a nil context, the method would return nil without setting the
+//        // error argument.
+//        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+//        return NO;
+//    }
+//    
+//    GRMustacheBuffer buffer = GRMustacheBufferCreate(MAX(1024, (_innerRange.length + 50) * 1.3));
+//    
+//    for (id<GRMustacheTemplateComponent> component in _components) {
+//        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
+//        component = [context resolveTemplateComponent:component];
+//        
+//        // render
+//        if (![component renderContentType:_contentType inBuffer:&buffer withContext:context error:error]) {
+//            return nil;
+//        }
+//    }
+//    
+//    if (HTMLSafe) {
+//        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
+//    }
+//    
+//    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (NSString *)innerTemplateString

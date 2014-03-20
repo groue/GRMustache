@@ -22,10 +22,11 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheBuffer_private.h"
-#import "GRMustacheContentType.h"
-
-@class GRMustacheContext;
+#import "GRMustacheASTVisitor_private.h"
+//#import "GRMustacheBuffer_private.h"
+//#import "GRMustacheContentType.h"
+//
+//@class GRMustacheContext;
 
 /**
  * The protocol for "template components".
@@ -61,20 +62,25 @@
 @required
 
 /**
- * Appends the rendering of the receiver to a buffer.
- * 
- * @param requiredContentType  The required content type of the rendering
- * @param buffer               A buffer
- * @param context              A rendering context
- * @param error                If there is an error performing the rendering,
- *                             upon return contains an NSError object that
- *                             describes the problem.
- *
- * @return YES if the receiver could append its rendering to the buffer.
- *
- * @see GRMustacheContext
+ * TODO
  */
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
+
+///**
+// * Appends the rendering of the receiver to a buffer.
+// * 
+// * @param requiredContentType  The required content type of the rendering
+// * @param buffer               A buffer
+// * @param context              A rendering context
+// * @param error                If there is an error performing the rendering,
+// *                             upon return contains an NSError object that
+// *                             describes the problem.
+// *
+// * @return YES if the receiver could append its rendering to the buffer.
+// *
+// * @see GRMustacheContext
+// */
+//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of template inheritance, return the component that should be

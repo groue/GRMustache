@@ -28,6 +28,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheTemplateRepository_private.h"
+#import "GRMustacheBuffer_private.h"
 
 
 // =============================================================================

@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateComponent_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 @implementation GRMustacheAST
 @synthesize templateComponents=_templateComponents;
@@ -45,6 +47,16 @@
         _contentType = contentType;
     }
     return self;
+}
+
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+{
+    for (id<GRMustacheTemplateComponent> templateComponent in _templateComponents) {
+        if (![templateComponent accept:visitor error:error]) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end

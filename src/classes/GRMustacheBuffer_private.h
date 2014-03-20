@@ -66,6 +66,13 @@ static inline void GRMustacheBufferAppendCharacters(GRMustacheBuffer *buffer, co
     CFStringAppendCharacters(buffer->string, chars, numChars);
 } GRMUSTACHE_API_INTERNAL
 
+static inline CFStringRef GRMustacheBufferGetString(GRMustacheBuffer *buffer)
+{
+    CFRetain(buffer->string);
+    CFAutorelease(buffer->string);
+    return buffer->string;
+} GRMUSTACHE_API_INTERNAL
+
 static inline CFStringRef GRMustacheBufferGetStringAndRelease(GRMustacheBuffer *buffer)
 {
     CFAutorelease(buffer->string);

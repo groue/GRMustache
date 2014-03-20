@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTextComponent_private.h"
-
+#import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheTextComponent()
 @property (nonatomic, retain) NSString *text;
@@ -45,11 +45,16 @@
 
 #pragma mark <GRMustacheTemplateComponent>
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    GRMustacheBufferAppendString(buffer, (CFStringRef)_text);
-    return YES;
+    return [visitor visitTextComponent:self error:error];
 }
+
+//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+//{
+//    GRMustacheBufferAppendString(buffer, (CFStringRef)_text);
+//    return YES;
+//}
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {

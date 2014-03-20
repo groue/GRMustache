@@ -520,7 +520,7 @@
                     }
                     
                     // Success: create new GRMustacheInheritableSection
-                    wrapperComponent = [GRMustacheInheritableSection inheritableSectionWithIdentifier:(NSString *)_currentTagValue components:_currentComponents];
+                    wrapperComponent = [GRMustacheInheritableSection inheritableSectionWithIdentifier:(NSString *)_currentTagValue templateComponents:_currentComponents];
                 } break;
                     
                 case GRMustacheTokenTypeInheritablePartial: {

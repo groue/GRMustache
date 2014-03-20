@@ -21,55 +21,58 @@
 // THE SOFTWARE.
 
 #import "GRMustacheInheritableSection_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheInheritableSection()
 @property (nonatomic, readonly) NSString *identifier;
-/**
- * @see +[GRMustacheInheritableSection inheritableSectionWithComponents:]
- */
-- (instancetype)initWithIdentifier:(NSString *)identifier components:(NSArray *)components;
-
+- (instancetype)initWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents;
 @end
 
 @implementation GRMustacheInheritableSection
 @synthesize identifier=_identifier;
+@synthesize templateComponents=_templateComponents;
 
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents
 {
-    return [[[self alloc] initWithIdentifier:identifier components:components] autorelease];
+    return [[[self alloc] initWithIdentifier:identifier templateComponents:templateComponents] autorelease];
 }
 
 - (void)dealloc
 {
     [_identifier release];
-    [_components release];
+    [_templateComponents release];
     [super dealloc];
 }
 
 
 #pragma mark - <GRMustacheTemplateComponent>
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    if (!context) {
-        // With a nil context, the method would return NO without setting the
-        // error argument.
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-        return NO;
-    }
-    
-    for (id<GRMustacheTemplateComponent> component in _components) {
-        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
-        component = [context resolveTemplateComponent:component];
-        
-        // render
-        if (![component renderContentType:requiredContentType inBuffer:buffer withContext:context error:error]) {
-            return NO;
-        }
-    }
-    
-    return YES;
+    return [visitor visitInheritableSection:self error:error];
 }
+
+//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+//{
+//    if (!context) {
+//        // With a nil context, the method would return NO without setting the
+//        // error argument.
+//        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+//        return NO;
+//    }
+//    
+//    for (id<GRMustacheTemplateComponent> component in _templateComponents) {
+//        // component may be overriden by a GRMustacheInheritablePartial: resolve it.
+//        component = [context resolveTemplateComponent:component];
+//        
+//        // render
+//        if (![component renderContentType:requiredContentType inBuffer:buffer withContext:context error:error]) {
+//            return NO;
+//        }
+//    }
+//    
+//    return YES;
+//}
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
@@ -91,12 +94,12 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithIdentifier:(NSString *)identifier components:(NSArray *)components
+- (instancetype)initWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents
 {
     self = [self init];
     if (self) {
         _identifier = [identifier retain];
-        _components = [components retain];
+        _templateComponents = [templateComponents retain];
     }
     return self;
 }

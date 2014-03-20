@@ -24,9 +24,10 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheRendering_private.h"
-#import "GRMustacheTemplateComponent_private.h"
+//#import "GRMustacheTemplateComponent_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
+#import "GRMustacheRenderingASTVisitor_private.h"
 
 @interface GRMustacheTemplate()<GRMustacheRendering>
 @end
@@ -121,22 +122,30 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheContentType contentType = _partial.AST.contentType;
-    GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
+    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context] autorelease];
     
-    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-    BOOL success = [_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error];
-    [GRMustacheRendering popCurrentTemplateRepository];
-    
-    if (!success) {
-        GRMustacheBufferRelease(&buffer);
+    if (![_partial.AST accept:visitor error:error]) {
         return nil;
-    } else {
-        if (HTMLSafe) {
-            *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
-        }
-        return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
     }
+    
+    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+
+//    GRMustacheContentType contentType = _partial.AST.contentType;
+//    GRMustacheBuffer buffer = GRMustacheBufferCreate(1024);
+//    
+//    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
+//    BOOL success = [_partial renderContentType:contentType inBuffer:&buffer withContext:context error:error];
+//    [GRMustacheRendering popCurrentTemplateRepository];
+//    
+//    if (!success) {
+//        GRMustacheBufferRelease(&buffer);
+//        return nil;
+//    } else {
+//        if (HTMLSafe) {
+//            *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
+//        }
+//        return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+//    }
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext

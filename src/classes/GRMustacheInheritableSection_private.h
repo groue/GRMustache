@@ -27,8 +27,13 @@
 @interface GRMustacheInheritableSection : NSObject<GRMustacheTemplateComponent> {
 @private
     NSString *_identifier;
-    NSArray *_components;
+    NSArray *_templateComponents;
 }
+
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) NSArray *templateComponents;
 
 /**
  * Returns a new inheritable section.
@@ -40,5 +45,5 @@
  *
  * @see GRMustacheTemplateComponent
  */
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier components:(NSArray *)components GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier templateComponents:(NSArray *)templateComponents GRMUSTACHE_API_INTERNAL;
 @end

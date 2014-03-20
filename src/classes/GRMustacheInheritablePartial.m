@@ -22,7 +22,8 @@
 
 #import "GRMustacheInheritablePartial_private.h"
 #import "GRMustachePartial_private.h"
-#import "GRMustacheContext_private.h"
+//#import "GRMustacheContext_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
 @interface GRMustacheInheritablePartial()
 - (id)initWithPartial:(GRMustachePartial *)partial components:(NSArray *)components;
@@ -45,11 +46,16 @@
 
 #pragma mark - GRMustacheTemplateComponent
 
-- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+- (BOOL)accept:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    context = [context contextByAddingInheritablePartial:self];
-    return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
+    return [visitor visitInheritablePartial:self error:error];
 }
+
+//- (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
+//{
+//    context = [context contextByAddingInheritablePartial:self];
+//    return [_partial renderContentType:requiredContentType inBuffer:buffer withContext:context error:error];
+//}
 
 - (id<GRMustacheTemplateComponent>)resolveTemplateComponent:(id<GRMustacheTemplateComponent>)component
 {
