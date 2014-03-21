@@ -10,14 +10,6 @@ GRMustache is a flexible and production-ready implementation of [Mustache templa
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
 
-7.0
----
-
-GRMustache 7.0 introduces several changes to the previous release, focusing on security, compatibility with other Mustache implementations, and API simplification. Those changes may break your existing applications.
-
-The [GRMustache 7.0 Migration Guide](Guides/upgrading.md) is here to ease your transition.
-
-
 How To
 ------
 
