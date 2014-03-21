@@ -38,6 +38,7 @@
 // Documented in GRMustacheSectionTag.h
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
+@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds a GRMustacheSectionTag.

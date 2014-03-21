@@ -25,6 +25,7 @@
 
 
 @implementation GRMustacheSectionTag
+@synthesize ASTNodes=_ASTNodes;
 
 + (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
@@ -44,18 +45,7 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context] autorelease];
-
-    for (id<GRMustacheASTNode> ASTNode in _ASTNodes) {
-        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
-        ASTNode = [context resolveASTNode:ASTNode];
-        
-        // render
-        if (![ASTNode acceptVisitor:visitor error:error]) {
-            return nil;
-        }
-    }
-    
-    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    return [visitor renderContentOfSectionTag:self HTMLSafe:HTMLSafe error:error];
 }
 
 - (NSString *)innerTemplateString

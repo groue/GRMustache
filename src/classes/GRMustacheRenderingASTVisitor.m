@@ -23,6 +23,7 @@
 #import "GRMustacheRenderingASTVisitor_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheTag_private.h"
+#import "GRMustacheSectionTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
@@ -40,12 +41,7 @@
 #import "GRMustacheFilter_private.h"
 #import "GRMustacheError.h"
 
-@interface GRMustacheRenderingASTVisitor()
-@property (nonatomic, retain) GRMustacheContext *context;
-@end
-
 @implementation GRMustacheRenderingASTVisitor
-@synthesize context=_context;
 
 - (void)dealloc
 {
@@ -70,10 +66,39 @@
     return self;
 }
 
+- (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    if (HTMLSafe) {
+        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
+    }
+    return (NSString *)GRMustacheBufferGetString(&_buffer);
+}
+
+- (NSString *)renderContentOfSectionTag:(GRMustacheSectionTag *)sectionTag HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    for (id<GRMustacheASTNode> ASTNode in sectionTag.ASTNodes) {
+        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
+        ASTNode = [_context resolveASTNode:ASTNode];
+        
+        // render
+        if (![ASTNode acceptVisitor:self error:error]) {
+            return nil;
+        }
+    }
+    
+    return [self renderingWithHTMLSafe:HTMLSafe error:error];
+}
+
+
+#pragma mark - AST Nodes
+
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
 {
-    self.context = [_context contextByAddingInheritablePartial:inheritablePartial];
+    GRMustacheContext *context = [_context retain];
+    _context = [[_context contextByAddingInheritablePartial:inheritablePartial] retain];
     return [inheritablePartial.partial acceptVisitor:self error:error];
+    [_context release];
+    _context = context;
 }
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
@@ -283,6 +308,9 @@
     return YES;
 }
 
+
+#pragma mark - Expressions
+
 - (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error
 {
     id filter;
@@ -370,17 +398,6 @@
     *value = [_context topMustacheObject];
     _protected = NO;
     return YES;
-}
-
-
-#pragma mark - Private
-
-- (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    if (HTMLSafe) {
-        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
-    }
-    return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
 @end

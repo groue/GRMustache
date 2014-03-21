@@ -26,6 +26,7 @@
 #import "GRMustacheBuffer_private.h"
 
 @class GRMustacheContext;
+@class GRMustacheSectionTag;
 
 @interface GRMustacheRenderingASTVisitor : NSObject<GRMustacheASTVisitor>
 {
@@ -45,5 +46,10 @@
  * TODO
  */
 - (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+
+/**
+ * TODO
+ */
+- (NSString *)renderContentOfSectionTag:(GRMustacheSectionTag *)sectionTag HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
 
 @end
