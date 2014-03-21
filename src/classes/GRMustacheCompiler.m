@@ -109,27 +109,6 @@
  */
 @property (nonatomic, retain) NSMutableArray *tagValueStack;
 
-/**
- * This method is called whenever an error has occurred beyond any repair hope.
- *
- * @param fatalError  The fatal error
- */
-- (void)failWithFatalError:(NSError *)fatalError;
-
-/**
- * Builds and returns an NSError of domain GRMustacheErrorDomain, code
- * GRMustacheErrorCodeParseError, related to a specific location in a template,
- * represented by the token argument.
- *
- * @param token         The GRMustacheToken where the parse error has been
- *                      found.
- * @param description   A NSString that fills the NSLocalizedDescriptionKey key
- *                      of the error's userInfo.
- *
- * @return An NSError
- */
-- (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description;
-
 @end
 
 @implementation GRMustacheCompiler
@@ -143,7 +122,7 @@
 @synthesize currentASTNodes=_currentASTNodes;
 @synthesize ASTNodesStack=_ASTNodesStack;
 
-- (id)initWithContentType:(GRMustacheContentType)contentType
+- (instancetype)initWithContentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
@@ -617,6 +596,11 @@
 
 #pragma mark Private
 
+/**
+ * This method is called whenever an error has occurred beyond any repair hope.
+ *
+ * @param fatalError  The fatal error
+ */
 - (void)failWithFatalError:(NSError *)fatalError
 {
     // Make sure ASTNodesReturningError: returns correct results:
@@ -630,6 +614,18 @@
     self.openingTokenStack = nil;
 }
 
+/**
+ * Builds and returns an NSError of domain GRMustacheErrorDomain, code
+ * GRMustacheErrorCodeParseError, related to a specific location in a template,
+ * represented by the token argument.
+ *
+ * @param token         The GRMustacheToken where the parse error has been
+ *                      found.
+ * @param description   A NSString that fills the NSLocalizedDescriptionKey key
+ *                      of the error's userInfo.
+ *
+ * @return An NSError
+ */
 - (NSError *)parseErrorAtToken:(GRMustacheToken *)token description:(NSString *)description
 {
     NSString *localizedDescription;

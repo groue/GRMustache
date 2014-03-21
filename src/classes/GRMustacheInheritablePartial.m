@@ -24,10 +24,6 @@
 #import "GRMustachePartial_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@interface GRMustacheInheritablePartial()
-- (id)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes;
-@end
-
 @implementation GRMustacheInheritablePartial
 @synthesize partial=_partial;
 
@@ -63,7 +59,7 @@
 
 #pragma mark - Private
 
-- (id)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
 {
     self = [super init];
     if (self) {

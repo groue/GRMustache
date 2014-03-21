@@ -88,7 +88,7 @@
  *
  * @see +[GRMustache standardLibrary]
  */
-- (id)init;
+- (instancetype)init;
 
 /**
  * Returns an empty rendering context.

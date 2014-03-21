@@ -45,7 +45,7 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
     [super dealloc];
 }
 
-- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName
+- (instancetype)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName
 {
     self = [super init];
     if (self) {

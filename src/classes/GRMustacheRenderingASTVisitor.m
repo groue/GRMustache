@@ -70,11 +70,6 @@
     return self;
 }
 
-- (void)setContentType:(GRMustacheContentType)contentType
-{
-    _contentType = contentType;
-}
-
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
 {
     self.context = [_context contextByAddingInheritablePartial:inheritablePartial];

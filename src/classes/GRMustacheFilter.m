@@ -33,7 +33,7 @@
 @private
     id(^_block)(id value);
 }
-- (id)initWithBlock:(id(^)(id value))block;
+- (instancetype)initWithBlock:(id(^)(id value))block;
 @end
 
 
@@ -49,7 +49,7 @@
     NSArray *_arguments;
     id(^_block)(NSArray *arguments);
 }
-- (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments;
+- (instancetype)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments;
 @end
 
 
@@ -81,7 +81,7 @@
 
 @implementation GRMustacheBlockFilter
 
-- (id)initWithBlock:(id(^)(id value))block
+- (instancetype)initWithBlock:(id(^)(id value))block
 {
     if (block == nil) {
         [NSException raise:NSInvalidArgumentException format:@"Can't build a filter with a nil block."];
@@ -116,7 +116,7 @@
 
 @implementation GRMustacheBlockVariadicFilter
 
-- (id)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
+- (instancetype)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
 {
     if (block == nil) {
         [NSException raise:NSInvalidArgumentException format:@"Can't build a filter with a nil block."];

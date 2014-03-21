@@ -107,7 +107,7 @@
  *                       parsing phase.
  * @return a compiler
  */
-- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration GRMUSTACHE_API_INTERNAL;
+- (instancetype)initWithConfiguration:(GRMustacheConfiguration *)configuration GRMUSTACHE_API_INTERNAL;
 
 /**
  * The parser will invoke its delegate as it builds tokens from the template

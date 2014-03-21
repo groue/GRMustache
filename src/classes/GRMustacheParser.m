@@ -40,21 +40,6 @@
 // Documented in GRMustacheParser_private.h
 @property (nonatomic, strong) NSMutableSet *pragmas;
 
-/**
- * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
- * method.
- */
-- (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token;
-
-/**
- * Wrapper around the delegate's `parser:didFailWithError:` method.
- *
- * @param line          The line at which the error occurred.
- * @param description   A human-readable error message
- * @param templateID    A template ID (see GRMustacheTemplateRepository)
- */
-- (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID;
-
 @end
 
 @implementation GRMustacheParser
@@ -63,7 +48,7 @@
 @synthesize tagEndDelimiter=_tagEndDelimiter;
 @synthesize pragmas=_pragmas;
 
-- (id)initWithConfiguration:(GRMustacheConfiguration *)configuration
+- (instancetype)initWithConfiguration:(GRMustacheConfiguration *)configuration
 {
     self = [super init];
     if (self) {
@@ -505,6 +490,10 @@
 
 #pragma mark - Private
 
+/**
+ * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
+ * method.
+ */
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
     if ([_delegate respondsToSelector:@selector(parser:shouldContinueAfterParsingToken:)]) {
@@ -513,6 +502,13 @@
     return YES;
 }
 
+/**
+ * Wrapper around the delegate's `parser:didFailWithError:` method.
+ *
+ * @param line          The line at which the error occurred.
+ * @param description   A human-readable error message
+ * @param templateID    A template ID (see GRMustacheTemplateRepository)
+ */
 - (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
 {
     if ([_delegate respondsToSelector:@selector(parser:didFailWithError:)]) {

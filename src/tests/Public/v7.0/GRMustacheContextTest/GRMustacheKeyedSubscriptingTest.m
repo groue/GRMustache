@@ -38,7 +38,7 @@
     [super dealloc];
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

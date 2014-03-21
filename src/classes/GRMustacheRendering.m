@@ -48,7 +48,7 @@ static GRMustacheNilRendering *nilRendering;
 @private
     NSString *(^_block)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 }
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
+- (instancetype)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block;
 @end
 
 
@@ -256,7 +256,7 @@ void freeCurrentContentTypeStack(void *objects) {
     [super dealloc];
 }
 
-- (id)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
+- (instancetype)initWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
 {
     if (block == nil) {
         [NSException raise:NSInvalidArgumentException format:@"Can't build a rendering object with a nil block."];

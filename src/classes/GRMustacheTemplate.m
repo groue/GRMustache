@@ -23,13 +23,9 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheRendering_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheRenderingASTVisitor_private.h"
-
-@interface GRMustacheTemplate()<GRMustacheRendering>
-@end
 
 @implementation GRMustacheTemplate
 @synthesize templateRepository=_templateRepository;

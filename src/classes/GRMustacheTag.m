@@ -39,7 +39,7 @@
     [super dealloc];
 }
 
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
+- (instancetype)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {

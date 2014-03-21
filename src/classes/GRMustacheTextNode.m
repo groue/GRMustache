@@ -23,12 +23,6 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@interface GRMustacheTextNode()
-@property (nonatomic, retain) NSString *text;
-- (id)initWithText:(NSString *)text;
-@end
-
-
 @implementation GRMustacheTextNode
 @synthesize text=_text;
 
@@ -58,12 +52,12 @@
 
 #pragma mark - Private
 
-- (id)initWithText:(NSString *)text
+- (instancetype)initWithText:(NSString *)text
 {
     NSAssert(text, @"WTF");
     self = [self init];
     if (self) {
-        self.text = text;
+        _text = [text retain];
     }
     return self;
 }

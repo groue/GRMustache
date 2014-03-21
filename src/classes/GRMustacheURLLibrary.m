@@ -30,10 +30,6 @@
 // =============================================================================
 #pragma mark - GRMustacheURLEscapeFilter
 
-@interface GRMustacheURLEscapeFilter()
-- (NSString *)escape:(NSString *)string;
-@end
-
 @implementation GRMustacheURLEscapeFilter
 
 #pragma mark <GRMustacheFilter>

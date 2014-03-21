@@ -25,7 +25,6 @@
 
 @interface GRMustacheInheritableSection()
 @property (nonatomic, readonly) NSString *identifier;
-- (instancetype)initWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes;
 @end
 
 @implementation GRMustacheInheritableSection

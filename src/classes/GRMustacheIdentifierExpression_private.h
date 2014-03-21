@@ -31,7 +31,7 @@
     NSString *_identifier;
 }
 
-@property (nonatomic, copy, readonly) NSString *identifier;
+@property (nonatomic, retain, readonly) NSString *identifier;
 
 /**
  * Returns an identifier expression, given an identifier.

@@ -29,10 +29,6 @@
 // =============================================================================
 #pragma mark - GRMustacheJavascriptEscaper
 
-@interface GRMustacheJavascriptEscaper()
-- (NSString *)escape:(NSString *)string;
-@end
-
 @implementation GRMustacheJavascriptEscaper
 
 #pragma mark <GRMustacheFilter>

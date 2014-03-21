@@ -58,10 +58,5 @@
  */
 + (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
-/**
- * TODO
- */
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
-
 @end
 

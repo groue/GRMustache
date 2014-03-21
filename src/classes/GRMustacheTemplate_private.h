@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheRendering_private.h"
 
 @class GRMustacheContext;
 @class GRMustachePartial;
@@ -29,7 +30,7 @@
 @protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject {
+@interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     GRMustachePartial *_partial;

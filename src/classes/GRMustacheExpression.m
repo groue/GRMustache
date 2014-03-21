@@ -22,9 +22,6 @@
 
 #import "GRMustacheExpression_private.h"
 
-@interface GRMustacheExpression()
-@end
-
 @implementation GRMustacheExpression
 @synthesize token=_token;
 

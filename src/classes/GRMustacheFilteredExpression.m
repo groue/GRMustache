@@ -24,12 +24,6 @@
 #import "GRMustacheFilteredExpression_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@interface GRMustacheFilteredExpression()
-@property (nonatomic, retain) GRMustacheExpression *filterExpression;
-@property (nonatomic, retain) GRMustacheExpression *argumentExpression;
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried;
-@end
-
 @implementation GRMustacheFilteredExpression
 @synthesize filterExpression=_filterExpression;
 @synthesize argumentExpression=_argumentExpression;
@@ -38,17 +32,6 @@
 + (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
 {
     return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curried:curried] autorelease];
-}
-
-- (id)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
-{
-    self = [super init];
-    if (self) {
-        _filterExpression = [filterExpression retain];
-        _argumentExpression = [argumentExpression retain];
-        _curried = curried;
-    }
-    return self;
 }
 
 - (void)dealloc
@@ -87,6 +70,20 @@
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitFilteredExpression:self value:value error:error];
+}
+
+
+#pragma mark - Private
+
+- (instancetype)initWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
+{
+    self = [super init];
+    if (self) {
+        _filterExpression = [filterExpression retain];
+        _argumentExpression = [argumentExpression retain];
+        _curried = curried;
+    }
+    return self;
 }
 
 @end

@@ -44,7 +44,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 
@@ -61,7 +61,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
+- (instancetype)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 
@@ -78,7 +78,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     NSString *_templateExtension;
     NSStringEncoding _encoding;
 }
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
+- (instancetype)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
 
@@ -93,32 +93,12 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @private
     NSDictionary *_partialsDictionary;
 }
-- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary;
+- (instancetype)initWithPartialsDictionary:(NSDictionary *)partialsDictionary;
 @end
 
 
 // =============================================================================
 #pragma mark - GRMustacheTemplateRepository
-
-@interface GRMustacheTemplateRepository()
-
-/**
- * Parses templateString and returns an abstract syntax tree.
- * 
- * @param templateString  A Mustache template string.
- * @param contentType     The content type of the returned AST.
- * @param templateID      The template ID of the template, or nil if the
- *                        template string is not tied to any identified template.
- * @param error           If there is an error, upon return contains an NSError
- *                        object that describes the problem.
- *
- * @return a GRMustacheAST instance.
- * 
- * @see GRMustacheTemplateRepository
- */
-- (GRMustacheAST *)ASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error;
-
-@end
 
 @implementation GRMustacheTemplateRepository
 @synthesize dataSource=_dataSource;
@@ -164,7 +144,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [[[GRMustacheTemplateRepository alloc] init] autorelease];
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -240,6 +220,20 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 #pragma mark Private
 
+/**
+ * Parses templateString and returns an abstract syntax tree.
+ *
+ * @param templateString  A Mustache template string.
+ * @param contentType     The content type of the returned AST.
+ * @param templateID      The template ID of the template, or nil if the
+ *                        template string is not tied to any identified template.
+ * @param error           If there is an error, upon return contains an NSError
+ *                        object that describes the problem.
+ *
+ * @return a GRMustacheAST instance.
+ *
+ * @see GRMustacheTemplateRepository
+ */
 - (GRMustacheAST *)ASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error
 {
     GRMustacheAST *AST = nil;
@@ -373,7 +367,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryBaseURL
 
-- (id)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
+- (instancetype)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
     self = [super init];
     if (self) {
@@ -436,7 +430,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryDirectory
 
-- (id)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
+- (instancetype)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
     self = [super init];
     if (self) {
@@ -500,7 +494,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryBundle
 
-- (id)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
+- (instancetype)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
     self = [super init];
     if (self) {
@@ -546,7 +540,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 @implementation GRMustacheTemplateRepositoryPartialsDictionary
 
-- (id)initWithPartialsDictionary:(NSDictionary *)partialsDictionary
+- (instancetype)initWithPartialsDictionary:(NSDictionary *)partialsDictionary
 {
     self = [super init];
     if (self) {

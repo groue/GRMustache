@@ -24,13 +24,6 @@
 #import "GRMustacheASTVisitor_private.h"
 
 
-@interface GRMustacheScopedExpression()
-@property (nonatomic, retain) GRMustacheExpression *baseExpression;
-@property (nonatomic, copy) NSString *identifier;
-
-- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier;
-@end
-
 @implementation GRMustacheScopedExpression
 @synthesize baseExpression=_baseExpression;
 @synthesize identifier=_identifier;
@@ -38,16 +31,6 @@
 + (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
 {
     return [[[self alloc] initWithBaseExpression:baseExpression identifier:identifier] autorelease];
-}
-
-- (id)initWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
-{
-    self = [super init];
-    if (self) {
-        self.baseExpression = baseExpression;
-        self.identifier = identifier;
-    }
-    return self;
 }
 
 - (void)dealloc
@@ -85,6 +68,19 @@
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitScopedExpression:self value:value error:error];
+}
+
+
+#pragma mark - Private
+
+- (instancetype)initWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
+{
+    self = [super init];
+    if (self) {
+        _baseExpression = [baseExpression retain];
+        _identifier = [identifier retain];
+    }
+    return self;
 }
 
 @end

@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * @param expression   The expression to be evaluated when rendering the tag.
  * @param contentType  The content type of the tag rendering.
  */
-- (id)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+- (instancetype)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;

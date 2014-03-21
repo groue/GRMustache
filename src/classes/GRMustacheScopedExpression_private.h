@@ -33,7 +33,7 @@
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression;
-@property (nonatomic, copy, readonly) NSString *identifier;
+@property (nonatomic, retain, readonly) NSString *identifier;
 
 /**
  * Returns a scoped expression, given an expression that returns a value, and

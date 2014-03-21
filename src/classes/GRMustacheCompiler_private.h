@@ -73,7 +73,7 @@
  *
  * @return a compiler
  */
-- (id)initWithContentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+- (instancetype)initWithContentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Mustache Abstract Syntax Tree.

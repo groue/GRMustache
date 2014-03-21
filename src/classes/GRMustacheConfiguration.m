@@ -24,10 +24,6 @@
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 
-@interface GRMustacheConfiguration()
-- (void)assertNotLocked;
-@end
-
 @implementation GRMustacheConfiguration
 @synthesize contentType=_contentType;
 @synthesize tagStartDelimiter=_tagStartDelimiter;
@@ -58,7 +54,7 @@
     [super dealloc];
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

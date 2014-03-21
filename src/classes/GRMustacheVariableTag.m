@@ -22,10 +22,6 @@
 
 #import "GRMustacheVariableTag_private.h"
 
-@interface GRMustacheVariableTag()
-- (id)initWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML;
-@end
-
 @implementation GRMustacheVariableTag
 
 + (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
@@ -46,7 +42,7 @@
 
 #pragma mark - Private
 
-- (id)initWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
 {
     self = [super initWithType:GRMustacheTagTypeVariable expression:expression contentType:contentType];
     if (self) {

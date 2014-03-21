@@ -39,7 +39,7 @@
     return [[[self alloc] initWithASTNodes:ASTNodes contentType:contentType] autorelease];
 }
 
-- (id)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
+- (instancetype)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
@@ -47,16 +47,6 @@
         _contentType = contentType;
     }
     return self;
-}
-
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
-{
-    for (id<GRMustacheASTNode> ASTNode in _ASTNodes) {
-        if (![ASTNode acceptVisitor:visitor error:error]) {
-            return NO;
-        }
-    }
-    return YES;
 }
 
 @end

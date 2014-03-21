@@ -23,27 +23,12 @@
 #import "GRMustacheIdentifierExpression_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@interface GRMustacheIdentifierExpression()
-@property (nonatomic, copy) NSString *identifier;
-
-- (id)initWithIdentifier:(NSString *)identifier;
-@end
-
 @implementation GRMustacheIdentifierExpression
 @synthesize identifier=_identifier;
 
 + (instancetype)expressionWithIdentifier:(NSString *)identifier
 {
     return [[[self alloc] initWithIdentifier:identifier] autorelease];
-}
-
-- (id)initWithIdentifier:(NSString *)identifier
-{
-    self = [super init];
-    if (self) {
-        _identifier = [identifier copy];
-    }
-    return self;
 }
 
 - (void)dealloc
@@ -71,6 +56,18 @@
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitIdentifierExpression:self value:value error:error];
+}
+
+
+#pragma mark - Private
+
+- (instancetype)initWithIdentifier:(NSString *)identifier
+{
+    self = [super init];
+    if (self) {
+        _identifier = [identifier retain];
+    }
+    return self;
 }
 
 @end
