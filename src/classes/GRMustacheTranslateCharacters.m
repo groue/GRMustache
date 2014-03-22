@@ -60,10 +60,10 @@ NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCh
     const UniChar *unescapedStart = characters;
     CFIndex unescapedLength = 0;
     for (NSUInteger i=0; i<length; ++i, ++characters) {
-        const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
+        NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
             GRMustacheBufferAppendCharacters(&buffer, unescapedStart, unescapedLength);
-            GRMustacheBufferAppendString(&buffer, (NSString *)escape);
+            GRMustacheBufferAppendString(&buffer, escape);
             unescapedStart = characters+1;
             unescapedLength = 0;
         } else {
