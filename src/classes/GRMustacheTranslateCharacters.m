@@ -63,7 +63,7 @@ NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCh
         const NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
             GRMustacheBufferAppendCharacters(&buffer, unescapedStart, unescapedLength);
-            GRMustacheBufferAppendString(&buffer, escape);
+            GRMustacheBufferAppendString(&buffer, (NSString *)escape);
             unescapedStart = characters+1;
             unescapedLength = 0;
         } else {

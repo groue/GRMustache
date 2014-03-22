@@ -135,7 +135,7 @@
         if (_contentType == GRMustacheContentTypeHTML && !HTMLSafe) {
             rendering = GRMustacheTranslateHTMLCharacters(rendering);
         }
-        GRMustacheBufferAppendString(&_buffer, (CFStringRef)rendering);
+        GRMustacheBufferAppendString(&_buffer, rendering);
         return YES;
     }
     else
@@ -263,7 +263,7 @@
                     if ((_contentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && tag.escapesHTML) {
                         rendering = GRMustacheTranslateHTMLCharacters(rendering);
                     }
-                    GRMustacheBufferAppendString(&_buffer, (CFStringRef)rendering);
+                    GRMustacheBufferAppendString(&_buffer, rendering);
                 }
 
 
@@ -304,7 +304,7 @@
 
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error
 {
-    GRMustacheBufferAppendString(&_buffer, (CFStringRef)textNode.text);
+    GRMustacheBufferAppendString(&_buffer, textNode.text);
     return YES;
 }
 
