@@ -455,7 +455,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                             }
                         }
                         
-                        GRMustacheBufferAppendString(&buffer, (CFStringRef)rendering);
+                        GRMustacheBufferAppendString(&buffer, rendering);
                     }
                 }
             }
@@ -468,7 +468,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             if (HTMLSafe != NULL) {
                 *HTMLSafe = !oneItemHasRenderedHTMLUnescaped;   // oneItemHasRenderedHTMLUnescaped is initialized to NO: we assume safest (YES) if list is empty.
             }
-            return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+            return GRMustacheBufferGetStringAndRelease(&buffer);
         }
             
         case GRMustacheTagTypeSection: {
@@ -496,7 +496,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                         break;
                     }
                     
-                    GRMustacheBufferAppendString(&buffer, (CFStringRef)rendering);
+                    GRMustacheBufferAppendString(&buffer, rendering);
                 }
             }
             if (!success) {
@@ -504,7 +504,7 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
                 GRMustacheBufferRelease(&buffer);   // buffer exists, because we have an error, and errors come from items.
                 return nil;
             } else if (bufferCreated) {
-                return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+                return GRMustacheBufferGetStringAndRelease(&buffer);
             } else {
                 if (HTMLSafe != NULL) {
                     *HTMLSafe = YES;   // assume safest (YES) if list is empty.

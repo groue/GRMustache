@@ -73,7 +73,7 @@
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
     
-    return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+    return GRMustacheBufferGetStringAndRelease(&buffer);
 }
 
 - (NSString *)innerTemplateString

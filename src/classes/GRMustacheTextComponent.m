@@ -47,7 +47,7 @@
 
 - (BOOL)renderContentType:(GRMustacheContentType)requiredContentType inBuffer:(GRMustacheBuffer *)buffer withContext:(GRMustacheContext *)context error:(NSError **)error
 {
-    GRMustacheBufferAppendString(buffer, (CFStringRef)_text);
+    GRMustacheBufferAppendString(buffer, _text);
     return YES;
 }
 

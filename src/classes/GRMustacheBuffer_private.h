@@ -26,54 +26,53 @@
 // Inspired by https://github.com/fotonauts/handlebars-objc/blob/master/src/handlebars-objc/astVisitors/HBAstEvaluationVisitor.m
 
 typedef struct {
-    CFIndex capacity;
-    CFMutableStringRef string;
+    NSUInteger capacity;
+    NSMutableString *string;
 } GRMustacheBuffer;
 
 static inline GRMustacheBuffer GRMustacheBufferCreate(CFIndex capacity)
 {
     return (GRMustacheBuffer){
         .capacity = capacity,
-        .string = CFStringCreateMutable(0, capacity),
+        .string = (NSMutableString *)CFStringCreateMutable(0, capacity),
     };
 } GRMUSTACHE_API_INTERNAL
 
-static inline void GRMustacheBufferAdjustCapacityForLength(GRMustacheBuffer *buffer, CFIndex length)
+static inline void GRMustacheBufferAdjustCapacityForLength(GRMustacheBuffer *buffer, NSUInteger length)
 {
 // Maximum CFIndex value based on http://www.fefe.de/intof.html
 #define CFINDEX_HALF_MAX ((CFIndex)1 << (sizeof(CFIndex)*8-2))
 #define CFINDEX_MAX (CFINDEX_HALF_MAX - 1 + CFINDEX_HALF_MAX)
     if (length > buffer->capacity) {
         CFIndex newCapacity = (buffer->capacity >= CFINDEX_MAX / 2) ? CFINDEX_MAX : MAX(length, buffer->capacity * 2); // Avoid CFIndex overflow
-        CFMutableStringRef newBuffer = CFStringCreateMutableCopy(NULL, newCapacity, buffer->string);
-        CFRelease(buffer->string);
+        NSMutableString *newString = (NSMutableString *)CFStringCreateMutableCopy(NULL, newCapacity, (CFStringRef)buffer->string);
+        [buffer->string release];
+        buffer->string = newString;
         buffer->capacity = newCapacity;
-        buffer->string = newBuffer;
     }
 } GRMUSTACHE_API_INTERNAL
 
-static inline void GRMustacheBufferAppendString(GRMustacheBuffer *buffer, CFStringRef string)
+static inline void GRMustacheBufferAppendString(GRMustacheBuffer *buffer, NSString *string)
 {
-    CFIndex newLength = CFStringGetLength(buffer->string) + CFStringGetLength(string);
+    CFIndex newLength = [buffer->string length] + [string length];
     GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
-    CFStringAppend(buffer->string, string);
+    CFStringAppend((CFMutableStringRef)buffer->string, (CFStringRef)string);
 } GRMUSTACHE_API_INTERNAL
 
-static inline void GRMustacheBufferAppendCharacters(GRMustacheBuffer *buffer, const UniChar *chars, CFIndex numChars)
+static inline void GRMustacheBufferAppendCharacters(GRMustacheBuffer *buffer, const UniChar *chars, NSUInteger numChars)
 {
-    CFIndex newLength = CFStringGetLength(buffer->string) + numChars;
+    CFIndex newLength = [buffer->string length] + numChars;
     GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
-    CFStringAppendCharacters(buffer->string, chars, numChars);
+    CFStringAppendCharacters((CFMutableStringRef)buffer->string, chars, numChars);
 } GRMUSTACHE_API_INTERNAL
 
-static inline CFStringRef GRMustacheBufferGetStringAndRelease(GRMustacheBuffer *buffer)
+static inline NSString *GRMustacheBufferGetStringAndRelease(GRMustacheBuffer *buffer)
 {
-    CFAutorelease(buffer->string);
-    return buffer->string;
+    return [buffer->string autorelease];
 } GRMUSTACHE_API_INTERNAL
 
 static inline void GRMustacheBufferRelease(GRMustacheBuffer *buffer)
 {
-    CFRelease(buffer->string);
+    [buffer->string release];
 } GRMUSTACHE_API_INTERNAL
 

@@ -135,7 +135,7 @@
         if (HTMLSafe) {
             *HTMLSafe = (contentType == GRMustacheContentTypeHTML);
         }
-        return (NSString *)GRMustacheBufferGetStringAndRelease(&buffer);
+        return GRMustacheBufferGetStringAndRelease(&buffer);
     }
 }
 

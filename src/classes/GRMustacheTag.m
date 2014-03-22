@@ -207,7 +207,7 @@
                     if ((requiredContentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && self.escapesHTML) {
                         rendering = GRMustacheTranslateHTMLCharacters(rendering);
                     }
-                    GRMustacheBufferAppendString(buffer, (CFStringRef)rendering);
+                    GRMustacheBufferAppendString(buffer, rendering);
                 }
                 
                 

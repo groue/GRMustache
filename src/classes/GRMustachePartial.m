@@ -89,8 +89,8 @@
     }
     
     if (needsEscapingBuffer) {
-        NSString *unescapedString = (NSString *)GRMustacheBufferGetStringAndRelease(&unescapedBuffer);
-        GRMustacheBufferAppendString(buffer, (CFStringRef)GRMustacheTranslateHTMLCharacters(unescapedString));
+        NSString *unescapedString = GRMustacheBufferGetStringAndRelease(&unescapedBuffer);
+        GRMustacheBufferAppendString(buffer, GRMustacheTranslateHTMLCharacters(unescapedString));
     }
     
     return YES;
