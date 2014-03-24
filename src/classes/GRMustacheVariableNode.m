@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2014 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,32 +20,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableTag_private.h"
+#import "GRMustacheVariableNode_private.h"
 
-@implementation GRMustacheVariableTag
+@implementation GRMustacheVariableNode
+@synthesize expression=_expression;
+@synthesize escapesHTML=_escapesHTML;
 
-+ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
+- (void)dealloc
 {
-    return [[[self alloc] initWithExpression:expression contentType:contentType escapesHTML:escapesHTML] autorelease];
+    [_expression release];
+    [super dealloc];
+}
+
++ (instancetype)variableNodeWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
+{
+    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML] autorelease];
 }
 
 
-#pragma mark - GRMustacheTag
+#pragma mark - <GRMustacheASTNode>
 
-@synthesize escapesHTML=_escapesHTML;
-
-- (GRMustacheTagType)type
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    return GRMustacheTagTypeVariable;
+    return [visitor visitVariableNode:self error:error];
+}
+
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+{
+    return ASTNode;
 }
 
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType escapesHTML:(BOOL)escapesHTML
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
 {
-    self = [super initWithType:GRMustacheTagTypeVariable expression:expression contentType:contentType];
+    self = [super init];
     if (self) {
+        _expression = [expression retain];
         _escapesHTML = escapesHTML;
     }
     return self;

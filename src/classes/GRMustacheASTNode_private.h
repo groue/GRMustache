@@ -24,6 +24,8 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
+@class GRMustacheExpression;
+
 /**
  * The protocol for AST nodes.
  * 
@@ -70,4 +72,12 @@
  * @see GRMustacheInheritablePartial
  */
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
+@end
+
+
+@protocol GRMustacheASTExpressionNode <GRMustacheASTNode>
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 @end

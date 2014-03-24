@@ -23,36 +23,25 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheTag_private.h"
 #import "GRMustacheExpression_private.h"
-#import "GRMustacheToken_private.h"
 #import "GRMustacheRendering_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheToken_private.h"
+#import "GRMustacheSectionNode_private.h"
+#import "GRMustacheVariableNode_private.h"
+#import "GRMustacheRenderingASTVisitor_private.h"
 
 
 @implementation GRMustacheTag
-@synthesize type=_type;
-@synthesize expression=_expression;
-@synthesize contentType=_contentType;
+@synthesize ASTNode=_ASTNode;
 
 - (void)dealloc
 {
-    [_expression release];
+    [_ASTNode release];
     [super dealloc];
-}
-
-- (instancetype)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType
-{
-    self = [super init];
-    if (self) {
-        _type = type;
-        _expression = [expression retain];
-        _contentType = contentType;
-    }
-    return self;
 }
 
 - (NSString *)description
 {
-    GRMustacheToken *token = _expression.token;
+    GRMustacheToken *token = self.ASTNode.expression.token;
     if (token.templateID) {
         return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
     } else {
@@ -60,30 +49,15 @@
     }
 }
 
-- (BOOL)escapesHTML
+- (GRMustacheTagType)type
 {
-    // Default YES.
-    // This method is overrided by GRMustacheVariableTag,
-    // and sets the difference between {{name}} and {{{name}}} tags.
-    return YES;
-}
-
-- (NSString *)innerTemplateString
-{
-    // Default empty string.
-    // This method is overrided by GRMustacheSectionTag,
-    // which returns the content of the section.
-    return @"";
-}
-
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    // Default empty string.
-    // This method is overrided by GRMustacheSectionTag.
-    if (HTMLSafe) {
-        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
+    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
+        if ([(GRMustacheSectionNode *)_ASTNode isInverted]) {
+            return GRMustacheTagTypeInvertedSection;
+        }
+        return GRMustacheTagTypeSection;
     }
-    return @"";
+    return GRMustacheTagTypeVariable;
 }
 
 - (GRMustacheTemplateRepository *)templateRepository
@@ -91,17 +65,37 @@
     return [GRMustacheRendering currentTemplateRepository];
 }
 
-
-#pragma mark - <GRMustacheASTNode>
-
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (NSString *)innerTemplateString
 {
-    return [visitor visitTag:self error:error];
+    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
+        return [(GRMustacheSectionNode *)_ASTNode innerTemplateString];
+    }
+    return @"";
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (GRMustacheExpression *)expression
 {
-    return ASTNode;
+    return _ASTNode.expression;
+}
+
+- (BOOL)escapesHTML
+{
+    if ([_ASTNode isKindOfClass:[GRMustacheVariableNode class]]) {
+        return [(GRMustacheVariableNode *)_ASTNode escapesHTML];
+    }
+    return YES;
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
+        GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context] autorelease];
+        return [visitor renderContentOfSectionNode:_ASTNode HTMLSafe:HTMLSafe error:error];
+    }
+    if (HTMLSafe) {
+        *HTMLSafe = ([GRMustacheRendering currentContentType] == GRMustacheContentTypeHTML);
+    }
+    return @"";
 }
 
 @end

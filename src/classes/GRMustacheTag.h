@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
-#import "GRMustacheConfiguration.h"
 
 @class GRMustacheTemplateRepository;
 
@@ -66,9 +65,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  */
 @interface GRMustacheTag: NSObject {
 @private
-    GRMustacheTagType _type;
-    id _expression;
-    GRMustacheContentType _contentType;
+    id _ASTNode;
 }
 
 

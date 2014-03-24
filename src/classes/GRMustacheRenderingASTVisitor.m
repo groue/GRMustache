@@ -23,7 +23,8 @@
 #import "GRMustacheRenderingASTVisitor_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheTag_private.h"
-#import "GRMustacheSectionTag_private.h"
+#import "GRMustacheSectionNode_private.h"
+#import "GRMustacheVariableNode_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
@@ -74,9 +75,9 @@
     return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
-- (NSString *)renderContentOfSectionTag:(GRMustacheSectionTag *)sectionTag HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderContentOfSectionNode:(GRMustacheSectionNode *)sectionNode HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    for (id<GRMustacheASTNode> ASTNode in sectionTag.ASTNodes) {
+    for (id<GRMustacheASTNode> ASTNode in sectionNode.ASTNodes) {
         // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
         ASTNode = [_context resolveASTNode:ASTNode];
         
@@ -157,12 +158,22 @@
     }
 }
 
+- (BOOL)visitVariableNode:(GRMustacheVariableNode *)variableNode error:(NSError **)error
+{
+    GRMustacheTag *tag = [[[GRMustacheTag alloc] init] autorelease];
+    tag.ASTNode = variableNode;
+    return [self visitTag:tag error:error];
+}
+
+- (BOOL)visitSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error
+{
+    GRMustacheTag *tag = [[[GRMustacheTag alloc] init] autorelease];
+    tag.ASTNode = sectionNode;
+    return [self visitTag:tag error:error];
+}
+
 - (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error
 {
-    if (_contentType != tag.contentType) {
-        NSAssert(NO, @"Not implemented");
-    }
-
     BOOL success = YES;
 
     @autoreleasepool {

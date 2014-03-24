@@ -1,17 +1,17 @@
 // The MIT License
-// 
+//
 // Copyright (c) 2014 Gwendal Roué
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,33 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSectionTag_private.h"
-#import "GRMustacheRenderingASTVisitor_private.h"
+#import "GRMustacheSectionNode_private.h"
 
-
-@implementation GRMustacheSectionTag
+@implementation GRMustacheSectionNode
+@synthesize expression=_expression;
+@synthesize inverted=_inverted;
 @synthesize ASTNodes=_ASTNodes;
-
-+ (instancetype)sectionTagWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
-{
-    return [[[self alloc] initWithType:type expression:expression contentType:contentType templateString:templateString innerRange:innerRange ASTNodes:ASTNodes] autorelease];
-}
 
 - (void)dealloc
 {
+    [_expression release];
     [_templateString release];
     [_ASTNodes release];
     [super dealloc];
 }
 
-
-#pragma mark - GRMustacheTag
-
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
++ (instancetype)sectionNodeWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
-    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context] autorelease];
-    return [visitor renderContentOfSectionTag:self HTMLSafe:HTMLSafe error:error];
+    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange ASTNodes:ASTNodes] autorelease];
 }
+
 
 - (NSString *)innerTemplateString
 {
@@ -54,12 +47,27 @@
 }
 
 
+#pragma mark - <GRMustacheASTNode>
+
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+{
+    return [visitor visitSectionNode:self error:error];
+}
+
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+{
+    return ASTNode;
+}
+
+
 #pragma mark - Private
 
-- (instancetype)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
-    self = [super initWithType:type expression:expression contentType:contentType];
+    self = [super init];
     if (self) {
+        _expression = [expression retain];
+        _inverted = inverted;
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _ASTNodes = [ASTNodes retain];

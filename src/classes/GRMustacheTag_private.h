@@ -23,9 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTNode_private.h"
-#import "GRMustacheContentType.h"
 
-@class GRMustacheExpression;
 @class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 
@@ -37,14 +35,11 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 } GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@interface GRMustacheTag: NSObject<GRMustacheASTNode> {
+@interface GRMustacheTag: NSObject {
 @public
-    GRMustacheTagType _type;
-    GRMustacheExpression *_expression;
-    GRMustacheContentType _contentType;
+    id<GRMustacheASTExpressionNode> _ASTNode;
 }
 
-// Abstract method whose default implementation raises an exception.
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
 
@@ -54,58 +49,9 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
-/**
- * Returns the content type of the receiver.
- *
- * For example:
- *
- * - `{{name}}`: GRMustacheContentTypeHTML
- * - `{{{name}}}`: GRMustacheContentTypeHTML.
- * - `{{#name}}...{{/name}}`: GRMustacheContentTypeHTML.
- * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: GRMustacheContentTypeText.
- * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: GRMustacheContentTypeText
- * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: GRMustacheContentTypeText.
- *
- * @see escapesHTML
- */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns YES if the received HTML-escapes its HTML-unsafe input.
- *
- * This property is used is and only if contentType is GRMustacheContentTypeHTML.
- *
- * For example:
- *
- * - `{{name}}`: the variable tag escapes HTML-unsafe input.
- * - `{{{name}}}`: the variable tag does not escape input.
- * - `{{#name}}...{{/name}}`: the section tag escapes HTML-unsafe input.
- * - `{{%CONTENT_TYPE:TEXT}}{{name}}`: the escapesHTML property is ignored.
- * - `{{%CONTENT_TYPE:TEXT}}{{{name}}}`: the escapesHTML property is ignored.
- * - `{{%CONTENT_TYPE:TEXT}}{{#name}}...{{/name}}`: the escapesHTML property is ignored.
- *
- * @see contentType
- */
-@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
-
-/**
- * The expression evaluated and rendered by the tag.
- *
- * For example:
- *
- * - `{{name}}` holds the `name` expression.
- * - `{{uppercase(person.name)}}` holds the `uppercase(person.name)` expression.
- */
+@property (nonatomic, retain) id<GRMustacheASTExpressionNode> ASTNode GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a new GRMustacheTag.
- *
- * @param type         The tag type
- * @param expression   The expression to be evaluated when rendering the tag.
- * @param contentType  The content type of the tag rendering.
- */
-- (instancetype)initWithType:(GRMustacheTagType)type expression:(GRMustacheExpression *)expression contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
