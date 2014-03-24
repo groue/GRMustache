@@ -30,34 +30,45 @@
 #import "GRMustacheRenderingASTVisitor_private.h"
 
 
-@implementation GRMustacheTag
-@synthesize ASTNode=_ASTNode;
+// =============================================================================
+#pragma mark - GRMustacheSectionTag
 
-- (void)dealloc
+@interface GRMustacheSectionTag : GRMustacheTag {
+@private
+    GRMustacheSectionNode *_ASTNode;
+}
+- (instancetype)initWithSectionNode:(GRMustacheSectionNode *)ASTNode;
+@end
+
+// =============================================================================
+#pragma mark - GRMustacheVariableTag
+
+@interface GRMustacheVariableTag : GRMustacheTag {
+@private
+    GRMustacheVariableNode *_ASTNode;
+}
+- (instancetype)initWithVariableNode:(GRMustacheVariableNode *)ASTNode;
+@end
+
+// =============================================================================
+#pragma mark - GRMustacheTag
+
+@implementation GRMustacheTag
+
++ (instancetype)tagWithSectionNode:(GRMustacheSectionNode *)ASTNode
 {
-    [_ASTNode release];
-    [super dealloc];
+    return [[[GRMustacheSectionTag alloc] initWithSectionNode:ASTNode] autorelease];
 }
 
-- (NSString *)description
++ (instancetype)tagWithVariableNode:(GRMustacheVariableNode *)ASTNode
 {
-    GRMustacheToken *token = self.ASTNode.expression.token;
-    if (token.templateID) {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
-    } else {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
-    }
+    return [[[GRMustacheVariableTag alloc] initWithVariableNode:ASTNode] autorelease];
 }
 
 - (GRMustacheTagType)type
 {
-    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
-        if ([(GRMustacheSectionNode *)_ASTNode isInverted]) {
-            return GRMustacheTagTypeInvertedSection;
-        }
-        return GRMustacheTagTypeSection;
-    }
-    return GRMustacheTagTypeVariable;
+    [self doesNotRecognizeSelector:_cmd];
+    return 0;
 }
 
 - (GRMustacheTemplateRepository *)templateRepository
@@ -67,31 +78,114 @@
 
 - (NSString *)innerTemplateString
 {
-    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
-        return [(GRMustacheSectionNode *)_ASTNode innerTemplateString];
-    }
-    return @"";
-}
-
-- (GRMustacheExpression *)expression
-{
-    return _ASTNode.expression;
-}
-
-- (BOOL)escapesHTML
-{
-    if ([_ASTNode isKindOfClass:[GRMustacheVariableNode class]]) {
-        return [(GRMustacheVariableNode *)_ASTNode escapesHTML];
-    }
-    return YES;
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
 }
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    if ([_ASTNode isKindOfClass:[GRMustacheSectionNode class]]) {
-        GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context] autorelease];
-        return [visitor renderContentOfSectionNode:_ASTNode HTMLSafe:HTMLSafe error:error];
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
+}
+
+@end
+
+// =============================================================================
+#pragma mark - GRMustacheSectionTag
+
+@implementation GRMustacheSectionTag
+
+- (void)dealloc
+{
+    [_ASTNode release];
+    [super dealloc];
+}
+
+- (instancetype)initWithSectionNode:(GRMustacheSectionNode *)ASTNode
+{
+    self = [super init];
+    if (self) {
+        _ASTNode = [ASTNode retain];
     }
+    return self;
+}
+
+- (NSString *)description
+{
+    GRMustacheToken *token = _ASTNode.expression.token;
+    if (token.templateID) {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
+    } else {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
+    }
+}
+
+- (GRMustacheTagType)type
+{
+    if (_ASTNode.isInverted) {
+        return GRMustacheTagTypeInvertedSection;
+    }
+    return GRMustacheTagTypeSection;
+}
+
+- (NSString *)innerTemplateString
+{
+    return [_ASTNode innerTemplateString];
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context] autorelease];
+    if (![visitor visitContentOfSectionNode:_ASTNode error:error]) {
+        return nil;
+    }
+    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+}
+
+@end
+
+// =============================================================================
+#pragma mark - GRMustacheVariableTag
+
+@implementation GRMustacheVariableTag
+
+- (void)dealloc
+{
+    [_ASTNode release];
+    [super dealloc];
+}
+
+- (instancetype)initWithVariableNode:(GRMustacheVariableNode *)ASTNode
+{
+    self = [super init];
+    if (self) {
+        _ASTNode = [ASTNode retain];
+    }
+    return self;
+}
+
+- (NSString *)description
+{
+    GRMustacheToken *token = _ASTNode.expression.token;
+    if (token.templateID) {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
+    } else {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
+    }
+}
+
+- (GRMustacheTagType)type
+{
+    return GRMustacheTagTypeVariable;
+}
+
+- (NSString *)innerTemplateString
+{
+    return @"";
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
     if (HTMLSafe) {
         *HTMLSafe = ([GRMustacheRendering currentContentType] == GRMustacheContentTypeHTML);
     }
@@ -99,3 +193,4 @@
 }
 
 @end
+

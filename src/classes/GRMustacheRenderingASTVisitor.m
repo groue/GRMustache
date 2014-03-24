@@ -75,19 +75,9 @@
     return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
-- (NSString *)renderContentOfSectionNode:(GRMustacheSectionNode *)sectionNode HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (BOOL)visitContentOfSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error
 {
-    for (id<GRMustacheASTNode> ASTNode in sectionNode.ASTNodes) {
-        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
-        ASTNode = [_context resolveASTNode:ASTNode];
-        
-        // render
-        if (![ASTNode acceptVisitor:self error:error]) {
-            return nil;
-        }
-    }
-    
-    return [self renderingWithHTMLSafe:HTMLSafe error:error];
+    return [self visitASTNodes:sectionNode.ASTNodes error:error];
 }
 
 
@@ -104,17 +94,7 @@
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
 {
-    for (id<GRMustacheASTNode> ASTNode in inheritableSection.ASTNodes) {
-        // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
-        ASTNode = [_context resolveASTNode:ASTNode];
-
-        // render
-        if (![ASTNode acceptVisitor:self error:error]) {
-            return NO;
-        }
-    }
-    
-    return YES;
+    return [self visitASTNodes:inheritableSection.ASTNodes error:error];
 }
 
 - (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error
@@ -141,18 +121,8 @@
     }
     else
     {
-        BOOL success = YES;
         [GRMustacheRendering pushCurrentContentType:partialContentType];
-        for (id<GRMustacheASTNode> ASTNode in AST.ASTNodes) {
-            // ASTNode may be overriden by a GRMustacheInheritablePartial: resolve it.
-            ASTNode = [_context resolveASTNode:ASTNode];
-            
-            // render
-            if (![ASTNode acceptVisitor:self error:error]) {
-                success = NO;
-                break;
-            }
-        }
+        BOOL success = [self visitASTNodes:AST.ASTNodes error:error];
         [GRMustacheRendering popCurrentContentType];
         return success;
     }
@@ -160,157 +130,14 @@
 
 - (BOOL)visitVariableNode:(GRMustacheVariableNode *)variableNode error:(NSError **)error
 {
-    GRMustacheTag *tag = [[[GRMustacheTag alloc] init] autorelease];
-    tag.ASTNode = variableNode;
-    return [self visitTag:tag error:error];
+    GRMustacheTag *tag = [GRMustacheTag tagWithVariableNode:variableNode];
+    return [self visitTag:tag expression:variableNode.expression escapesHTML:variableNode.escapesHTML error:error];
 }
 
 - (BOOL)visitSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error
 {
-    GRMustacheTag *tag = [[[GRMustacheTag alloc] init] autorelease];
-    tag.ASTNode = sectionNode;
-    return [self visitTag:tag error:error];
-}
-
-- (BOOL)visitTag:(GRMustacheTag *)tag error:(NSError **)error
-{
-    BOOL success = YES;
-
-    @autoreleasepool {
-        
-        GRMustacheContext *context = _context;
-
-        // Evaluate expression
-
-        __block id object;
-        if (![tag.expression acceptVisitor:self value:&object error:error]) {  // this sets _protected
-
-            // Error
-
-            if (error != NULL) {
-                [*error retain];   // retain error so that it survives the @autoreleasepool block
-            }
-
-            success = NO;
-
-        } else {
-
-            // Hide object if it is protected
-
-            if (_protected) {
-                // Object is protected: it may enter the context stack, and provide
-                // value for `.` and `.name`. However, it must not expose its keys.
-                //
-                // The goal is to have `{{ safe.name }}` and `{{#safe}}{{.name}}{{/safe}}`
-                // work, but not `{{#safe}}{{name}}{{/safe}}`.
-                //
-                // Rationale:
-                //
-                // Let's look at `{{#safe}}{{#hacker}}{{name}}{{/hacker}}{{/safe}}`:
-                //
-                // The protected context stack contains the "protected root":
-                // { safe : { name: "important } }.
-                //
-                // Since the user has used the key `safe`, he expects `name` to be
-                // safe as well, even if `hacker` has defined its own `name`.
-                //
-                // So we need to have `name` come from `safe`, not from `hacker`.
-                // We should thus start looking in `safe` first. But `safe` was
-                // not initially in the protected context stack. Only the protected
-                // root was. Hence somebody had `safe` in the protected context
-                // stack.
-                //
-                // Who has objects enter the context stack? Rendering objects do. So
-                // rendering objects have to know that values are protected or not,
-                // and choose the correct bucket accordingly.
-                //
-                // Who can write his own rendering objects? The end user does. So
-                // the end user must carefully read a documentation about safety,
-                // and then carefully code his rendering objects so that they
-                // conform to this safety notice.
-                //
-                // Of course this is not what we want. So `name` can not be
-                // protected. Since we don't want to let the user think he is data
-                // is given protected when it is not, we prevent this whole pattern, and
-                // forbid `{{#safe}}{{name}}{{/safe}}`.
-                context = [context contextByAddingHiddenObject:object];
-            }
-
-
-            // Rendered value hooks
-
-            NSArray *tagDelegateStack = [context tagDelegateStack];
-            for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
-                if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-                    object = [tagDelegate mustacheTag:tag willRenderObject:object];
-                }
-            }
-
-
-            // Render value
-
-            BOOL objectHTMLSafe = NO;
-            NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
-            NSString *rendering = [[GRMustacheRendering renderingObjectForObject:object] renderForMustacheTag:tag context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
-
-            if (rendering == nil && renderingError == nil)
-            {
-                // Rendering is nil, but rendering error is not set.
-                //
-                // Assume a rendering object coded by a lazy programmer, whose
-                // intention is to render nothing.
-
-                rendering = @"";
-            }
-
-
-            // Finish
-
-            if (rendering)
-            {
-                // render
-
-                if (rendering.length > 0) {
-                    if ((_contentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && tag.escapesHTML) {
-                        rendering = GRMustacheTranslateHTMLCharacters(rendering);
-                    }
-                    GRMustacheBufferAppendString(&_buffer, rendering);
-                }
-
-
-                // Post-rendering hooks
-
-                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
-                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
-                        [tagDelegate mustacheTag:tag didRenderObject:object as:rendering];
-                    }
-                }
-            }
-            else
-            {
-                // Error
-
-                if (error != NULL) {
-                    *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
-                } else {
-                    NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-                }
-                success = NO;
-
-
-                // Post-error hooks
-
-                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
-                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                        [tagDelegate mustacheTag:tag didFailRenderingObject:object withError:renderingError];
-                    }
-                }
-            }
-        }
-    }
-    
-    if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
-    return success;
+    GRMustacheTag *tag = [GRMustacheTag tagWithSectionNode:sectionNode];
+    return [self visitTag:tag expression:sectionNode.expression escapesHTML:YES error:error];
 }
 
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error
@@ -408,6 +235,164 @@
 {
     *value = [_context topMustacheObject];
     _protected = NO;
+    return YES;
+}
+
+
+#pragma mark - Private
+
+- (BOOL)visitTag:(GRMustacheTag *)tag expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML error:(NSError **)error
+{
+    BOOL success = YES;
+    
+    @autoreleasepool {
+        
+        GRMustacheContext *context = _context;
+        
+        // Evaluate expression
+        
+        __block id object;
+        if (![expression acceptVisitor:self value:&object error:error]) {  // this sets _protected
+            
+            // Error
+            
+            if (error != NULL) {
+                [*error retain];   // retain error so that it survives the @autoreleasepool block
+            }
+            
+            success = NO;
+            
+        } else {
+            
+            // Hide object if it is protected
+            
+            if (_protected) {
+                // Object is protected: it may enter the context stack, and provide
+                // value for `.` and `.name`. However, it must not expose its keys.
+                //
+                // The goal is to have `{{ safe.name }}` and `{{#safe}}{{.name}}{{/safe}}`
+                // work, but not `{{#safe}}{{name}}{{/safe}}`.
+                //
+                // Rationale:
+                //
+                // Let's look at `{{#safe}}{{#hacker}}{{name}}{{/hacker}}{{/safe}}`:
+                //
+                // The protected context stack contains the "protected root":
+                // { safe : { name: "important } }.
+                //
+                // Since the user has used the key `safe`, he expects `name` to be
+                // safe as well, even if `hacker` has defined its own `name`.
+                //
+                // So we need to have `name` come from `safe`, not from `hacker`.
+                // We should thus start looking in `safe` first. But `safe` was
+                // not initially in the protected context stack. Only the protected
+                // root was. Hence somebody had `safe` in the protected context
+                // stack.
+                //
+                // Who has objects enter the context stack? Rendering objects do. So
+                // rendering objects have to know that values are protected or not,
+                // and choose the correct bucket accordingly.
+                //
+                // Who can write his own rendering objects? The end user does. So
+                // the end user must carefully read a documentation about safety,
+                // and then carefully code his rendering objects so that they
+                // conform to this safety notice.
+                //
+                // Of course this is not what we want. So `name` can not be
+                // protected. Since we don't want to let the user think he is data
+                // is given protected when it is not, we prevent this whole pattern, and
+                // forbid `{{#safe}}{{name}}{{/safe}}`.
+                context = [context contextByAddingHiddenObject:object];
+            }
+            
+            
+            // Rendered value hooks
+            
+            NSArray *tagDelegateStack = [context tagDelegateStack];
+            for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
+                if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
+                    object = [tagDelegate mustacheTag:tag willRenderObject:object];
+                }
+            }
+            
+            
+            // Render value
+            
+            BOOL objectHTMLSafe = NO;
+            NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
+            NSString *rendering = [[GRMustacheRendering renderingObjectForObject:object] renderForMustacheTag:tag context:context HTMLSafe:&objectHTMLSafe error:&renderingError];
+            
+            if (rendering == nil && renderingError == nil)
+            {
+                // Rendering is nil, but rendering error is not set.
+                //
+                // Assume a rendering object coded by a lazy programmer, whose
+                // intention is to render nothing.
+                
+                rendering = @"";
+            }
+            
+            
+            // Finish
+            
+            if (rendering)
+            {
+                // render
+                
+                if (rendering.length > 0) {
+                    if ((_contentType == GRMustacheContentTypeHTML) && !objectHTMLSafe && escapesHTML) {
+                        rendering = GRMustacheTranslateHTMLCharacters(rendering);
+                    }
+                    GRMustacheBufferAppendString(&_buffer, rendering);
+                }
+                
+                
+                // Post-rendering hooks
+                
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
+                        [tagDelegate mustacheTag:tag didRenderObject:object as:rendering];
+                    }
+                }
+            }
+            else
+            {
+                // Error
+                
+                if (error != NULL) {
+                    *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
+                } else {
+                    NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
+                }
+                success = NO;
+                
+                
+                // Post-error hooks
+                
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                        [tagDelegate mustacheTag:tag didFailRenderingObject:object withError:renderingError];
+                    }
+                }
+            }
+        }
+    }
+    
+    if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
+    return success;
+}
+
+- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error
+{
+    for (id<GRMustacheASTNode> ASTNode in ASTNodes) {
+        
+        ASTNode = [_context resolveASTNode:ASTNode];
+        
+        if (![ASTNode acceptVisitor:self error:error]) {
+            return NO;
+        }
+    }
+    
     return YES;
 }
 

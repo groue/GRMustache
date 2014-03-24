@@ -63,10 +63,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
  */
-@interface GRMustacheTag: NSObject {
-@private
-    id _ASTNode;
-}
+@interface GRMustacheTag: NSObject
 
 
 ////////////////////////////////////////////////////////////////////////////////

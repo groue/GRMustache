@@ -50,6 +50,6 @@
 /**
  * TODO
  */
-- (NSString *)renderContentOfSectionNode:(GRMustacheSectionNode *)sectionNode HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+- (BOOL)visitContentOfSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error;
 
 @end
