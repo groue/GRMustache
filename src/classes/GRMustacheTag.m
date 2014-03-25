@@ -95,17 +95,11 @@
 
 @implementation GRMustacheSectionTag
 
-- (void)dealloc
-{
-    [_ASTNode release];
-    [super dealloc];
-}
-
 - (instancetype)initWithSectionNode:(GRMustacheSectionNode *)ASTNode
 {
     self = [super init];
     if (self) {
-        _ASTNode = [ASTNode retain];
+        _ASTNode = ASTNode;
     }
     return self;
 }
@@ -153,17 +147,11 @@
 
 @implementation GRMustacheVariableTag
 
-- (void)dealloc
-{
-    [_ASTNode release];
-    [super dealloc];
-}
-
 - (instancetype)initWithVariableNode:(GRMustacheVariableNode *)ASTNode
 {
     self = [super init];
     if (self) {
-        _ASTNode = [ASTNode retain];
+        _ASTNode = ASTNode;
     }
     return self;
 }
