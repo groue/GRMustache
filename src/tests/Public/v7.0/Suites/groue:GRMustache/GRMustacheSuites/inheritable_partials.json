@@ -169,6 +169,13 @@
       "template": "<{{<node}}{{$value}}{{>node}}{{/value}}{{/node}}>",
       "partials": { "node": "{{content}}<{{#nodes}}{{$value}}overriden{{/value}}{{/nodes}}>" },
       "expected": "<X<Y<>>>"
+    },
+    {
+      "name": "Inheritable section context is cleaned after inheritable partial rendering.",
+      "data": { },
+      "template": "{{$section}}rendered{{/section}}|{{<partial}}{{$section}}inherited{{/section}}{{/partial}}|{{$section}}rendered{{/section}}",
+      "partials": { "partial": "{{$section}}ignored{{/section}}" },
+      "expected": "rendered|inherited|rendered"
     }
   ]
 }
