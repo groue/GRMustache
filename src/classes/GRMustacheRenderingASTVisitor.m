@@ -47,7 +47,6 @@
 - (void)dealloc
 {
     GRMustacheBufferRelease(&_buffer);
-    [_context release];
     [super dealloc];
 }
 
@@ -61,7 +60,7 @@
     self = [super init];
     if (self) {
         _contentType = contentType;
-        _context = [context retain];
+        _context = context;
         _buffer = GRMustacheBufferCreate(1024);
     }
     return self;
@@ -85,11 +84,11 @@
 
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
 {
-    GRMustacheContext *context = [_context retain];
-    _context = [[_context contextByAddingInheritablePartial:inheritablePartial] retain];
-    return [inheritablePartial.partial acceptVisitor:self error:error];
-    [_context release];
+    GRMustacheContext *context = _context;
+    _context = [_context contextByAddingInheritablePartial:inheritablePartial];
+    BOOL success = [inheritablePartial.partial acceptVisitor:self error:error];
     _context = context;
+    return success;
 }
 
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
