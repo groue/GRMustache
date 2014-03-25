@@ -86,6 +86,7 @@
 {
     [_partial release];
     [_baseContext release];
+    [_templateRepository release];
     [super dealloc];
 }
 
