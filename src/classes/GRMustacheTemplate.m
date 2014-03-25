@@ -81,6 +81,7 @@
 - (void)dealloc
 {
     [_partial release];
+    [_templateRepository release];
     [_baseContext release];
     [super dealloc];
 }
