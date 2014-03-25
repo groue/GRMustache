@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
-+ (instancetype)tagWithSectionNode:(GRMustacheSectionNode *)ASTNode GRMUSTACHE_API_PUBLIC;
-+ (instancetype)tagWithVariableNode:(GRMustacheVariableNode *)ASTNode GRMUSTACHE_API_PUBLIC;
++ (instancetype)tagWithSectionNode:(GRMustacheSectionNode *)ASTNode GRMUSTACHE_API_INTERNAL;
++ (instancetype)tagWithVariableNode:(GRMustacheVariableNode *)ASTNode GRMUSTACHE_API_INTERNAL;
 
 @end
