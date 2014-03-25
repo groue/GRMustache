@@ -135,11 +135,15 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context] autorelease];
-    if (![visitor visitContentOfSectionNode:_ASTNode error:error]) {
-        return nil;
+    NSString *rendering = nil;
+    
+    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context];
+    if ([visitor visitContentOfSectionNode:_ASTNode error:error]) {
+        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
     }
-    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    [visitor release];
+    
+    return rendering;
 }
 
 @end

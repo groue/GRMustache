@@ -118,17 +118,19 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context] autorelease];
-
-    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-    BOOL success = [_partial acceptVisitor:visitor error:error];
-    [GRMustacheRendering popCurrentTemplateRepository];
-
-    if (!success) {
-        return nil;
-    }
+    NSString *rendering = nil;
     
-    return [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
+    
+    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context];
+    if ([_partial acceptVisitor:visitor error:error]) {
+        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    }
+    [visitor release];
+    
+    [GRMustacheRendering popCurrentTemplateRepository];
+    
+    return rendering;
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext
