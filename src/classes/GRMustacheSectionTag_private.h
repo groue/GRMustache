@@ -22,6 +22,7 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTag_private.h"
+#import "GRMustacheContentType.h"
 
 @class GRMustacheExpression;
 
@@ -32,11 +33,10 @@
     NSString *_templateString;
     NSRange _innerRange;
     NSArray *_ASTNodes;
+    GRMustacheContentType _contentType;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
-@property (nonatomic, readonly, getter = isInverted) BOOL inverted;
-@property (nonatomic, retain, readonly) NSString *innerTemplateString;
 @property (nonatomic, retain, readonly) NSArray *ASTNodes;
 
 
@@ -67,6 +67,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -23,7 +23,6 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
-#import "GRMustacheRendering_private.h"
 
 @implementation GRMustacheVariableTag
 @synthesize expression=_expression;
@@ -35,9 +34,9 @@
     [super dealloc];
 }
 
-+ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
++ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType
 {
-    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML] autorelease];
+    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML contentType:contentType] autorelease];
 }
 
 
@@ -66,7 +65,7 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     if (HTMLSafe) {
-        *HTMLSafe = ([GRMustacheRendering currentContentType] == GRMustacheContentTypeHTML);
+        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
     return @"";
 }
@@ -87,12 +86,13 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
         _expression = [expression retain];
         _escapesHTML = escapesHTML;
+        _contentType = contentType;
     }
     return self;
 }

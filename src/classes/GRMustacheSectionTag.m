@@ -24,11 +24,9 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 #import "GRMustacheRenderingASTVisitor_private.h"
-#import "GRMustacheRendering_private.h"
 
 @implementation GRMustacheSectionTag
 @synthesize expression=_expression;
-@synthesize inverted=_inverted;
 @synthesize ASTNodes=_ASTNodes;
 
 - (void)dealloc
@@ -39,9 +37,9 @@
     [super dealloc];
 }
 
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
 {
-    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange ASTNodes:ASTNodes] autorelease];
+    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange ASTNodes:ASTNodes contentType:contentType] autorelease];
 }
 
 
@@ -74,8 +72,8 @@
 {
     NSString *rendering = nil;
 
-    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context];
-    if ([visitor visitContentOfSectionTag:self error:error]) {
+    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context];
+    if ([visitor visitASTNodes:_ASTNodes error:error]) {
         rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
     }
     [visitor release];
@@ -94,7 +92,7 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
@@ -103,6 +101,7 @@
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _ASTNodes = [ASTNodes retain];
+        _contentType = contentType;
     }
     return self;
 }

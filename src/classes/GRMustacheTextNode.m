@@ -24,7 +24,6 @@
 #import "GRMustacheASTVisitor_private.h"
 
 @implementation GRMustacheTextNode
-@synthesize text=_text;
 
 + (instancetype)textNodeWithText:(NSString *)text
 {
@@ -36,6 +35,12 @@
     [_text release];
     [super dealloc];
 }
+
+- (NSString *)text
+{
+    return _text;
+}
+
 
 #pragma mark - <GRMustacheASTNode>
 

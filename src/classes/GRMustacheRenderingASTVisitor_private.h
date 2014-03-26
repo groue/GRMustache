@@ -50,6 +50,6 @@
 /**
  * TODO
  */
-- (BOOL)visitContentOfSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error;
+- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error;
 
 @end

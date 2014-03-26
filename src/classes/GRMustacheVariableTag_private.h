@@ -22,6 +22,7 @@
 
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheTag_private.h"
+#import "GRMustacheContentType.h"
 
 @class GRMustacheExpression;
 
@@ -29,6 +30,7 @@
 @private
     GRMustacheExpression *_expression;
     BOOL _escapesHTML;
+    GRMustacheContentType _contentType;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression;
@@ -48,6 +50,6 @@
  *
  * @see GRMustacheExpression
  */
-+ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
++ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 @end

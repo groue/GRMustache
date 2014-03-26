@@ -74,9 +74,16 @@
     return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
-- (BOOL)visitContentOfSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error
+- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error
 {
-    return [self visitASTNodes:sectionTag.ASTNodes error:error];
+    for (id<GRMustacheASTNode> ASTNode in ASTNodes) {
+        ASTNode = [_context resolveASTNode:ASTNode];
+        if (![ASTNode acceptVisitor:self error:error]) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 
@@ -377,20 +384,6 @@
     
     if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
     return success;
-}
-
-- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error
-{
-    for (id<GRMustacheASTNode> ASTNode in ASTNodes) {
-        
-        ASTNode = [_context resolveASTNode:ASTNode];
-        
-        if (![ASTNode acceptVisitor:self error:error]) {
-            return NO;
-        }
-    }
-    
-    return YES;
 }
 
 @end
