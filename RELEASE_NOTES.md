@@ -3,6 +3,12 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v7.0.2
+
+- Fix a memory leak
+- Remove a compiler warning
+
+
 ## v7.0.1
 
 Restore compatibility with iOS < 7 and OSX < 10.9.
