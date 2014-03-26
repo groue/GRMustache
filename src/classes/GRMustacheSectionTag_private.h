@@ -21,11 +21,11 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTNode_private.h"
+#import "GRMustacheTag_private.h"
 
 @class GRMustacheExpression;
 
-@interface GRMustacheSectionNode : NSObject<GRMustacheASTExpressionNode> {
+@interface GRMustacheSectionTag : GRMustacheTag {
 @private
     GRMustacheExpression *_expression;
     BOOL _inverted;
@@ -67,6 +67,6 @@
  * @see GRMustacheContext
  * @see GRMustacheContext
  */
-+ (instancetype)sectionNodeWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
 
 @end

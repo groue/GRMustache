@@ -73,11 +73,3 @@
  */
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
 @end
-
-
-@protocol GRMustacheASTExpressionNode <GRMustacheASTNode>
-/**
- * TODO
- */
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
-@end

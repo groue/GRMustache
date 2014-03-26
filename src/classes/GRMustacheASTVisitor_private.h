@@ -27,8 +27,8 @@
 @class GRMustacheInheritablePartial;
 @class GRMustacheInheritableSection;
 @class GRMustachePartial;
-@class GRMustacheVariableNode;
-@class GRMustacheSectionNode;
+@class GRMustacheVariableTag;
+@class GRMustacheSectionTag;
 @class GRMustacheTextNode;
 
 @class GRMustacheFilteredExpression;
@@ -43,8 +43,8 @@
 - (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error;
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
 - (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error;
-- (BOOL)visitVariableNode:(GRMustacheVariableNode *)variableNode error:(NSError **)error;
-- (BOOL)visitSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error;
+- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error;
+- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error;
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
 
 // Expressions

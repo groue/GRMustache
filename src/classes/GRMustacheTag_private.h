@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 } GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@interface GRMustacheTag: NSObject
+@interface GRMustacheTag: NSObject<GRMustacheASTNode>
 
 // Documented in GRMustacheTag.h
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
@@ -48,8 +48,5 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
-
-+ (instancetype)tagWithSectionNode:(GRMustacheSectionNode *)ASTNode GRMUSTACHE_API_INTERNAL;
-+ (instancetype)tagWithVariableNode:(GRMustacheVariableNode *)ASTNode GRMUSTACHE_API_INTERNAL;
 
 @end

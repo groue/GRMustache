@@ -24,8 +24,8 @@
 #import "GRMustachePartial_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTextNode_private.h"
-#import "GRMustacheVariableNode_private.h"
-#import "GRMustacheSectionNode_private.h"
+#import "GRMustacheVariableTag_private.h"
+#import "GRMustacheSectionTag_private.h"
 #import "GRMustacheInheritableSection_private.h"
 #import "GRMustacheInheritablePartial_private.h"
 #import "GRMustacheExpressionParser_private.h"
@@ -231,7 +231,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentASTNodes addObject:[GRMustacheVariableNode variableNodeWithExpression:expression escapesHTML:YES]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:YES]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -249,7 +249,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentASTNodes addObject:[GRMustacheVariableNode variableNodeWithExpression:expression escapesHTML:NO]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:NO]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -274,18 +274,18 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                GRMustacheSectionNode *sectioNode = [GRMustacheSectionNode sectionNodeWithExpression:(GRMustacheExpression *)_currentTagValue
-                                                                                            inverted:YES
-                                                                                      templateString:token.templateString
-                                                                                          innerRange:innerRange
-                                                                                            ASTNodes:_currentASTNodes];
+                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
+                                                                                         inverted:YES
+                                                                                   templateString:token.templateString
+                                                                                       innerRange:innerRange
+                                                                                         ASTNodes:_currentASTNodes];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
                 [_ASTNodesStack removeLastObject];
-                [[_ASTNodesStack lastObject] addObject:sectioNode];
+                [[_ASTNodesStack lastObject] addObject:sectionTag];
                 
                 self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
                 [_ASTNodesStack addObject:_currentASTNodes];
@@ -337,18 +337,18 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                GRMustacheSectionNode *sectioNode = [GRMustacheSectionNode sectionNodeWithExpression:(GRMustacheExpression *)_currentTagValue
-                                                                                            inverted:NO
-                                                                                      templateString:token.templateString
-                                                                                          innerRange:innerRange
-                                                                                            ASTNodes:_currentASTNodes];
+                GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
+                                                                                         inverted:NO
+                                                                                   templateString:token.templateString
+                                                                                       innerRange:innerRange
+                                                                                         ASTNodes:_currentASTNodes];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
                 [_openingTokenStack addObject:_currentOpeningToken];
                 
                 [_ASTNodesStack removeLastObject];
-                [[_ASTNodesStack lastObject] addObject:sectioNode];
+                [[_ASTNodesStack lastObject] addObject:sectionTag];
                 
                 self.currentASTNodes = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
                 [_ASTNodesStack addObject:_currentASTNodes];
@@ -458,20 +458,20 @@
                     }
                     
                     // Nothing prevents tokens to come from different template strings.
-                    // We, however, do not support this case, because GRMustacheSectionNode
+                    // We, however, do not support this case, because GRMustacheSectionTag
                     // builds from a single template string and a single innerRange.
                     if (_currentOpeningToken.templateString != token.templateString) {
                         [NSException raise:NSInternalInconsistencyException format:@"Support for tokens coming from different strings is not implemented."];
                     }
                     
-                    // Success: create new GRMustacheSectionNode
+                    // Success: create new GRMustacheSectionTag
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
-                    wrapperASTNode = [GRMustacheSectionNode sectionNodeWithExpression:(GRMustacheExpression *)_currentTagValue
-                                                                             inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
-                                                                       templateString:token.templateString
-                                                                           innerRange:innerRange
-                                                                             ASTNodes:_currentASTNodes];
+                    wrapperASTNode = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
+                                                                           inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
+                                                                     templateString:token.templateString
+                                                                         innerRange:innerRange
+                                                                           ASTNodes:_currentASTNodes];
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {

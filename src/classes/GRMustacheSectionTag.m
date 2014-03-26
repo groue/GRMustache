@@ -20,9 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheSectionNode_private.h"
+#import "GRMustacheSectionTag_private.h"
+#import "GRMustacheExpression_private.h"
+#import "GRMustacheToken_private.h"
+#import "GRMustacheRenderingASTVisitor_private.h"
+#import "GRMustacheRendering_private.h"
 
-@implementation GRMustacheSectionNode
+@implementation GRMustacheSectionTag
 @synthesize expression=_expression;
 @synthesize inverted=_inverted;
 @synthesize ASTNodes=_ASTNodes;
@@ -35,15 +39,48 @@
     [super dealloc];
 }
 
-+ (instancetype)sectionNodeWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes
 {
     return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange ASTNodes:ASTNodes] autorelease];
 }
 
 
+#pragma mark - GRMustacheTag
+
+- (NSString *)description
+{
+    GRMustacheToken *token = _expression.token;
+    if (token.templateID) {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
+    } else {
+        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
+    }
+}
+
 - (NSString *)innerTemplateString
 {
     return [_templateString substringWithRange:_innerRange];
+}
+
+- (GRMustacheTagType)type
+{
+    if (_inverted) {
+        return GRMustacheTagTypeInvertedSection;
+    }
+    return GRMustacheTagTypeSection;
+}
+
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    NSString *rendering = nil;
+
+    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context];
+    if ([visitor visitContentOfSectionTag:self error:error]) {
+        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    }
+    [visitor release];
+
+    return rendering;
 }
 
 
@@ -51,12 +88,7 @@
 
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitSectionNode:self error:error];
-}
-
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
-{
-    return ASTNode;
+    return [visitor visitSectionTag:self error:error];
 }
 
 

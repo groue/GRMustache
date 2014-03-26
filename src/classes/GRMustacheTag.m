@@ -22,48 +22,9 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheTag_private.h"
-#import "GRMustacheExpression_private.h"
 #import "GRMustacheRendering_private.h"
-#import "GRMustacheToken_private.h"
-#import "GRMustacheSectionNode_private.h"
-#import "GRMustacheVariableNode_private.h"
-#import "GRMustacheRenderingASTVisitor_private.h"
-
-
-// =============================================================================
-#pragma mark - GRMustacheSectionTag
-
-@interface GRMustacheSectionTag : GRMustacheTag {
-@private
-    GRMustacheSectionNode *_ASTNode;
-}
-- (instancetype)initWithSectionNode:(GRMustacheSectionNode *)ASTNode;
-@end
-
-// =============================================================================
-#pragma mark - GRMustacheVariableTag
-
-@interface GRMustacheVariableTag : GRMustacheTag {
-@private
-    GRMustacheVariableNode *_ASTNode;
-}
-- (instancetype)initWithVariableNode:(GRMustacheVariableNode *)ASTNode;
-@end
-
-// =============================================================================
-#pragma mark - GRMustacheTag
 
 @implementation GRMustacheTag
-
-+ (instancetype)tagWithSectionNode:(GRMustacheSectionNode *)ASTNode
-{
-    return [[[GRMustacheSectionTag alloc] initWithSectionNode:ASTNode] autorelease];
-}
-
-+ (instancetype)tagWithVariableNode:(GRMustacheVariableNode *)ASTNode
-{
-    return [[[GRMustacheVariableTag alloc] initWithVariableNode:ASTNode] autorelease];
-}
 
 - (GRMustacheTagType)type
 {
@@ -88,100 +49,17 @@
     return nil;
 }
 
-@end
+#pragma mark - <GRMustacheASTNode>
 
-// =============================================================================
-#pragma mark - GRMustacheSectionTag
-
-@implementation GRMustacheSectionTag
-
-- (instancetype)initWithSectionNode:(GRMustacheSectionNode *)ASTNode
+- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
-    self = [super init];
-    if (self) {
-        _ASTNode = ASTNode;
-    }
-    return self;
+    return ASTNode;
 }
 
-- (NSString *)description
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    GRMustacheToken *token = _ASTNode.expression.token;
-    if (token.templateID) {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
-    } else {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
-    }
-}
-
-- (GRMustacheTagType)type
-{
-    if (_ASTNode.isInverted) {
-        return GRMustacheTagTypeInvertedSection;
-    }
-    return GRMustacheTagTypeSection;
-}
-
-- (NSString *)innerTemplateString
-{
-    return [_ASTNode innerTemplateString];
-}
-
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    NSString *rendering = nil;
-    
-    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:[GRMustacheRendering currentContentType] context:context];
-    if ([visitor visitContentOfSectionNode:_ASTNode error:error]) {
-        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
-    }
-    [visitor release];
-    
-    return rendering;
-}
-
-@end
-
-// =============================================================================
-#pragma mark - GRMustacheVariableTag
-
-@implementation GRMustacheVariableTag
-
-- (instancetype)initWithVariableNode:(GRMustacheVariableNode *)ASTNode
-{
-    self = [super init];
-    if (self) {
-        _ASTNode = ASTNode;
-    }
-    return self;
-}
-
-- (NSString *)description
-{
-    GRMustacheToken *token = _ASTNode.expression.token;
-    if (token.templateID) {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu of template %@>", [self class], token.templateSubstring, (unsigned long)token.line, token.templateID];
-    } else {
-        return [NSString stringWithFormat:@"<%@ `%@` at line %lu>", [self class], token.templateSubstring, (unsigned long)token.line];
-    }
-}
-
-- (GRMustacheTagType)type
-{
-    return GRMustacheTagTypeVariable;
-}
-
-- (NSString *)innerTemplateString
-{
-    return @"";
-}
-
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    if (HTMLSafe) {
-        *HTMLSafe = ([GRMustacheRendering currentContentType] == GRMustacheContentTypeHTML);
-    }
-    return @"";
+    [self doesNotRecognizeSelector:_cmd];
+    return NO;
 }
 
 @end

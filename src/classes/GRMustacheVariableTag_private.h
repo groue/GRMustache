@@ -20,47 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheVariableNode_private.h"
+#import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTag_private.h"
 
-@implementation GRMustacheVariableNode
-@synthesize expression=_expression;
-@synthesize escapesHTML=_escapesHTML;
+@class GRMustacheExpression;
 
-- (void)dealloc
-{
-    [_expression release];
-    [super dealloc];
+@interface GRMustacheVariableTag : GRMustacheTag {
+@private
+    GRMustacheExpression *_expression;
+    BOOL _escapesHTML;
 }
 
-+ (instancetype)variableNodeWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
-{
-    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML] autorelease];
-}
+@property (nonatomic, retain, readonly) GRMustacheExpression *expression;
+@property (nonatomic, readonly) BOOL escapesHTML;
 
-
-#pragma mark - <GRMustacheASTNode>
-
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
-{
-    return [visitor visitVariableNode:self error:error];
-}
-
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
-{
-    return ASTNode;
-}
-
-
-#pragma mark - Private
-
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML
-{
-    self = [super init];
-    if (self) {
-        _expression = [expression retain];
-        _escapesHTML = escapesHTML;
-    }
-    return self;
-}
+/**
+ * TODO
+ *
+ * Builds and returns a GRMustacheVariableTag.
+ *
+ * @param expression   The expression that would evaluate against a rendering
+ *                     contex.
+ * @param contentType  The content type of the tag rendering.
+ * @param escapesHTML  YES if the value should be escaped.
+ *
+ * @return a GRMustacheVariableTag
+ *
+ * @see GRMustacheExpression
+ */
++ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML GRMUSTACHE_API_INTERNAL;
 
 @end

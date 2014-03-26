@@ -23,8 +23,8 @@
 #import "GRMustacheRenderingASTVisitor_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheTag_private.h"
-#import "GRMustacheSectionNode_private.h"
-#import "GRMustacheVariableNode_private.h"
+#import "GRMustacheSectionTag_private.h"
+#import "GRMustacheVariableTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
@@ -74,9 +74,9 @@
     return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
-- (BOOL)visitContentOfSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error
+- (BOOL)visitContentOfSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error
 {
-    return [self visitASTNodes:sectionNode.ASTNodes error:error];
+    return [self visitASTNodes:sectionTag.ASTNodes error:error];
 }
 
 
@@ -127,16 +127,14 @@
     }
 }
 
-- (BOOL)visitVariableNode:(GRMustacheVariableNode *)variableNode error:(NSError **)error
+- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error
 {
-    GRMustacheTag *tag = [GRMustacheTag tagWithVariableNode:variableNode];
-    return [self visitTag:tag expression:variableNode.expression escapesHTML:variableNode.escapesHTML error:error];
+    return [self visitTag:variableTag expression:variableTag.expression escapesHTML:variableTag.escapesHTML error:error];
 }
 
-- (BOOL)visitSectionNode:(GRMustacheSectionNode *)sectionNode error:(NSError **)error
+- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error
 {
-    GRMustacheTag *tag = [GRMustacheTag tagWithSectionNode:sectionNode];
-    return [self visitTag:tag expression:sectionNode.expression escapesHTML:YES error:error];
+    return [self visitTag:sectionTag expression:sectionTag.expression escapesHTML:YES error:error];
 }
 
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error
