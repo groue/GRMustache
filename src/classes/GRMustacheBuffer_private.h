@@ -54,16 +54,21 @@ static inline void GRMustacheBufferAdjustCapacityForLength(GRMustacheBuffer *buf
 
 static inline void GRMustacheBufferAppendString(GRMustacheBuffer *buffer, NSString *string)
 {
-    CFIndex newLength = [buffer->string length] + [string length];
-    GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
-    CFStringAppend((CFMutableStringRef)buffer->string, (CFStringRef)string);
+    NSUInteger length = [string length];
+    if (length) {
+        CFIndex newLength = [buffer->string length] + length;
+        GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
+        CFStringAppend((CFMutableStringRef)buffer->string, (CFStringRef)string);
+    }
 } GRMUSTACHE_API_INTERNAL
 
 static inline void GRMustacheBufferAppendCharacters(GRMustacheBuffer *buffer, const UniChar *chars, NSUInteger numChars)
 {
-    CFIndex newLength = [buffer->string length] + numChars;
-    GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
-    CFStringAppendCharacters((CFMutableStringRef)buffer->string, chars, numChars);
+    if (numChars) {
+        CFIndex newLength = [buffer->string length] + numChars;
+        GRMustacheBufferAdjustCapacityForLength(buffer, newLength);
+        CFStringAppendCharacters((CFMutableStringRef)buffer->string, chars, numChars);
+    }
 } GRMUSTACHE_API_INTERNAL
 
 static inline NSString *GRMustacheBufferGetString(GRMustacheBuffer *buffer)
