@@ -313,14 +313,9 @@
             // Rendered value hooks
             
             NSArray *tagDelegateStack = [context tagDelegateStack];
-            if (tagDelegateStack.count == 0) {
-                tagDelegateStack = nil;
-            }
-            if (tagDelegateStack) {
-                for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
-                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-                        object = [tagDelegate mustacheTag:tag willRenderObject:object];
-                    }
+            for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
+                if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
+                    object = [tagDelegate mustacheTag:tag willRenderObject:object];
                 }
             }
             
@@ -357,11 +352,9 @@
                 
                 // Post-rendering hooks
                 
-                if (tagDelegateStack) {
-                    for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
-                        if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
-                            [tagDelegate mustacheTag:tag didRenderObject:object as:rendering];
-                        }
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
+                        [tagDelegate mustacheTag:tag didRenderObject:object as:rendering];
                     }
                 }
             }
@@ -379,11 +372,9 @@
                 
                 // Post-error hooks
                 
-                if (tagDelegateStack) {
-                    for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
-                        if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                            [tagDelegate mustacheTag:tag didFailRenderingObject:object withError:renderingError];
-                        }
+                for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
+                    if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
+                        [tagDelegate mustacheTag:tag didFailRenderingObject:object withError:renderingError];
                     }
                 }
             }
