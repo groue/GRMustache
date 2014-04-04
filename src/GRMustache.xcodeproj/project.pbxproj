@@ -582,6 +582,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		56318F5018EE8A2A00AFC4BE /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				56DEC2AA152631300031E8DC /* GRMustacheTemplate.h */,
+				56DEC2AC152631300031E8DC /* GRMustacheTemplate_private.h */,
+				56DEC2AB152631300031E8DC /* GRMustacheTemplate.m */,
+				56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */,
+				56DEC2B2152631300031E8DC /* GRMustacheTemplateRepository_private.h */,
+				56DEC2B1152631300031E8DC /* GRMustacheTemplateRepository.m */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
 		563D66FE15264EDA008628C5 /* vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -898,6 +911,7 @@
 				56DEC311152631A30031E8DC /* Parsing */,
 				56DEC310152631830031E8DC /* Compiling */,
 				56DEC312152631DE0031E8DC /* Rendering */,
+				56318F5018EE8A2A00AFC4BE /* Templates */,
 				56FE26B016B808FD00FECF56 /* Services */,
 				56DEC292152631300031E8DC /* GRMustache.h */,
 				56DEC294152631300031E8DC /* GRMustache_private.h */,
@@ -924,8 +938,6 @@
 				561E363318D8259F004A56A3 /* GRMustacheASTVisitor_private.h */,
 				56DEC2AF152631300031E8DC /* GRMustacheCompiler_private.h */,
 				56DEC2AE152631300031E8DC /* GRMustacheCompiler.m */,
-				568ECC30175DB0CC00F1178F /* GRMustacheExpressionParser_private.h */,
-				568ECC31175DB0CD00F1178F /* GRMustacheExpressionParser.m */,
 				569EB2E91640370E00C09632 /* AST Nodes */,
 				569D20A215CA53BC00EC1A15 /* Expressions */,
 			);
@@ -935,14 +947,10 @@
 		56DEC311152631A30031E8DC /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
+				568ECC30175DB0CC00F1178F /* GRMustacheExpressionParser_private.h */,
+				568ECC31175DB0CD00F1178F /* GRMustacheExpressionParser.m */,
 				56DEC2B8152631300031E8DC /* GRMustacheParser_private.h */,
 				56DEC2B7152631300031E8DC /* GRMustacheParser.m */,
-				56DEC2AA152631300031E8DC /* GRMustacheTemplate.h */,
-				56DEC2AC152631300031E8DC /* GRMustacheTemplate_private.h */,
-				56DEC2AB152631300031E8DC /* GRMustacheTemplate.m */,
-				56DEC2B0152631300031E8DC /* GRMustacheTemplateRepository.h */,
-				56DEC2B2152631300031E8DC /* GRMustacheTemplateRepository_private.h */,
-				56DEC2B1152631300031E8DC /* GRMustacheTemplateRepository.m */,
 				56DEC2B6152631300031E8DC /* GRMustacheToken_private.h */,
 				56DEC2B5152631300031E8DC /* GRMustacheToken.m */,
 			);
