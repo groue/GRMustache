@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheRenderingASTVisitor_private.h"
+#import "GRMustacheRenderingEngine_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheSectionTag_private.h"
@@ -42,7 +42,7 @@
 #import "GRMustacheFilter_private.h"
 #import "GRMustacheError.h"
 
-@implementation GRMustacheRenderingASTVisitor
+@implementation GRMustacheRenderingEngine
 
 - (void)dealloc
 {
@@ -66,7 +66,7 @@
     return self;
 }
 
-- (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     if (HTMLSafe) {
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
@@ -110,12 +110,12 @@
     
     if (_contentType != partialContentType)
     {
-        GRMustacheRenderingASTVisitor *visitor = [[[GRMustacheRenderingASTVisitor alloc] initWithContentType:partialContentType context:_context] autorelease];
-        if (![partial acceptVisitor:visitor error:error]) {
+        GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:partialContentType context:_context] autorelease];
+        if (![partial acceptVisitor:renderingEngine error:error]) {
             return NO;
         }
         BOOL HTMLSafe;
-        NSString *rendering = [visitor renderingWithHTMLSafe:&HTMLSafe error:error];
+        NSString *rendering = [renderingEngine renderHTMLSafe:&HTMLSafe error:error];
         if (!rendering) {
             return NO;
         }

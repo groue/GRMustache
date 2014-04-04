@@ -25,7 +25,7 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustachePartial_private.h"
 #import "GRMustacheAST_private.h"
-#import "GRMustacheRenderingASTVisitor_private.h"
+#import "GRMustacheRenderingEngine_private.h"
 
 @implementation GRMustacheTemplate
 @synthesize templateRepository=_templateRepository;
@@ -122,11 +122,11 @@
     
     [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
     
-    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:_partial.AST.contentType context:context];
-    if ([_partial acceptVisitor:visitor error:error]) {
-        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_partial.AST.contentType context:context];
+    if ([_partial acceptVisitor:renderingEngine error:error]) {
+        rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
     }
-    [visitor release];
+    [renderingEngine release];
     
     [GRMustacheRendering popCurrentTemplateRepository];
     

@@ -23,7 +23,7 @@
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
-#import "GRMustacheRenderingASTVisitor_private.h"
+#import "GRMustacheRenderingEngine_private.h"
 
 @implementation GRMustacheSectionTag
 @synthesize expression=_expression;
@@ -72,11 +72,11 @@
 {
     NSString *rendering = nil;
 
-    GRMustacheRenderingASTVisitor *visitor = [[GRMustacheRenderingASTVisitor alloc] initWithContentType:_contentType context:context];
-    if ([visitor visitASTNodes:_ASTNodes error:error]) {
-        rendering = [visitor renderingWithHTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_contentType context:context];
+    if ([renderingEngine visitASTNodes:_ASTNodes error:error]) {
+        rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
     }
-    [visitor release];
+    [renderingEngine release];
 
     return rendering;
 }

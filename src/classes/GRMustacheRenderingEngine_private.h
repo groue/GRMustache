@@ -28,7 +28,7 @@
 @class GRMustacheContext;
 @class GRMustacheSectionTag;
 
-@interface GRMustacheRenderingASTVisitor : NSObject<GRMustacheASTVisitor>
+@interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor>
 {
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;
@@ -45,7 +45,7 @@
 /**
  * TODO
  */
-- (NSString *)renderingWithHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
 
 /**
  * TODO
