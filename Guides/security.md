@@ -69,8 +69,11 @@ If you know what you are doing, you can disable safe key access altogether, remo
 This can be done globally for all renderings:
 
 ```objc
-GRMustacheConfiguration *config = [GRMustacheConfiguration defaultConfiguration];
-config.baseContext = [config.baseContext contextWithUnsafeKeyAccess];
+// Grant GRMustache unsafe access to `valueForKey:`, so that we do not have
+// to explicitly declare properties on objects that feed templates.
+
+GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+configuration.baseContext = [configuration.baseContext contextWithUnsafeKeyAccess];
 ```
 
 `GRMustacheConfiguration` is described in the [Configuration Guide](configuration.md).

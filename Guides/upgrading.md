@@ -41,6 +41,9 @@ This default behavior can be customized to fit your needs: see the [Security Gui
 The easiest way to restore the previous behavior of the library is to evaluate the following code prior to any rendering:
 
 ```objc
+// Grant GRMustache unsafe access to `valueForKey:`, so that we do not have
+// to explicitly declare properties on objects that feed templates.
+
 GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
 configuration.baseContext = [configuration.baseContext contextWithUnsafeKeyAccess];
 ```
