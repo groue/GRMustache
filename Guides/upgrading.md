@@ -32,39 +32,18 @@ In order to restore the pristine warning-free state of your project, read the up
 Safe Key Access
 ---------------
 
-GRMustache does no longer blindly evaluate `valueForKey:` on your objects. This topic is fully described in the [Security Guide](security.md).
+GRMustache does no longer blindly evaluate `valueForKey:` on your objects.
 
-The default behavior now only fetches keys that are declared as properties (with `@property`), or Core Data attributes (for managed objects).
+Instead, only keys that are declared as properties (with `@property`), or Core Data attributes (for managed objects) are evaluated.
 
-Consider the following ViewModel class:
+This default behavior can be customized to fit your needs: see the [Security Guide](security.md).
 
-```objc
-@interface Document: NSObject
-@property (nonatomic) User *user;
-@end
-
-@implementation Document
-
-- (NSDateFormatter *)dateFormat
-{
-  return [NSDateFormatter ...];
-}
-
-@end
-```
-
-Without any `dateFormat` property, `{{ dateFormat(user.joinDate )}}` will yield a rendering error, due to the missing (unreachable) `dateFormat` filter.
-
-The fix is to add a `dateFormat` property:
+The easiest way to restore the previous behavior of the library is to evaluate the following code prior to any rendering:
 
 ```objc
-@property (nonatomic, readonly) NSDateFormatter *dateFormat;
+GRMustacheConfiguration *configuration = [GRMustacheConfiguration defaultConfiguration];
+configuration.baseContext = [configuration.baseContext contextWithUnsafeKeyAccess];
 ```
-
-
-### Customizing key access
-
-You can, if you want, customize the list of safe keys, or restore the previous behavior of the library: see the [Security Guide](security.md).
 
 
 Default values
