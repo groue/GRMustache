@@ -85,23 +85,28 @@
 /**
  * Support for {{# javascript.escape }}...{{ value }}...{{ value }}...{{/ javascript.escape }}
  */
--(id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
+- (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
-    // Process {{ value }}
-    if (tag.type == GRMustacheTagTypeVariable) {
-        // We can not escape `object`, because it is not a string.
-        // We want to escape its rendering.
-        // So return a rendering object that will eventually render `object`,
-        // and escape its rendering.
-        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
-            NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-            return [self escape:rendering];
-        }];
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ value }}
+            //
+            // We can not escape `object`, because it is not a string.
+            // We want to escape its rendering.
+            // So return a rendering object that will eventually render `object`,
+            // and escape its rendering.
+            return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+                id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
+                NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+                return [self escape:rendering];
+            }];
+            
+        case GRMustacheTagTypeSection:
+        case GRMustacheTagTypeInvertedSection:
+            // {{# value }}
+            // {{^ value }}
+            return object;
     }
-    
-    // Don't process {{# value }}, {{^ value }}, {{$ value }}
-    return object;
 }
 
 

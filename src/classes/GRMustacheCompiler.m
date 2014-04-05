@@ -331,8 +331,6 @@
                 // We found the "else" close of a regular or inheritable section:
                 // {{#foo}}...{{^}}...{{/foo}}
                 // {{#foo}}...{{^foo}}...{{/foo}}
-                //
-                // There is no support for {{$foo}}...{{^foo}}...{{/foo}}.
                 
                 // Insert a new section and prepare an inverted one
                 

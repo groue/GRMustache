@@ -177,24 +177,25 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
  */
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
-    /**
-     * We are only interested in the rendering of variable tags such as
-     * {{name}}. We do not want to mess with Mustache handling of boolean
-     * sections such as {{#true}}...{{/}}.
-     */
-    
-    if (tag.type != GRMustacheTagTypeVariable) {
-        return object;
-    }
-    
-    /**
-     * We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
-     */
-    
-    if (self.formatArguments) {
-        return object;
-    } else {
-        return GRMustacheLocalizerValuePlaceholder;
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ value }}
+            //
+            // We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
+            
+            if (self.formatArguments) {
+                return object;
+            }
+            return GRMustacheLocalizerValuePlaceholder;
+            
+        case GRMustacheTagTypeSection:
+        case GRMustacheTagTypeInvertedSection:
+            // {{# value }}
+            // {{^ value }}
+            //
+            // We do not want to mess with Mustache handling of boolean sections
+            // such as {{#true}}...{{/}}.
+            return object;
     }
 }
 
@@ -203,17 +204,20 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
  */
 - (void)mustacheTag:(GRMustacheTag *)tag didRenderObject:(id)object as:(NSString *)rendering
 {
-    /**
-     * Without messing with section tags...
-     */
-    
-    if (tag.type == GRMustacheTagTypeVariable) {
-        
-        /**
-         * ... we behave as stated in renderForMustacheTag:context:HTMLSafe:error:
-         */
-        
-        [self.formatArguments addObject:rendering];
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ value }}
+            //
+            // We behave as stated in renderForMustacheTag:context:HTMLSafe:error:
+            
+            [self.formatArguments addObject:rendering];
+            break;
+            
+        case GRMustacheTagTypeSection:
+        case GRMustacheTagTypeInvertedSection:
+            // {{# value }}
+            // {{^ value }}
+            break;
     }
 }
 
