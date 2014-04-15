@@ -86,6 +86,15 @@
       "expected": "4"
     },
     {
+      "name": "The content of the last inheritable sections in partials is rendered in the inherited section",
+      "data": { },
+      "template": "{{<partial1}}{{$inheritable}}1{{/inheritable}}{{>partial2}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{$inheritable}}ignored{{/inheritable}}",
+        "partial2": "{{$inheritable}}2{{/inheritable}}{{$inheritable}}3{{/inheritable}}" },
+      "expected": "3"
+    },
+    {
       "name": "Inheritable partials can override inheritable sections in their own inheritable partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
