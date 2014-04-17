@@ -178,6 +178,15 @@
       "template": "<{{<node}}{{$value}}{{>node}}{{/value}}{{/node}}>",
       "partials": { "node": "{{content}}<{{#nodes}}{{$value}}overriden{{/value}}{{/nodes}}>" },
       "expected": "<X<Y<>>>"
+    },
+    {
+      "name": "Templates can override inheritable sections through inherited partials",
+      "data": { },
+      "template": "{{<parent}}{{$inheritable}}1{{/inheritable}}{{/parent}}{{<parent}}{{<parent2}}{{/parent2}}{{/parent}}{{<parent}}{{<parent2}}{{$inheritable}}3{{/inheritable}}{{/parent2}}{{/parent}}",
+      "partials": {
+          "parent": "{{$inheritable}}0{{/inheritable}}",
+          "parent2": "{{$inheritable}}2{{/inheritable}}" },
+      "expected": "123"
     }
   ]
 }
