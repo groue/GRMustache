@@ -43,7 +43,7 @@ Rendering:
 Formatting all values in a section
 ----------------------------------
 
-NSFormatters are ably to *format all variable tags* inside the section:
+NSFormatters are able to *format all variable tags* inside the section:
 
 `Document.mustache`:
 

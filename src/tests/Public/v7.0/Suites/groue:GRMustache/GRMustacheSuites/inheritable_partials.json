@@ -86,6 +86,15 @@
       "expected": "4"
     },
     {
+      "name": "The content of the last inheritable sections in partials is rendered in the inherited section",
+      "data": { },
+      "template": "{{<partial1}}{{$inheritable}}1{{/inheritable}}{{>partial2}}{{/partial1}}",
+      "partials": {
+        "partial1": "{{$inheritable}}ignored{{/inheritable}}",
+        "partial2": "{{$inheritable}}2{{/inheritable}}{{$inheritable}}3{{/inheritable}}" },
+      "expected": "3"
+    },
+    {
       "name": "Inheritable partials can override inheritable sections in their own inheritable partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
@@ -169,6 +178,15 @@
       "template": "<{{<node}}{{$value}}{{>node}}{{/value}}{{/node}}>",
       "partials": { "node": "{{content}}<{{#nodes}}{{$value}}overriden{{/value}}{{/nodes}}>" },
       "expected": "<X<Y<>>>"
+    },
+    {
+      "name": "Templates can override inheritable sections through inherited partials",
+      "data": { },
+      "template": "{{<parent}}{{$inheritable}}1{{/inheritable}}{{/parent}}{{<parent}}{{<parent2}}{{/parent2}}{{/parent}}{{<parent}}{{<parent2}}{{$inheritable}}3{{/inheritable}}{{/parent2}}{{/parent}}",
+      "partials": {
+          "parent": "{{$inheritable}}0{{/inheritable}}",
+          "parent2": "{{$inheritable}}2{{/inheritable}}" },
+      "expected": "123"
     },
     {
       "name": "Inheritable section context is cleaned after inheritable partial rendering.",
