@@ -41,7 +41,7 @@
  * - a GRMustacheVariableTag that renders the value of the `name` key in the
  *   rendering context.
  * - a GRMustacheTextNode that renders "!".
- * - a GRMustachePartial that would contain the three previous nodes.
+ * - a GRMustachePartialNode that would contain the three previous nodes.
  * 
  * @see GRMustacheCompiler
  * @see GRMustacheContext
@@ -60,7 +60,7 @@
  *
  * All classes conforming to the GRMustacheASTNode protocol return
  * the node argument, but GRMustacheInheritableSectionTag and
- * GRMustacheInheritablePartial.
+ * GRMustacheInheritablePartialNode.
  *
  * @param ASTNode  A node
  *
@@ -69,7 +69,7 @@
  *
  * @see GRMustacheSectionTag
  * @see GRMustacheTemplate
- * @see GRMustacheInheritablePartial
+ * @see GRMustacheInheritablePartialNode
  */
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
 @end

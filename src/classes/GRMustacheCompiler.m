@@ -21,13 +21,13 @@
 // THE SOFTWARE.
 
 #import "GRMustacheCompiler_private.h"
-#import "GRMustachePartial_private.h"
+#import "GRMustachePartialNode_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheInheritableSection_private.h"
-#import "GRMustacheInheritablePartial_private.h"
+#import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
@@ -185,8 +185,6 @@
         return NO;
     }
     
-    GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
-    
     switch (token.type) {
         case GRMustacheTokenTypeSetDelimiter:
         case GRMustacheTokenTypeComment:
@@ -223,6 +221,7 @@
         case GRMustacheTokenTypeEscapedVariable: {
             // Expression validation
             NSError *error;
+            GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
             GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
             if (expression == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
@@ -241,6 +240,7 @@
         case GRMustacheTokenTypeUnescapedVariable: {
             // Expression validation
             NSError *error;
+            GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
             GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:NULL error:&error];
             if (expression == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
@@ -260,6 +260,7 @@
             // Expression validation
             NSError *error;
             BOOL empty;
+            GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
             GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
             
             if (_currentOpeningToken &&
@@ -322,6 +323,7 @@
             // Expression validation
             NSError *error;
             BOOL empty;
+            GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
             GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
             
             if (_currentOpeningToken &&
@@ -445,6 +447,7 @@
                     // or an empty `{{/}}` closing tags.
                     NSError *error;
                     BOOL empty;
+                    GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
                     GRMustacheExpression *expression = [expressionParser parseExpression:token.tagInnerContent empty:&empty error:&error];
                     if (expression == nil && !empty) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:error.localizedDescription]];
@@ -513,30 +516,32 @@
                     }
                     
                     // Ask templateRepository for inheritable template
-                    GRMustachePartial *partial = [_templateRepository partialNamed:(NSString *)_currentTagValue relativeToTemplateID:_baseTemplateID error:&error];
-                    if (partial == nil) {
+                    partialName = (NSString *)_currentTagValue;
+                    GRMustacheAST *AST = [_templateRepository ASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&error];
+                    if (AST == nil) {
                         [self failWithFatalError:error];
                         return NO;
                     }
                     
                     // Check for consistency of HTML safety
                     //
-                    // If partial.AST.ASTNodes is nil, this means that we are actually
+                    // If AST.isPlaceholder, this means that we are actually
                     // compiling it, and that template simply recursively refers to itself.
                     // Consistency of HTML safety is thus guaranteed.
                     //
-                    // However, if partial.AST.ASTNodes is not nil, then we must
-                    // ensure content type compatibility: an HTML template can not override a
+                    // However, if AST.isPlaceholder is false, then we must ensure
+                    // content type compatibility: an HTML template can not override a
                     // text one, and vice versa.
                     //
                     // See test "HTML template can not override TEXT template" in GRMustacheSuites/text_rendering.json
-                    if (partial.AST.ASTNodes && partial.AST.contentType != _contentType) {
+                    if (!AST.isPlaceholder && AST.contentType != _contentType) {
                         [self failWithFatalError:[self parseErrorAtToken:_currentOpeningToken description:@"HTML safety mismatch"]];
                         return NO;
                     }
                     
-                    // Success: create new GRMustacheInheritablePartial
-                    wrapperASTNode = [GRMustacheInheritablePartial inheritablePartialWithPartial:partial ASTNodes:_currentASTNodes];
+                    // Success: create new GRMustacheInheritablePartialNode
+                    GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:partialName];
+                    wrapperASTNode = [GRMustacheInheritablePartialNode inheritablePartialNodeWithPartialNode:partialNode ASTNodes:_currentASTNodes];
                 } break;
                     
                 default:
@@ -569,14 +574,15 @@
             }
             
             // Ask templateRepository for partial template
-            GRMustachePartial *partial = [_templateRepository partialNamed:partialName relativeToTemplateID:_baseTemplateID error:&partialError];
-            if (partial == nil) {
+            GRMustacheAST *AST = [_templateRepository ASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&partialError];
+            if (AST == nil) {
                 [self failWithFatalError:partialError];
                 return NO;
             }
             
             // Success: append ASTNode
-            [_currentASTNodes addObject:partial];
+            GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:partialName];
+            [_currentASTNodes addObject:partialNode];
             
             // lock _contentType
             _contentTypeLocked = YES;

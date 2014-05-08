@@ -29,9 +29,9 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
-#import "GRMustacheInheritablePartial_private.h"
+#import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustacheInheritableSection_private.h"
-#import "GRMustachePartial_private.h"
+#import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheScopedExpression_private.h"
@@ -89,11 +89,11 @@
 
 #pragma mark - AST Nodes
 
-- (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error
+- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
 {
     GRMustacheContext *context = _context;
-    _context = [_context contextByAddingInheritablePartial:inheritablePartial];
-    BOOL success = [inheritablePartial.partial acceptVisitor:self error:error];
+    _context = [_context contextByAddingInheritablePartialNode:inheritablePartialNode];
+    BOOL success = [inheritablePartialNode.partialNode acceptVisitor:self error:error];
     _context = context;
     return success;
 }
@@ -103,15 +103,15 @@
     return [self visitASTNodes:inheritableSection.ASTNodes error:error];
 }
 
-- (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error
+- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error
 {
-    GRMustacheAST *AST = partial.AST;
+    GRMustacheAST *AST = partialNode.AST;
     GRMustacheContentType partialContentType = AST.contentType;
     
     if (_contentType != partialContentType)
     {
         GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:partialContentType context:_context] autorelease];
-        if (![partial acceptVisitor:renderingEngine error:error]) {
+        if (![partialNode acceptVisitor:renderingEngine error:error]) {
             return NO;
         }
         BOOL HTMLSafe;

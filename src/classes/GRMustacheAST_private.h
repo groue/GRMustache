@@ -39,12 +39,17 @@
  *
  * @see GRMustacheASTNode
  */
-@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
  * The content type of the AST
  */
-@property (nonatomic, readonly) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
+@property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+@property (nonatomic, readonly, getter = isPlaceholder) BOOL placeholder;
 
 /**
  * Returns a new allocated AST.
@@ -57,6 +62,11 @@
  * @see GRMustacheASTNode
  */
 + (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
++ (instancetype)placeholderAST GRMUSTACHE_API_INTERNAL;
 
 @end
 

@@ -23,13 +23,13 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
-#import "GRMustachePartial_private.h"
+#import "GRMustachePartialNode_private.h"
 #import "GRMustacheAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
 
 @implementation GRMustacheTemplate
 @synthesize templateRepository=_templateRepository;
-@synthesize partial=_partial;
+@synthesize partialNode=_partialNode;
 @synthesize baseContext=_baseContext;
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
@@ -80,7 +80,7 @@
 
 - (void)dealloc
 {
-    [_partial release];
+    [_partialNode release];
     [_baseContext release];
     [_templateRepository release];
     [super dealloc];
@@ -122,8 +122,8 @@
     
     [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
     
-    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_partial.AST.contentType context:context];
-    if ([_partial acceptVisitor:renderingEngine error:error]) {
+    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_partialNode.AST.contentType context:context];
+    if ([_partialNode acceptVisitor:renderingEngine error:error]) {
         rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
     }
     [renderingEngine release];

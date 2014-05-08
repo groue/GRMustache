@@ -20,22 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTNode_private.h"
+#import "GRMustacheASTVisitor_private.h"
 
-@class GRMustacheAST;
+@class GRMustacheTemplate;
+@class GRMustacheTemplateRepository;
 
-/**
- * A GRMustachePartial is an AST node that represents partial tags as
- * `{{>name}}`.
- */
-@interface GRMustachePartial : NSObject<GRMustacheASTNode> {
+@interface GRMustacheTemplateGenerator : NSObject<GRMustacheASTVisitor> {
 @private
-    GRMustacheAST *_AST;
+    GRMustacheTemplateRepository *_templateRepository;
+    NSString *_expressionString;
+    NSMutableString *_templateString;
+    BOOL _needsPartialContent;
 }
 
-/**
- * The abstract syntax tree of the partial template.
- */
-@property (nonatomic, retain) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository;
+
++ (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository;
+- (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template;
+
 @end

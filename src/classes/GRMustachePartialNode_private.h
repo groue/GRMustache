@@ -20,44 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheAST_private.h"
+#import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTNode_private.h"
-#import "GRMustacheASTVisitor_private.h"
 
-@implementation GRMustacheAST
-@synthesize ASTNodes=_ASTNodes;
-@synthesize contentType=_contentType;
+@class GRMustacheAST;
 
-- (void)dealloc
-{
-    [_ASTNodes release];
-    [super dealloc];
+/**
+ * A GRMustachePartialNode is an AST node that represents partial tags as
+ * `{{>name}}`.
+ */
+@interface GRMustachePartialNode : NSObject<GRMustacheASTNode> {
+@private
+    NSString *_name;
+    GRMustacheAST *_AST;
 }
 
-+ (instancetype)placeholderAST
-{
-    return [[[self alloc] initWithASTNodes:nil contentType:GRMustacheContentTypeHTML] autorelease];
-}
+/**
+ * TODO
+ */
+@property (nonatomic, retain, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
 
-+ (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
-{
-    NSAssert(ASTNodes, @"nil ASTNodes");
-    return [[[self alloc] initWithASTNodes:ASTNodes contentType:contentType] autorelease];
-}
+/**
+ * The abstract syntax tree of the partial template.
+ */
+@property (nonatomic, retain, readonly) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
 
-- (BOOL)isPlaceholder
-{
-    return (_ASTNodes == nil);
-}
-
-- (instancetype)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
-{
-    self = [super init];
-    if (self) {
-        _ASTNodes = [ASTNodes retain];
-        _contentType = contentType;
-    }
-    return self;
-}
-
+/**
+ * TODO
+ */
++ (instancetype)partialNodeWithAST:(GRMustacheAST *)AST name:(NSString *)name GRMUSTACHE_API_INTERNAL;
 @end

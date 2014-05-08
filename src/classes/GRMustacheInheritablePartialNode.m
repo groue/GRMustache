@@ -20,47 +20,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePartial_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheInheritablePartialNode_private.h"
+#import "GRMustachePartialNode_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
+@implementation GRMustacheInheritablePartialNode
+@synthesize ASTNodes=_ASTNodes;
+@synthesize partialNode=_partialNode;
 
-@implementation GRMustachePartial
-@synthesize AST=_AST;
++ (instancetype)inheritablePartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode ASTNodes:(NSArray *)ASTNodes
+{
+    return [[[self alloc] initWithPartialNode:partialNode ASTNodes:ASTNodes] autorelease];
+}
 
 - (void)dealloc
 {
-    [_AST release];
+    [_partialNode release];
+    [_ASTNodes release];
     [super dealloc];
 }
 
-#pragma mark <GRMustacheASTNode>
+
+#pragma mark - GRMustacheASTNode
 
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitPartial:self error:error];
+    return [visitor visitInheritablePartialNode:self error:error];
 }
 
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
-    // Look for the last inheritable node in inner nodes.
-    //
-    // This allows a partial do define an inheritable section:
-    //
-    //    {
-    //        data: { },
-    //        expected: "partial1",
-    //        name: "Partials in inheritable partials can override inheritable sections",
-    //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
-    //        partials: {
-    //            partial1: "{{$inheritable}}partial1{{/inheritable}}";
-    //            partial2: "{{$inheritable}}ignored{{/inheritable}}";
-    //        },
-    //    }
-    for (id<GRMustacheASTNode> innerASTNode in _AST.ASTNodes) {
+    // look for the last inheritable ASTNode in inner ASTNodes
+    for (id<GRMustacheASTNode> innerASTNode in _ASTNodes) {
         ASTNode = [innerASTNode resolveASTNode:ASTNode];
     }
     return ASTNode;
+}
+
+
+#pragma mark - Private
+
+- (instancetype)initWithPartialNode:(GRMustachePartialNode *)partialNode ASTNodes:(NSArray *)ASTNodes
+{
+    self = [super init];
+    if (self) {
+        _partialNode = [partialNode retain];
+        _ASTNodes = [ASTNodes retain];
+    }
+    return self;
 }
 
 @end

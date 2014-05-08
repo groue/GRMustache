@@ -24,32 +24,37 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheASTNode_private.h"
 
-@class GRMustachePartial;
+@class GRMustachePartialNode;
 
 /**
- * A GRMustacheInheritablePartial is an AST node that represents inheritable
+ * A GRMustacheInheritablePartialNode is an AST node that represents inheritable
  * partials as `{{<name}}...{{/name}}`.
  */
-@interface GRMustacheInheritablePartial : NSObject<GRMustacheASTNode> {
+@interface GRMustacheInheritablePartialNode : NSObject<GRMustacheASTNode> {
 @private
-    GRMustachePartial *_partial;
+    GRMustachePartialNode *_partialNode;
     NSArray *_ASTNodes;
 }
 
 /**
- * The partial template that is inherited
+ * TODO
  */
-@property (nonatomic, retain, readonly) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
- * Builds a GRMustacheInheritablePartial.
- *
- * @param partial   The inherited partial.
- * @param ASTNodes  The nodes that may override nodes of the inherited partial
- *                  template.
- *
- * @return A GRMustacheInheritablePartial
+ * The partial template that is inherited
  */
-+ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustachePartialNode *partialNode GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Builds a GRMustacheInheritablePartialNode.
+ *
+ * @param partialNode  The inherited partial.
+ * @param ASTNodes     The nodes that may override nodes of the inherited
+ *                     partial template.
+ *
+ * @return A GRMustacheInheritablePartialNode
+ */
++ (instancetype)inheritablePartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -20,51 +20,64 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheInheritablePartial_private.h"
-#import "GRMustachePartial_private.h"
+#import "GRMustachePartialNode_private.h"
+#import "GRMustacheAST_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@implementation GRMustacheInheritablePartial
-@synthesize partial=_partial;
 
-+ (instancetype)inheritablePartialWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
-{
-    return [[[self alloc] initWithPartial:partial ASTNodes:ASTNodes] autorelease];
-}
+@implementation GRMustachePartialNode
+@synthesize AST=_AST;
+@synthesize name=_name;
 
 - (void)dealloc
 {
-    [_partial release];
-    [_ASTNodes release];
+    [_AST release];
+    [_name release];
     [super dealloc];
 }
 
++ (instancetype)partialNodeWithAST:(GRMustacheAST *)AST name:(NSString *)name
+{
+    return [[[self alloc] initWithAST:AST name:name] autorelease];
+}
 
-#pragma mark - GRMustacheASTNode
+#pragma mark <GRMustacheASTNode>
 
 - (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritablePartial:self error:error];
+    return [visitor visitPartialNode:self error:error];
 }
 
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
-    // look for the last inheritable ASTNode in inner ASTNodes
-    for (id<GRMustacheASTNode> innerASTNode in _ASTNodes) {
+    // Look for the last inheritable node in inner nodes.
+    //
+    // This allows a partial do define an inheritable section:
+    //
+    //    {
+    //        data: { },
+    //        expected: "partial1",
+    //        name: "Partials in inheritable partials can override inheritable sections",
+    //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
+    //        partials: {
+    //            partial1: "{{$inheritable}}partial1{{/inheritable}}";
+    //            partial2: "{{$inheritable}}ignored{{/inheritable}}";
+    //        },
+    //    }
+    for (id<GRMustacheASTNode> innerASTNode in _AST.ASTNodes) {
         ASTNode = [innerASTNode resolveASTNode:ASTNode];
     }
     return ASTNode;
 }
 
-
 #pragma mark - Private
 
-- (instancetype)initWithPartial:(GRMustachePartial *)partial ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithAST:(GRMustacheAST *)AST name:(NSString *)name
 {
-    self = [super init];
+    self = [self init];
     if (self) {
-        _partial = [partial retain];
-        _ASTNodes = [ASTNodes retain];
+        _AST = [AST retain];
+        _name = [name retain];
     }
     return self;
 }

@@ -27,7 +27,8 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheKeyAccess_private.h"
-#import "GRMustacheInheritablePartial_private.h"
+#import "GRMustachePartialNode_private.h"
+#import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheRenderingEngine_private.h"
 
@@ -102,23 +103,24 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
 {
-    if (!GRMUSTACHE_STACK_TOP(inheritablePartialStack, self)) {
+    if (!GRMUSTACHE_STACK_TOP(inheritablePartialNodeStack, self)) {
         return ASTNode;
     }
     
-    NSMutableSet *usedPartials = [[NSMutableSet alloc] init];
-    GRMUSTACHE_STACK_ENUMERATE(inheritablePartialStack, self, context) {
-        GRMustacheInheritablePartial *inheritablePartial = GRMUSTACHE_STACK_TOP(inheritablePartialStack, context);
-        if ([usedPartials containsObject:inheritablePartial.partial]) {
+    NSMutableSet *usedASTs = [[NSMutableSet alloc] init];
+    GRMUSTACHE_STACK_ENUMERATE(inheritablePartialNodeStack, self, context) {
+        GRMustacheInheritablePartialNode *inheritablePartialNode = GRMUSTACHE_STACK_TOP(inheritablePartialNodeStack, context);
+        GRMustacheAST *AST = inheritablePartialNode.partialNode.AST;
+        if ([usedASTs containsObject:AST]) {
             continue;
         }
-        id<GRMustacheASTNode> resolvedASTNode = [inheritablePartial resolveASTNode:ASTNode];
+        id<GRMustacheASTNode> resolvedASTNode = [inheritablePartialNode resolveASTNode:ASTNode];
         if (resolvedASTNode != ASTNode) {
-            [usedPartials addObject:inheritablePartial.partial];
+            [usedASTs addObject:AST];
         }
         ASTNode = resolvedASTNode;
     }
-    [usedPartials release];
+    [usedASTs release];
     
     return ASTNode;
 }
@@ -174,7 +176,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     GRMUSTACHE_STACK_RELEASE(protectedContextStack);
     GRMUSTACHE_STACK_RELEASE(hiddenContextStack);
     GRMUSTACHE_STACK_RELEASE(tagDelegateStack);
-    GRMUSTACHE_STACK_RELEASE(inheritablePartialStack);
+    GRMUSTACHE_STACK_RELEASE(inheritablePartialNodeStack);
     [super dealloc];
 }
 
@@ -194,7 +196,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
-    GRMUSTACHE_STACK_COPY(inheritablePartialStack, self, context);
+    GRMUSTACHE_STACK_COPY(inheritablePartialNodeStack, self, context);
     
     GRMUSTACHE_STACK_PUSH(tagDelegateStack, self, context, tagDelegate);
     
@@ -212,7 +214,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
-    GRMUSTACHE_STACK_COPY(inheritablePartialStack, self, context);
+    GRMUSTACHE_STACK_COPY(inheritablePartialNodeStack, self, context);
     GRMUSTACHE_STACK_COPY(tagDelegateStack, self, context);
     
     GRMUSTACHE_STACK_PUSH(contextStack, self, context, object);
@@ -242,7 +244,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
-    GRMUSTACHE_STACK_COPY(inheritablePartialStack, self, context);
+    GRMUSTACHE_STACK_COPY(inheritablePartialNodeStack, self, context);
     GRMUSTACHE_STACK_COPY(tagDelegateStack, self, context);
     
     GRMUSTACHE_STACK_PUSH(protectedContextStack, self, context, object);
@@ -261,7 +263,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
-    GRMUSTACHE_STACK_COPY(inheritablePartialStack, self, context);
+    GRMUSTACHE_STACK_COPY(inheritablePartialNodeStack, self, context);
     GRMUSTACHE_STACK_COPY(tagDelegateStack, self, context);
     
     GRMUSTACHE_STACK_PUSH(hiddenContextStack, self, context, object);
@@ -269,9 +271,9 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     return context;
 }
 
-- (instancetype)contextByAddingInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial
+- (instancetype)contextByAddingInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode
 {
-    if (inheritablePartial == nil) {
+    if (inheritablePartialNode == nil) {
         return self;
     }
     
@@ -283,7 +285,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
     GRMUSTACHE_STACK_COPY(tagDelegateStack, self, context);
     
-    GRMUSTACHE_STACK_PUSH(inheritablePartialStack, self, context, inheritablePartial);
+    GRMUSTACHE_STACK_PUSH(inheritablePartialNodeStack, self, context, inheritablePartialNode);
     
     return context;
 }
@@ -299,7 +301,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
             GRMUSTACHE_STACK_COPY(protectedContextStack, __context, __unsafeContext); \
             GRMUSTACHE_STACK_COPY(hiddenContextStack, __context, __unsafeContext); \
             GRMUSTACHE_STACK_COPY(tagDelegateStack, __context, __unsafeContext); \
-            GRMUSTACHE_STACK_COPY(inheritablePartialStack, __context, __unsafeContext); \
+            GRMUSTACHE_STACK_COPY(inheritablePartialNodeStack, __context, __unsafeContext); \
             CFDictionarySetValue(unsafeContextForContext, __context, __unsafeContext); \
         } \
     }
@@ -322,7 +324,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(protectedContextStack);
     GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(hiddenContextStack);
     GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(tagDelegateStack);
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(inheritablePartialStack);
+    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(inheritablePartialNodeStack);
     
     
     // Update safe parents of unsafe contexts with unsafe ones
@@ -336,7 +338,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
         GRMUSTACHE_UPDATE_UNSAFE_PARENT(protectedContextStack, unsafeContext);
         GRMUSTACHE_UPDATE_UNSAFE_PARENT(hiddenContextStack, unsafeContext);
         GRMUSTACHE_UPDATE_UNSAFE_PARENT(tagDelegateStack, unsafeContext);
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(inheritablePartialStack, unsafeContext);
+        GRMUSTACHE_UPDATE_UNSAFE_PARENT(inheritablePartialNodeStack, unsafeContext);
     }
     free(unsafeContexts);
     

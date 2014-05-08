@@ -25,7 +25,7 @@
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheASTNode;
-@class GRMustacheInheritablePartial;
+@class GRMustacheInheritablePartialNode;
 
 /**
  * The GRMustacheContext maintains the following stacks:
@@ -64,7 +64,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, GRMustacheInheritablePartial *);
+    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialNodeStack, GRMustacheInheritablePartialNode *);
     
     BOOL _unsafeKeyAccess;
 }
@@ -138,14 +138,14 @@
  * Returns a GRMustacheContext object identical to the receiver, but for the
  * inheritable partial stack that is extended with _inheritablePartial_.
  *
- * @param inheritablePartial  An inheritable partial
+ * @param inheritablePartialNode  An inheritable partial
  *
  * @return A GRMustacheContext object.
  *
- * @see GRMustacheInheritablePartial
- * @see [GRMustacheInheritablePartial renderWithContext:inBuffer:error:]
+ * @see GRMustacheInheritablePartialNode
+ * @see [GRMustacheInheritablePartialNode renderWithContext:inBuffer:error:]
  */
-- (instancetype)contextByAddingInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found

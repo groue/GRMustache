@@ -35,7 +35,15 @@
     NSArray *_ASTNodes;
 }
 
+/**
+ * TODO
+ */
 @property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+@property (nonatomic, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a new inheritable section.
@@ -48,4 +56,5 @@
  * @see GRMustacheASTNode
  */
 + (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
+
 @end

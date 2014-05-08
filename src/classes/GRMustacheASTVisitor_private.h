@@ -24,9 +24,9 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
 
-@class GRMustacheInheritablePartial;
+@class GRMustacheInheritablePartialNode;
 @class GRMustacheInheritableSection;
-@class GRMustachePartial;
+@class GRMustachePartialNode;
 @class GRMustacheVariableTag;
 @class GRMustacheSectionTag;
 @class GRMustacheTextNode;
@@ -40,9 +40,9 @@
 
 // AST nodes
 // Don't use these methods directly. Use -[<GRMustacheASTNode acceptVisitor:error:] instead
-- (BOOL)visitInheritablePartial:(GRMustacheInheritablePartial *)inheritablePartial error:(NSError **)error;
+- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error;
 - (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
-- (BOOL)visitPartial:(GRMustachePartial *)partial error:(NSError **)error;
+- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error;
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error;
 - (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error;
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;

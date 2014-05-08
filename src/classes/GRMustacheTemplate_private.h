@@ -25,7 +25,7 @@
 #import "GRMustacheRendering_private.h"
 
 @class GRMustacheContext;
-@class GRMustachePartial;
+@class GRMustachePartialNode;
 @class GRMustacheTemplateRepository;
 @protocol GRMustacheTagDelegate;
 
@@ -33,14 +33,14 @@
 @interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
-    GRMustachePartial *_partial;
+    GRMustachePartialNode *_partialNode;
     GRMustacheContext *_baseContext;
 }
 
 /**
  * The underlying partial
  */
-@property (nonatomic, retain) GRMustachePartial *partial GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustachePartialNode *partialNode GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
 @property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;

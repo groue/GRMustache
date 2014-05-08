@@ -20,44 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheAST_private.h"
-#import "GRMustacheASTNode_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustachePrivateAPITest.h"
+#import "GRMustacheTemplateGenerator_private.h"
+#import "GRMustacheTemplateRepository_private.h"
+#import "GRMustacheTemplate_private.h"
 
-@implementation GRMustacheAST
-@synthesize ASTNodes=_ASTNodes;
-@synthesize contentType=_contentType;
+@interface GRMustacheTemplateGeneratorTest : GRMustachePrivateAPITest
+@end
 
-- (void)dealloc
+@implementation GRMustacheTemplateGeneratorTest
+
+- (void)testTemplateGeneration
 {
-    [_ASTNodes release];
-    [super dealloc];
-}
-
-+ (instancetype)placeholderAST
-{
-    return [[[self alloc] initWithASTNodes:nil contentType:GRMustacheContentTypeHTML] autorelease];
-}
-
-+ (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
-{
-    NSAssert(ASTNodes, @"nil ASTNodes");
-    return [[[self alloc] initWithASTNodes:ASTNodes contentType:contentType] autorelease];
-}
-
-- (BOOL)isPlaceholder
-{
-    return (_ASTNodes == nil);
-}
-
-- (instancetype)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
-{
-    self = [super init];
-    if (self) {
-        _ASTNodes = [ASTNodes retain];
-        _contentType = contentType;
-    }
-    return self;
+    NSDictionary *partials = @{@"template": @"|{{>partial}}|{{<partial}}{{$a}}b{{/a}}{{/partial}}{{c}}{{#d}}e{{^f}}g{{/f}}g{{/d}}h{{&i}}",
+                               @"partial": @""};
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
+    GRMustacheTemplate *template = [repo templateNamed:@"template" error:NULL];
+    GRMustacheTemplateGenerator *generator = [GRMustacheTemplateGenerator templateGeneratorWithTemplateRepository:template.templateRepository];
+    NSString *generatedTemplateString = [generator templateStringWithTemplate:template];
+    XCTAssertEqualObjects([partials objectForKey:@"template"], generatedTemplateString);
 }
 
 @end

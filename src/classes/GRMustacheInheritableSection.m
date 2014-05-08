@@ -23,10 +23,6 @@
 #import "GRMustacheInheritableSection_private.h"
 #import "GRMustacheASTVisitor_private.h"
 
-@interface GRMustacheInheritableSection()
-@property (nonatomic, readonly) NSString *identifier;
-@end
-
 @implementation GRMustacheInheritableSection
 @synthesize identifier=_identifier;
 @synthesize ASTNodes=_ASTNodes;

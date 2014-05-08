@@ -25,7 +25,7 @@
 #import "GRMustacheCompiler_private.h"
 #import "GRMustacheError.h"
 #import "GRMustacheConfiguration_private.h"
-#import "GRMustachePartial_private.h"
+#import "GRMustachePartialNode_private.h"
 #import "GRMustacheAST_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
@@ -148,8 +148,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     self = [super init];
     if (self) {
-        _partialForTemplateID = [[NSMutableDictionary alloc] init];
-        _partialForTemplateString = [[NSMutableDictionary alloc] init];
+        _ASTForTemplateID = [[NSMutableDictionary alloc] init];
         _configuration = [[GRMustacheConfiguration defaultConfiguration] copy];
     }
     return self;
@@ -157,22 +156,21 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (void)dealloc
 {
-    [_partialForTemplateID release];
-    [_partialForTemplateString release];
+    [_ASTForTemplateID release];
     [_configuration release];
     [super dealloc];
 }
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    GRMustachePartial *partial = [self partialNamed:name relativeToTemplateID:nil error:error];
-    if (!partial) {
+    GRMustacheAST *AST = [self ASTNamed:name relativeToTemplateID:nil error:error];
+    if (!AST) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partial = partial;
+    template.partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:name];
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -184,14 +182,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
 {
-    GRMustachePartial *partial = [self partialFromString:templateString contentType:contentType error:error];
-    if (!partial) {
+    GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
+    if (!AST) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partial = partial;
+    template.partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:nil];
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -199,8 +197,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)reloadTemplates
 {
     @synchronized(self) {
-        [_partialForTemplateID removeAllObjects];
-        [_partialForTemplateString removeAllObjects];
+        [_ASTForTemplateID removeAllObjects];
     }
 }
 
@@ -261,9 +258,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     return [AST autorelease];
 }
 
-- (GRMustachePartial *)partialNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
+- (GRMustacheAST *)ASTNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    // Protect our _partialForTemplateID dictionary, and our dataSource
+    // Protect our _ASTForTemplateID dictionary, and our dataSource
     @synchronized(self) {
         
         id templateID = nil;
@@ -283,9 +280,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             return nil;
         }
         
-        GRMustachePartial *partial = [_partialForTemplateID objectForKey:templateID];
+        GRMustacheAST *AST = [_ASTForTemplateID objectForKey:templateID];
         
-        if (partial == nil) {
+        if (AST == nil) {
             // templateRepository:templateStringForTemplateID:error: is a dataSource method.
             // We are not sure the dataSource will set error when not returning any templateString.
             // We thus have to take extra care of error handling here.
@@ -307,52 +304,31 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             }
             
             
-            // store an empty template before compiling, so that we support
+            // Store a placeholder AST before compiling, so that we support
             // recursive partials
-            
-            partial = [[[GRMustachePartial alloc] init] autorelease];
-            [_partialForTemplateID setObject:partial forKey:templateID];
+            AST = [GRMustacheAST placeholderAST];
+            [_ASTForTemplateID setObject:AST forKey:templateID];
             
             
             // Compile
             
-            GRMustacheAST *AST = [self ASTFromString:templateString contentType:_configuration.contentType templateID:templateID error:error];
+            GRMustacheAST *compiledAST = [self ASTFromString:templateString contentType:_configuration.contentType templateID:templateID error:error];
             
             
             // compiling done
             
-            if (AST) {
-                partial.AST = AST;
+            if (compiledAST) {
+                // update stored AST
+                AST.ASTNodes = compiledAST.ASTNodes;
+                AST.contentType = compiledAST.contentType;
             } else {
-                // forget invalid empty template
-                [_partialForTemplateID removeObjectForKey:templateID];
-                partial = nil;
+                // forget invalid empty AST
+                [_ASTForTemplateID removeObjectForKey:templateID];
+                AST = nil;
             }
         }
         
-        return partial;
-    }
-}
-
-- (GRMustachePartial *)partialFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
-{
-    // Protect our _partialForTemplateString dictionary
-    @synchronized(self) {
-        GRMustachePartial *partial = [_partialForTemplateID objectForKey:templateString];
-        
-        if (partial == nil) {
-            GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
-            if (!AST) {
-                return nil;
-            }
-            
-            partial = [[[GRMustachePartial alloc] init] autorelease];
-            partial.AST = AST;
-            
-            [_partialForTemplateString setObject:partial forKey:templateString];
-        }
-        
-        return partial;
+        return AST;
     }
 }
 
