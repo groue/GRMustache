@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheToken;
-@protocol GRMustacheASTVisitor;
+@protocol GRMustacheExpressionVisitor;
 
 /**
  * The GRMustacheExpression is the base class for objects that represent
@@ -61,6 +61,6 @@
 /**
  * TODO
  */
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error;
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error;
 
 @end

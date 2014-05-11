@@ -23,21 +23,17 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-@class GRMustacheInheritablePartialNode;
-@class GRMustacheInheritableSection;
-@class GRMustachePartialNode;
-@class GRMustacheVariableTag;
-@class GRMustacheSectionTag;
-@class GRMustacheTextNode;
+@class GRMustacheFilteredExpression;
+@class GRMustacheIdentifierExpression;
+@class GRMustacheImplicitIteratorExpression;
+@class GRMustacheScopedExpression;
 
-@protocol GRMustacheASTVisitor <NSObject>
+@protocol GRMustacheExpressionVisitor <NSObject>
 
-// Don't use these methods directly. Use -[<GRMustacheASTNode acceptVisitor:error:] instead
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error;
-- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
-- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error;
-- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error;
-- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error;
-- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
+// Don't use these methods directly. Use -[GRMustacheExpression acceptVisitor:error:] instead
+- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error;
+- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error;
 
 @end

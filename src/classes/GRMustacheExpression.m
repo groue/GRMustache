@@ -36,7 +36,7 @@
     return [super isEqual:anObject];
 }
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return YES;
 }

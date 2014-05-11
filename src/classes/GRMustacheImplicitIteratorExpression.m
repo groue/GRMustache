@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheExpressionVisitor_private.h"
 
 static GRMustacheImplicitIteratorExpression *instance;
 
@@ -45,7 +45,7 @@ static GRMustacheImplicitIteratorExpression *instance;
     return expression == instance;
 }
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitImplicitIteratorExpression:self value:value error:error];
 }

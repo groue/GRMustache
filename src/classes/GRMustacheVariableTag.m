@@ -78,11 +78,6 @@
     return [visitor visitVariableTag:self error:error];
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
-{
-    return ASTNode;
-}
-
 
 #pragma mark - Private
 

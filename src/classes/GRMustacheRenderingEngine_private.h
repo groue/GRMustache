@@ -22,13 +22,15 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheContentType.h"
 #import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheExpressionVisitor_private.h"
 #import "GRMustacheBuffer_private.h"
 
 @class GRMustacheContext;
 @class GRMustacheSectionTag;
 
-@interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor>
+@interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor, GRMustacheExpressionVisitor>
 {
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;

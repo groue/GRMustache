@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheExpressionVisitor_private.h"
 
 @implementation GRMustacheIdentifierExpression
 @synthesize identifier=_identifier;
@@ -53,7 +53,7 @@
     return [_identifier hash];
 }
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitIdentifierExpression:self value:value error:error];
 }

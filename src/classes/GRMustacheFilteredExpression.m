@@ -22,7 +22,7 @@
 
 #import <objc/runtime.h>
 #import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheExpressionVisitor_private.h"
 
 @implementation GRMustacheFilteredExpression
 @synthesize filterExpression=_filterExpression;
@@ -67,7 +67,7 @@
     return [_filterExpression hash] ^ [_argumentExpression hash];
 }
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor value:(id *)value error:(NSError **)error
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error
 {
     return [visitor visitFilteredExpression:self value:value error:error];
 }
