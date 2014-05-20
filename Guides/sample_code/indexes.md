@@ -113,7 +113,7 @@ Rendering objects take full responsability of their rendering. Our will render t
     //
     // So let's return an object that does custom rendering.
     
-    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error)
+    return [GRMustache renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
     {
         NSMutableString *buffer = [NSMutableString string];
         

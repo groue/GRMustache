@@ -142,7 +142,7 @@ It conforms to GRMustacheTagDelegate, obviously, but also to the [GRMustacheRend
 @implementation UppercaseTagDelegate
 
 // GRMustacheRendering
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     // Render the Mustache tag with an extended context
     context = [context contextByAddingTagDelegate:self];

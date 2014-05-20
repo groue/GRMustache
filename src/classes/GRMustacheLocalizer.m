@@ -86,7 +86,7 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
 /**
  * Support for {{# localize }}...{{ value }}...{{ value }}...{{/ localize }}
  */
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError *__autoreleasing *)error
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     /**
      * Perform a first rendering of the section tag, that will turn variable
