@@ -72,11 +72,10 @@
 {
     NSString *rendering = nil;
 
-    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_contentType context:context];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_contentType context:context];
     if ([renderingEngine visitASTNodes:_ASTNodes error:error]) {
         rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
     }
-    [renderingEngine release];
 
     return rendering;
 }

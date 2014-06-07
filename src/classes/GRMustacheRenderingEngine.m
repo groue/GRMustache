@@ -50,20 +50,9 @@
     [super dealloc];
 }
 
-- (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
++ (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
 {
-    if (!context) {
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-        return NO;
-    }
-    
-    self = [super init];
-    if (self) {
-        _contentType = contentType;
-        _context = context;
-        _buffer = GRMustacheBufferCreate(1024);
-    }
-    return self;
+    return [[[self alloc] initWithContentType:contentType context:context] autorelease];
 }
 
 - (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
@@ -244,6 +233,22 @@
 
 
 #pragma mark - Private
+
+- (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
+{
+    if (!context) {
+        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
+        return NO;
+    }
+    
+    self = [super init];
+    if (self) {
+        _contentType = contentType;
+        _context = context;
+        _buffer = GRMustacheBufferCreate(1024);
+    }
+    return self;
+}
 
 - (BOOL)visitTag:(GRMustacheTag *)tag expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML error:(NSError **)error
 {

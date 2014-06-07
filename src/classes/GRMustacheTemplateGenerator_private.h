@@ -36,9 +36,9 @@
     BOOL _needsPartialContent;
 }
 
-@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository;
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
-+ (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository;
-- (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template;
++ (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
+- (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_INTERNAL;
 
 @end

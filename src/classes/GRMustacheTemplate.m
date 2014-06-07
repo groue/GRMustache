@@ -121,13 +121,10 @@
     NSString *rendering = nil;
     
     [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-    
-    GRMustacheRenderingEngine *renderingEngine = [[GRMustacheRenderingEngine alloc] initWithContentType:_partialNode.AST.contentType context:context];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_partialNode.AST.contentType context:context];
     if ([_partialNode acceptVisitor:renderingEngine error:error]) {
         rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
     }
-    [renderingEngine release];
-    
     [GRMustacheRendering popCurrentTemplateRepository];
     
     return rendering;

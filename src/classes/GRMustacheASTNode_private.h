@@ -50,9 +50,9 @@
 @required
 
 /**
- * TODO
+ * Has the visitor visit the receiver.
  */
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error;
+- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of template inheritance, return the AST node that should be

@@ -84,7 +84,7 @@
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
-- (void)reloadTemplates;
+- (void)reloadTemplates GRMUSTACHE_API_PUBLIC;
 
 /**
  * TODO

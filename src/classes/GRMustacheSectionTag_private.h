@@ -36,13 +36,11 @@
     GRMustacheContentType _contentType;
 }
 
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression;
-@property (nonatomic, retain, readonly) NSArray *ASTNodes;
+@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 
 /**
- * TODO
- *
  * Builds a GRMustacheSectionTag.
  *
  * The rendering of Mustache sections depend on the value they are attached to.
@@ -52,20 +50,18 @@
  * The ASTNodes array contains the GRMustacheASTNode objects that make the
  * section (texts, variables, other sections, etc.)
  *
- * @param type            The type of the section.
  * @param expression      The expression that would evaluate against a rendering
  *                        context.
- * @param contentType     The content type of the tag rendering.
+ * @param inverted        NO for {{# section }}, YES for {{^ section }}.
  * @param templateString  A Mustache template string.
  * @param innerRange      The range of the inner template string of the section
  *                        in _templateString_.
  * @param ASTNodes        An array of GRMustacheASTNode that make the section.
+ * @param contentType     The content type of the tag rendering.
  *
  * @return A GRMustacheSectionTag
  *
  * @see GRMustacheExpression
- * @see GRMustacheContext
- * @see GRMustacheContext
  */
 + (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 

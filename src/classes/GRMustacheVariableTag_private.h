@@ -33,18 +33,16 @@
     GRMustacheContentType _contentType;
 }
 
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression;
-@property (nonatomic, readonly) BOOL escapesHTML;
+@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
- *
  * Builds and returns a GRMustacheVariableTag.
  *
  * @param expression   The expression that would evaluate against a rendering
  *                     contex.
- * @param contentType  The content type of the tag rendering.
  * @param escapesHTML  YES if the value should be escaped.
+ * @param contentType  The content type of the tag rendering.
  *
  * @return a GRMustacheVariableTag
  *

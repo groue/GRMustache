@@ -33,9 +33,9 @@
     BOOL _curried;
 }
 
-@property (nonatomic, retain, readonly) GRMustacheExpression *filterExpression;
-@property (nonatomic, retain, readonly) GRMustacheExpression *argumentExpression;
-@property (nonatomic, getter=isCurried, readonly) BOOL curried;
+@property (nonatomic, retain, readonly) GRMustacheExpression *filterExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheExpression *argumentExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, getter=isCurried, readonly) BOOL curried GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a filtered expression, given an expression that returns a filter, and

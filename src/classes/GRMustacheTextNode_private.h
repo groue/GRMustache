@@ -33,9 +33,9 @@
 }
 
 /**
- * TODO
+ * The text of the text node.
  */
-@property (nonatomic, retain, readonly) NSString *text;
+@property (nonatomic, retain, readonly) NSString *text GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds and returns a GRMustacheTextNode.

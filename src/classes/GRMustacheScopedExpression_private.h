@@ -32,8 +32,8 @@
     NSString *_identifier;
 }
 
-@property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression;
-@property (nonatomic, retain, readonly) NSString *identifier;
+@property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a scoped expression, given an expression that returns a value, and

@@ -33,11 +33,11 @@
 @protocol GRMustacheASTVisitor <NSObject>
 
 // Don't use these methods directly. Use -[<GRMustacheASTNode acceptVisitor:error:] instead
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error;
-- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error;
-- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error;
-- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error;
-- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error;
-- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error;
+- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -36,7 +36,9 @@
 }
 
 /**
- * TODO
+ * The name of the partial:
+ *
+ *     {{> name }}
  */
 @property (nonatomic, retain, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
 
@@ -46,7 +48,12 @@
 @property (nonatomic, retain, readonly) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns a newly created partial node.
+ *
+ * @param AST   The abstract syntax tree of the partial template.
+ * @param name  The name of the partial template.
+ *
+ * @return  a newly created partial node.
  */
 + (instancetype)partialNodeWithAST:(GRMustacheAST *)AST name:(NSString *)name GRMUSTACHE_API_INTERNAL;
 @end

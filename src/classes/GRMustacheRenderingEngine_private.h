@@ -30,6 +30,9 @@
 @class GRMustacheContext;
 @class GRMustacheSectionTag;
 
+/**
+ * TODO
+ */
 @interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor, GRMustacheExpressionVisitor>
 {
     GRMustacheBuffer _buffer;
@@ -41,17 +44,21 @@
 /**
  * TODO
  */
-
-- (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context;
-
-/**
- * TODO
- */
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error;
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error;
+- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns a newly created rendering engine.
+ *
+ * @param contentType  
+ * @param context
+ *
+ * @return a newly created rendering engine.
+ */
++ (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 
 @end

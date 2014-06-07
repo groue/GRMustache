@@ -59,8 +59,8 @@
 - (BOOL)isEqual:(id)anObject; // no availability macro for Foundation method declaration
 
 /**
- * TODO
+ * Has the visitor visit the expression.
  */
-- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error;
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

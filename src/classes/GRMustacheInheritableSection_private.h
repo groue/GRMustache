@@ -36,12 +36,16 @@
 }
 
 /**
- * TODO
+ * The AST nodes inside the inheritable section:
+ *
+ *     {{$ section }} AST nodes {{/ }}
  */
 @property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * The identifier of the inheritable section:
+ *
+ *     {{$ identifier }} ... {{/ }}
  */
 @property (nonatomic, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 

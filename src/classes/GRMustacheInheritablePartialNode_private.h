@@ -37,12 +37,17 @@
 }
 
 /**
- * TODO
+ * The overriding AST nodes, built from the inner content of the inheritable
+ * partial node:
+ *
+ *     {{< parent }} overriding AST nodes {{/ }}
  */
 @property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
- * The partial template that is inherited
+ * The partial template that is inherited:
+ *
+ *    {{< inherited_partial_template }}...{{/ }}
  */
 @property (nonatomic, retain, readonly) GRMustachePartialNode *partialNode GRMUSTACHE_API_INTERNAL;
 

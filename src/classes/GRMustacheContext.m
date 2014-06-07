@@ -413,7 +413,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 {
     GRMustacheExpressionParser *parser = [[[GRMustacheExpressionParser alloc] init] autorelease];
     GRMustacheExpression *expression = [parser parseExpression:string empty:NULL error:error];
-    GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:GRMustacheContentTypeHTML context:self] autorelease];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:GRMustacheContentTypeHTML context:self];
     return [expression acceptVisitor:renderingEngine value:value error:error];
 }
 

@@ -47,9 +47,10 @@
 @property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Used by GRMustacheTemplateRepository, which uses placeholder ASTs when
+ * building recursive templates.
  */
-@property (nonatomic, readonly, getter = isPlaceholder) BOOL placeholder;
+@property (nonatomic, readonly, getter = isPlaceholder) BOOL placeholder GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a new allocated AST.
@@ -64,7 +65,8 @@
 + (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
 
 /**
- * TODO
+ * Returns a placeholder AST
+ * @see placeholder
  */
 + (instancetype)placeholderAST GRMUSTACHE_API_INTERNAL;
 

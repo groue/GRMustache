@@ -31,7 +31,7 @@
     NSString *_identifier;
 }
 
-@property (nonatomic, retain, readonly) NSString *identifier;
+@property (nonatomic, retain, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an identifier expression, given an identifier.
