@@ -178,15 +178,34 @@
       "template": "<{{<node}}{{$value}}{{>node}}{{/value}}{{/node}}>",
       "partials": { "node": "{{content}}<{{#nodes}}{{$value}}overriden{{/value}}{{/nodes}}>" },
       "expected": "<X<Y<>>>"
-    },
-    {
-      "name": "Templates can override inheritable sections through inherited partials",
-      "data": { },
-      "template": "{{<parent}}{{$inheritable}}1{{/inheritable}}{{/parent}}{{<parent}}{{<parent2}}{{/parent2}}{{/parent}}{{<parent}}{{<parent2}}{{$inheritable}}3{{/inheritable}}{{/parent2}}{{/parent}}",
-      "partials": {
-          "parent": "{{$inheritable}}0{{/inheritable}}",
-          "parent2": "{{$inheritable}}2{{/inheritable}}" },
-      "expected": "123"
     }
+    
+    // Failing test: we get "103" instead of "123".
+    // It tests that any template snippet can be extracted into an inheritable partial.
+    //
+    // Initial state:
+    //
+    //   template:
+    //   {{<parent}}{{$inheritable}}2{{/inheritable}}{{/parent}}
+    //
+    // Apply the "any template snippet can be extracted into an inheritable partial"
+    // transformation to the "{{$inheritable}}2{{/inheritable}}" snippet:
+    //
+    //   template:
+    //   {{<parent}}{{<parent2}}{{/parent2}}{{/parent}}
+    //   parent2:
+    //   {{$inheritable}}2{{/inheritable}}
+    //
+    // The rendering should be identical.
+    // 
+    // {
+    //   "name": "Templates can override inheritable sections through inherited partials",
+    //   "data": { },
+    //   "template": "{{<parent}}{{$inheritable}}1{{/inheritable}}{{/parent}}{{<parent}}{{<parent2}}{{/parent2}}{{/parent}}{{<parent}}{{<parent2}}{{$inheritable}}3{{/inheritable}}{{/parent2}}{{/parent}}",
+    //   "partials": {
+    //       "parent": "{{$inheritable}}0{{/inheritable}}",
+    //       "parent2": "{{$inheritable}}2{{/inheritable}}" },
+    //   "expected": "123"
+    // }
   ]
 }
