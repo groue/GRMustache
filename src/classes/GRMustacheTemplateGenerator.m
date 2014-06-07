@@ -84,8 +84,8 @@
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, inheritableSection.identifier, tagEndDelimiter];
-    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSection.identifier, tagEndDelimiter];
+    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, inheritableSection.name, tagEndDelimiter];
+    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSection.name, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
     

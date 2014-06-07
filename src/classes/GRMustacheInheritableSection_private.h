@@ -31,7 +31,7 @@
  */
 @interface GRMustacheInheritableSection : NSObject<GRMustacheASTNode> {
 @private
-    NSString *_identifier;
+    NSString *_name;
     NSArray *_ASTNodes;
 }
 
@@ -43,22 +43,22 @@
 @property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
- * The identifier of the inheritable section:
+ * The name of the inheritable section:
  *
- *     {{$ identifier }} ... {{/ }}
+ *     {{$ name }} ... {{/ }}
  */
-@property (nonatomic, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a new inheritable section.
  *
- * @param identifier  The identifier of the inheritable section
- * @param ASTNodes    Array of GRMustacheASTNode objects
+ * @param name      The name of the inheritable section
+ * @param ASTNodes  Array of GRMustacheASTNode objects
  *
  * @return a new GRMustacheInheritableSection.
  *
  * @see GRMustacheASTNode
  */
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritableSectionWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
 
 @end

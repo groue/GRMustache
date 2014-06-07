@@ -416,7 +416,7 @@
     }
 }
 
-- (NSString *)parseInheritableSectionIdentifier:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
+- (NSString *)parseInheritableSectionName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
 {
     NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *inheritableSectionName = [string stringByTrimmingCharactersInSet:whiteSpace];
@@ -427,7 +427,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing inheritable section identifier"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing inheritable section name"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;
@@ -439,7 +439,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid inheritable section identifier"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid inheritable section name"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;

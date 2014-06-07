@@ -1,6 +1,6 @@
 ## TODO
 
-- [ ] Rename `identifier` to `name`
+- [X] Rename `identifier` to `name`
 - [ ] Fix link to filters Guide from GRMustacheFilter.h
 - [X] Document [GRMustacheTemplateRepository templateRepositoryWithDictionary:] changes (mutability of the dictionary)
 - [X] Document [GRMustacheTemplateRepository reloadTemplates] in release notes.

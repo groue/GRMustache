@@ -24,17 +24,17 @@
 #import "GRMustacheASTVisitor_private.h"
 
 @implementation GRMustacheInheritableSection
-@synthesize identifier=_identifier;
+@synthesize name=_name;
 @synthesize ASTNodes=_ASTNodes;
 
-+ (instancetype)inheritableSectionWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes
++ (instancetype)inheritableSectionWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes
 {
-    return [[[self alloc] initWithIdentifier:identifier ASTNodes:ASTNodes] autorelease];
+    return [[[self alloc] initWithName:name ASTNodes:ASTNodes] autorelease];
 }
 
 - (void)dealloc
 {
-    [_identifier release];
+    [_name release];
     [_ASTNodes release];
     [super dealloc];
 }
@@ -55,8 +55,8 @@
     }
     GRMustacheInheritableSection *otherSection = (GRMustacheInheritableSection *)ASTNode;
     
-    // Identifiers must match
-    if (![otherSection.identifier isEqual:_identifier]) {
+    // names must match
+    if (![otherSection.name isEqual:_name]) {
         return otherSection;
     }
     
@@ -67,11 +67,11 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithIdentifier:(NSString *)identifier ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes
 {
     self = [self init];
     if (self) {
-        _identifier = [identifier retain];
+        _name = [name retain];
         _ASTNodes = [ASTNodes retain];
     }
     return self;

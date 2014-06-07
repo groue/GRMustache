@@ -383,16 +383,16 @@
             
             
         case GRMustacheTokenTypeInheritableSectionOpening: {
-            // Inheritable section identifier validation
+            // Inheritable section name validation
             NSError *inheritableSectionError;
-            NSString *identifier = [parser parseInheritableSectionIdentifier:token.tagInnerContent empty:NULL error:&inheritableSectionError];
-            if (identifier == nil) {
+            NSString *name = [parser parseInheritableSectionName:token.tagInnerContent empty:NULL error:&inheritableSectionError];
+            if (name == nil) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in inheritable section tag", inheritableSectionError.localizedDescription]]];
                 return NO;
             }
             
             // Expand stacks
-            self.currentTagValue = identifier;
+            self.currentTagValue = name;
             [_tagValueStack addObject:_currentTagValue];
             
             self.currentOpeningToken = token;
@@ -479,27 +479,27 @@
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {
-                    // Inheritable section identifier validation
-                    // We need a valid identifier that matches section opening,
+                    // Inheritable section name validation
+                    // We need a valid name that matches section opening,
                     // or an empty `{{/}}` closing tags.
                     NSError *error;
                     BOOL empty;
-                    NSString *identifier = [parser parseInheritableSectionIdentifier:token.tagInnerContent empty:&empty error:&error];
-                    if (identifier && ![identifier isEqual:_currentTagValue]) {
+                    NSString *name = [parser parseInheritableSectionName:token.tagInnerContent empty:&empty error:&error];
+                    if (name && ![name isEqual:_currentTagValue]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
-                    } else if (!identifier && !empty) {
+                    } else if (!name && !empty) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in partial closing tag", error.localizedDescription]]];
                         return NO;
                     }
                     
-                    if (identifier && ![identifier isEqual:_currentTagValue]) {
+                    if (name && ![name isEqual:_currentTagValue]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
                     }
                     
                     // Success: create new GRMustacheInheritableSection
-                    wrapperASTNode = [GRMustacheInheritableSection inheritableSectionWithIdentifier:(NSString *)_currentTagValue ASTNodes:_currentASTNodes];
+                    wrapperASTNode = [GRMustacheInheritableSection inheritableSectionWithName:(NSString *)_currentTagValue ASTNodes:_currentASTNodes];
                 } break;
                     
                 case GRMustacheTokenTypeInheritablePartial: {
