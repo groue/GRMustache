@@ -175,25 +175,25 @@
 
 #pragma mark - <GRMustacheASTVisitor>
 
-- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error
+- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression error:(NSError **)error
 {
     _expressionString = [NSString stringWithFormat:@"%@(%@)", [self stringWithExpression:expression.filterExpression], [self stringWithExpression:expression.argumentExpression]];
     return YES;
 }
 
-- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error
+- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression error:(NSError **)error
 {
     _expressionString = expression.identifier;
     return YES;
 }
 
-- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error
+- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression error:(NSError **)error
 {
     _expressionString = @".";
     return YES;
 }
 
-- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error
+- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression error:(NSError **)error
 {
     _expressionString = [NSString stringWithFormat:@"%@.%@", [self stringWithExpression:expression.baseExpression], expression.identifier];
     return YES;
@@ -213,7 +213,7 @@
 
 - (NSString *)stringWithExpression:(GRMustacheExpression *)expression
 {
-    [expression acceptVisitor:self value:NULL error:NULL];
+    [expression acceptVisitor:self error:NULL];
     return _expressionString;
 }
 

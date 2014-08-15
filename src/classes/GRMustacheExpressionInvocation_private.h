@@ -22,43 +22,43 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheContentType.h"
-#import "GRMustacheASTVisitor_private.h"
-#import "GRMustacheBuffer_private.h"
 
 @class GRMustacheContext;
-@class GRMustacheSectionTag;
-@class GRMustacheExpressionInvocation;
+@class GRMustacheExpression;
 
 /**
  * TODO
  */
-@interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor>
-{
-    GRMustacheBuffer _buffer;
-    GRMustacheContentType _contentType;
+@interface GRMustacheExpressionInvocation : NSObject {
     GRMustacheContext *_context;
-    GRMustacheExpressionInvocation *_expressionInvocation;
+    GRMustacheExpression *_expression;
+    id _value;
+    BOOL _valueIsProtected;
 }
 
 /**
  * TODO
  */
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheContext *context GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a newly created rendering engine.
- *
- * @param contentType  
- * @param context
- *
- * @return a newly created rendering engine.
+ * TODO
  */
-+ (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) id value GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+@property (nonatomic, readonly) BOOL valueIsProtected GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (BOOL)invokeReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

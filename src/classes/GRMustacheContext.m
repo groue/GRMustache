@@ -30,7 +30,7 @@
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustacheTagDelegate.h"
-#import "GRMustacheRenderingEngine_private.h"
+#import "GRMustacheExpressionInvocation_private.h"
 
 #define GRMUSTACHE_STACK_RELEASE(stackName) \
     [GRMUSTACHE_STACK_TOP_IVAR(stackName) release]; \
@@ -423,8 +423,18 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 {
     GRMustacheExpressionParser *parser = [[[GRMustacheExpressionParser alloc] init] autorelease];
     GRMustacheExpression *expression = [parser parseExpression:string empty:NULL error:error];
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:GRMustacheContentTypeHTML context:self];
-    return [expression acceptVisitor:renderingEngine value:value error:error];
+    
+    GRMustacheExpressionInvocation *invocation = [[[GRMustacheExpressionInvocation alloc] init] autorelease];
+    invocation.context = self;
+    invocation.expression = expression;
+    if (![invocation invokeReturningError:error]) {
+        return NO;
+    }
+    
+    if (value) {
+        *value = invocation.value;
+    }
+    return YES;
 }
 
 

@@ -34,19 +34,14 @@
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
-#import "GRMustacheScopedExpression_private.h"
-#import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheToken_private.h"
-#import "GRMustacheKeyAccess_private.h"
-#import "GRMustacheFilter_private.h"
-#import "GRMustacheError.h"
+#import "GRMustacheExpressionInvocation_private.h"
 
 @implementation GRMustacheRenderingEngine
 
 - (void)dealloc
 {
     GRMustacheBufferRelease(&_buffer);
+    [_expressionInvocation release];
     [super dealloc];
 }
 
@@ -140,98 +135,6 @@
 }
 
 
-#pragma mark - Expressions
-
-- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error
-{
-    id filter;
-    if (![expression.filterExpression acceptVisitor:self value:&filter error:error]) {
-        return NO;
-    }
-    
-    id argument;
-    if (![expression.argumentExpression acceptVisitor:self value:&argument error:error]) {
-        return NO;
-    }
-    
-    if (filter == nil) {
-        GRMustacheToken *token = expression.token;
-        NSString *renderingErrorDescription = nil;
-        if (token) {
-            if (token.templateID) {
-                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu of template %@", token.templateSubstring, (unsigned long)token.line, token.templateID];
-            } else {
-                renderingErrorDescription = [NSString stringWithFormat:@"Missing filter in tag `%@` at line %lu", token.templateSubstring, (unsigned long)token.line];
-            }
-        } else {
-            renderingErrorDescription = [NSString stringWithFormat:@"Missing filter"];
-        }
-        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-        }
-        return NO;
-    }
-    
-    if (![filter respondsToSelector:@selector(transformedValue:)]) {
-        GRMustacheToken *token = expression.token;
-        NSString *renderingErrorDescription = nil;
-        if (token) {
-            if (token.templateID) {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu of template %@: %@", token.templateSubstring, (unsigned long)token.line, token.templateID, filter];
-            } else {
-                renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol in tag `%@` at line %lu: %@", token.templateSubstring, (unsigned long)token.line, filter];
-            }
-        } else {
-            renderingErrorDescription = [NSString stringWithFormat:@"Object does not conform to GRMustacheFilter protocol: %@", filter];
-        }
-        NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
-        if (error != NULL) {
-            *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
-        }
-        return NO;
-    }
-    
-    if (expression.isCurried && [filter respondsToSelector:@selector(filterByCurryingArgument:)]) {
-        *value = [(id<GRMustacheFilter>)filter filterByCurryingArgument:argument];
-    } else {
-        *value = [(id<GRMustacheFilter>)filter transformedValue:argument];
-    }
-    
-    _protected = NO;
-    return YES;
-}
-
-- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error
-{
-    *value = [_context valueForMustacheKey:expression.identifier protected:&_protected];
-    return YES;
-}
-
-- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error
-{
-    id scopedValue;
-    if (![expression.baseExpression acceptVisitor:self value:&scopedValue error:error]) {
-        return NO;
-    }
-    
-    *value = [GRMustacheKeyAccess valueForMustacheKey:expression.identifier inObject:scopedValue unsafeKeyAccess:_context.unsafeKeyAccess];
-    _protected = NO;
-    return YES;
-}
-
-- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error
-{
-    *value = [_context topMustacheObject];
-    _protected = NO;
-    return YES;
-}
-
-
 #pragma mark - Private
 
 - (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
@@ -246,6 +149,7 @@
         _contentType = contentType;
         _context = context;
         _buffer = GRMustacheBufferCreate(1024);
+        _expressionInvocation = [[GRMustacheExpressionInvocation alloc] init];
     }
     return self;
 }
@@ -260,8 +164,9 @@
         
         // Evaluate expression
         
-        __block id object;
-        if (![expression acceptVisitor:self value:&object error:error]) {  // this sets _protected
+        _expressionInvocation.expression = expression;
+        _expressionInvocation.context = context;
+        if (![_expressionInvocation invokeReturningError:error]) {
             
             // Error
             
@@ -273,9 +178,11 @@
             
         } else {
             
-            // Hide object if it is protected
+            id value = _expressionInvocation.value;
+            BOOL valueIsProtected = _expressionInvocation.valueIsProtected;
             
-            if (_protected) {
+            // Hide value if it is protected
+            if (valueIsProtected) {
                 // Object is protected: it may enter the context stack, and provide
                 // value for `.` and `.name`. However, it must not expose its keys.
                 //
@@ -311,7 +218,7 @@
                 // protected. Since we don't want to let the user think he is data
                 // is given protected when it is not, we prevent this whole pattern, and
                 // forbid `{{#safe}}{{name}}{{/safe}}`.
-                context = [context contextByAddingHiddenObject:object];
+                context = [context contextByAddingHiddenObject:value];
             }
             
             
@@ -320,7 +227,7 @@
             NSArray *tagDelegateStack = [context tagDelegateStack];
             for (id<GRMustacheTagDelegate> tagDelegate in [tagDelegateStack reverseObjectEnumerator]) { // willRenderObject: from top to bottom
                 if ([tagDelegate respondsToSelector:@selector(mustacheTag:willRenderObject:)]) {
-                    object = [tagDelegate mustacheTag:tag willRenderObject:object];
+                    value = [tagDelegate mustacheTag:tag willRenderObject:value];
                 }
             }
             
@@ -329,7 +236,7 @@
             
             BOOL HTMLSafe = NO;
             NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
-            id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
+            id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:value];
             NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:&HTMLSafe error:&renderingError];
             
             if (rendering == nil && renderingError == nil)
@@ -359,7 +266,7 @@
                 
                 for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didRenderObject: from bottom to top
                     if ([tagDelegate respondsToSelector:@selector(mustacheTag:didRenderObject:as:)]) {
-                        [tagDelegate mustacheTag:tag didRenderObject:object as:rendering];
+                        [tagDelegate mustacheTag:tag didRenderObject:value as:rendering];
                     }
                 }
             }
@@ -379,7 +286,7 @@
                 
                 for (id<GRMustacheTagDelegate> tagDelegate in tagDelegateStack) { // didFailRenderingObject: from bottom to top
                     if ([tagDelegate respondsToSelector:@selector(mustacheTag:didFailRenderingObject:withError:)]) {
-                        [tagDelegate mustacheTag:tag didFailRenderingObject:object withError:renderingError];
+                        [tagDelegate mustacheTag:tag didFailRenderingObject:value withError:renderingError];
                     }
                 }
             }

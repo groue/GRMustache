@@ -31,9 +31,9 @@
 @protocol GRMustacheExpressionVisitor <NSObject>
 
 // Don't use these methods directly. Use -[GRMustacheExpression acceptVisitor:error:] instead
-- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

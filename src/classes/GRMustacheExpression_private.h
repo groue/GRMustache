@@ -61,6 +61,6 @@
 /**
  * Has the visitor visit the expression.
  */
-- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor value:(id *)value error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)acceptVisitor:(id<GRMustacheExpressionVisitor>)visitor error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end
