@@ -35,7 +35,7 @@ Check the [Template Repositories Guide](template_repositories.md) for more parti
 Partials in the file system
 ---------------------------
 
-When you identify a template through a URL or a file path (see the [Templates Guide](templates.md)), you are able to navigate through a hierarchy of directories and partial files.
+When you identify a template through a URL, a file path, or a bundle resource name (see the [Templates Guide](templates.md)), you are able to navigate through a hierarchy of directories and partial files.
 
 The partial tag `{{> name }}` interprets the *name* as a *relative path*, and loads the partial template relatively to the embedding template. For example, given the following hierarchy:
 

@@ -155,6 +155,8 @@
 		5682B4C01528DF4A00ADD123 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4BF1528DF4900ADD123 /* Foundation.framework */; };
 		5682B4C31528E0B300ADD123 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4BF1528DF4900ADD123 /* Foundation.framework */; };
 		5682B4C51528E0C600ADD123 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5682B4C41528E0C500ADD123 /* CoreData.framework */; };
+		5688264D199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources in Resources */ = {isa = PBXBuildFile; fileRef = 5688264C199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources */; };
+		5688264E199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources in Resources */ = {isa = PBXBuildFile; fileRef = 5688264C199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources */; };
 		568ECC32175DB0D000F1178F /* GRMustacheExpressionParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 568ECC30175DB0CC00F1178F /* GRMustacheExpressionParser_private.h */; };
 		568ECC33175DB0D000F1178F /* GRMustacheExpressionParser_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 568ECC30175DB0CC00F1178F /* GRMustacheExpressionParser_private.h */; };
 		568ECC34175DB0D000F1178F /* GRMustacheExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 568ECC31175DB0CD00F1178F /* GRMustacheExpressionParser.m */; };
@@ -443,6 +445,7 @@
 		5682B4BD1528DF3D00ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5682B4BF1528DF4900ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5682B4C41528E0C500ADD123 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
+		5688264C199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheTemplateRepositoryWithBundleTestResources; sourceTree = "<group>"; };
 		568ECC30175DB0CC00F1178F /* GRMustacheExpressionParser_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheExpressionParser_private.h; sourceTree = "<group>"; };
 		568ECC31175DB0CD00F1178F /* GRMustacheExpressionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExpressionParser.m; sourceTree = "<group>"; };
 		56907EE515FC752E0081BC2A /* GRMustacheExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExpression.m; sourceTree = "<group>"; };
@@ -714,6 +717,7 @@
 			isa = PBXGroup;
 			children = (
 				5682B4861528472C00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.m */,
+				5688264C199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources */,
 				5682B4A215284A9300ADD123 /* GRMustacheTemplateRepositoryWithBundleTest */,
 				5682B49C152849FD00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache */,
 				5682B4A315284A9400ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.text */,
@@ -1348,6 +1352,7 @@
 				5682B4761528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */,
 				5682B4781528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */,
 				5682B4971528486C00ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 in Resources */,
+				5688264D199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources in Resources */,
 				5682B4991528486C00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 in Resources */,
 				5682B49E152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache in Resources */,
 				5682B4A0152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.mustache in Resources */,
@@ -1381,6 +1386,7 @@
 				5682B4771528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.json in Resources */,
 				5682B4791528372000ADD123 /* GRMustacheTemplateRenderMethodsTest.mustache in Resources */,
 				5682B4981528486C00ADD123 /* GRMustacheTemplateRepositoryTest_ISOLatin1 in Resources */,
+				5688264E199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources in Resources */,
 				5682B49A1528486C00ADD123 /* GRMustacheTemplateRepositoryTest_UTF8 in Resources */,
 				5682B49F152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest.mustache in Resources */,
 				5682B4A1152849FE00ADD123 /* GRMustacheTemplateRepositoryWithBundleTest_partial.mustache in Resources */,

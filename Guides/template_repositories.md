@@ -116,14 +116,15 @@ In this case, use an absolute path in your partial tags, starting with a slash, 
     ios/c.mustache
     {{> /shared/header }}   {{! absolute path to shared/header }}
     
-```objc 
-NSString *templatesPath = @"path/to/templates";
-GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath];
+```objc
+// The root is templatesDirectoryPath:
+[GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath];
 
-// Loads path/to/templates/a.mustache, and provides a root for
-// absolute partial tags: 
-GRMustacheTemplate aTemplate = [repository templateNamed:@"a"];
-NSString *rendering = [aTemplate renderObject:... error:...];
+// The root is templatesURL:
+[GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesURL];
+
+// The root is [bundle resourcePath]:
+[GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
 ```
 
 

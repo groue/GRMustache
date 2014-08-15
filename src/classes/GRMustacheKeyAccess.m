@@ -258,6 +258,20 @@ static Class NSManagedObjectClass;
                 return nil;
             } else {
                 void *buffer = malloc(methodReturnLength);
+                if (buffer == NULL) {
+                    // Allocation failed.
+                    //
+                    // This method is not supposed to allocate any object, so we
+                    // can not behave like failing allocating methods and return
+                    // nil.
+                    //
+                    // So let's raise an exception.
+                    //
+                    // NSMallocException is supposedly obsolete but there are
+                    // evidences it is still used by Foundation:
+                    // http://stackoverflow.com/search?q=NSMallocException
+                    [NSException raise:NSMallocException format:@"Out of memory."];
+                }
                 [invocation getReturnValue:buffer];
                 
                 // Turn the raw value buffer into an object
