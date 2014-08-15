@@ -48,6 +48,11 @@
         NSString *result = [template renderObject:nil error:NULL];
         XCTAssertEqualObjects(result, @"GRMustacheTemplateRepositoryWithBundleTest.mustache GRMustacheTemplateRepositoryWithBundleTest_partial.mustache", @"");
     }
+    {
+        GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTemplateRepositoryWithBundleTestResources/partial}}" error:NULL];
+        NSString *result = [template renderObject:nil error:NULL];
+        XCTAssertEqualObjects(result, @"partial sibling GRMustacheTemplateRepositoryWithBundleTest.mustache GRMustacheTemplateRepositoryWithBundleTest_partial.mustache", @"");
+    }
 }
 
 - (void)testTemplateRepositoryWithBundle_templateExtension_encoding
