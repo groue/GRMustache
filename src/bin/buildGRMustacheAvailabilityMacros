@@ -8,7 +8,7 @@
 #   src/bin/buildGRMustacheAvailabilityMacros > src/classes/GRMustacheAvailabilityMacros.h
 
 MAJOR_VERSION = 7
-MAX_MINOR_VERSION = 0
+MAX_MINOR_VERSION = 1
 
 puts <<-LICENSE
 // The MIT License

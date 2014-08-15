@@ -61,7 +61,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialStack, id);
+    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialNodeStack, id);
     
     BOOL _unsafeKeyAccess;
 }
@@ -88,7 +88,7 @@
  *
  * @see +[GRMustache standardLibrary]
  */
-- (id)init;
+- (instancetype)init;
 
 /**
  * Returns an empty rendering context.

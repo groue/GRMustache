@@ -3,6 +3,12 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v7.1.0
+
+- Support for template hierarchies stored as bundle resources - fix for [issue #78](https://github.com/groue/GRMustache/pull/78)
+- Fix for [issue #79](https://github.com/groue/GRMustache/issues/79)
+
+
 ## v7.0.2
 
 - Fix a memory leak

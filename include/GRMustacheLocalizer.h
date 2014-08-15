@@ -85,7 +85,7 @@
  *
  * @since v6.4
  */
-- (id)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)initWithBundle:(NSBundle *)bundle tableName:(NSString *)tableName AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 /**
  * The bundle where to look for localized strings.
