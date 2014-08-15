@@ -328,6 +328,16 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     
     CFIndex count = CFDictionaryGetCount(unsafeContextForContext);
     GRMustacheContext **unsafeContexts = malloc(count * sizeof(GRMustacheContext *));
+    if (unsafeContexts == NULL) {
+        // Allocation failed.
+        //
+        // This method is supposed to return a newly created object, so we can
+        // behave like failing allocating methods and return nil.
+        //
+        // And make sure we cleanup allocated memory before.
+        CFRelease(unsafeContextForContext);
+        return nil;
+    }
     CFDictionaryGetKeysAndValues(unsafeContextForContext, NULL, (const void **)unsafeContexts);
     for (CFIndex i = 0; i < count; ++i) {
         GRMustacheContext *unsafeContext = unsafeContexts[i];
