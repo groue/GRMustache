@@ -195,7 +195,7 @@ Your rendering objects can thus delegate their rendering to the tag they are giv
 
 ```objc
 id data = @{
-    @"twice": [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+    @"twice": [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         NSMutableString *buffer = [NSMutableString string];
         [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
         [buffer appendString:[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
@@ -519,7 +519,7 @@ id customHelperLibrary = @{
     // `list` is a filter that takes an array, and returns a rendering object:
     @"list": [GRMustacheFilter filterWithBlock:^id(NSArray *items) {
         
-        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError *__autoreleasing *error) {
+        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             NSMutableString *buffer = [NSMutableString string];
             

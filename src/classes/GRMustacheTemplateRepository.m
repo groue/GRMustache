@@ -496,7 +496,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID
 {
-    return [_bundle pathForResource:name ofType:_templateExtension];
+    if (baseTemplateID) {
+        NSString *relativePath = [baseTemplateID stringByDeletingLastPathComponent];
+        relativePath = [relativePath stringByReplacingOccurrencesOfString:_bundle.resourcePath withString:@""];
+        
+        return [_bundle pathForResource:name ofType:_templateExtension inDirectory:relativePath];
+    } else {
+        return [_bundle pathForResource:name ofType:_templateExtension];
+    }
 }
 
 - (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error

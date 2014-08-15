@@ -101,7 +101,7 @@ GRMustache lets you embed partial templates that are chosen at runtime (see the 
 
 The Mustache specification does not cover this use case, and provides with lambda-based workarounds that eventually lead to unwanted HTML-escaping issues.
 
-[Jamie Hill](https://github.com/thelucid) has a [Ruby](https://github.com/thelucid/tache) and a [Javascript](https://github.com/thelucid/mustache.js) engine that support dynamic partials.
+[Jamie Hill](https://github.com/thelucid) has a [Ruby](https://github.com/thelucid/tache) engine that support dynamic partials.
 
 Generally speaking, writing cross-language templates requires you to avoid this feature.
 
