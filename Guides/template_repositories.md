@@ -121,7 +121,7 @@ In this case, use an absolute path in your partial tags, starting with a slash, 
 [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesDirectoryPath];
 
 // The root is templatesURL:
-[GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesURL];
+[GRMustacheTemplateRepository templateRepositoryWithBaseURL:templatesURL];
 
 // The root is [bundle resourcePath]:
 [GRMustacheTemplateRepository templateRepositoryWithBundle:bundle];
