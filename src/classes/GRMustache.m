@@ -28,9 +28,13 @@
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
-#import "GRMustacheZipFilter_private.h"
 #import "GRMustacheEachFilter_private.h"
 #import "GRMustacheLocalizer.h"
+
+// For zip filter
+#import "GRMustacheContext_private.h"
+#import "GRMustacheTag_private.h"
+#import "GRMustacheError.h"
 
 
 // =============================================================================
@@ -59,6 +63,83 @@
     static NSObject *standardLibrary = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        id zipFilter = [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
+            
+            // GRMustache generally identifies collections as objects conforming
+            // to NSFastEnumeration, excluding NSDictionary.
+            //
+            // Let's validate our arguments first.
+            
+            for (id argument in arguments) {
+                if (![argument respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] || [argument isKindOfClass:[NSDictionary class]]) {
+                    return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+                        if (error) {
+                            *error = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"zip filter in tag %@ requires all its arguments to be enumerable. %@ is not.", tag, argument] }];
+                        }
+                        return nil;
+                    }];
+                }
+            }
+            
+            
+            // Turn NSFastEnumeration arguments into enumerators. This is
+            // because enumerators can be iterated all together, when
+            // NSFastEnumeration objects can not.
+            
+            NSMutableArray *enumerators = [NSMutableArray array];
+            for (id argument in arguments) {
+                if ([argument respondsToSelector:@selector(objectEnumerator)]) {
+                    // Assume objectEnumerator method returns what we need.
+                    [enumerators addObject:[argument objectEnumerator]];
+                } else {
+                    // Turn NSFastEnumeration argument into an array,
+                    // and extract enumerator from the array.
+                    NSMutableArray *array = [NSMutableArray array];
+                    for (id object in argument) {
+                        [array addObject:object];
+                    }
+                    [enumerators addObject:[array objectEnumerator]];
+                }
+            }
+            
+            
+            // Iterate all enumerators
+            
+            NSMutableArray *renderingObjects = [NSMutableArray array];
+            while (YES) {
+                
+                // TODO
+                
+                NSMutableArray *objects = [NSMutableArray array];
+                for (NSEnumerator *enumerator in enumerators) {
+                    id object = [enumerator nextObject];
+                    if (object) {
+                        [objects addObject:object];
+                    }
+                }
+                
+                
+                // All iterators have been enumerated: stop
+                
+                if (objects.count == 0) {
+                    break;
+                }
+                
+                
+                // TODO
+                
+                id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+                    for (id object in objects) {
+                        context = [context contextByAddingObject:object];
+                    }
+                    return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                }];
+                [renderingObjects addObject:renderingObject];
+            }
+            
+            return renderingObjects;
+        }];
+        
         standardLibrary = [[NSDictionary dictionaryWithObjectsAndKeys:
                             // {{ capitalized(value) }}
                             [[[GRMustacheCapitalizedFilter alloc] init] autorelease], @"capitalized",
@@ -76,12 +157,11 @@
                             [[[GRMustacheEmptyFilter alloc] init] autorelease], @"isEmpty",
                             
                             // {{ localize(value) }}
-                            // {{^ localize }}...{{/}}
+                            // {{# localize }}...{{/}}
                             [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
                             
                             // {{# zip(collection, collection, ...) }}...{{/}}
-                            // {{^ zip(collection, collection, ...) }}...{{/}}
-                            [[[GRMustacheZipFilter alloc] init] autorelease], @"zip",
+                            zipFilter, @"zip",
                             
                             // {{# each(collection) }}...{{/}}
                             [[[GRMustacheEachFilter alloc] init] autorelease], @"each",
