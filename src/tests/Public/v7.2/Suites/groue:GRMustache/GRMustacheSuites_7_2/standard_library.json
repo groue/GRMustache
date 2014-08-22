@@ -38,7 +38,7 @@
       "expected": "+++"
     },
     
-    // each
+    // each(array)
     
     {
       "name": "`each` filter iterates its array argument and make the @first and @index keys available for rendering.",
@@ -55,6 +55,37 @@
       },
       "template": "{{#each(array)}}---{{/}}{{^each(array)}}+++{{/}}",
       "expected": "+++"
+    },
+    
+    // each(dictionary)
+    
+    {
+      "name": "`each` filter iterates its dictionary argument and make the @first and @key keys available for rendering.",
+      "data": {
+        "dictionary": { "key1": 0, "key2": 1 }
+      },
+      "template": "{{#each(dictionary)}}{{^@first}}, {{/}}{{@key}}:{{.}}{{/}}",
+      "expected": "key1:0, key2:1"
+    },
+    {
+      "name": "`each` filter does not render for empty dictionaries.",
+      "data": {
+        "dictionary": {}
+      },
+      "template": "{{#each(dictionary)}}---{{/}}{{^each(dictionary)}}+++{{/}}",
+      "expected": "+++"
+    },
+    
+    // each(zip(...))
+    
+    {
+      "name": "`each` and `zip` filters can chain.",
+      "data": {
+        "array1": [{"name": "Alice"}, {"name": "Bob"}],
+        "array2": [{"age": 20}, {"age": 30}]
+      },
+      "template": "{{# each(zip(array1, array2)) }}{{^ @first }}, {{/ }}{{ @index }}:({{ name }}, {{ age }}){{/ }}",
+      "expected" :"0:(Alice, 20), 1:(Bob, 30)"
     }
   ]
 }

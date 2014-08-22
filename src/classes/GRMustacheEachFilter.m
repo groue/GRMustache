@@ -38,6 +38,10 @@
 
 - (id)transformedValue:(id)object
 {
+    /**
+     * Check that parameter can be iterated.
+     */
+    
     if (![object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)]) {
         return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (error) {
@@ -47,8 +51,21 @@
         }];
     }
     
-#warning TODO: render dictionaries with @key and @value keys.
     
+    /**
+     * When iterating dictionaries, set the `@key` and `@first` keys.
+     * When iterating arrays, set the `@index` and `@first` keys.
+     */
+    
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        return [self transformedDictionary:object];
+    } else {
+        return [self transformedArray:object];
+    }
+}
+
+- (id)transformedArray:(id<NSFastEnumeration>)array
+{
     /**
      * We'll return an array containing as many objects as in the original
      * collection.
@@ -63,7 +80,7 @@
     NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
     NSUInteger index = 0;
-    for (id item in object) {
+    for (id object in array) {
         
         /**
          * Build the replacement rendering object.
@@ -80,7 +97,7 @@
          */
         
         // The original rendering object:
-        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:item];
+        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
         
         // Its boolean value:
         BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
@@ -91,7 +108,73 @@
             /**
              * Add our positional keys in the rendering context
              */
+            
             context = [context contextByAddingObject:@{@"@index": @(index),
+                                                       @"@first" : @(index == 0),
+                                                       }];
+            
+            /**
+             * And return the rendering of the original object given the
+             * extended context.
+             */
+            
+            return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+        }];
+        
+        [replacementRenderingObjects addObject:replacementRenderingObject];
+        ++index;
+    }
+    
+    return replacementRenderingObjects;
+}
+
+- (id)transformedDictionary:(NSDictionary *)dictionary
+{
+    /**
+     * We'll return an array containing as many objects as in the original
+     * dictionary.
+     *
+     * The replacement objects will perform custom rendering by enqueuing in the
+     * context stack the positional keys before rendering just like the original
+     * values.
+     *
+     * Objects that perform custom rendering conform to the GRMustacheRendering
+     * protocol, hence the name of our array of replacement objects:
+     */
+    NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
+    
+    NSUInteger index = 0;
+    for (id key in dictionary) {
+        
+        /**
+         * Build the replacement rendering object.
+         *
+         * It has the same boolean value as the original one, so that it
+         * triggers the rendering {{#regular}} or {{^inverted}} sections just
+         * the same as the original object.
+         *
+         * It enqueues the positional keys, and then renders the same as the
+         * original object.
+         *
+         * To known the boolean value of the original object, and know how it
+         * would render, turn it into a rendering object.
+         */
+        
+        // The original rendering object:
+        id object = dictionary[key];
+        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
+        
+        // Its boolean value:
+        BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
+        
+        // The replacement rendering object:
+        id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:originalBoolValue block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            
+            /**
+             * Add our positional keys in the rendering context
+             */
+            
+            context = [context contextByAddingObject:@{@"@key": key,
                                                        @"@first" : @(index == 0),
                                                        }];
             

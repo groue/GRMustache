@@ -29,14 +29,24 @@
 
 @implementation GRMustacheEachFilterTest
 
-- (void)testGRMustacheEachFilterTriggersRenderingObjectItems
+- (void)testGRMustacheEachFilterTriggersRenderingObjectItemsInArray
 {
     id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [NSString stringWithFormat:@"<%@>", [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
     }];
-    id data = @{ @"array": @[renderingObject, renderingObject] };
+    id data = @{ @"array": @[renderingObject] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}{{@index}}{{/}}" error:NULL] renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering, @"<0><1>", @"");
+    XCTAssertEqualObjects(rendering, @"<0>", @"");
+}
+
+- (void)testGRMustacheEachFilterTriggersRenderingObjectItemsInDictionary
+{
+    id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        return [NSString stringWithFormat:@"<%@>", [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
+    }];
+    id data = @{ @"dictionary": @{ @"a": renderingObject } };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(dictionary)}}{{@key}}{{/}}" error:NULL] renderObject:data error:NULL];
+    XCTAssertEqualObjects(rendering, @"<a>", @"");
 }
 
 @end
