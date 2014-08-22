@@ -176,17 +176,14 @@ GRMustache ships with a built-in [standard library](standard_library.md). This s
 - localizing templates:
     
         {{# localize }}Hello, {{ name }}!{{/ }}
+- accessing array indexes:
+    
+        {{# each(users) }}{{ @index }}: {{name}}{{/ }}
 - etc.
 
-You may eventually write your own reusable components, such as:
-
-- pluralizing strings (see sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912)):
+You may eventually write your own reusable components, such as pluralizing strings (see sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912)):
     
-        You have {{# pluralize(items.count )}}item{{/ }}.
-- accessing array indexes (see sample code in the [Indexes Sample Code](sample_code/indexes.md)):
-    
-        {{# withPosition(items) }}{{ position }}: {{name}}{{/ }}
-- etc.
+    You have {{# pluralize(items.count )}}item{{/ }}.
 
 You can make those reusable components available for all your Mustache renderings by extending the default configuration, once and early in your application:
 

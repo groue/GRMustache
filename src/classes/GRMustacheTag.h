@@ -128,7 +128,6 @@ AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_
  *
  * - https://github.com/groue/GRMustache/blob/master/Guides/delegate.md
  * - https://github.com/groue/GRMustache/blob/master/Guides/rendering_objects.md
- * - https://github.com/groue/GRMustache/blob/master/Guides/sample_code/indexes.md
  *
  * Note that variable tags such as `{{ name }}` have no inner content, and
  * return the empty string.

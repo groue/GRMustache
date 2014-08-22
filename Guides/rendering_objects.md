@@ -44,13 +44,13 @@ The `{{> partial }}` tag renders a hard-coded template, identified by its name. 
 
 `pluralize` is a filter that returns an object able to pluralize the content of the section (see sample code in [issue #50](https://github.com/groue/GRMustache/issues/50#issuecomment-16197912)).
 
-    {{# withPosition(items) }}{{ position }}: {{ name }}{{/ }}
+    {{# each(items) }}{{ @index }}: {{ name }}{{/ }}
 
-`withPosition` is a filter that returns an object that performs a custom rendering of arrays, by defining the `position` key (see the [Indexes Sample Code](sample_code/indexes.md)).
+`each` is part of the [standard library](standard_library.md#each). It returns rendering objects that define extra keys such as `@index`.
 
 ----
 
-All examples above are built using public GRMustache APIs, even the ones that use built-in objects such as `localize` or the date formatter: your own rendering objects are not artificially limited.
+**All examples above are built using public GRMustache APIs.** Even the built-in ones such as `localize`, `each`, or the date formatter. Your own rendering objects are not artificially limited.
 
 The last two examples involve [filters](filters.md). Filters themselves do not provide custom rendering: they just transform values. However, when they return objects that provide custom rendering, the fun can begin. This two-fold pattern is how GRMustache let you implement [Handlebars-like helpers](http://handlebarsjs.com/block_helpers.html).
 
@@ -571,9 +571,9 @@ You have more sample code in [issue #50](https://github.com/groue/GRMustache/iss
 More Sample Code
 ----------------
 
-The [Collection Indexes Sample Code](sample_code/indexes.md) uses the `GRMustacheRendering` protocol for rendering indexes of an array items.
+The `each` filter of the [standard library](standard_library.md#each) uses the protocol to make special keys such as `@index` and `@first` available to templates.
 
-The `localize` helper of the [standard library](standard_library.md) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{ name }}{{/ localize }}`.
+The `localize` helper of the [standard library](standard_library.md#localize) uses the protocol to localize full template sections, as in `{{# localize }}Hello {{ name }}{{/ localize }}`.
 
 NSFormatter instances are rendering objets as well, so that `{{# decimal }}{{ x }} + {{ y }} = {{ sum }}{{/ decimal }}` would render nice decimal numbers. Check the [NSFormatter Guide](NSFormatter.md).
 

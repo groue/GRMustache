@@ -7,7 +7,7 @@ GRMustache FAQ
 
 - **Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
-    [Yes, yes, and yes](sample_code/indexes.md).
+    [Yes, yes, and yes](standard_library.md#each).
 
 - **Is it possible to format numbers and dates?**
     

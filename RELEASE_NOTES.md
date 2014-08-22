@@ -12,13 +12,11 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built from public APIs. So you don't have to write them yourselves. But you can still customize them :-).
 
-### New APIs
+### Better support for custom rendering of collections
 
-GRMustache 7.2 gives more power to your custom rendering objects, especially when you need custom rendering of collections.
+Performing custom rendering of a collection can now be done by providing another collection of objects that provide custom rendering of the original items.
 
-Custom rendering of collection does no longer force you to lose the collection nature of the rendered data. This allows filters which provide custom rendering of collections to chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
-
-Such construct used not to be possible.
+This lets you build reusable filters which can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
 
 Everything lies in the new optional `mustacheBoolValue` property of the GRMustacheRendering. This property let you fine tune your custom rendering of `{{# regular}}` and `{{^ inverted }}` sections. Check the [Rendering Objects Guide](Guides/rendering_objects.md).
 
