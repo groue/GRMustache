@@ -40,6 +40,14 @@
      */
     
     if (![object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)]) {
+        
+        /**
+         * Filters have no way to directly return an error.
+         *
+         * So let's return a rendering object that will complain when it
+         * eventually gets rendered.
+         */
+        
         return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             if (error) {
                 *error = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"each filter in tag %@ expects its arguments to conform to the NSFastEnumeration protocol. %@ is not.", tag, object] }];

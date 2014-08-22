@@ -58,7 +58,7 @@ See also [lowercase](#lowercase), [uppercase](#uppercase).
 each
 ----
 
-Iteration is the default behavior of Mustache when a section is given an array: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc.".
+Iteration is the default behavior of Mustache when a section is given an array: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc."
 
 The `each` filter provides more than the raw iteration.
 
