@@ -37,7 +37,8 @@
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:repositoryDictionary];
     GRMustacheTemplate *template = [repository templateNamed:@"list" error:NULL];
     NSError *error;
-    [template renderObject:@{ @"people": @[ @{ @"name": @"updog" } ] }  error:&error];
+    NSString *rendering = [template renderObject:@{ @"people": @[ @{ @"name": @"updog" } ] }  error:&error];
+    XCTAssertNil(rendering);
     XCTAssertNoThrow([error code], @"EXC_BAD_ACCESS message sent to deallocated instance");
 }
 
