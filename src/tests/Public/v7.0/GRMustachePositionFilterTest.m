@@ -23,10 +23,10 @@
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
 #import "GRMustachePublicAPITest.h"
 
-@interface GRPositionFilter : NSObject<GRMustacheFilter>
+@interface GRMustachePositionFilter : NSObject<GRMustacheFilter>
 @end
 
-@implementation GRPositionFilter
+@implementation GRMustachePositionFilter
 
 - (id)transformedValue:(id)object
 {
@@ -70,42 +70,37 @@
 @end
 
 
-@interface GRPositionFilterTest : GRMustachePublicAPITest
+@interface GRMustachePositionFilterTest : GRMustachePublicAPITest
 
 @end
 
-@implementation GRPositionFilterTest
+@implementation GRMustachePositionFilterTest
 
-- (void)testGRPositionFilterRendersPositions
+- (void)testGRMustachePositionFilterRendersPositions
 {
-    // GRPositionFilter should do its job
-    id data = @{ @"array": @[@"foo", @"bar"], @"f": [[[GRPositionFilter alloc] init] autorelease] };
+    // GRMustachePositionFilter should do its job
+    id data = @{ @"array": @[@"foo", @"bar"], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}{{position}}:{{.}} {{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"1:foo 2:bar ", @"");
 }
 
-- (void)testGRPositionFilterRendersArrayOfFalseValuesJustAsOriginalArray
+- (void)testGRMustachePositionFilterRendersArrayOfFalseValuesJustAsOriginalArray
 {
-    // GRPositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[[NSNull null], @NO], @"f": [[[GRPositionFilter alloc] init] autorelease] };
+    // GRMustachePositionFilter should not alter the way an array is rendered
+    id data = @{ @"array": @[[NSNull null], @NO], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
     NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
     NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering1, rendering2, @"");
 }
 
-- (void)testGRPositionFilterRendersEmptyArrayJustAsOriginalArray
+- (void)testGRMustachePositionFilterRendersEmptyArrayJustAsOriginalArray
 {
-    // GRPositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[], @"f": [[[GRPositionFilter alloc] init] autorelease] };
+    // GRMustachePositionFilter should not alter the way an array is rendered
+    id data = @{ @"array": @[], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
     
     {
         NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
         NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering1, rendering2, @"");
-    }
-    {
-        NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{^array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
-        NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{^f(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering1, rendering2, @"");
     }
 }

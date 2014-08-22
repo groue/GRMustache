@@ -28,6 +28,7 @@
 #import "GRMustacheJavascriptLibrary_private.h"
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
+#import "GRMustacheZipFilter_private.h"
 #import "GRMustacheLocalizer.h"
 
 
@@ -76,6 +77,10 @@
                             // {{ localize(value) }}
                             // {{^ localize }}...{{/}}
                             [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease], @"localize",
+                            
+                            // {{# zip(collection, collection, ...) }}...{{/}}
+                            // {{^ zip(collection, collection, ...) }}...{{/}}
+                            [[[GRMustacheZipFilter alloc] init] autorelease], @"zip",
                             
                             [NSDictionary dictionaryWithObjectsAndKeys:
                              
