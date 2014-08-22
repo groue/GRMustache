@@ -189,7 +189,6 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
             return GRMustacheLocalizerValuePlaceholder;
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeInvertedSection:
             // {{# value }}
             // {{^ value }}
             //
@@ -214,7 +213,6 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
             break;
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeInvertedSection:
             // {{# value }}
             // {{^ value }}
             break;

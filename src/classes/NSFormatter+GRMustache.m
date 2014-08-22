@@ -58,13 +58,9 @@
             if (HTMLSafe != NULL) { *HTMLSafe = NO; }
             return [self description];
             
-        case GRMustacheTagTypeInvertedSection:
-            // {{^ formatter }}...{{/ formatter }}
-            // Behave as a truthy object: don't render for inverted sections
-            return nil;
-            
         case GRMustacheTagTypeSection:
             // {{# formatter }}...{{/ formatter }}
+            // {{^ formatter }}...{{/ formatter }}
             
             // Render normally, but listen to all inner tags rendering, so that
             // we can format them. See mustacheTag:willRenderObject: below.
@@ -103,7 +99,6 @@
         }
             
         case GRMustacheTagTypeSection:
-        case GRMustacheTagTypeInvertedSection:
             // {{# value }}
             // {{^ value }}
             return object;
