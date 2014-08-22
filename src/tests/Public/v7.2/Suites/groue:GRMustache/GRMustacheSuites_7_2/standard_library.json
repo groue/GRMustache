@@ -45,7 +45,7 @@
       "data": {
         "array": ["a", "b", "c", "d"]
       },
-      "template": "{{# each(array) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{ . }}{{/}}",
+      "template": "{{# each(array) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{.}}{{/}}",
       "expected": "a, b, c and d"
     },
     {
@@ -81,9 +81,9 @@
       "expected": "+++"
     },
     {
-      "name": "`each` filter should not alter the boolean value of items.",
+      "name": "`each` filter should not alter the rendering of a list made of lists.",
       "data": { "array": [["a", "b"], [], [0, 1]] },
-      "template": "<{{# each(array) }}({{# . }}{{ . }}{{^}}-{{/}}){{/}}>",
+      "template": "<{{# each(array) }}({{#.}}{{.}}{{^}}-{{/}}){{/}}>",
       "expected": "<(ab)(-)(01)>"
     },
     
@@ -95,7 +95,7 @@
         // Because dictionaries are fundamentally unordered, we can render only a single key.
         "dictionary": { "key": "value" }
       },
-      "template": "{{# each(dictionary) }}{{ @key }}:{{ . }}{{/}}",
+      "template": "{{# each(dictionary) }}{{ @key }}:{{.}}{{/}}",
       "expected": "key:value"
     },
     {
@@ -104,7 +104,7 @@
         // Because dictionaries are fundamentally unordered, we can only render a single unique value.
         "dictionary": { "key1": "value", "key2": "value", "key3": "value" }
       },
-      "template": "{{# each(dictionary) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{ . }}{{/}}",
+      "template": "{{# each(dictionary) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{.}}{{/}}",
       "expected": "value, value and value"
     },
     {

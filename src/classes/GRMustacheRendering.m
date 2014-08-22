@@ -462,7 +462,6 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     // {{ list }}
     // {{# list }}...{{/}}
     // {{^ list }}...{{/}}
-    // Render for each item in the list
     
     BOOL success = YES;
     BOOL bufferCreated = NO;
@@ -477,10 +476,18 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         }
         @autoreleasepool {
             // Render item
+            //
+            // We must not flatten collections (see "List made of lists should render each of them independently." test).
+            // So let's have a custom processing of enumerable objects.
             
             BOOL itemHTMLSafe = NO; // always assume unsafe rendering
             NSError *renderingError = nil;
-            NSString *rendering = [[GRMustacheRendering renderingObjectForObject:item] renderForMustacheTag:tag context:context HTMLSafe:&itemHTMLSafe error:&renderingError];
+            NSString *rendering = nil;
+            if ([item respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![item isKindOfClass:[NSDictionary class]]) {
+                rendering = [tag renderContentWithContext:[context contextByAddingObject:item] HTMLSafe:&itemHTMLSafe error:&renderingError];
+            } else {
+                rendering = [[GRMustacheRendering renderingObjectForObject:item] renderForMustacheTag:tag context:context HTMLSafe:&itemHTMLSafe error:&renderingError];
+            }
             
             if (!rendering) {
                 if (!renderingError) {
@@ -528,13 +535,23 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
     }
     
     if (bufferCreated) {
+        // Non-empty list
+        
         if (HTMLSafe != NULL) {
             *HTMLSafe = !anyItemHTMLUnsafe;
         }
         return GRMustacheBufferGetStringAndRelease(&buffer);
+    } else {
+        // Empty list
+        
+        switch (tag.type) {
+            case GRMustacheTagTypeVariable:
+                // {{ emptyList }}
+                return @"";
+                
+            case GRMustacheTagTypeSection:
+                // {{^ emptyList }}...{{/}}
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        }
     }
-    
-    // We're empty, but rendered: we are rendering an inverted section.
-    // Render once.
-    return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
 }
