@@ -7,6 +7,7 @@ GRMustache [default configuration](configuration.md) contains a library of prede
 
 - [HTML.escape](#htmlescape)
 - [capitalized](#capitalized)
+- [each](#each)
 - [isBlank](#isblank)
 - [isEmpty](#isempty)
 - [javascript.escape](#javascriptescape)
@@ -14,6 +15,7 @@ GRMustache [default configuration](configuration.md) contains a library of prede
 - [lowercase](#lowercase)
 - [uppercase](#uppercase)
 - [URL.escape](#urlescape)
+- [zip](#zip)
 
 
 HTML.escape
@@ -51,6 +53,54 @@ This [filter](filters.md) returns its argument, capitalized: the first character
     {{ capitalized(firstName) }} {{ capitalized(lastName) }}
 
 See also [lowercase](#lowercase), [uppercase](#uppercase).
+
+
+each
+----
+
+Iteration is the default behavior of Mustache when a section is given an array: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc.".
+
+The `each` filter provides more than the raw iteration.
+
+When given an enumerable object (but NSDictionary), it makes the `@index`, `@indexIsEven`, `@indexPlusOne`, `@first` and `@last` keys available:
+
+- `@index` contains the 0-based index of the item (0, 1, 2, etc.)
+- `@indexPlusOne` contains the 1-based index of the item (1, 2, 3, etc.)
+- `@indexIsEven` is true if the 0-based index is even.
+- `@first` is true for the first item only.
+- `@last` is true for the last item only.
+
+```
+One line per user:
+{{# each(users) }}
+  {{ @index }}: {{ name }}
+{{/ }}
+
+Comma-separated user names:
+{{# each(users) }}{{ name }}{{^ @last }}, {{/ }}{{/ }}
+```
+
+```
+One line per user:
+0: Alice
+1: Bob
+2: Craig
+
+Comma-separated user names:
+Alice, Bob, Craig
+```
+
+When provided with a dictionary, `each` iterates each key/value pairs of the dictionary, stores the key in `@key`, and sets the value as the current context:
+
+```
+{{# each(dictionary) }}
+  {{ @key }}: {{ . }}
+{{/ }}
+```
+
+The `@index`, `@indexPlusOne`, `@indexIsEven`, `@first` and `@last` keys are still available when iterating dictionaries.
+
+Should you need other positional keys, for playing [FizzBuzz](http://en.wikipedia.org/wiki/Fizz_buzz) for example, just get inspiration from the [source code](../src/classes/GRMustacheEachFilter.m) of the standard `each` filter. It is written with public APIs only, so you should not have any problem.
 
 
 isBlank
