@@ -278,7 +278,7 @@ The `zip` [filter](filters.md) iterates several collections all at once:
   "scores": [
     { "score": 100 },
     { "score": 200 },
-  ]
+  ],
   "teams": [
     { "team": "iOS" },
     { "team": "Android" },
