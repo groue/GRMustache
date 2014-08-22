@@ -34,19 +34,19 @@
       "data": {
         "emptyArray": []
       },
-      "template": "{{^ zip(emptyArray, emptyArray) }}+++{{/ }}",
+      "template": "{{# zip(emptyArray, emptyArray) }}---{{^ }}+++{{/ }}",
       "expected": "+++"
     },
     
     // each(array)
     
     {
-      "name": "`each` filter iterates its array argument and make the @first and @index keys available for rendering.",
+      "name": "`each` filter iterates its array argument and make the `@first`, `@last` and `@index` keys available for rendering.",
       "data": {
         "array": [0,1,2,3]
       },
-      "template": "{{#each(array)}}{{^@first}}, {{/}}{{@index}}:{{.}}{{/}}",
-      "expected": "0:0, 1:1, 2:2, 3:3"
+      "template": "{{#each(array)}}{{^@first}}{{#@last}} and {{^}}, {{/}}{{/}}{{@index}}:{{.}}{{/}}",
+      "expected": "0:0, 1:1, 2:2 and 3:3"
     },
     {
       "name": "`each` filter does not render for empty arrays.",
@@ -60,19 +60,29 @@
     // each(dictionary)
     
     {
-      "name": "`each` filter iterates its dictionary argument and make the @first and @key keys available for rendering.",
+      "name": "`each` filter iterates its dictionary argument and make the `@key` key available for rendering.",
       "data": {
-        "dictionary": { "key1": 0, "key2": 1 }
+        // Because dictionaries are fundamentally unordered, we can render only a single key.
+        "dictionary": { "key1": 0 }
       },
-      "template": "{{#each(dictionary)}}{{^@first}}, {{/}}{{@key}}:{{.}}{{/}}",
-      "expected": "key1:0, key2:1"
+      "template": "{{#each(dictionary)}}{{@key}}:{{.}}{{/}}",
+      "expected": "key1:0"
+    },
+    {
+      "name": "`each` filter iterates its dictionary argument and make the `@first`, `@last` keys available for rendering.",
+      "data": {
+        // Because dictionaries are fundamentally unordered, we can only render a single unique value.
+        "dictionary": { "key1": "value", "key2": "value", "key3": "value" }
+      },
+      "template": "{{#each(dictionary)}}{{^@first}}{{#@last}} and {{^}}, {{/}}{{/}}{{.}}{{/}}",
+      "expected": "value, value and value"
     },
     {
       "name": "`each` filter does not render for empty dictionaries.",
       "data": {
         "dictionary": {}
       },
-      "template": "{{#each(dictionary)}}---{{/}}{{^each(dictionary)}}+++{{/}}",
+      "template": "{{#each(dictionary)}}---{{^}}+++{{/}}",
       "expected": "+++"
     },
     
