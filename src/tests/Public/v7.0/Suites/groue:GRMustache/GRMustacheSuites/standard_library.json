@@ -99,7 +99,7 @@
     },
     {
       "name": "`isBlank` filter should not match non-empty list.",
-      "data": { "object": [1,2,3] },
+      "data": { "object": [0,1,2,3] },
       "template": "{{^ isBlank(object) }}success{{/ isBlank(object) }}",
       "expected": "success"
     },
@@ -161,7 +161,7 @@
     },
     {
       "name": "`isEmpty` filter should not match non-empty list.",
-      "data": { "object": [1,2,3] },
+      "data": { "object": [0,1,2,3] },
       "template": "{{^ isEmpty(object) }}success{{/ isEmpty(object) }}",
       "expected": "success"
     },

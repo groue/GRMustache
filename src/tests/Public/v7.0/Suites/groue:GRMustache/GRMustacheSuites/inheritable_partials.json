@@ -16,10 +16,10 @@
     },
     {
       "name": "Template can embed an inheritable partial inside in a section",
-      "data": { "items": [1,2,3] },
+      "data": { "items": [0,1,2,3] },
       "template": "{{#items}}{{<partial}}ignored{{/partial}}{{/items}}",
       "partials": { "partial": "{{.}}" },
-      "expected": "123"
+      "expected": "0123"
     },
     {
       "name": "Inheritable partials can embed inheritable partials",
@@ -57,10 +57,10 @@
     },
     {
       "name": "Templates can override nested inheritable sections in inheritable partials",
-      "data": { "items": [1,2,3] },
+      "data": { "items": [0,1,2,3] },
       "template": "{{<partial}}{{$inheritable}}{{.}}{{/inheritable}}{{/partial}}",
       "partials": { "partial": "{{#items}}{{$inheritable}}ignored{{/inheritable}}{{/items}}" },
-      "expected": "123"
+      "expected": "0123"
     },
     {
       "name": "Templates can override duplicated inheritable sections",

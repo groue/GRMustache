@@ -26,7 +26,7 @@
     },
     {
       "name": "Inheritable sections are not tied to rendered data: they do not render multiple times.",
-      "data": { "inheritable": [1,2,3] },
+      "data": { "inheritable": [0,1,2,3] },
       "template": "<{{$inheritable}}rendered{{/inheritable}}>",
       "expected": "<rendered>"
     }
