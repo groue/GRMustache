@@ -477,8 +477,30 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
         @autoreleasepool {
             // Render item
             //
-            // We must not flatten collections (see "List made of lists should render each of them independently." test).
-            // So let's have a custom processing of enumerable objects.
+            // 1. If item is a collection, render the tag with item as the new
+            //    top-level context object.
+            //
+            // 2. Otherwize, let the rendering object for item render the tag as
+            //    it wants.
+            //
+            // Why is that?
+            //
+            // If we would only let the rendering object for item render the tag
+            // as it wants, the "List made of lists should render each of them
+            // independently." test would fail.
+            //
+            // This is because rendering all object in the same way, including
+            // collections, leads to collection flattening.
+            //
+            // If we would always render the tag with item as the new top-level
+            // context object, then the rendering objects returned by `each` and
+            // `zip` filters could not apply. Those filters should then return a
+            // unique rendering object instead of a collection of rendering
+            // objects, and the "`each` and `zip` filters can chain." test would
+            // fail.
+            //
+            // However, the "`each` filter should not alter the rendering of a
+            // list made of lists." test fails. :-(
             
             BOOL itemHTMLSafe = NO; // always assume unsafe rendering
             NSError *renderingError = nil;
