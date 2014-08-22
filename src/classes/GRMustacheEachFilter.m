@@ -38,6 +38,7 @@
 
 - (id)transformedValue:(id)object
 {
+#warning TODO: restore the @last key: http://handlebarsjs.com "The first and last steps of iteration are noted via the @first and @last variables then iterating over an array. When iterating over an object only the @first is available"
     /**
      * Check that parameter can be iterated.
      */
