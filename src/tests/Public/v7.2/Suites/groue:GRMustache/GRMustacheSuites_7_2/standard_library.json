@@ -80,6 +80,12 @@
       "template": "{{# each(array) }}---{{^}}+++{{/}}",
       "expected": "+++"
     },
+    {
+      "name": "`each` filter should not alter the boolean value of items.",
+      "data": { "array": [["a", "b"], [], [0, 1]] },
+      "template": "<{{# each(array) }}({{# . }}{{ . }}{{^}}-{{/}}){{/}}>",
+      "expected": "<(ab)(-)(01)>"
+    },
     
     // each(dictionary)
     
