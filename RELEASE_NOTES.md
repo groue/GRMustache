@@ -3,6 +3,26 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v7.2.0
+
+### New Standard Library Goodness**
+
+- The `zip` filter allows you to iterate several collections all at once ([documentation](Guides/standard_library.md#zip)). Inspired by [issue #80](https://github.com/groue/GRMustache/issues/80)
+- The `each` filter allows templates to access array indexes, dictionary keys, and more ([documentation](Guides/standard_library.md#each)). Inspired by [Handlebars.js](http://handlebarsjs.com)
+
+Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built from public APIs. So you don't have to write them yourselves. But you can still customize them :-).
+
+### New APIs**
+
+GRMustache 7.2 gives more power to your custom rendering objects, especially when you need custom rendering of collections.
+
+Custom rendering of collection does no longer force you to lose the collection nature of the rendered data. This allows filters which provide custom rendering of collections to chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
+
+Such construct used not to be possible.
+
+Everything lies in the new optional `mustacheBoolValue` property of the GRMustacheRendering. This property let you fine tune your custom rendering of `{{# regular}}` and `{{^ inverted }}` sections. Check the [Rendering Objects Guide](Guides/rendering_objects.md).
+
+
 ## v7.1.0
 
 - Support for template hierarchies stored as bundle resources - fix for [issue #78](https://github.com/groue/GRMustache/pull/78)
