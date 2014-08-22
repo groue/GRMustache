@@ -75,6 +75,12 @@
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
     },
+    {
+      "name": "List made of lists should render each of them independently.",
+      "data": { "subject": [["a", "b"], [], [0, 1]] },
+      "template": "<{{#subject}}({{#.}}{{.}}{{^}}-{{/}}){{/subject}}>",
+      "expected": "<(ab)(-)(01)>"
+    },
     
     // Context stack
     
