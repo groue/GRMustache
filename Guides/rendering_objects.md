@@ -93,12 +93,22 @@ The `GRMustacheRendering` class comes in with two handy methods for creating a r
 ```objc
 id trueRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
-    return @"I'm rendering variable tags and regular sections.";
+    switch(tag.type) {
+        case GRMustacheTagTypeVariable:
+            return @"I'm rendering a {{ variable }} tag.";
+        case GRMustacheTagTypeSection:
+            return @"I'm rendering a {{# regular }}...{{/ }} section tag.";
+    }
 }];
 
 id falseRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:NO block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
-    return @"I'm rendering variable tags and inverted sections.";
+    switch(tag.type) {
+        case GRMustacheTagTypeVariable:
+            return @"I'm rendering a {{ variable }} tag.";
+        case GRMustacheTagTypeSection:
+            return @"I'm rendering an {{^ inverted }}...{{/ }} section tag.";
+    }
 }];
 ```
 
