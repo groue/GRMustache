@@ -68,16 +68,6 @@
     XCTAssertEqualObjects(result, @"---", @"");
 }
 
-- (void)testRenderingObjectPerformsInvertedSectionRendering
-{
-    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return @"---";
-    }];
-    NSDictionary *context = @{ @"object": object };
-    NSString *result = [[GRMustacheTemplate templateFromString:@"{{^object}}{{/object}}" error:nil] renderObject:context error:NULL];
-    XCTAssertEqualObjects(result, @"---", @"");
-}
-
 - (void)testRenderingObjectPerformsHTMLSafeVariableRendering
 {
     {
@@ -219,15 +209,10 @@
 
 - (void)testRenderingObjectCanAccessTagType
 {
-    __block NSUInteger invertedSectionCount = 0;
     __block NSUInteger regularSectionCount = 0;
     __block NSUInteger variableCount = 0;
     id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         switch (tag.type) {
-            case GRMustacheTagTypeInvertedSection:
-                ++invertedSectionCount;
-                break;
-                
             case GRMustacheTagTypeSection:
                 ++regularSectionCount;
                 break;
@@ -240,46 +225,38 @@
     }];
     
     {
-        invertedSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(variableCount, (NSUInteger)1, @"");
     }
     {
-        invertedSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{#object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(regularSectionCount, (NSUInteger)1, @"");
         XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
     {
-        invertedSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{$object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        XCTAssertEqual(invertedSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
     {
-        invertedSectionCount = 0;
         regularSectionCount = 0;
         variableCount = 0;
         
         [[GRMustacheTemplate templateFromString:@"{{^object}}...{{/object}}" error:nil] renderObject:@{ @"object": object } error:NULL];
         
-        XCTAssertEqual(invertedSectionCount, (NSUInteger)1, @"");
         XCTAssertEqual(regularSectionCount, (NSUInteger)0, @"");
         XCTAssertEqual(variableCount, (NSUInteger)0, @"");
     }
@@ -531,22 +508,6 @@
     id items = @{@"items": @[object1, object2] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}{{.}}{{/items}}" error:NULL] renderObject:items error:NULL];
     XCTAssertEqualObjects(rendering, @"12", @"");
-}
-
-- (void)testArrayOfRenderingObjectsInSectionTagNeedsExplicitInvocation
-{
-    id object1 = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        return [NSString stringWithFormat:@"[1:%@]", tagRendering];
-    }];
-    id object2 = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        return [NSString stringWithFormat:@"[2:%@]", tagRendering];
-    }];
-    
-    id items = @{@"items": @[object1, object2] };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}---{{/items}},{{#items}}{{#.}}---{{/.}}{{/items}}" error:NULL] renderObject:items error:NULL];
-    XCTAssertEqualObjects(rendering, @"------,[1:---][2:---]", @"");
 }
 
 - (void)testArrayOfRenderingObjectsInVariableTag
