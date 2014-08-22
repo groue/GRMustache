@@ -262,14 +262,53 @@ Variable tags buried inside inner sections are escaped as well, so that you can 
 See also [HTML.escape](#htmlescape), [javascript.escape](#javascriptescape)
 
 
+zip
+---
+
+The `zip` [filter](filters.md) iterates several collections all at once:
+
+`data.json`:
+
+```json
+{
+  "users": [
+    { "name": "Alice" },
+    { "name": "Bob" },
+  ],
+  "scores": [
+    { "score": 100 },
+    { "score": 200 },
+  ]
+  "teams": [
+    { "team": "iOS" },
+    { "team": "Android" },
+  ]
+}
+```
+
+`Document.mustache`:
+
+    {{# zip(users, scores, teams) }}
+    - {{ name }} ({{ team }}): {{ score }} points
+    {{/}}
+
+Rendering:
+
+    - Alice (iOS): 100 points
+    - Bob (Android): 200 points
+
+When given to a section, the `zip` filter renders as many times as there are elements in the longest collection.
+
+
 Get inspired
 ------------
 
 All items of the standard library are built using public APIs: check the code for inspiration:
 
-- [GRMustacheStandardLibrary.m](../src/classes/GRMustacheStandardLibrary.m)
+- [GRMustacheEachFilter.m](../src/classes/GRMustacheEachFilter.m)
 - [GRMustacheHTMLLibrary.m](../src/classes/GRMustacheHTMLLibrary.m)
 - [GRMustacheLocalizer.m](../src/classes/GRMustacheLocalizer.m)
+- [GRMustacheStandardLibrary.m](../src/classes/GRMustacheStandardLibrary.m)
 
 
 [up](../../../../GRMustache#documentation), [next](html_vs_text.md)

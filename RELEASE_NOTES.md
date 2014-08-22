@@ -7,8 +7,8 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ### New Standard Library Goodness
 
-- The `zip` filter iterates several collections all at once ([documentation](Guides/standard_library.md#zip)). Inspired by [issue #80](https://github.com/groue/GRMustache/issues/80).
 - The `each` filter let templates access array indexes, dictionary keys, and more ([documentation](Guides/standard_library.md#each)). Inspired by [Handlebars.js](http://handlebarsjs.com).
+- The `zip` filter can iterate several collections all at once ([documentation](Guides/standard_library.md#zip)). Inspired by [issue #80](https://github.com/groue/GRMustache/issues/80).
 
 Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built from public APIs. So you don't have to write them yourselves. But you can still customize them :-).
 
