@@ -9,7 +9,7 @@
         "names": [{"name":"Alice", "o": "n"}, {"name":"Bob", "o": "n"}, {"name":"Craig", "o": "n"}],
         "ages": [{"age":30, "o": "a"}, {"age":25, "o": "a"}],
         "hair": [{"hair":"brown", "o": "h"}, {"hair":"silver", "o": "h"}, {"hair":"dark", "o": "h"}]},
-      "template": "{{# zip(hair, names, ages) }}{{ name }} ({{ o }}) is {{ age }} years old and has {{ hair}} hair. {{/ }}",
+      "template": "{{# zip(hair, names, ages) }}{{ name }} ({{ o }}) is {{ age }} years old and has {{ hair}} hair. {{/}}",
       "expected": "Alice (a) is 30 years old and has brown hair. Bob (a) is 25 years old and has silver hair. Craig (n) is  years old and has dark hair. "
     },
     {
@@ -18,7 +18,7 @@
         "names": [{"name":"Alice", "o": "n"}, {"name":"Bob", "o": "n"}, {"name":"Craig", "o": "n"}],
         "ages": [{"age":30, "o": "a"}, {"age":25, "o": "a"}],
         "hair": [{"hair":"brown", "o": "h"}, {"hair":"silver", "o": "h"}, {"hair":"dark", "o": "h"}]},
-      "template": "{{# zip(ages, names, hair) }}{{ name }} ({{ o }}) is {{ age }} years old and has {{ hair}} hair. {{/ }}",
+      "template": "{{# zip(ages, names, hair) }}{{ name }} ({{ o }}) is {{ age }} years old and has {{ hair}} hair. {{/}}",
       "expected": "Alice (h) is 30 years old and has brown hair. Bob (h) is 25 years old and has silver hair. Craig (h) is  years old and has dark hair. "
     },
     {
@@ -26,7 +26,7 @@
       "data": {
         "nonArray": "blah"
       },
-      "template": "{{# zip(nonArray) }}...{{/ }}",
+      "template": "{{# zip(nonArray) }}...{{/}}",
       "expected_error": "zip filter.*requires all its arguments to be enumerable"
     },
     {
@@ -34,26 +34,50 @@
       "data": {
         "emptyArray": []
       },
-      "template": "{{# zip(emptyArray, emptyArray) }}---{{^ }}+++{{/ }}",
+      "template": "{{# zip(emptyArray, emptyArray) }}---{{^}}+++{{/}}",
       "expected": "+++"
     },
     
     // each(array)
     
     {
-      "name": "`each` filter iterates its array argument and make the `@first`, `@last` and `@index` keys available for rendering.",
+      "name": "`each` filter iterates its array argument and makes the `@first`, `@last` keys available for rendering.",
       "data": {
-        "array": [0,1,2,3]
+        "array": ["a", "b", "c", "d"]
       },
-      "template": "{{#each(array)}}{{^@first}}{{#@last}} and {{^}}, {{/}}{{/}}{{@index}}:{{.}}{{/}}",
-      "expected": "0:0, 1:1, 2:2 and 3:3"
+      "template": "{{# each(array) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{ . }}{{/}}",
+      "expected": "a, b, c and d"
+    },
+    {
+      "name": "`each` filter iterates its array argument and makes the `@index` key available for rendering.",
+      "data": {
+        "array": ["a", "b", "c", "d"]
+      },
+      "template": "{{# each(array) }}{{ @index }}{{/}}",
+      "expected": "0123"
+    },
+    {
+      "name": "`each` filter iterates its array argument and makes the `@indexPlusOne` key available for rendering.",
+      "data": {
+        "array": ["a", "b", "c", "d"]
+      },
+      "template": "{{# each(array) }}{{ @indexPlusOne }}{{/}}",
+      "expected": "1234"
+    },
+    {
+      "name": "`each` filter iterates its array argument and makes the `@indexIsEven` key available for rendering.",
+      "data": {
+        "array": ["a", "b", "c", "d"]
+      },
+      "template": "{{# each(array) }}{{# @indexIsEven }}e{{^}}o{{/}}{{/}}",
+      "expected": "eoeo"
     },
     {
       "name": "`each` filter does not render for empty arrays.",
       "data": {
         "array": []
       },
-      "template": "{{#each(array)}}---{{/}}{{^each(array)}}+++{{/}}",
+      "template": "{{# each(array) }}---{{^}}+++{{/}}",
       "expected": "+++"
     },
     
@@ -63,10 +87,10 @@
       "name": "`each` filter iterates its dictionary argument and make the `@key` key available for rendering.",
       "data": {
         // Because dictionaries are fundamentally unordered, we can render only a single key.
-        "dictionary": { "key1": 0 }
+        "dictionary": { "key": "value" }
       },
-      "template": "{{#each(dictionary)}}{{@key}}:{{.}}{{/}}",
-      "expected": "key1:0"
+      "template": "{{# each(dictionary) }}{{ @key }}:{{ . }}{{/}}",
+      "expected": "key:value"
     },
     {
       "name": "`each` filter iterates its dictionary argument and make the `@first`, `@last` keys available for rendering.",
@@ -74,15 +98,39 @@
         // Because dictionaries are fundamentally unordered, we can only render a single unique value.
         "dictionary": { "key1": "value", "key2": "value", "key3": "value" }
       },
-      "template": "{{#each(dictionary)}}{{^@first}}{{#@last}} and {{^}}, {{/}}{{/}}{{.}}{{/}}",
+      "template": "{{# each(dictionary) }}{{^ @first }}{{# @last }} and {{^}}, {{/}}{{/}}{{ . }}{{/}}",
       "expected": "value, value and value"
+    },
+    {
+      "name": "`each` filter iterates its dictionary argument and makes the `@index` key available for rendering.",
+      "data": {
+        "dictionary": { "key1": "value1", "key2": "value2", "key3": "value3" }
+      },
+      "template": "{{# each(dictionary) }}{{ @indexPlusOne }}{{/}}",
+      "expected": "123"
+    },
+    {
+      "name": "`each` filter iterates its dictionary argument and makes the `@indexPlusOne` key available for rendering.",
+      "data": {
+        "dictionary": { "key1": "value1", "key2": "value2", "key3": "value3" }
+      },
+      "template": "{{# each(dictionary) }}{{ @indexPlusOne }}{{/}}",
+      "expected": "123"
+    },
+    {
+      "name": "`each` filter iterates its dictionary argument and makes the `@indexIsEven` key available for rendering.",
+      "data": {
+        "dictionary": { "key1": "value", "key2": "value", "key3": "value" }
+      },
+      "template": "{{# each(dictionary) }}{{# @indexIsEven }}e{{^}}o{{/}}{{/}}",
+      "expected": "eoe"
     },
     {
       "name": "`each` filter does not render for empty dictionaries.",
       "data": {
         "dictionary": {}
       },
-      "template": "{{#each(dictionary)}}---{{^}}+++{{/}}",
+      "template": "{{# each(dictionary) }}---{{^}}+++{{/}}",
       "expected": "+++"
     },
     
@@ -94,7 +142,7 @@
         "array1": [{"name": "Alice"}, {"name": "Bob"}],
         "array2": [{"age": 20}, {"age": 30}]
       },
-      "template": "{{# each(zip(array1, array2)) }}{{^ @first }}, {{/ }}{{ @index }}:({{ name }}, {{ age }}){{/ }}",
+      "template": "{{# each(zip(array1, array2)) }}{{^ @first }}, {{/}}{{ @index }}:({{ name }}, {{ age }}){{/}}",
       "expected" :"0:(Alice, 20), 1:(Bob, 30)"
     }
   ]

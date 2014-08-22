@@ -31,9 +31,6 @@
 
 /**
  * The transformedValue: method is required by the GRMustacheFilter protocol.
- *
- * Don't provide any type checking, and assume the filter argument is
- * enumerable.
  */
 
 - (id)transformedValue:(id)object
@@ -53,8 +50,8 @@
     
     
     /**
-     * When iterating dictionaries, set the `@key` and `@first` keys.
-     * When iterating arrays, set the `@index` and `@first` keys.
+     * Index-based collections and key-based collections are not iterated in the
+     * same way.
      */
     
     if ([object isKindOfClass:[NSDictionary class]]) {
@@ -112,6 +109,8 @@
              */
             
             context = [context contextByAddingObject:@{@"@index": @(index),
+                                                       @"@indexPlusOne": @(index + 1),
+                                                       @"@indexIsEven" : @(index % 2 == 0),
                                                        @"@first" : @(index == 0),
                                                        @"@last" : @(index == indexOfLastObject),    // When this is evaluated, on rendering, the filter will have been long executed. The __block variable indexOfLastObject will have the value of the last index.
                                                        }];
@@ -178,7 +177,10 @@
              * Add our positional keys in the rendering context
              */
             
-            context = [context contextByAddingObject:@{@"@key": key,
+            context = [context contextByAddingObject:@{@"@index": @(index),
+                                                       @"@indexPlusOne": @(index + 1),
+                                                       @"@indexIsEven" : @(index % 2 == 0),
+                                                       @"@key": key,
                                                        @"@first" : @(index == 0),
                                                        @"@last" : @(index == indexOfLastObject),
                                                        }];
