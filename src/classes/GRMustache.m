@@ -29,6 +29,7 @@
 #import "GRMustacheHTMLLibrary_private.h"
 #import "GRMustacheURLLibrary_private.h"
 #import "GRMustacheZipFilter_private.h"
+#import "GRMustacheEachFilter_private.h"
 #import "GRMustacheLocalizer.h"
 
 
@@ -81,6 +82,9 @@
                             // {{# zip(collection, collection, ...) }}...{{/}}
                             // {{^ zip(collection, collection, ...) }}...{{/}}
                             [[[GRMustacheZipFilter alloc] init] autorelease], @"zip",
+                            
+                            // {{# each(collection) }}...{{/}}
+                            [[[GRMustacheEachFilter alloc] init] autorelease], @"each",
                             
                             [NSDictionary dictionaryWithObjectsAndKeys:
                              

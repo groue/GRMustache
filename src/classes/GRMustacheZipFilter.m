@@ -21,9 +21,11 @@
 // THE SOFTWARE.
 
 #import "GRMustacheZipFilter_private.h"
-#import "GRMustacheRendering_private.h"
-#import "GRMustacheContext_private.h"
-#import "GRMustacheTag_private.h"
+
+// Only use public APIs
+#import "GRMustacheRendering.h"
+#import "GRMustacheContext.h"
+#import "GRMustacheTag.h"
 #import "GRMustacheError.h"
 
 // =============================================================================
