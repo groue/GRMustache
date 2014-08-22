@@ -297,7 +297,7 @@ Rendering:
     - Alice (iOS): 100 points
     - Bob (Android): 200 points
 
-When given to a section, the `zip` filter renders as many times as there are elements in the longest collection.
+The `zip` filter renders a section as many times as there are elements in the **longest** of its argument.
 
 
 Get inspired
