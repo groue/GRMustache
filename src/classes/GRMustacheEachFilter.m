@@ -38,7 +38,6 @@
 
 - (id)transformedValue:(id)object
 {
-#warning TODO: restore the @last key: http://handlebarsjs.com "The first and last steps of iteration are noted via the @first and @last variables then iterating over an array. When iterating over an object only the @first is available"
     /**
      * Check that parameter can be iterated.
      */
@@ -80,6 +79,7 @@
      */
     NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
+    __block NSUInteger indexOfLastObject = 0;
     NSUInteger index = 0;
     for (id object in array) {
         
@@ -104,6 +104,7 @@
         BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
         
         // The replacement rendering object:
+        indexOfLastObject = index;
         id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:originalBoolValue block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             /**
@@ -112,6 +113,7 @@
             
             context = [context contextByAddingObject:@{@"@index": @(index),
                                                        @"@first" : @(index == 0),
+                                                       @"@last" : @(index == indexOfLastObject),    // When this is evaluated, on rendering, the filter will have been long executed. The __block variable indexOfLastObject will have the value of the last index.
                                                        }];
             
             /**
@@ -144,6 +146,7 @@
      */
     NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
+    NSUInteger indexOfLastObject = dictionary.count - 1;
     NSUInteger index = 0;
     for (id key in dictionary) {
         
@@ -177,6 +180,7 @@
             
             context = [context contextByAddingObject:@{@"@key": key,
                                                        @"@first" : @(index == 0),
+                                                       @"@last" : @(index == indexOfLastObject),
                                                        }];
             
             /**
