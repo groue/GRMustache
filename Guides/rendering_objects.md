@@ -10,7 +10,6 @@ Rendering Objects
 - [Example: Have a section render an alternate template string](#example-have-a-section-render-an-alternate-template-string)
 - [Example: Dynamic partials](#example-dynamic-partials)
 - [Example: Objects that render themselves](#example-objects-that-render-themselves)
-- [Example: Render collections of objects](#example-render-collections-of-objects)
 - [Example: A Handlebars.js Helper](#example-a-handlebarsjs-helper)
 - [More Sample Code](#more-sample-code)
 - [Compatibility with other Mustache implementations](#compatibility-with-other-mustache-implementations)
@@ -454,52 +453,6 @@ Two useful things:
     When GRMustache renders `{{ name }}`, it looks for the `name` key in the [context stack](runtime.md#the-context-stack): for the title and names of our movies and people to render, movies and people must enter the context stack. This is the reason for the derivation of new contexts, using the `contextByAddingObject:` method, before partials are rendered.
     
 See the [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of the GRMustacheContext class.
-
-
-Example: Render collections of objects
---------------------------------------
-
-Using the same Movie and Person class introduced above, we can easily render a list of movies, just as Ruby on Rails's `<%= render @movies %>`:
-
-
-`Document.mustache`:
-
-    {{ movies }}  {{! one movie is not enough }}
-
-`Movie.mustache`:
-
-    {{ title }} by {{ director }}
-    
-`Person.mustache`:
-
-    {{ firstName }} {{ lastName }}
-
-`Render.m`:
-
-```objc
-id data = @{
-    @"movies": @[
-        [Movie movieWithTitle:@"Citizen Kane"
-                     director:[Person personWithFirstName:@"Orson" lastName:@"Welles"]],
-        [Movie movieWithTitle:@"Some Like It Hot"
-                     director:[Person personWithFirstName:@"Billy" lastName:@"Wilder"]],
-    ]
-};
-
-NSString *rendering = [GRMustacheTemplate renderObject:data
-                                          fromResource:@"Document"
-                                                bundle:nil
-                                                 error:NULL];
-```
-
-Final rendering:
-
-    Citizen Kane by Orson Welles
-    Some Like It Hot by Billy Wilder
-
-### What did we learn here?
-
-A new perspective on the fact that arrays render the concatenation of their items.
 
 
 Example: A Handlebars.js Helper
