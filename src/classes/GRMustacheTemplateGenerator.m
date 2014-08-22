@@ -139,20 +139,7 @@
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
     NSString *expressionString = [self stringWithExpression:sectionTag.expression];
-    NSString *sectionPrefix = nil;
-    switch (sectionTag.type) {
-        case GRMustacheTagTypeSection:
-            sectionPrefix = @"#";
-            break;
-            
-        case GRMustacheTagTypeInvertedSection:
-            sectionPrefix = @"^";
-            break;
-            
-        case GRMustacheTagTypeVariable:
-            [NSException raise:NSInvalidArgumentException format:@"Bad tag type: %ld", (long)sectionTag.type];
-            break;
-    }
+    NSString *sectionPrefix = sectionTag.isInverted ? @"^" : @"#";
     NSString *tagStartString = [NSString stringWithFormat:@"%@%@%@%@", tagStartDelimiter, sectionPrefix, expressionString, tagEndDelimiter];
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
     

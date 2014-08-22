@@ -57,6 +57,11 @@
     return GRMustacheTagTypeVariable;
 }
 
+- (BOOL)isInverted
+{
+    return NO;
+}
+
 - (NSString *)innerTemplateString
 {
     return @"";

@@ -28,6 +28,7 @@
 @implementation GRMustacheSectionTag
 @synthesize expression=_expression;
 @synthesize ASTNodes=_ASTNodes;
+@synthesize inverted=_inverted;
 
 - (void)dealloc
 {
@@ -62,9 +63,6 @@
 
 - (GRMustacheTagType)type
 {
-    if (_inverted) {
-        return GRMustacheTagTypeInvertedSection;
-    }
     return GRMustacheTagTypeSection;
 }
 

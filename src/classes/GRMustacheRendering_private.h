@@ -39,12 +39,18 @@
 
 // Documented in GRMustacheRendering.h
 @protocol GRMustacheRendering <NSObject>
+@required
 
 // Documented in GRMustacheRendering.h
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
                            context:(GRMustacheContext *)context
                           HTMLSafe:(BOOL *)HTMLSafe
                              error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+
+@optional
+
+// Documented in GRMustacheRendering.h
+@property (nonatomic, readonly) BOOL mustacheBoolValue GRMUSTACHE_API_PUBLIC;
 
 @end
 
@@ -59,7 +65,10 @@
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheRendering.h
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block GRMUSTACHE_API_PUBLIC;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustacheRendering.h
++ (id<GRMustacheRendering>)renderingObjectWithBoolValue:(BOOL)boolValue block:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock GRMUSTACHE_API_PUBLIC;
 
 + (void)pushCurrentTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
 + (void)popCurrentTemplateRepository GRMUSTACHE_API_INTERNAL;

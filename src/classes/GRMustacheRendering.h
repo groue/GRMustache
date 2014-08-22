@@ -66,11 +66,31 @@
  * @see GRMustacheTag
  * @see GRMustacheContext
  * @see GRMustacheContentType
+ *
+ * @since v6.0
  */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
                            context:(GRMustacheContext *)context
                           HTMLSafe:(BOOL *)HTMLSafe
                              error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+@optional
+
+/**
+ * The boolean value of the rendering object.
+ *
+ * A YES boolean value triggers the rendering of {{#section}}...{{/section}}
+ * tags, and avoids the rendering of inverted {{^section}}...{{/section}} tags.
+ *
+ * A NO boolean value avoids the rendering of {{#section}}...{{/section}}
+ * tags, and triggers the rendering of inverted {{^section}}...{{/section}} tags.
+ *
+ * When this method is not provided, the rendering object is assumed to be
+ * true.
+ *
+ * @since v7.2
+ */
+@property (nonatomic, readonly) BOOL mustacheBoolValue AVAILABLE_GRMUSTACHE_VERSION_7_2_AND_LATER;
 
 @end
 
@@ -111,10 +131,10 @@
 /**
  * Returns a rendering object that renders with the provided block.
  *
- * @param block  A block that follows the semantics of the
- *               renderForMustacheTag:context:HTMLSafe:error: method defined by
- *               the GRMustacheRendering protocol. See the documentation of this
- *               method.
+ * @param renderingBlock  A block that follows the semantics of the
+ *                        renderForMustacheTag:context:HTMLSafe:error: method
+ *                        defined by the GRMustacheRendering protocol. See the
+ *                        documentation of this method.
  *
  * @return A rendering object
  *
@@ -122,7 +142,24 @@
  *
  * @since v7.0
  */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * Returns a rendering object that renders with the provided block.
+ *
+ * @param boolValue       TODO
+ * @param renderingBlock  A block that follows the semantics of the
+ *                        renderForMustacheTag:context:HTMLSafe:error: method
+ *                        defined by the GRMustacheRendering protocol. See the
+ *                        documentation of this method.
+ *
+ * @return A rendering object
+ *
+ * @see GRMustacheRendering protocol
+ *
+ * @since v7.2
+ */
++ (id<GRMustacheRendering>)renderingObjectWithBoolValue:(BOOL)boolValue block:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock AVAILABLE_GRMUSTACHE_VERSION_7_2_AND_LATER;
 
 @end
 

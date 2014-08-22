@@ -234,12 +234,35 @@
             
             // Render value
             
-            BOOL HTMLSafe = NO;
-            NSError *renderingError = nil;  // set it to nil, so that we can help lazy coders who return nil as a valid rendering.
             id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:value];
-            NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:&HTMLSafe error:&renderingError];
+            NSString *rendering = nil;
+            NSError *renderingError = nil;  // Default nil, so that we can help lazy coders who return nil as a valid rendering.
+            BOOL HTMLSafe = NO;             // Default NO, so that we assume unsafe rendering from lazy coders who do not explicitly set it.
+            switch (tag.type) {
+                case GRMustacheTagTypeVariable:
+                    rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:&HTMLSafe error:&renderingError];
+                    break;
+                    
+                case GRMustacheTagTypeSection: {
+                    // Section rendering depends on the boolean value of the
+                    // rendering object.
+                    //
+                    // Despite the mustacheBoolValue method being declared
+                    // optional by the GRMustacheRendering protocol (for API
+                    // compatibility with GRMustache <= 7.1), the method is
+                    // always implemented, with YES as a default value.
+                    //
+                    // See +[GRMustacheRendering initialize]
+                    BOOL boolValue = [renderingObject mustacheBoolValue];
+                    if (tag.isInverted ^ boolValue) {
+                        rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:&HTMLSafe error:&renderingError];
+                    } else {
+                        rendering = @"";
+                    }
+                } break;
+            }
             
-            if (rendering == nil && renderingError == nil)
+            if (!rendering && !renderingError)
             {
                 // Rendering is nil, but rendering error is not set.
                 //

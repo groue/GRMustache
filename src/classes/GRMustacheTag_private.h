@@ -31,7 +31,6 @@
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     GRMustacheTagTypeVariable = 1 << 1 GRMUSTACHE_API_PUBLIC,
     GRMustacheTagTypeSection = 1 << 2 GRMUSTACHE_API_PUBLIC,
-    GRMustacheTagTypeInvertedSection = 1 << 3 GRMUSTACHE_API_PUBLIC,
 } GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
@@ -48,5 +47,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+
+/**
+ * TODO
+ */
+@property (nonatomic, readonly, getter=isInverted) BOOL inverted GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -32,27 +32,31 @@
  */
 typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
     /**
-     * The type for variable tags such as {{ name }}
+     * The type for variable tags such as `{{name}}`.
      *
      * @since v6.0
      */
     GRMustacheTagTypeVariable = 1 << 1 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
     /**
-     * The type for section tags such as {{# name }}...{{/}}
+     * The type for regular and inverted section tags, such as
+     * `{{#name}}...{{/name}}` and `{{#name}}...{{/name}}`.
      *
      * @since v6.0
      */
     GRMustacheTagTypeSection = 1 << 2 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
-    /**
-     * The type for inverted section tags such as {{^ name }}...{{/}}
-     *
-     * @since v6.0
-     */
-    GRMustacheTagTypeInvertedSection = 1 << 3 AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
 } AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
+/**
+ * The type for inverted section tags such as {{^ name }}...{{/}}
+ *
+ * This value is deprecated.
+ *
+ * @since v6.0
+ * @deprecated v7.2
+ */
+AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_7_2 static GRMustacheTagType const GRMustacheTagTypeInvertedSection = 1 << 3;
 
 /**
  * GRMustacheTag instances represent Mustache tags that render values, such as
