@@ -61,20 +61,24 @@ Let's begin the detailed tour.
 GRMustacheRendering protocol
 ----------------------------
 
-This protocol declares the method that all rendering objects must implement:
+This protocol declares two methods:
 
 ```objc
 @protocol GRMustacheRendering <NSObject>
-
+@required
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
                            context:(GRMustacheContext *)context
                           HTMLSafe:(BOOL *)HTMLSafe
                              error:(NSError **)error;
 
+@optional
+@property (nonatomic, readonly) BOOL mustacheBoolValue;
 @end
 ```
 
-- The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
+- The optional _mustacheBoolValue_ method decides whether the rendering object should render sections. False rendering objects only render `{{^inverted}}` sections. True ones only render `{{#regular}}` sections. This flag is not used for `{{variable}}` tags. When this method is not provided, the rendering object is assumed to be true.
+
+- In the required `renderForMustacheTag:context:HTMLSafe:error:` method, the _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
 
 - The _context_ represents the [context stack](runtime.md#the-context-stack), and all information that tags need to render.
 
@@ -84,16 +88,19 @@ This protocol declares the method that all rendering objects must implement:
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext.
 
-You may declare and implement your own conforming classes. The `+[GRMustacheRendering renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
+The `GRMustacheRendering` class comes in with two handy methods for creating a rendering object without declaring any class:
 
 ```objc
-id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id trueRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
-    return @"I'm rendered!";
+    return @"I'm rendering variable tags and regular sections.";
+}];
+
+id falseRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:NO block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+{
+    return @"I'm rendering variable tags and inverted sections.";
 }];
 ```
-
-The _tag_ and _context_ parameters help you perform your custom rendering. Check their references ([GRMustacheTag](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html), [GRMustacheContext](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html)) for a full documentation of their classes. This guide will illustrate how to use those objects with a few examples.
 
 
 Trivial Example
