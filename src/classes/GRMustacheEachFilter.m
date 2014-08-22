@@ -25,6 +25,7 @@
 // Only use public APIs
 #import "GRMustacheRendering.h"
 #import "GRMustacheContext.h"
+#import "GRMustacheError.h"
 
 @implementation GRMustacheEachFilter
 
@@ -35,9 +36,17 @@
  * enumerable.
  */
 
-- (id)transformedValue:(id<NSFastEnumeration>)objects
+- (id)transformedValue:(id)object
 {
-#warning TODO: render an error when argument is not iterable.
+    if (![object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)]) {
+        return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+            if (error) {
+                *error = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"each filter in tag %@ expects its arguments to conform to the NSFastEnumeration protocol. %@ is not.", tag, object] }];
+            }
+            return nil;
+        }];
+    }
+    
 #warning TODO: render dictionaries with @key and @value keys.
     
     /**
@@ -53,16 +62,8 @@
      */
     NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
-    
-    /**
-     * Iterate original objects
-     */
-    
     NSUInteger index = 0;
-    __block NSUInteger indexOfLastObject;
-    for (id object in objects) {
-        
-        indexOfLastObject = index;
+    for (id item in object) {
         
         /**
          * Build the replacement rendering object.
@@ -79,7 +80,7 @@
          */
         
         // The original rendering object:
-        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
+        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:item];
         
         // Its boolean value:
         BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
@@ -92,7 +93,6 @@
              */
             context = [context contextByAddingObject:@{@"@index": @(index),
                                                        @"@first" : @(index == 0),
-                                                       @"@last" : @(index == indexOfLastObject),
                                                        }];
             
             /**

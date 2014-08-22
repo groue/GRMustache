@@ -1,5 +1,8 @@
 {
   "tests": [
+    
+    // zip
+    
     {
       "name": "`zip` iterates its collection arguments in the same time, as many times as there are elements in the longest collection.",
       "data": {
@@ -25,12 +28,32 @@
       },
       "template": "{{# zip(nonArray) }}...{{/ }}",
       "expected_error": "zip filter.*requires all its arguments to be enumerable"
-    }, {
+    },
+    {
       "name": "`zip` preserves the boolean value of empty arrays.",
       "data": {
         "emptyArray": []
       },
       "template": "{{^ zip(emptyArray, emptyArray) }}+++{{/ }}",
+      "expected": "+++"
+    },
+    
+    // each
+    
+    {
+      "name": "`each` filter iterates its array argument and make the @first and @index keys available for rendering.",
+      "data": {
+        "array": [0,1,2,3]
+      },
+      "template": "{{#each(array)}}{{^@first}}, {{/}}{{@index}}:{{.}}{{/}}",
+      "expected": "0:0, 1:1, 2:2, 3:3"
+    },
+    {
+      "name": "`each` filter does not render for empty arrays.",
+      "data": {
+        "array": []
+      },
+      "template": "{{#each(array)}}---{{/}}{{^each(array)}}+++{{/}}",
       "expected": "+++"
     }
   ]

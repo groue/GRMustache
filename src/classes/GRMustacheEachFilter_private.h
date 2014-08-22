@@ -22,6 +22,6 @@
 
 #import "GRMustacheFilter_private.h"
 
-@interface GRMustacheEachFilter : NSObject
+@interface GRMustacheEachFilter : NSObject<GRMustacheFilter>
 
 @end

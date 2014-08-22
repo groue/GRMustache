@@ -29,13 +29,6 @@
 
 @implementation GRMustacheEachFilterTest
 
-- (void)testGRMustacheEachFilterRendersPositions
-{
-    id data = @{ @"array": @[@"a", @"b", @"c"] };
-    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}{{@index}}{{#@first}}(first){{/}}{{#@last}}(last){{/}}:{{.}} {{/}}" error:NULL] renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering, @"0(first):a 1:b 2(last):c ", @"");
-}
-
 - (void)testGRMustacheEachFilterTriggersRenderingObjectItems
 {
     id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
@@ -44,45 +37,6 @@
     id data = @{ @"array": @[renderingObject, renderingObject] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}{{@index}}{{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"<0><1>", @"");
-}
-
-- (void)testGRMustacheEachFilterRendersArrayOfFilteredStringsJustAsOriginalArray
-{
-    // `each` filter should not alter the way an array is rendered
-    id data = @{ @"array": @[@"a", @"b"] };
-    NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{uppercase(.)}}>{{/}}" error:NULL] renderObject:data error:NULL];
-    NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}<{{uppercase(.)}}>{{/}}" error:NULL] renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering1, @"<A><B>", @"");
-    XCTAssertEqualObjects(rendering1, rendering2, @"");
-}
-
-- (void)testGRMustacheEachFilterRendersArrayOfFalseValuesJustAsOriginalArray
-{
-    // `each` filter should not alter the way an array is rendered
-    id data = @{ @"array": @[[NSNull null], @NO] };
-    NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
-    NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering1, @"<><0>", @"");
-    XCTAssertEqualObjects(rendering1, rendering2, @"");
-}
-
-- (void)testGRMustacheEachFilterRendersEmptyArrayJustAsOriginalArray
-{
-    // `each` filter should not alter the way an array is rendered
-    id data = @{ @"array": @[] };
-    
-    {
-        NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"<{{#array}}---{{/}}>" error:NULL] renderObject:data error:NULL];
-        NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"<{{#each(array)}}---{{/}}>" error:NULL] renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering1, @"<>", @"");
-        XCTAssertEqualObjects(rendering1, rendering2, @"");
-    }
-    {
-        NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{^array}}---{{/}}" error:NULL] renderObject:data error:NULL];
-        NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{^each(array)}}---{{/}}" error:NULL] renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering1, @"---", @"");
-        XCTAssertEqualObjects(rendering1, rendering2, @"");
-    }
 }
 
 @end
