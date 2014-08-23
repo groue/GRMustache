@@ -25,6 +25,7 @@
 // Only use public APIs
 #import "GRMustacheRendering.h"
 #import "GRMustacheContext.h"
+#import "GRMustacheTag.h"
 #import "GRMustacheError.h"
 
 @implementation GRMustacheEachFilter
@@ -118,17 +119,25 @@
             
             context = [context contextByAddingObject:@{@"@index": @(index),
                                                        @"@indexPlusOne": @(index + 1),
-                                                       @"@indexIsEven" : @(index % 2 == 0),
-                                                       @"@first" : @(index == 0),
-                                                       @"@last" : @(index == indexOfLastObject),    // When this is evaluated, on rendering, the filter will have been long executed. The __block variable indexOfLastObject will have the value of the last index.
+                                                       @"@indexIsEven": @(index % 2 == 0),
+                                                       @"@first": @(index == 0),
+                                                       @"@last": @(index == indexOfLastObject),    // When this is evaluated, on rendering, the filter will have been long executed. The __block variable indexOfLastObject will have the value of the last index.
                                                        }];
             
             /**
-             * And return the rendering of the original object given the
+             * If object is an collection, add it to the context and perform a
+             * simple rendering of the content of the tag.
+             *
+             * Otherwize return the rendering of the original object given the
              * extended context.
              */
             
-            return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
+                // Not doing this makes the "`each` filter should render independently all lists of an array." test fail.
+                return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
+            } else {
+                return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            }
         }];
         
         [replacementRenderingObjects addObject:replacementRenderingObject];
@@ -187,18 +196,26 @@
             
             context = [context contextByAddingObject:@{@"@index": @(index),
                                                        @"@indexPlusOne": @(index + 1),
-                                                       @"@indexIsEven" : @(index % 2 == 0),
+                                                       @"@indexIsEven": @(index % 2 == 0),
                                                        @"@key": key,
-                                                       @"@first" : @(index == 0),
-                                                       @"@last" : @(index == indexOfLastObject),
+                                                       @"@first": @(index == 0),
+                                                       @"@last": @(index == indexOfLastObject),
                                                        }];
             
             /**
-             * And return the rendering of the original object given the
+             * If object is an collection, add it to the context and perform a
+             * simple rendering of the content of the tag.
+             *
+             * Otherwize return the rendering of the original object given the
              * extended context.
              */
             
-            return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
+                // Not doing this makes the "`each` filter should render independently all lists of a dictionary." test fail.
+                return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
+            } else {
+                return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
+            }
         }];
         
         [replacementRenderingObjects addObject:replacementRenderingObject];
