@@ -87,26 +87,16 @@ This protocol declares two methods:
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext.
 
-The `GRMustacheRendering` class comes in with two handy methods for creating a rendering object without declaring any class:
+The `GRMustacheRendering` class comes in with a handy method for creating a rendering object without declaring any class:
 
 ```objc
-id trueRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
+id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
 {
     switch(tag.type) {
         case GRMustacheTagTypeVariable:
             return @"I'm rendering a {{ variable }} tag.";
         case GRMustacheTagTypeSection:
             return @"I'm rendering a {{# regular }}...{{/ }} section tag.";
-    }
-}];
-
-id falseRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:NO block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)
-{
-    switch(tag.type) {
-        case GRMustacheTagTypeVariable:
-            return @"I'm rendering a {{ variable }} tag.";
-        case GRMustacheTagTypeSection:
-            return @"I'm rendering an {{^ inverted }}...{{/ }} section tag.";
     }
 }];
 ```

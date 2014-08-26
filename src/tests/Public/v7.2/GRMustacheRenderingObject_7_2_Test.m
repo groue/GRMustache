@@ -197,77 +197,9 @@
     }
 }
 
-- (void)testExplicitTrueRenderingObjectsWithBlocks
-{
-    id object = [GRMustacheRendering renderingObjectWithBoolValue:YES block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        switch (tag.type) {
-            case GRMustacheTagTypeVariable:
-                return @"variable";
-                break;
-                
-            case GRMustacheTagTypeSection:
-                return @"section";
-                break;
-        }
-    }];
-    
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{ object }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<variable>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{# object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<section>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{^ object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<>");
-    }
-}
-
 - (void)testExplicitFalseRenderingObjects
 {
     id object = [[[GRMustacheExplicitFalseRenderingObject alloc] init] autorelease];
-    
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{ object }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<variable>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{# object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{^ object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<section>");
-    }
-}
-
-- (void)testExplicitFalseRenderingObjectsWithBlocks
-{
-    id object = [GRMustacheRendering renderingObjectWithBoolValue:NO block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        switch (tag.type) {
-            case GRMustacheTagTypeVariable:
-                return @"variable";
-                break;
-                
-            case GRMustacheTagTypeSection:
-                return @"section";
-                break;
-        }
-    }];
     
     {
         NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }

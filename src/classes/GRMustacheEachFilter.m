@@ -92,26 +92,19 @@
         /**
          * Build the replacement rendering object.
          *
-         * It has the same boolean value as the original one, so that it
-         * triggers the rendering {{#regular}} or {{^inverted}} sections just
-         * the same as the original object.
-         *
          * It enqueues the positional keys, and then renders the same as the
          * original object.
          *
-         * To known the boolean value of the original object, and know how it
-         * would render, turn it into a rendering object.
+         * To known how the original object would render, turn it into a
+         * rendering object.
          */
         
         // The original rendering object:
         id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
         
-        // Its boolean value:
-        BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
-        
         // The replacement rendering object:
         indexOfLastObject = index;
-        id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:originalBoolValue block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             /**
              * Add our positional keys in the rendering context
@@ -169,26 +162,19 @@
         /**
          * Build the replacement rendering object.
          *
-         * It has the same boolean value as the original one, so that it
-         * triggers the rendering {{#regular}} or {{^inverted}} sections just
-         * the same as the original object.
-         *
          * It enqueues the positional keys, and then renders the same as the
          * original object.
          *
-         * To known the boolean value of the original object, and know how it
-         * would render, turn it into a rendering object.
+         * To known how the original object would render, turn it into a
+         * rendering object.
          */
         
         // The original rendering object:
         id object = dictionary[key];
         id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
         
-        // Its boolean value:
-        BOOL originalBoolValue = originalRenderingObject.mustacheBoolValue;
-        
         // The replacement rendering object:
-        id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBoolValue:originalBoolValue block:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             /**
              * Add our positional keys in the rendering context

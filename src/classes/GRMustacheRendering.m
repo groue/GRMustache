@@ -47,9 +47,8 @@ static GRMustacheNilRendering *nilRendering;
 @interface GRMustacheBlockRendering : NSObject<GRMustacheRendering> {
 @private
     NSString *(^_renderingBlock)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
-    BOOL _boolValue;
 }
-- (instancetype)initWithBoolValue:(BOOL)boolValue renderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock;
+- (instancetype)initWithRenderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock;
 @end
 
 
@@ -136,12 +135,7 @@ void freeCurrentContentTypeStack(void *objects) {
 
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
 {
-    return [[[GRMustacheBlockRendering alloc] initWithBoolValue:YES renderingBlock:renderingBlock] autorelease];
-}
-
-+ (id<GRMustacheRendering>)renderingObjectWithBoolValue:(BOOL)boolValue block:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
-{
-    return [[[GRMustacheBlockRendering alloc] initWithBoolValue:boolValue renderingBlock:renderingBlock] autorelease];
+    return [[[GRMustacheBlockRendering alloc] initWithRenderingBlock:renderingBlock] autorelease];
 }
 
 
@@ -283,7 +277,7 @@ void freeCurrentContentTypeStack(void *objects) {
     [super dealloc];
 }
 
-- (instancetype)initWithBoolValue:(BOOL)boolValue renderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
+- (instancetype)initWithRenderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
 {
     if (renderingBlock == nil) {
         [NSException raise:NSInvalidArgumentException format:@"Can't build a rendering object with a nil rendering block."];
@@ -292,14 +286,13 @@ void freeCurrentContentTypeStack(void *objects) {
     self = [super init];
     if (self) {
         _renderingBlock = [renderingBlock copy];
-        _boolValue = boolValue;
     }
     return self;
 }
 
 - (BOOL)mustacheBoolValue
 {
-    return _boolValue;
+    return YES;
 }
 
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
