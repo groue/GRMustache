@@ -16,9 +16,9 @@ Just like all other tools of the [standard library](Guides/standard_library.md),
 
 Performing custom rendering of a collection can now be done by providing another collection of objects that provide custom rendering of the original items.
 
-This lets you build reusable filters which can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
+This lets you build collection filters that can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
 
-Everything lies in the new optional `mustacheBoolValue` property of the GRMustacheRendering. This property let you fine tune your custom rendering of `{{# regular}}` and `{{^ inverted }}` sections. Check the [Rendering Objects Guide](Guides/rendering_objects.md).
+Check the [Rendering Objects Guide](Guides/rendering_objects.md).
 
 
 ## v7.1.0

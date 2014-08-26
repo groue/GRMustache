@@ -49,64 +49,6 @@
 
 
 // =============================================================================
-#pragma mark - GRMustacheExplicitTrueRenderingObject
-
-@interface GRMustacheExplicitTrueRenderingObject : NSObject<GRMustacheRendering>
-@end
-
-@implementation GRMustacheExplicitTrueRenderingObject
-
-- (BOOL)mustacheBoolValue
-{
-    return YES;
-}
-
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    switch (tag.type) {
-        case GRMustacheTagTypeVariable:
-            return @"variable";
-            break;
-            
-        case GRMustacheTagTypeSection:
-            return @"section";
-            break;
-    }
-}
-
-@end
-
-
-// =============================================================================
-#pragma mark - GRMustacheExplicitFalseRenderingObject
-
-@interface GRMustacheExplicitFalseRenderingObject : NSObject<GRMustacheRendering>
-@end
-
-@implementation GRMustacheExplicitFalseRenderingObject
-
-- (BOOL)mustacheBoolValue
-{
-    return NO;
-}
-
-- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
-{
-    switch (tag.type) {
-        case GRMustacheTagTypeVariable:
-            return @"variable";
-            break;
-            
-        case GRMustacheTagTypeSection:
-            return @"section";
-            break;
-    }
-}
-
-@end
-
-
-// =============================================================================
 #pragma mark - GRMustacheRenderingObject_7_2_Test
 
 @interface GRMustacheRenderingObject_7_2_Test : GRMustachePublicAPITest
@@ -170,54 +112,6 @@
                                                     fromString:@"<{{^ object }}...{{/ }}>"
                                                          error:NULL];
         XCTAssertEqualObjects(rendering, @"<>");
-    }
-}
-
-- (void)testExplicitTrueRenderingObjects
-{
-    id object = [[[GRMustacheExplicitTrueRenderingObject alloc] init] autorelease];
-    
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{ object }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<variable>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{# object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<section>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{^ object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<>");
-    }
-}
-
-- (void)testExplicitFalseRenderingObjects
-{
-    id object = [[[GRMustacheExplicitFalseRenderingObject alloc] init] autorelease];
-    
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{ object }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<variable>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{# object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<>");
-    }
-    {
-        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
-                                                    fromString:@"<{{^ object }}...{{/ }}>"
-                                                         error:NULL];
-        XCTAssertEqualObjects(rendering, @"<section>");
     }
 }
 

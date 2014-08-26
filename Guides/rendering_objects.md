@@ -60,24 +60,20 @@ Let's begin the detailed tour.
 GRMustacheRendering protocol
 ----------------------------
 
-This protocol declares two methods:
+This protocol declares the method that all rendering objects must implement:
 
 ```objc
 @protocol GRMustacheRendering <NSObject>
-@required
+
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag
                            context:(GRMustacheContext *)context
                           HTMLSafe:(BOOL *)HTMLSafe
                              error:(NSError **)error;
 
-@optional
-@property (nonatomic, readonly) BOOL mustacheBoolValue;
 @end
 ```
 
-- The optional _mustacheBoolValue_ method decides whether the rendering object should render sections. False rendering objects only render `{{^inverted}}` sections. True ones only render `{{#regular}}` sections. This flag is not used for `{{variable}}` tags. When this method is not provided, the rendering object is assumed to be true.
-
-- In the required `renderForMustacheTag:context:HTMLSafe:error:` method, the _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
+- The _tag_ represents the tag you must render for. It may be a variable tag `{{ name }}`, a section tag `{{# name }}...{{/}}`, etc.
 
 - The _context_ represents the [context stack](runtime.md#the-context-stack), and all information that tags need to render.
 
@@ -87,7 +83,7 @@ This protocol declares two methods:
 
 See the [GRMustacheTag Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheTag.html) and [GRMustacheContext Class Reference](http://groue.github.io/GRMustache/Reference/Classes/GRMustacheContext.html) for a full documentation of GRMustacheTag and GRMustacheContext.
 
-The `GRMustacheRendering` class comes in with a handy method for creating a rendering object without declaring any class:
+The `+[GRMustacheRendering renderingObjectWithBlock:]` method comes in handy for creating a rendering object without declaring any class:
 
 ```objc
 id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error)

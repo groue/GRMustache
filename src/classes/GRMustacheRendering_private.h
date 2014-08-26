@@ -49,8 +49,19 @@
 
 @optional
 
-// Documented in GRMustacheRendering.h
-@property (nonatomic, readonly) BOOL mustacheBoolValue GRMUSTACHE_API_PUBLIC;
+/**
+ * The boolean value of the rendering object.
+ *
+ * A YES boolean value triggers the rendering of {{#section}}...{{/section}}
+ * tags, and avoids the rendering of inverted {{^section}}...{{/section}} tags.
+ *
+ * A NO boolean value avoids the rendering of {{#section}}...{{/section}}
+ * tags, and triggers the rendering of inverted {{^section}}...{{/section}} tags.
+ *
+ * When this method is not provided, the rendering object is assumed to be
+ * true.
+ */
+@property (nonatomic, readonly) BOOL mustacheBoolValue GRMUSTACHE_API_INTERNAL;
 
 @end
 

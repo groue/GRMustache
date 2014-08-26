@@ -73,25 +73,6 @@
                            context:(GRMustacheContext *)context
                           HTMLSafe:(BOOL *)HTMLSafe
                              error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
-
-@optional
-
-/**
- * The boolean value of the rendering object.
- *
- * A YES boolean value triggers the rendering of {{#section}}...{{/section}}
- * tags, and avoids the rendering of inverted {{^section}}...{{/section}} tags.
- *
- * A NO boolean value avoids the rendering of {{#section}}...{{/section}}
- * tags, and triggers the rendering of inverted {{^section}}...{{/section}} tags.
- *
- * When this method is not provided, the rendering object is assumed to be
- * true.
- *
- * @since v7.2
- */
-@property (nonatomic, readonly) BOOL mustacheBoolValue AVAILABLE_GRMUSTACHE_VERSION_7_2_AND_LATER;
-
 @end
 
 
