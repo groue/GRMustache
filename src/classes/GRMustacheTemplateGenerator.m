@@ -160,7 +160,7 @@
 }
 
 
-#pragma mark - <GRMustacheASTVisitor>
+#pragma mark - <GRMustacheExpressionVisitor>
 
 - (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression error:(NSError **)error
 {
