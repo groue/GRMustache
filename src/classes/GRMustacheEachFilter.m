@@ -94,15 +94,8 @@
          *
          * It enqueues the positional keys, and then renders the same as the
          * original object.
-         *
-         * To known how the original object would render, turn it into a
-         * rendering object.
          */
         
-        // The original rendering object:
-        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
-        
-        // The replacement rendering object:
         indexOfLastObject = index;
         id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
@@ -123,12 +116,20 @@
              *
              * Otherwize return the rendering of the original object given the
              * extended context.
+             *
+             * The test for this condition is named: "`each` filter should
+             * render independently all lists of an array."
              */
             
             if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
-                // Not doing this makes the "`each` filter should render independently all lists of an array." test fail.
                 return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
             } else {
+                /**
+                 * To render just like the original object would render, turn it
+                 * into a rendering object.
+                 */
+
+                id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
                 return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
             }
         }];
@@ -164,26 +165,19 @@
          *
          * It enqueues the positional keys, and then renders the same as the
          * original object.
-         *
-         * To known how the original object would render, turn it into a
-         * rendering object.
          */
         
-        // The original rendering object:
         id object = dictionary[key];
-        id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
-        
-        // The replacement rendering object:
         id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             /**
              * Add our positional keys in the rendering context
              */
             
-            context = [context contextByAddingObject:@{@"@index": @(index),
+            context = [context contextByAddingObject:@{@"@key": key,
+                                                       @"@index": @(index),
                                                        @"@indexPlusOne": @(index + 1),
                                                        @"@indexIsEven": @(index % 2 == 0),
-                                                       @"@key": key,
                                                        @"@first": @(index == 0),
                                                        @"@last": @(index == indexOfLastObject),
                                                        }];
@@ -194,12 +188,20 @@
              *
              * Otherwize return the rendering of the original object given the
              * extended context.
+             *
+             * The test for this condition is named: "`each` filter should
+             * render independently all lists of a dictionary."
              */
             
             if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
-                // Not doing this makes the "`each` filter should render independently all lists of a dictionary." test fail.
                 return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
             } else {
+                /**
+                 * To render just like the original object would render, turn it
+                 * into a rendering object.
+                 */
+                
+                id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
                 return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
             }
         }];
