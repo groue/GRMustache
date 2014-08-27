@@ -81,6 +81,12 @@
       "expected": "+++"
     },
     {
+      "name": "`each` filter does not alter context access.",
+      "data": { "array": [{ "name": "foo" }, { "name": "bar" }] },
+      "template": "{{# each(array) }}<{{@index}}:{{name}}>{{/}}",
+      "expected": "<0:foo><1:bar>"
+    },
+    {
       "name": "`each` filter should render independently all lists of an array.",
       "data": { "array": [["a", "b"], [], [0, 1]] },
       "template": "<{{# each(array) }}{{@index}}:({{#.}}{{.}}{{^}}-{{/}}){{/}}>",
@@ -138,6 +144,12 @@
       },
       "template": "{{# each(dictionary) }}---{{^}}+++{{/}}",
       "expected": "+++"
+    },
+    {
+      "name": "`each` filter does not alter context access.",
+      "data": { "dictionary": { "key": { "name": "foo" } } },
+      "template": "{{# each(dictionary) }}<{{@key}}:{{name}}>{{/}}",
+      "expected": "<key:foo>"
     },
     {
       "name": "`each` filter should render independently all lists of a dictionary.",
