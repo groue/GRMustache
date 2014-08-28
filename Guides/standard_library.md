@@ -136,7 +136,7 @@ Iteration is the default behavior of Mustache when a section is given an array: 
 
 The `each` filter provides more than the raw iteration.
 
-When given an enumerable object (but NSDictionary), it makes the `@index`, `@indexIsEven`, `@indexPlusOne`, `@first` and `@last` keys available:
+When given an enumerable object (but NSDictionary), it provides your templates with extra keys:
 
 - `@index` contains the 0-based index of the item (0, 1, 2, etc.)
 - `@indexPlusOne` contains the 1-based index of the item (1, 2, 3, etc.)
@@ -172,9 +172,9 @@ When provided with a dictionary, `each` iterates each key/value pairs of the dic
 {{/ }}
 ```
 
-The `@index`, `@indexPlusOne`, `@indexIsEven`, `@first` and `@last` keys are still available when iterating dictionaries.
+The other positional keys `@index`, `@first`, etc. are still available when iterating dictionaries.
 
-Should you need other positional keys, for playing [FizzBuzz](http://en.wikipedia.org/wiki/Fizz_buzz) for example, just get inspiration from the [source code](../src/classes/GRMustacheEachFilter.m) of the standard `each` filter. It is written with public APIs only, so you should not have any problem.
+Should you need some other keys, for playing [FizzBuzz](http://en.wikipedia.org/wiki/Fizz_buzz) for example, just get inspiration from the [source code](../src/classes/GRMustacheEachFilter.m) of the standard `each` filter. It is written with public APIs only, so you should not have any problem writing your own filter.
 
 
 ### zip
