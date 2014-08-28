@@ -10,15 +10,13 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 - The `each` filter let templates access array indexes, dictionary keys, and more ([documentation](Guides/standard_library.md#each)). Inspired by [Handlebars.js](http://handlebarsjs.com).
 - The `zip` filter can iterate several collections all at once ([documentation](Guides/standard_library.md#zip)). Inspired by [issue #80](https://github.com/groue/GRMustache/issues/80).
 
-Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built from public APIs. So you don't have to write them yourselves. But you can still customize them :-).
+Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built with public APIs. So you don't have to write them yourselves. But you can still customize them :-).
 
 ### Better support for custom rendering of collections
 
-Performing custom rendering of a collection can now be done by providing another collection of objects that provide custom rendering of the original items.
+Custom rendering of a collection can now be done by writing a filter which returns another collection of objects that are responsible for the custom rendering of the original items.
 
 This lets you build collection filters that can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
-
-Check the [Rendering Objects Guide](Guides/rendering_objects.md).
 
 
 ## v7.1.0
