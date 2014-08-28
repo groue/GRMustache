@@ -14,9 +14,11 @@ Just like all other tools of the [standard library](Guides/standard_library.md),
 
 ### Better support for custom rendering of collections
 
-Custom rendering of a collection can now be done by writing a filter which returns another collection of objects that are responsible for the custom rendering of the original items.
+Custom rendering of a collection can now be done by writing a filter which returns another collection.
 
-This lets you build collection filters that can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
+Filters written this way can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
+
+Check the [`each` filter source code](../src/classes/GRMustacheEachFilter.m) for an example.
 
 
 ## v7.1.0
