@@ -26,6 +26,11 @@ String Processing
 
 ### `HTML.escape`
 
+Usage:
+
+- `{{ HTML.escape(...) }}`
+- `{{# HTML.escape }}...{{/}}`
+
 As a [filter](filters.md), `HTML.escape` returns its argument, HTML-escaped. Since Mustache generally provides HTML-escaping, this filter will generally be used in conjunction with other escaping filters. For example:
 
     <script type="text/javascript">
@@ -50,7 +55,11 @@ Variable tags buried inside inner sections are escaped as well, so that you can 
 See also [javascript.escape](#javascriptescape), [URL.escape](#urlescape)
 
 
-### capitalized
+### `capitalized`
+
+Usage:
+
+- `{{ capitalized(...) }}`
 
 This [filter](filters.md) returns its argument, capitalized: the first character from each word is changed to its corresponding uppercase value, and all remaining characters set to their corresponding lowercase values.
 
@@ -59,7 +68,12 @@ This [filter](filters.md) returns its argument, capitalized: the first character
 See also [lowercase](#lowercase), [uppercase](#uppercase).
 
 
-### javascript.escape
+### `javascript.escape`
+
+Usage:
+
+- `{{ javascript.escape(...) }}`
+- `{{# javascript.escape }}...{{/}}`
 
 As a [filter](filters.md), `javascript.escape` outputs a Javascript and JSON-savvy string:
 
@@ -88,7 +102,11 @@ Variable tags buried inside inner sections are escaped as well, so that you can 
 See also [HTML.escape](#htmlescape), [URL.escape](#urlescape)
 
 
-### lowercase
+### `lowercase`
+
+Usage:
+
+- `{{ lowercase(...) }}`
 
 This [filter](filters.md) returns a lowercased representation of its argument.
 
@@ -97,7 +115,11 @@ This [filter](filters.md) returns a lowercased representation of its argument.
 See also [capitalized](#capitalized), [uppercase](#uppercase).
 
 
-### uppercase
+### `uppercase`
+
+Usage:
+
+- `{{ uppercase(...) }}`
 
 This [filter](filters.md) returns a uppercased representation of its argument.
 
@@ -106,7 +128,12 @@ This [filter](filters.md) returns a uppercased representation of its argument.
 See also [lowercase](#lowercase), [uppercase](#uppercase).
 
 
-### URL.escape
+### `URL.escape`
+
+Usage:
+
+- `{{ URL.escape(...) }}`
+- `{{# URL.escape }}...{{/}}`
 
 As a [filter](filters.md), `URL.escape` returns its argument, percent-escaped.
 
@@ -130,7 +157,11 @@ See also [HTML.escape](#htmlescape), [javascript.escape](#javascriptescape)
 Collection Processing
 ---------------------
 
-### each
+### `each`
+
+Usage:
+
+- `{{# each(collection) }}...{{/}}`
 
 Iteration is the default behavior of Mustache when a section is given an array: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc."
 
@@ -177,7 +208,11 @@ The other positional keys `@index`, `@first`, etc. are still available when iter
 Should you need some other keys, for playing [FizzBuzz](http://en.wikipedia.org/wiki/Fizz_buzz) for example, just get inspiration from the [source code](../src/classes/GRMustacheEachFilter.m) of the standard `each` filter. It is written with public APIs only, so you should not have any problem writing your own filter.
 
 
-### zip
+### `zip`
+
+Usage:
+
+- `{{# zip(collection1, collection2, ...) }}...{{/}}`
 
 The `zip` [filter](filters.md) iterates several collections all at once. On each step, one object from each input collection enters the rendering context, and makes its own keys available for rendering.
 
@@ -219,7 +254,7 @@ The `zip` filter renders a section as many times as there are elements in the **
 Miscellaneous
 -------------
 
-### isBlank
+### `{{# isBlank(...) }}...{{/}}`
 
 This [filter](filters.md) is true if and only if its argument is "blank", that is to say nil, null, empty (empty string or empty enumerable), or a string only made of white spaces. 
 
@@ -232,7 +267,7 @@ This [filter](filters.md) is true if and only if its argument is "blank", that i
 See also [isEmpty](#isempty).
 
 
-### isEmpty
+### `{{# isEmpty(...) }}...{{/}}`
 
 This [filter](filters.md) is true if and only if its argument is "empty", that is to say nil, null, or empty (empty string or empty enumerable).
 
@@ -245,7 +280,7 @@ This [filter](filters.md) is true if and only if its argument is "empty", that i
 See also [isBlank](#isblank).
 
 
-### localize
+### `{{ localize(...) }}` `{{# localize }}...{{/}}`
 
 #### Localizing a value
 
