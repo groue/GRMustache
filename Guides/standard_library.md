@@ -3,7 +3,7 @@
 The Standard Library
 ====================
 
-GRMustache [default configuration](configuration.md) contains a library of predefined keys available for your templates:
+GRMustache ships with a library of built-in goodies available for your templates:
 
 - String Processing
     - [HTML.escape](#htmlescape)
