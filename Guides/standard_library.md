@@ -179,7 +179,13 @@ Should you need some other keys, for playing [FizzBuzz](http://en.wikipedia.org/
 
 ### zip
 
-The `zip` [filter](filters.md) iterates several collections all at once:
+The `zip` [filter](filters.md) iterates several collections all at once. On each step, one object from each input collection enters the rendering context, and makes its own keys available for rendering.
+
+`Document.mustache`:
+
+    {{# zip(users, teams, scores) }}
+    - {{ name }} ({{ team }}): {{ score }} points
+    {{/}}
 
 `data.json`:
 
@@ -189,29 +195,25 @@ The `zip` [filter](filters.md) iterates several collections all at once:
     { "name": "Alice" },
     { "name": "Bob" },
   ],
-  "scores": [
-    { "score": 100 },
-    { "score": 200 },
-  ],
   "teams": [
     { "team": "iOS" },
     { "team": "Android" },
+  ],
+  "scores": [
+    { "score": 100 },
+    { "score": 200 },
   ]
 }
 ```
-
-`Document.mustache`:
-
-    {{# zip(users, scores, teams) }}
-    - {{ name }} ({{ team }}): {{ score }} points
-    {{/}}
 
 Rendering:
 
     - Alice (iOS): 100 points
     - Bob (Android): 200 points
 
-The `zip` filter renders a section as many times as there are elements in the **longest** of its argument.
+In the example above, the first step has consumed (Alice, iOS and 100), and the second one (Bob, Android and 200):
+
+The `zip` filter renders a section as many times as there are elements in the **longest** of its argument: exhausted collections simply do not add anything to the rendering context.
 
 
 Miscellaneous
