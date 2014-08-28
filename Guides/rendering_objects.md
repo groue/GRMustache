@@ -465,7 +465,7 @@ Let's build this "helper" with GRMustache:
 ```objc
 // Load the template
 
-GRMustacheTemplate *template = [GRMustacheTemplate fromResource:@"Document" bundle:nil error:NULL];
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"Document" bundle:nil error:NULL];
 
 
 // Extend the base context of the template, so that the "list" helper gets
