@@ -63,8 +63,6 @@ Usage:
 
 This [filter](filters.md) returns its argument, capitalized: the first character from each word is changed to its corresponding uppercase value, and all remaining characters set to their corresponding lowercase values.
 
-    {{ capitalized(firstName) }} {{ capitalized(lastName) }}
-
 See also [lowercase](#lowercase), [uppercase](#uppercase).
 
 
@@ -110,8 +108,6 @@ Usage:
 
 This [filter](filters.md) returns a lowercased representation of its argument.
 
-    {{ lowercase(name) }}
-
 See also [capitalized](#capitalized), [uppercase](#uppercase).
 
 
@@ -122,8 +118,6 @@ Usage:
 - `{{ uppercase(...) }}`
 
 This [filter](filters.md) returns a uppercased representation of its argument.
-
-    {{ uppercase(name) }}
 
 See also [lowercase](#lowercase), [uppercase](#uppercase).
 
