@@ -24,7 +24,7 @@ GRMustache ships with a library of built-in goodies available for your templates
 String Processing
 -----------------
 
-### HTML.escape
+### `HTML.escape`
 
 As a [filter](filters.md), `HTML.escape` returns its argument, HTML-escaped. Since Mustache generally provides HTML-escaping, this filter will generally be used in conjunction with other escaping filters. For example:
 
