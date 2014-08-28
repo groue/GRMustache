@@ -137,7 +137,7 @@ The implementation files of those tests must not include any public header.
 
 ### Tests of public APIS
 
-Tests of public GRMustache API are versionned: the `src/tests/Public/v7.0` folder contains tests for features introduced in the version 7.0 of the library. `src/tests/Public/v7.1` contains tests for the version 7.1, etc.
+Tests of public GRMustache API are versionned: the `src/tests/Public/v7.0` folder contains tests for features introduced in the version 7.0 of the library. `src/tests/Public/v7.2` contains tests for the version 7.2, etc.
 
 Those tests are all subclasses of `GRMustachePublicAPITest`. Their implementation files must not include any private header.
 
@@ -147,9 +147,9 @@ You will use the macros defined in `Classes/GRMustacheAvailabilityMacros.h`. The
 - emit deprecation warning when they use deprecated GRMustache APIs,
 - help GRMustache achieve full backward compatibility.
 
-For instance, all header files for public API tests in `src/tests/Public/v7.1` would begin with:
+For instance, all header files for public API tests in `src/tests/Public/v7.2` would begin with:
 
-    #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_1
+    #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_2
     #import "GRMustachePublicAPITest.h"
 
 When you add a test for a public API, make sure you place it in the folder that introduced the API (check the release notes), and NOT in the version that will include the new code. For instance, if version 7.6 introduces a fix for an API that was introduced in version 7.2, the version 7.6 will then ship with new tests in the src/tests/Public/v7.2 folder.
