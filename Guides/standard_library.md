@@ -136,7 +136,7 @@ Iteration is the default behavior of Mustache when a section is given an array: 
 
 The `each` filter provides more than the raw iteration.
 
-When given an enumerable object (but NSDictionary), it provides your templates with extra keys:
+When given an enumerable object, it provides your templates with extra keys:
 
 - `@index` contains the 0-based index of the item (0, 1, 2, etc.)
 - `@indexPlusOne` contains the 1-based index of the item (1, 2, 3, etc.)
