@@ -5,6 +5,10 @@ GRMustache FAQ
     
     Thread-safety of non-mutating methods is guaranteed. Thread-safety of mutating methods is not guaranteed.
 
+- **Is it possible to iterate over key/value pairs of a dictionary?**
+    
+    [Yes](standard_library.md#each).
+
 - **Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
     
     [Yes, yes, and yes](standard_library.md#each).

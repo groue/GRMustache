@@ -157,11 +157,9 @@ Usage:
 
 - `{{# each(collection) }}...{{/}}`
 
-Iteration is the default behavior of Mustache when a section is given an array: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc."
+Iteration is the default behavior of Mustache when a section is given a collection: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc."
 
-The `each` filter provides more than the raw iteration.
-
-When given an enumerable object, it provides your templates with extra keys:
+The `each` filter performs the same enumeration of all collection items, but provides your templates with extra keys:
 
 - `@index` contains the 0-based index of the item (0, 1, 2, etc.)
 - `@indexPlusOne` contains the 1-based index of the item (1, 2, 3, etc.)
