@@ -167,7 +167,7 @@
          * original object.
          */
         
-        id object = dictionary[key];
+        id object = [dictionary objectForKey:key];
         id<GRMustacheRendering> replacementRenderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
             
             /**

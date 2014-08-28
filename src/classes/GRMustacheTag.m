@@ -49,6 +49,12 @@
     return nil;
 }
 
+- (BOOL)isInverted
+{
+    [self doesNotRecognizeSelector:_cmd];
+    return NO;
+}
+
 #pragma mark - <GRMustacheASTNode>
 
 - (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
