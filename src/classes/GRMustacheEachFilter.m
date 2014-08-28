@@ -111,19 +111,28 @@
                                                        }];
             
             /**
-             * If object is an collection, add it to the context and perform a
-             * simple rendering of the content of the tag.
+             * We want to render just like the original object.
              *
-             * Otherwize return the rendering of the original object given the
-             * extended context.
+             * We have to take extra care, though, and process collections
+             * differently, so that arrays of arrays render as expected.
              *
-             * The test for this condition is named: "`each` filter should
-             * render independently all lists of an array."
+             * Collections would render the tag as many times as they contain
+             * elements. Instead, render the tag only once, after pushing the
+             * collection into the context.
+             *
+             * See the test "`each` filter should render independently all lists
+             * of an array."
              */
             
             if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
+                
+                /**
+                 * object is a collection: render the tag only once.
+                 */
+                
                 return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
             } else {
+                
                 /**
                  * To render just like the original object would render, turn it
                  * into a rendering object.
@@ -183,19 +192,29 @@
                                                        }];
             
             /**
-             * If object is an collection, add it to the context and perform a
-             * simple rendering of the content of the tag.
+             * We want to render just like the original object.
              *
-             * Otherwize return the rendering of the original object given the
-             * extended context.
+             * We have to take extra care, though, and process collections
+             * differently, so that dictionaries having arrays as values render
+             * as expected.
              *
-             * The test for this condition is named: "`each` filter should
-             * render independently all lists of a dictionary."
+             * Collections would render the tag as many times as they contain
+             * elements. Instead, render the tag only once, after pushing the
+             * collection into the context.
+             *
+             * See the test "`each` filter should render independently all lists
+             * of a dictionary."
              */
             
             if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
+                
+                /**
+                 * object is a collection: render the tag only once.
+                 */
+                
                 return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
             } else {
+                
                 /**
                  * To render just like the original object would render, turn it
                  * into a rendering object.
