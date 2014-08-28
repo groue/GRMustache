@@ -248,7 +248,11 @@ The `zip` filter renders a section as many times as there are elements in the **
 Miscellaneous
 -------------
 
-### `{{# isBlank(...) }}...{{/}}`
+### `isBlank`
+
+Usage:
+
+- `{{# isBlank(...) }}...{{/}}`
 
 This [filter](filters.md) is true if and only if its argument is "blank", that is to say nil, null, empty (empty string or empty enumerable), or a string only made of white spaces. 
 
@@ -261,7 +265,11 @@ This [filter](filters.md) is true if and only if its argument is "blank", that i
 See also [isEmpty](#isempty).
 
 
-### `{{# isEmpty(...) }}...{{/}}`
+### `isEmpty`
+
+Usage:
+
+- `{{# isEmpty(...) }}...{{/}}`
 
 This [filter](filters.md) is true if and only if its argument is "empty", that is to say nil, null, or empty (empty string or empty enumerable).
 
@@ -274,7 +282,12 @@ This [filter](filters.md) is true if and only if its argument is "empty", that i
 See also [isBlank](#isblank).
 
 
-### `{{ localize(...) }}` `{{# localize }}...{{/}}`
+### `localize`
+
+Usage:
+
+- `{{ localize(...) }}`
+- `{{# localize }}...{{/}}`
 
 #### Localizing a value
 
