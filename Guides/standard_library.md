@@ -148,10 +148,10 @@ When given an enumerable object, it provides your templates with extra keys:
 One line per user:
 {{# each(users) }}
   {{ @index }}: {{ name }}
-{{/ }}
+{{/}}
 
 Comma-separated user names:
-{{# each(users) }}{{ name }}{{^ @last }}, {{/ }}{{/ }}
+{{# each(users) }}{{ name }}{{^ @last }}, {{/}}{{/}}
 ```
 
 ```
@@ -168,8 +168,8 @@ When provided with a dictionary, `each` iterates each key/value pairs of the dic
 
 ```
 {{# each(dictionary) }}
-  {{ @key }}: {{ . }}
-{{/ }}
+  {{ @key }}: {{.}}
+{{/}}
 ```
 
 The other positional keys `@index`, `@first`, etc. are still available when iterating dictionaries.
