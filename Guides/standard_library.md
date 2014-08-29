@@ -155,11 +155,12 @@ Collection Processing
 
 Usage:
 
-- `{{# each(collection) }}...{{/}}`
+- `{{# each(list) }}...{{/}}`
+- `{{# each(dictionary) }}...{{/}}`
 
-Iteration is the default behavior of Mustache when a section is given a collection: `{{# users }}{{ name }}, {{/ users }}` would render "Alice, Bob, etc."
+Iteration is natural to Mustache templates: `{{# users }}{{ name }}, {{/ users }}` renders "Alice, Bob, etc." when the `users` key is given a list of users.
 
-The `each` filter performs the same enumeration of all collection items, but provides your templates with extra keys:
+The `each` filter is there to give you some extra keys:
 
 - `@index` contains the 0-based index of the item (0, 1, 2, etc.)
 - `@indexPlusOne` contains the 1-based index of the item (1, 2, 3, etc.)
@@ -170,29 +171,34 @@ The `each` filter performs the same enumeration of all collection items, but pro
 ```
 One line per user:
 {{# each(users) }}
-  {{ @index }}: {{ name }}
+- {{ @index }}: {{ name }}
 {{/}}
 
 Comma-separated user names:
-{{# each(users) }}{{ name }}{{^ @last }}, {{/}}{{/}}
+{{# each(users) }}{{ name }}{{^ @last }}, {{/}}{{/}}.
 ```
 
 ```
 One line per user:
-0: Alice
-1: Bob
-2: Craig
+- 0: Alice
+- 1: Bob
+- 2: Craig
 
-Comma-separated user names:
-Alice, Bob, Craig
+Comma-separated user names: Alice, Bob, Craig.
 ```
 
-When provided with a dictionary, `each` iterates each key/value pairs of the dictionary, stores the key in `@key`, and sets the value as the current context:
+When provided with a dictionary, `each` iterates each key/value pair of the dictionary, stores the key in `@key`, and sets the value as the current context:
 
 ```
 {{# each(dictionary) }}
-  {{ @key }}: {{.}}
+- {{ @key }}: {{.}}
 {{/}}
+```
+
+```
+- name: Alice
+- score: 200
+- level: 5
 ```
 
 The other positional keys `@index`, `@first`, etc. are still available when iterating dictionaries.
@@ -204,9 +210,9 @@ Should you need some other keys, for playing [FizzBuzz](http://en.wikipedia.org/
 
 Usage:
 
-- `{{# zip(collection1, collection2, ...) }}...{{/}}`
+- `{{# zip(list1, list2, ...) }}...{{/}}`
 
-The `zip` [filter](filters.md) iterates several collections all at once. On each step, one object from each input collection enters the rendering context, and makes its own keys available for rendering.
+The `zip` [filter](filters.md) iterates several lists all at once. On each step, one object from each input list enters the rendering context, and makes its own keys available for rendering.
 
 `Document.mustache`:
 
@@ -240,7 +246,7 @@ Rendering:
 
 In the example above, the first step has consumed (Alice, iOS and 100), and the second one (Bob, Android and 200):
 
-The `zip` filter renders a section as many times as there are elements in the **longest** of its argument: exhausted collections simply do not add anything to the rendering context.
+The `zip` filter renders a section as many times as there are elements in the **longest** of its argument: exhausted lists simply do not add anything to the rendering context.
 
 
 Miscellaneous
