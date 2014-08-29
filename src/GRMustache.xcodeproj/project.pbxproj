@@ -1150,12 +1150,12 @@
 				56CD619B15C5C7830067E2E7 /* GRMustacheStandardLibrary.m */,
 				56E2F30B16C0166D00F01DC2 /* GRMustacheURLLibrary_private.h */,
 				56E2F30C16C0166D00F01DC2 /* GRMustacheURLLibrary.m */,
+				56C889231908E2B60084FC5A /* GRMustacheTemplateGenerator_private.h */,
+				56C889241908E2B60084FC5A /* GRMustacheTemplateGenerator.m */,
 				56E2F2F316C0095800F01DC2 /* NSFormatter+GRMustache.h */,
 				56E2F2F416C0095800F01DC2 /* NSFormatter+GRMustache.m */,
 				56E2F2F916C00B3F00F01DC2 /* NSValueTransformer+GRMustache.h */,
 				56E2F2FA16C00B4000F01DC2 /* NSValueTransformer+GRMustache.m */,
-				56C889231908E2B60084FC5A /* GRMustacheTemplateGenerator_private.h */,
-				56C889241908E2B60084FC5A /* GRMustacheTemplateGenerator.m */,
 			);
 			name = Services;
 			sourceTree = "<group>";

@@ -73,18 +73,22 @@
 - (id)transformedArray:(id<NSFastEnumeration>)array
 {
     /**
-     * We'll return an array containing as many objects as in the original
+     * Let's return an array containing as many objects as in the original
      * collection.
      *
-     * The replacement objects will perform custom rendering by enqueuing in the
-     * context stack the positional keys before rendering just like the original
-     * objects.
+     * Returning an array is important: it allows the `each` filter to be
+     * chained with other collection-processing filters, as in
+     * {{# reverse(each(list)) }}...{{/} for example.
      *
-     * Objects that perform custom rendering conform to the GRMustacheRendering
-     * protocol, hence the name of our array of replacement objects:
+     * The new array contains objects that perform custom rendering by enqueuing
+     * in the context stack the positional keys before rendering just like the
+     * original objects.
+     *
+     * Those objects which perform custom rendering conform to the
+     * GRMustacheRendering protocol:
      */
-    NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
+    NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     __block NSUInteger indexOfLastObject = 0;
     NSUInteger index = 0;
     for (id object in array) {
@@ -153,18 +157,18 @@
 - (id)transformedDictionary:(NSDictionary *)dictionary
 {
     /**
-     * We'll return an array containing as many objects as in the original
+     * Let's return an array containing as many objects as in the original
      * dictionary.
      *
-     * The replacement objects will perform custom rendering by enqueuing in the
-     * context stack the positional keys before rendering just like the original
-     * values.
+     * The new array contains objects that perform custom rendering by enqueuing
+     * in the context stack the positional keys before rendering just like the
+     * original dictionary values.
      *
-     * Objects that perform custom rendering conform to the GRMustacheRendering
-     * protocol, hence the name of our array of replacement objects:
+     * Those objects which perform custom rendering conform to the
+     * GRMustacheRendering protocol:
      */
-    NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     
+    NSMutableArray *replacementRenderingObjects = [NSMutableArray array];
     NSUInteger indexOfLastObject = dictionary.count - 1;
     NSUInteger index = 0;
     for (id key in dictionary) {
