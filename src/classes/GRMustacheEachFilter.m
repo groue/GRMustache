@@ -78,7 +78,7 @@
      *
      * Returning an array is important: it allows the `each` filter to be
      * chained with other collection-processing filters, as in
-     * {{# reverse(each(list)) }}...{{/} for example.
+     * {{# reverse(each(list)) }}...{{/}} for example.
      *
      * The new array contains objects that perform custom rendering by enqueuing
      * in the context stack the positional keys before rendering just like the

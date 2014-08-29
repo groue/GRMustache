@@ -157,7 +157,7 @@ NSString *rendering = [GRMustacheTemplate renderObject:data
                                                  error:NULL];
 ```
 
-Each item in the collection gets, each on its turn, available for the key lookup: that is how the `{{ name }}` tag renders each of my friend's name.
+Each item in the collection gets, each on its turn, available for the key lookup: that is how the `{{ name }}` tag renders each of my friend's name. Items that conform to the `GRMustacheRendering` protocol can provide their own rendering of their iteration step (see the [Rendering Objects Guide](rendering_objects.md)).
 
 Inverted sections render if and only if the collection is empty:
 
