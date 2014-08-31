@@ -5,9 +5,9 @@ GRMustache is an implementation of [Mustache templates](http://mustache.github.i
 
 It ships with built-in goodies and extensibility hooks that let you avoid the strict minimalism of the genuine Mustache language when you need it.
 
-**August 29, 2014: GRMustache 7.2.0 is out.** [Release notes](RELEASE_NOTES.md)
-
 **System requirements**: GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (without garbage collection), and only depends on the Foundation framework.
+
+**August 29, 2014: GRMustache 7.2.0 is out.** [Release notes](RELEASE_NOTES.md)
 
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
