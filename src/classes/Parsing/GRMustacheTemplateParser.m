@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheParser_private.h"
+#import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustacheToken_private.h"
 #import "GRMustacheError.h"
 
-@interface GRMustacheParser()
+@interface GRMustacheTemplateParser()
 
 /**
  * The Mustache tag opening delimiter.
@@ -37,12 +37,12 @@
  */
 @property (nonatomic, copy) NSString *tagEndDelimiter;
 
-// Documented in GRMustacheParser_private.h
+// Documented in GRMustacheTemplateParser_private.h
 @property (nonatomic, strong) NSMutableSet *pragmas;
 
 @end
 
-@implementation GRMustacheParser
+@implementation GRMustacheTemplateParser
 @synthesize delegate=_delegate;
 @synthesize tagStartDelimiter=_tagStartDelimiter;
 @synthesize tagEndDelimiter=_tagEndDelimiter;
@@ -69,11 +69,11 @@
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID
 {
     if (templateString == nil) {
-        if ([_delegate respondsToSelector:@selector(parser:didFailWithError:)]) {
-            [_delegate parser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
-                                                                        code:GRMustacheErrorCodeTemplateNotFound
-                                                                    userInfo:[NSDictionary dictionaryWithObject:@"Nil template string can not be parsed."
-                                                                                                         forKey:NSLocalizedDescriptionKey]]];
+        if ([_delegate respondsToSelector:@selector(templateParser:didFailWithError:)]) {
+            [_delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+                                                                                code:GRMustacheErrorCodeTemplateNotFound
+                                                                            userInfo:[NSDictionary dictionaryWithObject:@"Nil template string can not be parsed."
+                                                                                                                 forKey:NSLocalizedDescriptionKey]]];
         }
         return;
     }
@@ -197,7 +197,7 @@
                                                                      templateID:templateID
                                                                            line:lineNumber
                                                                           range:(NSRange){ .location = start, .length = i-start}];
-                        if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                        if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
                     start = i;
@@ -213,7 +213,7 @@
                                                                      templateID:templateID
                                                                            line:lineNumber
                                                                           range:(NSRange){ .location = start, .length = i-start}];
-                        if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                        if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
                     start = i;
@@ -229,7 +229,7 @@
                                                                       templateID:templateID
                                                                             line:lineNumber
                                                                            range:(NSRange){ .location = start, .length = i-start}];
-                        if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                        if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
                     start = i;
@@ -301,7 +301,7 @@
                                                                        line:tagStartLineNumber
                                                                       range:(NSRange){ .location = start, .length = (i+tagEndDelimiterLength)-start}];
                     token.tagInnerRange = tagInnerRange;
-                    if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                    if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
                     start = i + tagEndDelimiterLength;
                     state = stateStart;
@@ -323,7 +323,7 @@
                                                                        line:tagStartLineNumber
                                                                       range:(NSRange){ .location = start, .length = (i+unescapedTagEndDelimiterLength)-start}];
                     token.tagInnerRange = (NSRange){ .location = start+unescapedTagStartDelimiterLength, .length = i-(start+unescapedTagStartDelimiterLength) };
-                    if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                    if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
                     start = i + unescapedTagEndDelimiterLength;
                     state = stateStart;
@@ -358,7 +358,7 @@
                                                                        line:tagStartLineNumber
                                                                       range:(NSRange){ .location = start, .length = (i+setDelimitersTagEndDelimiterLength)-start}];
                     token.tagInnerRange = (NSRange){ .location = start+setDelimitersTagStartDelimiterLength, .length = i-(start+setDelimitersTagStartDelimiterLength) };
-                    if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+                    if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
                     start = i + setDelimitersTagEndDelimiterLength;
                     state = stateStart;
@@ -404,7 +404,7 @@
                                                          templateID:templateID
                                                                line:lineNumber
                                                               range:(NSRange){ .location = start, .length = i-start}];
-            if (![self.delegate parser:self shouldContinueAfterParsingToken:token]) return;
+            if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
         } break;
             
         case stateTag:
@@ -491,19 +491,19 @@
 #pragma mark - Private
 
 /**
- * Wrapper around the delegate's `parser:shouldContinueAfterParsingToken:`
+ * Wrapper around the delegate's `templateParser:shouldContinueAfterParsingToken:`
  * method.
  */
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
-    if ([_delegate respondsToSelector:@selector(parser:shouldContinueAfterParsingToken:)]) {
-        return [_delegate parser:self shouldContinueAfterParsingToken:token];
+    if ([_delegate respondsToSelector:@selector(templateParser:shouldContinueAfterParsingToken:)]) {
+        return [_delegate templateParser:self shouldContinueAfterParsingToken:token];
     }
     return YES;
 }
 
 /**
- * Wrapper around the delegate's `parser:didFailWithError:` method.
+ * Wrapper around the delegate's `templateParser:didFailWithError:` method.
  *
  * @param line          The line at which the error occurred.
  * @param description   A human-readable error message
@@ -511,14 +511,14 @@
  */
 - (void)failWithParseErrorAtLine:(NSInteger)line description:(NSString *)description templateID:(id)templateID
 {
-    if ([_delegate respondsToSelector:@selector(parser:didFailWithError:)]) {
+    if ([_delegate respondsToSelector:@selector(templateParser:didFailWithError:)]) {
         NSString *localizedDescription;
         if (templateID) {
             localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu of template %@: %@", (unsigned long)line, templateID, description];
         } else {
             localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu: %@", (unsigned long)line, description];
         }
-        [_delegate parser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+        [_delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
                                                                     code:GRMustacheErrorCodeParseError
                                                                 userInfo:[NSDictionary dictionaryWithObject:localizedDescription
                                                                                                      forKey:NSLocalizedDescriptionKey]]];

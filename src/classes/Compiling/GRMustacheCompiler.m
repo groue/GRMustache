@@ -176,9 +176,9 @@
 }
 
 
-#pragma mark GRMustacheParserDelegate
+#pragma mark GRMustacheTemplateParserDelegate
 
-- (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
+- (BOOL)templateParser:(GRMustacheTemplateParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
     // Refuse tokens after a fatal error has occurred.
     if (_currentASTNodes == nil) {
@@ -594,7 +594,7 @@
     return YES;
 }
 
-- (void)parser:(GRMustacheParser *)parser didFailWithError:(NSError *)error
+- (void)templateParser:(GRMustacheTemplateParser *)parser didFailWithError:(NSError *)error
 {
     [self failWithFatalError:error];
 }

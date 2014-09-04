@@ -244,7 +244,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         compiler.baseTemplateID = templateID;
         
         // Create a Mustache parser that feeds the compiler
-        GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithConfiguration:_configuration] autorelease];
+        GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] initWithConfiguration:_configuration] autorelease];
         parser.delegate = compiler;
         
         // Parse and extract template components from the compiler

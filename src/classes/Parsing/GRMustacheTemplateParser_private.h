@@ -24,22 +24,22 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheToken;
-@class GRMustacheParser;
+@class GRMustacheTemplateParser;
 @class GRMustacheConfiguration;
 
 
 // =============================================================================
-#pragma mark - <GRMustacheParserDelegate>
+#pragma mark - <GRMustacheTemplateParserDelegate>
 
 /**
- * The protocol for the delegate of a GRMustacheParser.
+ * The protocol for the delegate of a GRMustacheTemplateParser.
  *
  * The delegate's responsability is to consume tokens and handle parser
  * errors.
  *
  * @see GRMustacheCompiler
  */
-@protocol GRMustacheParserDelegate<NSObject>
+@protocol GRMustacheTemplateParserDelegate<NSObject>
 @optional
 
 /**
@@ -52,7 +52,7 @@
  *
  * @see GRMustacheToken
  */
-- (BOOL)parser:(GRMustacheParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
+- (BOOL)templateParser:(GRMustacheTemplateParser *)parser shouldContinueAfterParsingToken:(GRMustacheToken *)token GRMUSTACHE_API_INTERNAL;
 
 /**
  * Sent after the token has failed.
@@ -60,25 +60,25 @@
  * @param parser   The parser that failed to producing tokens.
  * @param error       The error that occurred.
  */
-- (void)parser:(GRMustacheParser *)parser didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
+- (void)templateParser:(GRMustacheTemplateParser *)parser didFailWithError:(NSError *)error GRMUSTACHE_API_INTERNAL;
 @end
 
 
 // =============================================================================
-#pragma mark - GRMustacheParser
+#pragma mark - GRMustacheTemplateParser
 
 /**
- * The GRMustacheParser consumes a Mustache template string, and produces
- * tokens.
+ * The GRMustacheTemplateParser consumes a Mustache template string, and
+ * produces tokens.
  *
  * Those tokens are consumed by the parser's delegate.
  *
  * @see GRMustacheToken
- * @see GRMustacheParserDelegate
+ * @see GRMustacheTemplateParserDelegate
  */
-@interface GRMustacheParser : NSObject {
+@interface GRMustacheTemplateParser : NSObject {
 @private
-    id<GRMustacheParserDelegate> _delegate;
+    id<GRMustacheTemplateParserDelegate> _delegate;
     NSString *_tagStartDelimiter;
     NSString *_tagEndDelimiter;
     NSMutableSet *_pragmas;
@@ -90,9 +90,9 @@
  * The delegate is sent messages as the parser interprets a Mustache template
  * string.
  *
- * @see GRMustacheParserDelegate
+ * @see GRMustacheTemplateParserDelegate
  */
-@property (nonatomic, assign) id<GRMustacheParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign) id<GRMustacheTemplateParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
  * A set of all pragmas found while parsing. Pragmas are defined via pragma tags

@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheParser_private.h"
+#import "GRMustacheTemplateParser_private.h"
 #import "GRMustacheContentType.h"
 
 @class GRMustacheTemplateRepository;
@@ -30,14 +30,14 @@
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
- * GRMustacheParser, and outputs a syntax tree of objects conforming to the
- * GRMustacheTemplateASTNode protocol.
+ * GRMustacheTemplateParser, and outputs a syntax tree of objects conforming to
+ * the GRMustacheTemplateASTNode protocol.
  *
  * @see GRMustacheTemplateASTNode
  * @see GRMustacheToken
- * @see GRMustacheParser
+ * @see GRMustacheTemplateParser
  */
-@interface GRMustacheCompiler : NSObject<GRMustacheParserDelegate> {
+@interface GRMustacheCompiler : NSObject<GRMustacheTemplateParserDelegate> {
 @private
     NSError *_fatalError;
     
@@ -78,7 +78,7 @@
 /**
  * Returns a Mustache Abstract Syntax Tree.
  *
- * The AST will contain something if a GRMustacheParser has provided
+ * The AST will contain something if a GRMustacheTemplateParser has provided
  * GRMustacheToken instances to the compiler.
  *
  * For example:
@@ -92,7 +92,7 @@
  * compiler.dataSource = ...;
  *
  * // Create a Mustache parser
- * GRMustacheParser *parser = [[[GRMustacheParser alloc] initWithContentType:...] autorelease];
+ * GRMustacheTemplateParser *parser = [[[GRMustacheTemplateParser alloc] initWithContentType:...] autorelease];
  *
  * // The parser feeds the compiler
  * parser.delegate = compiler;
