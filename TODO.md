@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] Consider replacing GRMustacheTemplate.partialNode with GRMustacheTemplate.templateAST
 - [X] Rename `identifier` to `name`
 - [X] Fix link to filters Guide from GRMustacheFilter.h
 - [X] Document [GRMustacheTemplateRepository templateRepositoryWithDictionary:] changes (mutability of the dictionary)
@@ -35,8 +36,3 @@
 - [ ] document migration path from all previous versions to latest version
 - [ ] > But they do allow Xcode to see the symbols when creating the final executable and allow the static library symbols to get included in the final DSYM file thereby allowing full symoblication of crash reports. (https://github.com/RestKit/RestKit/issues/1277)
 
-## Experiments
-
-- [ ] {{.}}, {{..}}, {{...}}, {{.name}}, {{..name}}, {{...name}}, {{ROOT}}, {{ROOT.name}}
-- [ ] Have filters put something in the scope: in `{{ dateFormat(date, ISO_8601) }}`, ISO_8601 would be defined by the dateFormat filter.
-- [ ] date/time formatter: `{{ dateFormat(date, Short) }}`, `{{ timeFormat(date, Short) }}`, `{{ dateTimeFormat(date, Short, Full) }}`
