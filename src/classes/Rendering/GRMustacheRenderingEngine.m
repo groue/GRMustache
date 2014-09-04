@@ -249,7 +249,7 @@
                     //
                     // See +[GRMustacheRendering initialize]
                     BOOL boolValue = [renderingObject mustacheBoolValue];
-                    if (tag.isInverted ^ boolValue) {
+                    if (!tag.isInverted != !boolValue) {
                         rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:&HTMLSafe error:&renderingError];
                     } else {
                         rendering = @"";
