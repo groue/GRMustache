@@ -20,7 +20,7 @@ Custom rendering of a collection can now be done by writing a filter which retur
 
 Filters written this way can nicely chain, as in `{{# each(zip(array1, array2)) }}...{{/ }}`.
 
-Check the [`each` filter source code](src/classes/GRMustacheEachFilter.m) for an example.
+Check the [`each` filter source code](src/classes/Services/StandardLibrary/GRMustacheEachFilter.m) for an example.
 
 
 ## v7.1.0

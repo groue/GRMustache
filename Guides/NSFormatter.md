@@ -103,6 +103,6 @@ Typically, NSNumberFormatter only formats numbers, and NSDateFormatter, dates: y
 Get inspired
 ------------
 
-NSFormatter has been turned into a citizen of GRMustache using public APIs: check [the code](../src/classes/NSFormatter%2BGRMustache.m) for inspiration.
+NSFormatter has been turned into a citizen of GRMustache using public APIs: check [the code](../src/classes/Services/NSFormatter%2BGRMustache.m) for inspiration.
 
 [up](../../../../GRMustache#documentation), [next](filters.md)
