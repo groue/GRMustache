@@ -41,6 +41,7 @@
 - (void)dealloc
 {
     GRMustacheBufferRelease(&_buffer);
+    [_context release];
     [_expressionInvocation release];
     [super dealloc];
 }
@@ -141,7 +142,7 @@
     self = [super init];
     if (self) {
         _contentType = contentType;
-        _context = context;
+        _context = [context retain];
         _buffer = GRMustacheBufferCreate(1024);
         _expressionInvocation = [[GRMustacheExpressionInvocation alloc] init];
     }
