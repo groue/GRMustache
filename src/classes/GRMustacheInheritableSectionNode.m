@@ -20,40 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheInheritableSection_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheInheritableSectionNode_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheInheritableSection
+@implementation GRMustacheInheritableSectionNode
 @synthesize name=_name;
-@synthesize ASTNodes=_ASTNodes;
+@synthesize templateAST=_templateAST;
 
-+ (instancetype)inheritableSectionWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes
++ (instancetype)inheritableSectionNodeWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST
 {
-    return [[[self alloc] initWithName:name ASTNodes:ASTNodes] autorelease];
+    return [[[self alloc] initWithName:name templateAST:templateAST] autorelease];
 }
 
 - (void)dealloc
 {
     [_name release];
-    [_ASTNodes release];
+    [_templateAST release];
     [super dealloc];
 }
 
 
-#pragma mark - <GRMustacheASTNode>
+#pragma mark - <GRMustacheTemplateASTNode>
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritableSection:self error:error];
+    return [visitor visitInheritableSectionTag:self error:error];
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
     // Inheritable section can only override inheritable section
-    if (![ASTNode isKindOfClass:[GRMustacheInheritableSection class]]) {
-        return ASTNode;
+    if (![templateASTNode isKindOfClass:[GRMustacheInheritableSectionNode class]]) {
+        return templateASTNode;
     }
-    GRMustacheInheritableSection *otherSection = (GRMustacheInheritableSection *)ASTNode;
+    GRMustacheInheritableSectionNode *otherSection = (GRMustacheInheritableSectionNode *)templateASTNode;
     
     // names must match
     if (![otherSection.name isEqual:_name]) {
@@ -67,12 +67,12 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST
 {
     self = [self init];
     if (self) {
         _name = [name retain];
-        _ASTNodes = [ASTNodes retain];
+        _templateAST = [templateAST retain];
     }
     return self;
 }

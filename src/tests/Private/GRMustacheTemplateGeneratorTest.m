@@ -32,8 +32,9 @@
 
 - (void)testTemplateGeneration
 {
-    NSDictionary *partials = @{@"template": @"|{{>partial}}|{{<partial}}{{$a}}b{{/a}}{{/partial}}{{c}}{{#d}}e{{^f}}g{{/f}}g{{/d}}h{{&i}}",
-                               @"partial": @""};
+    NSDictionary *partials = @{@"template": @"|{{>partial1}}{{>partial2}}|{{<partial1}}{{$a}}b{{/a}}{{/partial1}}{{c}}{{#d}}e{{^f}}g{{/f}}g{{/d}}h{{&i}}",
+                               @"partial1": @"",
+                               @"partial2": @""};
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
     GRMustacheTemplate *template = [repo templateNamed:@"template" error:NULL];
     GRMustacheTemplateGenerator *generator = [GRMustacheTemplateGenerator templateGeneratorWithTemplateRepository:template.templateRepository];

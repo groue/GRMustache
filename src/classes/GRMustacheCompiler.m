@@ -26,12 +26,12 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
-#import "GRMustacheInheritableSection_private.h"
+#import "GRMustacheInheritableSectionNode_private.h"
 #import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheError.h"
 
 @interface GRMustacheCompiler()
@@ -137,7 +137,7 @@
     return self;
 }
 
-- (GRMustacheAST *)ASTReturningError:(NSError **)error
+- (GRMustacheTemplateAST *)templateASTReturningError:(NSError **)error
 {
     // Has a fatal error occurred?
     if (_currentASTNodes == nil) {
@@ -162,7 +162,7 @@
     }
     
     // Success
-    return [GRMustacheAST ASTWithASTNodes:_currentASTNodes contentType:_contentType];
+    return [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
 }
 
 - (void)dealloc
@@ -275,12 +275,12 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
+                GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
                                                                                          inverted:YES
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                         ASTNodes:_currentASTNodes
-                                                                                      contentType:_contentType];
+                                                                                      templateAST:templateAST];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -338,12 +338,12 @@
                 
                 NSRange openingTokenRange = _currentOpeningToken.range;
                 NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
+                GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
                 GRMustacheSectionTag *sectionTag = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
                                                                                          inverted:NO
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                         ASTNodes:_currentASTNodes
-                                                                                      contentType:_contentType];
+                                                                                      templateAST:templateAST];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -438,7 +438,7 @@
             
             // What are we closing?
             
-            id<GRMustacheASTNode> wrapperASTNode = nil;
+            id<GRMustacheTemplateASTNode> wrapperASTNode = nil;
             switch (_currentOpeningToken.type) {
                 case GRMustacheTokenTypeSectionOpening:
                 case GRMustacheTokenTypeInvertedSectionOpening: {
@@ -470,12 +470,12 @@
                     // Success: create new GRMustacheSectionTag
                     NSRange openingTokenRange = _currentOpeningToken.range;
                     NSRange innerRange = NSMakeRange(openingTokenRange.location + openingTokenRange.length, token.range.location - (openingTokenRange.location + openingTokenRange.length));
+                    GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
                     wrapperASTNode = [GRMustacheSectionTag sectionTagWithExpression:(GRMustacheExpression *)_currentTagValue
                                                                            inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
                                                                      templateString:token.templateString
                                                                          innerRange:innerRange
-                                                                           ASTNodes:_currentASTNodes
-                                                                        contentType:_contentType];
+                                                                        templateAST:templateAST];
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {
@@ -499,7 +499,8 @@
                     }
                     
                     // Success: create new GRMustacheInheritableSection
-                    wrapperASTNode = [GRMustacheInheritableSection inheritableSectionWithName:(NSString *)_currentTagValue ASTNodes:_currentASTNodes];
+                    GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
+                    wrapperASTNode = [GRMustacheInheritableSectionNode inheritableSectionNodeWithName:(NSString *)_currentTagValue templateAST:templateAST];
                 } break;
                     
                 case GRMustacheTokenTypeInheritablePartial: {
@@ -517,31 +518,32 @@
                     
                     // Ask templateRepository for inheritable template
                     partialName = (NSString *)_currentTagValue;
-                    GRMustacheAST *AST = [_templateRepository ASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&error];
-                    if (AST == nil) {
+                    GRMustacheTemplateAST *templateAST = [_templateRepository templateASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&error];
+                    if (templateAST == nil) {
                         [self failWithFatalError:error];
                         return NO;
                     }
                     
                     // Check for consistency of HTML safety
                     //
-                    // If AST.isPlaceholder, this means that we are actually
+                    // If templateAST.isPlaceholder, this means that we are actually
                     // compiling it, and that template simply recursively refers to itself.
                     // Consistency of HTML safety is thus guaranteed.
                     //
-                    // However, if AST.isPlaceholder is false, then we must ensure
+                    // However, if templateAST.isPlaceholder is false, then we must ensure
                     // content type compatibility: an HTML template can not override a
                     // text one, and vice versa.
                     //
                     // See test "HTML template can not override TEXT template" in GRMustacheSuites/text_rendering.json
-                    if (!AST.isPlaceholder && AST.contentType != _contentType) {
+                    if (!templateAST.isPlaceholder && templateAST.contentType != _contentType) {
                         [self failWithFatalError:[self parseErrorAtToken:_currentOpeningToken description:@"HTML safety mismatch"]];
                         return NO;
                     }
                     
                     // Success: create new GRMustacheInheritablePartialNode
-                    GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:partialName];
-                    wrapperASTNode = [GRMustacheInheritablePartialNode inheritablePartialNodeWithPartialNode:partialNode ASTNodes:_currentASTNodes];
+                    GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:partialName];
+                    GRMustacheTemplateAST *overridingTemplateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
+                    wrapperASTNode = [GRMustacheInheritablePartialNode inheritablePartialNodeWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
                 } break;
                     
                 default:
@@ -574,14 +576,14 @@
             }
             
             // Ask templateRepository for partial template
-            GRMustacheAST *AST = [_templateRepository ASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&partialError];
-            if (AST == nil) {
+            GRMustacheTemplateAST *templateAST = [_templateRepository templateASTNamed:partialName relativeToTemplateID:_baseTemplateID error:&partialError];
+            if (templateAST == nil) {
                 [self failWithFatalError:partialError];
                 return NO;
             }
             
             // Success: append ASTNode
-            GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:partialName];
+            GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:partialName];
             [_currentASTNodes addObject:partialNode];
             
             // lock _contentType

@@ -55,14 +55,14 @@
     return NO;
 }
 
-#pragma mark - <GRMustacheASTNode>
+#pragma mark - <GRMustacheTemplateASTNode>
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    return ASTNode;
+    return templateASTNode;
 }
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     [self doesNotRecognizeSelector:_cmd];
     return NO;

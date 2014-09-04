@@ -21,18 +21,18 @@
 // THE SOFTWARE.
 
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTNode_private.h"
+#import "GRMustacheTemplateASTNode_private.h"
 
-@class GRMustacheAST;
+@class GRMustacheTemplateAST;
 
 /**
  * A GRMustachePartialNode is an AST node that represents partial tags as
  * `{{>name}}`.
  */
-@interface GRMustachePartialNode : NSObject<GRMustacheASTNode> {
+@interface GRMustachePartialNode : NSObject<GRMustacheTemplateASTNode> {
 @private
     NSString *_name;
-    GRMustacheAST *_AST;
+    GRMustacheTemplateAST *_templateAST;
 }
 
 /**
@@ -45,15 +45,15 @@
 /**
  * The abstract syntax tree of the partial template.
  */
-@property (nonatomic, retain, readonly) GRMustacheAST *AST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a newly created partial node.
  *
- * @param AST   The abstract syntax tree of the partial template.
- * @param name  The name of the partial template.
+ * @param templateAST  The abstract syntax tree of the partial template.
+ * @param name         The name of the partial template.
  *
  * @return  a newly created partial node.
  */
-+ (instancetype)partialNodeWithAST:(GRMustacheAST *)AST name:(NSString *)name GRMUSTACHE_API_INTERNAL;
++ (instancetype)partialNodeWithTemplateAST:(GRMustacheTemplateAST *)templateAST name:(NSString *)name GRMUSTACHE_API_INTERNAL;
 @end

@@ -24,9 +24,9 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheConfiguration_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheInheritablePartialNode_private.h"
-#import "GRMustacheInheritableSection_private.h"
+#import "GRMustacheInheritableSectionNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
@@ -55,12 +55,21 @@
 {
     _templateString = [NSMutableString string];
     _needsPartialContent = YES;
-    [template.partialNode acceptVisitor:self error:NULL];
+    [template.partialNode acceptTemplateASTVisitor:self error:NULL];
     return _templateString;
 }
 
 
-#pragma mark - <GRMustacheASTVisitor>
+#pragma mark - <GRMustacheTemplateASTVisitor>
+
+- (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error
+{
+    for (id<GRMustacheTemplateASTNode> ASTNode in templateAST.templateASTNodes) {
+        [ASTNode acceptTemplateASTVisitor:self error:error];
+    }
+    
+    return YES;
+}
 
 - (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
 {
@@ -71,28 +80,20 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    
-    for (id<GRMustacheASTNode> ASTNode in inheritablePartialNode.ASTNodes) {
-        [ASTNode acceptVisitor:self error:error];
-    }
-    
+    [inheritablePartialNode.overridingTemplateAST acceptTemplateASTVisitor:self error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
 
-- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
+- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, inheritableSection.name, tagEndDelimiter];
-    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSection.name, tagEndDelimiter];
+    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
+    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    
-    for (id<GRMustacheASTNode> ASTNode in inheritableSection.ASTNodes) {
-        [ASTNode acceptVisitor:self error:error];
-    }
-    
+    [inheritableSectionNode.templateAST acceptTemplateASTVisitor:self error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
@@ -101,12 +102,7 @@
 {
     if (_needsPartialContent) {
         _needsPartialContent = NO;
-        
-        for (id<GRMustacheASTNode> ASTNode in partialNode.AST.ASTNodes) {
-            [ASTNode acceptVisitor:self error:error];
-        }
-        
-        return YES;
+        return [partialNode.templateAST acceptTemplateASTVisitor:self error:error];
     } else {
         NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
         NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
@@ -144,11 +140,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    
-    for (id<GRMustacheASTNode> ASTNode in sectionTag.ASTNodes) {
-        [ASTNode acceptVisitor:self error:error];
-    }
-    
+    [sectionTag.templateAST acceptTemplateASTVisitor:self error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }

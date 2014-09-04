@@ -24,7 +24,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustachePartialNode_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
 
 @implementation GRMustacheTemplate
@@ -121,9 +121,9 @@
     NSString *rendering = nil;
     
     [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_partialNode.AST.contentType context:context];
-    if ([_partialNode acceptVisitor:renderingEngine error:error]) {
-        rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_partialNode.templateAST.contentType context:context];
+    if ([_partialNode acceptTemplateASTVisitor:renderingEngine error:error]) {
+        rendering = [renderingEngine renderHTMLSafe:HTMLSafe];
     }
     [GRMustacheRendering popCurrentTemplateRepository];
     

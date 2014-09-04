@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
 @class GRMustacheExpression;
 
@@ -32,8 +32,8 @@
  * When parsing a Mustache template, GRMustacheCompiler builds an abstract
  * tree of objects representing raw text and various mustache tags.
  * 
- * This abstract tree is made of objects conforming to the GRMustacheASTNode
- * protocol.
+ * This abstract tree is made of objects conforming to the
+ * GRMustacheTemplateASTNode protocol.
  * 
  * For example, the template string "hello {{name}}!" would give four AST nodes:
  *
@@ -46,20 +46,20 @@
  * @see GRMustacheCompiler
  * @see GRMustacheContext
  */
-@protocol GRMustacheASTNode<NSObject>
+@protocol GRMustacheTemplateASTNode<NSObject>
 @required
 
 /**
  * Has the visitor visit the receiver.
  */
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * In the context of template inheritance, return the AST node that should be
  * rendered in lieu of the node argument.
  *
- * All classes conforming to the GRMustacheASTNode protocol return
- * the node argument, but GRMustacheInheritableSectionTag and
+ * All classes conforming to the GRMustacheTemplateASTNode protocol return
+ * the node argument, but GRMustacheInheritableSectionNode and
  * GRMustacheInheritablePartialNode.
  *
  * @param ASTNode  A node
@@ -71,5 +71,5 @@
  * @see GRMustacheTemplate
  * @see GRMustacheInheritablePartialNode
  */
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode GRMUSTACHE_API_INTERNAL;
 @end

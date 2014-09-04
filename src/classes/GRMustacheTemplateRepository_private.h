@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
 
-@class GRMustacheAST;
+@class GRMustacheTemplateAST;
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 @class GRMustacheConfiguration;
@@ -43,7 +43,7 @@
 @interface GRMustacheTemplateRepository : NSObject {
 @private
     id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    NSMutableDictionary *_ASTForTemplateID;
+    NSMutableDictionary *_templateASTForTemplateID;
     GRMustacheConfiguration *_configuration;
 }
 
@@ -102,6 +102,6 @@
  *
  * @return an AST
  */
-- (GRMustacheAST *)ASTNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (GRMustacheTemplateAST *)templateASTNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

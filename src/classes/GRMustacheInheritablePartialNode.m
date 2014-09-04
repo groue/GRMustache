@@ -22,50 +22,51 @@
 
 #import "GRMustacheInheritablePartialNode_private.h"
 #import "GRMustachePartialNode_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateAST_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
 @implementation GRMustacheInheritablePartialNode
-@synthesize ASTNodes=_ASTNodes;
+@synthesize overridingTemplateAST=_overridingTemplateAST;
 @synthesize partialNode=_partialNode;
 
-+ (instancetype)inheritablePartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode ASTNodes:(NSArray *)ASTNodes
++ (instancetype)inheritablePartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
-    return [[[self alloc] initWithPartialNode:partialNode ASTNodes:ASTNodes] autorelease];
+    return [[[self alloc] initWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST] autorelease];
 }
 
 - (void)dealloc
 {
     [_partialNode release];
-    [_ASTNodes release];
+    [_overridingTemplateAST release];
     [super dealloc];
 }
 
 
-#pragma mark - GRMustacheASTNode
+#pragma mark - GRMustacheTemplateASTNode
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitInheritablePartialNode:self error:error];
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    // look for the last inheritable ASTNode in inner ASTNodes
-    for (id<GRMustacheASTNode> innerASTNode in _ASTNodes) {
-        ASTNode = [innerASTNode resolveASTNode:ASTNode];
+    // look for the last inheritable ASTNode in inner templateAST
+    for (id<GRMustacheTemplateASTNode> innerASTNode in _overridingTemplateAST.templateASTNodes) {
+        templateASTNode = [innerASTNode resolveTemplateASTNode:templateASTNode];
     }
-    return ASTNode;
+    return templateASTNode;
 }
 
 
 #pragma mark - Private
 
-- (instancetype)initWithPartialNode:(GRMustachePartialNode *)partialNode ASTNodes:(NSArray *)ASTNodes
+- (instancetype)initWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
     self = [super init];
     if (self) {
         _partialNode = [partialNode retain];
-        _ASTNodes = [ASTNodes retain];
+        _overridingTemplateAST = [overridingTemplateAST retain];
     }
     return self;
 }

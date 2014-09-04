@@ -21,34 +21,34 @@
 // THE SOFTWARE.
 
 #import "GRMustachePartialNode_private.h"
-#import "GRMustacheAST_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateAST_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
 
 @implementation GRMustachePartialNode
-@synthesize AST=_AST;
+@synthesize templateAST=_templateAST;
 @synthesize name=_name;
 
 - (void)dealloc
 {
-    [_AST release];
+    [_templateAST release];
     [_name release];
     [super dealloc];
 }
 
-+ (instancetype)partialNodeWithAST:(GRMustacheAST *)AST name:(NSString *)name
++ (instancetype)partialNodeWithTemplateAST:(GRMustacheTemplateAST *)templateAST name:(NSString *)name
 {
-    return [[[self alloc] initWithAST:AST name:name] autorelease];
+    return [[[self alloc] initWithTemplateAST:templateAST name:name] autorelease];
 }
 
-#pragma mark <GRMustacheASTNode>
+#pragma mark <GRMustacheTemplateASTNode>
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitPartialNode:self error:error];
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
     // Look for the last inheritable node in inner nodes.
     //
@@ -64,19 +64,19 @@
     //            partial2: "{{$inheritable}}ignored{{/inheritable}}";
     //        },
     //    }
-    for (id<GRMustacheASTNode> innerASTNode in _AST.ASTNodes) {
-        ASTNode = [innerASTNode resolveASTNode:ASTNode];
+    for (id<GRMustacheTemplateASTNode> innerASTNode in _templateAST.templateASTNodes) {
+        templateASTNode = [innerASTNode resolveTemplateASTNode:templateASTNode];
     }
-    return ASTNode;
+    return templateASTNode;
 }
 
 #pragma mark - Private
 
-- (instancetype)initWithAST:(GRMustacheAST *)AST name:(NSString *)name
+- (instancetype)initWithTemplateAST:(GRMustacheTemplateAST *)templateAST name:(NSString *)name
 {
     self = [self init];
     if (self) {
-        _AST = [AST retain];
+        _templateAST = [templateAST retain];
         _name = [name retain];
     }
     return self;

@@ -23,24 +23,25 @@
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
+#import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
 
 @implementation GRMustacheSectionTag
 @synthesize expression=_expression;
-@synthesize ASTNodes=_ASTNodes;
+@synthesize templateAST=_templateAST;
 @synthesize inverted=_inverted;
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
-    [_ASTNodes release];
+    [_templateAST release];
     [super dealloc];
 }
 
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateAST:(GRMustacheTemplateAST *)templateAST
 {
-    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange ASTNodes:ASTNodes contentType:contentType] autorelease];
+    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange templateAST:templateAST] autorelease];
 }
 
 
@@ -68,20 +69,17 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    NSString *rendering = nil;
-
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_contentType context:context];
-    if ([renderingEngine visitASTNodes:_ASTNodes error:error]) {
-        rendering = [renderingEngine renderHTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_templateAST.contentType context:context];
+    if (![renderingEngine visitTemplateAST:_templateAST error:error]) {
+        return nil;
     }
-
-    return rendering;
+    return [renderingEngine renderHTMLSafe:HTMLSafe];
 }
 
 
-#pragma mark - <GRMustacheASTNode>
+#pragma mark - <GRMustacheTemplateASTNode>
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitSectionTag:self error:error];
 }
@@ -89,7 +87,7 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange ASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateAST:(GRMustacheTemplateAST *)templateAST
 {
     self = [super init];
     if (self) {
@@ -97,8 +95,7 @@
         _inverted = inverted;
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _ASTNodes = [ASTNodes retain];
-        _contentType = contentType;
+        _templateAST = [templateAST retain];
     }
     return self;
 }

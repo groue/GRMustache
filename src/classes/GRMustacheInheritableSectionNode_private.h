@@ -22,22 +22,44 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheTemplateASTNode_private.h"
 
-@class GRMustacheInheritablePartialNode;
-@class GRMustacheInheritableSection;
-@class GRMustachePartialNode;
-@class GRMustacheVariableTag;
-@class GRMustacheSectionTag;
-@class GRMustacheTextNode;
+@class GRMustacheTemplateAST;
 
-@protocol GRMustacheASTVisitor <NSObject>
+/**
+ * A GRMustacheInheritableSection is an AST node that represents inheritable
+ * sections as `{{$name}}...{{/name}}`.
+ */
+@interface GRMustacheInheritableSectionNode : NSObject<GRMustacheTemplateASTNode> {
+@private
+    NSString *_name;
+    GRMustacheTemplateAST *_templateAST;
+}
 
-// Don't use these methods directly. Use -[<GRMustacheASTNode acceptVisitor:error:] instead
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+/**
+ * The AST of the inner content of the section
+ *
+ *     {{$ ... }} AST {{/ }}
+ */
+@property (nonatomic, retain, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
+
+/**
+ * The name of the inheritable section:
+ *
+ *     {{$ name }} ... {{/ }}
+ */
+@property (nonatomic, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
+
+/**
+ * Returns a new inheritable section.
+ *
+ * @param name         The name of the inheritable section
+ * @param templateAST  The AST of the inner content of the section
+ *
+ * @return a new GRMustacheInheritableSection.
+ *
+ * @see GRMustacheTemplateASTNode
+ */
++ (instancetype)inheritableSectionNodeWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST GRMUSTACHE_API_INTERNAL;
 
 @end

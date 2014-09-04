@@ -26,7 +26,7 @@
 #import "GRMustacheError.h"
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustachePartialNode_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateAST_private.h"
 
 static NSString* const GRMustacheDefaultExtension = @"mustache";
 
@@ -148,7 +148,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 {
     self = [super init];
     if (self) {
-        _ASTForTemplateID = [[NSMutableDictionary alloc] init];
+        _templateASTForTemplateID = [[NSMutableDictionary alloc] init];
         _configuration = [[GRMustacheConfiguration defaultConfiguration] copy];
     }
     return self;
@@ -156,21 +156,21 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (void)dealloc
 {
-    [_ASTForTemplateID release];
+    [_templateASTForTemplateID release];
     [_configuration release];
     [super dealloc];
 }
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error
 {
-    GRMustacheAST *AST = [self ASTNamed:name relativeToTemplateID:nil error:error];
-    if (!AST) {
+    GRMustacheTemplateAST *templateAST = [self templateASTNamed:name relativeToTemplateID:nil error:error];
+    if (!templateAST) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:name];
+    template.partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:name];
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -182,14 +182,14 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 
 - (GRMustacheTemplate *)templateFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType error:(NSError **)error
 {
-    GRMustacheAST *AST = [self ASTFromString:templateString contentType:contentType templateID:nil error:error];
-    if (!AST) {
+    GRMustacheTemplateAST *templateAST = [self templateASTFromString:templateString contentType:contentType templateID:nil error:error];
+    if (!templateAST) {
         return nil;
     }
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partialNode = [GRMustachePartialNode partialNodeWithAST:AST name:nil];
+    template.partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:nil];
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -197,7 +197,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 - (void)reloadTemplates
 {
     @synchronized(self) {
-        [_ASTForTemplateID removeAllObjects];
+        [_templateASTForTemplateID removeAllObjects];
     }
 }
 
@@ -227,13 +227,13 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * @param error           If there is an error, upon return contains an NSError
  *                        object that describes the problem.
  *
- * @return a GRMustacheAST instance.
+ * @return a GRMustacheTemplateAST instance.
  *
  * @see GRMustacheTemplateRepository
  */
-- (GRMustacheAST *)ASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error
+- (GRMustacheTemplateAST *)templateASTFromString:(NSString *)templateString contentType:(GRMustacheContentType)contentType templateID:(id)templateID error:(NSError **)error
 {
-    GRMustacheAST *AST = nil;
+    GRMustacheTemplateAST *templateAST = nil;
     @autoreleasepool {
         // It's time to lock the configuration.
         [_configuration lock];
@@ -249,18 +249,18 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
         
         // Parse and extract template components from the compiler
         [parser parseTemplateString:templateString templateID:templateID];
-        AST = [[compiler ASTReturningError:error] retain];  // make sure AST is not released by autoreleasepool
+        templateAST = [[compiler templateASTReturningError:error] retain];  // make sure AST is not released by autoreleasepool
         
         // make sure error is not released by autoreleasepool
-        if (!AST && error != NULL) [*error retain];
+        if (!templateAST && error != NULL) [*error retain];
     }
-    if (!AST && error != NULL) [*error autorelease];
-    return [AST autorelease];
+    if (!templateAST && error != NULL) [*error autorelease];
+    return [templateAST autorelease];
 }
 
-- (GRMustacheAST *)ASTNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
+- (GRMustacheTemplateAST *)templateASTNamed:(NSString *)name relativeToTemplateID:(id)baseTemplateID error:(NSError **)error
 {
-    // Protect our _ASTForTemplateID dictionary, and our dataSource
+    // Protect our _templateASTForTemplateID dictionary, and our dataSource
     @synchronized(self) {
         
         id templateID = nil;
@@ -280,9 +280,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             return nil;
         }
         
-        GRMustacheAST *AST = [_ASTForTemplateID objectForKey:templateID];
+        GRMustacheTemplateAST *templateAST = [_templateASTForTemplateID objectForKey:templateID];
         
-        if (AST == nil) {
+        if (templateAST == nil) {
             // templateRepository:templateStringForTemplateID:error: is a dataSource method.
             // We are not sure the dataSource will set error when not returning any templateString.
             // We thus have to take extra care of error handling here.
@@ -306,29 +306,29 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
             
             // Store a placeholder AST before compiling, so that we support
             // recursive partials
-            AST = [GRMustacheAST placeholderAST];
-            [_ASTForTemplateID setObject:AST forKey:templateID];
+            templateAST = [GRMustacheTemplateAST placeholderAST];
+            [_templateASTForTemplateID setObject:templateAST forKey:templateID];
             
             
             // Compile
             
-            GRMustacheAST *compiledAST = [self ASTFromString:templateString contentType:_configuration.contentType templateID:templateID error:error];
+            GRMustacheTemplateAST *compiledAST = [self templateASTFromString:templateString contentType:_configuration.contentType templateID:templateID error:error];
             
             
             // compiling done
             
             if (compiledAST) {
                 // update stored AST
-                AST.ASTNodes = compiledAST.ASTNodes;
-                AST.contentType = compiledAST.contentType;
+                templateAST.templateASTNodes = compiledAST.templateASTNodes;
+                templateAST.contentType = compiledAST.contentType;
             } else {
                 // forget invalid empty AST
-                [_ASTForTemplateID removeObjectForKey:templateID];
-                AST = nil;
+                [_templateASTForTemplateID removeObjectForKey:templateID];
+                templateAST = nil;
             }
         }
         
-        return AST;
+        return templateAST;
     }
 }
 

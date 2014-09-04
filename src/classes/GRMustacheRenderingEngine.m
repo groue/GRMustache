@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheRenderingEngine_private.h"
-#import "GRMustacheAST_private.h"
+#import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheVariableTag_private.h"
@@ -30,7 +30,7 @@
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustacheInheritablePartialNode_private.h"
-#import "GRMustacheInheritableSection_private.h"
+#import "GRMustacheInheritableSectionNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
@@ -50,7 +50,7 @@
     return [[[self alloc] initWithContentType:contentType context:context] autorelease];
 }
 
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe
 {
     if (HTMLSafe) {
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
@@ -58,51 +58,26 @@
     return (NSString *)GRMustacheBufferGetString(&_buffer);
 }
 
-- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error
-{
-    for (id<GRMustacheASTNode> ASTNode in ASTNodes) {
-        ASTNode = [_context resolveASTNode:ASTNode];
-        if (![ASTNode acceptVisitor:self error:error]) {
-            return NO;
-        }
-    }
-    
-    return YES;
-}
-
 
 #pragma mark - AST Nodes
 
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
+- (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error
 {
-    GRMustacheContext *context = _context;
-    _context = [_context contextByAddingInheritablePartialNode:inheritablePartialNode];
-    BOOL success = [inheritablePartialNode.partialNode acceptVisitor:self error:error];
-    _context = context;
-    return success;
-}
-
-- (BOOL)visitInheritableSection:(GRMustacheInheritableSection *)inheritableSection error:(NSError **)error
-{
-    return [self visitASTNodes:inheritableSection.ASTNodes error:error];
-}
-
-- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error
-{
-    GRMustacheAST *AST = partialNode.AST;
-    GRMustacheContentType partialContentType = AST.contentType;
+    GRMustacheContentType ASTContentType = templateAST.contentType;
     
-    if (_contentType != partialContentType)
+    if (_contentType != ASTContentType)
     {
-        GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:partialContentType context:_context] autorelease];
-        if (![partialNode acceptVisitor:renderingEngine error:error]) {
+        // Render separately...
+        
+        GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:ASTContentType context:_context] autorelease];
+        if (![templateAST acceptTemplateASTVisitor:renderingEngine error:error]) {
             return NO;
         }
         BOOL HTMLSafe;
-        NSString *rendering = [renderingEngine renderHTMLSafe:&HTMLSafe error:error];
-        if (!rendering) {
-            return NO;
-        }
+        NSString *rendering = [renderingEngine renderHTMLSafe:&HTMLSafe];
+        
+        // ... and escape if needed
+        
         if (_contentType == GRMustacheContentTypeHTML && !HTMLSafe) {
             rendering = GRMustacheTranslateHTMLCharacters(rendering);
         }
@@ -111,11 +86,30 @@
     }
     else
     {
-        [GRMustacheRendering pushCurrentContentType:partialContentType];
-        BOOL success = [self visitASTNodes:AST.ASTNodes error:error];
+        [GRMustacheRendering pushCurrentContentType:ASTContentType];
+        BOOL success = [self visitTemplateASTNodes:templateAST.templateASTNodes error:error];
         [GRMustacheRendering popCurrentContentType];
         return success;
     }
+}
+
+- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
+{
+    GRMustacheContext *context = _context;
+    _context = [_context contextByAddingInheritablePartialNode:inheritablePartialNode];
+    BOOL success = [inheritablePartialNode.partialNode acceptTemplateASTVisitor:self error:error];
+    _context = context;
+    return success;
+}
+
+- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
+{
+    return [inheritableSectionNode.templateAST acceptTemplateASTVisitor:self error:error];
+}
+
+- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error
+{
+    return [partialNode.templateAST acceptTemplateASTVisitor:self error:error];
 }
 
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error
@@ -318,6 +312,18 @@
     
     if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
     return success;
+}
+
+- (BOOL)visitTemplateASTNodes:(NSArray *)templateASTNodes error:(NSError **)error
+{
+    for (id<GRMustacheTemplateASTNode> ASTNode in templateASTNodes) {
+        ASTNode = [_context resolveTemplateASTNode:ASTNode];
+        if (![ASTNode acceptTemplateASTVisitor:self error:error]) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 @end

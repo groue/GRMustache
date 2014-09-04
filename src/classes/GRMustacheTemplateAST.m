@@ -20,17 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheAST_private.h"
-#import "GRMustacheASTNode_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateAST_private.h"
+#import "GRMustacheTemplateASTNode_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheAST
-@synthesize ASTNodes=_ASTNodes;
+@implementation GRMustacheTemplateAST
+@synthesize templateASTNodes=_templateASTNodes;
 @synthesize contentType=_contentType;
 
 - (void)dealloc
 {
-    [_ASTNodes release];
+    [_templateASTNodes release];
     [super dealloc];
 }
 
@@ -39,25 +39,38 @@
     return [[[self alloc] initWithASTNodes:nil contentType:GRMustacheContentTypeHTML] autorelease];
 }
 
-+ (instancetype)ASTWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
++ (instancetype)templateASTWithASTNodes:(NSArray *)templateASTNodes contentType:(GRMustacheContentType)contentType
 {
-    NSAssert(ASTNodes, @"nil ASTNodes");
-    return [[[self alloc] initWithASTNodes:ASTNodes contentType:contentType] autorelease];
+    NSAssert(templateASTNodes, @"nil templateASTNodes");
+    return [[[self alloc] initWithASTNodes:templateASTNodes contentType:contentType] autorelease];
 }
 
 - (BOOL)isPlaceholder
 {
-    return (_ASTNodes == nil);
+    return (_templateASTNodes == nil);
 }
 
-- (instancetype)initWithASTNodes:(NSArray *)ASTNodes contentType:(GRMustacheContentType)contentType
+- (instancetype)initWithASTNodes:(NSArray *)templateASTNodes contentType:(GRMustacheContentType)contentType
 {
     self = [super init];
     if (self) {
-        _ASTNodes = [ASTNodes retain];
+        _templateASTNodes = [templateASTNodes retain];
         _contentType = contentType;
     }
     return self;
+}
+
+
+#pragma mark - <GRMustacheTemplateASTNode>
+
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
+{
+    return [visitor visitTemplateAST:self error:error];
+}
+
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
+{
+    return templateASTNode;
 }
 
 @end

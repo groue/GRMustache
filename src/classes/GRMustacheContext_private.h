@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @protocol GRMustacheTagDelegate;
-@protocol GRMustacheASTNode;
+@protocol GRMustacheTemplateASTNode;
 @class GRMustacheInheritablePartialNode;
 
 /**
@@ -170,7 +170,7 @@
  * @return The resolution of the node in the context of Mustache template
  *         inheritance.
  */
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode GRMUSTACHE_API_INTERNAL;
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an array containing all tag delegates in the delegate stack.

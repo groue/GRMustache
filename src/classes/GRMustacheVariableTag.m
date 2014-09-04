@@ -76,9 +76,9 @@
 }
 
 
-#pragma mark - <GRMustacheASTNode>
+#pragma mark - <GRMustacheTemplateASTNode>
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitVariableTag:self error:error];
 }

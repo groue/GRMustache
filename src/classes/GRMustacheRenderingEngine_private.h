@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 #import "GRMustacheBuffer_private.h"
 
 @class GRMustacheContext;
@@ -33,7 +33,7 @@
 /**
  * TODO
  */
-@interface GRMustacheRenderingEngine : NSObject<GRMustacheASTVisitor>
+@interface GRMustacheRenderingEngine : NSObject<GRMustacheTemplateASTVisitor>
 {
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;
@@ -44,12 +44,7 @@
 /**
  * TODO
  */
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-
-/**
- * TODO
- */
-- (BOOL)visitASTNodes:(NSArray *)ASTNodes error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a newly created rendering engine.

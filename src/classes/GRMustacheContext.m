@@ -101,28 +101,28 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     setupTagDelegateClasses();
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
     if (!GRMUSTACHE_STACK_TOP(inheritablePartialNodeStack, self)) {
-        return ASTNode;
+        return templateASTNode;
     }
     
-    NSMutableSet *usedASTs = [[NSMutableSet alloc] init];
+    NSMutableSet *usedTemplateASTs = [[NSMutableSet alloc] init];
     GRMUSTACHE_STACK_ENUMERATE(inheritablePartialNodeStack, self, context) {
         GRMustacheInheritablePartialNode *inheritablePartialNode = GRMUSTACHE_STACK_TOP(inheritablePartialNodeStack, context);
-        GRMustacheAST *AST = inheritablePartialNode.partialNode.AST;
-        if ([usedASTs containsObject:AST]) {
+        GRMustacheTemplateAST *templateAST = inheritablePartialNode.partialNode.templateAST;
+        if ([usedTemplateASTs containsObject:templateAST]) {
             continue;
         }
-        id<GRMustacheASTNode> resolvedASTNode = [inheritablePartialNode resolveASTNode:ASTNode];
-        if (resolvedASTNode != ASTNode) {
-            [usedASTs addObject:AST];
+        id<GRMustacheTemplateASTNode> resolvedASTNode = [inheritablePartialNode resolveTemplateASTNode:templateASTNode];
+        if (resolvedASTNode != templateASTNode) {
+            [usedTemplateASTs addObject:templateAST];
         }
-        ASTNode = resolvedASTNode;
+        templateASTNode = resolvedASTNode;
     }
-    [usedASTs release];
+    [usedTemplateASTs release];
     
-    return ASTNode;
+    return templateASTNode;
 }
 
 - (BOOL)unsafeKeyAccess

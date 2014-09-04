@@ -26,14 +26,14 @@
 #import "GRMustacheContentType.h"
 
 @class GRMustacheTemplateRepository;
-@class GRMustacheAST;
+@class GRMustacheTemplateAST;
 
 /**
  * The GRMustacheCompiler interprets GRMustacheTokens provided by a
  * GRMustacheParser, and outputs a syntax tree of objects conforming to the
- * GRMustacheASTNode protocol.
+ * GRMustacheTemplateASTNode protocol.
  *
- * @see GRMustacheASTNode
+ * @see GRMustacheTemplateASTNode
  * @see GRMustacheToken
  * @see GRMustacheParser
  */
@@ -101,15 +101,15 @@
  * [parser parseTemplateString:... templateID:...];
  *
  * // Extract template ASTNodes from the compiler
- * GRMustacheAST *AST = [compiler ASTReturningError:...];
+ * GRMustacheTemplateAST *templateAST = [compiler templateASTReturningError:...];
  * ```
  *
  * @param error  If there is an error building the abstract syntax tree, upon
  *               return contains an NSError object that describes the problem.
  *
- * @return A GRMustacheAST instance
+ * @return A GRMustacheTemplateAST instance
  *
- * @see GRMustacheAST
+ * @see GRMustacheTemplateAST
  */
-- (GRMustacheAST *)ASTReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (GRMustacheTemplateAST *)templateASTReturningError:(NSError **)error GRMUSTACHE_API_INTERNAL;
 @end

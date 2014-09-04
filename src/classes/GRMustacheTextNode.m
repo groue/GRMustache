@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTextNode_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 
 @implementation GRMustacheTextNode
 
@@ -42,16 +42,16 @@
 }
 
 
-#pragma mark - <GRMustacheASTNode>
+#pragma mark - <GRMustacheTemplateASTNode>
 
-- (BOOL)acceptVisitor:(id<GRMustacheASTVisitor>)visitor error:(NSError **)error
+- (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
     return [visitor visitTextNode:self error:error];
 }
 
-- (id<GRMustacheASTNode>)resolveASTNode:(id<GRMustacheASTNode>)ASTNode
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    return ASTNode;
+    return templateASTNode;
 }
 
 

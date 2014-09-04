@@ -22,43 +22,24 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTNode_private.h"
 
+@class GRMustacheTemplateAST;
+@class GRMustacheInheritablePartialNode;
+@class GRMustacheInheritableSectionNode;
+@class GRMustachePartialNode;
+@class GRMustacheVariableTag;
+@class GRMustacheSectionTag;
+@class GRMustacheTextNode;
 
-/**
- * A GRMustacheInheritableSection is an AST node that represents inheritable
- * sections as `{{$name}}...{{/name}}`.
- */
-@interface GRMustacheInheritableSection : NSObject<GRMustacheASTNode> {
-@private
-    NSString *_name;
-    NSArray *_ASTNodes;
-}
+@protocol GRMustacheTemplateASTVisitor <NSObject>
 
-/**
- * The AST nodes inside the inheritable section:
- *
- *     {{$ section }} AST nodes {{/ }}
- */
-@property (nonatomic, retain, readonly) NSArray *ASTNodes GRMUSTACHE_API_INTERNAL;
-
-/**
- * The name of the inheritable section:
- *
- *     {{$ name }} ... {{/ }}
- */
-@property (nonatomic, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
-
-/**
- * Returns a new inheritable section.
- *
- * @param name      The name of the inheritable section
- * @param ASTNodes  Array of GRMustacheASTNode objects
- *
- * @return a new GRMustacheInheritableSection.
- *
- * @see GRMustacheASTNode
- */
-+ (instancetype)inheritableSectionWithName:(NSString *)name ASTNodes:(NSArray *)ASTNodes GRMUSTACHE_API_INTERNAL;
+// Don't use these methods directly. Use -[<GRMustacheTemplateASTNode acceptTemplateASTVisitor:error:] instead
+- (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 @end

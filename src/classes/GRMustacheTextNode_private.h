@@ -22,12 +22,12 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTNode_private.h"
+#import "GRMustacheTemplateASTNode_private.h"
 
 /**
  * A GRMustacheTextNode is an AST node that represents raw text.
  */
-@interface GRMustacheTextNode: NSObject<GRMustacheASTNode> {
+@interface GRMustacheTextNode: NSObject<GRMustacheTemplateASTNode> {
 @private
     NSString *_text;
 }

@@ -22,13 +22,13 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheASTVisitor_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 #import "GRMustacheExpressionVisitor_private.h"
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 
-@interface GRMustacheTemplateGenerator : NSObject<GRMustacheASTVisitor, GRMustacheExpressionVisitor> {
+@interface GRMustacheTemplateGenerator : NSObject<GRMustacheTemplateASTVisitor, GRMustacheExpressionVisitor> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSString *_expressionString;
