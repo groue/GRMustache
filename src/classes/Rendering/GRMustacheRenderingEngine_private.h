@@ -23,17 +23,17 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
-#import "GRMustacheTemplateASTVisitor_private.h"
 #import "GRMustacheBuffer_private.h"
 
 @class GRMustacheContext;
 @class GRMustacheSectionTag;
 @class GRMustacheExpressionInvocation;
+@class GRMustacheTemplateAST;
 
 /**
  * TODO
  */
-@interface GRMustacheRenderingEngine : NSObject<GRMustacheTemplateASTVisitor>
+@interface GRMustacheRenderingEngine : NSObject
 {
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;
@@ -44,15 +44,10 @@
 /**
  * TODO
  */
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderTemplateAST:(GRMustacheTemplateAST *)templateAST HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a newly created rendering engine.
- *
- * @param contentType  
- * @param context
- *
- * @return a newly created rendering engine.
+ * TODO
  */
 + (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 

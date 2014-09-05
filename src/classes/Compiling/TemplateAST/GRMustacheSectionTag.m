@@ -70,10 +70,7 @@
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_templateAST.contentType context:context];
-    if (![_templateAST acceptTemplateASTVisitor:renderingEngine error:error]) {
-        return nil;
-    }
-    return [renderingEngine renderHTMLSafe:HTMLSafe];
+    return [renderingEngine renderTemplateAST:_templateAST HTMLSafe:HTMLSafe error:error];
 }
 
 

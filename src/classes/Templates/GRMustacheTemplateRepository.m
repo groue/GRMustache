@@ -170,7 +170,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:name];
+    template.templateAST = templateAST;
     template.baseContext = _configuration.baseContext;
     return template;
 }
@@ -189,7 +189,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
     
     GRMustacheTemplate *template = [[[GRMustacheTemplate alloc] init] autorelease];
     template.templateRepository = self;
-    template.partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:nil];
+    template.templateAST = templateAST;
     template.baseContext = _configuration.baseContext;
     return template;
 }

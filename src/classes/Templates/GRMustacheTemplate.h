@@ -39,7 +39,7 @@
 @interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
 @private
     GRMustacheTemplateRepository *_templateRepository;
-    id _partial;
+    id _templateAST;
     GRMustacheContext *_baseContext;
 }
 

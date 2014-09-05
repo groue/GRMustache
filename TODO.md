@@ -1,7 +1,7 @@
 ## TODO
 
 - [X] check that {{^ [NSNull null]|@NO }}...{{.}}...{{/}} does not mess with the {{.}}
-- [ ] Consider replacing GRMustacheTemplate.partialNode with GRMustacheTemplate.templateAST
+- [X] Consider replacing GRMustacheTemplate.partialNode with GRMustacheTemplate.templateAST
 - [X] Rename `identifier` to `name`
 - [X] Fix link to filters Guide from GRMustacheFilter.h
 - [X] Document [GRMustacheTemplateRepository templateRepositoryWithDictionary:] changes (mutability of the dictionary)

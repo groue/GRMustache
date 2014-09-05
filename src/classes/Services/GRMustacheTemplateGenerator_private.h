@@ -22,18 +22,15 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
-#import "GRMustacheTemplateASTVisitor_private.h"
-#import "GRMustacheExpressionVisitor_private.h"
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
 
-@interface GRMustacheTemplateGenerator : NSObject<GRMustacheTemplateASTVisitor, GRMustacheExpressionVisitor> {
+@interface GRMustacheTemplateGenerator : NSObject {
 @private
     GRMustacheTemplateRepository *_templateRepository;
     NSString *_expressionString;
     NSMutableString *_templateString;
-    BOOL _needsPartialContent;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;

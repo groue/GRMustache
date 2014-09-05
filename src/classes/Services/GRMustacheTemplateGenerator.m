@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplateGenerator_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
+#import "GRMustacheExpressionVisitor_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheConfiguration_private.h"
@@ -36,6 +38,9 @@
 #import "GRMustacheImplicitIteratorExpression_private.h"
 #import "GRMustacheScopedExpression_private.h"
 
+
+@interface GRMustacheTemplateGenerator() <GRMustacheTemplateASTVisitor, GRMustacheExpressionVisitor>
+@end
 
 @implementation GRMustacheTemplateGenerator
 @synthesize templateRepository=_templateRepository;
@@ -54,8 +59,7 @@
 - (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template
 {
     _templateString = [NSMutableString string];
-    _needsPartialContent = YES;
-    [template.partialNode acceptTemplateASTVisitor:self error:NULL];
+    [template.templateAST acceptTemplateASTVisitor:self error:NULL];
     return _templateString;
 }
 
@@ -100,17 +104,12 @@
 
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error
 {
-    if (_needsPartialContent) {
-        _needsPartialContent = NO;
-        return [partialNode.templateAST acceptTemplateASTVisitor:self error:error];
-    } else {
-        NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
-        NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-        NSString *partialName = partialNode.name;
-        NSString *tagString = [NSString stringWithFormat:@"%@>%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
-        [_templateString appendString:tagString];
-        return YES;
-    }
+    NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
+    NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
+    NSString *partialName = partialNode.name;
+    NSString *tagString = [NSString stringWithFormat:@"%@>%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
+    [_templateString appendString:tagString];
+    return YES;
 }
 
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error

@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustacheRenderingEngine_private.h"
+#import "GRMustacheTemplateASTVisitor_private.h"
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheSectionTag_private.h"
@@ -35,6 +36,9 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheExpressionInvocation_private.h"
+
+@interface GRMustacheRenderingEngine() <GRMustacheTemplateASTVisitor>
+@end
 
 @implementation GRMustacheRenderingEngine
 
@@ -51,8 +55,11 @@
     return [[[self alloc] initWithContentType:contentType context:context] autorelease];
 }
 
-- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe
+- (NSString *)renderTemplateAST:(GRMustacheTemplateAST *)templateAST HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
+    if (![templateAST acceptTemplateASTVisitor:self error:error]) {
+        return nil;
+    }
     if (HTMLSafe) {
         *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
     }
@@ -71,11 +78,11 @@
         // Render separately...
         
         GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:ASTContentType context:_context] autorelease];
-        if (![templateAST acceptTemplateASTVisitor:renderingEngine error:error]) {
+        BOOL HTMLSafe;
+        NSString *rendering = [renderingEngine renderTemplateAST:templateAST HTMLSafe:&HTMLSafe error:error];
+        if (!rendering) {
             return NO;
         }
-        BOOL HTMLSafe;
-        NSString *rendering = [renderingEngine renderHTMLSafe:&HTMLSafe];
         
         // ... and escape if needed
         
