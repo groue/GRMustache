@@ -16,9 +16,21 @@
       "expected": "<--->"
     },
     {
+      "name": "Missing key should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
+      "expected": "<--->"
+    },
+    {
       "name": "Null should trigger the inverted section rendering.",
       "data": { "subject": null },
       "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Null should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "subject": null, "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
       "expected": "<--->"
     },
     {
@@ -28,9 +40,21 @@
       "expected": "<--->"
     },
     {
+      "name": "False should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "subject": false, "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
+      "expected": "<--->"
+    },
+    {
       "name": "Empty string should trigger the inverted section rendering.",
       "data": { "subject": "" },
       "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Empty string should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "subject": "", "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
       "expected": "<--->"
     },
     {
@@ -40,9 +64,21 @@
       "expected": "<--->"
     },
     {
+      "name": "Empty list should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "subject": [], "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
+      "expected": "<--->"
+    },
+    {
       "name": "Zero should trigger the inverted section rendering.",
       "data": { "subject": 0 },
       "template": "<{{^subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Zero should trigger the inverted section rendering without altering the top of the context stack.",
+      "data": { "subject": 0, "object": "---" },
+      "template": "<{{#object}}{{^subject}}{{.}}{{/subject}}{{/object}}>",
       "expected": "<--->"
     },
     {
