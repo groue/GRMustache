@@ -358,12 +358,16 @@ static NSString *GRMustacheRenderNSNull(NSNull *self, SEL _cmd, GRMustacheTag *t
             return @"";
             
         case GRMustacheTagTypeSection:
-            // {{# null }}...{{/}}
-            // {{^ null }}...{{/}}
-            context = [context newContextByAddingObject:self];
-            NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-            [context release];
-            return rendering;
+            if (tag.isInverted) {
+                // {{^ null }}...{{/}}
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            } else {
+                // {{# null }}...{{/}}
+                context = [context newContextByAddingObject:self];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                [context release];
+                return rendering;
+            }
     }
 }
 
@@ -383,12 +387,16 @@ static NSString *GRMustacheRenderNSNumber(NSNumber *self, SEL _cmd, GRMustacheTa
             return [self description];
             
         case GRMustacheTagTypeSection:
-            // {{# number }}...{{/}}
-            // {{^ number }}...{{/}}
-            context = [context newContextByAddingObject:self];
-            NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-            [context release];
-            return rendering;
+            if (tag.isInverted) {
+                // {{^ number }}...{{/}}
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            } else {
+                // {{# number }}...{{/}}
+                context = [context newContextByAddingObject:self];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                [context release];
+                return rendering;
+            }
     }
 }
 
@@ -408,12 +416,16 @@ static NSString *GRMustacheRenderNSString(NSString *self, SEL _cmd, GRMustacheTa
             return self;
             
         case GRMustacheTagTypeSection:
-            // {{# string }}...{{/}}
-            // {{^ string }}...{{/}}
-            context = [context newContextByAddingObject:self];
-            NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-            [context release];
-            return rendering;
+            if (tag.isInverted) {
+                // {{^ number }}...{{/}}
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            } else {
+                // {{# string }}...{{/}}
+                context = [context newContextByAddingObject:self];
+                NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+                [context release];
+                return rendering;
+            }
     }
 }
 
