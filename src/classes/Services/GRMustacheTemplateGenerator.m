@@ -89,7 +89,7 @@
     return YES;
 }
 
-- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
+- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;

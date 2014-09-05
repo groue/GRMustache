@@ -36,7 +36,7 @@
 // Don't use these methods directly. Use -[<GRMustacheTemplateASTNode acceptTemplateASTVisitor:error:] instead
 - (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;

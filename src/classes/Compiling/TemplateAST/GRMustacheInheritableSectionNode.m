@@ -44,7 +44,7 @@
 
 - (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritableSectionTag:self error:error];
+    return [visitor visitInheritableSectionNode:self error:error];
 }
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode

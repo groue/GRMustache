@@ -110,7 +110,7 @@
     return success;
 }
 
-- (BOOL)visitInheritableSectionTag:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
+- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
 {
     return [inheritableSectionNode.templateAST acceptTemplateASTVisitor:self error:error];
 }
