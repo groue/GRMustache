@@ -40,17 +40,17 @@
 /**
  * TODO
  */
-@property (nonatomic, retain) GRMustacheContext *context GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign) GRMustacheContext *context GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-@property (nonatomic, retain) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-@property (nonatomic, retain, readonly) id value GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, assign, readonly) id value GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

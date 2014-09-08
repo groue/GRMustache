@@ -40,13 +40,6 @@
 @synthesize value=_value;
 @synthesize valueIsProtected=_valueIsProtected;
 
-- (void)dealloc
-{
-    [_context release];
-    [_expression release];
-    [super dealloc];
-}
-
 - (BOOL)invokeReturningError:(NSError **)error
 {
     return [_expression acceptVisitor:self error:error];
