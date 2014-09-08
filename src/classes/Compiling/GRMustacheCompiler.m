@@ -144,8 +144,6 @@
         NSAssert(_fatalError, @"We should have an error when _currentASTNodes is nil");
         if (error != NULL) {
             *error = [[_fatalError retain] autorelease];
-        } else {
-            NSLog(@"GRMustache error: %@", _fatalError.localizedDescription);
         }
         return nil;
     }
@@ -155,8 +153,6 @@
         NSError *parseError = [self parseErrorAtToken:_currentOpeningToken description:[NSString stringWithFormat:@"Unclosed %@ section", _currentOpeningToken.templateSubstring]];
         if (error != NULL) {
             *error = parseError;
-        } else {
-            NSLog(@"GRMustache error: %@", parseError.localizedDescription);
         }
         return nil;
     }

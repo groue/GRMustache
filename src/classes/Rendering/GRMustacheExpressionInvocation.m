@@ -82,8 +82,6 @@
         NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
         if (error != NULL) {
             *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
         }
         return NO;
     }
@@ -103,8 +101,6 @@
         NSError *renderingError = [NSError errorWithDomain:GRMustacheErrorDomain code:GRMustacheErrorCodeRenderingError userInfo:[NSDictionary dictionaryWithObject:renderingErrorDescription forKey:NSLocalizedDescriptionKey]];
         if (error != NULL) {
             *error = renderingError;
-        } else {
-            NSLog(@"GRMustache error: %@", renderingError.localizedDescription);
         }
         return NO;
     }

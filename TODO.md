@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] Document that errors are no longer logged.
 - [X] check that {{^ [NSNull null]|@NO }}...{{.}}...{{/}} does not mess with the {{.}}
 - [X] Consider replacing GRMustacheTemplate.partialNode with GRMustacheTemplate.templateAST
 - [X] Rename `identifier` to `name`

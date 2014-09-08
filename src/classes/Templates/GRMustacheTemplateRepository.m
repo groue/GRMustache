@@ -274,8 +274,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
                                                                                                  forKey:NSLocalizedDescriptionKey]];
             if (error != NULL) {
                 *error = missingTemplateError;
-            } else {
-                NSLog(@"GRMustache error: %@", missingTemplateError.localizedDescription);
             }
             return nil;
         }
@@ -297,8 +295,6 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
                 }
                 if (error != NULL) {
                     *error = templateStringError;
-                } else {
-                    NSLog(@"GRMustache error: %@", templateStringError.localizedDescription);
                 }
                 return nil;
             }
