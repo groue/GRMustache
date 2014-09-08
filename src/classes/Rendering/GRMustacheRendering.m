@@ -511,7 +511,9 @@ static NSString *GRMustacheRenderNSFastEnumeration(id<NSFastEnumeration> self, S
             NSError *renderingError = nil;
             NSString *rendering = nil;
             if ([item respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![item isKindOfClass:[NSDictionary class]]) {
-                rendering = [tag renderContentWithContext:[context contextByAddingObject:item] HTMLSafe:&itemHTMLSafe error:&renderingError];
+                GRMustacheContext *itemContext = [context newContextByAddingObject:item];
+                rendering = [tag renderContentWithContext:itemContext HTMLSafe:&itemHTMLSafe error:&renderingError];
+                [itemContext release];
             } else {
                 rendering = [[GRMustacheRendering renderingObjectForObject:item] renderForMustacheTag:tag context:context HTMLSafe:&itemHTMLSafe error:&renderingError];
             }
