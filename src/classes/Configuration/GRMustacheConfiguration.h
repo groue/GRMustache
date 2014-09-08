@@ -76,6 +76,7 @@
  * @since v6.2
  */
 @interface GRMustacheConfiguration : NSObject<NSCopying> {
+@private
     GRMustacheContentType _contentType;
     NSString *_tagStartDelimiter;
     NSString *_tagEndDelimiter;

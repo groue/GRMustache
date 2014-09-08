@@ -30,6 +30,7 @@
  * TODO
  */
 @interface GRMustacheExpressionInvocation : NSObject {
+@private
     GRMustacheContext *_context;
     GRMustacheExpression *_expression;
     id _value;

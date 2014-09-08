@@ -29,6 +29,7 @@
 
 // Documented in GRMustacheConfiguration.h
 @interface GRMustacheConfiguration : NSObject<NSCopying> {
+@private
     GRMustacheContentType _contentType;
     NSString *_tagStartDelimiter;
     NSString *_tagEndDelimiter;

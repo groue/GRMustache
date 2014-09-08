@@ -33,8 +33,8 @@
 /**
  * TODO
  */
-@interface GRMustacheRenderingEngine : NSObject
-{
+@interface GRMustacheRenderingEngine : NSObject {
+@private
     GRMustacheBuffer _buffer;
     GRMustacheContentType _contentType;
     GRMustacheContext *_context;
