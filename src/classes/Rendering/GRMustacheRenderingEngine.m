@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <pthread.h>
 #import "GRMustacheRenderingEngine_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
 #import "GRMustacheTemplateAST_private.h"
@@ -40,14 +41,28 @@
 @interface GRMustacheRenderingEngine() <GRMustacheTemplateASTVisitor>
 @end
 
+static pthread_key_t GRCurrentExpressionInvocationKey;
+void freeCurrentExpressionInvocation(void *object) {
+    [(GRMustacheExpressionInvocation *)object release];
+}
+#define setupCurrentExpressionInvocation() pthread_key_create(&GRCurrentExpressionInvocationKey, freeCurrentExpressionInvocation)
+#define getCurrentThreadCurrentExpressionInvocation() (GRMustacheExpressionInvocation *)pthread_getspecific(GRCurrentExpressionInvocationKey)
+#define setCurrentThreadCurrentExpressionInvocation(object) pthread_setspecific(GRCurrentExpressionInvocationKey, object)
+static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvocation() {
+    GRMustacheExpressionInvocation *expressionInvocation = getCurrentThreadCurrentExpressionInvocation();
+    if (!expressionInvocation) {
+        expressionInvocation = [[GRMustacheExpressionInvocation alloc] init];
+        setCurrentThreadCurrentExpressionInvocation(expressionInvocation);
+    }
+    return expressionInvocation;
+}
+
+
 @implementation GRMustacheRenderingEngine
 
-- (void)dealloc
++ (void)initialize
 {
-    GRMustacheBufferRelease(&_buffer);
-    [_context release];
-    [_expressionInvocation release];
-    [super dealloc];
+    setupCurrentExpressionInvocation();
 }
 
 + (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
@@ -57,13 +72,19 @@
 
 - (NSString *)renderTemplateAST:(GRMustacheTemplateAST *)templateAST HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    if (![templateAST acceptTemplateASTVisitor:self error:error]) {
-        return nil;
+    _buffer = GRMustacheBufferCreate(1024);
+    
+    NSString *result = nil;
+    if ([self visitTemplateAST:templateAST error:error]) {
+        if (HTMLSafe) {
+            *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
+        }
+        result = GRMustacheBufferGetString(&_buffer);
     }
-    if (HTMLSafe) {
-        *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
-    }
-    return (NSString *)GRMustacheBufferGetString(&_buffer);
+    
+    GRMustacheBufferRelease(&_buffer);
+    
+    return result;
 }
 
 
@@ -141,17 +162,12 @@
 
 - (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
 {
-    if (!context) {
-        [NSException raise:NSInvalidArgumentException format:@"Invalid context:nil"];
-        return NO;
-    }
+    NSAssert(context, @"Invalid context:nil");
     
     self = [super init];
     if (self) {
         _contentType = contentType;
-        _context = [context retain];
-        _buffer = GRMustacheBufferCreate(1024);
-        _expressionInvocation = [[GRMustacheExpressionInvocation alloc] init];
+        _context = context;
     }
     return self;
 }
@@ -166,9 +182,10 @@
         
         // Evaluate expression
         
-        _expressionInvocation.expression = expression;
-        _expressionInvocation.context = context;
-        if (![_expressionInvocation invokeReturningError:error]) {
+        GRMustacheExpressionInvocation *expressionInvocation = currentThreadCurrentExpressionInvocation();
+        expressionInvocation.expression = expression;
+        expressionInvocation.context = context;
+        if (![expressionInvocation invokeReturningError:error]) {
             
             // Error
             
@@ -180,8 +197,8 @@
             
         } else {
             
-            id value = _expressionInvocation.value;
-            BOOL valueIsProtected = _expressionInvocation.valueIsProtected;
+            id value = expressionInvocation.value;
+            BOOL valueIsProtected = expressionInvocation.valueIsProtected;
             
             // Hide value if it is protected
             if (valueIsProtected) {
