@@ -59,7 +59,7 @@
 - (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template
 {
     _templateString = [NSMutableString string];
-    [template.templateAST acceptTemplateASTVisitor:self error:NULL];
+    [self visitTemplateAST:template.templateAST error:NULL];
     return _templateString;
 }
 
@@ -84,7 +84,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [inheritablePartialNode.overridingTemplateAST acceptTemplateASTVisitor:self error:error];
+    [self visitTemplateAST:inheritablePartialNode.overridingTemplateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
@@ -97,7 +97,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [inheritableSectionNode.templateAST acceptTemplateASTVisitor:self error:error];
+    [self visitTemplateAST:inheritableSectionNode.templateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
@@ -139,7 +139,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [sectionTag.templateAST acceptTemplateASTVisitor:self error:error];
+    [self visitTemplateAST:sectionTag.templateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }

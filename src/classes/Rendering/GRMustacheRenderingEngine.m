@@ -105,19 +105,19 @@
 {
     GRMustacheContext *context = _context;
     _context = [_context contextByAddingInheritablePartialNode:inheritablePartialNode];
-    BOOL success = [inheritablePartialNode.partialNode acceptTemplateASTVisitor:self error:error];
+    BOOL success = [self visitPartialNode:inheritablePartialNode.partialNode error:error];
     _context = context;
     return success;
 }
 
 - (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
 {
-    return [inheritableSectionNode.templateAST acceptTemplateASTVisitor:self error:error];
+    return [self visitTemplateAST:inheritableSectionNode.templateAST error:error];
 }
 
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error
 {
-    return [partialNode.templateAST acceptTemplateASTVisitor:self error:error];
+    return [self visitTemplateAST:partialNode.templateAST error:error];
 }
 
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error
