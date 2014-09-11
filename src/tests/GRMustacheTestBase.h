@@ -25,7 +25,6 @@
 
 @interface GRMustacheTestBase: XCTestCase
 @property (nonatomic, readonly) NSBundle *testBundle;
-- (id)JSONObjectWithData:(NSData *)data error:(NSError **)error;
 @end
 
 @interface GRMustacheTestingDelegate : NSObject<GRMustacheTagDelegate> {

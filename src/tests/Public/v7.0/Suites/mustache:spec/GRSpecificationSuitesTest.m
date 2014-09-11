@@ -47,7 +47,7 @@
     XCTAssertNotNil(testSuiteData, @"Could not load test suite at %@", path);
     if (!testSuiteData) return;
     
-    NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
+    NSDictionary *testSuite = [NSJSONSerialization JSONObjectWithData:testSuiteData options:0 error:&error];
     XCTAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
     if (!testSuite) return;
     

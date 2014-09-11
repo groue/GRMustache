@@ -23,38 +23,12 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheTestBase.h"
 
-#ifdef GRMUSTACHE_USE_JSONKIT
-#import "JSONKit.h"
-#endif
-
 @implementation GRMustacheTestBase
 @dynamic testBundle;
 
 - (NSBundle *)testBundle
 {
     return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
-}
-
-- (id)JSONObjectWithData:(NSData *)data error:(NSError **)error
-{
-#ifdef GRMUSTACHE_USE_JSONKIT
-    return [data objectFromJSONDataWithParseOptions:JKParseOptionComments error:error];
-#else
-    // Naive support for single line comments "// ..."
-    NSString *string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-    NSMutableString *commentLessString = [NSMutableString string];
-    NSScanner *scanner = [NSScanner scannerWithString:string];
-    [scanner setCharactersToBeSkipped:nil]; // Keep newlines
-    while (![scanner isAtEnd]) {
-        NSString *chunk;
-        if ([scanner scanUpToString:@"//" intoString:&chunk]) {
-            [commentLessString appendString:chunk];
-        }
-        [scanner scanUpToString:@"\n" intoString:NULL];
-    }
-    data = [commentLessString dataUsingEncoding:NSUTF8StringEncoding];
-    return [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-#endif
 }
 
 @end

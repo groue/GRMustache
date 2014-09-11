@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "GRMustachePublicAPITest.h"
+#import "NSJSONSerialization+Comments.h"
 
 static struct {
     NSString *tests;
@@ -64,7 +65,7 @@ static struct {
         return;
     }
     
-    NSDictionary *testSuite = [self JSONObjectWithData:testSuiteData error:&error];
+    NSDictionary *testSuite = [NSJSONSerialization JSONObjectWithCommentedData:testSuiteData options:0 error:&error];
     XCTAssertNotNil(testSuite, @"Could not load test suite at %@: %@", path, error);
     if (!testSuite) {
         // Allow breakpoint for failing tests

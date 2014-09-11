@@ -73,7 +73,7 @@
     NSError *error;
     
     NSData *data = [rendering dataUsingEncoding:NSUTF8StringEncoding];
-    id object = [self JSONObjectWithData:data error:&error];
+    id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     XCTAssertNotNil(object, @"%@", error);
     return [object valueForKey:key];
 }
