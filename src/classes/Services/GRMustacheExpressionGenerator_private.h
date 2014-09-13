@@ -20,26 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustachePrivateAPITest.h"
-#import "GRMustacheTemplateGenerator_private.h"
-#import "GRMustacheTemplateRepository_private.h"
-#import "GRMustacheTemplate_private.h"
+#import <Foundation/Foundation.h>
+#import "GRMustacheAvailabilityMacros_private.h"
 
-@interface GRMustacheTemplateGeneratorTest : GRMustachePrivateAPITest
-@end
+@class GRMustacheExpression;
 
-@implementation GRMustacheTemplateGeneratorTest
-
-- (void)testTemplateGeneration
-{
-    NSDictionary *partials = @{@"template": @"|{{>partial1}}{{>partial2}}|{{<partial1}}{{$a}}b{{/a}}{{/partial1}}{{c}}{{#d}}e{{^f}}g{{/f}}g{{/d}}h{{&i}}",
-                               @"partial1": @"",
-                               @"partial2": @""};
-    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-    GRMustacheTemplate *template = [repo templateNamed:@"template" error:NULL];
-    GRMustacheTemplateGenerator *generator = [GRMustacheTemplateGenerator templateGeneratorWithTemplateRepository:template.templateRepository];
-    NSString *generatedTemplateString = [generator stringWithTemplate:template];
-    XCTAssertEqualObjects([partials objectForKey:@"template"], generatedTemplateString);
+@interface GRMustacheExpressionGenerator : NSObject {
+@private
+    NSString *_expressionString;
 }
+
+- (NSString *)stringWithExpression:(GRMustacheExpression *)expression GRMUSTACHE_API_INTERNAL;
 
 @end

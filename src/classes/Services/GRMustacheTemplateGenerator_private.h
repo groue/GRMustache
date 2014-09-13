@@ -25,17 +25,18 @@
 
 @class GRMustacheTemplate;
 @class GRMustacheTemplateRepository;
+@class GRMustacheExpressionGenerator;
 
 @interface GRMustacheTemplateGenerator : NSObject {
 @private
     GRMustacheTemplateRepository *_templateRepository;
-    NSString *_expressionString;
+    GRMustacheExpressionGenerator *_expressionGenerator;
     NSMutableString *_templateString;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 + (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
-- (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_INTERNAL;
+- (NSString *)stringWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_INTERNAL;
 
 @end

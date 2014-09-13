@@ -21,8 +21,8 @@
 // THE SOFTWARE.
 
 #import "GRMustacheTemplateGenerator_private.h"
+#import "GRMustacheExpressionGenerator_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
-#import "GRMustacheExpressionVisitor_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheConfiguration_private.h"
@@ -33,13 +33,9 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheTextNode_private.h"
-#import "GRMustacheFilteredExpression_private.h"
-#import "GRMustacheIdentifierExpression_private.h"
-#import "GRMustacheImplicitIteratorExpression_private.h"
-#import "GRMustacheScopedExpression_private.h"
 
 
-@interface GRMustacheTemplateGenerator() <GRMustacheTemplateASTVisitor, GRMustacheExpressionVisitor>
+@interface GRMustacheTemplateGenerator() <GRMustacheTemplateASTVisitor>
 @end
 
 @implementation GRMustacheTemplateGenerator
@@ -48,6 +44,7 @@
 - (void)dealloc
 {
     [_templateRepository release];
+    [_expressionGenerator release];
     [super dealloc];
 }
 
@@ -56,7 +53,7 @@
     return [[[self alloc] initWithTemplateRepository:templateRepository] autorelease];
 }
 
-- (NSString *)templateStringWithTemplate:(GRMustacheTemplate *)template
+- (NSString *)stringWithTemplate:(GRMustacheTemplate *)template
 {
     _templateString = [NSMutableString string];
     [self visitTemplateAST:template.templateAST error:NULL];
@@ -123,7 +120,7 @@
         tagStartDelimiter = [NSString stringWithFormat:@"%@&", _templateRepository.configuration.tagStartDelimiter];
         tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
     }
-    NSString *expressionString = [self stringWithExpression:variableTag.expression];
+    NSString *expressionString = [_expressionGenerator stringWithExpression:variableTag.expression];
     NSString *tagString = [NSString stringWithFormat:@"%@%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
     [_templateString appendString:tagString];
     return YES;
@@ -133,7 +130,7 @@
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-    NSString *expressionString = [self stringWithExpression:sectionTag.expression];
+    NSString *expressionString = [_expressionGenerator stringWithExpression:sectionTag.expression];
     NSString *sectionPrefix = sectionTag.isInverted ? @"^" : @"#";
     NSString *tagStartString = [NSString stringWithFormat:@"%@%@%@%@", tagStartDelimiter, sectionPrefix, expressionString, tagEndDelimiter];
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
@@ -151,33 +148,6 @@
 }
 
 
-#pragma mark - <GRMustacheExpressionVisitor>
-
-- (BOOL)visitFilteredExpression:(GRMustacheFilteredExpression *)expression error:(NSError **)error
-{
-    _expressionString = [NSString stringWithFormat:@"%@(%@)", [self stringWithExpression:expression.filterExpression], [self stringWithExpression:expression.argumentExpression]];
-    return YES;
-}
-
-- (BOOL)visitIdentifierExpression:(GRMustacheIdentifierExpression *)expression error:(NSError **)error
-{
-    _expressionString = expression.identifier;
-    return YES;
-}
-
-- (BOOL)visitImplicitIteratorExpression:(GRMustacheImplicitIteratorExpression *)expression error:(NSError **)error
-{
-    _expressionString = @".";
-    return YES;
-}
-
-- (BOOL)visitScopedExpression:(GRMustacheScopedExpression *)expression error:(NSError **)error
-{
-    _expressionString = [NSString stringWithFormat:@"%@.%@", [self stringWithExpression:expression.baseExpression], expression.identifier];
-    return YES;
-}
-
-
 #pragma mark - Private
 
 - (instancetype)initWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository
@@ -185,14 +155,9 @@
     self = [super init];
     if (self) {
         _templateRepository = [templateRepository retain];
+        _expressionGenerator = [[GRMustacheExpressionGenerator alloc] init];
     }
     return self;
-}
-
-- (NSString *)stringWithExpression:(GRMustacheExpression *)expression
-{
-    [expression acceptVisitor:self error:NULL];
-    return _expressionString;
 }
 
 @end
