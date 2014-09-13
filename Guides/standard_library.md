@@ -202,8 +202,6 @@ When provided with a dictionary, `each` iterates each key/value pair of the dict
 
 The other positional keys `@index`, `@first`, etc. are still available when iterating dictionaries.
 
-Should you need some other keys, for playing [FizzBuzz](http://en.wikipedia.org/wiki/Fizz_buzz) for example, just get inspiration from the [source code](../src/classes/Services/StandardLibrary/GRMustacheEachFilter.m) of the standard `each` filter. It is written with public APIs only, so you should not have any problem writing your own filter.
-
 
 Miscellaneous
 -------------
@@ -308,9 +306,8 @@ NSString *rendering = [GRMustacheTemplate renderObject:data from...];
 Get inspired
 ------------
 
-All items of the standard library are built using public APIs: check the code for inspiration:
+All items of the standard library, but the `each` filter, are built using public APIs: check the code for inspiration:
 
-- [GRMustacheEachFilter.m](../src/classes/Services/StandardLibrary/GRMustacheEachFilter.m)
 - [GRMustacheHTMLLibrary.m](../src/classes/Services/StandardLibrary/GRMustacheHTMLLibrary.m)
 - [GRMustacheLocalizer.m](../src/classes/Services/StandardLibrary/GRMustacheLocalizer.m)
 - [GRMustacheStandardLibrary.m](../src/classes/Services/StandardLibrary/GRMustacheStandardLibrary.m)

@@ -9,7 +9,7 @@ GRMustache FAQ
     
     [Yes](standard_library.md#each).
 
-- **Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items, play fizzbuzz?**
+- **Is it possible to render array indexes? Customize first and last elements? Distinguish odd and even items?**
     
     [Yes, yes, and yes](standard_library.md#each).
 
