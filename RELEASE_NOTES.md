@@ -3,11 +3,20 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v7.3.0
+
+This version fixes the backward compatibility issues introduced by GRMustache v7.2.0.
+
+- Fix for issue [#82](https://github.com/groue/GRMustache/issues/82): the `zip` filter is no longer part of the standard library. See [issue #80](https://github.com/groue/GRMustache/issues/80) for some sample code for this discontinued filter.
+- Fix for issue [#83](https://github.com/groue/GRMustache/issues/83).
+- GRMustache used to log parsing and rendering errors whenever your code would not explicitly pass an error pointer. This is no longer the case.
+
+
 ## v7.2.0
 
-**GRMustache 7.2.0 has several backward compatibility issues ([#83](https://github.com/groue/GRMustache/issues/83), [#82](https://github.com/groue/GRMustache/issues/82)).**
+**GRMustache 7.2.0 has severe backward compatibility issues.**
 
-**IT IS RECOMMENDED THAT YOU KEEP USING VERSION 7.1.0**.
+**IT SHOULD NOT BE USED.**
 
 #### New Standard Library Goodness
 
