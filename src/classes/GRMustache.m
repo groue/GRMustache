@@ -31,11 +31,6 @@
 #import "GRMustacheEachFilter_private.h"
 #import "GRMustacheLocalizer.h"
 
-// For zip filter
-#import "GRMustacheContext_private.h"
-#import "GRMustacheTag_private.h"
-#import "GRMustacheError.h"
-
 
 // =============================================================================
 #pragma mark - GRMustache
