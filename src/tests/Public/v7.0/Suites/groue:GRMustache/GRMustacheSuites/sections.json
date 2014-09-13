@@ -52,9 +52,35 @@
       "expected": "<--->"
     },
     {
+      // Regression test for https://github.com/groue/GRMustache/issues/83
+      "name": "True should trigger the section rendering without altering the top of the context stack.",
+      "data": { "subject": true, "object": "---" },
+      "template": "<{{#object}}{{#subject}}{{.}}{{/subject}}{{/object}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Non-zero number should trigger the section rendering.",
+      "data": { "subject": 1 },
+      "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      // Regression test for https://github.com/groue/GRMustache/issues/83
+      "name": "Non-zero number should trigger the section rendering without altering the top of the context stack.",
+      "data": { "subject": 1, "object": "---" },
+      "template": "<{{#object}}{{#subject}}{{.}}{{/subject}}{{/object}}>",
+      "expected": "<--->"
+    },
+    {
       "name": "Object should trigger the section rendering.",
       "data": { "subject": { } },
       "template": "<{{#subject}}---{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
+      "name": "Object should trigger the section rendering and enter the top of the context stack.",
+      "data": { "subject": { "object": "---" } },
+      "template": "<{{#subject}}{{object}}{{/subject}}>",
       "expected": "<--->"
     },
     {
@@ -64,10 +90,22 @@
       "expected": "<--->"
     },
     {
+      "name": "Non-empty string should trigger the section rendering and enter the top of the context stack.",
+      "data": { "subject": "---" },
+      "template": "<{{#subject}}{{.}}{{/subject}}>",
+      "expected": "<--->"
+    },
+    {
       "name": "Non-empty blank string should trigger the section rendering.",
       "data": { "subject": " " },
       "template": "<{{#subject}}---{{/subject}}>",
       "expected": "<--->"
+    },
+    {
+      "name": "Non-empty blank string should trigger the section rendering and enter the top of the context stack.",
+      "data": { "subject": " " },
+      "template": "<{{#subject}}{{.}}{{/subject}}>",
+      "expected": "< >"
     },
     {
       "name": "List made of an empty list should trigger the section rendering.",
