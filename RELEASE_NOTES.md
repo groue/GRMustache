@@ -14,14 +14,12 @@ This version fixes the backward compatibility issues introduced by GRMustache v7
 
 ## v7.2.0
 
-**GRMustache 7.2.0 has severe backward compatibility issues.**
-
-**IT SHOULD NOT BE USED.**
-
 #### New Standard Library Goodness
 
 - The `each` filter lets templates access array indexes, iterate over key/value dictionary pairs, and more. [Documentation](Guides/standard_library.md#each)
 - The `zip` filter can iterate several collections all at once. [Documentation](Guides/standard_library.md#zip)
+
+**NB: The `zip` filter has introduced a severe backward compatibility issue. It has been removed from the version v7.3.0.**.
 
 Just like all other tools of the [standard library](Guides/standard_library.md), both `each` and `zip` filters are built with public APIs. So you don't have to write them yourselves. But you can still customize them.
 
