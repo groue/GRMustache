@@ -21,11 +21,9 @@
 // THE SOFTWARE.
 
 #import "GRMustacheEachFilter_private.h"
-
-// Only use public APIs
-#import "GRMustacheRendering.h"
-#import "GRMustacheContext.h"
-#import "GRMustacheTag.h"
+#import "GRMustacheRendering_private.h"
+#import "GRMustacheContext_private.h"
+#import "GRMustacheTag_private.h"
 #import "GRMustacheError.h"
 
 @implementation GRMustacheEachFilter
@@ -116,35 +114,10 @@
             
             /**
              * We want to render just like the original object.
-             *
-             * We have to take extra care, though, and process collections
-             * differently, so that arrays of arrays render as expected.
-             *
-             * Collections would render the tag as many times as they contain
-             * elements. Instead, render the tag only once, after pushing the
-             * collection into the context.
-             *
-             * See the test "`each` filter should render independently all lists
-             * of an array."
              */
             
-            if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
-                
-                /**
-                 * object is a collection: render the tag only once.
-                 */
-                
-                return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
-            } else {
-                
-                /**
-                 * To render just like the original object would render, turn it
-                 * into a rendering object.
-                 */
-
-                id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
-                return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-            }
+            id<GRMustacheRenderingWithIterationSupport> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
+            return [originalRenderingObject renderForMustacheTag:tag asEnumerationItem:YES context:context HTMLSafe:HTMLSafe error:error];
         }];
         
         [replacementRenderingObjects addObject:replacementRenderingObject];
@@ -197,36 +170,10 @@
             
             /**
              * We want to render just like the original object.
-             *
-             * We have to take extra care, though, and process collections
-             * differently, so that dictionaries having arrays as values render
-             * as expected.
-             *
-             * Collections would render the tag as many times as they contain
-             * elements. Instead, render the tag only once, after pushing the
-             * collection into the context.
-             *
-             * See the test "`each` filter should render independently all lists
-             * of a dictionary."
              */
             
-            if ([object respondsToSelector:@selector(countByEnumeratingWithState:objects:count:)] && ![object isKindOfClass:[NSDictionary class]]) {
-                
-                /**
-                 * object is a collection: render the tag only once.
-                 */
-                
-                return [tag renderContentWithContext:[context contextByAddingObject:object] HTMLSafe:HTMLSafe error:error];
-            } else {
-                
-                /**
-                 * To render just like the original object would render, turn it
-                 * into a rendering object.
-                 */
-                
-                id<GRMustacheRendering> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
-                return [originalRenderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-            }
+            id<GRMustacheRenderingWithIterationSupport> originalRenderingObject = [GRMustacheRendering renderingObjectForObject:object];
+            return [originalRenderingObject renderForMustacheTag:tag asEnumerationItem:YES context:context HTMLSafe:HTMLSafe error:error];
         }];
         
         [replacementRenderingObjects addObject:replacementRenderingObject];
