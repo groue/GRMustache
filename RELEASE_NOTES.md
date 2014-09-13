@@ -7,7 +7,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 **GRMustache 7.2.0 has several backward compatibility issues ([#83](https://github.com/groue/GRMustache/issues/83), [#82](https://github.com/groue/GRMustache/issues/82)).**
 
-**It is recommended that you keep using version 7.1.0**.
+**IT IS RECOMMENDED THAT YOU KEEP USING VERSION 7.1.0**.
 
 #### New Standard Library Goodness
 

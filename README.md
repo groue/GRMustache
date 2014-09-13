@@ -9,9 +9,9 @@ It ships with built-in goodies and extensibility hooks that let you avoid the st
 
 **August 29, 2014: GRMustache 7.2.0 is out.** [Release notes](RELEASE_NOTES.md)
 
-**GRMustache 7.2 has several unexpected compatibility issues ([#83](https://github.com/groue/GRMustache/issues/83), [#82](https://github.com/groue/GRMustache/issues/82)).**
+**September 13, 2014: GRMustache 7.2.0 has several unexpected compatibility issues ([#83](https://github.com/groue/GRMustache/issues/83), [#82](https://github.com/groue/GRMustache/issues/82)).**
 
-**It is recommended that you keep using version 7.1.0**.
+**IT IS RECOMMENDED THAT YOU KEEP USING VERSION 7.1.0**.
 
 
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
