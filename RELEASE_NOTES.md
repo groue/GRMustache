@@ -5,7 +5,11 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 
 ## v7.2.0
 
-### New Standard Library Goodness
+**GRMustache 7.2.0 has several backward compatibility issues ([#83](https://github.com/groue/GRMustache/issues/83), [#82](https://github.com/groue/GRMustache/issues/82)).**
+
+**It is recommended that you keep using version 7.1.0**.
+
+#### New Standard Library Goodness
 
 - The `each` filter lets templates access array indexes, iterate over key/value dictionary pairs, and more. [Documentation](Guides/standard_library.md#each)
 - The `zip` filter can iterate several collections all at once. [Documentation](Guides/standard_library.md#zip)
@@ -14,7 +18,7 @@ Just like all other tools of the [standard library](Guides/standard_library.md),
 
 `each` is inspired by [Handlebars.js](http://handlebarsjs.com), and `zip` by [issue #80](https://github.com/groue/GRMustache/issues/80).
 
-### Better support for custom rendering of collections
+#### Better support for custom rendering of collections
 
 Custom rendering of a collection can now be done by writing a filter which returns another collection.
 
