@@ -8,7 +8,7 @@ You can compare the performances of GRMustache versions at https://github.com/gr
 This version fixes the backward compatibility issues introduced by GRMustache v7.2.0.
 
 - Fix for issue [#82](https://github.com/groue/GRMustache/issues/82): the `zip` filter is no longer part of the standard library. See [issue #80](https://github.com/groue/GRMustache/issues/80) for some sample code for this discontinued filter.
-- Fix for issue [#83](https://github.com/groue/GRMustache/issues/83).
+- Fix for issue [#83](https://github.com/groue/GRMustache/issues/83): true boolean values no longer enter the context stack when they trigger the rendering of a section.
 - GRMustache used to log parsing and rendering errors whenever your code would not explicitly pass an error pointer. This is no longer the case.
 
 
