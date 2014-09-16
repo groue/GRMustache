@@ -37,16 +37,12 @@
  */
 @property (nonatomic, copy) NSString *tagEndDelimiter;
 
-// Documented in GRMustacheTemplateParser_private.h
-@property (nonatomic, strong) NSMutableSet *pragmas;
-
 @end
 
 @implementation GRMustacheTemplateParser
 @synthesize delegate=_delegate;
 @synthesize tagStartDelimiter=_tagStartDelimiter;
 @synthesize tagEndDelimiter=_tagEndDelimiter;
-@synthesize pragmas=_pragmas;
 
 - (instancetype)initWithConfiguration:(GRMustacheConfiguration *)configuration
 {
@@ -62,7 +58,6 @@
 {
     [_tagStartDelimiter release];
     [_tagEndDelimiter release];
-    [_pragmas release];
     [super dealloc];
 }
 
