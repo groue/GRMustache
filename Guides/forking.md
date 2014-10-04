@@ -86,7 +86,7 @@ The library features are described in the [guides](introduction.md). This sectio
     
     Template repositories emit *templates*.
 
-- **Configuration*
+- **Configuration**
 
     - `GRMustacheConfiguration`
     
