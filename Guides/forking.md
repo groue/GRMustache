@@ -13,86 +13,101 @@ You'll find below some useful information on each of those topics.
 The library features are described in the [guides](introduction.md). This section describes the classes that implement those features. They are organized in a few big domains:
 
 - **Parsing**
-    - `GRMustacheTemplateRepository`
-    - `<GRMustacheTemplateRepositoryDataSource>` (protocol)
+    - `GRMustacheTemplateParser`
+    - `GRMustacheToken`
     
+    The *template parser* parses a template string, and emits *tokens*. For example, `Hello {{name}}!` yields a text token, a variable token, and a final text token.
+    
+    - `GRMustacheExpressionParser`
+    
+    The *expression parser* parses *expressions* such as `name` or `each(user.friends)`.
+
+- **Compiling**
+    
+    - `GRMustacheCompiler`
+    - `GRMustacheTemplateAST`
+    - `GRMustacheTemplateASTNode`
+    
+    The *compiler* consumes parsed *tokens* to build an *abstract syntax tree* (AST) made of *nodes*.
+    
+    Nodes are either:
+    
+    - `GRMustacheInheritablePartialNode`: `{{< partial }}...{{/}}`
+    - `GRMustacheInheritableSectionNode`: `{{$ name }}...{{/}}`
+    - `GRMustachePartialNode`: `{{> partial }}`
+    - `GRMustacheSectionTag`: `{{# expression }}...{{/}}`
+    - `GRMustacheTextNode`: `text`
+    - `GRMustacheVariableTag`: `{{ expression }}`
+    
+    Section and variable tags are both subclasses of `GRMustacheTag`, tags which gets rendered by evaluating *expressions*:
+    
+    - `GRMustacheFilteredExpression`: `identifier(expression, ...)`
+    - `GRMustacheIdentifierExpression`: `identifier`
+    - `GRMustacheImplicitIteratorExpression`: `.`
+    - `GRMustacheScopedExpression`: `identifier.identifier`
+    
+    AST nodes and expressions can be consumed by *visitors*:
+    
+    - `GRMustacheTemplateASTNodeVisitor`
+    - `GRMustacheExpressionVisitor`
+    
+- **Rendering**
+    
+    - `GRMustacheRenderingEngine`
+    
+    The *rendering engine* is the AST visitor that renders templates. It renders each AST node on its turn, and uses *expression invocations* to evaluate tag expressions:
+    
+    - `GRMustacheExpressionInvocation`
+    - `GRMustacheContext`
+    - `GRMustacheKeyAccess`
+    - `GRMustacheSafeKeyAccess`
+    
+    *Expression invocation* is the expression visitor that evaluates expressions against *contexts*. It uses `GRMustacheKeyAccess` for extracting values out of user-provided values. `GRMustacheSafeKeyAccess` is the protocol that lets the user escape the default secure behavior of `GRMustacheKeyAccess`.
+    
+    - `GRMustacheRendering`
+    
+    `GRMustacheRendering` is a public protocol that users can implement to provide custom rendering.
+    
+    The private implementation of GRMustache makes all objects, starting from NSObject, implement this protocol: `GRMustacheRendering.m` provides the rendering implementation for `nil`, `NSNull`, `NSNumber`, `NSFastEnumeration`, `NSString`, and `NSObject`.
+    
+    - `GRMustacheFilter`
+    
+    *Filter* is both a protocol, and a class. The protocol allows any class to evaluate filter expressions such as `f(x)`. The class provides ways to build filters by providing a block.
+
+- **Templates**
+    
+    - `GRMustacheTemplate`
+    - `GRMustacheTemplateRepository`
+    - `GRMustacheTemplateRepositoryDataSource`
+
     *Template repositories* are objects that load template strings from various sources.
     
     GRMustache ships with various template repositories that are able to load templates from the file system, and from a dictionary of template strings. The library user can also provide a *data source* to a template repository, in order to load template strings from unimagined locations.
     
-    - `GRMustacheParser`
-    - `GRMustacheToken`
-    
-    The *parser* is able to produce a [parse tree](http://en.wikipedia.org/wiki/Parse_tree) of *tokens* out of a template string.
-    
-    For instance, a parser generates three tokens from `Hello {{name}}!`: two text tokens and a variable token.
-    
-    - `GRMustacheExpression`
-    - `GRMustacheFilteredExpression`
-    - `GRMustacheIdentifierExpression`
-    - `GRMustacheImplicitIteratorExpression`
-    - `GRMustacheScopedExpression`
-    
-    Some tokens contain an *expression*. Expressions will go live during the rendering of a template (see below), being able to compute rendered values:
-    
-    - `{{ name }}` contains an *identifier expression*.
-    - `{{ . }}` contains an *implicit iterator expression*.
-    - `{{ person.name }}` contains a *scoped expression*.
-    - `{{ uppercase(name) }}` contains a *filtered expression*.
+    Template repositories emit *templates*.
 
-- **Compiling**
+- **Configuration*
+
     - `GRMustacheConfiguration`
-    - `GRMustacheCompiler`
-    - `GRMustacheAST`
-    - `<GRMustacheTemplateComponent>` (protocol)
     
-    The *compiler* consumes a parse tree of tokens and outputs an *AST* ([abstract syntax tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree)) of *template components*. The *configuration* tells the compiler whether the AST should represent a HTML or a text template.
+    A *configuration* allows the user to customize the parsing and the rendering of templates.
     
-    Template components are actually able to provide the rendering expected by the library user:
+- **Services**
+    
+    - `NSFormatter+GRMustache`
+    - `NSValueTransformer+GRMustache`
+    
+    Those categories allows formatters and value transformers to evaluate filter expressions such as `dateFormat(date)` and format all values in a section such a `{{#dateFormat}}...{{date}}...{{/}}`.
+    
+    - `GRMustacheEachFilter`
+    - `GRMustacheHTMLLibrary`
+    - `GRMustacheJavascriptLibrary`
+    - `GRMustacheLocalizer`
+    - `GRMustacheStandardLibrary`
+    - `GRMustacheURLLibrary`
+    
+    Those classes provide implementations for the various tools of the *standard library*.
 
-    - `GRMustacheInheritableSection`
-    - `GRMustacheInheritablePartial`
-    - `GRMustacheTemplate`
-    - `GRMustacheTextComponent`
-    - `GRMustacheTag`
-    
-    *Templates* render full templates and partials, *tags* render user data, *text elements* render raw text, *inheritable templates* render inheritable partial tags, and *inheritable sections* render sections starting with a dollar sign, such as `{{$ content }}...{{/ }}`.
-    
-    For instance, from the tokens parsed from `Hello {{name}}!`, a compiler outputs an AST made of two text elements and a tag element.
-    
-    There are two subclasses of GRMustacheTag:
-    
-    - `GRMustacheSectionTag`
-    - `GRMustacheVariableTag`
-    
-    *Section tags* and *Variable tags* represent their "physical" counterpart `{{#^$ name}}...{{/name}}` and `{{name}}` respectively.
-
-- **Runtime**
-    - `GRMustacheContext`
-    
-    A *rendering context* implements a state of four different stacks:
-    
-    - a *context stack*.
-    - a *priority context stack*.
-    - a *tag delegate stack*.
-    - a *inheritable partial stack*, that grows when a inheritable partial renders.
-    
-    A rendering context is able to provide the value for an identifier such as `name` found in a `{{name}}` tag. However, runtime is not directly responsible for providing values that should be rendered. Expressions built at the parsing phase are. They query the context in order to compute their values.
-
-    - `<GRMustacheTagDelegate>` (protocol)
-
-    Tags iterate all *tag delegates* in a rendering context and let them observe or alter their rendering.
-    
-    - `<GRMustacheRendering>` (protocol)
-
-    The library user can implement his own *rendering objects* in order to perform custom rendering.
-
-    - `<GRMustacheFilter>` (protocol)
-    - `GRMustacheFilter` (class)
-    
-    The library user can implement her own *filters*, that will add to the built-in ones.
-    
-    
 
 ### Project organisation
 
