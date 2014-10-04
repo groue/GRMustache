@@ -41,10 +41,10 @@ The library features are described in the [guides](introduction.md). This sectio
     
     Section and variable tags are both subclasses of `GRMustacheTag`, tags which gets rendered by evaluating *expressions*:
     
-    - `GRMustacheFilteredExpression`: `identifier(expression, ...)`
+    - `GRMustacheFilteredExpression`: `expression(expression, ...)`
     - `GRMustacheIdentifierExpression`: `identifier`
     - `GRMustacheImplicitIteratorExpression`: `.`
-    - `GRMustacheScopedExpression`: `identifier.identifier`
+    - `GRMustacheScopedExpression`: `expression.identifier`
     
     AST nodes and expressions can be consumed by *visitors*:
     
