@@ -52,8 +52,6 @@ rendering = [template renderObject:barbara error:NULL];
 rendering = ...
 ```
 
-[GRMustachio](https://github.com/mugginsoft/GRMustachio) by Jonathan Mitchell is "A super simple, interactive GRMustache based application". It can help you design and test your templates.
-
 
 Documentation
 -------------
