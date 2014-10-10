@@ -72,13 +72,6 @@ Let's design a custom ViewModel for it.
 ```objc
 @implementation Document
 
-// Some users don't have any name.
-// Provides a default name for those anonymous users.
-- (NSString *)name
-{
-    return @"Anonymous";
-}
-
 // The User class does not have any `age` property.
 // Instead, it defines a `birthDate` property.
 - (NSUInteger)age
