@@ -183,21 +183,31 @@ You can make those reusable components available for all your Mustache rendering
 NSDictionary *myCustomLibrary = @{
   @"pluralize": ...,
 };
+
+// Make myCustomLibrary available for all templates:
+
 GRMustacheConfiguration* configuration = [GRMustacheConfiguration defaultConfiguration];
 [configuration extendBaseContextWithObject:myCustomLibrary];
 
-// myCustomLibrary is now available right away:
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
 NSString *rendering = [template render...];
 ```
 
-You can also inject your custom library at the template repository level:
+You can also inject your custom library in a single template, or in all templates loaded from a template repository:
 
 ```obc
+// Make myCustomLibrary available for single template:
+
+GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
+[template extendBaseContextWithObject:myCustomLibrary];
+NSString *rendering = [template render...];
+
+
+// Make myCustomLibrary available for all templates loaded from the template repository:
+
 GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:pathToTemplates];
 [repository.configuration extendBaseContextWithObject:myCustomLibrary];
 
-// myCustomLibrary is now available for templates loaded from the repository:
 GRMustacheTemplate *template = [repository templateFrom...];
 NSString *rendering = [template render...];
 ```
