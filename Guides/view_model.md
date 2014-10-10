@@ -182,7 +182,6 @@ You can make those reusable components available for all your Mustache rendering
 ```objc
 NSDictionary *myCustomLibrary = @{
   @"pluralize": ...,
-  @"withPosition": ...,
 };
 GRMustacheConfiguration* configuration = [GRMustacheConfiguration defaultConfiguration];
 [configuration extendBaseContextWithObject:myCustomLibrary];
