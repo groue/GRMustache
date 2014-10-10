@@ -195,7 +195,7 @@ NSString *rendering = [template render...];
 
 You can also inject your custom library in a single template, or in all templates loaded from a template repository:
 
-```obc
+```objc
 // Make myCustomLibrary available for a single template:
 
 GRMustacheTemplate *template = [GRMustacheTemplate templateFrom...];
