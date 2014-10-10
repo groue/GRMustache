@@ -61,7 +61,6 @@ Let's design a custom ViewModel for it.
  */
 @interface Document : NSObject
 @property (nonatomic, strong) User *user;
-@property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSUInteger age;
 @property (nonatomic, readonly) NSDateFormatter *fullDateFormat;
 @end
