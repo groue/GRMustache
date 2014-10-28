@@ -25,10 +25,8 @@ You can inherit from it from another template, and override its sections:
 
     {{< layout }}
     
-        {{! override page_title }}
         {{$ page_title }}{{ article.title }}{{/ page_title }}
         
-        {{! override page_content }}
         {{$ page_content }}
             {{# article }}
                 {{ body }}
