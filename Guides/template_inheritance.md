@@ -50,7 +50,7 @@ Our support for this feature was inspired by [hogan.js](http://twitter.github.co
 
 GRMustache passes all template inheritance tests from hogan.js & mustache.java, without exact white-space conformance: GRMustache doesn't honor line suppression, indentation and other white-space niceties.
 
-The reciprocal is not sure: hogan.js & mustache.jave may, or not, pass all template inheritance tests of GRMustache.
+The reciprocal is not sure: hogan.js & mustache.java may, or not, pass all template inheritance tests ([1](https://github.com/groue/GRMustache/blob/master/src/tests/Public/v7.0/Suites/groue:GRMustache/GRMustacheSuites/inheritable_partials.json), [2](https://github.com/groue/GRMustache/blob/master/src/tests/Public/v7.0/Suites/groue:GRMustache/GRMustacheSuites/inheritable_sections.json)) of GRMustache.
 
 **As a consequence, if your goal is to design templates that are compatible with [other Mustache implementations](https://github.com/defunkt/mustache/wiki/Other-Mustache-implementations), use template inheritance with great care.**
 
