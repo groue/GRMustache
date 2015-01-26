@@ -18,12 +18,6 @@ GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (wit
 
 **You can use GRMustache from Swift**. However, you can only render Objective-C objects.
 
-Here are the known Github projects that provide a pure swift API to Mustache:
-
-- [BjornRuud/Swiftache](https://github.com/BjornRuud/Swiftache) - Functional
-- [groue/GRMustache.swift](https://github.com/groue/GRMustache.swift) - Work In Progress
-- [jmont/Mustachio](https://github.com/jmont/Mustachio) - Functional
-
 
 How To
 ------
