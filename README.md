@@ -16,7 +16,7 @@ System requirements
 
 GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (without garbage collection), and only depends on the Foundation framework.
 
-**You can use GRMustache from Swift**. However, you can only render Objective-C objects.
+**Swift developers**: You can use GRMustache from Swift. However, you can only render Objective-C objects. Instead, consider using [GRMustache.swift](https://github.com/groue/GRMustache.swift), a pure Swift implementation of GRMustache. You'd be an early adopter, and that would make me happy.
 
 
 How To
