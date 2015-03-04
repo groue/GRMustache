@@ -15,7 +15,7 @@ Templates may contain *inheritable sections*. Those sections start with a dollar
         <h1>{{$ page_title }}Default title{{/ page_title }}</h1>
         {{$ page_content }}
             Default content
-        {{/ page_content }}}
+        {{/ page_content }}
     </body>
     </html>
 
