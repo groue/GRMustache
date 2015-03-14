@@ -1402,7 +1402,7 @@
 		56DEC19C15262FC80031E8DC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0620;
 			};
 			buildConfigurationList = 56DEC19F15262FC80031E8DC /* Build configuration list for PBXProject "GRMustache" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1823,7 +1823,6 @@
 		56DEC265152631040031E8DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DSTROOT = "/tmp/$(TARGET_NAME).dst";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1834,7 +1833,6 @@
 		56DEC266152631040031E8DC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DSTROOT = "/tmp/$(TARGET_NAME).dst";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1846,7 +1844,6 @@
 		56DEC268152631040031E8DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1863,7 +1860,6 @@
 		56DEC269152631040031E8DC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
