@@ -23,6 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+@class GRMustacheContext;
 @class GRMustacheTemplateRepository;
 
 /**
