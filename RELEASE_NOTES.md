@@ -3,6 +3,11 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+## v7.3.1
+
+- [#92](https://github.com/groue/GRMustache/pull/92) Fix compile error when using the `use_frameworks!` option of CocoaPods.
+
+
 ## v7.3.0
 
 This version fixes the backward compatibility issues introduced by GRMustache v7.2.0.
