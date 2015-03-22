@@ -670,8 +670,7 @@
 				563D66F315264B40008628C5 /* GRMustacheSuites */,
 				563D66E81526497E008628C5 /* GRMustacheSuitesTest.m */,
 			);
-			name = groue/GRMustache;
-			path = "groue:GRMustache";
+			path = groue/GRMustache;
 			sourceTree = "<group>";
 		};
 		5682B47B1528393200ADD123 /* GRMustacheTagDelegateTest */ = {
@@ -716,8 +715,7 @@
 				56DEC3BF152639560031E8DC /* GRSpecificationSuitesTest.m */,
 				56B477A618D0E41A00EFF629 /* specs */,
 			);
-			name = mustache/spec;
-			path = "mustache:spec";
+			path = mustache/spec;
 			sourceTree = "<group>";
 		};
 		5682B49B1528487700ADD123 /* GRMustacheTemplateRepositoryTest */ = {
@@ -804,8 +802,7 @@
 				56B4779618CF8D2A00EFF629 /* GRHoganSuitesTest.m */,
 				56B4779918CF8D3300EFF629 /* GRHoganSuites */,
 			);
-			name = twitter/hogan.js;
-			path = "twitter:hogan.js";
+			path = twitter/hogan.js;
 			sourceTree = "<group>";
 		};
 		56B4779E18CF9F6100EFF629 /* spullara/mustache.java */ = {
@@ -814,8 +811,7 @@
 				56B477A018CF9F6100EFF629 /* GRMustacheJavaSuitesTest.m */,
 				56B477A318CF9F6E00EFF629 /* GRMustacheJavaSuites */,
 			);
-			name = spullara/mustache.java;
-			path = "spullara:mustache.java";
+			path = spullara/mustache.java;
 			sourceTree = "<group>";
 		};
 		56B477A918D0E55A00EFF629 /* Suites */ = {
