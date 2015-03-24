@@ -1060,7 +1060,8 @@
 				56C1FDEA19A66DC500006AB4 /* GRMustacheSuites_7_2 */,
 				56C1FDE719A66DBE00006AB4 /* GRMustacheSuites_7_2_Test.m */,
 			);
-			path = "groue:GRMustache";
+			name = "groue:GRMustache";
+			path = groue/GRMustache;
 			sourceTree = "<group>";
 		};
 		56DEC19A15262FC80031E8DC = {
