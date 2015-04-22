@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros.h"
 
 @class GRMustacheTemplateRepository;
+@class GRMustacheContext;
 
 /**
  * The types of Mustache tags

@@ -5,7 +5,7 @@ GRMustache is a [Mustache](http://mustache.github.io) template engine written in
 
 It ships with built-in goodies and extensibility hooks that let you avoid the strict minimalism of the genuine Mustache language when you need it.
 
-**March 14, 2015: GRMustache 7.3.1 is out.** [Release notes](RELEASE_NOTES.md)
+**April 22, 2015: GRMustache 7.3.2 is out.** [Release notes](RELEASE_NOTES.md)
 
 
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).

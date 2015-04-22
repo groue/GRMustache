@@ -3,6 +3,13 @@ GRMustache Release Notes
 
 You can compare the performances of GRMustache versions at https://github.com/groue/GRMustacheBenchmark.
 
+
+## v7.3.2
+
+- [#93](https://github.com/groue/GRMustache/issues/93) and [#94](https://github.com/groue/GRMustache/issues/94): Rename repository files which were not supported on Windows
+- [#95](https://github.com/groue/GRMustache/pull/95): Fix compile error when using the `use_frameworks!` option of CocoaPods.
+
+
 ## v7.3.1
 
 - [#92](https://github.com/groue/GRMustache/pull/92) Fix compile error when using the `use_frameworks!` option of CocoaPods.
