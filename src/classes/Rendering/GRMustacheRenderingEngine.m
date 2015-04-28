@@ -133,7 +133,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 
 - (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
 {
-    return [self visitTemplateAST:inheritableSectionNode.templateAST error:error];
+    return [self visitTemplateAST:inheritableSectionNode.innerTemplateAST error:error];
 }
 
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error

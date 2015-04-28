@@ -33,7 +33,7 @@
 @interface GRMustacheInheritableSectionNode : NSObject<GRMustacheTemplateASTNode> {
 @private
     NSString *_name;
-    GRMustacheTemplateAST *_templateAST;
+    GRMustacheTemplateAST *_innerTemplateAST;
 }
 
 /**
@@ -41,7 +41,7 @@
  *
  *     {{$ ... }} AST {{/ }}
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 /**
  * The name of the inheritable section:
@@ -53,13 +53,13 @@
 /**
  * Returns a new inheritable section.
  *
- * @param name         The name of the inheritable section
- * @param templateAST  The AST of the inner content of the section
+ * @param name              The name of the inheritable section
+ * @param innerTemplateAST  The AST of the inner content of the section
  *
  * @return a new GRMustacheInheritableSection.
  *
  * @see GRMustacheTemplateASTNode
  */
-+ (instancetype)inheritableSectionNodeWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritableSectionNodeWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 @end

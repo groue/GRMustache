@@ -496,7 +496,7 @@
                     
                     // Success: create new GRMustacheInheritableSection
                     GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
-                    wrapperASTNode = [GRMustacheInheritableSectionNode inheritableSectionNodeWithName:(NSString *)_currentTagValue templateAST:templateAST];
+                    wrapperASTNode = [GRMustacheInheritableSectionNode inheritableSectionNodeWithName:(NSString *)_currentTagValue innerTemplateAST:templateAST];
                 } break;
                     
                 case GRMustacheTokenTypeInheritedPartial: {

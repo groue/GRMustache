@@ -25,17 +25,17 @@
 
 @implementation GRMustacheInheritableSectionNode
 @synthesize name=_name;
-@synthesize templateAST=_templateAST;
+@synthesize innerTemplateAST=_innerTemplateAST;
 
-+ (instancetype)inheritableSectionNodeWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST
++ (instancetype)inheritableSectionNodeWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
-    return [[[self alloc] initWithName:name templateAST:templateAST] autorelease];
+    return [[[self alloc] initWithName:name innerTemplateAST:innerTemplateAST] autorelease];
 }
 
 - (void)dealloc
 {
     [_name release];
-    [_templateAST release];
+    [_innerTemplateAST release];
     [super dealloc];
 }
 
@@ -67,12 +67,12 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithName:(NSString *)name templateAST:(GRMustacheTemplateAST *)templateAST
+- (instancetype)initWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
     self = [self init];
     if (self) {
         _name = [name retain];
-        _templateAST = [templateAST retain];
+        _innerTemplateAST = [innerTemplateAST retain];
     }
     return self;
 }

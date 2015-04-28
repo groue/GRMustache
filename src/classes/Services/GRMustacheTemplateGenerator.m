@@ -94,7 +94,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [self visitTemplateAST:inheritableSectionNode.templateAST error:error];
+    [self visitTemplateAST:inheritableSectionNode.innerTemplateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
