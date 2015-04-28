@@ -276,7 +276,7 @@
                                                                                          inverted:YES
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                      templateAST:templateAST];
+                                                                                 innerTemplateAST:templateAST];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -339,7 +339,7 @@
                                                                                          inverted:NO
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                      templateAST:templateAST];
+                                                                                 innerTemplateAST:templateAST];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -471,7 +471,7 @@
                                                                            inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
                                                                      templateString:token.templateString
                                                                          innerRange:innerRange
-                                                                        templateAST:templateAST];
+                                                                   innerTemplateAST:templateAST];
                 } break;
                     
                 case GRMustacheTokenTypeInheritableSectionOpening: {

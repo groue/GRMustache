@@ -33,11 +33,11 @@
     BOOL _inverted;
     NSString *_templateString;
     NSRange _innerRange;
-    GRMustacheTemplateAST *_templateAST;
+    GRMustacheTemplateAST *_innerTemplateAST;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 
 /**
@@ -47,7 +47,7 @@
  * The value is fetched by evaluating the _expression_ parameter against a
  * rendering context.
  *
- * The templateAST describes the inner content of the section
+ * The innerTemplateAST describes the inner content of the section
  *
  * @param expression        The expression that would evaluate against a
  *                          rendering context.
@@ -55,12 +55,12 @@
  * @param templateString    A Mustache template string.
  * @param innerRange        The range of the inner template string of the
  *                          section in _templateString_.
- * @param templateAST       The AST of the inner content of the section.
+ * @param innerTemplateAST  The AST of the inner content of the section.
  *
  * @return A GRMustacheSectionTag
  *
  * @see GRMustacheExpression
  */
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateAST:(GRMustacheTemplateAST *)templateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 @end

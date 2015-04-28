@@ -28,20 +28,20 @@
 
 @implementation GRMustacheSectionTag
 @synthesize expression=_expression;
-@synthesize templateAST=_templateAST;
+@synthesize innerTemplateAST=_innerTemplateAST;
 @synthesize inverted=_inverted;
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
-    [_templateAST release];
+    [_innerTemplateAST release];
     [super dealloc];
 }
 
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateAST:(GRMustacheTemplateAST *)templateAST
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
-    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange templateAST:templateAST] autorelease];
+    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange innerTemplateAST:innerTemplateAST] autorelease];
 }
 
 
@@ -69,8 +69,8 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_templateAST.contentType context:context];
-    return [renderingEngine renderTemplateAST:_templateAST HTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_innerTemplateAST.contentType context:context];
+    return [renderingEngine renderTemplateAST:_innerTemplateAST HTMLSafe:HTMLSafe error:error];
 }
 
 
@@ -84,7 +84,7 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange templateAST:(GRMustacheTemplateAST *)templateAST
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
     self = [super init];
     if (self) {
@@ -92,7 +92,7 @@
         _inverted = inverted;
         _templateString = [templateString retain];
         _innerRange = innerRange;
-        _templateAST = [templateAST retain];
+        _innerTemplateAST = [innerTemplateAST retain];
     }
     return self;
 }

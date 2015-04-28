@@ -136,7 +136,7 @@
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, expressionString, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [self visitTemplateAST:sectionTag.templateAST error:error];
+    [self visitTemplateAST:sectionTag.innerTemplateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }
