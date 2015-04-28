@@ -31,7 +31,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
-#import "GRMustacheInheritablePartialNode_private.h"
+#import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustacheInheritableSectionNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
@@ -122,11 +122,11 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     }
 }
 
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
+- (BOOL)visitInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode error:(NSError **)error
 {
     GRMustacheContext *context = _context;
-    _context = [_context contextByAddingInheritablePartialNode:inheritablePartialNode];
-    BOOL success = [self visitPartialNode:inheritablePartialNode.partialNode error:error];
+    _context = [_context contextByAddingInheritedPartialNode:inheritedPartialNode];
+    BOOL success = [self visitPartialNode:inheritedPartialNode.partialNode error:error];
     _context = context;
     return success;
 }

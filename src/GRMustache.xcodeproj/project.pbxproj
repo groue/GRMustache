@@ -203,10 +203,10 @@
 		56BF36AD19B8EE9D00854524 /* GRMustacheCompiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368019B8EE9D00854524 /* GRMustacheCompiler.m */; };
 		56BF36AE19B8EE9D00854524 /* GRMustacheCompiler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368119B8EE9D00854524 /* GRMustacheCompiler_private.h */; };
 		56BF36AF19B8EE9D00854524 /* GRMustacheCompiler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368119B8EE9D00854524 /* GRMustacheCompiler_private.h */; };
-		56BF36B019B8EE9D00854524 /* GRMustacheInheritablePartialNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368319B8EE9D00854524 /* GRMustacheInheritablePartialNode.m */; };
-		56BF36B119B8EE9D00854524 /* GRMustacheInheritablePartialNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368319B8EE9D00854524 /* GRMustacheInheritablePartialNode.m */; };
-		56BF36B219B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368419B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h */; };
-		56BF36B319B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368419B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h */; };
+		56BF36B019B8EE9D00854524 /* GRMustacheInheritedPartialNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368319B8EE9D00854524 /* GRMustacheInheritedPartialNode.m */; };
+		56BF36B119B8EE9D00854524 /* GRMustacheInheritedPartialNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368319B8EE9D00854524 /* GRMustacheInheritedPartialNode.m */; };
+		56BF36B219B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368419B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h */; };
+		56BF36B319B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368419B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h */; };
 		56BF36B419B8EE9D00854524 /* GRMustacheInheritableSectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368519B8EE9D00854524 /* GRMustacheInheritableSectionNode.m */; };
 		56BF36B519B8EE9D00854524 /* GRMustacheInheritableSectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF368519B8EE9D00854524 /* GRMustacheInheritableSectionNode.m */; };
 		56BF36B619B8EE9D00854524 /* GRMustacheInheritableSectionNode_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF368619B8EE9D00854524 /* GRMustacheInheritableSectionNode_private.h */; };
@@ -493,8 +493,8 @@
 		56BF367F19B8EE9D00854524 /* GRMustacheScopedExpression_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheScopedExpression_private.h; sourceTree = "<group>"; };
 		56BF368019B8EE9D00854524 /* GRMustacheCompiler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheCompiler.m; sourceTree = "<group>"; };
 		56BF368119B8EE9D00854524 /* GRMustacheCompiler_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheCompiler_private.h; sourceTree = "<group>"; };
-		56BF368319B8EE9D00854524 /* GRMustacheInheritablePartialNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheInheritablePartialNode.m; sourceTree = "<group>"; };
-		56BF368419B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInheritablePartialNode_private.h; sourceTree = "<group>"; };
+		56BF368319B8EE9D00854524 /* GRMustacheInheritedPartialNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheInheritedPartialNode.m; sourceTree = "<group>"; };
+		56BF368419B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInheritedPartialNode_private.h; sourceTree = "<group>"; };
 		56BF368519B8EE9D00854524 /* GRMustacheInheritableSectionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheInheritableSectionNode.m; sourceTree = "<group>"; };
 		56BF368619B8EE9D00854524 /* GRMustacheInheritableSectionNode_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRMustacheInheritableSectionNode_private.h; sourceTree = "<group>"; };
 		56BF368719B8EE9D00854524 /* GRMustachePartialNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustachePartialNode.m; sourceTree = "<group>"; };
@@ -926,8 +926,8 @@
 		56BF368219B8EE9D00854524 /* TemplateAST */ = {
 			isa = PBXGroup;
 			children = (
-				56BF368319B8EE9D00854524 /* GRMustacheInheritablePartialNode.m */,
-				56BF368419B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h */,
+				56BF368319B8EE9D00854524 /* GRMustacheInheritedPartialNode.m */,
+				56BF368419B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h */,
 				56BF368519B8EE9D00854524 /* GRMustacheInheritableSectionNode.m */,
 				56BF368619B8EE9D00854524 /* GRMustacheInheritableSectionNode_private.h */,
 				56BF368719B8EE9D00854524 /* GRMustachePartialNode.m */,
@@ -1201,7 +1201,7 @@
 				56BF374719B8EEC700854524 /* GRMustacheJavascriptLibrary_private.h in Headers */,
 				56BF371519B8EEB900854524 /* GRMustacheTemplate_private.h in Headers */,
 				56BF374919B8EEC700854524 /* GRMustacheLocalizer.h in Headers */,
-				56BF36B219B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h in Headers */,
+				56BF36B219B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h in Headers */,
 				56BF370019B8EEAE00854524 /* GRMustacheRendering_private.h in Headers */,
 				56BF367119B8EE8B00854524 /* GRMustacheToken_private.h in Headers */,
 				56BF36E819B8EEAE00854524 /* GRMustacheContext.h in Headers */,
@@ -1266,7 +1266,7 @@
 				56BF374819B8EEC700854524 /* GRMustacheJavascriptLibrary_private.h in Headers */,
 				56BF371619B8EEB900854524 /* GRMustacheTemplate_private.h in Headers */,
 				56BF374A19B8EEC700854524 /* GRMustacheLocalizer.h in Headers */,
-				56BF36B319B8EE9D00854524 /* GRMustacheInheritablePartialNode_private.h in Headers */,
+				56BF36B319B8EE9D00854524 /* GRMustacheInheritedPartialNode_private.h in Headers */,
 				56BF370119B8EEAE00854524 /* GRMustacheRendering_private.h in Headers */,
 				56BF367219B8EE8B00854524 /* GRMustacheToken_private.h in Headers */,
 				56BF36E919B8EEAE00854524 /* GRMustacheContext.h in Headers */,
@@ -1547,7 +1547,7 @@
 				56BF36A019B8EE9D00854524 /* GRMustacheIdentifierExpression.m in Sources */,
 				56BF374519B8EEC700854524 /* GRMustacheJavascriptLibrary.m in Sources */,
 				56BF366B19B8EE8B00854524 /* GRMustacheTemplateParser.m in Sources */,
-				56BF36B019B8EE9D00854524 /* GRMustacheInheritablePartialNode.m in Sources */,
+				56BF36B019B8EE9D00854524 /* GRMustacheInheritedPartialNode.m in Sources */,
 				56BF36CE19B8EE9E00854524 /* GRMustacheTextNode.m in Sources */,
 				56BF365C19B8EE7A00854524 /* GRMustacheConfiguration.m in Sources */,
 				56BF36D219B8EE9E00854524 /* GRMustacheVariableTag.m in Sources */,
@@ -1651,7 +1651,7 @@
 				56BF36A119B8EE9D00854524 /* GRMustacheIdentifierExpression.m in Sources */,
 				56BF374619B8EEC700854524 /* GRMustacheJavascriptLibrary.m in Sources */,
 				56BF366C19B8EE8B00854524 /* GRMustacheTemplateParser.m in Sources */,
-				56BF36B119B8EE9D00854524 /* GRMustacheInheritablePartialNode.m in Sources */,
+				56BF36B119B8EE9D00854524 /* GRMustacheInheritedPartialNode.m in Sources */,
 				56BF36CF19B8EE9E00854524 /* GRMustacheTextNode.m in Sources */,
 				56BF365D19B8EE7A00854524 /* GRMustacheConfiguration.m in Sources */,
 				56BF36D319B8EE9E00854524 /* GRMustacheVariableTag.m in Sources */,

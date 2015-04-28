@@ -57,7 +57,7 @@
     //    {
     //        data: { },
     //        expected: "partial1",
-    //        name: "Partials in inheritable partials can override inheritable sections",
+    //        name: "Partials in inherited partials can override inheritable sections",
     //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
     //        partials: {
     //            partial1: "{{$inheritable}}partial1{{/inheritable}}";

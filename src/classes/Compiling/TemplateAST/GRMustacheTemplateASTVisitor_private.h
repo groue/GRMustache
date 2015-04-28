@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheTemplateAST;
-@class GRMustacheInheritablePartialNode;
+@class GRMustacheInheritedPartialNode;
 @class GRMustacheInheritableSectionNode;
 @class GRMustachePartialNode;
 @class GRMustacheVariableTag;
@@ -35,7 +35,7 @@
 
 // Don't use these methods directly. Use -[<GRMustacheTemplateASTNode acceptTemplateASTVisitor:error:] instead
 - (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;

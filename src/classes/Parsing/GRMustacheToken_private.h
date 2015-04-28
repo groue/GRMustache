@@ -81,10 +81,10 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
     GRMustacheTokenTypePragma,
     
     /**
-     * The kind of tokens representing inheritable partial tags such as
+     * The kind of tokens representing inherited partial tags such as
      * `{{<name}}`.
      */
-    GRMustacheTokenTypeInheritablePartial,
+    GRMustacheTokenTypeInheritedPartial,
     
     /**
      * The kind of tokens representing inheritable ection opening tags such as
@@ -164,7 +164,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
  * - GRMustacheTokenTypeInheritableSectionOpening;
  * - GRMustacheTokenTypeClosing;
  * - GRMustacheTokenTypePartial;
- * - GRMustacheTokenTypeInheritablePartial;
+ * - GRMustacheTokenTypeInheritedPartial;
  * - GRMustacheTokenTypeUnescapedVariable;
  * - GRMustacheTokenTypePragma;
  * - GRMustacheTokenTypeEscapedVariable;

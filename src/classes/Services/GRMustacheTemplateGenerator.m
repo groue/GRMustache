@@ -27,7 +27,7 @@
 #import "GRMustacheTemplate_private.h"
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustacheTemplateAST_private.h"
-#import "GRMustacheInheritablePartialNode_private.h"
+#import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustacheInheritableSectionNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheVariableTag_private.h"
@@ -72,16 +72,16 @@
     return YES;
 }
 
-- (BOOL)visitInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode error:(NSError **)error
+- (BOOL)visitInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode error:(NSError **)error
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-    NSString *partialName = inheritablePartialNode.partialNode.name;
+    NSString *partialName = inheritedPartialNode.partialNode.name;
     NSString *tagStartString = [NSString stringWithFormat:@"%@<%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
     NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, partialName, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [self visitTemplateAST:inheritablePartialNode.overridingTemplateAST error:error];
+    [self visitTemplateAST:inheritedPartialNode.overridingTemplateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }

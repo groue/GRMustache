@@ -20,16 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheInheritablePartialNode_private.h"
+#import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheInheritablePartialNode
+@implementation GRMustacheInheritedPartialNode
 @synthesize overridingTemplateAST=_overridingTemplateAST;
 @synthesize partialNode=_partialNode;
 
-+ (instancetype)inheritablePartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
++ (instancetype)inheritedPartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
     return [[[self alloc] initWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST] autorelease];
 }
@@ -46,7 +46,7 @@
 
 - (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritablePartialNode:self error:error];
+    return [visitor visitInheritedPartialNode:self error:error];
 }
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode

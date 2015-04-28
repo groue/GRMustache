@@ -25,7 +25,7 @@
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateASTNode;
-@class GRMustacheInheritablePartialNode;
+@class GRMustacheInheritedPartialNode;
 
 /**
  * The GRMustacheContext maintains the following stacks:
@@ -34,7 +34,7 @@
  * - a protected context stack,
  * - a hidden context stack,
  * - a tag delegate stack,
- * - an inheritable partial stack.
+ * - an inherited partial stack.
  *
  * As such, it is able to:
  *
@@ -49,7 +49,7 @@
  *
  * - Let tag delegates interpret rendered values.
  *
- * - Let inheritable partial templates override AST nodes.
+ * - Let inherited partial templates override AST nodes.
  */
 @interface GRMustacheContext : NSObject {
 @private
@@ -64,7 +64,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(inheritablePartialNodeStack, GRMustacheInheritablePartialNode *);
+    GRMUSTACHE_STACK_DECLARE_IVARS(inheritedPartialNodeStack, GRMustacheInheritedPartialNode *);
     
     BOOL _unsafeKeyAccess;
 }
@@ -136,16 +136,16 @@
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
- * inheritable partial stack that is extended with _inheritablePartial_.
+ * inherited partial stack that is extended with _inheritedPartial_.
  *
- * @param inheritablePartialNode  An inheritable partial
+ * @param inheritedPartialNode  An inherited partial
  *
  * @return A GRMustacheContext object.
  *
- * @see GRMustacheInheritablePartialNode
- * @see [GRMustacheInheritablePartialNode renderWithContext:inBuffer:error:]
+ * @see GRMustacheInheritedPartialNode
+ * @see [GRMustacheInheritedPartialNode renderWithContext:inBuffer:error:]
  */
-- (instancetype)contextByAddingInheritablePartialNode:(GRMustacheInheritablePartialNode *)inheritablePartialNode GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found

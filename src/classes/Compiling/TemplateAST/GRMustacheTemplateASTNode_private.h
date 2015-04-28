@@ -60,7 +60,7 @@
  *
  * All classes conforming to the GRMustacheTemplateASTNode protocol return
  * the node argument, but GRMustacheInheritableSectionNode and
- * GRMustacheInheritablePartialNode.
+ * GRMustacheInheritedPartialNode.
  *
  * @param ASTNode  A node
  *
@@ -69,7 +69,7 @@
  *
  * @see GRMustacheSectionTag
  * @see GRMustacheTemplate
- * @see GRMustacheInheritablePartialNode
+ * @see GRMustacheInheritedPartialNode
  */
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode GRMUSTACHE_API_INTERNAL;
 @end

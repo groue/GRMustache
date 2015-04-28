@@ -32,7 +32,7 @@ The library features are described in the [guides](introduction.md). This sectio
     
     Nodes are either:
     
-    - `GRMustacheInheritablePartialNode`: `{{< partial }}...{{/}}`
+    - `GRMustacheInheritedPartialNode`: `{{< partial }}...{{/}}`
     - `GRMustacheInheritableSectionNode`: `{{$ name }}...{{/}}`
     - `GRMustachePartialNode`: `{{> partial }}`
     - `GRMustacheSectionTag`: `{{# expression }}...{{/}}`

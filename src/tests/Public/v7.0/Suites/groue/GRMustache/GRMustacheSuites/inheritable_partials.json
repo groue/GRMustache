@@ -1,28 +1,28 @@
 {
   "tests": [
     {
-      "name": "Template can embed an inheritable partial",
+      "name": "Template can embed an inherited partial",
       "data": { },
       "template": "before {{<partial}}ignored{{/partial}} after",
       "partials": { "partial": "partial" },
       "expected": "before partial after"
     },
     {
-      "name": "Template can embed several inheritable partials",
+      "name": "Template can embed several inherited partials",
       "data": { },
       "template": "before1 {{<partial1}}ignored{{/partial1}} | {{<partial2}}ignored{{/partial2}} after2",
       "partials": { "partial1": "partial1", "partial2": "partial2" },
       "expected": "before1 partial1 | partial2 after2"
     },
     {
-      "name": "Template can embed an inheritable partial inside in a section",
+      "name": "Template can embed an inherited partial inside in a section",
       "data": { "items": [0,1,2,3] },
       "template": "{{#items}}{{<partial}}ignored{{/partial}}{{/items}}",
       "partials": { "partial": "{{.}}" },
       "expected": "0123"
     },
     {
-      "name": "Inheritable partials can embed inheritable partials",
+      "name": "Inherited partials can embed inherited partials",
       "data": { },
       "template": "before1 {{<partial1}}{{/partial1}} after1",
       "partials": {
@@ -31,7 +31,7 @@
       "expected": "before1 before2 partial2 after2 after1"
     },
     {
-      "name": "Partials can embed inheritable partials",
+      "name": "Partials can embed inherited partials",
       "data": { },
       "template": "before1 {{>partial1}} after1",
       "partials": {
@@ -40,7 +40,7 @@
       "expected": "before1 before2 partial2 after2 after1"
     },
     {
-      "name": "Inheritable partials can embed partials",
+      "name": "Inherited partials can embed partials",
       "data": { },
       "template": "before1 {{<partial1}}{{/partial1}} after1",
       "partials": {
@@ -49,14 +49,14 @@
       "expected": "before1 before2 partial2 after2 after1"
     },
     {
-      "name": "Templates can override top level inheritable sections in inheritable partials",
+      "name": "Templates can override top level inheritable sections in inherited partials",
       "data": { },
       "template": "{{<partial}}{{$inheritable}}inherited{{/inheritable}}{{/partial}}",
       "partials": { "partial": "{{$inheritable}}ignored{{/inheritable}}" },
       "expected": "inherited"
     },
     {
-      "name": "Templates can override nested inheritable sections in inheritable partials",
+      "name": "Templates can override nested inheritable sections in inherited partials",
       "data": { "items": [0,1,2,3] },
       "template": "{{<partial}}{{$inheritable}}{{.}}{{/inheritable}}{{/partial}}",
       "partials": { "partial": "{{#items}}{{$inheritable}}ignored{{/inheritable}}{{/items}}" },
@@ -95,7 +95,7 @@
       "expected": "3"
     },
     {
-      "name": "Inheritable partials can override inheritable sections in their own inheritable partials",
+      "name": "Inherited partials can override inheritable sections in their own inherited partials",
       "data": { },
       "template": "{{<partial1}}{{/partial1}}",
       "partials": {
@@ -104,7 +104,7 @@
       "expected": "partial1"
     },
     {
-      "name": "Partials in inheritable partials can override inheritable sections",
+      "name": "Partials in inherited partials can override inheritable sections",
       "data": { },
       "template": "{{<partial2}}{{>partial1}}{{/partial2}}",
       "partials": {
@@ -113,7 +113,7 @@
       "expected": "partial1"
     },
     {
-      "name": "Partials can override inheritable sections in their own inheritable partials",
+      "name": "Partials can override inheritable sections in their own inherited partials",
       "data": { },
       "template": "{{>partial1}}",
       "partials": {
@@ -122,7 +122,7 @@
       "expected": "partial1"
     },
     {
-      "name": "Templates and partials can both override the same inheritable partial",
+      "name": "Templates and partials can both override the same inherited partial",
       "data": { },
       "template": "{{<partial2}}{{$inheritable}}base{{/inheritable}}{{/partial2}} {{>partial1}}",
       "partials": {
@@ -131,7 +131,7 @@
       "expected": "base partial1"
     },
     {
-      "name": "Templates can override inheritable sections in partials embedded in inheritable partials",
+      "name": "Templates can override inheritable sections in partials embedded in inherited partials",
       "data": { },
       "template": "{{<partial1}}{{$inheritable}}inherited{{/inheritable}}{{/partial1}}",
       "partials": {
@@ -140,7 +140,7 @@
       "expected": "inherited"
     },
     {
-      "name": "Templates can override inheritable sections in inheritable partials embedded in inheritable partials",
+      "name": "Templates can override inheritable sections in inherited partials embedded in inherited partials",
       "data": { },
       "template": "{{<partial1}}{{$inheritable}}inherited{{/inheritable}}{{/partial1}}",
       "partials": {
@@ -156,7 +156,7 @@
       "expected": "success"
     },
     {
-      "name": "Templates sections can not override inheritable sections in inheritable partial",
+      "name": "Templates sections can not override inheritable sections in inherited partial",
       "data": { "section": true },
       "template": "{{<partial}}{{#section}}inherited{{/section}}{{/partial}}",
       "partials": { "partial": "{{$section}}success{{/section}}" },
@@ -164,7 +164,7 @@
     },
     {
       // Inspired by https://github.com/spullara/mustache.java/commit/d2942e39a671ee71c0427b3a963149af81bdb0a5
-      "name": "Recursive inheritable partials should be rendered.",
+      "name": "Recursive inherited partials should be rendered.",
       "data": { "content": "X", "nodes": [ { "content": "Y", "nodes": [] } ] },
       "template": "<{{<node}}{{/node}}>",
       "partials": {
@@ -180,7 +180,7 @@
       "expected": "<X<Y<>>>"
     },
     {
-      "name": "Inheritable section context is cleaned after inheritable partial rendering.",
+      "name": "Inheritable section context is cleaned after inherited partial rendering.",
       "data": { },
       "template": "{{$section}}rendered{{/section}}|{{<partial}}{{$section}}inherited{{/section}}{{/partial}}|{{$section}}rendered{{/section}}",
       "partials": { "partial": "{{$section}}ignored{{/section}}" },
@@ -188,14 +188,14 @@
     }
     
     // Failing test: we get "103" instead of "123".
-    // It tests that any template snippet can be extracted into an inheritable partial.
+    // It tests that any template snippet can be extracted into an inherited partial.
     //
     // Initial state:
     //
     //   template:
     //   {{<parent}}{{$inheritable}}2{{/inheritable}}{{/parent}}
     //
-    // Apply the "any template snippet can be extracted into an inheritable partial"
+    // Apply the "any template snippet can be extracted into an inherited partial"
     // transformation to the "{{$inheritable}}2{{/inheritable}}" snippet:
     //
     //   template:

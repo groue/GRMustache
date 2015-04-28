@@ -27,7 +27,7 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheInheritableSectionNode_private.h"
-#import "GRMustacheInheritablePartialNode_private.h"
+#import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
@@ -402,7 +402,7 @@
         } break;
             
             
-        case GRMustacheTokenTypeInheritablePartial: {
+        case GRMustacheTokenTypeInheritedPartial: {
             // Partial name validation
             NSError *partialError;
             NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
@@ -499,7 +499,7 @@
                     wrapperASTNode = [GRMustacheInheritableSectionNode inheritableSectionNodeWithName:(NSString *)_currentTagValue templateAST:templateAST];
                 } break;
                     
-                case GRMustacheTokenTypeInheritablePartial: {
+                case GRMustacheTokenTypeInheritedPartial: {
                     // Validate token: inheritable template ending should be missing, or match inheritable template opening
                     NSError *error;
                     BOOL empty;
@@ -536,10 +536,10 @@
                         return NO;
                     }
                     
-                    // Success: create new GRMustacheInheritablePartialNode
+                    // Success: create new GRMustacheInheritedPartialNode
                     GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:partialName];
                     GRMustacheTemplateAST *overridingTemplateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
-                    wrapperASTNode = [GRMustacheInheritablePartialNode inheritablePartialNodeWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
+                    wrapperASTNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
                 } break;
                     
                 default:

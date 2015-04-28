@@ -92,7 +92,7 @@
       "expected_error": "Parse error"
     },
     {
-      "name": "CONTENT_TYPE:TEXT pragma can not enter inheritable partial tag.",
+      "name": "CONTENT_TYPE:TEXT pragma can not enter inherited partial tag.",
       "data": null,
       "template": "{{<layout}}{{% CONTENT_TYPE:TEXT }}{{/layout}}",
       "partials": { "layout": "{{% CONTENT_TYPE:TEXT }}{{$content}}{{/content}}" },
