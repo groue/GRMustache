@@ -27,16 +27,16 @@
 
 @implementation GRMustacheInheritedPartialNode
 @synthesize overridingTemplateAST=_overridingTemplateAST;
-@synthesize partialNode=_partialNode;
+@synthesize parentPartialNode=_parentPartialNode;
 
-+ (instancetype)inheritedPartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
++ (instancetype)inheritedPartialNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
-    return [[[self alloc] initWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST] autorelease];
+    return [[[self alloc] initWithParentPartialNode:parentPartialNode overridingTemplateAST:overridingTemplateAST] autorelease];
 }
 
 - (void)dealloc
 {
-    [_partialNode release];
+    [_parentPartialNode release];
     [_overridingTemplateAST release];
     [super dealloc];
 }
@@ -61,11 +61,11 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
+- (instancetype)initWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
     self = [super init];
     if (self) {
-        _partialNode = [partialNode retain];
+        _parentPartialNode = [parentPartialNode retain];
         _overridingTemplateAST = [overridingTemplateAST retain];
     }
     return self;

@@ -126,7 +126,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 {
     GRMustacheContext *context = _context;
     _context = [_context contextByAddingInheritedPartialNode:inheritedPartialNode];
-    BOOL success = [self visitPartialNode:inheritedPartialNode.partialNode error:error];
+    BOOL success = [self visitPartialNode:inheritedPartialNode.parentPartialNode error:error];
     _context = context;
     return success;
 }

@@ -110,7 +110,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     NSMutableSet *usedTemplateASTs = [[NSMutableSet alloc] init];
     GRMUSTACHE_STACK_ENUMERATE(inheritedPartialNodeStack, self, context) {
         GRMustacheInheritedPartialNode *inheritedPartialNode = GRMUSTACHE_STACK_TOP(inheritedPartialNodeStack, context);
-        GRMustacheTemplateAST *templateAST = inheritedPartialNode.partialNode.templateAST;
+        GRMustacheTemplateAST *templateAST = inheritedPartialNode.parentPartialNode.templateAST;
         if ([usedTemplateASTs containsObject:templateAST]) {
             continue;
         }

@@ -33,7 +33,7 @@
  */
 @interface GRMustacheInheritedPartialNode : NSObject<GRMustacheTemplateASTNode> {
 @private
-    GRMustachePartialNode *_partialNode;
+    GRMustachePartialNode *_parentPartialNode;
     GRMustacheTemplateAST *_overridingTemplateAST;
 }
 
@@ -50,16 +50,16 @@
  *
  *    {{< inherited_partial_template }}...{{/ }}
  */
-@property (nonatomic, retain, readonly) GRMustachePartialNode *partialNode GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) GRMustachePartialNode *parentPartialNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds a GRMustacheInheritedPartialNode.
  *
- * @param partialNode  The inherited partial.
- * @param templateAST  The AST that overrides the inherited partial template.
+ * @param parentPartialNode  The inherited partial.
+ * @param templateAST        The AST that overrides the inherited partial template.
  *
  * @return A GRMustacheInheritedPartialNode
  */
-+ (instancetype)inheritedPartialNodeWithPartialNode:(GRMustachePartialNode *)partialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)inheritedPartialNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST GRMUSTACHE_API_INTERNAL;
 
 @end

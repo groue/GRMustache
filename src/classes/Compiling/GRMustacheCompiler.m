@@ -539,7 +539,7 @@
                     // Success: create new GRMustacheInheritedPartialNode
                     GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:partialName];
                     GRMustacheTemplateAST *overridingTemplateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
-                    wrapperASTNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
+                    wrapperASTNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithParentPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
                 } break;
                     
                 default:
