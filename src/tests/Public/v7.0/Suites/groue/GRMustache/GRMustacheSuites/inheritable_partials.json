@@ -185,34 +185,33 @@
       "template": "{{$section}}rendered{{/section}}|{{<partial}}{{$section}}inherited{{/section}}{{/partial}}|{{$section}}rendered{{/section}}",
       "partials": { "partial": "{{$section}}ignored{{/section}}" },
       "expected": "rendered|inherited|rendered"
+    },
+    {
+      "name": "Two levels of inheritance: inherited partial with overriding content containing a partial",
+      "data": { },
+      "template": "{{<partial}}{{>partial2}}{{/partial}}",
+      "partials": {
+          "partial": "{{$inheritable}}ignored{{/inheritable}}",
+          "partial2": "{{$inheritable}}inherited{{/inheritable}}" },
+      "expected": "inherited"
+    },
+    {
+      "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial",
+      "data": { },
+      "template": "{{<partial}}{{<partial2}}{{/partial2}}{{/partial}}",
+      "partials": {
+          "partial": "{{$inheritable}}ignored{{/inheritable}}",
+          "partial2": "{{$inheritable}}inherited{{/inheritable}}" },
+      "expected": "inherited"
+    },
+    {
+      "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial with overriding content containing an inheritable section",
+      "data": { },
+      "template": "{{<partial}}{{<partial2}}{{$inheritable}}inherited{{/inheritable}}{{/partial2}}{{/partial}}",
+      "partials": {
+          "partial": "{{$inheritable}}ignored{{/inheritable}}",
+          "partial2": "{{$inheritable}}ignored{{/inheritable}}" },
+      "expected": "inherited"
     }
-    
-    // Failing test: we get "103" instead of "123".
-    // It tests that any template snippet can be extracted into an inherited partial.
-    //
-    // Initial state:
-    //
-    //   template:
-    //   {{<parent}}{{$inheritable}}2{{/inheritable}}{{/parent}}
-    //
-    // Apply the "any template snippet can be extracted into an inherited partial"
-    // transformation to the "{{$inheritable}}2{{/inheritable}}" snippet:
-    //
-    //   template:
-    //   {{<parent}}{{<parent2}}{{/parent2}}{{/parent}}
-    //   parent2:
-    //   {{$inheritable}}2{{/inheritable}}
-    //
-    // The rendering should be identical.
-    // 
-    // {
-    //   "name": "Templates can override inheritable sections through inherited partials",
-    //   "data": { },
-    //   "template": "{{<parent}}{{$inheritable}}1{{/inheritable}}{{/parent}}{{<parent}}{{<parent2}}{{/parent2}}{{/parent}}{{<parent}}{{<parent2}}{{$inheritable}}3{{/inheritable}}{{/parent2}}{{/parent}}",
-    //   "partials": {
-    //       "parent": "{{$inheritable}}0{{/inheritable}}",
-    //       "parent2": "{{$inheritable}}2{{/inheritable}}" },
-    //   "expected": "123"
-    // }
   ]
 }
