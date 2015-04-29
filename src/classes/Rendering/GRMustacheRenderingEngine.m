@@ -92,11 +92,20 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 
 - (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error
 {
+    // We must take care of eventual content-type mismatch between the
+    // currently rendered AST (defined by init), and the argument.
+    //
+    // For example, the partial loaded by the HTML template `{{>partial}}`
+    // may be a text one. In this case, we must render the partial as text,
+    // and then HTML-encode its rendering. See the "Partial containing
+    // CONTENT_TYPE:TEXT pragma is HTML-escaped when embedded." test in
+    // the text_rendering.json test suite.
+    //
+    // So let's check for a content-type mismatch:
     GRMustacheContentType ASTContentType = templateAST.contentType;
-    
     if (_contentType != ASTContentType)
     {
-        // Render separately...
+        // Content-type mismatch: render separately...
         
         GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:ASTContentType context:_context] autorelease];
         BOOL HTMLSafe;
@@ -115,6 +124,8 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     }
     else
     {
+        // Content-type match
+        
         [GRMustacheRendering pushCurrentContentType:ASTContentType];
         BOOL success = [self visitTemplateASTNodes:templateAST.templateASTNodes error:error];
         [GRMustacheRendering popCurrentContentType];
@@ -340,13 +351,36 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 - (BOOL)visitTemplateASTNodes:(NSArray *)templateASTNodes error:(NSError **)error
 {
     for (id<GRMustacheTemplateASTNode> ASTNode in templateASTNodes) {
-        ASTNode = [_context resolveTemplateASTNode:ASTNode];
+        ASTNode = [self resolveTemplateASTNode:ASTNode];
         if (![ASTNode acceptTemplateASTVisitor:self error:error]) {
             return NO;
         }
     }
     
     return YES;
+}
+
+#pragma mark - Inheritance
+
+- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)node
+{
+    NSMutableSet *usedTemplateASTs = [NSMutableSet set];
+    for (GRMustacheInheritedPartialNode *inheritedPartialNode in _context.inheritedPartialNodeStack) {
+        // for -[GRMustacheJavaSuiteTests testExtensionNested]
+        if (![usedTemplateASTs containsObject:inheritedPartialNode.parentPartialNode.templateAST]) {
+            id<GRMustacheTemplateASTNode> resolvedNode = node;
+            for (id<GRMustacheTemplateASTNode> overridingNode in inheritedPartialNode.overridingTemplateAST.templateASTNodes) {
+                resolvedNode = [overridingNode resolveTemplateASTNode:resolvedNode];
+            }
+
+            // for "Recursion in inherited templates" test
+            if (node != resolvedNode) {
+                [usedTemplateASTs addObject:inheritedPartialNode.parentPartialNode.templateAST];
+            }
+            node = resolvedNode;
+        }
+    }
+    return node;
 }
 
 @end

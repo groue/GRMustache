@@ -136,14 +136,11 @@
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
- * inherited partial stack that is extended with _inheritedPartial_.
+ * overriding stack that is extended with _inheritedPartialNode_.
  *
- * @param inheritedPartialNode  An inherited partial
+ * @param inheritedPartialNode  A template AST
  *
  * @return A GRMustacheContext object.
- *
- * @see GRMustacheInheritedPartialNode
- * @see [GRMustacheInheritedPartialNode renderWithContext:inBuffer:error:]
  */
 - (instancetype)contextByAddingInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode GRMUSTACHE_API_INTERNAL;
 
@@ -162,22 +159,16 @@
 - (id)valueForMustacheKey:(NSString *)key protected:(BOOL *)protected GRMUSTACHE_API_INTERNAL;
 
 /**
- * In the context of template inheritance, return the node that should be
- * rendered in lieu of the node argument.
- *
- * @param ASTNode  A node
- *
- * @return The resolution of the node in the context of Mustache template
- *         inheritance.
- */
-- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode GRMUSTACHE_API_INTERNAL;
-
-/**
  * Returns an array containing all tag delegates in the delegate stack.
  * Array may be null (meaning there is no tag delegate in the stack).
  *
  * Last object is the top object in the delegate stack.
  */
 - (NSArray *)tagDelegateStack GRMUSTACHE_API_INTERNAL;
+
+/**
+ * TODO
+ */
+- (NSArray *)inheritedPartialNodeStack GRMUSTACHE_API_INTERNAL;
 
 @end

@@ -30,6 +30,7 @@ static struct {
 };
 
 static struct {
+    NSString *name;
     NSString *partials;
     NSString *template;
     NSString *template_name;
@@ -38,6 +39,7 @@ static struct {
     NSString *expected;
     NSString *expected_error;
 } GRMustachePublicAPITestItemKeys = {
+    .name = @"name",
     .partials = @"partials",
     .template = @"template",
     .template_name = @"template_name",
@@ -166,6 +168,8 @@ static struct {
         
         
         // run test
+        
+        NSLog(@"Run test \"%@\"", [testDictionary objectForKey:GRMustachePublicAPITestItemKeys.name]);
         
         if (templateName) {
             

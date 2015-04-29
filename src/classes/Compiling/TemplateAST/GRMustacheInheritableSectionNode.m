@@ -49,18 +49,18 @@
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    // Inheritable section can only override inheritable section
+    // {{$ name }}...{{/ name }}
+    //
+    // An inheritable section is overriden by another inheritable section with the same name:
+    
     if (![templateASTNode isKindOfClass:[GRMustacheInheritableSectionNode class]]) {
         return templateASTNode;
     }
-    GRMustacheInheritableSectionNode *otherSection = (GRMustacheInheritableSectionNode *)templateASTNode;
     
-    // names must match
-    if (![otherSection.name isEqual:_name]) {
-        return otherSection;
+    if (![((GRMustacheInheritableSectionNode *)templateASTNode).name isEqualToString:_name]) {
+        return templateASTNode;
     }
     
-    // OK, override with self
     return self;
 }
 

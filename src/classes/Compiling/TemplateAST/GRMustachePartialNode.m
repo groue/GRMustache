@@ -50,22 +50,21 @@
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    // Look for the last inheritable node in inner nodes.
+    // {{> partial }}
     //
-    // This allows a partial do define an inheritable section:
+    // Relevant test:
     //
-    //    {
-    //        data: { },
-    //        expected: "partial1",
-    //        name: "Partials in inherited partials can override inheritable sections",
-    //        template: "{{<partial2}}{{>partial1}}{{/partial2}}"
-    //        partials: {
-    //            partial1: "{{$inheritable}}partial1{{/inheritable}}";
-    //            partial2: "{{$inheritable}}ignored{{/inheritable}}";
-    //        },
-    //    }
-    for (id<GRMustacheTemplateASTNode> innerASTNode in _templateAST.templateASTNodes) {
-        templateASTNode = [innerASTNode resolveTemplateASTNode:templateASTNode];
+    // {
+    //   "name": "Partials in inherited partials can override inheritable sections",
+    //   "data": { },
+    //   "template": "{{<partial2}}{{>partial1}}{{/partial2}}",
+    //   "partials": {
+    //       "partial1": "{{$inheritable}}partial1{{/inheritable}}",
+    //       "partial2": "{{$inheritable}}ignored{{/inheritable}}" },
+    //   "expected": "partial1"
+    // },
+    for (id<GRMustacheTemplateASTNode> overridingNode in _templateAST.templateASTNodes) {
+        templateASTNode = [overridingNode resolveTemplateASTNode:templateASTNode];
     }
     return templateASTNode;
 }

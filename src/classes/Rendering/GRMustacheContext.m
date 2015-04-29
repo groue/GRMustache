@@ -28,7 +28,6 @@
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheKeyAccess_private.h"
 #import "GRMustachePartialNode_private.h"
-#import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheExpressionInvocation_private.h"
 
@@ -99,30 +98,6 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
 + (void)initialize
 {
     setupTagDelegateClasses();
-}
-
-- (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
-{
-    if (!GRMUSTACHE_STACK_TOP(inheritedPartialNodeStack, self)) {
-        return templateASTNode;
-    }
-    
-    NSMutableSet *usedTemplateASTs = [[NSMutableSet alloc] init];
-    GRMUSTACHE_STACK_ENUMERATE(inheritedPartialNodeStack, self, context) {
-        GRMustacheInheritedPartialNode *inheritedPartialNode = GRMUSTACHE_STACK_TOP(inheritedPartialNodeStack, context);
-        GRMustacheTemplateAST *templateAST = inheritedPartialNode.parentPartialNode.templateAST;
-        if ([usedTemplateASTs containsObject:templateAST]) {
-            continue;
-        }
-        id<GRMustacheTemplateASTNode> resolvedASTNode = [inheritedPartialNode resolveTemplateASTNode:templateASTNode];
-        if (resolvedASTNode != templateASTNode) {
-            [usedTemplateASTs addObject:templateAST];
-        }
-        templateASTNode = resolvedASTNode;
-    }
-    [usedTemplateASTs release];
-    
-    return templateASTNode;
 }
 
 - (BOOL)unsafeKeyAccess
@@ -453,6 +428,24 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     }
     
     return tagDelegateStack;
+}
+
+
+// =============================================================================
+#pragma mark - Overriding Template AST Stack
+
+- (NSArray *)inheritedPartialNodeStack
+{
+    NSMutableArray *inheritedPartialNodeStack = nil;
+    
+    GRMUSTACHE_STACK_ENUMERATE(inheritedPartialNodeStack, self, context) {
+        if (!inheritedPartialNodeStack) {
+            inheritedPartialNodeStack = [NSMutableArray array];
+        }
+        [inheritedPartialNodeStack addObject:GRMUSTACHE_STACK_TOP(inheritedPartialNodeStack, context)];
+    }
+    
+    return inheritedPartialNodeStack;
 }
 
 @end

@@ -55,8 +55,13 @@
 
 - (NSString *)stringWithTemplate:(GRMustacheTemplate *)template
 {
+    return [self stringWithTemplateAST:template.templateAST];
+}
+
+- (NSString *)stringWithTemplateAST:(GRMustacheTemplateAST *)templateAST
+{
     _templateString = [NSMutableString string];
-    [self visitTemplateAST:template.templateAST error:NULL];
+    [self visitTemplateAST:templateAST error:NULL];
     return _templateString;
 }
 

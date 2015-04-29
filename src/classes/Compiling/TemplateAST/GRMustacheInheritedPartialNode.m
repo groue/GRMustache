@@ -51,10 +51,40 @@
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
-    // look for the last inheritable ASTNode in inner templateAST
-    for (id<GRMustacheTemplateASTNode> innerASTNode in _overridingTemplateAST.templateASTNodes) {
-        templateASTNode = [innerASTNode resolveTemplateASTNode:templateASTNode];
+    // {{< partial }}...{{/ partial }}
+    //
+    // Inherited partials can provide an override in two ways: in
+    // the parent partial, and inside the overriding section.
+    //
+    // Relevant tests:
+    //
+    // {
+    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial",
+    //   "data": { },
+    //   "template": "{{<partial}}{{<partial2}}{{/partial2}}{{/partial}}",
+    //   "partials": {
+    //       "partial": "{{$inheritable}}ignored{{/inheritable}}",
+    //       "partial2": "{{$inheritable}}inherited{{/inheritable}}" },
+    //   "expected": "inherited"
+    // },
+    // {
+    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial with overriding content containing an inheritable section",
+    //   "data": { },
+    //   "template": "{{<partial}}{{<partial2}}{{$inheritable}}inherited{{/inheritable}}{{/partial2}}{{/partial}}",
+    //   "partials": {
+    //       "partial": "{{$inheritable}}ignored{{/inheritable}}",
+    //       "partial2": "{{$inheritable}}ignored{{/inheritable}}" },
+    //   "expected": "inherited"
+    // }
+    
+    for (id<GRMustacheTemplateASTNode> overridingNode in _parentPartialNode.templateAST.templateASTNodes) {
+        templateASTNode = [overridingNode resolveTemplateASTNode:templateASTNode];
     }
+
+    for (id<GRMustacheTemplateASTNode> overridingNode in _overridingTemplateAST.templateASTNodes) {
+        templateASTNode = [overridingNode resolveTemplateASTNode:templateASTNode];
+    }
+
     return templateASTNode;
 }
 

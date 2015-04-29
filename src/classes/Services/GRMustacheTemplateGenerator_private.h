@@ -24,6 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @class GRMustacheTemplate;
+@class GRMustacheTemplateAST;
 @class GRMustacheTemplateRepository;
 @class GRMustacheExpressionGenerator;
 
@@ -38,5 +39,6 @@
 
 + (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
 - (NSString *)stringWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_INTERNAL;
+- (NSString *)stringWithTemplateAST:(GRMustacheTemplateAST *)templateAST GRMUSTACHE_API_INTERNAL;
 
 @end

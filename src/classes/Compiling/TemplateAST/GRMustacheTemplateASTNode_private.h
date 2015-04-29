@@ -59,17 +59,14 @@
  * rendered in lieu of the node argument.
  *
  * All classes conforming to the GRMustacheTemplateASTNode protocol return
- * the node argument, but GRMustacheInheritableSectionNode and
- * GRMustacheInheritedPartialNode.
+ * the node argument, but GRMustacheInheritableSectionNode,
+ * GRMustacheInheritedPartialNode, and GRMustachePartialNode.
  *
- * @param ASTNode  A node
+ * @param templateASTNode  A node
  *
  * @return The resolution of the node in the context of Mustache template
  *         inheritance.
- *
- * @see GRMustacheSectionTag
- * @see GRMustacheTemplate
- * @see GRMustacheInheritedPartialNode
  */
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode GRMUSTACHE_API_INTERNAL;
+
 @end
