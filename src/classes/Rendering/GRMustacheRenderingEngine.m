@@ -373,7 +373,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
                 resolvedNode = [overridingNode resolveTemplateASTNode:resolvedNode];
             }
 
-            // for "Recursion in inherited templates" test
+            // for Hogan "Recursion in inherited templates" test
             if (node != resolvedNode) {
                 [usedTemplateASTs addObject:inheritedPartialNode.parentPartialNode.templateAST];
             }
