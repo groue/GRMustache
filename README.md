@@ -74,3 +74,10 @@ License
 -------
 
 Released under the [MIT License](LICENSE).
+
+
+Other Nifty Libraries
+---------------------
+
+- [groue/GRMustache.swift](http://github.com/groue/GRMustache.swift): Flexible Mustache templates for Swift
+- [groue/GRDB.swift](http://github.com/groue/GRDB.swift): SQLite toolkit for Swift
