@@ -79,5 +79,6 @@ Released under the [MIT License](LICENSE).
 Other Nifty Libraries
 ---------------------
 
-- [groue/GRMustache.swift](http://github.com/groue/GRMustache.swift): Flexible Mustache templates for Swift
-- [groue/GRDB.swift](http://github.com/groue/GRDB.swift): SQLite toolkit for Swift
+- [groue/GRMustache.swift](http://github.com/groue/GRMustache.swift): Flexible Mustache templates for Swift 1.2 and 2.
+- [groue/GRDB.swift](http://github.com/groue/GRDB.swift): SQLite toolkit for Swift 2.
+- [groue/GRValidation](http://github.com/groue/GRDB.swift): Validation toolkit for Swift 2.
