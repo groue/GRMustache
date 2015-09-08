@@ -32,7 +32,6 @@
 #define GRMUSTACHE_VERSION_7_1  7010
 #define GRMUSTACHE_VERSION_7_2  7020
 #define GRMUSTACHE_VERSION_7_3  7030
-#define GRMUSTACHE_VERSION_8_0  8000
 
 
 
@@ -40,10 +39,10 @@
 
 
 /* 
- * If max GRMustacheVersion not specified, assume 8.0
+ * If max GRMustacheVersion not specified, assume 7.3
  */
 #ifndef GRMUSTACHE_VERSION_MAX_ALLOWED
-#define GRMUSTACHE_VERSION_MAX_ALLOWED    GRMUSTACHE_VERSION_8_0
+#define GRMUSTACHE_VERSION_MAX_ALLOWED    GRMUSTACHE_VERSION_7_3
 #endif
 
 /*
