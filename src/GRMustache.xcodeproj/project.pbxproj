@@ -457,7 +457,6 @@
 		6586A0C21B9E2E6A0067C98E /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF365719B8EE7A00854524 /* GRMustacheConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6586A0C31B9E2E6A0067C98E /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6586A0C41B9E2E6A0067C98E /* GRMustacheConfiguration_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF365919B8EE7A00854524 /* GRMustacheConfiguration_private.h */; settings = {ASSET_TAGS = (); }; };
-		6586A0C81B9E2F070067C98E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6586A0C71B9E2F070067C98E /* Info.plist */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1650,7 +1649,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6586A0C81B9E2F070067C98E /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
