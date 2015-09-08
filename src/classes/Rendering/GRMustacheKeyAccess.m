@@ -483,11 +483,6 @@ class_addProtocol(klass, protocol);\
     return safeKeys;
 }
 
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    
-}
-
 @end
 
 // =============================================================================

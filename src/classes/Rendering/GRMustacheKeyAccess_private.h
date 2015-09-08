@@ -29,14 +29,6 @@
 @interface GRMustacheKeyAccess : NSObject
 
 /**
- * Avoids most NSUndefinedException to be raised by the invocation of
- * `valueForMustacheKey:inObject:`.
- *
- * @see valueForMustacheKey:inObject:
- */
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL_PUBLIC_BUT_DEPRECATED;
-
-/**
  * Sends the `objectForKeyedSubscript:` or `valueForKey:` message to object
  * with the provided key, and returns the result.
  *

@@ -39,11 +39,6 @@
 // =============================================================================
 #pragma mark - Global services
 
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    [GRMustacheKeyAccess preventNSUndefinedKeyExceptionAttack];
-}
-
 + (GRMustacheVersion)libraryVersion
 {
     return (GRMustacheVersion){
