@@ -25,10 +25,6 @@
 		563D66F2152649DF008628C5 /* GRMustacheExpressionParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheExpressionParserTest.m */; };
 		563D66F415264B40008628C5 /* GRMustacheSuites in Resources */ = {isa = PBXBuildFile; fileRef = 563D66F315264B40008628C5 /* GRMustacheSuites */; };
 		563D66F515264B40008628C5 /* GRMustacheSuites in Resources */ = {isa = PBXBuildFile; fileRef = 563D66F315264B40008628C5 /* GRMustacheSuites */; };
-		563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 563D670115264EDA008628C5 /* JRSwizzle.h */; };
-		563D672015264EDA008628C5 /* JRSwizzle.h in Headers */ = {isa = PBXBuildFile; fileRef = 563D670115264EDA008628C5 /* JRSwizzle.h */; };
-		563D672215264EDA008628C5 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D670215264EDA008628C5 /* JRSwizzle.m */; };
-		563D672315264EDA008628C5 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D670215264EDA008628C5 /* JRSwizzle.m */; };
 		5648F1B718998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
 		5648F1B918998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */; };
 		567AEC4A152789FF0009CA61 /* GRPreventNSUndefinedKeyExceptionAttackTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 567AEC47152789FF0009CA61 /* GRPreventNSUndefinedKeyExceptionAttackTest.m */; };
@@ -495,8 +491,6 @@
 		563D66EC152649DF008628C5 /* GRMustacheContextPrivateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheContextPrivateTest.m; sourceTree = "<group>"; };
 		563D66EE152649DF008628C5 /* GRMustacheExpressionParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheExpressionParserTest.m; sourceTree = "<group>"; };
 		563D66F315264B40008628C5 /* GRMustacheSuites */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheSuites; sourceTree = "<group>"; };
-		563D670115264EDA008628C5 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
-		563D670215264EDA008628C5 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		5648F1B618998BC5001F4B83 /* GRMustacheTemplateRepositoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRMustacheTemplateRepositoryTest.m; sourceTree = "<group>"; };
 		5662BA3E15A05268001FD2CA /* AppledocSettings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = AppledocSettings.plist; path = ../AppledocSettings.plist; sourceTree = "<group>"; };
 		567AEC47152789FF0009CA61 /* GRPreventNSUndefinedKeyExceptionAttackTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPreventNSUndefinedKeyExceptionAttackTest.m; sourceTree = "<group>"; };
@@ -735,37 +729,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		563D66FE15264EDA008628C5 /* vendor */ = {
-			isa = PBXGroup;
-			children = (
-				563D66FF15264EDA008628C5 /* groue */,
-			);
-			path = vendor;
-			sourceTree = "<group>";
-		};
-		563D66FF15264EDA008628C5 /* groue */ = {
-			isa = PBXGroup;
-			children = (
-				563D670015264EDA008628C5 /* jrswizzle */,
-			);
-			path = groue;
-			sourceTree = "<group>";
-		};
-		563D670015264EDA008628C5 /* jrswizzle */ = {
-			isa = PBXGroup;
-			children = (
-				563D670115264EDA008628C5 /* JRSwizzle.h */,
-				563D670215264EDA008628C5 /* JRSwizzle.m */,
-			);
-			path = jrswizzle;
-			sourceTree = "<group>";
-		};
 		567AEC4E15278C9A0009CA61 /* GRMustache */ = {
 			isa = PBXGroup;
 			children = (
 				6586A0C71B9E2F070067C98E /* Info.plist */,
 				56DEC291152631300031E8DC /* classes */,
-				563D66FE15264EDA008628C5 /* vendor */,
 				5682B4C21528DF6900ADD123 /* Frameworks */,
 			);
 			name = GRMustache;
@@ -1328,7 +1296,6 @@
 				56BF36F619B8EEAE00854524 /* GRMustacheFilter_private.h in Headers */,
 				56BF36CC19B8EE9E00854524 /* GRMustacheTemplateASTVisitor_private.h in Headers */,
 				56DEC30E152631300031E8DC /* GRMustacheVersion.h in Headers */,
-				563D671F15264EDA008628C5 /* JRSwizzle.h in Headers */,
 				56BF366D19B8EE8B00854524 /* GRMustacheTemplateParser_private.h in Headers */,
 				56BF376619B8EF2800854524 /* GRMustacheError.h in Headers */,
 				56BF36BA19B8EE9D00854524 /* GRMustachePartialNode_private.h in Headers */,
@@ -1393,7 +1360,6 @@
 				56BF36F719B8EEAE00854524 /* GRMustacheFilter_private.h in Headers */,
 				56BF36CD19B8EE9E00854524 /* GRMustacheTemplateASTVisitor_private.h in Headers */,
 				56DEC30F152631300031E8DC /* GRMustacheVersion.h in Headers */,
-				563D672015264EDA008628C5 /* JRSwizzle.h in Headers */,
 				56BF366E19B8EE8B00854524 /* GRMustacheTemplateParser_private.h in Headers */,
 				56BF376719B8EF2800854524 /* GRMustacheError.h in Headers */,
 				56BF36BB19B8EE9D00854524 /* GRMustachePartialNode_private.h in Headers */,
@@ -1741,7 +1707,6 @@
 				56BF36A819B8EE9D00854524 /* GRMustacheScopedExpression.m in Sources */,
 				56BF373719B8EEC700854524 /* NSFormatter+GRMustache.m in Sources */,
 				56BF36BC19B8EE9D00854524 /* GRMustacheSectionTag.m in Sources */,
-				563D672215264EDA008628C5 /* JRSwizzle.m in Sources */,
 				56BF374D19B8EEC700854524 /* GRMustacheStandardLibrary.m in Sources */,
 				56BF36AC19B8EE9D00854524 /* GRMustacheCompiler.m in Sources */,
 				56BF36EE19B8EEAE00854524 /* GRMustacheExpressionInvocation.m in Sources */,
@@ -1845,7 +1810,6 @@
 				56BF36A919B8EE9D00854524 /* GRMustacheScopedExpression.m in Sources */,
 				56BF373819B8EEC700854524 /* NSFormatter+GRMustache.m in Sources */,
 				56BF36BD19B8EE9D00854524 /* GRMustacheSectionTag.m in Sources */,
-				563D672315264EDA008628C5 /* JRSwizzle.m in Sources */,
 				56BF374E19B8EEC700854524 /* GRMustacheStandardLibrary.m in Sources */,
 				56BF36AD19B8EE9D00854524 /* GRMustacheCompiler.m in Sources */,
 				56BF36EF19B8EEAE00854524 /* GRMustacheExpressionInvocation.m in Sources */,
