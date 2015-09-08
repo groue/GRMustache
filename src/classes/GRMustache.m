@@ -31,7 +31,6 @@
 #import "GRMustacheEachFilter_private.h"
 #import "GRMustacheLocalizer.h"
 
-
 // =============================================================================
 #pragma mark - GRMustache
 

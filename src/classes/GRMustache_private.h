@@ -40,7 +40,7 @@ typedef struct {
 + (GRMustacheVersion)libraryVersion GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC;
++ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
 
 // Documented in GRMustache.h
 + (NSObject *)standardLibrary GRMUSTACHE_API_PUBLIC;

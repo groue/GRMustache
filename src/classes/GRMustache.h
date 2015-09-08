@@ -64,6 +64,8 @@ typedef struct {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * This method is deprecated.
+ * 
  * Have GRMustache avoid most `NSUndefinedKeyExceptions` when rendering
  * templates.
  * 
@@ -111,8 +113,9 @@ typedef struct {
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime.md
  * 
  * @since v1.7
+ * @deprecated v8.0
  */
-+ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (void)preventNSUndefinedKeyExceptionAttack AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED_IN_GRMUSTACHE_VERSION_8_0;
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -23,13 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-#if !defined(NS_BLOCK_ASSERTIONS)
-/**
- * This global variable is used by GRPreventNSUndefinedKeyExceptionAttackTest.
- */
-extern BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
-#endif
-
 /**
  * GRMustacheKeyAccess implements all the GRMustache key-fetching logic.
  */
@@ -41,7 +34,7 @@ extern BOOL GRMustacheKeyAccessDidCatchNSUndefinedKeyException;
  *
  * @see valueForMustacheKey:inObject:
  */
-+ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL;
++ (void)preventNSUndefinedKeyExceptionAttack GRMUSTACHE_API_INTERNAL_PUBLIC_BUT_DEPRECATED;
 
 /**
  * Sends the `objectForKeyedSubscript:` or `valueForKey:` message to object
