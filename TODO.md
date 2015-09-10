@@ -1,0 +1,1 @@
+- [ ] #97: In commit 65a6593229ae8bad1630a82ccebb327fb4a9f1e3, Daniel removes a few tests based on Core Data. Make sure that we still have tests for Core Data: attributes are safe keys, and they should be rendered.
