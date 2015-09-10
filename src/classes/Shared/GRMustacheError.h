@@ -38,14 +38,14 @@ typedef NS_ENUM(NSInteger, GRMustacheErrorCode) {
     GRMustacheErrorCodeParseError AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
     /**
-     * The error code for not found templates and partials.
+     * The error code for missing templates and partials.
      *
      * @since v1.0
      */
     GRMustacheErrorCodeTemplateNotFound AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
     
     /**
-     * The error code for not rendering errors.
+     * The error code for rendering errors.
      *
      * @since v6.3
      */
