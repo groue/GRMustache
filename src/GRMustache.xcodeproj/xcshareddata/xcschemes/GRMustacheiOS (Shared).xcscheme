@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6586A05C1B9E2D720067C98E"
-               BuildableName = "GRMustache.framework"
-               BlueprintName = "GRMustache"
+               BuildableName = "GRMustacheiOS.framework"
+               BlueprintName = "GRMustacheiOS"
                ReferencedContainer = "container:GRMustache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6586A05C1B9E2D720067C98E"
-            BuildableName = "GRMustache.framework"
-            BlueprintName = "GRMustache"
+            BuildableName = "GRMustacheiOS.framework"
+            BlueprintName = "GRMustacheiOS"
             ReferencedContainer = "container:GRMustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6586A05C1B9E2D720067C98E"
-            BuildableName = "GRMustache.framework"
-            BlueprintName = "GRMustache"
+            BuildableName = "GRMustacheiOS.framework"
+            BlueprintName = "GRMustacheiOS"
             ReferencedContainer = "container:GRMustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

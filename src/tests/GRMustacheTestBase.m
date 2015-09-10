@@ -28,7 +28,7 @@
 
 - (NSBundle *)testBundle
 {
-    return [NSBundle bundleWithIdentifier:@"com.github.groue.GRMustache"];
+    return [NSBundle bundleForClass:[self class]];
 }
 
 @end
