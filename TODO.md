@@ -1,1 +1,5 @@
 - [ ] #97: In commit 65a6593229ae8bad1630a82ccebb327fb4a9f1e3, Daniel removes a few tests based on Core Data. Make sure that we still have tests for Core Data: attributes are safe keys, and they should be rendered.
+- [ ] See if dropping GRMustacheSafeKeyAccess and introducing GRMustacheObject could not solve two issues at the same time:
+    - [ ] #66
+    - [ ] Compatibility with GRMustache.swift on Arrays, Sets, and other standard collections.
+- [ ] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
