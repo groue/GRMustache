@@ -17,4 +17,4 @@
     - [X] +[GRMustache renderingObjectForObject:]
     - [X] +[GRMustache renderingObjectWithBlock:]
     - [X] GRMustacheTag.templateRepository
-- [ ] Drop GRMustacheVersion and +[GRMustache libraryVersion]
+- [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
