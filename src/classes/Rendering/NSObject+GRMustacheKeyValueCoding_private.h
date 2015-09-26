@@ -21,8 +21,21 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "GRMustacheAvailabilityMacros_private.h"
+#import "GRMustacheAvailabilityMacros.h"
+#import "GRMustacheKeyValueCoding.h"
 
-@interface GRMustacheKeyAccess : NSObject
-+ (BOOL)isSafeMustacheKey:(NSString *)key forObject:(id)object GRMUSTACHE_API_INTERNAL;
+@interface NSObject(GRMustacheKeyValueCoding)
+- (id)valueForMustacheKey:(NSString *)key unsafeKeyAccess:(BOOL)unsafeKeyAccess;
+@end
+
+@interface NSDictionary(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
+@end
+
+@interface NSArray(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
+@end
+
+@interface NSOrderedSet(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
+@end
+
+@interface NSSet(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
 @end

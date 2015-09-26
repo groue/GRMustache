@@ -30,6 +30,7 @@
 #import "GRMustacheToken_private.h"
 #import "GRMustacheKeyAccess_private.h"
 #import "GRMustacheError.h"
+#import "NSObject+GRMustacheKeyValueCoding_private.h"
 
 @interface GRMustacheExpressionInvocation()<GRMustacheExpressionVisitor>
 @end
@@ -120,7 +121,7 @@
         return NO;
     }
     
-    _value = [GRMustacheKeyAccess valueForMustacheKey:expression.identifier inObject:_value unsafeKeyAccess:_context.unsafeKeyAccess];
+    _value = [_value valueForMustacheKey:expression.identifier unsafeKeyAccess:_context.unsafeKeyAccess];
     _valueIsProtected = NO;
     return YES;
 }

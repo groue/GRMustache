@@ -23,32 +23,6 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
-
-/**
- * Your data classes should conform to the GRMustacheSafeKeyAccess protocol
- * to filter the keys that can be accessed by GRMustache templates.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/runtime/security.md
- */
-@protocol GRMustacheSafeKeyAccess <NSObject>
-
-/**
- * List the name of the keys GRMustache can access on this class using the
- * `valueForKey:` method.
- *
- * When objects do not respond to this method, only declared properties can be
- * accessed. All properties of Core Data NSManagedObjects are also accessible,
- * even without property declaration.
- *
- * This method is not used for objects responding to `objectForKeyedSubscript:`.
- * For those objects, all keys are accessible from templates.
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
- *
- * @return The set of accessible keys on the class.
- *
- * @since v7.0
- */
-+ (NSSet *)safeMustacheKeys AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
-
+@protocol GRMustacheKeyValueCoding <NSObject>
+- (id)valueForMustacheKey:(NSString *)key;
 @end

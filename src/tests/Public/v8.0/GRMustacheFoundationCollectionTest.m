@@ -52,7 +52,7 @@
     
     {
         // [NSArray lastObject] should be accessible (test for method returning an object)
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.lastObject.key}}" error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.last.key}}" error:NULL] renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }
@@ -81,7 +81,7 @@
     
     {
         // [NSSet anyObject] should be accessible (test for method returning an object)
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.anyObject.key}}" error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.first.key}}" error:NULL] renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }
@@ -110,7 +110,7 @@
     
     {
         // [NSOrderedSet firstObject] should be accessible (test for method returning an object)
-        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.firstObject.key}}" error:NULL] renderObject:data error:NULL];
+        NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{collection.first.key}}" error:NULL] renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"value", @"");
     }
 }

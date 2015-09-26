@@ -30,6 +30,7 @@
 
 - (void)testGRMustacheSuites
 {
+    [self runTestsFromResource:@"arrays.json" subdirectory:@"Tests"];
     [self runTestsFromResource:@"blocks.json" subdirectory:@"Tests"];
     [self runTestsFromResource:@"comments.json" subdirectory:@"Tests"];
     [self runTestsFromResource:@"compound_keys.json" subdirectory:@"Tests"];

@@ -30,6 +30,7 @@
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheExpressionInvocation_private.h"
+#import "NSObject+GRMustacheKeyValueCoding_private.h"
 
 #define GRMUSTACHE_STACK_RELEASE(stackName) \
     [GRMUSTACHE_STACK_TOP_IVAR(stackName) release]; \
@@ -353,7 +354,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     // First look for in the protected context stack
     
     GRMUSTACHE_STACK_ENUMERATE(protectedContextStack, self, context) {
-        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:GRMUSTACHE_STACK_TOP(protectedContextStack, context) unsafeKeyAccess:context->_unsafeKeyAccess];
+        id value = [GRMUSTACHE_STACK_TOP(protectedContextStack, context) valueForMustacheKey:key unsafeKeyAccess:context->_unsafeKeyAccess];
         if (value != nil) {
             if (protected != NULL) {
                 *protected = YES;
@@ -379,7 +380,7 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
             }
         }
         if (hidden) { continue; }
-        id value = [GRMustacheKeyAccess valueForMustacheKey:key inObject:contextObject unsafeKeyAccess:context->_unsafeKeyAccess];
+        id value = [contextObject valueForMustacheKey:key unsafeKeyAccess:context->_unsafeKeyAccess];
         if (value != nil) {
             if (protected != NULL) {
                 *protected = NO;
