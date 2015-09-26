@@ -5,7 +5,7 @@
 # Whenever GRMustache major or minor version changes, update the MAJOR_VERSION
 # and MAX_MINOR_VERSION constants below, and run:
 # 
-#   src/bin/buildGRMustacheAvailabilityMacros > src/classes/Shared/GRMustacheAvailabilityMacros.h
+#   Scripts/buildGRMustacheAvailabilityMacros > GRMustache/Shared/GRMustacheAvailabilityMacros.h
 
 MAJOR_VERSION = 8
 MAX_MINOR_VERSION = 0
