@@ -24,6 +24,26 @@
 #import "GRMustachePublicAPITest.h"
 #import "GRMustacheTestingDelegate.h"
 
+@interface GRMustacheImplicitTrueRenderingObject : NSObject<GRMustacheRendering>
+@end
+
+@implementation GRMustacheImplicitTrueRenderingObject
+
+- (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+{
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            return @"variable";
+            break;
+            
+        case GRMustacheTagTypeSection:
+            return @"section";
+            break;
+    }
+}
+
+@end
+
 @interface GRMustacheRenderingObjectTest : GRMustachePublicAPITest
 @end
 
@@ -775,6 +795,81 @@
     GRMustacheTemplate *template = [repoHTML templateNamed:@"templateHTML" error:NULL];
     NSString *rendering = [template renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"&|&amp;");
+}
+
+
+- (void)testImplicitTrueRenderingObjects
+{
+    id object = [[[GRMustacheImplicitTrueRenderingObject alloc] init] autorelease];
+    
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{ object }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<variable>");
+    }
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{# object }}...{{/ }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<section>");
+    }
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{^ object }}...{{/ }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<>");
+    }
+}
+
+- (void)testImplicitTrueRenderingObjectsWithBlocks
+{
+    id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        switch (tag.type) {
+            case GRMustacheTagTypeVariable:
+                return @"variable";
+                break;
+                
+            case GRMustacheTagTypeSection:
+                return @"section";
+                break;
+        }
+    }];
+    
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{ object }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<variable>");
+    }
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{# object }}...{{/ }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<section>");
+    }
+    {
+        NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }
+                                                    fromString:@"<{{^ object }}...{{/ }}>"
+                                                         error:NULL];
+        XCTAssertEqualObjects(rendering, @"<>");
+    }
+}
+
+- (void)testArrayOfRenderingObjectsInSectionTagDoesNotNeedExplicitInvocation
+{
+    id object1 = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [NSString stringWithFormat:@"[1:%@]", tagRendering];
+    }];
+    id object2 = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        NSString *tagRendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        return [NSString stringWithFormat:@"[2:%@]", tagRendering];
+    }];
+    
+    id items = @{@"items": @[object1, object2, @YES, @NO] };
+    NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#items}}---{{/items}},{{#items}}{{#.}}---{{/.}}{{/items}}" error:NULL] renderObject:items error:NULL];
+    XCTAssertEqualObjects(rendering, @"[1:---][2:---]------,[1:---][2:---]---", @"");
 }
 
 @end
