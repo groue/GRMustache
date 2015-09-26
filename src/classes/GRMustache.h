@@ -29,21 +29,6 @@ FOUNDATION_EXPORT double GRMustacheVersionNumber;
 //! Project version string for GRMustache.
 FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
 
-@protocol GRMustacheRendering;
-@class GRMustacheTag;
-@class GRMustacheContext;
-
-/**
- * A C struct that hold GRMustache version information
- * 
- * @since v1.0
- */
-typedef struct {
-    int major;    /**< The major component of the version. */
-    int minor;    /**< The minor component of the version. */
-    int patch;    /**< The patch-level component of the version. */
-} GRMustacheVersion;
-
 
 /**
  * The GRMustache class provides with global-level information and configuration
@@ -52,17 +37,6 @@ typedef struct {
  * @since v1.0
  */
 @interface GRMustache: NSObject
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Getting the GRMustache version
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @return The version of GRMustache as a GRMustacheVersion struct.
- *
- * @since v7.0
- */
-+ (GRMustacheVersion)libraryVersion AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +95,6 @@ typedef struct {
 #import "GRMustacheTemplateRepository.h"
 #import "GRMustacheFilter.h"
 #import "GRMustacheError.h"
-#import "GRMustacheVersion.h"
 #import "GRMustacheContentType.h"
 #import "GRMustacheContext.h"
 #import "GRMustacheRendering.h"

@@ -22,7 +22,6 @@
 
 #import "GRMustache_private.h"
 #import "GRMustacheKeyAccess_private.h"
-#import "GRMustacheVersion.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheJavascriptEscapeFilter_private.h"
 #import "GRMustacheHTMLEscapeFilter_private.h"
@@ -38,16 +37,9 @@
 
 @implementation GRMustache
 
-// =============================================================================
-#pragma mark - Global services
 
-+ (GRMustacheVersion)libraryVersion
-{
-    return (GRMustacheVersion){
-        .major = GRMUSTACHE_MAJOR_VERSION,
-        .minor = GRMUSTACHE_MINOR_VERSION,
-        .patch = GRMUSTACHE_PATCH_VERSION };
-}
+// =============================================================================
+#pragma mark - Standard library
 
 // Documented in GRMustache.h
 + (NSObject *)standardEach

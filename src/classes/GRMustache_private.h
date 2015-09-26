@@ -27,17 +27,7 @@
 @class GRMustacheTag;
 @class GRMustacheContext;
 
-// Documented in GRMustache.h
-typedef struct {
-    int major;
-    int minor;
-    int patch;
-} GRMustacheVersion;
-
 @interface GRMustache: NSObject
-
-// Documented in GRMustache.h
-+ (GRMustacheVersion)libraryVersion GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
 + (NSObject *)standardEach GRMUSTACHE_API_PUBLIC;
