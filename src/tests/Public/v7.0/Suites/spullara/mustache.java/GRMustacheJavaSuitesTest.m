@@ -35,14 +35,16 @@
 
 - (GRMustacheTemplate *)templateNamed:(NSString *)name
 {
-    NSString *directory = [self.testBundle pathForResource:@"GRMustacheJavaSuites" ofType:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    NSString *directory = [testBundle pathForResource:@"GRMustacheJavaSuites" ofType:nil];
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDirectory:directory templateExtension:@"html" encoding:NSUTF8StringEncoding];
     return [repo templateNamed:name error:NULL];
 }
 
 - (NSString *)expectedRenderingNamed:(NSString *)name
 {
-    NSString *directory = [self.testBundle pathForResource:@"GRMustacheJavaSuites" ofType:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    NSString *directory = [testBundle pathForResource:@"GRMustacheJavaSuites" ofType:nil];
     return [NSString stringWithContentsOfFile:[directory stringByAppendingPathComponent:name] encoding:NSUTF8StringEncoding error:NULL];
 }
 

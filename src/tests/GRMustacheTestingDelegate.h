@@ -20,12 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@import XCTest;
 #import "GRMustacheTagDelegate.h"
-
-@interface GRMustacheTestBase: XCTestCase
-@property (nonatomic, readonly) NSBundle *testBundle;
-@end
 
 @interface GRMustacheTestingDelegate : NSObject<GRMustacheTagDelegate> {
     id(^_mustacheTagWillRenderObjectBlock)(GRMustacheTag *tag, id object);

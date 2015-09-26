@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTestBase.h"
+#import <XCTest/XCTest.h>
 
-@interface GRMustachePrivateAPITest : GRMustacheTestBase
+@interface GRMustachePrivateAPITest : XCTestCase
 @end

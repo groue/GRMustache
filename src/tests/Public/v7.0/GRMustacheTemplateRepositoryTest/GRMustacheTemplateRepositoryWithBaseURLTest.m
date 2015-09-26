@@ -36,7 +36,8 @@
     NSString *result;
     NSError *error;
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL];
     
     template = [repository templateNamed:@"notFound" error:&error];
@@ -67,49 +68,51 @@
     GRMustacheTemplate *template;
     NSString *result;
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"" encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_UTF8" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil encoding:NSUTF8StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"mustache" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1.mustache\ndir/é1.mustache\ndir/dir/é1.mustache\ndir/dir/é2.mustache\n\n\ndir/é2.mustache\n\n\né2.mustache\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"txt" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1.txt\ndir/é1.txt\ndir/dir/é1.txt\ndir/dir/é2.txt\n\n\ndir/é2.txt\n\n\né2.txt\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:@"" encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
     XCTAssertEqualObjects(result, @"é1\ndir/é1\ndir/dir/é1\ndir/dir/é2\n\n\ndir/é2\n\n\né2\n\n", @"");
     
-    URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
+    URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest_ISOLatin1" withExtension:nil];
     repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL templateExtension:nil encoding:NSISOLatin1StringEncoding];
     template = [repository templateNamed:@"file1" error:NULL];
     result = [template renderObject:nil error:NULL];
@@ -118,7 +121,9 @@
 
 - (void)testAbsolutePartialName
 {
-    NSURL *URL = [self.testBundle URLForResource:@"GRMustacheTemplateRepositoryTest" withExtension:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    
+    NSURL *URL = [testBundle URLForResource:@"GRMustacheTemplateRepositoryTest" withExtension:nil];
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:URL];
     GRMustacheTemplate *template = [repository templateNamed:@"base" error:NULL];
     NSString *rendering = [template renderObject:nil error:NULL];

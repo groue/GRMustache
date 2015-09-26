@@ -20,18 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheTemplate_private.h"
-#import "GRMustacheTestBase.h"
-
-@implementation GRMustacheTestBase
-@dynamic testBundle;
-
-- (NSBundle *)testBundle
-{
-    return [NSBundle bundleForClass:[self class]];
-}
-
-@end
+#import "GRMustacheTestingDelegate.h"
 
 @implementation GRMustacheTestingDelegate
 @synthesize mustacheTagWillRenderObjectBlock=_mustacheTagWillRenderObjectBlock;

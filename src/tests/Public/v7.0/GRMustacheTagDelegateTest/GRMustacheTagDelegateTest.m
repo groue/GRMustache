@@ -22,6 +22,7 @@
 
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
 #import "GRMustachePublicAPITest.h"
+#import "GRMustacheTestingDelegate.h"
 
 @interface GRMustacheTagDelegateTest : GRMustachePublicAPITest
 @end
@@ -463,12 +464,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest" bundle:self.testBundle error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest" bundle:testBundle error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -480,13 +482,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -502,12 +505,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest" withExtension:@"mustache"] error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[testBundle URLForResource:@"GRMustacheTagDelegateTest" withExtension:@"mustache"] error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -519,13 +523,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -541,12 +546,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"] error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"] error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -558,13 +564,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -580,12 +587,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest_wrapper" bundle:self.testBundle error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"GRMustacheTagDelegateTest_wrapper" bundle:testBundle error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -597,13 +605,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:testBundle];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -615,13 +624,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:testBundle];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -637,12 +647,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[self.testBundle URLForResource:@"GRMustacheTagDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:[testBundle URLForResource:@"GRMustacheTagDelegateTest_wrapper" withExtension:@"mustache"] error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -654,13 +665,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -672,13 +684,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[self.testBundle resourceURL]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBaseURL:[testBundle resourceURL]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }
@@ -694,12 +707,13 @@
             return object;
         };
         
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:[testBundle pathForResource:@"GRMustacheTagDelegateTest_wrapper" ofType:@"mustache"] error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -711,13 +725,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateNamed:@"GRMustacheTagDelegateTest_wrapper" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
     {
@@ -729,13 +744,14 @@
             return object;
         };
         
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[self.testBundle resourcePath]];
+        NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDirectory:[testBundle resourcePath]];
         GRMustacheTemplate *template = [repository templateFromString:@"{{>GRMustacheTagDelegateTest}}" error:NULL];
         template.baseContext = [template.baseContext contextByAddingTagDelegate:delegate];
         [template renderObject:nil error:NULL];
         
         XCTAssertNotNil(description, @"");
-        NSRange range = [description rangeOfString:[self.testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
+        NSRange range = [description rangeOfString:[testBundle pathForResource:@"GRMustacheTagDelegateTest" ofType:@"mustache"]];
         XCTAssertTrue(range.location != NSNotFound, @"");
     }
 }

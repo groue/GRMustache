@@ -66,27 +66,27 @@
 @implementation GRMustacheTemplateFromMethodsTest
 
 - (NSString *)templateName { return @"GRMustacheTemplateFromMethodsTest"; }
-- (NSURL *)templateURL { return [self.testBundle URLForResource:self.templateName withExtension:@"mustache"]; }
+- (NSURL *)templateURL { return [[NSBundle bundleForClass:[self class]] URLForResource:self.templateName withExtension:@"mustache"]; }
 - (NSString *)templatePath { return [self.templateURL path]; }
 - (NSString *)templateString { return [NSString stringWithContentsOfFile:self.templatePath encoding:NSUTF8StringEncoding error:NULL]; }
 
 - (NSString *)parserErrorTemplateName { return @"GRMustacheTemplateFromMethodsTest_parserError"; }
-- (NSURL *)parserErrorTemplateURL { return [self.testBundle URLForResource:self.parserErrorTemplateName withExtension:@"mustache"]; }
+- (NSURL *)parserErrorTemplateURL { return [[NSBundle bundleForClass:[self class]] URLForResource:self.parserErrorTemplateName withExtension:@"mustache"]; }
 - (NSString *)parserErrorTemplatePath { return [self.parserErrorTemplateURL path]; }
 - (NSString *)parserErrorTemplateString { return [NSString stringWithContentsOfFile:self.parserErrorTemplatePath encoding:NSUTF8StringEncoding error:NULL]; }
 
 - (NSString *)parserErrorTemplateWrapperName { return @"GRMustacheTemplateFromMethodsTest_parserErrorWrapper"; }
-- (NSURL *)parserErrorTemplateWrapperURL { return [self.testBundle URLForResource:self.parserErrorTemplateWrapperName withExtension:@"mustache"]; }
+- (NSURL *)parserErrorTemplateWrapperURL { return [[NSBundle bundleForClass:[self class]] URLForResource:self.parserErrorTemplateWrapperName withExtension:@"mustache"]; }
 - (NSString *)parserErrorTemplateWrapperPath { return [self.parserErrorTemplateWrapperURL path]; }
 - (NSString *)parserErrorTemplateWrapperString { return [NSString stringWithContentsOfFile:self.parserErrorTemplateWrapperPath encoding:NSUTF8StringEncoding error:NULL]; }
 
 - (NSString *)compilerErrorTemplateName { return @"GRMustacheTemplateFromMethodsTest_compilerError"; }
-- (NSURL *)compilerErrorTemplateURL { return [self.testBundle URLForResource:self.compilerErrorTemplateName withExtension:@"mustache"]; }
+- (NSURL *)compilerErrorTemplateURL { return [[NSBundle bundleForClass:[self class]] URLForResource:self.compilerErrorTemplateName withExtension:@"mustache"]; }
 - (NSString *)compilerErrorTemplatePath { return [self.compilerErrorTemplateURL path]; }
 - (NSString *)compilerErrorTemplateString { return [NSString stringWithContentsOfFile:self.compilerErrorTemplatePath encoding:NSUTF8StringEncoding error:NULL]; }
 
 - (NSString *)compilerErrorTemplateWrapperName { return @"GRMustacheTemplateFromMethodsTest_compilerErrorWrapper"; }
-- (NSURL *)compilerErrorTemplateWrapperURL { return [self.testBundle URLForResource:self.compilerErrorTemplateWrapperName withExtension:@"mustache"]; }
+- (NSURL *)compilerErrorTemplateWrapperURL { return [[NSBundle bundleForClass:[self class]] URLForResource:self.compilerErrorTemplateWrapperName withExtension:@"mustache"]; }
 - (NSString *)compilerErrorTemplateWrapperPath { return [self.compilerErrorTemplateWrapperURL path]; }
 - (NSString *)compilerErrorTemplateWrapperString { return [NSString stringWithContentsOfFile:self.compilerErrorTemplateWrapperPath encoding:NSUTF8StringEncoding error:NULL]; }
 
@@ -177,7 +177,7 @@
 - (void)test_templateFromResource_bundle_error
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.templateName
-                                                                     bundle:self.testBundle
+                                                                     bundle:[NSBundle bundleForClass:[self class]]
                                                                       error:NULL];
     GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
     context.stringProperty = @"foo";
@@ -275,7 +275,7 @@
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.parserErrorTemplateName
-                                                                         bundle:self.testBundle
+                                                                         bundle:[NSBundle bundleForClass:[self class]]
                                                                           error:&error];
         XCTAssertNil(template, @"");
         XCTAssertNotNil(error, @"");
@@ -292,7 +292,7 @@
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.parserErrorTemplateWrapperName
-                                                                         bundle:self.testBundle
+                                                                         bundle:[NSBundle bundleForClass:[self class]]
                                                                           error:&error];
         XCTAssertNil(template, @"");
         XCTAssertNotNil(error, @"");
@@ -397,7 +397,7 @@
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.compilerErrorTemplateName
-                                                                         bundle:self.testBundle
+                                                                         bundle:[NSBundle bundleForClass:[self class]]
                                                                           error:&error];
         XCTAssertNil(template, @"");
         XCTAssertNotNil(error, @"");
@@ -414,7 +414,7 @@
     {
         NSError *error;
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.compilerErrorTemplateWrapperName
-                                                                         bundle:self.testBundle
+                                                                         bundle:[NSBundle bundleForClass:[self class]]
                                                                           error:&error];
         XCTAssertNil(template, @"");
         XCTAssertNotNil(error, @"");

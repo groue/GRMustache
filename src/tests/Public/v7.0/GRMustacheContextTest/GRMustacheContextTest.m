@@ -22,6 +22,7 @@
 
 #define GRMUSTACHE_VERSION_MAX_ALLOWED GRMUSTACHE_VERSION_7_0
 #import "GRMustachePublicAPITest.h"
+#import "GRMustacheTestingDelegate.h"
 
 @interface GRMustacheContextTest : GRMustachePublicAPITest
 @end

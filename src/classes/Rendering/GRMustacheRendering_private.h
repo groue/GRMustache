@@ -24,7 +24,7 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 #import "GRMustacheContentType.h"
 
-// prevent GRMustacheFilter.h to load
+// Prevent GRMustacheRendering.h from loading
 #define GRMUSTACHE_RENDERING
 
 

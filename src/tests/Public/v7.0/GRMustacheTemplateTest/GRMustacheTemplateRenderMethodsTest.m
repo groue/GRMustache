@@ -50,7 +50,7 @@
 
 - (NSURL *)templateURL
 {
-    return [self.testBundle URLForResource:self.templateName withExtension:@"mustache"];
+    return [[NSBundle bundleForClass:[self class]] URLForResource:self.templateName withExtension:@"mustache"];
 }
 
 - (NSString *)templatePath

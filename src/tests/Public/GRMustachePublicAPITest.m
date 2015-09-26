@@ -57,7 +57,8 @@ static struct {
 
 - (void)runTestsFromResource:(NSString *)name subdirectory:(NSString *)subpath
 {
-    NSString *path = [[self.testBundle pathForResource:subpath ofType:nil] stringByAppendingPathComponent:name];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [[testBundle pathForResource:subpath ofType:nil] stringByAppendingPathComponent:name];
     
     NSError *error;
     NSData *testSuiteData = [NSData dataWithContentsOfFile:path];

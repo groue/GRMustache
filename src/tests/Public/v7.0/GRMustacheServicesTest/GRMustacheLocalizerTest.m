@@ -37,7 +37,8 @@
 
 - (void)setUp
 {
-    NSString *path = [[self testBundle] pathForResource:@"GRMustacheLocalizerTestBundle" ofType:nil];
+    NSBundle *testBundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [testBundle pathForResource:@"GRMustacheLocalizerTestBundle" ofType:nil];
     self.localizableBundle = [NSBundle bundleWithPath:path];
     self.localizer = [[[GRMustacheLocalizer alloc] initWithBundle:self.localizableBundle tableName:nil] autorelease];
 }

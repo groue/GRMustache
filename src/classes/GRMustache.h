@@ -23,6 +23,12 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+//! Project version number for GRMustache.
+FOUNDATION_EXPORT double GRMustacheVersionNumber;
+
+//! Project version string for GRMustache.
+FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
+
 @protocol GRMustacheRendering;
 @class GRMustacheTag;
 @class GRMustacheContext;

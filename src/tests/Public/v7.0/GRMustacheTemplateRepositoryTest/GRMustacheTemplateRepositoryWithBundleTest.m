@@ -31,7 +31,7 @@
 - (void)testTemplateRepositoryWithBundle
 {
     NSError *error;
-    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle];
+    GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle bundleForClass:[self class]]];
     
     {
         GRMustacheTemplate *template = [repository templateNamed:@"notFound" error:&error];
@@ -59,7 +59,7 @@
 {
     NSError *error;
     {
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle bundleForClass:[self class]]
                                                                                             templateExtension:@"text"
                                                                                                      encoding:NSUTF8StringEncoding];
         {
@@ -79,7 +79,7 @@
         }
     }
     {
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle bundleForClass:[self class]]
                                                                                             templateExtension:@""
                                                                                                      encoding:NSUTF8StringEncoding];
         {
@@ -99,7 +99,7 @@
         }
     }
     {
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:self.testBundle
+        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle bundleForClass:[self class]]
                                                                                             templateExtension:nil
                                                                                                      encoding:NSUTF8StringEncoding];
         {
