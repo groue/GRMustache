@@ -83,7 +83,7 @@
  *
  * @since v1.13
  */
-- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (id<NSCopying>)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateIDForName:(NSString *)name relativeToTemplateID:(id)baseTemplateID AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Provided with a template ID that comes from
@@ -109,7 +109,7 @@
  *
  * @since v1.13
  */
-- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (NSString *)templateRepository:(GRMustacheTemplateRepository *)templateRepository templateStringForTemplateID:(id)templateID error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 @end
 
 
@@ -185,7 +185,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepository AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -226,7 +226,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -272,7 +272,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithDirectory:(NSString *)path templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -314,7 +314,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -361,7 +361,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -391,7 +391,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -425,7 +425,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithBundle:(NSBundle *)bundle templateExtension:(NSString *)ext encoding:(NSStringEncoding)encoding AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a GRMustacheTemplateRepository that loads Mustache template strings
@@ -459,7 +459,7 @@
  *
  * @since v1.13
  */
-+ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateRepositoryWithDictionary:(NSDictionary *)templates AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -495,7 +495,7 @@
  *
  * @since v6.2
  */
-@property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, copy) GRMustacheConfiguration *configuration AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * The repository's data source.
@@ -504,7 +504,7 @@
  *
  * @since v1.13
  */
-@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -527,7 +527,7 @@
  *
  * @since v1.13
  */
-- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (GRMustacheTemplate *)templateNamed:(NSString *)name error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a template built from the provided Mustache template string.
@@ -545,7 +545,7 @@
  *
  * @since v1.13
  */
-- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (GRMustacheTemplate *)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Have the template repository reload its templates.
@@ -571,6 +571,6 @@
  *
  * @since v7.0
  */
-- (void)reloadTemplates AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (void)reloadTemplates AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end

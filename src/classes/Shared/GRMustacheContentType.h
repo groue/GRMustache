@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
      *
      * @since v6.2
      */
-    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
+    GRMustacheContentTypeHTML AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER,
     
     /**
      * The `GRMustacheContentTypeText` content type has templates render text.
@@ -48,6 +48,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheContentType) {
      *
      * @since v6.2
      */
-    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER,
-} AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+    GRMustacheContentTypeText AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER,
+} AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 

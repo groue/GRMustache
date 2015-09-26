@@ -110,7 +110,7 @@
  *
  * @since v6.4
  */
-+ (instancetype)context AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)context AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a rendering context containing a single object.
@@ -137,7 +137,7 @@
  *
  * @since v6.4
  */
-+ (instancetype)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a context containing a single priority object.
@@ -166,7 +166,7 @@
  *
  * @since v6.4
  */
-+ (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a context containing a single tag delegate.
@@ -188,7 +188,7 @@
  *
  * @since v6.4
  */
-+ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@
  *
  * @since v6.0
  */
-- (instancetype)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextByAddingObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -260,7 +260,7 @@
  *
  * @since v6.0
  */
-- (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextByAddingProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, and the
@@ -283,7 +283,7 @@
  *
  * @since v6.0
  */
-- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +309,7 @@
  *
  * @since v6.7
  */
-@property (nonatomic, readonly) id topMustacheObject AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, readonly) id topMustacheObject AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns the value stored in the context stack for the given key.
@@ -362,7 +362,7 @@
  *
  * @since v6.6
  */
-- (id)valueForMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (id)valueForMustacheKey:(NSString *)key AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Evaluates an expression such as `name`, or `uppercase(user.name)`.
@@ -380,7 +380,7 @@
  *
  * @since v6.8
  */
-- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +392,7 @@
  *
  * @since v7.0
  */
-@property (nonatomic, readonly) BOOL unsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, readonly) BOOL unsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a new context with unsafe key access.
@@ -434,7 +434,7 @@
  *
  * @since v7.0
  */
-+ (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns a new rendering context that is the copy of the receiver, with unsafe
@@ -477,6 +477,6 @@
  *
  * @since v7.0
  */
-- (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end

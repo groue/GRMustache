@@ -159,15 +159,4 @@
     }];
 }
 
-
-+ (id<GRMustacheRendering>)renderingObjectForObject:(id)object
-{
-    return [GRMustacheRendering renderingObjectForObject:object];
-}
-
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block
-{
-    return [GRMustacheRendering renderingObjectWithBlock:block];
-}
-
 @end

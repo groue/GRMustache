@@ -32,11 +32,6 @@
     return 0;
 }
 
-- (GRMustacheTemplateRepository *)templateRepository
-{
-    return [GRMustacheRendering currentTemplateRepository];
-}
-
 - (NSString *)innerTemplateString
 {
     [self doesNotRecognizeSelector:_cmd];

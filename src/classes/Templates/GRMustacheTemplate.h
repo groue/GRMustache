@@ -60,7 +60,7 @@
  *
  * @since v1.11
  */
-+ (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Parses a template file, and returns a compiled template.
@@ -79,7 +79,7 @@
  *
  * @since v1.11
  */
-+ (instancetype)templateFromContentsOfFile:(NSString *)path error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateFromContentsOfFile:(NSString *)path error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Parses a template file, and returns a compiled template.
@@ -98,7 +98,7 @@
  *
  * @since v1.11
  */
-+ (instancetype)templateFromContentsOfURL:(NSURL *)url error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateFromContentsOfURL:(NSURL *)url error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Parses a bundle resource template, and returns a compiled template.
@@ -122,7 +122,7 @@
  *
  * @since v1.11
  */
-+ (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@
  *
  * @since v6.0
  */
-@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, retain) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -186,7 +186,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (void)extendBaseContextWithObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its
@@ -222,7 +222,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (void)extendBaseContextWithProtectedObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with a tag delegate, making it aware
@@ -242,7 +242,7 @@
  *
  * @since v6.8
  */
-- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;;
+- (void)extendBaseContextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -262,7 +262,7 @@
  *
  * @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromString:(NSString *)templateString error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Renders an object from a bundle resource template.
@@ -286,7 +286,7 @@
  *
  * @since v1.0
  */
-+ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSString *)renderObject:(id)object fromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Renders a template with a context stack initialized with the provided object
@@ -301,7 +301,7 @@
  *
  * @since v6.0
  */
-- (NSString *)renderObject:(id)object error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (NSString *)renderObject:(id)object error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Renders a template with a context stack initialized with the provided objects
@@ -316,7 +316,7 @@
  *
  * @since v6.0
  */
-- (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (NSString *)renderObjectsFromArray:(NSArray *)objects error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Returns the rendering of the receiver, given a rendering context.
@@ -336,7 +336,7 @@
  *
  * @since v6.0
  */
-- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+- (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Accessing Sibling Templates
@@ -378,6 +378,6 @@
  *
  * @since v7.0
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end

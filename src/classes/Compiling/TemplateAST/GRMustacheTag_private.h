@@ -43,9 +43,6 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;
-
-// Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 /**

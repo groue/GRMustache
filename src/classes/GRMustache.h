@@ -62,7 +62,7 @@ typedef struct {
  *
  * @since v7.0
  */
-+ (GRMustacheVersion)libraryVersion AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (GRMustacheVersion)libraryVersion AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ typedef struct {
  *
  * @since v8.0
  */
-+ (NSObject *)standardEach AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSObject *)standardEach AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `HTMLEscape`.
@@ -85,7 +85,7 @@ typedef struct {
  *
  * @since v8.0
  */
-+ (NSObject *)standardHTMLEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSObject *)standardHTMLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `URLEscape`.
@@ -94,7 +94,7 @@ typedef struct {
  *
  * @since v8.0
  */
-+ (NSObject *)standardURLEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSObject *)standardURLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `javascriptEscape`.
@@ -103,7 +103,7 @@ typedef struct {
  *
  * @since v8.0
  */
-+ (NSObject *)standardJavascriptEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSObject *)standardJavascriptEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `zip`.
@@ -112,34 +112,7 @@ typedef struct {
  *
  * @since v8.0
  */
-+ (NSObject *)standardZip AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Building rendering objects
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * This method is deprecated. Use
- * `+[GRMustacheRendering renderingObjectForObject:]` instead.
- *
- * @see GRMustacheRendering class
- *
- * @since v6.0
- * @deprecated v7.0
- */
-+ (id<GRMustacheRendering>)renderingObjectForObject:(id)object AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED;
-
-/**
- * This method is deprecated. Use
- * `+[GRMustacheRendering renderingObjectWithBlock:]` instead.
- *
- * @see GRMustacheRendering class
- *
- * @since v6.0
- * @deprecated v7.0
- */
-+ (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))block AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER_BUT_DEPRECATED;
++ (NSObject *)standardZip AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end
 

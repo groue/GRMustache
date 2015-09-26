@@ -12,3 +12,9 @@
     - [X] Sets should only have "count", and "first" keys.
 - [X] Remove standard library from default context.
 - [X] Drop +[GRMustache standardLibrary]
+- [X] Drop deprecated items:
+    - [X] GRMustacheTagTypeInvertedSection
+    - [X] +[GRMustache renderingObjectForObject:]
+    - [X] +[GRMustache renderingObjectWithBlock:]
+    - [X] GRMustacheTag.templateRepository
+- [ ] Drop GRMustacheVersion and +[GRMustache libraryVersion]
