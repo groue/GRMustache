@@ -31,7 +31,6 @@
 #import "GRMustacheEachFilter_private.h"
 #import "GRMustacheLocalizer.h"
 
-
 // =============================================================================
 #pragma mark - GRMustache
 
@@ -39,11 +38,6 @@
 
 // =============================================================================
 #pragma mark - Global services
-
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    [GRMustacheKeyAccess preventNSUndefinedKeyExceptionAttack];
-}
 
 + (GRMustacheVersion)libraryVersion
 {

@@ -24,8 +24,6 @@
 #import <pthread.h>
 #import "GRMustacheKeyAccess_private.h"
 #import "GRMustacheSafeKeyAccess.h"
-#import "JRSwizzle.h"
-
 
 #if !defined(NS_BLOCK_ASSERTIONS)
 // For testing purpose
@@ -144,13 +142,6 @@ static Class NSManagedObjectClass;
     
     @try {
         
-        // valueForKey: may throw NSUndefinedKeyException, and user may want to
-        // prevent them.
-        
-        if (preventsNSUndefinedKeyException) {
-            [GRMustacheKeyAccess startPreventingNSUndefinedKeyExceptionFromObject:object];
-        }
-        
         // We don't want to use NSArray, NSSet and NSOrderedSet implementation
         // of valueForKey:, because they return another collection: see issue
         // #21 and "anchored key should not extract properties inside an array"
@@ -171,18 +162,6 @@ static Class NSManagedObjectClass;
         
         if (![[exception name] isEqualToString:NSUndefinedKeyException]) {
             [exception raise];
-        }
-#if !defined(NS_BLOCK_ASSERTIONS)
-        else {
-            // For testing purpose
-            GRMustacheKeyAccessDidCatchNSUndefinedKeyException = YES;
-        }
-#endif
-    }
-    
-    @finally {
-        if (preventsNSUndefinedKeyException) {
-            [GRMustacheKeyAccess stopPreventingNSUndefinedKeyExceptionFromObject:object];
         }
     }
     
@@ -504,90 +483,7 @@ class_addProtocol(klass, protocol);\
     return safeKeys;
 }
 
-
-// =============================================================================
-#pragma mark - NSUndefinedKeyException prevention
-
-static BOOL preventsNSUndefinedKeyException = NO;
-
-static pthread_key_t GRPreventedObjectsStorageKey;
-void freePreventedObjectsStorage(void *objects) {
-    [(NSMutableSet *)objects release];
-}
-#define setupPreventedObjectsStorage() pthread_key_create(&GRPreventedObjectsStorageKey, freePreventedObjectsStorage)
-#define getCurrentThreadPreventedObjects() (NSMutableSet *)pthread_getspecific(GRPreventedObjectsStorageKey)
-#define setCurrentThreadPreventedObjects(objects) pthread_setspecific(GRPreventedObjectsStorageKey, objects)
-
-+ (void)preventNSUndefinedKeyExceptionAttack
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self setupNSUndefinedKeyExceptionPrevention];
-    });
-}
-
-+ (void)setupNSUndefinedKeyExceptionPrevention
-{
-    preventsNSUndefinedKeyException = YES;
-    
-    // Swizzle [NSObject valueForUndefinedKey:]
-    
-    [NSObject jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                    withMethod:@selector(GRMustacheKeyAccessValueForUndefinedKey_NSObject:)
-                         error:nil];
-    
-    
-    // Swizzle [NSManagedObject valueForUndefinedKey:]
-    
-    if (NSManagedObjectClass) {
-        [NSManagedObjectClass jr_swizzleMethod:@selector(valueForUndefinedKey:)
-                                    withMethod:@selector(GRMustacheKeyAccessValueForUndefinedKey_NSManagedObject:)
-                                         error:nil];
-    }
-    
-    setupPreventedObjectsStorage();
-}
-
-+ (void)startPreventingNSUndefinedKeyExceptionFromObject:(id)object
-{
-    NSMutableSet *objects = getCurrentThreadPreventedObjects();
-    if (objects == NULL) {
-        objects = [[NSMutableSet alloc] init];
-        setCurrentThreadPreventedObjects(objects);
-    }
-    
-    [objects addObject:object];
-}
-
-+ (void)stopPreventingNSUndefinedKeyExceptionFromObject:(id)object
-{
-    [getCurrentThreadPreventedObjects() removeObject:object];
-}
-
 @end
-
-@implementation NSObject(GRMustacheKeyAccessPreventionOfNSUndefinedKeyException)
-
-// NSObject
-- (id)GRMustacheKeyAccessValueForUndefinedKey_NSObject:(NSString *)key
-{
-    if ([getCurrentThreadPreventedObjects() containsObject:self]) {
-        return nil;
-    }
-    return [self GRMustacheKeyAccessValueForUndefinedKey_NSObject:key];
-}
-
-// NSManagedObject
-- (id)GRMustacheKeyAccessValueForUndefinedKey_NSManagedObject:(NSString *)key
-{
-    if ([getCurrentThreadPreventedObjects() containsObject:self]) {
-        return nil;
-    }
-    return [self GRMustacheKeyAccessValueForUndefinedKey_NSManagedObject:key];
-}
-
-@end
-
 
 // =============================================================================
 #pragma mark - Foundation implementations

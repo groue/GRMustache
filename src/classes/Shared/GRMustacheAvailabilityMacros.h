@@ -283,9 +283,3 @@
 #else
 #define DEPRECATED_IN_GRMUSTACHE_VERSION_7_3_AND_LATER
 #endif
-
-
-
-
-
-
