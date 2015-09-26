@@ -62,8 +62,16 @@
         NSString *expected = [test objectForKey:@"expected"];
         
         GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
-        GRMustacheTemplate *template = [repository templateFromString:templateString error:NULL];
-        NSString *rendering = [template renderObject:data error:NULL];
+        NSError *error;
+        GRMustacheTemplate *template = [repository templateFromString:templateString error:&error];
+        if (template == nil && [test[@"desc"] isEqual:@"The empty string should be used when the named partial is not found."]) {
+            // Ignore this test: it makes sure missing partials don't render.
+            // In GRMustache, missing partials are an error.
+            continue;
+        }
+        XCTAssertNotNil(template, @"Could not load template %@: %@", templateString, error);
+        NSString *rendering = [template renderObject:data error:&error];
+        XCTAssertNotNil(rendering, @"Could not render template %@: %@", templateString, error);
         
         // GRMustache doesn't care about white space rules of the Mustache specification.
         // Compare rendering and expected rendering, but ignoring white space.
