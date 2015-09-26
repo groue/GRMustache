@@ -1,6 +1,0 @@
-[submodule "src/tests/vendor/mustache/spec"]
-	path = src/tests/vendor/mustache/spec
-	url = https://github.com/mustache/spec.git
-[submodule "src/tests/vendor/groue/GRMustacheSpec"]
-	path = src/tests/vendor/groue/GRMustacheSpec
-	url = https://github.com/groue/GRMustacheSpec.git
