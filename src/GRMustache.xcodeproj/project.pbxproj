@@ -526,7 +526,6 @@
 		5682B4BF1528DF4900ADD123 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5682B4C41528E0C500ADD123 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.1.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		5688264C199DFCDF00922497 /* GRMustacheTemplateRepositoryWithBundleTestResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GRMustacheTemplateRepositoryWithBundleTestResources; sourceTree = "<group>"; };
-		56A731B818123F1900B8570A /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../Makefile; sourceTree = "<group>"; };
 		56A7591119C173E6008D119F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		56A7591219C173E6008D119F /* NSJSONSerialization+Comments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSJSONSerialization+Comments.h"; sourceTree = "<group>"; };
 		56A7591319C173E6008D119F /* NSJSONSerialization+Comments.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSJSONSerialization+Comments.m"; sourceTree = "<group>"; };
@@ -1139,7 +1138,6 @@
 			isa = PBXGroup;
 			children = (
 				5662BA3E15A05268001FD2CA /* AppledocSettings.plist */,
-				56A731B818123F1900B8570A /* Makefile */,
 				56E2F2E616BA49A500F01DC2 /* TODO.md */,
 				567AEC4E15278C9A0009CA61 /* GRMustache */,
 				56DEC3AE152638CD0031E8DC /* Tests */,
