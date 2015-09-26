@@ -7,5 +7,5 @@
     - [X] Use submodule
     - [ ] Arrays should only have "count", "first" and "last" keys.
     - [ ] Sets should only have "count", and "first" keys.
-- [ ] Remove standard library from default context.
-- [ ] Drop +[GRMustache standardLibrary]
+- [X] Remove standard library from default context.
+- [X] Drop +[GRMustache standardLibrary]
