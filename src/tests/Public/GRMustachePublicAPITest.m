@@ -248,6 +248,21 @@ static struct {
 - (GRMustacheTemplate *)templateForTemplateString:(NSString *)templateString partialsDictionary:(NSDictionary *)partialsDictionary error:(NSError **)error
 {
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsDictionary];
+    NSDictionary *library = @{
+                              // Standard Library
+                              @"each": [GRMustache standardEach],
+                              // @"zip": [[[GRMustacheZipFilter alloc] init] autorelease],
+                              @"localize": [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease],
+                              @"HTMLEscape": [GRMustache standardHTMLEscape],
+                              @"URLEscape": [GRMustache standardURLEscape],
+                              @"javascriptEscape": [GRMustache standardJavascriptEscape],
+                              @"zip": [GRMustache standardZip],
+                              
+                              // Support for filters.json
+                              @"capitalized": [GRMustacheFilter filterWithBlock:^id(id value) {
+                                  return [(NSString *)value capitalizedString];
+                              }]};
+    [repository.configuration extendBaseContextWithObject:library];
     return [repository templateFromString:templateString error:error];
 }
 

@@ -20,15 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheJavascriptLibrary_private.h"
+#import "GRMustacheJavascriptEscapeFilter_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
 
 
 // =============================================================================
-#pragma mark - GRMustacheJavascriptEscaper
+#pragma mark - GRMustacheJavascriptEscapeFilter
 
-@implementation GRMustacheJavascriptEscaper
+@implementation GRMustacheJavascriptEscapeFilter
 
 #pragma mark <GRMustacheFilter>
 

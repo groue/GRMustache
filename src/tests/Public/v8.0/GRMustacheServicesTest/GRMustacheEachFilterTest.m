@@ -34,7 +34,8 @@
     id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [NSString stringWithFormat:@"<%@>", [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
     }];
-    id data = @{ @"array": @[renderingObject] };
+    id data = @{ @"array": @[renderingObject],
+                 @"each": [GRMustache standardEach] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(array)}}{{@index}}{{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"<0>", @"");
 }
@@ -44,7 +45,8 @@
     id renderingObject = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return [NSString stringWithFormat:@"<%@>", [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error]];
     }];
-    id data = @{ @"dictionary": @{ @"a": renderingObject } };
+    id data = @{ @"dictionary": @{ @"a": renderingObject },
+                 @"each": [GRMustache standardEach] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#each(dictionary)}}{{@key}}{{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"<a>", @"");
 }

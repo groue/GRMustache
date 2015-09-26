@@ -22,12 +22,12 @@
 
 #import <Foundation/Foundation.h>
 #import "GRMustacheRendering_private.h"
-#import "GRMustacheFilter_private.h"
+#import "GRMustacheFilter.h"
 #import "GRMustacheTagDelegate.h"
 
 
 // =============================================================================
-#pragma mark - GRMustacheHTMLEscapeFilter
+#pragma mark - GRMustacheJavascriptEscapeFilter
 
-@interface GRMustacheHTMLEscapeFilter: NSObject<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
+@interface GRMustacheJavascriptEscapeFilter: NSObject<GRMustacheFilter, GRMustacheRendering, GRMustacheTagDelegate>
 @end

@@ -20,21 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheURLLibrary_private.h"
+#import "GRMustacheHTMLEscapeFilter_private.h"
 #import "GRMustacheTag_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
 
-
 // =============================================================================
-#pragma mark - GRMustacheURLEscapeFilter
+#pragma mark - GRMustacheHTMLEscapeFilter
 
-@implementation GRMustacheURLEscapeFilter
+@implementation GRMustacheHTMLEscapeFilter
 
 #pragma mark <GRMustacheFilter>
 
 /**
- * Support for {{ URL.escape(value) }}
+ * Support for {{ HTML.escape(value) }}
  */
 - (id)transformedValue:(id)object
 {
@@ -44,28 +43,30 @@
         return @"";
     }
     
+    // Turns other objects into strings, and escape
+    
     NSString *string = [object description];
-    return [self escape:string];
+    return GRMustacheTranslateHTMLCharacters(string);
 }
 
 
 #pragma mark - <GRMustacheRendering>
 
 /**
- * Support for {{# URL.escape }}...{{ value }}...{{ value }}...{{/ URL.escape }}
+ * Support for {{# HTML.escape }}...{{ value }}...{{ value }}...{{/ HTML.escape }}
  */
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     switch (tag.type) {
         case GRMustacheTagTypeVariable:
-            // {{ URL.escape }}
+            // {{ HTML.escape }}
             // Behave as a regular object: render self's description
             if (HTMLSafe != NULL) { *HTMLSafe = NO; }
             return [self description];
             
         case GRMustacheTagTypeSection:
-            // {{# URL.escape }}...{{/ URL.escape }}
-            // {{^ URL.escape }}...{{/ URL.escape }}
+            // {{# HTML.escape }}...{{/ HTML.escape }}
+            // {{^ HTML.escape }}...{{/ HTML.escape }}
             
             // Render normally, but listen to all inner tags rendering, so that
             // we can format them. See mustacheTag:willRenderObject: below.
@@ -78,7 +79,7 @@
 #pragma mark - <GRMustacheTagDelegate>
 
 /**
- * Support for {{# URL.escape }}...{{ value }}...{{ value }}...{{/ URL.escape }}
+ * Support for {{# HTML.escape }}...{{ value }}...{{ value }}...{{/ HTML.escape }}
  */
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
@@ -93,7 +94,7 @@
             return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
                 id<GRMustacheRendering> renderingObject = [GRMustacheRendering renderingObjectForObject:object];
                 NSString *rendering = [renderingObject renderForMustacheTag:tag context:context HTMLSafe:HTMLSafe error:error];
-                return [self escape:rendering];
+                return GRMustacheTranslateHTMLCharacters(rendering);
             }];
             
         case GRMustacheTagTypeSection:
@@ -101,41 +102,6 @@
             // {{^ value }}
             return object;
     }
-}
-
-
-#pragma mark - Private
-
-- (NSString *)escape:(NSString *)string
-{
-    // Perform a first escaping using Apple's implementation.
-    // It leaves many character unescaped. We'll have to go further.
-    
-    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    static const NSString *escapeForCharacter[] = {
-        ['$'] = @"%24",
-        ['&'] = @"%26",
-        ['+'] = @"%2B",
-        [','] = @"%2C",
-        ['/'] = @"%2F",
-        [':'] = @"%3A",
-        [';'] = @"%3B",
-        ['='] = @"%3D",
-        ['?'] = @"%3F",
-        ['@'] = @"%40",
-        [' '] = @"%20",
-        ['\t'] = @"%09",
-        ['#'] = @"%23",
-        ['<'] = @"%3C",
-        ['>'] = @"%3E",
-        ['\"'] = @"%22",
-        ['\n'] = @"%0A",
-        ['\r'] = @"%0D",
-    };
-    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    NSUInteger capacity = ([string length] + 20) * 1.2;
-    return GRMustacheTranslateCharacters(string, escapeForCharacter, escapeForCharacterLength, capacity);
 }
 
 @end

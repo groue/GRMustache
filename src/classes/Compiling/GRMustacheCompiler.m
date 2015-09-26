@@ -215,6 +215,12 @@
             
             
         case GRMustacheTokenTypeEscapedVariable: {
+            // Context validation
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
+                return NO;
+            }
+
             // Expression validation
             NSError *error;
             GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
@@ -234,6 +240,12 @@
             
             
         case GRMustacheTokenTypeUnescapedVariable: {
+            // Context validation
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
+                return NO;
+            }
+            
             // Expression validation
             NSError *error;
             GRMustacheExpressionParser *expressionParser = [[[GRMustacheExpressionParser alloc] init] autorelease];
@@ -253,6 +265,12 @@
             
             
         case GRMustacheTokenTypeSectionOpening: {
+            // Context validation
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
+                return NO;
+            }
+            
             // Expression validation
             NSError *error;
             BOOL empty;
@@ -316,6 +334,12 @@
             
             
         case GRMustacheTokenTypeInvertedSectionOpening: {
+            // Context validation
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+                [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
+                return NO;
+            }
+            
             // Expression validation
             NSError *error;
             BOOL empty;

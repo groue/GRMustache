@@ -70,13 +70,49 @@ typedef struct {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @return The GRMustache standard library.
+ * @return The GRMustache standard `each`.
  *
  * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md
  *
- * @since v6.4
+ * @since v8.0
  */
-+ (NSObject *)standardLibrary AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
++ (NSObject *)standardEach AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * @return The GRMustache standard `HTMLEscape`.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md
+ *
+ * @since v8.0
+ */
++ (NSObject *)standardHTMLEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * @return The GRMustache standard `URLEscape`.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md
+ *
+ * @since v8.0
+ */
++ (NSObject *)standardURLEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * @return The GRMustache standard `javascriptEscape`.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md
+ *
+ * @since v8.0
+ */
++ (NSObject *)standardJavascriptEscape AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
+
+/**
+ * @return The GRMustache standard `zip`.
+ *
+ * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/standard_library.md
+ *
+ * @since v8.0
+ */
++ (NSObject *)standardZip AVAILABLE_GRMUSTACHE_VERSION_7_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

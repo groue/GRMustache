@@ -30,7 +30,7 @@
 
 - (void)testValueForMustacheKey
 {
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
+    GRMustacheContext *context = [GRMustacheContext context];
     id data = @{ @"name": @"name1", @"a": @{ @"name": @"name2" }};
     context = [context contextByAddingObject:data];
     {
@@ -47,11 +47,6 @@
         // 'a.name' is an expression, not a key
         id value = [context valueForMustacheKey:@"a.name"];
         XCTAssertNil(value, @"");
-    }
-    {
-        // 'uppercase' is a key
-        id value = [context valueForMustacheKey:@"uppercase"];
-        XCTAssertTrue([value conformsToProtocol:@protocol(GRMustacheFilter)], @"");
     }
 }
 

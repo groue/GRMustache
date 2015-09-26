@@ -30,7 +30,7 @@
 
 - (void)testHasValueForMustacheExpression
 {
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:[GRMustache standardLibrary]];
+    GRMustacheContext *context = [GRMustacheContext context];
     id filter = [GRMustacheFilter filterWithBlock:^id(id value) {
         return [[value description] uppercaseString];
     }];

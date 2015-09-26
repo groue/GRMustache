@@ -422,7 +422,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing inheritable section name"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Missing block name"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;
@@ -434,7 +434,7 @@
         if (error != NULL) {
             *error = [NSError errorWithDomain:GRMustacheErrorDomain
                                          code:GRMustacheErrorCodeParseError
-                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid inheritable section name"
+                                     userInfo:[NSDictionary dictionaryWithObject:@"Invalid block name"
                                                                           forKey:NSLocalizedDescriptionKey]];
         }
         return nil;

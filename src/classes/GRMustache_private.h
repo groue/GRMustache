@@ -40,7 +40,19 @@ typedef struct {
 + (GRMustacheVersion)libraryVersion GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (NSObject *)standardLibrary GRMUSTACHE_API_PUBLIC;
++ (NSObject *)standardEach GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
++ (NSObject *)standardHTMLEscape GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
++ (NSObject *)standardURLEscape GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
++ (NSObject *)standardJavascriptEscape GRMUSTACHE_API_PUBLIC;
+
+// Documented in GRMustache.h
++ (NSObject *)standardZip GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
 + (id<GRMustacheRendering>)renderingObjectForObject:(id)object GRMUSTACHE_API_PUBLIC_BUT_DEPRECATED;

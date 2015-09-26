@@ -4,5 +4,8 @@
     - [ ] Compatibility with GRMustache.swift on Arrays, Sets, and other standard collections.
 - [ ] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
 - [ ] Share JSON tests suite with GRMustache.swift.
+    - [X] Use submodule
     - [ ] Arrays should only have "count", "first" and "last" keys.
     - [ ] Sets should only have "count", and "first" keys.
+- [ ] Remove standard library from default context.
+- [ ] Drop +[GRMustache standardLibrary]

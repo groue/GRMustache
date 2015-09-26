@@ -20,8 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheFilter_private.h"
+#import "GRMustacheFilter.h"
 
 @interface GRMustacheEachFilter : NSObject<GRMustacheFilter>
-
 @end

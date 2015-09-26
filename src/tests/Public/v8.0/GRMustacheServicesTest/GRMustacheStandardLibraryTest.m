@@ -28,18 +28,6 @@
 
 @implementation GRMustacheStandardLibraryTest
 
-- (void)testStandardLibraryExists
-{
-    XCTAssertNotNil([GRMustache standardLibrary], @"");
-}
-
-- (void)testStandardLibraryHasUppercaseKey
-{
-    id filter = [[GRMustache standardLibrary] valueForKey:@"uppercase"];
-    XCTAssertNotNil(filter, @"");
-    XCTAssertTrue([filter conformsToProtocol:@protocol(GRMustacheFilter)], @"");
-}
-
 - (void)testStandardLibraryHTMLEscapeDoesEscapeNonHTMLSafeRenderingObjects
 {
     {
@@ -47,8 +35,9 @@
             *HTMLSafe = NO;
             return @"<";
         }];
-        id data = @{ @"object": object };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
+        id data = @{ @"object": object,
+                     @"HTMLEscape": [GRMustache standardHTMLEscape] };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTMLEscape }}{{ object }}{{/ }}" error:NULL];
         XCTAssertEqualObjects(rendering, @"&amp;lt;", @"");
     }
     {
@@ -56,8 +45,9 @@
             *HTMLSafe = NO;
             return @"<";
         }];
-        id data = @{ @"object": object };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
+        id data = @{ @"object": object,
+                     @"HTMLEscape": [GRMustache standardHTMLEscape] };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTMLEscape }}{{{ object }}}{{/ }}" error:NULL];
         XCTAssertEqualObjects(rendering, @"&lt;", @"");
     }
 }
@@ -69,8 +59,9 @@
             *HTMLSafe = YES;
             return @"<br>";
         }];
-        id data = @{ @"object": object };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{ object }}{{/ }}" error:NULL];
+        id data = @{ @"object": object,
+                     @"HTMLEscape": [GRMustache standardHTMLEscape] };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTMLEscape }}{{ object }}{{/ }}" error:NULL];
         XCTAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
     {
@@ -78,8 +69,9 @@
             *HTMLSafe = YES;
             return @"<br>";
         }];
-        id data = @{ @"object": object };
-        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTML.escape }}{{{ object }}}{{/ }}" error:NULL];
+        id data = @{ @"object": object,
+                     @"HTMLEscape": [GRMustache standardHTMLEscape] };
+        NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# HTMLEscape }}{{{ object }}}{{/ }}" error:NULL];
         XCTAssertEqualObjects(rendering, @"&lt;br&gt;", @"");
     }
 }
@@ -89,8 +81,9 @@
     id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"\"double quotes\" and 'single quotes'";
     }];
-    id data = @{ @"object": object };
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# javascript.escape }}{{ object }}{{/ }}" error:NULL];
+    id data = @{ @"object": object,
+                 @"javascriptEscape": [GRMustache standardJavascriptEscape] };
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# javascriptEscape }}{{ object }}{{/ }}" error:NULL];
     XCTAssertEqualObjects(rendering, @"\\u0022double quotes\\u0022 and \\u0027single quotes\\u0027", @"");
 }
 
@@ -99,8 +92,9 @@
     id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
         return @"&";
     }];
-    id data = @{ @"object": object };
-    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# URL.escape }}{{ object }}{{/ }}" error:NULL];
+    id data = @{ @"object": object,
+                 @"URLEscape": [GRMustache standardURLEscape] };
+    NSString *rendering = [GRMustacheTemplate renderObject:data fromString:@"{{# URLEscape }}{{ object }}{{/ }}" error:NULL];
     XCTAssertEqualObjects(rendering, @"%26", @"");
 }
 

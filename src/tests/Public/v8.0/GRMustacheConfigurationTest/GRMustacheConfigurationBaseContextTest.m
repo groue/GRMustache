@@ -36,16 +36,6 @@
     [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheConfiguration configuration].baseContext;
 }
 
-- (void)testFactoryConfigurationHasStandardLibraryInBaseContextRegardlessOfDefaultConfiguration
-{
-    [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];
-    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
-    repo.configuration = [GRMustacheConfiguration configuration];
-    GRMustacheTemplate *template = [repo templateFromString:@"{{uppercase(foo)}}" error:NULL];
-    NSString *rendering = [template renderObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"] error:NULL];
-    XCTAssertEqualObjects(rendering, @"SUCCESS", @"");
-}
-
 - (void)testDefaultConfigurationMustacheBaseContext
 {
     [GRMustacheConfiguration defaultConfiguration].baseContext = [GRMustacheContext contextWithObject:[NSDictionary dictionaryWithObject:@"success" forKey:@"foo"]];

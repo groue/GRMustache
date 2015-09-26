@@ -61,7 +61,7 @@
         _contentType = GRMustacheContentTypeHTML;
         _tagStartDelimiter = [@"{{" retain];    // useless retain that matches the release in dealloc
         _tagEndDelimiter = [@"}}" retain];      // useless retain that matches the release in dealloc
-        _baseContext = [[GRMustacheContext contextWithObject:[GRMustache standardLibrary]] retain];
+        _baseContext = [[GRMustacheContext context] retain];
     }
     return self;
 }

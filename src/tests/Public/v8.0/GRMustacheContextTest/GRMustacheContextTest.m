@@ -29,26 +29,6 @@
 
 @implementation GRMustacheContextTest
 
-- (void)testContextConstructor
-{
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{uppercase(foo)}}" error:NULL];
-    id data = @{ @"foo": @"bar" };
-    
-    {
-        NSString *rendering = [template renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering, @"BAR", @"");
-    }
-    {
-        template.baseContext = [GRMustacheContext context];
-        NSError *error;
-        NSString *rendering = [template renderObject:data error:&error];
-        XCTAssertNil(rendering, @"");
-        XCTAssertNotNil(error, @"");
-        XCTAssertEqualObjects(error.domain, GRMustacheErrorDomain, @"");
-        XCTAssertEqual(error.code, GRMustacheErrorCodeRenderingError, @"");
-    }
-}
-
 - (void)testContextWithObjectConstructor
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];

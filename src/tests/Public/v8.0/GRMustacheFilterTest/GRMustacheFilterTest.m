@@ -122,6 +122,9 @@
     NSString *templateString = @"<{{#uppercase(.)}}{{.}}{{/}}> <{{#uppercase(.)}}{{.}}{{/ }}>";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
     XCTAssertNotNil(template);
+    [template extendBaseContextWithObject:@{ @"uppercase": [GRMustacheFilter filterWithBlock:^(id object) {
+        return [[object description] uppercaseString];
+    }]}];
     NSString *rendering = [template renderObject:@"foo" error:NULL];
     XCTAssertEqualObjects(rendering, @"<FOO> <FOO>");
 }

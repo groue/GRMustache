@@ -78,7 +78,8 @@
 {
     NSString *templateString = @"{{localize(foo)}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    id data = @{ @"foo": @"bar" };
+    id data = @{ @"foo": @"bar",
+                 @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
     NSString *rendering = [template renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"bar", @"");
 }
@@ -87,7 +88,8 @@
 {
     NSString *templateString = @"{{#localize}}...{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    NSString *rendering = [template renderObject:nil error:NULL];
+    id data = @{ @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
+    NSString *rendering = [template renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"...", @"");
 }
 
@@ -95,7 +97,8 @@
 {
     NSString *templateString = @"{{#localize}}..{{foo}}..{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    id data = @{ @"foo": @"bar" };
+    id data = @{ @"foo": @"bar",
+                 @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
     NSString *rendering = [template renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"..bar..", @"");
 }
@@ -104,7 +107,9 @@
 {
     NSString *templateString = @"{{#localize}}.{{foo}}.{{^false}}{{baz}}{{/}}.{{/}}";
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-    id data = @{ @"foo": @"bar", @"baz": @"truc" };
+    id data = @{ @"foo": @"bar",
+                 @"baz": @"truc",
+                 @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
     NSString *rendering = [template renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @".bar.truc.", @"");
 }
@@ -231,14 +236,14 @@
     {
         NSString *templateString = @"{{#localize}}..{{foo}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-        id data = @{ @"foo": @"&" };
+        id data = @{ @"foo": @"&", @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
         NSString *rendering = [template renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"..&amp;..", @"");
     }
     {
         NSString *templateString = @"{{#localize}}..{{{foo}}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-        id data = @{ @"foo": @"&" };
+        id data = @{ @"foo": @"&", @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
         NSString *rendering = [template renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
@@ -249,14 +254,14 @@
     {
         NSString *templateString = @"{{% CONTENT_TYPE:TEXT }}{{#localize}}..{{foo}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-        id data = @{ @"foo": @"&" };
+        id data = @{ @"foo": @"&", @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
         NSString *rendering = [template renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
     {
         NSString *templateString = @"{{% CONTENT_TYPE:TEXT }}{{#localize}}..{{{foo}}}..{{/}}";
         GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
-        id data = @{ @"foo": @"&" };
+        id data = @{ @"foo": @"&", @"localize": [[[GRMustacheLocalizer alloc] init] autorelease] };
         NSString *rendering = [template renderObject:data error:NULL];
         XCTAssertEqualObjects(rendering, @"..&..", @"");
     }
