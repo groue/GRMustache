@@ -103,7 +103,13 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     //
     // So let's check for a content-type mismatch:
     GRMustacheContentType ASTContentType = templateAST.contentType;
-    if (_contentType != ASTContentType)
+    if (_contentType == ASTContentType)
+    {
+        // Content-type match
+        
+        return [self visitTemplateASTNodes:templateAST.templateASTNodes error:error];
+    }
+    else
     {
         // Content-type mismatch: render separately...
         
@@ -121,15 +127,6 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
         }
         GRMustacheBufferAppendString(&_buffer, rendering);
         return YES;
-    }
-    else
-    {
-        // Content-type match
-        
-        [GRMustacheRendering pushCurrentContentType:ASTContentType];
-        BOOL success = [self visitTemplateASTNodes:templateAST.templateASTNodes error:error];
-        [GRMustacheRendering popCurrentContentType];
-        return success;
     }
 }
 

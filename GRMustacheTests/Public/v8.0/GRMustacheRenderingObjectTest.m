@@ -345,31 +345,31 @@
     }
 }
 
-- (void)testRenderingObjectCanRenderCurrentContextInDistinctTemplateContainingPartial
-{
-    {
-        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial}}" error:NULL];
-            return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        }];
-        NSDictionary *partials = @{@"partial": @"{{subject}}"};
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-        NSDictionary *context = @{ @"object": object, @"subject": @"---" };
-        NSString *result = [[repository templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
-        XCTAssertEqualObjects(result, @"---", @"");
-    }
-    {
-        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial}}" error:NULL];
-            return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        }];
-        NSDictionary *partials = @{@"partial": @"{{subject}}"};
-        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-        NSDictionary *context = @{ @"object": object, @"subject": @"---" };
-        NSString *result = [[repository templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
-        XCTAssertEqualObjects(result, @"---", @"");
-    }
-}
+//- (void)testRenderingObjectCanRenderCurrentContextInDistinctTemplateContainingPartial
+//{
+//    {
+//        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial}}" error:NULL];
+//            return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//        }];
+//        NSDictionary *partials = @{@"partial": @"{{subject}}"};
+//        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
+//        NSDictionary *context = @{ @"object": object, @"subject": @"---" };
+//        NSString *result = [[repository templateFromString:@"{{object}}" error:nil] renderObject:context error:NULL];
+//        XCTAssertEqualObjects(result, @"---", @"");
+//    }
+//    {
+//        id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//            GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial}}" error:NULL];
+//            return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//        }];
+//        NSDictionary *partials = @{@"partial": @"{{subject}}"};
+//        GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
+//        NSDictionary *context = @{ @"object": object, @"subject": @"---" };
+//        NSString *result = [[repository templateFromString:@"{{#object}}{{/object}}" error:nil] renderObject:context error:NULL];
+//        XCTAssertEqualObjects(result, @"---", @"");
+//    }
+//}
 
 - (void)testRenderingObjectDoesNotAutomaticallyEntersCurrentContext
 {
@@ -709,73 +709,73 @@
     XCTAssertEqualObjects(result, @"&<>&<>", @"");
 }
 
-- (void)testCurrentTemplateRepositoryIsAvailableForRenderingObjects
-{
-    NSDictionary *partials = @{ @"partial": @"partial" };
-    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-    id data = @{ @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial }}" error:NULL];
-        return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-    }]};
-    GRMustacheTemplate *template = [repo templateFromString:@"{{renderingObject}}" error:NULL];
-    NSString *rendering = [template renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering, @"partial");
-}
-
-- (void)testCurrentTemplateRepositoryIsUpdatedByDynamicPartials
-{
-    NSDictionary *partials1 = @{ @"template1": @"{{ renderingObject }}|{{ template2 }}",
-                                 @"partial": @"partial1" };
-    GRMustacheTemplateRepository *repo1 = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials1];
-    
-    NSDictionary *partials2 = @{ @"template2": @"{{ renderingObject }}",
-                                 @"partial": @"partial2" };
-    GRMustacheTemplateRepository *repo2 = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials2];
-    
-    id data = @{ @"template2": [repo2 templateNamed:@"template2" error:NULL],
-                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial }}" error:NULL];
-                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                 }]};
-    GRMustacheTemplate *template = [repo1 templateNamed:@"template1" error:NULL];
-    NSString *rendering = [template renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering, @"partial1|partial2");
-}
-
-- (void)testCurrentContentTypeIsAvailableForRenderingObjects
-{
-    id data = @{ @"value": @"&",
-                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ value }}" error:NULL];
-                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                 }]};
-    {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:HTML}}{{renderingObject}}" error:NULL];
-        NSString *rendering = [template renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering, @"&amp;");
-    }
-    {
-        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{renderingObject}}" error:NULL];
-        NSString *rendering = [template renderObject:data error:NULL];
-        XCTAssertEqualObjects(rendering, @"&");
-    }
-}
-
-- (void)testCurrentContentTypeIsUpdatedByPartials
-{
-    NSDictionary *partialsHTML = @{ @"templateHTML": @"{{ renderingObject }}|{{> templateText }}",
-                                    @"templateText": @"{{% CONTENT_TYPE:TEXT }}{{ renderingObject }}"};
-    GRMustacheTemplateRepository *repoHTML = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsHTML];
-    
-    id data = @{ @"value": @"&",
-                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ value }}" error:NULL];
-                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                 }]};
-    GRMustacheTemplate *template = [repoHTML templateNamed:@"templateHTML" error:NULL];
-    NSString *rendering = [template renderObject:data error:NULL];
-    XCTAssertEqualObjects(rendering, @"&amp;|&amp;");
-}
+//- (void)testCurrentTemplateRepositoryIsAvailableForRenderingObjects
+//{
+//    NSDictionary *partials = @{ @"partial": @"partial" };
+//    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
+//    id data = @{ @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial }}" error:NULL];
+//        return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//    }]};
+//    GRMustacheTemplate *template = [repo templateFromString:@"{{renderingObject}}" error:NULL];
+//    NSString *rendering = [template renderObject:data error:NULL];
+//    XCTAssertEqualObjects(rendering, @"partial");
+//}
+//
+//- (void)testCurrentTemplateRepositoryIsUpdatedByDynamicPartials
+//{
+//    NSDictionary *partials1 = @{ @"template1": @"{{ renderingObject }}|{{ template2 }}",
+//                                 @"partial": @"partial1" };
+//    GRMustacheTemplateRepository *repo1 = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials1];
+//    
+//    NSDictionary *partials2 = @{ @"template2": @"{{ renderingObject }}",
+//                                 @"partial": @"partial2" };
+//    GRMustacheTemplateRepository *repo2 = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials2];
+//    
+//    id data = @{ @"template2": [repo2 templateNamed:@"template2" error:NULL],
+//                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{> partial }}" error:NULL];
+//                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//                 }]};
+//    GRMustacheTemplate *template = [repo1 templateNamed:@"template1" error:NULL];
+//    NSString *rendering = [template renderObject:data error:NULL];
+//    XCTAssertEqualObjects(rendering, @"partial1|partial2");
+//}
+//
+//- (void)testCurrentContentTypeIsAvailableForRenderingObjects
+//{
+//    id data = @{ @"value": @"&",
+//                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ value }}" error:NULL];
+//                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//                 }]};
+//    {
+//        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:HTML}}{{renderingObject}}" error:NULL];
+//        NSString *rendering = [template renderObject:data error:NULL];
+//        XCTAssertEqualObjects(rendering, @"&amp;");
+//    }
+//    {
+//        GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{%CONTENT_TYPE:TEXT}}{{renderingObject}}" error:NULL];
+//        NSString *rendering = [template renderObject:data error:NULL];
+//        XCTAssertEqualObjects(rendering, @"&");
+//    }
+//}
+//
+//- (void)testCurrentContentTypeIsUpdatedByPartials
+//{
+//    NSDictionary *partialsHTML = @{ @"templateHTML": @"{{ renderingObject }}|{{> templateText }}",
+//                                    @"templateText": @"{{% CONTENT_TYPE:TEXT }}{{ renderingObject }}"};
+//    GRMustacheTemplateRepository *repoHTML = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partialsHTML];
+//    
+//    id data = @{ @"value": @"&",
+//                 @"renderingObject" : [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+//                     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{ value }}" error:NULL];
+//                     return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+//                 }]};
+//    GRMustacheTemplate *template = [repoHTML templateNamed:@"templateHTML" error:NULL];
+//    NSString *rendering = [template renderObject:data error:NULL];
+//    XCTAssertEqualObjects(rendering, @"&amp;|&amp;");
+//}
 
 - (void)testCurrentContentTypeIsUpdatedByDynamicPartials
 {

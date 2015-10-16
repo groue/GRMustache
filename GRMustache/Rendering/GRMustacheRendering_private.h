@@ -145,13 +145,5 @@
 // Documented in GRMustacheRendering.h
 + (id<GRMustacheRenderingWithIterationSupport>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock GRMUSTACHE_API_PUBLIC;
 
-+ (void)pushCurrentTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
-+ (void)popCurrentTemplateRepository GRMUSTACHE_API_INTERNAL;
-+ (GRMustacheTemplateRepository *)currentTemplateRepository GRMUSTACHE_API_INTERNAL;
-
-+ (void)pushCurrentContentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
-+ (void)popCurrentContentType GRMUSTACHE_API_INTERNAL;
-+ (GRMustacheContentType)currentContentType GRMUSTACHE_API_INTERNAL;
-
 @end
 

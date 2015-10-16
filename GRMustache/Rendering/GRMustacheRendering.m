@@ -148,63 +148,6 @@ void freeCurrentContentTypeStack(void *objects) {
 }
 
 
-#pragma mark - Current Template Repository
-
-+ (void)pushCurrentTemplateRepository:(GRMustacheTemplateRepository *)templateRepository
-{
-    NSMutableArray *stack = getCurrentThreadCurrentTemplateRepositoryStack();
-    if (!stack) {
-        stack = [[NSMutableArray alloc] init];
-        setCurrentThreadCurrentTemplateRepositoryStack(stack);
-    }
-    [stack addObject:templateRepository];
-}
-
-+ (void)popCurrentTemplateRepository
-{
-    NSMutableArray *stack = getCurrentThreadCurrentTemplateRepositoryStack();
-    NSAssert(stack, @"Missing currentTemplateRepositoryStack");
-    NSAssert(stack.count > 0, @"Empty currentTemplateRepositoryStack");
-    [stack removeLastObject];
-}
-
-+ (GRMustacheTemplateRepository *)currentTemplateRepository
-{
-    NSMutableArray *stack = getCurrentThreadCurrentTemplateRepositoryStack();
-    return [stack lastObject];
-}
-
-
-#pragma mark - Current Content Type
-
-+ (void)pushCurrentContentType:(GRMustacheContentType)contentType
-{
-    NSMutableArray *stack = getCurrentThreadCurrentContentTypeStack();
-    if (!stack) {
-        stack = [[NSMutableArray alloc] init];
-        setCurrentThreadCurrentContentTypeStack(stack);
-    }
-    [stack addObject:[NSNumber numberWithUnsignedInteger:contentType]];
-}
-
-+ (void)popCurrentContentType
-{
-    NSMutableArray *stack = getCurrentThreadCurrentContentTypeStack();
-    NSAssert(stack, @"Missing currentContentTypeStack");
-    NSAssert(stack.count > 0, @"Empty currentContentTypeStack");
-    [stack removeLastObject];
-}
-
-+ (GRMustacheContentType)currentContentType
-{
-    NSMutableArray *stack = getCurrentThreadCurrentContentTypeStack();
-    if (stack.count > 0) {
-        return [(NSNumber *)[stack lastObject] unsignedIntegerValue];
-    }
-    return ([self currentTemplateRepository].configuration ?: [GRMustacheConfiguration defaultConfiguration]).contentType;
-}
-
-
 #pragma mark - Private
 
 /**

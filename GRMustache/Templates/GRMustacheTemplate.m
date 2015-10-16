@@ -33,12 +33,8 @@
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
 {
-    GRMustacheTemplateRepository *templateRepository = [GRMustacheRendering currentTemplateRepository];
-    if (templateRepository == nil) {
-        templateRepository = [GRMustacheTemplateRepository templateRepositoryWithBundle:[NSBundle mainBundle]];
-    }
-    GRMustacheContentType contentType = [GRMustacheRendering currentContentType];
-    return [templateRepository templateFromString:templateString contentType:contentType error:error];
+    GRMustacheTemplateRepository *templateRepository = [GRMustacheTemplateRepository templateRepository];
+    return [templateRepository templateFromString:templateString error:error];
 }
 
 + (instancetype)templateFromResource:(NSString *)name bundle:(NSBundle *)bundle error:(NSError **)error
@@ -117,14 +113,8 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    NSString *rendering = nil;
-    
-    [GRMustacheRendering pushCurrentTemplateRepository:self.templateRepository];
     GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_templateAST.contentType context:context];
-    rendering = [renderingEngine renderTemplateAST:_templateAST HTMLSafe:HTMLSafe error:error];
-    [GRMustacheRendering popCurrentTemplateRepository];
-    
-    return rendering;
+    return [renderingEngine renderTemplateAST:_templateAST HTMLSafe:HTMLSafe error:error];
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext
