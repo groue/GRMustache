@@ -108,34 +108,9 @@
 
 - (NSString *)escape:(NSString *)string
 {
-    // Perform a first escaping using Apple's implementation.
-    // It leaves many character unescaped. We'll have to go further.
-    
-    string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    static const NSString *escapeForCharacter[] = {
-        ['$'] = @"%24",
-        ['&'] = @"%26",
-        ['+'] = @"%2B",
-        [','] = @"%2C",
-        ['/'] = @"%2F",
-        [':'] = @"%3A",
-        [';'] = @"%3B",
-        ['='] = @"%3D",
-        ['?'] = @"%3F",
-        ['@'] = @"%40",
-        [' '] = @"%20",
-        ['\t'] = @"%09",
-        ['#'] = @"%23",
-        ['<'] = @"%3C",
-        ['>'] = @"%3E",
-        ['\"'] = @"%22",
-        ['\n'] = @"%0A",
-        ['\r'] = @"%0D",
-    };
-    static const int escapeForCharacterLength = sizeof(escapeForCharacter) / sizeof(NSString *);
-    NSUInteger capacity = ([string length] + 20) * 1.2;
-    return GRMustacheTranslateCharacters(string, escapeForCharacter, escapeForCharacterLength, capacity);
+    NSMutableCharacterSet *cs = [[[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy] autorelease];
+    [cs removeCharactersInString:@"?&="];
+    return [string stringByAddingPercentEncodingWithAllowedCharacters: cs];
 }
 
 @end
