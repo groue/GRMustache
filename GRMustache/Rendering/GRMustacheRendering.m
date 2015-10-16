@@ -75,39 +75,12 @@ static BOOL GRMustacheBoolValueNSFastEnumeration(id<NSFastEnumeration> self, SEL
 
 
 // =============================================================================
-#pragma mark - Current Template Repository
-
-static pthread_key_t GRCurrentTemplateRepositoryStackKey;
-void freeCurrentTemplateRepositoryStack(void *objects) {
-    [(NSMutableArray *)objects release];
-}
-#define setupCurrentTemplateRepositoryStack() pthread_key_create(&GRCurrentTemplateRepositoryStackKey, freeCurrentTemplateRepositoryStack)
-#define getCurrentThreadCurrentTemplateRepositoryStack() (NSMutableArray *)pthread_getspecific(GRCurrentTemplateRepositoryStackKey)
-#define setCurrentThreadCurrentTemplateRepositoryStack(classes) pthread_setspecific(GRCurrentTemplateRepositoryStackKey, classes)
-
-
-// =============================================================================
-#pragma mark - Current Content Type
-
-static pthread_key_t GRCurrentContentTypeStackKey;
-void freeCurrentContentTypeStack(void *objects) {
-    [(NSMutableArray *)objects release];
-}
-#define setupCurrentContentTypeStack() pthread_key_create(&GRCurrentContentTypeStackKey, freeCurrentContentTypeStack)
-#define getCurrentThreadCurrentContentTypeStack() (NSMutableArray *)pthread_getspecific(GRCurrentContentTypeStackKey)
-#define setCurrentThreadCurrentContentTypeStack(classes) pthread_setspecific(GRCurrentContentTypeStackKey, classes)
-
-
-// =============================================================================
 #pragma mark - GRMustacheRendering
 
 @implementation GRMustacheRendering
 
 + (void)initialize
 {
-    setupCurrentTemplateRepositoryStack();
-    setupCurrentContentTypeStack();
-    
     nilRendering = [[GRMustacheNilRendering alloc] init];
     
     // We could have declared categories on NSNull, NSNumber, NSString and
