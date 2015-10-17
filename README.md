@@ -101,6 +101,87 @@ github "groue/GRMustache" ~> 8.0
 Download a copy of GRMustache, embed the `GRMustache.xcodeproj` project in your own project, and add the `GRMustacheOSX` or `GRMustacheiOS` target as a dependency of your own target.
 
 
+Documentation
+=============
+
+External links:
+
+- [The Mustache Language](http://mustache.github.io/mustache.5.html): the Mustache language itself. You should start here.
+- [GRMustache.swift Reference](http://cocoadocs.org/docsets/GRMustache/7.3.2/index.html) on cocoadocs.org
+
+Rendering templates:
+
+- [Loading Templates](#loading-templates)
+- [Errors](#errors)
+- [Mustache Tags Reference](#mustache-tags-reference)
+- [The Context Stack and Expressions](#the-context-stack-and-expressions)
+
+Feeding templates:
+
+- [Boxing Values](#boxing-values)
+- [Standard Swift Types Reference](#standard-swift-types-reference)
+- [Custom Types](#custom-types)
+- [Lambdas](#lambdas)
+- [Filters](#filters)
+- [Advanced Boxes](#advanced-boxes)
+
+Misc:
+
+- [Built-in goodies](#built-in-goodies)
+
+
+Loading Templates
+-----------------
+
+Templates may come from various sources:
+
+- Raw Swift strings:
+
+    ```objc
+    GRMustacheTemplate *template;
+    template = [GRMustacheTemplate templateFromString:@"Hello {{name}}" error:NULL];
+    ```
+
+- Bundle resources:
+
+    ```objc
+    // Loads the "document.mustache" resource of the main bundle:
+    template = [GRMustacheTemplate templateFromResource:@"document" bundle:nil error:NULL];
+    ```
+
+- Files and URLs:
+
+    ```objc
+    
+    template = [GRMustacheTemplate templateFromContentsOfURL:templateURL error:NULL];
+    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/to/document.mustache" error:NULL];
+    ```
+
+- Template Repositories:
+    
+    Template repositories represent a group of templates. They can be configured independently, and provide neat features like template caching. For example:
+    
+    ```objc
+    // The repository of Bash templates, with extension ".sh":
+    GRMustacheTemplateRepository *repo;
+    repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil
+                                                    templateExtension:@"sh"
+                                                             encoding:NSUTF8StringEncoding];
+    
+    // Disable HTML escaping for Bash scripts:
+    repo.configuration.contentType = GRMustacheContentTypeText;
+    
+    // Load a template:
+    template = [repo templateNamed:@"script" error:NULL];
+    ```
+
+For more information, check:
+
+- [GRMustacheTemplate](http://cocoadocs.org/docsets/GRMustache/7.3.2/Classes/GRMustacheTemplate.html)
+- [GRMustacheTemplateRepository](http://cocoadocs.org/docsets/GRMustache/7.3.2/Classes/GRMustacheTemplateRepository.html)
+
+
+
 
 
 TO BE CONTINUED
