@@ -775,16 +775,18 @@ Standard Foundation Types Reference
 
 GRMustache comes with built-in support for the following standard Foundation types:
 
-- [NSArray and NSFastEnumeration](#nsarray-and-nsfastenumeration)
+- [NSArray](#nsarray)
 - [NSDictionary](#nsdictionary)
+- [NSFastEnumeration](#nsfastenumeration)
 - [NSNull](#nsnull)
 - [NSNumber](#nsnumber)
-- [NSObject](#nsobject)
+- [NSOrderedSet](#nsorderedset)
 - [NSSet](#nsset)
 - [NSString](#nsstring)
+- [NSObject](#nsobject)
 
 
-### NSArray and NSFastEnumeration
+### NSArray
 
 - `{{array}}` renders the concatenation of the renderings of array elements.
 - `{{#array}}...{{/array}}` renders as many times as there are elements in the array, pushing them on top of the [context stack](#the-context-stack).
@@ -796,14 +798,19 @@ Exposed keys:
 - `array.last`: the last element.
 - `array.count`: the number of elements in the array.
 
-GRMustache renders as `NSArray` all types that conform to NSFastEnumeration, but [NSSet](#nsset) and [NSDictionary](#nsdictionary).
-
 
 ### NSDictionary
 
 - `{{dictionary}}` renders the standard description of *dictionary* (not very useful).
 - `{{#dictionary}}...{{/dictionary}}` renders once, pushing the dictionary on top of the [context stack](#the-context-stack).
 - `{{^dictionary}}...{{/dictionary}}` does not render.
+
+
+### NSFastEnumeration
+
+- `{{collection}}` renders the concatenation of the renderings of collection elements.
+- `{{#collection}}...{{/collection}}` renders as many times as there are elements in the collection, pushing them on top of the [context stack](#the-context-stack).
+- `{{^collection}}...{{/collection}}` renders if and only if the collection is empty.
 
 
 ### NSNull
@@ -837,16 +844,17 @@ NSString *rendering = [template renderObject:data error:NULL];
 [More info on NSFormatter](Docs/Guides/goodies.md#nsformatter).
 
 
-### NSObject
+### NSOrderedSet
 
-When an object is not [NSNumber](#nsnumber), [NSString](#nsstring), [NSDictionary](#nsdictionary), [NSSet](#nsset), [NSArray, NSFastEnumeration](#nsarray-and-nsfastenumeration), or [NSNull](#nsnull), it renders as follows:
+- `{{orderedSet}}` renders the concatenation of the renderings of ordered set elements.
+- `{{#orderedSet}}...{{/orderedSet}}` renders as many times as there are elements in the ordered set, pushing them on top of the [context stack](#the-context-stack).
+- `{{^orderedSet}}...{{/orderedSet}}` renders if and only if the orderedSet is empty.
 
-- `{{object}}` renders the `description` method, HTML-escaped.
-- `{{{object}}}` renders the `description` method, not HTML-escaped.
-- `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
-- `{{^object}}...{{/object}}` does not render.
-    
-Templates can access object's properties: `{{ user.name }}`.
+Exposed keys:
+
+- `orderedSet.first`: the first element.
+- `orderedSet.last`: the last element.
+- `orderedSet.count`: the number of elements in the array.
 
 
 ### NSSet
@@ -871,6 +879,18 @@ Exposed keys:
 Exposed keys:
 
 - `string.length`: the length of the string.
+
+
+### NSObject
+
+When an object is not one of the specific ones decribed above, it renders as follows:
+
+- `{{object}}` renders the `description` method, HTML-escaped.
+- `{{{object}}}` renders the `description` method, not HTML-escaped.
+- `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
+- `{{^object}}...{{/object}}` does not render.
+    
+Templates can access object's properties: `{{ user.name }}`.
 
 
 
