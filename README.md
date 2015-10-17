@@ -26,7 +26,7 @@ Requirements
 - iOS 7.0+ / OSX 10.9+
 - Xcode 7
 
-[GRMustache 7.3.2](https://github.com/groue/GRMustache/tree/v7.3.2) used to support older systems and Xcode versions.
+See [GRMustache 7.3.2](https://github.com/groue/GRMustache/tree/v7.3.2) for older systems and Xcode versions.
 
 **Swift developers**: You can use GRMustache from Swift, with a limitation: you can only render Objective-C objects. Instead, consider using [GRMustache.swift](https://github.com/groue/GRMustache.swift), a pure Swift implementation of GRMustache.
 
