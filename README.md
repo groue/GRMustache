@@ -121,7 +121,6 @@ Rendering templates:
 
 Feeding templates:
 
-- [Boxing Values](#boxing-values)
 - [Standard Foundation Types Reference](#standard-foundation-types-reference)
 - [Custom Types](#custom-types)
 - [Lambdas](#lambdas)
@@ -771,8 +770,107 @@ There are four kinds of expressions:
     [Filters](#filters) are introduced below.
 
 
+Standard Foundation Types Reference
+-----------------------------------
+
+GRMustache comes with built-in support for the following standard Foundation types:
+
+- [NSNumber](#nsnumber): Int, UInt and Double
+- [NSString](#nsstring)
+- [NSDictionary](#nsdictionary)
+- [NSSet](#nsset)
+- [NSArray and NSFastEnumeration](#nsarray-and-nsfastenumeration)
+- [NSNull](#nsnull)
+- [NSObject](#nsobject)
 
 
+### NSNumber
+
+- `{{number}}` renders the standard description of *number*.
+- `{{#number}}...{{/number}}` renders if and only if *number* is not 0 (zero).
+- `{{^number}}...{{/number}}` renders if and only if *int* is 0 (zero).
+
+To format numbers, use `NSNumberFormatter`:
+
+```objc
+NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
+percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
+
+GRMustacheTemplate *template;
+NSString *templateString = @"{{ percent(x) }}";
+template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+
+// Rendering: 50%
+id data = @{ @"x": @(0.5) };
+NSString *rendering = [template renderObject:data error:NULL];
+```
+
+[More info on NSFormatter](Docs/Guides/goodies.md#nsformatter).
+
+
+### NSString
+
+- `{{string}}` renders *string*, HTML-escaped.
+- `{{{string}}}` renders *string*, not HTML-escaped.
+- `{{#string}}...{{/string}}` renders if and only if *string* is not empty.
+- `{{^string}}...{{/string}}` renders if and only if *string* is empty.
+
+Exposed keys:
+
+- `string.length`: the length of the string.
+
+
+### NSDictionary
+
+- `{{dictionary}}` renders the standard description of *dictionary* (not very useful).
+- `{{#dictionary}}...{{/dictionary}}` renders once, pushing the dictionary on top of the [context stack](#the-context-stack).
+- `{{^dictionary}}...{{/dictionary}}` does not render.
+
+
+### NSSet
+
+- `{{set}}` renders the concatenation of the renderings of set elements.
+- `{{#set}}...{{/set}}` renders as many times as there are elements in the set, pushing them on top of the [context stack](#the-context-stack).
+- `{{^set}}...{{/set}}` renders if and only if the set is empty.
+
+Exposed keys:
+
+- `set.first`: any element of the set.
+- `set.count`: the number of elements in the set.
+
+
+### NSArray and NSFastEnumeration
+
+- `{{array}}` renders the concatenation of the renderings of array elements.
+- `{{#array}}...{{/array}}` renders as many times as there are elements in the array, pushing them on top of the [context stack](#the-context-stack).
+- `{{^array}}...{{/array}}` renders if and only if the array is empty.
+
+Exposed keys:
+
+- `array.first`: the first element.
+- `array.last`: the last element.
+- `array.count`: the number of elements in the array.
+
+GRMustache renders as `NSArray` all types that conform to NSFastEnumeration, but [NSSet](#nsset) and [NSDictionary](#nsdictionary).
+
+
+### NSNull
+
+- `{{null}}` does not render.
+- `{{#null}}...{{/null}}` does not render.
+- `{{^null}}...{{/null}}` renders.
+
+
+### NSObject
+
+When an object is not [NSNumber](#nsnumber), [NSString](#nsstring), [NSDictionary](#nsdictionary), [NSSet](#nsset), [NSArray, NSFastEnumeration](#nsarray-and-nsfastenumeration), or [NSNull](#nsnull), it renders as follows:
+
+- `{{object}}` renders the `description` method, HTML-escaped.
+- `{{{object}}}` renders the `description` method, not HTML-escaped.
+- `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
+- `{{^object}}...{{/object}}` does not render.
+    
+Templates can access object's properties: `{{ user.name }}`.
 
 TO BE CONTINUED
 --------------------------------------------------------------------------
