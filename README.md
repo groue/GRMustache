@@ -481,7 +481,7 @@ GRMustacheTemplate *template;
 
 NSString *templatesPath = @"/path";
 repo = [GRMustacheTemplateRepository templateRepositoryWithDirectory:templatesPath];
-template = [repo templateNamed:@"documents/profile" error:NULL];
+template = [repo templateNamed:... error:NULL];
 
 // {{> /shared/partial }} includes /path/shared/partial.mustache.
 ```
