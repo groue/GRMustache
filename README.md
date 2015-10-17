@@ -48,7 +48,10 @@ Well, on {{format(realDate)}} because of a Martian attack.
 @import GRMustache;
 
 // Load the `document.mustache` resource of the main bundle
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"document" bundle:nil error:NULL];
+GRMustacheTemplate *template;
+template = [GRMustacheTemplate templateFromResource:@"document"
+                                             bundle:nil
+                                              error:NULL];
 
 // Let template format dates with `{{format(...)}}`
 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -139,22 +142,27 @@ Templates may come from various sources:
 
     ```objc
     GRMustacheTemplate *template;
-    template = [GRMustacheTemplate templateFromString:@"Hello {{name}}" error:NULL];
+    template = [GRMustacheTemplate templateFromString:@"Hello {{name}}"
+                                                error:NULL];
     ```
 
 - Bundle resources:
 
     ```objc
     // Loads the "document.mustache" resource of the main bundle:
-    template = [GRMustacheTemplate templateFromResource:@"document" bundle:nil error:NULL];
+    template = [GRMustacheTemplate templateFromResource:@"document"
+                                                 bundle:nil
+                                                  error:NULL];
     ```
 
 - Files and URLs:
 
     ```objc
     
-    template = [GRMustacheTemplate templateFromContentsOfURL:templateURL error:NULL];
-    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/to/document.mustache" error:NULL];
+    template = [GRMustacheTemplate templateFromContentsOfURL:templateURL
+                                                       error:NULL];
+    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/to/document.mustache"
+                                                        error:NULL];
     ```
 
 - Template Repositories:
