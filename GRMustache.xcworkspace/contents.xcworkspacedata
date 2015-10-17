@@ -7,4 +7,10 @@
    <FileRef
       location = "group:DemoApps/GRMustacheDemoiOS/GRMustacheDemoiOS.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:DemoApps/GRMustacheDemoOSX/GRMustacheDemoOSX.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DemoApps/GRMustacheDemoTvOS/GRMustacheDemoTvOS.xcodeproj">
+   </FileRef>
 </Workspace>
