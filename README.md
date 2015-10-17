@@ -453,9 +453,11 @@ Partial lookup depends on the origin of the main template:
 Partial names are **relative paths** when the template comes from the file system (via paths or URLs):
 
 ```objc
+GRMustacheTemplate *template;
+
 // Load /path/to/document.mustache
 NSString *templatePath = @"/path/document.mustache";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:templatePath error:NULL];
+template = [GRMustacheTemplate templateFromContentsOfFile:templatePath error:NULL];
 
 // {{> partial }} includes /path/partial.mustache.
 // {{> shared/partial }} includes /path/shared/partial.mustache.
@@ -466,7 +468,7 @@ Partials have the same file extension as the main template.
 ```objc
 // Load /path/document.html
 NSString *templatePath = @"/path/document.html";
-GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:templatePath error:NULL];
+template = [GRMustacheTemplate templateFromContentsOfFile:templatePath error:NULL];
 
 // {{> partial }} includes /path/partial.html.
 ```
