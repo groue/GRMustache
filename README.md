@@ -11,12 +11,101 @@ It ships with built-in goodies and extensibility hooks that let you avoid the st
 Get release announcements and usage tips: follow [@GRMustache on Twitter](http://twitter.com/GRMustache).
 
 
-System requirements
--------------------
+Features
+--------
 
-GRMustache targets iOS down to version 4.3, MacOS down to 10.6 Snow Leopard (without garbage collection), and only depends on the Foundation framework.
+- Support for the full [Mustache syntax](http://mustache.github.io/mustache.5.html)
+- Filters, as `{{ uppercase(name) }}`
+- Template inheritance, as in [hogan.js](http://twitter.github.com/hogan.js/), [mustache.java](https://github.com/spullara/mustache.java) and [mustache.php](https://github.com/bobthecow/mustache.php).
+- Built-in [goodies](Docs/Guides/goodies.md)
+
+
+Requirements
+------------
+
+- iOS 7.0+ / OSX 10.9+
+- Xcode 7
+
+[GRMustache 7.3.2](https://github.com/groue/GRMustache/tree/v7.3.2) used to support older systems and Xcode versions.
 
 **Swift developers**: You can use GRMustache from Swift, with a limitation: you can only render Objective-C objects. Instead, consider using [GRMustache.swift](https://github.com/groue/GRMustache.swift), a pure Swift implementation of GRMustache.
+
+
+Usage
+-----
+
+`document.mustache`:
+
+```mustache
+Hello {{name}}
+Your beard trimmer will arrive on {{format(date)}}.
+{{#late}}
+Well, on {{format(realDate)}} because of a Martian attack.
+{{/late}}
+```
+
+```objc
+@import GRMustache;
+
+// Load the `document.mustache` resource of the main bundle
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:@"document" bundle:nil error:NULL];
+
+// Let template format dates with `{{format(...)}}`
+NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+[template extendBaseContextWithObject:@{ @"format": dateFormatter }];
+
+// The rendered data
+id data = @{
+    @"name": @"Arthur",
+    @"date": [NSDate date],
+    @"realDate": [[NSDate date] dateByAddingTimeInterval:60*60*24*3],
+    @"late": @YES,
+};
+
+// The rendering: "Hello Arthur..."
+NSString *rendering = [template renderObject:data error:NULL];
+```
+
+
+Installation
+------------
+
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org/) is a dependency manager for Xcode projects.
+
+To use GRMustache with Cocoapods, specify in your Podfile:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+pod 'GRMustache', '~> 8.0'
+```
+
+
+### Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is another dependency manager for Xcode projects.
+
+To use GRMustache with Carthage, specify in your Cartfile:
+
+```
+github "groue/GRMustache" ~> 8.0
+```
+
+
+### Manually
+
+Download a copy of GRMustache, embed the `GRMustache.xcodeproj` project in your own project, and add the `GRMustacheOSX` or `GRMustacheiOS` target as a dependency of your own target.
+
+
+
+
+TO BE CONTINUED
+--------------------------------------------------------------------------
+
 
 
 How To
