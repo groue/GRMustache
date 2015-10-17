@@ -19,3 +19,4 @@
     - [X] GRMustacheTag.templateRepository
 - [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
+- [ ] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
