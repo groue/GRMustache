@@ -92,3 +92,8 @@ xcuserdata
 # Obj-C/Swift specific
 *.hmap
 *.ipa
+
+
+DemoApps/GRMustacheDemoOSX/Carthage
+DemoApps/GRMustacheDemoOSX/Cartfile.resolved
+GRMustacheTests/Carthage
