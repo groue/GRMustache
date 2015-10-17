@@ -138,7 +138,7 @@ Loading Templates
 
 Templates may come from various sources:
 
-- Raw strings:
+- **Raw strings:**
 
     ```objc
     GRMustacheTemplate *template;
@@ -146,7 +146,7 @@ Templates may come from various sources:
                                                 error:NULL];
     ```
 
-- Bundle resources:
+- **Bundle resources:**
 
     ```objc
     // Loads the "document.mustache" resource of the main bundle:
@@ -155,7 +155,7 @@ Templates may come from various sources:
                                                   error:NULL];
     ```
 
-- Files and URLs:
+- **Files and URLs:**
 
     ```objc
     
@@ -165,7 +165,7 @@ Templates may come from various sources:
                                                         error:NULL];
     ```
 
-- Template Repositories:
+- **Template Repositories:**
     
     Template repositories represent a group of templates. They can be configured independently, and provide neat features like template caching. For example:
     
