@@ -141,27 +141,31 @@ Templates may come from various sources:
 
     ```objc
     GRMustacheTemplate *template;
-    template = [GRMustacheTemplate templateFromString:@"Hello {{name}}"
-                                                error:NULL];
+    template = [GRMustacheTemplate
+                templateFromString:@"Hello {{name}}"
+                             error:NULL];
     ```
 
 - **Bundle resources:**
 
     ```objc
     // Loads the "document.mustache" resource of the main bundle:
-    template = [GRMustacheTemplate templateFromResource:@"document"
-                                                 bundle:nil
-                                                  error:NULL];
+    template = [GRMustacheTemplate
+                templateFromResource:@"document"
+                              bundle:nil
+                               error:NULL];
     ```
 
 - **Files and URLs:**
 
     ```objc
     
-    template = [GRMustacheTemplate templateFromContentsOfURL:templateURL
-                                                       error:NULL];
-    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/document.mustache"
-                                                        error:NULL];
+    template = [GRMustacheTemplate
+                templateFromContentsOfURL:templateURL
+                                    error:NULL];
+    template = [GRMustacheTemplate
+                templateFromContentsOfFile:@"/path/document.mustache"
+                                     error:NULL];
     ```
 
 - **Template Repositories:**
@@ -171,9 +175,10 @@ Templates may come from various sources:
     ```objc
     // The repository of Bash templates, with extension ".sh":
     GRMustacheTemplateRepository *repo;
-    repo = [GRMustacheTemplateRepository templateRepositoryWithBundle:nil
-                                                    templateExtension:@"sh"
-                                                             encoding:NSUTF8StringEncoding];
+    repo = [GRMustacheTemplateRepository
+            templateRepositoryWithBundle:nil
+                       templateExtension:@"sh"
+                                encoding:NSUTF8StringEncoding];
     
     // Disable HTML escaping for Bash scripts:
     repo.configuration.contentType = GRMustacheContentTypeText;
