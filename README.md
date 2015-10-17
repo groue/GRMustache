@@ -775,7 +775,7 @@ Standard Foundation Types Reference
 
 GRMustache comes with built-in support for the following standard Foundation types:
 
-- [NSNumber](#nsnumber): Int, UInt and Double
+- [NSNumber](#nsnumber)
 - [NSString](#nsstring)
 - [NSDictionary](#nsdictionary)
 - [NSSet](#nsset)
