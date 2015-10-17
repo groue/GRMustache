@@ -217,7 +217,9 @@ Error handling follows [Cocoa conventions](https://developer.apple.com/library/i
 NSError *error;
 GRMustacheTemplate *template;
 NSString *rendering;
-template = [GRMustacheTemplate templateFromResource:@"document" bundle:nil error:&error];
+template = [GRMustacheTemplate templateFromResource:@"document"
+                                             bundle:nil
+                                              error:&error];
 rendering = [template renderObject:... error:&error]
 if (!rendering) {
     // Parse error at line 2 of template /path/to/template.mustache:
