@@ -119,7 +119,7 @@
  *
  * @since v6.2
  */
-+ (GRMustacheConfiguration *)configuration AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (instancetype)configuration AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 
 ////////////////////////////////////////////////////////////////////////////////

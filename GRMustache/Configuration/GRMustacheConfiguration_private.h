@@ -42,7 +42,7 @@
 + (GRMustacheConfiguration *)defaultConfiguration GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
-+ (GRMustacheConfiguration *)configuration GRMUSTACHE_API_PUBLIC;
++ (instancetype)configuration GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
 @property (nonatomic) GRMustacheContentType contentType GRMUSTACHE_API_PUBLIC;

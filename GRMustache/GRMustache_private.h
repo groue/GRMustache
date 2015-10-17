@@ -30,18 +30,18 @@
 @interface GRMustache: NSObject
 
 // Documented in GRMustache.h
-+ (NSObject *)standardEach GRMUSTACHE_API_PUBLIC;
++ (id)standardEach GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (NSObject *)standardHTMLEscape GRMUSTACHE_API_PUBLIC;
++ (id)standardHTMLEscape GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (NSObject *)standardURLEscape GRMUSTACHE_API_PUBLIC;
++ (id)standardURLEscape GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (NSObject *)standardJavascriptEscape GRMUSTACHE_API_PUBLIC;
++ (id)standardJavascriptEscape GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustache.h
-+ (NSObject *)standardZip GRMUSTACHE_API_PUBLIC;
++ (id)standardZip GRMUSTACHE_API_PUBLIC;
 
 @end

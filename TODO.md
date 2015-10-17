@@ -18,4 +18,3 @@
     - [X] +[GRMustache renderingObjectWithBlock:]
     - [X] GRMustacheTag.templateRepository
 - [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
-- [ ] use instancetype when relevant

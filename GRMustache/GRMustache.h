@@ -50,7 +50,7 @@ FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
  *
  * @since v8.0
  */
-+ (NSObject *)standardEach AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (id)standardEach AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `HTMLEscape`.
@@ -59,7 +59,7 @@ FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
  *
  * @since v8.0
  */
-+ (NSObject *)standardHTMLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (id)standardHTMLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `URLEscape`.
@@ -68,7 +68,7 @@ FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
  *
  * @since v8.0
  */
-+ (NSObject *)standardURLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (id)standardURLEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `javascriptEscape`.
@@ -77,7 +77,7 @@ FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
  *
  * @since v8.0
  */
-+ (NSObject *)standardJavascriptEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (id)standardJavascriptEscape AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * @return The GRMustache standard `zip`.
@@ -86,7 +86,7 @@ FOUNDATION_EXPORT const unsigned char GRMustacheVersionString[];
  *
  * @since v8.0
  */
-+ (NSObject *)standardZip AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
++ (id)standardZip AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end
 

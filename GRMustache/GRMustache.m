@@ -42,31 +42,31 @@
 #pragma mark - Standard library
 
 // Documented in GRMustache.h
-+ (NSObject *)standardEach
++ (id)standardEach
 {
     return [[[GRMustacheEachFilter alloc] init] autorelease];
 }
 
 // Documented in GRMustache.h
-+ (NSObject *)standardHTMLEscape
++ (id)standardHTMLEscape
 {
     return [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease];
 }
 
 // Documented in GRMustache.h
-+ (NSObject *)standardURLEscape
++ (id)standardURLEscape
 {
     return [[[GRMustacheURLEscapeFilter alloc] init] autorelease];
 }
 
 // Documented in GRMustache.h
-+ (NSObject *)standardJavascriptEscape
++ (id)standardJavascriptEscape
 {
     return [[[GRMustacheJavascriptEscapeFilter alloc] init] autorelease];
 }
 
 // Documented in GRMustache.h
-+ (NSObject *)standardZip
++ (id)standardZip
 {
     return [GRMustacheFilter variadicFilterWithBlock:^id(NSArray *arguments) {
         

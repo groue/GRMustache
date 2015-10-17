@@ -41,9 +41,9 @@
     return defaultConfiguration;
 }
 
-+ (GRMustacheConfiguration *)configuration
++ (instancetype)configuration
 {
-    return [[[GRMustacheConfiguration alloc] init] autorelease];
+    return [[[self alloc] init] autorelease];
 }
 
 - (void)dealloc
