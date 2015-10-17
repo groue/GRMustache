@@ -823,8 +823,8 @@ Exposed keys:
 ### NSNumber
 
 - `{{number}}` renders the standard description of *number*.
-- `{{#number}}...{{/number}}` renders if and only if *number* is not 0 (zero).
-- `{{^number}}...{{/number}}` renders if and only if *int* is 0 (zero).
+- `{{#number}}...{{/number}}` renders if and only if `[number boolValue]` is YES.
+- `{{^number}}...{{/number}}` renders if and only if `[number boolValue]` is NO.
 
 To format numbers, use `NSNumberFormatter`:
 
