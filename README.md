@@ -775,13 +775,42 @@ Standard Foundation Types Reference
 
 GRMustache comes with built-in support for the following standard Foundation types:
 
-- [NSNumber](#nsnumber)
-- [NSString](#nsstring)
-- [NSDictionary](#nsdictionary)
-- [NSSet](#nsset)
 - [NSArray and NSFastEnumeration](#nsarray-and-nsfastenumeration)
+- [NSDictionary](#nsdictionary)
 - [NSNull](#nsnull)
+- [NSNumber](#nsnumber)
 - [NSObject](#nsobject)
+- [NSSet](#nsset)
+- [NSString](#nsstring)
+
+
+### NSArray and NSFastEnumeration
+
+- `{{array}}` renders the concatenation of the renderings of array elements.
+- `{{#array}}...{{/array}}` renders as many times as there are elements in the array, pushing them on top of the [context stack](#the-context-stack).
+- `{{^array}}...{{/array}}` renders if and only if the array is empty.
+
+Exposed keys:
+
+- `array.first`: the first element.
+- `array.last`: the last element.
+- `array.count`: the number of elements in the array.
+
+GRMustache renders as `NSArray` all types that conform to NSFastEnumeration, but [NSSet](#nsset) and [NSDictionary](#nsdictionary).
+
+
+### NSDictionary
+
+- `{{dictionary}}` renders the standard description of *dictionary* (not very useful).
+- `{{#dictionary}}...{{/dictionary}}` renders once, pushing the dictionary on top of the [context stack](#the-context-stack).
+- `{{^dictionary}}...{{/dictionary}}` does not render.
+
+
+### NSNull
+
+- `{{null}}` does not render.
+- `{{#null}}...{{/null}}` does not render.
+- `{{^null}}...{{/null}}` renders.
 
 
 ### NSNumber
@@ -808,23 +837,16 @@ NSString *rendering = [template renderObject:data error:NULL];
 [More info on NSFormatter](Docs/Guides/goodies.md#nsformatter).
 
 
-### NSString
+### NSObject
 
-- `{{string}}` renders *string*, HTML-escaped.
-- `{{{string}}}` renders *string*, not HTML-escaped.
-- `{{#string}}...{{/string}}` renders if and only if *string* is not empty.
-- `{{^string}}...{{/string}}` renders if and only if *string* is empty.
+When an object is not [NSNumber](#nsnumber), [NSString](#nsstring), [NSDictionary](#nsdictionary), [NSSet](#nsset), [NSArray, NSFastEnumeration](#nsarray-and-nsfastenumeration), or [NSNull](#nsnull), it renders as follows:
 
-Exposed keys:
-
-- `string.length`: the length of the string.
-
-
-### NSDictionary
-
-- `{{dictionary}}` renders the standard description of *dictionary* (not very useful).
-- `{{#dictionary}}...{{/dictionary}}` renders once, pushing the dictionary on top of the [context stack](#the-context-stack).
-- `{{^dictionary}}...{{/dictionary}}` does not render.
+- `{{object}}` renders the `description` method, HTML-escaped.
+- `{{{object}}}` renders the `description` method, not HTML-escaped.
+- `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
+- `{{^object}}...{{/object}}` does not render.
+    
+Templates can access object's properties: `{{ user.name }}`.
 
 
 ### NSSet
@@ -839,38 +861,18 @@ Exposed keys:
 - `set.count`: the number of elements in the set.
 
 
-### NSArray and NSFastEnumeration
+### NSString
 
-- `{{array}}` renders the concatenation of the renderings of array elements.
-- `{{#array}}...{{/array}}` renders as many times as there are elements in the array, pushing them on top of the [context stack](#the-context-stack).
-- `{{^array}}...{{/array}}` renders if and only if the array is empty.
+- `{{string}}` renders *string*, HTML-escaped.
+- `{{{string}}}` renders *string*, not HTML-escaped.
+- `{{#string}}...{{/string}}` renders if and only if *string* is not empty.
+- `{{^string}}...{{/string}}` renders if and only if *string* is empty.
 
 Exposed keys:
 
-- `array.first`: the first element.
-- `array.last`: the last element.
-- `array.count`: the number of elements in the array.
-
-GRMustache renders as `NSArray` all types that conform to NSFastEnumeration, but [NSSet](#nsset) and [NSDictionary](#nsdictionary).
+- `string.length`: the length of the string.
 
 
-### NSNull
-
-- `{{null}}` does not render.
-- `{{#null}}...{{/null}}` does not render.
-- `{{^null}}...{{/null}}` renders.
-
-
-### NSObject
-
-When an object is not [NSNumber](#nsnumber), [NSString](#nsstring), [NSDictionary](#nsdictionary), [NSSet](#nsset), [NSArray, NSFastEnumeration](#nsarray-and-nsfastenumeration), or [NSNull](#nsnull), it renders as follows:
-
-- `{{object}}` renders the `description` method, HTML-escaped.
-- `{{{object}}}` renders the `description` method, not HTML-escaped.
-- `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
-- `{{^object}}...{{/object}}` does not render.
-    
-Templates can access object's properties: `{{ user.name }}`.
 
 TO BE CONTINUED
 --------------------------------------------------------------------------
