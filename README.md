@@ -160,7 +160,7 @@ Templates may come from various sources:
     
     template = [GRMustacheTemplate templateFromContentsOfURL:templateURL
                                                        error:NULL];
-    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/to/document.mustache"
+    template = [GRMustacheTemplate templateFromContentsOfFile:@"/path/document.mustache"
                                                         error:NULL];
     ```
 
