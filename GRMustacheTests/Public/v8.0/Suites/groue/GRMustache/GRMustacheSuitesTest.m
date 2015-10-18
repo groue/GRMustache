@@ -30,24 +30,45 @@
 
 - (void)testGRMustacheSuites
 {
-    [self runTestsFromResource:@"arrays.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"blocks.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"comments.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"compound_keys.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"delimiters.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"expression_parsing_errors.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"filters.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"general.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"implicit_iterator.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"inverted_sections.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"partial_overrides.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"partials.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"pragmas.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"sections.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"standard_library.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"tag_parsing_errors.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"text_rendering.json" subdirectory:@"Tests"];
-    [self runTestsFromResource:@"variables.json" subdirectory:@"Tests"];
+    // General
+    [self runTestsFromResource:@"comments.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"delimiters.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"general.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"partials.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"pragmas.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"sections.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"inverted_sections.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"text_rendering.json" subdirectory:@"Tests/general"];
+    [self runTestsFromResource:@"variables.json" subdirectory:@"Tests/general"];
+    
+    // Errors
+    [self runTestsFromResource:@"expression_parsing_errors.json" subdirectory:@"Tests/errors"];
+    [self runTestsFromResource:@"tag_parsing_errors.json" subdirectory:@"Tests/errors"];
+    
+    // Expressions
+    [self runTestsFromResource:@"compound_keys.json" subdirectory:@"Tests/expressions"];
+    [self runTestsFromResource:@"filters.json" subdirectory:@"Tests/expressions"];
+    [self runTestsFromResource:@"implicit_iterator.json" subdirectory:@"Tests/expressions"];
+    
+    // Inheritance
+    [self runTestsFromResource:@"blocks.json" subdirectory:@"Tests/inheritance"];
+    [self runTestsFromResource:@"partial_overrides.json" subdirectory:@"Tests/inheritance"];
+    
+    // Standard library
+    [self runTestsFromResource:@"each.json" subdirectory:@"Tests/standard_library"];
+    [self runTestsFromResource:@"HTMLEscape.json" subdirectory:@"Tests/standard_library"];
+    [self runTestsFromResource:@"javascriptEscape.json" subdirectory:@"Tests/standard_library"];
+    [self runTestsFromResource:@"URLEscape.json" subdirectory:@"Tests/standard_library"];
+    [self runTestsFromResource:@"zip.json" subdirectory:@"Tests/standard_library"];
+    
+    // Values
+    [self runTestsFromResource:@"array.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"bool.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"dictionary.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"missing_value.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"null.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"number.json" subdirectory:@"Tests/values"];
+    [self runTestsFromResource:@"string.json" subdirectory:@"Tests/values"];
 }
 
 @end
