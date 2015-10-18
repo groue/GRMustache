@@ -5,7 +5,6 @@
     - [X] Drop GRMustacheSafeKeyAccess
     - [X] Drop default support for objectForKeyedSubscript:
     - [X] Add GRMustacheKeyValueCoding
-- [ ] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
 - [X] Share JSON tests suite with GRMustache.swift.
     - [X] Use submodule
     - [X] Arrays should only have "count", "first" and "last" keys.
@@ -18,9 +17,11 @@
     - [X] +[GRMustache renderingObjectWithBlock:]
     - [X] GRMustacheTag.templateRepository
 - [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
-- [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
 - [X] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
 - [X] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
-- [?] Have Filter and renderingObject APIs closer from GRMustache.swift
-- [?] Drop support for else `{{#a}}{{^a}}{{/a}}`.
 - [X] Remove @synthesize and explicit ivars in headers
+
+- [ ] Drop support for else `{{#a}}{{^a}}{{/a}}`.
+- [?] Have Filter and renderingObject APIs closer from GRMustache.swift
+- [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
+- [?] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
