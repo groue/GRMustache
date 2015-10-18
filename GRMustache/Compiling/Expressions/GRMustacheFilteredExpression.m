@@ -25,9 +25,6 @@
 #import "GRMustacheExpressionVisitor_private.h"
 
 @implementation GRMustacheFilteredExpression
-@synthesize filterExpression=_filterExpression;
-@synthesize argumentExpression=_argumentExpression;
-@synthesize curried=_curried;
 
 + (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
 {

@@ -26,20 +26,17 @@
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
 
-@implementation GRMustacheSectionTag
-@synthesize expression=_expression;
-@synthesize innerTemplateAST=_innerTemplateAST;
+@implementation GRMustacheSectionTag {
+    NSString *_templateString;
+    NSRange _innerRange;
+}
 @synthesize inverted=_inverted;
-@synthesize tagStartDelimiter=_tagStartDelimiter;
-@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
     [_innerTemplateAST release];
-    [_tagStartDelimiter release];
-    [_tagEndDelimiter release];
     [super dealloc];
 }
 
@@ -90,15 +87,13 @@
 
 - (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    self = [super init];
+    self = [super initWithTagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
     if (self) {
         _expression = [expression retain];
         _inverted = inverted;
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _innerTemplateAST = [innerTemplateAST retain];
-        _tagStartDelimiter = [tagStartDelimiter retain];
-        _tagEndDelimiter = [tagEndDelimiter retain];
     }
     return self;
 }

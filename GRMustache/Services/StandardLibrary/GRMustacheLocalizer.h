@@ -66,12 +66,7 @@
  *
  * @since v6.4
  */
-@interface GRMustacheLocalizer : NSObject<GRMustacheRendering, GRMustacheFilter> {
-@private
-    NSBundle *_bundle;
-    NSString *_tableName;
-    NSMutableArray *_formatArguments;
-}
+@interface GRMustacheLocalizer : NSObject<GRMustacheRendering, GRMustacheFilter>
 
 /**
  * Returns an initialized localizing helper.

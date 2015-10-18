@@ -26,8 +26,6 @@
 #import "GRMustacheTemplateASTVisitor_private.h"
 
 @implementation GRMustachePartialOverrideNode
-@synthesize overridingTemplateAST=_overridingTemplateAST;
-@synthesize parentPartialNode=_parentPartialNode;
 
 + (instancetype)partialOverrideNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {

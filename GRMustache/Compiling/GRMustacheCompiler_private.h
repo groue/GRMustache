@@ -37,24 +37,7 @@
  * @see GRMustacheToken
  * @see GRMustacheTemplateParser
  */
-@interface GRMustacheCompiler : NSObject<GRMustacheTemplateParserDelegate> {
-@private
-    NSError *_fatalError;
-    
-    NSMutableArray *_currentASTNodes;
-    NSMutableArray *_ASTNodesStack;
-    
-    GRMustacheToken *_currentOpeningToken;
-    NSMutableArray *_openingTokenStack;
-    
-    NSObject *_currentTagValue;
-    NSMutableArray *_tagValueStack;
-    
-    GRMustacheTemplateRepository *_templateRepository;
-    id _baseTemplateID;
-    GRMustacheContentType _contentType;
-    BOOL _contentTypeLocked;
-}
+@interface GRMustacheCompiler : NSObject<GRMustacheTemplateParserDelegate>
 
 /**
  * The template repository that provides partial templates to the compiler.

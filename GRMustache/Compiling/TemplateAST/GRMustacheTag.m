@@ -26,6 +26,23 @@
 
 @implementation GRMustacheTag
 
+- (instancetype)initWithTagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
+{
+    self = [super init];
+    if (self) {
+        _tagStartDelimiter = [tagStartDelimiter retain];
+        _tagEndDelimiter = [tagEndDelimiter retain];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
+    [super dealloc];
+}
+
 - (GRMustacheTagType)type
 {
     [self doesNotRecognizeSelector:_cmd];

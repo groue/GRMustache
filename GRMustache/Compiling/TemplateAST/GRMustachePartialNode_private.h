@@ -29,11 +29,7 @@
  * A GRMustachePartialNode is an AST node that represents partial tags as
  * `{{>name}}`.
  */
-@interface GRMustachePartialNode : NSObject<GRMustacheTemplateASTNode> {
-@private
-    NSString *_name;
-    GRMustacheTemplateAST *_templateAST;
-}
+@interface GRMustachePartialNode : NSObject<GRMustacheTemplateASTNode>
 
 /**
  * The name of the partial:

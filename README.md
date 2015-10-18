@@ -790,7 +790,6 @@ GRMustache comes with built-in support for the following standard Foundation typ
 - [NSOrderedSet](#nsorderedset)
 - [NSSet](#nsset)
 - [NSString](#nsstring)
-- [NSObject](#nsobject)
 
 
 ### NSArray
@@ -888,7 +887,8 @@ Exposed keys:
 - `string.length`: the length of the string.
 
 
-### NSObject
+Custom Types
+------------
 
 When an object is not one of the specific ones decribed above, it renders as follows:
 
@@ -897,7 +897,47 @@ When an object is not one of the specific ones decribed above, it renders as fol
 - `{{#object}}...{{/object}}` renders once, pushing the object on top of the [context stack](#the-context-stack).
 - `{{^object}}...{{/object}}` does not render.
     
-Templates can access object's properties: `{{ user.name }}`.
+Templates can access object's **safe keys**: `{{ user.name }}`. Safe keys are declared properties and NSManagedObject attributes.
+
+```objc
+@interface Person : NSObject
+@property (nonatomic, copy) NSString *name;
+@end
+
+// Freddy Mercury has a mustache.
+Person *person = [Person personWithName: @"Freddy Mercury"];
+NSString *templateString = @"{{name}} has a mustache.";
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+NSString *rendering = [template renderObject:person error:NULL];
+```
+
+Lambdas
+-------
+
+Mustache lambdas are functions that let you perform custom rendering. There are two kinds of lambdas: those that process section tags, and those that render variable tags.
+
+```swift
+// `{{fullName}}` renders just as `{{firstName}} {{lastName}}.`
+let fullName = Lambda { "{{firstName}} {{lastName}}" }
+
+// `{{#wrapped}}...{{/wrapped}}` renders the content of the section, wrapped in
+// a <b> HTML tag.
+let wrapped = Lambda { (string) in "<b>\(string)</b>" }
+
+// <b>Frank Zappa is awesome.</b>
+let templateString = "{{#wrapped}}{{fullName}} is awesome.{{/wrapped}}"
+let template = try Template(string: templateString)
+let data = [
+    "firstName": Box("Frank"),
+    "lastName": Box("Zappa"),
+    "fullName": Box(fullName),
+    "wrapped": Box(wrapped)]
+let rendering = try template.render(Box(data))
+```
+
+Lambdas are a special case of custom rendering functions. The raw `RenderFunction` type gives you extra flexibility when you need to perform custom rendering. See [CoreFunctions.swift](Mustache/Rendering/CoreFunctions.swift) ([read on cocoadocs.org](http://cocoadocs.org/docsets/GRMustache.swift/0.11.0/Typealiases.html)).
+
+
 
 
 

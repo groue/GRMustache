@@ -23,7 +23,6 @@
 #import "GRMustacheExpression_private.h"
 
 @implementation GRMustacheExpression
-@synthesize token=_token;
 
 - (void)dealloc
 {

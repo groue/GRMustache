@@ -23,6 +23,13 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros.h"
 
+/**
+ * TODO
+ */
 @protocol GRMustacheKeyValueCoding <NSObject>
+
+/**
+ * TODO
+ */
 - (id)valueForMustacheKey:(NSString *)key;
 @end

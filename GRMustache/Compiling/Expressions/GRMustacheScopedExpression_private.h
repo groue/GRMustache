@@ -26,12 +26,7 @@
  * The GRMustacheScopedExpression represents expressions such as
  * `<expression>.identifier`.
  */
-@interface GRMustacheScopedExpression : GRMustacheExpression {
-@private
-    GRMustacheExpression *_baseExpression;
-    NSString *_identifier;
-}
-
+@interface GRMustacheScopedExpression : GRMustacheExpression
 @property (nonatomic, retain, readonly) GRMustacheExpression *baseExpression GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, retain, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 

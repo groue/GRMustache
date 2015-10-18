@@ -76,12 +76,7 @@
  * @see GRMustacheToken
  * @see GRMustacheTemplateParserDelegate
  */
-@interface GRMustacheTemplateParser : NSObject {
-@private
-    id<GRMustacheTemplateParserDelegate> _delegate;
-    NSString *_tagStartDelimiter;
-    NSString *_tagEndDelimiter;
-}
+@interface GRMustacheTemplateParser : NSObject
 
 /**
  * The parser's delegate.

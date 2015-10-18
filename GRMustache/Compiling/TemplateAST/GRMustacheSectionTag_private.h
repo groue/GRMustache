@@ -27,17 +27,7 @@
 @class GRMustacheExpression;
 @class GRMustacheTemplateAST;
 
-@interface GRMustacheSectionTag : GRMustacheTag {
-@private
-    GRMustacheExpression *_expression;
-    BOOL _inverted;
-    NSString *_templateString;
-    NSRange _innerRange;
-    GRMustacheTemplateAST *_innerTemplateAST;
-    NSString *_tagStartDelimiter;
-    NSString *_tagEndDelimiter;
-}
-
+@interface GRMustacheSectionTag : GRMustacheTag
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 

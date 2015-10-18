@@ -25,11 +25,6 @@
 
 @class GRMustacheExpression;
 
-@interface GRMustacheExpressionGenerator : NSObject {
-@private
-    NSString *_expressionString;
-}
-
+@interface GRMustacheExpressionGenerator : NSObject
 - (NSString *)stringWithExpression:(GRMustacheExpression *)expression GRMUSTACHE_API_INTERNAL;
-
 @end

@@ -30,12 +30,7 @@
 @protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheTemplate.h
-@interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
-@private
-    GRMustacheTemplateRepository *_templateRepository;
-    GRMustacheTemplateAST *_templateAST;
-    GRMustacheContext *_baseContext;
-}
+@interface GRMustacheTemplate: NSObject<GRMustacheRendering>
 
 @property (nonatomic, retain) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
 

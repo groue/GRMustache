@@ -24,7 +24,6 @@
 #import "GRMustacheExpressionVisitor_private.h"
 
 @implementation GRMustacheIdentifierExpression
-@synthesize identifier=_identifier;
 
 + (instancetype)expressionWithIdentifier:(NSString *)identifier
 {

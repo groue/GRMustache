@@ -36,12 +36,7 @@
  * 
  * @since v1.0
  */
-@interface GRMustacheTemplate: NSObject<GRMustacheRendering> {
-@private
-    GRMustacheTemplateRepository *_templateRepository;
-    id _templateAST;
-    GRMustacheContext *_baseContext;
-}
+@interface GRMustacheTemplate: NSObject<GRMustacheRendering>
 
 
 ////////////////////////////////////////////////////////////////////////////////

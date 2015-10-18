@@ -31,9 +31,6 @@
 #import "GRMustacheSectionTag_private.h"
 
 @implementation GRMustacheTemplate
-@synthesize templateRepository=_templateRepository;
-@synthesize templateAST=_templateAST;
-@synthesize baseContext=_baseContext;
 
 + (instancetype)templateFromString:(NSString *)templateString error:(NSError **)error
 {

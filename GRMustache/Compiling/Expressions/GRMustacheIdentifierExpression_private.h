@@ -26,11 +26,7 @@
  * The GRMustacheIdentifierExpression represents expressions such as
  * `identifier`.
  */
-@interface GRMustacheIdentifierExpression : GRMustacheExpression {
-@private
-    NSString *_identifier;
-}
-
+@interface GRMustacheIdentifierExpression : GRMustacheExpression
 @property (nonatomic, retain, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 
 /**

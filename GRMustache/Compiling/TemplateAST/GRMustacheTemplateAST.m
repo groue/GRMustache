@@ -25,8 +25,6 @@
 #import "GRMustacheTemplateASTVisitor_private.h"
 
 @implementation GRMustacheTemplateAST
-@synthesize templateASTNodes=_templateASTNodes;
-@synthesize contentType=_contentType;
 
 - (void)dealloc
 {

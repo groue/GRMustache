@@ -24,17 +24,13 @@
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
 
-@implementation GRMustacheVariableTag
-@synthesize expression=_expression;
-@synthesize escapesHTML=_escapesHTML;
-@synthesize tagStartDelimiter=_tagStartDelimiter;
-@synthesize tagEndDelimiter=_tagEndDelimiter;
+@implementation GRMustacheVariableTag {
+    GRMustacheContentType _contentType;
+}
 
 - (void)dealloc
 {
     [_expression release];
-    [_tagStartDelimiter release];
-    [_tagEndDelimiter release];
     [super dealloc];
 }
 
@@ -92,13 +88,11 @@
 
 - (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    self = [super init];
+    self = [super initWithTagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
     if (self) {
         _expression = [expression retain];
         _escapesHTML = escapesHTML;
         _contentType = contentType;
-        _tagStartDelimiter = [tagStartDelimiter retain];
-        _tagEndDelimiter = [tagEndDelimiter retain];
     }
     return self;
 }

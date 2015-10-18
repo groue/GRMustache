@@ -102,17 +102,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
  * - a token of type GRMustacheTokenTypeEscapedVariable holding "{{name}}"
  * - a token of type GRMustacheTokenTypeText holding "!"
  */
-@interface GRMustacheToken : NSObject {
-@private
-    GRMustacheTokenType _type;
-    NSString *_templateString;
-    id _templateID;
-    NSUInteger _line;
-    NSRange _range;
-    NSRange _tagInnerRange;
-    NSString *_tagStartDelimiter;
-    NSString *_tagEndDelimiter;
-}
+@interface GRMustacheToken : NSObject
 
 /**
  * The type of the token.

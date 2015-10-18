@@ -25,11 +25,6 @@
 #import "GRMustacheContext_private.h"
 
 @implementation GRMustacheConfiguration
-@synthesize contentType=_contentType;
-@synthesize tagStartDelimiter=_tagStartDelimiter;
-@synthesize tagEndDelimiter=_tagEndDelimiter;
-@synthesize baseContext=_baseContext;
-@synthesize locked=_locked;
 
 + (GRMustacheConfiguration *)defaultConfiguration
 {

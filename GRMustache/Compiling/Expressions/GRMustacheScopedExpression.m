@@ -25,8 +25,6 @@
 
 
 @implementation GRMustacheScopedExpression
-@synthesize baseExpression=_baseExpression;
-@synthesize identifier=_identifier;
 
 + (instancetype)expressionWithBaseExpression:(GRMustacheExpression *)baseExpression identifier:(NSString *)identifier
 {

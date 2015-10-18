@@ -111,16 +111,10 @@
 
 @end
 
-@implementation GRMustacheCompiler
-@synthesize fatalError=_fatalError;
-@synthesize templateRepository=_templateRepository;
-@synthesize baseTemplateID=_baseTemplateID;
-@synthesize currentOpeningToken=_currentOpeningToken;
-@synthesize openingTokenStack=_openingTokenStack;
-@synthesize currentTagValue=_currentTagValue;
-@synthesize tagValueStack=_tagValueStack;
-@synthesize currentASTNodes=_currentASTNodes;
-@synthesize ASTNodesStack=_ASTNodesStack;
+@implementation GRMustacheCompiler {
+    GRMustacheContentType _contentType;
+    BOOL _contentTypeLocked;
+}
 
 - (instancetype)initWithContentType:(GRMustacheContentType)contentType
 {

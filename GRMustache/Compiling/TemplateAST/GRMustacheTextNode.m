@@ -23,7 +23,9 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheTextNode
+@implementation GRMustacheTextNode {
+    NSString *_text;
+}
 
 + (instancetype)textNodeWithText:(NSString *)text
 {

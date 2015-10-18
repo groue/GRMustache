@@ -34,9 +34,6 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
 @end
 
 @implementation GRMustacheLocalizer
-@synthesize formatArguments=_formatArguments;
-@synthesize bundle=_bundle;
-@synthesize tableName=_tableName;
 
 - (void)dealloc
 {

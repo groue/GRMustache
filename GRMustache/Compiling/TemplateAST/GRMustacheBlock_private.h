@@ -30,11 +30,7 @@
  * A GRMustacheBlock is an AST node that represents blocks such
  * as `{{$name}}...{{/name}}`.
  */
-@interface GRMustacheBlock : NSObject<GRMustacheTemplateASTNode> {
-@private
-    NSString *_name;
-    GRMustacheTemplateAST *_innerTemplateAST;
-}
+@interface GRMustacheBlock : NSObject<GRMustacheTemplateASTNode>
 
 /**
  * The AST of the inner content of the block

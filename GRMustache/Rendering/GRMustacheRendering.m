@@ -45,10 +45,7 @@ static GRMustacheNilRendering *nilRendering;
 
 // GRMustacheBlockRendering renders with a block
 
-@interface GRMustacheBlockRendering : NSObject<GRMustacheRenderingWithIterationSupport> {
-@private
-    NSString *(^_renderingBlock)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
-}
+@interface GRMustacheBlockRendering : NSObject<GRMustacheRenderingWithIterationSupport>
 - (instancetype)initWithRenderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock;
 @end
 
@@ -271,7 +268,9 @@ static BOOL GRMustacheBoolValueNSFastEnumeration(id<NSFastEnumeration> self, SEL
 @end
 
 
-@implementation GRMustacheBlockRendering
+@implementation GRMustacheBlockRendering {
+    NSString *(^_renderingBlock)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
+}
 
 - (void)dealloc
 {

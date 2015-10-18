@@ -28,15 +28,7 @@
 @protocol GRMustacheTagDelegate;
 
 // Documented in GRMustacheConfiguration.h
-@interface GRMustacheConfiguration : NSObject<NSCopying> {
-@private
-    GRMustacheContentType _contentType;
-    NSString *_tagStartDelimiter;
-    NSString *_tagEndDelimiter;
-    GRMustacheContext *_baseContext;
-    BOOL _locked;
-}
-
+@interface GRMustacheConfiguration : NSObject<NSCopying>
 
 // Documented in GRMustacheConfiguration.h
 + (GRMustacheConfiguration *)defaultConfiguration GRMUSTACHE_API_PUBLIC;

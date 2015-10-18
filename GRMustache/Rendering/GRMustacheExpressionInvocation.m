@@ -36,10 +36,6 @@
 @end
 
 @implementation GRMustacheExpressionInvocation
-@synthesize context=_context;
-@synthesize expression=_expression;
-@synthesize value=_value;
-@synthesize valueIsProtected=_valueIsProtected;
 
 - (BOOL)invokeReturningError:(NSError **)error
 {

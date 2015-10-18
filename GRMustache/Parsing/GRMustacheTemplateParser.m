@@ -40,9 +40,6 @@
 @end
 
 @implementation GRMustacheTemplateParser
-@synthesize delegate=_delegate;
-@synthesize tagStartDelimiter=_tagStartDelimiter;
-@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (instancetype)initWithConfiguration:(GRMustacheConfiguration *)configuration
 {

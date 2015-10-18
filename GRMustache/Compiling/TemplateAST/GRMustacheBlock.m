@@ -24,8 +24,6 @@
 #import "GRMustacheTemplateASTVisitor_private.h"
 
 @implementation GRMustacheBlock
-@synthesize name=_name;
-@synthesize innerTemplateAST=_innerTemplateAST;
 
 + (instancetype)blockWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {

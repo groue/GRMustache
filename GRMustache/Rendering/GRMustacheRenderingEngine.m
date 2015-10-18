@@ -37,6 +37,7 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
 #import "GRMustacheExpressionInvocation_private.h"
+#import "GRMustacheBuffer_private.h"
 
 @interface GRMustacheRenderingEngine() <GRMustacheTemplateASTVisitor>
 @end
@@ -58,7 +59,12 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 }
 
 
-@implementation GRMustacheRenderingEngine
+@implementation GRMustacheRenderingEngine {
+    GRMustacheBuffer _buffer;
+    GRMustacheTemplateAST *_templateAST;
+    GRMustacheContext *_context;
+    GRMustacheContentType _contentType;
+}
 
 + (void)initialize
 {

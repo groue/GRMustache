@@ -38,8 +38,10 @@
 @interface GRMustacheTemplateGenerator() <GRMustacheTemplateASTVisitor>
 @end
 
-@implementation GRMustacheTemplateGenerator
-@synthesize templateRepository=_templateRepository;
+@implementation GRMustacheTemplateGenerator {
+    GRMustacheExpressionGenerator *_expressionGenerator;
+    NSMutableString *_templateString;
+}
 
 - (void)dealloc
 {

@@ -948,12 +948,12 @@
 		56BF366019B8EE8B00854524 /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
-				56BF366119B8EE8B00854524 /* GRMustacheExpressionParser.m */,
 				56BF366219B8EE8B00854524 /* GRMustacheExpressionParser_private.h */,
-				56BF366319B8EE8B00854524 /* GRMustacheTemplateParser.m */,
+				56BF366119B8EE8B00854524 /* GRMustacheExpressionParser.m */,
 				56BF366419B8EE8B00854524 /* GRMustacheTemplateParser_private.h */,
-				56BF366519B8EE8B00854524 /* GRMustacheToken.m */,
+				56BF366319B8EE8B00854524 /* GRMustacheTemplateParser.m */,
 				56BF366619B8EE8B00854524 /* GRMustacheToken_private.h */,
+				56BF366519B8EE8B00854524 /* GRMustacheToken.m */,
 			);
 			path = Parsing;
 			sourceTree = "<group>";
@@ -961,8 +961,8 @@
 		56BF367319B8EE9D00854524 /* Compiling */ = {
 			isa = PBXGroup;
 			children = (
-				56BF368019B8EE9D00854524 /* GRMustacheCompiler.m */,
 				56BF368119B8EE9D00854524 /* GRMustacheCompiler_private.h */,
+				56BF368019B8EE9D00854524 /* GRMustacheCompiler.m */,
 				56BF367419B8EE9D00854524 /* Expressions */,
 				56BF368219B8EE9D00854524 /* TemplateAST */,
 			);
@@ -972,17 +972,17 @@
 		56BF367419B8EE9D00854524 /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
-				56BF367519B8EE9D00854524 /* GRMustacheExpression.m */,
 				56BF367619B8EE9D00854524 /* GRMustacheExpression_private.h */,
+				56BF367519B8EE9D00854524 /* GRMustacheExpression.m */,
 				56BF367719B8EE9D00854524 /* GRMustacheExpressionVisitor_private.h */,
-				56BF367819B8EE9D00854524 /* GRMustacheFilteredExpression.m */,
 				56BF367919B8EE9D00854524 /* GRMustacheFilteredExpression_private.h */,
-				56BF367A19B8EE9D00854524 /* GRMustacheIdentifierExpression.m */,
+				56BF367819B8EE9D00854524 /* GRMustacheFilteredExpression.m */,
 				56BF367B19B8EE9D00854524 /* GRMustacheIdentifierExpression_private.h */,
-				56BF367C19B8EE9D00854524 /* GRMustacheImplicitIteratorExpression.m */,
+				56BF367A19B8EE9D00854524 /* GRMustacheIdentifierExpression.m */,
 				56BF367D19B8EE9D00854524 /* GRMustacheImplicitIteratorExpression_private.h */,
-				56BF367E19B8EE9D00854524 /* GRMustacheScopedExpression.m */,
+				56BF367C19B8EE9D00854524 /* GRMustacheImplicitIteratorExpression.m */,
 				56BF367F19B8EE9D00854524 /* GRMustacheScopedExpression_private.h */,
+				56BF367E19B8EE9D00854524 /* GRMustacheScopedExpression.m */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -1016,23 +1016,23 @@
 		56BF36D619B8EEAD00854524 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				56BF36D919B8EEAD00854524 /* GRMustacheContext_private.h */,
 				56BF36D719B8EEAD00854524 /* GRMustacheContext.h */,
 				56BF36D819B8EEAD00854524 /* GRMustacheContext.m */,
-				56BF36D919B8EEAD00854524 /* GRMustacheContext_private.h */,
-				56BF36DA19B8EEAD00854524 /* GRMustacheExpressionInvocation.m */,
 				56BF36DB19B8EEAD00854524 /* GRMustacheExpressionInvocation_private.h */,
+				56BF36DA19B8EEAD00854524 /* GRMustacheExpressionInvocation.m */,
+				56BF36DE19B8EEAD00854524 /* GRMustacheFilter_private.h */,
 				56BF36DC19B8EEAD00854524 /* GRMustacheFilter.h */,
 				56BF36DD19B8EEAD00854524 /* GRMustacheFilter.m */,
-				56BF36DE19B8EEAD00854524 /* GRMustacheFilter_private.h */,
-				56BF36DF19B8EEAE00854524 /* GRMustacheKeyAccess.m */,
 				56BF36E019B8EEAE00854524 /* GRMustacheKeyAccess_private.h */,
+				56BF36DF19B8EEAE00854524 /* GRMustacheKeyAccess.m */,
+				56DAC7A21BB6C8DD0010FE01 /* GRMustacheKeyValueCoding.h */,
+				56BF36E319B8EEAE00854524 /* GRMustacheRendering_private.h */,
 				56BF36E119B8EEAE00854524 /* GRMustacheRendering.h */,
 				56BF36E219B8EEAE00854524 /* GRMustacheRendering.m */,
-				56BF36E319B8EEAE00854524 /* GRMustacheRendering_private.h */,
-				56BF36E419B8EEAE00854524 /* GRMustacheRenderingEngine.m */,
 				56BF36E519B8EEAE00854524 /* GRMustacheRenderingEngine_private.h */,
+				56BF36E419B8EEAE00854524 /* GRMustacheRenderingEngine.m */,
 				56BF36E719B8EEAE00854524 /* GRMustacheTagDelegate.h */,
-				56DAC7A21BB6C8DD0010FE01 /* GRMustacheKeyValueCoding.h */,
 				56DAC7AA1BB6C9040010FE01 /* NSObject+GRMustacheKeyValueCoding_private.h */,
 				56DAC7AB1BB6C9040010FE01 /* NSObject+GRMustacheKeyValueCoding.m */,
 			);
@@ -1042,12 +1042,12 @@
 		56BF370A19B8EEB900854524 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
+				56BF370D19B8EEB900854524 /* GRMustacheTemplate_private.h */,
 				56BF370B19B8EEB900854524 /* GRMustacheTemplate.h */,
 				56BF370C19B8EEB900854524 /* GRMustacheTemplate.m */,
-				56BF370D19B8EEB900854524 /* GRMustacheTemplate_private.h */,
+				56BF371019B8EEB900854524 /* GRMustacheTemplateRepository_private.h */,
 				56BF370E19B8EEB900854524 /* GRMustacheTemplateRepository.h */,
 				56BF370F19B8EEB900854524 /* GRMustacheTemplateRepository.m */,
-				56BF371019B8EEB900854524 /* GRMustacheTemplateRepository_private.h */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -1055,10 +1055,10 @@
 		56BF371D19B8EEC700854524 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				56B01A4B19C49AF5000439C7 /* GRMustacheExpressionGenerator.m */,
 				56B01A4A19C49AF5000439C7 /* GRMustacheExpressionGenerator_private.h */,
-				56BF371E19B8EEC700854524 /* GRMustacheTemplateGenerator.m */,
+				56B01A4B19C49AF5000439C7 /* GRMustacheExpressionGenerator.m */,
 				56BF371F19B8EEC700854524 /* GRMustacheTemplateGenerator_private.h */,
+				56BF371E19B8EEC700854524 /* GRMustacheTemplateGenerator.m */,
 				56BF372019B8EEC700854524 /* NSFormatter+GRMustache.h */,
 				56BF372119B8EEC700854524 /* NSFormatter+GRMustache.m */,
 				56BF372219B8EEC700854524 /* NSValueTransformer+GRMustache.h */,
@@ -1071,16 +1071,16 @@
 		56BF372419B8EEC700854524 /* StandardLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				56BF372519B8EEC700854524 /* GRMustacheEachFilter.m */,
 				56BF372619B8EEC700854524 /* GRMustacheEachFilter_private.h */,
-				56BF372719B8EEC700854524 /* GRMustacheHTMLEscapeFilter.m */,
+				56BF372519B8EEC700854524 /* GRMustacheEachFilter.m */,
 				56BF372819B8EEC700854524 /* GRMustacheHTMLEscapeFilter_private.h */,
-				56BF372919B8EEC700854524 /* GRMustacheJavascriptEscapeFilter.m */,
+				56BF372719B8EEC700854524 /* GRMustacheHTMLEscapeFilter.m */,
 				56BF372A19B8EEC700854524 /* GRMustacheJavascriptEscapeFilter_private.h */,
+				56BF372919B8EEC700854524 /* GRMustacheJavascriptEscapeFilter.m */,
 				56BF372B19B8EEC700854524 /* GRMustacheLocalizer.h */,
 				56BF372C19B8EEC700854524 /* GRMustacheLocalizer.m */,
-				56BF372F19B8EEC700854524 /* GRMustacheURLEscapeFilter.m */,
 				56BF373019B8EEC700854524 /* GRMustacheURLEscapeFilter_private.h */,
+				56BF372F19B8EEC700854524 /* GRMustacheURLEscapeFilter.m */,
 			);
 			path = StandardLibrary;
 			sourceTree = "<group>";
@@ -1088,14 +1088,14 @@
 		56BF375519B8EF2800854524 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				56BF375619B8EF2800854524 /* GRMustacheAvailabilityMacros.h */,
 				56BF375719B8EF2800854524 /* GRMustacheAvailabilityMacros_private.h */,
+				56BF375619B8EF2800854524 /* GRMustacheAvailabilityMacros.h */,
 				56BF375819B8EF2800854524 /* GRMustacheBuffer_private.h */,
 				56BF375919B8EF2800854524 /* GRMustacheContentType.h */,
 				56BF375A19B8EF2800854524 /* GRMustacheError.h */,
 				56BF375B19B8EF2800854524 /* GRMustacheError.m */,
-				56BF375C19B8EF2800854524 /* GRMustacheTranslateCharacters.m */,
 				56BF375D19B8EF2800854524 /* GRMustacheTranslateCharacters_private.h */,
+				56BF375C19B8EF2800854524 /* GRMustacheTranslateCharacters.m */,
 			);
 			path = Shared;
 			sourceTree = "<group>";

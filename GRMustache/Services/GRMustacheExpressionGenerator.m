@@ -31,7 +31,9 @@
 @interface GRMustacheExpressionGenerator() <GRMustacheExpressionVisitor>
 @end
 
-@implementation GRMustacheExpressionGenerator
+@implementation GRMustacheExpressionGenerator {
+    NSString *_expressionString;
+}
 
 - (NSString *)stringWithExpression:(GRMustacheExpression *)expression
 {

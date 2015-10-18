@@ -38,12 +38,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * Private subclass of GRMustacheTemplateRepository that is its own data source,
  * and loads templates from a base URL.
  */
-@interface GRMustacheTemplateRepositoryBaseURL : GRMustacheTemplateRepository {
-@private
-    NSURL *_baseURL;
-    NSString *_templateExtension;
-    NSStringEncoding _encoding;
-}
+@interface GRMustacheTemplateRepositoryBaseURL : GRMustacheTemplateRepository
 - (instancetype)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
@@ -55,12 +50,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * Private subclass of GRMustacheTemplateRepository that is its own data source,
  * and loads templates from a directory identified by its path.
  */
-@interface GRMustacheTemplateRepositoryDirectory : GRMustacheTemplateRepository {
-@private
-    NSString *_directoryPath;
-    NSString *_templateExtension;
-    NSStringEncoding _encoding;
-}
+@interface GRMustacheTemplateRepositoryDirectory : GRMustacheTemplateRepository
 - (instancetype)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
@@ -72,12 +62,7 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
  * Private subclass of GRMustacheTemplateRepository that is its own data source,
  * and loads templates from a bundle.
  */
-@interface GRMustacheTemplateRepositoryBundle : GRMustacheTemplateRepository {
-@private
-    NSBundle *_bundle;
-    NSString *_templateExtension;
-    NSStringEncoding _encoding;
-}
+@interface GRMustacheTemplateRepositoryBundle : GRMustacheTemplateRepository
 - (instancetype)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding;
 @end
 
@@ -100,9 +85,9 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 // =============================================================================
 #pragma mark - GRMustacheTemplateRepository
 
-@implementation GRMustacheTemplateRepository
-@synthesize dataSource=_dataSource;
-@synthesize configuration=_configuration;
+@implementation GRMustacheTemplateRepository {
+    NSMutableDictionary *_templateASTForTemplateID;
+}
 
 + (instancetype)templateRepositoryWithBaseURL:(NSURL *)URL
 {
@@ -337,7 +322,11 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepositoryBaseURL()<GRMustacheTemplateRepositoryDataSource>
 @end
 
-@implementation GRMustacheTemplateRepositoryBaseURL
+@implementation GRMustacheTemplateRepositoryBaseURL {
+    NSURL *_baseURL;
+    NSString *_templateExtension;
+    NSStringEncoding _encoding;
+}
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
@@ -400,7 +389,11 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepositoryDirectory()<GRMustacheTemplateRepositoryDataSource>
 @end
 
-@implementation GRMustacheTemplateRepositoryDirectory
+@implementation GRMustacheTemplateRepositoryDirectory {
+    NSString *_directoryPath;
+    NSString *_templateExtension;
+    NSStringEncoding _encoding;
+}
 
 - (instancetype)initWithDirectory:(NSString *)directoryPath templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {
@@ -464,7 +457,11 @@ static NSString* const GRMustacheDefaultExtension = @"mustache";
 @interface GRMustacheTemplateRepositoryBundle()<GRMustacheTemplateRepositoryDataSource>
 @end
 
-@implementation GRMustacheTemplateRepositoryBundle
+@implementation GRMustacheTemplateRepositoryBundle {
+    NSBundle *_bundle;
+    NSString *_templateExtension;
+    NSStringEncoding _encoding;
+}
 
 - (instancetype)initWithBundle:(NSBundle *)bundle templateExtension:(NSString *)templateExtension encoding:(NSStringEncoding)encoding
 {

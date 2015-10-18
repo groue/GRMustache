@@ -26,8 +26,6 @@
 
 
 @implementation GRMustachePartialNode
-@synthesize templateAST=_templateAST;
-@synthesize name=_name;
 
 - (void)dealloc
 {

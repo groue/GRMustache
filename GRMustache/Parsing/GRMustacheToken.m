@@ -24,14 +24,6 @@
 
 
 @implementation GRMustacheToken
-@synthesize type=_type;
-@synthesize templateString=_templateString;
-@synthesize templateID=_templateID;
-@synthesize line=_line;
-@synthesize range=_range;
-@synthesize tagInnerRange=_tagInnerRange;
-@synthesize tagStartDelimiter=_tagStartDelimiter;
-@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (void)dealloc
 {

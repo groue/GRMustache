@@ -40,12 +40,7 @@
 @end
 
 // Documented in GRMustacheTemplateRepository.h
-@interface GRMustacheTemplateRepository : NSObject {
-@private
-    id<GRMustacheTemplateRepositoryDataSource> _dataSource;
-    NSMutableDictionary *_templateASTForTemplateID;
-    GRMustacheConfiguration *_configuration;
-}
+@interface GRMustacheTemplateRepository : NSObject
 
 // Documented in GRMustacheTemplateRepository.h
 @property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource GRMUSTACHE_API_PUBLIC;

@@ -31,11 +31,7 @@
  * A GRMustachePartialOverrideNode is an AST node that represents inherited
  * partials as `{{<name}}...{{/name}}`.
  */
-@interface GRMustachePartialOverrideNode : NSObject<GRMustacheTemplateASTNode> {
-@private
-    GRMustachePartialNode *_parentPartialNode;
-    GRMustacheTemplateAST *_overridingTemplateAST;
-}
+@interface GRMustachePartialOverrideNode : NSObject<GRMustacheTemplateASTNode>
 
 /**
  * The overriding AST, built from the inner content of the overriding partial:

@@ -29,10 +29,7 @@
  * Private subclass of GRMustacheFilter that filters a single argument by
  * calling a block.
  */
-@interface GRMustacheBlockFilter: GRMustacheFilter {
-@private
-    id(^_block)(id value);
-}
+@interface GRMustacheBlockFilter: GRMustacheFilter
 - (instancetype)initWithBlock:(id(^)(id value))block;
 @end
 
@@ -44,11 +41,7 @@
  * Private subclass of GRMustacheFilter that filters an array of arguments by
  * calling a block.
  */
-@interface GRMustacheBlockVariadicFilter: GRMustacheFilter {
-@private
-    NSArray *_arguments;
-    id(^_block)(NSArray *arguments);
-}
+@interface GRMustacheBlockVariadicFilter: GRMustacheFilter
 - (instancetype)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments;
 @end
 
@@ -79,7 +72,9 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockFilter
 
-@implementation GRMustacheBlockFilter
+@implementation GRMustacheBlockFilter {
+    id(^_block)(id value);
+}
 
 - (instancetype)initWithBlock:(id(^)(id value))block
 {
@@ -114,7 +109,10 @@
 // =============================================================================
 #pragma mark - Private concrete class GRMustacheBlockVariadicFilter
 
-@implementation GRMustacheBlockVariadicFilter
+@implementation GRMustacheBlockVariadicFilter {
+    NSArray *_arguments;
+    id(^_block)(NSArray *arguments);
+}
 
 - (instancetype)initWithBlock:(id(^)(NSArray *arguments))block arguments:(NSArray *)arguments
 {

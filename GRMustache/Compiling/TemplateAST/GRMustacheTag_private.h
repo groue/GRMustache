@@ -43,10 +43,10 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, readonly, retain) NSString *tagStartDelimiter GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, retain) NSString *tagStartDelimiter GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, readonly, retain) NSString *tagEndDelimiter GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, retain) NSString *tagEndDelimiter GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;
@@ -55,5 +55,7 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
  * TODO
  */
 @property (nonatomic, readonly, getter=isInverted) BOOL inverted GRMUSTACHE_API_INTERNAL;
+
+- (instancetype)initWithTagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter GRMUSTACHE_API_INTERNAL;
 
 @end

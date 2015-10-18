@@ -24,7 +24,6 @@
 #import "GRMustacheAvailabilityMacros_private.h"
 
 @protocol GRMustacheTagDelegate;
-@protocol GRMustacheTemplateASTNode;
 @class GRMustachePartialOverrideNode;
 
 /**
@@ -51,23 +50,7 @@
  *
  * - Let partials override AST nodes.
  */
-@interface GRMustacheContext : NSObject {
-@private
-
-#define GRMUSTACHE_STACK_TOP_IVAR(stackName) _ ## stackName ## Object
-#define GRMUSTACHE_STACK_PARENT_IVAR(stackName) _ ## stackName ## Parent
-#define GRMUSTACHE_STACK_DECLARE_IVARS(stackName, type) \
-    GRMustacheContext *GRMUSTACHE_STACK_PARENT_IVAR(stackName); \
-    type GRMUSTACHE_STACK_TOP_IVAR(stackName)
-    
-    GRMUSTACHE_STACK_DECLARE_IVARS(contextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
-    GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideNodeStack, GRMustachePartialOverrideNode *);
-    
-    BOOL _unsafeKeyAccess;
-}
+@interface GRMustacheContext : NSObject
 
 // Documented in GRMustacheContext.h
 + (instancetype)context GRMUSTACHE_API_PUBLIC;
