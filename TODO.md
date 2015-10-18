@@ -21,5 +21,7 @@
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
 - [X] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
 - [X] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
-- [ ] Have Filter and renderingObject APIs closer from GRMustache.swift
-- [ ] Drop support for else `{{#a}}{{^a}}{{/a}}`.
+- [?] Have Filter and renderingObject APIs closer from GRMustache.swift
+- [?] Drop support for else `{{#a}}{{^a}}{{/a}}`.
+- [ ] Have rendering engine responsible for excluded middle (truthy, or falsey, not both)
+- [ ] Remove @synthesize and explicit ivars in headers
