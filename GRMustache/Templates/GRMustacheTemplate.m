@@ -26,7 +26,7 @@
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
 #import "GRMustacheTag_private.h"
-#import "GRMustacheInheritedPartialNode_private.h"
+#import "GRMustachePartialOverrideNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheSectionTag_private.h"
 
@@ -152,12 +152,12 @@
             // Let's render the template, overriding blocks with the content
             // of the section.
             //
-            // Overriding requires an GRMustacheInheritedPartialNode:
+            // Overriding requires an GRMustachePartialOverrideNode:
             
             GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:self.templateAST name:nil];
-            GRMustacheInheritedPartialNode *partialOverrideNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithParentPartialNode:partialNode overridingTemplateAST:((GRMustacheSectionTag *)tag).innerTemplateAST];
+            GRMustachePartialOverrideNode *partialOverrideNode = [GRMustachePartialOverrideNode partialOverrideNodeWithParentPartialNode:partialNode overridingTemplateAST:((GRMustacheSectionTag *)tag).innerTemplateAST];
             
-            // Only GRMustacheRenderingEngine knows how to render GRMustacheInheritedPartialNode.
+            // Only GRMustacheRenderingEngine knows how to render GRMustachePartialOverrideNode.
             // So wrap the node into a TemplateAST, and render.
             GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:@[partialOverrideNode] contentType:self.templateAST.contentType];
             GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithTemplateAST:templateAST context:context];

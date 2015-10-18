@@ -55,7 +55,7 @@
     // Relevant test:
     //
     // {
-    //   "name": "Partials in inherited partials can override blocks",
+    //   "name": "Partials in partial overrides can override blocks",
     //   "data": { },
     //   "template": "{{<partial2}}{{>partial1}}{{/partial2}}",
     //   "partials": {

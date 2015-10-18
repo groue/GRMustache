@@ -28,18 +28,17 @@
 @class GRMustacheTemplateAST;
 
 /**
- * A GRMustacheInheritedPartialNode is an AST node that represents inherited
+ * A GRMustachePartialOverrideNode is an AST node that represents inherited
  * partials as `{{<name}}...{{/name}}`.
  */
-@interface GRMustacheInheritedPartialNode : NSObject<GRMustacheTemplateASTNode> {
+@interface GRMustachePartialOverrideNode : NSObject<GRMustacheTemplateASTNode> {
 @private
     GRMustachePartialNode *_parentPartialNode;
     GRMustacheTemplateAST *_overridingTemplateAST;
 }
 
 /**
- * The overriding AST, built from the inner content of the inherited partial
- * node:
+ * The overriding AST, built from the inner content of the overriding partial:
  *
  *     {{< ... }} AST {{/ }}
  */
@@ -53,13 +52,13 @@
 @property (nonatomic, retain, readonly) GRMustachePartialNode *parentPartialNode GRMUSTACHE_API_INTERNAL;
 
 /**
- * Builds a GRMustacheInheritedPartialNode.
+ * Builds a GRMustachePartialOverrideNode.
  *
  * @param parentPartialNode  The inherited partial.
- * @param templateAST        The AST that overrides the inherited partial template.
+ * @param templateAST        The AST that overrides the inherited partial.
  *
- * @return A GRMustacheInheritedPartialNode
+ * @return A GRMustachePartialOverrideNode
  */
-+ (instancetype)inheritedPartialNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)partialOverrideNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST GRMUSTACHE_API_INTERNAL;
 
 @end

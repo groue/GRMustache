@@ -27,7 +27,7 @@
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
 #import "GRMustacheBlock_private.h"
-#import "GRMustacheInheritedPartialNode_private.h"
+#import "GRMustachePartialOverrideNode_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
 #import "GRMustacheToken_private.h"
@@ -216,7 +216,7 @@
             
         case GRMustacheTokenTypeEscapedVariable: {
             // Context validation
-            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypePartialOverride) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
                 return NO;
             }
@@ -241,7 +241,7 @@
             
         case GRMustacheTokenTypeUnescapedVariable: {
             // Context validation
-            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypePartialOverride) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
                 return NO;
             }
@@ -266,7 +266,7 @@
             
         case GRMustacheTokenTypeSectionOpening: {
             // Context validation
-            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypePartialOverride) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
                 return NO;
             }
@@ -335,7 +335,7 @@
             
         case GRMustacheTokenTypeInvertedSectionOpening: {
             // Context validation
-            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypeInheritedPartial) {
+            if (_currentOpeningToken && _currentOpeningToken.type == GRMustacheTokenTypePartialOverride) {
                 [self failWithFatalError:[self parseErrorAtToken:token description:@"Illegal tag inside a partial override tag."]];
                 return NO;
             }
@@ -426,7 +426,7 @@
         } break;
             
             
-        case GRMustacheTokenTypeInheritedPartial: {
+        case GRMustacheTokenTypePartialOverride: {
             // Partial name validation
             NSError *partialError;
             NSString *partialName = [parser parseTemplateName:token.tagInnerContent empty:NULL error:&partialError];
@@ -523,7 +523,7 @@
                     wrapperASTNode = [GRMustacheBlock blockWithName:(NSString *)_currentTagValue innerTemplateAST:templateAST];
                 } break;
                     
-                case GRMustacheTokenTypeInheritedPartial: {
+                case GRMustacheTokenTypePartialOverride: {
                     // Validate token: inheritable template ending should be missing, or match inheritable template opening
                     NSError *error;
                     BOOL empty;
@@ -560,10 +560,10 @@
                         return NO;
                     }
                     
-                    // Success: create new GRMustacheInheritedPartialNode
+                    // Success: create new GRMustachePartialOverrideNode
                     GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:templateAST name:partialName];
                     GRMustacheTemplateAST *overridingTemplateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
-                    wrapperASTNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithParentPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
+                    wrapperASTNode = [GRMustachePartialOverrideNode partialOverrideNodeWithParentPartialNode:partialNode overridingTemplateAST:overridingTemplateAST];
                 } break;
                     
                 default:

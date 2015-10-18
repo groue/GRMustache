@@ -20,16 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheInheritedPartialNode_private.h"
+#import "GRMustachePartialOverrideNode_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheInheritedPartialNode
+@implementation GRMustachePartialOverrideNode
 @synthesize overridingTemplateAST=_overridingTemplateAST;
 @synthesize parentPartialNode=_parentPartialNode;
 
-+ (instancetype)inheritedPartialNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
++ (instancetype)partialOverrideNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
     return [[[self alloc] initWithParentPartialNode:parentPartialNode overridingTemplateAST:overridingTemplateAST] autorelease];
 }
@@ -46,20 +46,20 @@
 
 - (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritedPartialNode:self error:error];
+    return [visitor visitPartialOverrideNode:self error:error];
 }
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
     // {{< partial }}...{{/ partial }}
     //
-    // Inherited partials can provide an override in two ways: in
+    // Partial overrides can provide an override in two ways: in
     // the parent partial, and inside the overriding section.
     //
     // Relevant tests:
     //
     // {
-    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial",
+    //   "name": "Two levels of inheritance: partial override with overriding content containing another partial override",
     //   "data": { },
     //   "template": "{{<partial}}{{<partial2}}{{/partial2}}{{/partial}}",
     //   "partials": {
@@ -68,7 +68,7 @@
     //   "expected": "inherited"
     // },
     // {
-    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial with overriding content containing a block",
+    //   "name": "Two levels of inheritance: partial override with overriding content containing another partial override with overriding content containing a block",
     //   "data": { },
     //   "template": "{{<partial}}{{<partial2}}{{$inheritable}}inherited{{/inheritable}}{{/partial2}}{{/partial}}",
     //   "partials": {

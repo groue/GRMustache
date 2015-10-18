@@ -25,7 +25,7 @@
 
 @protocol GRMustacheTagDelegate;
 @protocol GRMustacheTemplateASTNode;
-@class GRMustacheInheritedPartialNode;
+@class GRMustachePartialOverrideNode;
 
 /**
  * The GRMustacheContext maintains the following stacks:
@@ -34,7 +34,7 @@
  * - a protected context stack,
  * - a hidden context stack,
  * - a tag delegate stack,
- * - an inherited partial stack.
+ * - a partial override stack.
  *
  * As such, it is able to:
  *
@@ -49,7 +49,7 @@
  *
  * - Let tag delegates interpret rendered values.
  *
- * - Let inherited partial templates override AST nodes.
+ * - Let partials override AST nodes.
  */
 @interface GRMustacheContext : NSObject {
 @private
@@ -64,7 +64,7 @@
     GRMUSTACHE_STACK_DECLARE_IVARS(protectedContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(hiddenContextStack, id);
     GRMUSTACHE_STACK_DECLARE_IVARS(tagDelegateStack, id<GRMustacheTagDelegate>);
-    GRMUSTACHE_STACK_DECLARE_IVARS(inheritedPartialNodeStack, GRMustacheInheritedPartialNode *);
+    GRMUSTACHE_STACK_DECLARE_IVARS(partialOverrideNodeStack, GRMustachePartialOverrideNode *);
     
     BOOL _unsafeKeyAccess;
 }
@@ -136,13 +136,13 @@
 
 /**
  * Returns a GRMustacheContext object identical to the receiver, but for the
- * overriding stack that is extended with _inheritedPartialNode_.
+ * overriding stack that is extended with _partialOverrideNode_.
  *
- * @param inheritedPartialNode  A template AST
+ * @param partialOverrideNode  A template AST
  *
  * @return A GRMustacheContext object.
  */
-- (instancetype)contextByAddingInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode GRMUSTACHE_API_INTERNAL;
+- (instancetype)contextByAddingPartialOverrideNode:(GRMustachePartialOverrideNode *)partialOverrideNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Performs a key lookup in the receiver's context stack, and returns the found
@@ -169,6 +169,6 @@
 /**
  * TODO
  */
-- (NSArray *)inheritedPartialNodeStack GRMUSTACHE_API_INTERNAL;
+- (NSArray *)partialOverrideNodeStack GRMUSTACHE_API_INTERNAL;
 
 @end

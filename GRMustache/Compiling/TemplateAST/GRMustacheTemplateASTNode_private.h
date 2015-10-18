@@ -60,7 +60,7 @@
  *
  * All classes conforming to the GRMustacheTemplateASTNode protocol return
  * the node argument, but GRMustacheBlock,
- * GRMustacheInheritedPartialNode, and GRMustachePartialNode.
+ * GRMustachePartialOverrideNode, and GRMustachePartialNode.
  *
  * @param templateASTNode  A node
  *

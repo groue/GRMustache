@@ -81,10 +81,9 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
     GRMustacheTokenTypePragma,
     
     /**
-     * The kind of tokens representing inherited partial tags such as
-     * `{{<name}}`.
+     * The kind of tokens representing partial override tags such as `{{<name}}`.
      */
-    GRMustacheTokenTypeInheritedPartial,
+    GRMustacheTokenTypePartialOverride,
     
     /**
      * The kind of tokens representing block opening tags such as `{{$name}}`.
@@ -163,7 +162,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
  * - GRMustacheTokenTypeBlockOpening;
  * - GRMustacheTokenTypeClosing;
  * - GRMustacheTokenTypePartial;
- * - GRMustacheTokenTypeInheritedPartial;
+ * - GRMustacheTokenTypePartialOverride;
  * - GRMustacheTokenTypeUnescapedVariable;
  * - GRMustacheTokenTypePragma;
  * - GRMustacheTokenTypeEscapedVariable;

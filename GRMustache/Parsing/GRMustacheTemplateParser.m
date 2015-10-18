@@ -270,7 +270,7 @@
                             tagInnerRange = (NSRange){ .location = start+tagStartDelimiterLength+1, .length = i-(start+tagStartDelimiterLength+1) };
                             break;
                         case '<':
-                            type = GRMustacheTokenTypeInheritedPartial;
+                            type = GRMustacheTokenTypePartialOverride;
                             tagInnerRange = (NSRange){ .location = start+tagStartDelimiterLength+1, .length = i-(start+tagStartDelimiterLength+1) };
                             break;
                         case '{':

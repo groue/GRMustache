@@ -31,7 +31,7 @@
 #import "GRMustacheContext_private.h"
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
-#import "GRMustacheInheritedPartialNode_private.h"
+#import "GRMustachePartialOverrideNode_private.h"
 #import "GRMustacheBlock_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
@@ -130,11 +130,11 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     }
 }
 
-- (BOOL)visitInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode error:(NSError **)error
+- (BOOL)visitPartialOverrideNode:(GRMustachePartialOverrideNode *)partialOverrideNode error:(NSError **)error
 {
     GRMustacheContext *context = _context;
-    _context = [_context contextByAddingInheritedPartialNode:inheritedPartialNode];
-    BOOL success = [self visitPartialNode:inheritedPartialNode.parentPartialNode error:error];
+    _context = [_context contextByAddingPartialOverrideNode:partialOverrideNode];
+    BOOL success = [self visitPartialNode:partialOverrideNode.parentPartialNode error:error];
     _context = context;
     return success;
 }
@@ -370,17 +370,17 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)node
 {
     NSMutableSet *usedTemplateASTs = [NSMutableSet set];
-    for (GRMustacheInheritedPartialNode *inheritedPartialNode in _context.inheritedPartialNodeStack) {
+    for (GRMustachePartialOverrideNode *partialOverrideNode in _context.partialOverrideNodeStack) {
         // for -[GRMustacheJavaSuiteTests testExtensionNested]
-        if (![usedTemplateASTs containsObject:inheritedPartialNode.parentPartialNode.templateAST]) {
+        if (![usedTemplateASTs containsObject:partialOverrideNode.parentPartialNode.templateAST]) {
             id<GRMustacheTemplateASTNode> resolvedNode = node;
-            for (id<GRMustacheTemplateASTNode> overridingNode in inheritedPartialNode.overridingTemplateAST.templateASTNodes) {
+            for (id<GRMustacheTemplateASTNode> overridingNode in partialOverrideNode.overridingTemplateAST.templateASTNodes) {
                 resolvedNode = [overridingNode resolveTemplateASTNode:resolvedNode];
             }
 
             // for Hogan "Recursion in inherited templates" test
             if (node != resolvedNode) {
-                [usedTemplateASTs addObject:inheritedPartialNode.parentPartialNode.templateAST];
+                [usedTemplateASTs addObject:partialOverrideNode.parentPartialNode.templateAST];
             }
             node = resolvedNode;
         }
