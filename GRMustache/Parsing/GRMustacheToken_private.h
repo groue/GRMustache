@@ -87,10 +87,9 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
     GRMustacheTokenTypeInheritedPartial,
     
     /**
-     * The kind of tokens representing inheritable ection opening tags such as
-     * `{{$name}}`.
+     * The kind of tokens representing block opening tags such as `{{$name}}`.
      */
-    GRMustacheTokenTypeInheritableSectionOpening,
+    GRMustacheTokenTypeBlockOpening,
 };
 
 /**
@@ -161,7 +160,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
  * - GRMustacheTokenTypeComment;
  * - GRMustacheTokenTypeSectionOpening;
  * - GRMustacheTokenTypeInvertedSectionOpening;
- * - GRMustacheTokenTypeInheritableSectionOpening;
+ * - GRMustacheTokenTypeBlockOpening;
  * - GRMustacheTokenTypeClosing;
  * - GRMustacheTokenTypePartial;
  * - GRMustacheTokenTypeInheritedPartial;

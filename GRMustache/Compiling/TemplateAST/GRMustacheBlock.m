@@ -20,14 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "GRMustacheInheritableSectionNode_private.h"
+#import "GRMustacheBlock_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
 
-@implementation GRMustacheInheritableSectionNode
+@implementation GRMustacheBlock
 @synthesize name=_name;
 @synthesize innerTemplateAST=_innerTemplateAST;
 
-+ (instancetype)inheritableSectionNodeWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
++ (instancetype)blockWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
     return [[[self alloc] initWithName:name innerTemplateAST:innerTemplateAST] autorelease];
 }
@@ -44,20 +44,20 @@
 
 - (BOOL)acceptTemplateASTVisitor:(id<GRMustacheTemplateASTVisitor>)visitor error:(NSError **)error
 {
-    return [visitor visitInheritableSectionNode:self error:error];
+    return [visitor visitBlock:self error:error];
 }
 
 - (id<GRMustacheTemplateASTNode>)resolveTemplateASTNode:(id<GRMustacheTemplateASTNode>)templateASTNode
 {
     // {{$ name }}...{{/ name }}
     //
-    // An inheritable section is overriden by another inheritable section with the same name:
+    // A block is overriden by another block with the same name:
     
-    if (![templateASTNode isKindOfClass:[GRMustacheInheritableSectionNode class]]) {
+    if (![templateASTNode isKindOfClass:[GRMustacheBlock class]]) {
         return templateASTNode;
     }
     
-    if (![((GRMustacheInheritableSectionNode *)templateASTNode).name isEqualToString:_name]) {
+    if (![((GRMustacheBlock *)templateASTNode).name isEqualToString:_name]) {
         return templateASTNode;
     }
     

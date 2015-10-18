@@ -25,7 +25,7 @@
 
 @class GRMustacheTemplateAST;
 @class GRMustacheInheritedPartialNode;
-@class GRMustacheInheritableSectionNode;
+@class GRMustacheBlock;
 @class GRMustachePartialNode;
 @class GRMustacheVariableTag;
 @class GRMustacheSectionTag;
@@ -36,7 +36,7 @@
 // Don't use these methods directly. Use -[<GRMustacheTemplateASTNode acceptTemplateASTVisitor:error:] instead
 - (BOOL)visitTemplateAST:(GRMustacheTemplateAST *)templateAST error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitInheritedPartialNode:(GRMustacheInheritedPartialNode *)inheritedPartialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
-- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (BOOL)visitBlock:(GRMustacheBlock *)block error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitVariableTag:(GRMustacheVariableTag *)variableTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 - (BOOL)visitSectionTag:(GRMustacheSectionTag *)sectionTag error:(NSError **)error GRMUSTACHE_API_INTERNAL;

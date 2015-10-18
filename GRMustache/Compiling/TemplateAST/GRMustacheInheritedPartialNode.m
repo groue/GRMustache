@@ -68,7 +68,7 @@
     //   "expected": "inherited"
     // },
     // {
-    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial with overriding content containing an inheritable section",
+    //   "name": "Two levels of inheritance: inherited partial with overriding content containing another inherited partial with overriding content containing a block",
     //   "data": { },
     //   "template": "{{<partial}}{{<partial2}}{{$inheritable}}inherited{{/inheritable}}{{/partial2}}{{/partial}}",
     //   "partials": {

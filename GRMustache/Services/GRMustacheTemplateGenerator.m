@@ -28,7 +28,7 @@
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheInheritedPartialNode_private.h"
-#import "GRMustacheInheritableSectionNode_private.h"
+#import "GRMustacheBlock_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
@@ -91,15 +91,15 @@
     return YES;
 }
 
-- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
+- (BOOL)visitBlock:(GRMustacheBlock *)block error:(NSError **)error
 {
     NSString *tagStartDelimiter = _templateRepository.configuration.tagStartDelimiter;
     NSString *tagEndDelimiter = _templateRepository.configuration.tagEndDelimiter;
-    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
-    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, inheritableSectionNode.name, tagEndDelimiter];
+    NSString *tagStartString = [NSString stringWithFormat:@"%@$%@%@", tagStartDelimiter, block.name, tagEndDelimiter];
+    NSString *tagEndString = [NSString stringWithFormat:@"%@/%@%@", tagStartDelimiter, block.name, tagEndDelimiter];
     
     [_templateString appendString:tagStartString];
-    [self visitTemplateAST:inheritableSectionNode.innerTemplateAST error:error];
+    [self visitTemplateAST:block.innerTemplateAST error:error];
     [_templateString appendString:tagEndString];
     return YES;
 }

@@ -26,7 +26,7 @@
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheVariableTag_private.h"
 #import "GRMustacheSectionTag_private.h"
-#import "GRMustacheInheritableSectionNode_private.h"
+#import "GRMustacheBlock_private.h"
 #import "GRMustacheInheritedPartialNode_private.h"
 #import "GRMustacheExpressionParser_private.h"
 #import "GRMustacheExpression_private.h"
@@ -350,7 +350,7 @@
                 _currentOpeningToken.type == GRMustacheTokenTypeSectionOpening &&
                 ((expression == nil && empty) || (expression != nil && [expression isEqual:_currentTagValue])))
             {
-                // We found the "else" close of a regular or inheritable section:
+                // We found the "else" close of a section:
                 // {{#foo}}...{{^}}...{{/foo}}
                 // {{#foo}}...{{^foo}}...{{/foo}}
                 
@@ -402,12 +402,12 @@
         } break;
             
             
-        case GRMustacheTokenTypeInheritableSectionOpening: {
-            // Inheritable section name validation
-            NSError *inheritableSectionError;
-            NSString *name = [parser parseInheritableSectionName:token.tagInnerContent empty:NULL error:&inheritableSectionError];
+        case GRMustacheTokenTypeBlockOpening: {
+            // Block name validation
+            NSError *blockError;
+            NSString *name = [parser parseBlockName:token.tagInnerContent empty:NULL error:&blockError];
             if (name == nil) {
-                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in inheritable section tag", inheritableSectionError.localizedDescription]]];
+                [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"%@ in block", blockError.localizedDescription]]];
                 return NO;
             }
             
@@ -498,13 +498,13 @@
                                                                    innerTemplateAST:templateAST];
                 } break;
                     
-                case GRMustacheTokenTypeInheritableSectionOpening: {
-                    // Inheritable section name validation
-                    // We need a valid name that matches section opening,
+                case GRMustacheTokenTypeBlockOpening: {
+                    // Block name validation
+                    // We need a valid name that matches block opening,
                     // or an empty `{{/}}` closing tags.
                     NSError *error;
                     BOOL empty;
-                    NSString *name = [parser parseInheritableSectionName:token.tagInnerContent empty:&empty error:&error];
+                    NSString *name = [parser parseBlockName:token.tagInnerContent empty:&empty error:&error];
                     if (name && ![name isEqual:_currentTagValue]) {
                         [self failWithFatalError:[self parseErrorAtToken:token description:[NSString stringWithFormat:@"Unexpected %@ closing tag", token.templateSubstring]]];
                         return NO;
@@ -518,9 +518,9 @@
                         return NO;
                     }
                     
-                    // Success: create new GRMustacheInheritableSection
+                    // Success: create new GRMustacheBlock
                     GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:_currentASTNodes contentType:_contentType];
-                    wrapperASTNode = [GRMustacheInheritableSectionNode inheritableSectionNodeWithName:(NSString *)_currentTagValue innerTemplateAST:templateAST];
+                    wrapperASTNode = [GRMustacheBlock blockWithName:(NSString *)_currentTagValue innerTemplateAST:templateAST];
                 } break;
                     
                 case GRMustacheTokenTypeInheritedPartial: {

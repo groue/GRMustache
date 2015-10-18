@@ -32,7 +32,7 @@
 #import "GRMustacheRendering_private.h"
 #import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustacheInheritedPartialNode_private.h"
-#import "GRMustacheInheritableSectionNode_private.h"
+#import "GRMustacheBlock_private.h"
 #import "GRMustachePartialNode_private.h"
 #import "GRMustacheTextNode_private.h"
 #import "GRMustacheTagDelegate.h"
@@ -139,9 +139,9 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     return success;
 }
 
-- (BOOL)visitInheritableSectionNode:(GRMustacheInheritableSectionNode *)inheritableSectionNode error:(NSError **)error
+- (BOOL)visitBlock:(GRMustacheBlock *)block error:(NSError **)error
 {
-    return [self visitTemplateAST:inheritableSectionNode.innerTemplateAST error:error];
+    return [self visitTemplateAST:block.innerTemplateAST error:error];
 }
 
 - (BOOL)visitPartialNode:(GRMustachePartialNode *)partialNode error:(NSError **)error

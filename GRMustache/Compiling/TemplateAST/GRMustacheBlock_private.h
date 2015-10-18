@@ -27,39 +27,39 @@
 @class GRMustacheTemplateAST;
 
 /**
- * A GRMustacheInheritableSection is an AST node that represents inheritable
- * sections as `{{$name}}...{{/name}}`.
+ * A GRMustacheBlock is an AST node that represents blocks such
+ * as `{{$name}}...{{/name}}`.
  */
-@interface GRMustacheInheritableSectionNode : NSObject<GRMustacheTemplateASTNode> {
+@interface GRMustacheBlock : NSObject<GRMustacheTemplateASTNode> {
 @private
     NSString *_name;
     GRMustacheTemplateAST *_innerTemplateAST;
 }
 
 /**
- * The AST of the inner content of the section
+ * The AST of the inner content of the block
  *
  *     {{$ ... }} AST {{/ }}
  */
 @property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 /**
- * The name of the inheritable section:
+ * The name of the block:
  *
  *     {{$ name }} ... {{/ }}
  */
 @property (nonatomic, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
 
 /**
- * Returns a new inheritable section.
+ * Returns a new block.
  *
- * @param name              The name of the inheritable section
- * @param innerTemplateAST  The AST of the inner content of the section
+ * @param name              The name of the block
+ * @param innerTemplateAST  The AST of the inner content of the block
  *
- * @return a new GRMustacheInheritableSection.
+ * @return a new GRMustacheBlock.
  *
  * @see GRMustacheTemplateASTNode
  */
-+ (instancetype)inheritableSectionNodeWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)blockWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 @end

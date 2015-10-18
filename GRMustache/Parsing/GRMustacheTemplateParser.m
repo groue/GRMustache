@@ -258,7 +258,7 @@
                             tagInnerRange = (NSRange){ .location = start+tagStartDelimiterLength+1, .length = i-(start+tagStartDelimiterLength+1) };
                             break;
                         case '$':
-                            type = GRMustacheTokenTypeInheritableSectionOpening;
+                            type = GRMustacheTokenTypeBlockOpening;
                             tagInnerRange = (NSRange){ .location = start+tagStartDelimiterLength+1, .length = i-(start+tagStartDelimiterLength+1) };
                             break;
                         case '/':
@@ -411,11 +411,11 @@
     }
 }
 
-- (NSString *)parseInheritableSectionName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
+- (NSString *)parseBlockName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
 {
     NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *inheritableSectionName = [string stringByTrimmingCharactersInSet:whiteSpace];
-    if (inheritableSectionName.length == 0) {
+    NSString *blockName = [string stringByTrimmingCharactersInSet:whiteSpace];
+    if (blockName.length == 0) {
         if (empty != NULL) {
             *empty = YES;
         }
@@ -427,7 +427,7 @@
         }
         return nil;
     }
-    if ([inheritableSectionName rangeOfCharacterFromSet:whiteSpace].location != NSNotFound) {
+    if ([blockName rangeOfCharacterFromSet:whiteSpace].location != NSNotFound) {
         if (empty != NULL) {
             *empty = NO;
         }
@@ -439,7 +439,7 @@
         }
         return nil;
     }
-    return inheritableSectionName;
+    return blockName;
 }
 
 - (NSString *)parseTemplateName:(NSString *)string empty:(BOOL *)empty error:(NSError **)error
