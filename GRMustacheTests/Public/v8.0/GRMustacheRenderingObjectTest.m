@@ -856,6 +856,19 @@
     }
 }
 
+
+- (void)testDynamicPartialOverride
+{
+    NSDictionary *templates = @{ @"layout": @"<{{$a}}Default{{subject}}{{/a}},{{$b}}Ignored{{/b}}>",
+                                 @"partial": @"[{{#layout}}---{{$b}}Overriden{{subject}}{{/b}}---{{/layout}}]" };
+    GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:templates];
+    GRMustacheTemplate *template = [repo templateNamed:@"partial" error:NULL];
+    GRMustacheTemplate *layout = [repo templateNamed:@"layout" error:NULL];
+    id data = @{ @"layout": layout, @"subject": @"---" };
+    NSString *rendering = [template renderObject:data error:NULL];
+    XCTAssertEqualObjects(rendering, @"[<Default---,Overriden--->]");
+}
+
 - (void)testArrayOfRenderingObjectsInSectionTagDoesNotNeedExplicitInvocation
 {
     id object1 = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
