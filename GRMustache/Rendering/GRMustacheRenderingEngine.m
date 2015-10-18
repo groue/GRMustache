@@ -65,17 +65,17 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     setupCurrentExpressionInvocation();
 }
 
-+ (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
++ (instancetype)renderingEngineWithTemplateAST:(GRMustacheTemplateAST *)templateAST context:(GRMustacheContext *)context
 {
-    return [[[self alloc] initWithContentType:contentType context:context] autorelease];
+    return [[[self alloc] initWithTemplateAST:templateAST context:context] autorelease];
 }
 
-- (NSString *)renderTemplateAST:(GRMustacheTemplateAST *)templateAST HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     _buffer = GRMustacheBufferCreate(1024);
     
     NSString *result = nil;
-    if ([self visitTemplateAST:templateAST error:error]) {
+    if ([self visitTemplateAST:_templateAST error:error]) {
         if (HTMLSafe) {
             *HTMLSafe = (_contentType == GRMustacheContentTypeHTML);
         }
@@ -113,9 +113,9 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     {
         // Content-type mismatch: render separately...
         
-        GRMustacheRenderingEngine *renderingEngine = [[[GRMustacheRenderingEngine alloc] initWithContentType:ASTContentType context:_context] autorelease];
+        GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithTemplateAST:templateAST context:_context];
         BOOL HTMLSafe;
-        NSString *rendering = [renderingEngine renderTemplateAST:templateAST HTMLSafe:&HTMLSafe error:error];
+        NSString *rendering = [renderingEngine renderHTMLSafe:&HTMLSafe error:error];
         if (!rendering) {
             return NO;
         }
@@ -168,14 +168,22 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 
 #pragma mark - Private
 
-- (instancetype)initWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context
+- (void)dealloc
+{
+    [_templateAST release];
+    [_context release];
+    [super dealloc];
+}
+
+- (instancetype)initWithTemplateAST:(GRMustacheTemplateAST *)templateAST context:(GRMustacheContext *)context
 {
     NSAssert(context, @"Invalid context:nil");
     
     self = [super init];
     if (self) {
-        _contentType = contentType;
-        _context = context;
+        _templateAST = [templateAST retain];
+        _contentType = templateAST.contentType;
+        _context = [context retain];
     }
     return self;
 }

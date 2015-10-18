@@ -117,8 +117,8 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_templateAST.contentType context:context];
-    return [renderingEngine renderTemplateAST:_templateAST HTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithTemplateAST:_templateAST context:context];
+    return [renderingEngine renderHTMLSafe:HTMLSafe error:error];
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext
@@ -152,17 +152,16 @@
             // Let's render the template, overriding blocks with the content
             // of the section.
             //
-            // Overriding requires an PartialOverrideNode:
+            // Overriding requires an GRMustacheInheritedPartialNode:
             
-            // TODO: GRMustacheInheritedPartialNode should need an AST, not a GRMustachePartialNode.
             GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:self.templateAST name:nil];
             GRMustacheInheritedPartialNode *partialOverrideNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithParentPartialNode:partialNode overridingTemplateAST:((GRMustacheSectionTag *)tag).innerTemplateAST];
-            GRMustacheTemplateAST *AST = [GRMustacheTemplateAST templateASTWithASTNodes:@[partialOverrideNode] contentType:self.templateAST.contentType];
             
-            // Only RenderingEngine knows how to render PartialOverrideNode.
+            // Only GRMustacheRenderingEngine knows how to render GRMustacheInheritedPartialNode.
             // So wrap the node into a TemplateAST, and render.
-            GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:self.templateAST.contentType context:context];
-            return [renderingEngine renderTemplateAST:AST HTMLSafe:HTMLSafe error:error];
+            GRMustacheTemplateAST *templateAST = [GRMustacheTemplateAST templateASTWithASTNodes:@[partialOverrideNode] contentType:self.templateAST.contentType];
+            GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithTemplateAST:templateAST context:context];
+            return [renderingEngine renderHTMLSafe:HTMLSafe error:error];
         }
     }
 }

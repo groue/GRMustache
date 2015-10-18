@@ -27,7 +27,6 @@
 
 @class GRMustacheContext;
 @class GRMustacheSectionTag;
-@class GRMustacheExpressionInvocation;
 @class GRMustacheTemplateAST;
 
 /**
@@ -36,18 +35,19 @@
 @interface GRMustacheRenderingEngine : NSObject {
 @private
     GRMustacheBuffer _buffer;
-    GRMustacheContentType _contentType;
+    GRMustacheTemplateAST *_templateAST;
     GRMustacheContext *_context;
+    GRMustacheContentType _contentType;
 }
 
 /**
  * TODO
  */
-- (NSString *)renderTemplateAST:(GRMustacheTemplateAST *)templateAST HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
+- (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO
  */
-+ (instancetype)renderingEngineWithContentType:(GRMustacheContentType)contentType context:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
++ (instancetype)renderingEngineWithTemplateAST:(GRMustacheTemplateAST *)templateAST context:(GRMustacheContext *)context GRMUSTACHE_API_INTERNAL;
 
 @end

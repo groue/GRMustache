@@ -69,8 +69,8 @@
 
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:_innerTemplateAST.contentType context:context];
-    return [renderingEngine renderTemplateAST:_innerTemplateAST HTMLSafe:HTMLSafe error:error];
+    GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithTemplateAST:_innerTemplateAST context:context];
+    return [renderingEngine renderHTMLSafe:HTMLSafe error:error];
 }
 
 
