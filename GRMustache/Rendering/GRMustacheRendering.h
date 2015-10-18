@@ -125,17 +125,6 @@
  */
 + (id<GRMustacheRendering>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
-@end
-
-
-// =============================================================================
-#pragma mark - GRMustacheLambda
-
-/**
- * TODO
- */
-
-@interface GRMustacheLambda : NSObject
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @name Creating Lambdas

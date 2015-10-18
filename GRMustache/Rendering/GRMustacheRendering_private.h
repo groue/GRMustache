@@ -145,15 +145,6 @@
 // Documented in GRMustacheRendering.h
 + (id<GRMustacheRenderingWithIterationSupport>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock GRMUSTACHE_API_PUBLIC;
 
-@end
-
-
-// =============================================================================
-#pragma mark - GRMustacheLambda
-
-// Documented in GRMustacheRendering.h
-@interface GRMustacheLambda : NSObject
-
 // Documented in GRMustacheRendering.h
 + (id<GRMustacheRendering>)lambda:(NSString *(^)(void))lambda GRMUSTACHE_API_PUBLIC;
 
