@@ -127,4 +127,30 @@
 
 @end
 
+
+// =============================================================================
+#pragma mark - GRMustacheLambda
+
+/**
+ * TODO
+ */
+
+@interface GRMustacheLambda : NSObject
+
+////////////////////////////////////////////////////////////////////////////////
+/// @name Creating Lambdas
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * TODO
+ */
++ (id<GRMustacheRendering>)lambda:(NSString *(^)(void))lambda AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+
+/**
+ * TODO
+ */
++ (id<GRMustacheRendering>)sectionLambda:(NSString *(^)(NSString *string))lambda AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+
+@end
+
 #endif

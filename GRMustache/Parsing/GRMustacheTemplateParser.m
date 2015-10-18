@@ -191,7 +191,9 @@
                                                                  templateString:templateString
                                                                      templateID:templateID
                                                                            line:lineNumber
-                                                                          range:(NSRange){ .location = start, .length = i-start}];
+                                                                          range:(NSRange){ .location = start, .length = i-start}
+                                                              tagStartDelimiter:tagStartDelimiter
+                                                                tagEndDelimiter:tagEndDelimiter];
                         if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
@@ -207,7 +209,9 @@
                                                                  templateString:templateString
                                                                      templateID:templateID
                                                                            line:lineNumber
-                                                                          range:(NSRange){ .location = start, .length = i-start}];
+                                                                          range:(NSRange){ .location = start, .length = i-start}
+                                                              tagStartDelimiter:tagStartDelimiter
+                                                                tagEndDelimiter:tagEndDelimiter];
                         if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
@@ -223,7 +227,9 @@
                                                                   templateString:templateString
                                                                       templateID:templateID
                                                                             line:lineNumber
-                                                                           range:(NSRange){ .location = start, .length = i-start}];
+                                                                           range:(NSRange){ .location = start, .length = i-start}
+                                                               tagStartDelimiter:tagStartDelimiter
+                                                                 tagEndDelimiter:tagEndDelimiter];
                         if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     }
                     tagStartLineNumber = lineNumber;
@@ -294,7 +300,9 @@
                                                              templateString:templateString
                                                                  templateID:templateID
                                                                        line:tagStartLineNumber
-                                                                      range:(NSRange){ .location = start, .length = (i+tagEndDelimiterLength)-start}];
+                                                                      range:(NSRange){ .location = start, .length = (i+tagEndDelimiterLength)-start}
+                                                          tagStartDelimiter:tagStartDelimiter
+                                                            tagEndDelimiter:tagEndDelimiter];
                     token.tagInnerRange = tagInnerRange;
                     if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
@@ -316,7 +324,9 @@
                                                              templateString:templateString
                                                                  templateID:templateID
                                                                        line:tagStartLineNumber
-                                                                      range:(NSRange){ .location = start, .length = (i+unescapedTagEndDelimiterLength)-start}];
+                                                                      range:(NSRange){ .location = start, .length = (i+unescapedTagEndDelimiterLength)-start}
+                                                          tagStartDelimiter:tagStartDelimiter
+                                                            tagEndDelimiter:tagEndDelimiter];
                     token.tagInnerRange = (NSRange){ .location = start+unescapedTagStartDelimiterLength, .length = i-(start+unescapedTagStartDelimiterLength) };
                     if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
@@ -351,7 +361,9 @@
                                                              templateString:templateString
                                                                  templateID:templateID
                                                                        line:tagStartLineNumber
-                                                                      range:(NSRange){ .location = start, .length = (i+setDelimitersTagEndDelimiterLength)-start}];
+                                                                      range:(NSRange){ .location = start, .length = (i+setDelimitersTagEndDelimiterLength)-start}
+                                                          tagStartDelimiter:tagStartDelimiter
+                                                            tagEndDelimiter:tagEndDelimiter];
                     token.tagInnerRange = (NSRange){ .location = start+setDelimitersTagStartDelimiterLength, .length = i-(start+setDelimitersTagStartDelimiterLength) };
                     if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
                     
@@ -398,7 +410,9 @@
                                                      templateString:templateString
                                                          templateID:templateID
                                                                line:lineNumber
-                                                              range:(NSRange){ .location = start, .length = i-start}];
+                                                              range:(NSRange){ .location = start, .length = i-start}
+                                                  tagStartDelimiter:tagStartDelimiter
+                                                    tagEndDelimiter:tagEndDelimiter];
             if (![self.delegate templateParser:self shouldContinueAfterParsingToken:token]) return;
         } break;
             

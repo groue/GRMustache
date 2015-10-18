@@ -27,16 +27,20 @@
 @implementation GRMustacheVariableTag
 @synthesize expression=_expression;
 @synthesize escapesHTML=_escapesHTML;
+@synthesize tagStartDelimiter=_tagStartDelimiter;
+@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (void)dealloc
 {
     [_expression release];
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
     [super dealloc];
 }
 
-+ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType
++ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML contentType:contentType] autorelease];
+    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML contentType:contentType tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter] autorelease];
 }
 
 
@@ -86,13 +90,15 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
     self = [super init];
     if (self) {
         _expression = [expression retain];
         _escapesHTML = escapesHTML;
         _contentType = contentType;
+        _tagStartDelimiter = [tagStartDelimiter retain];
+        _tagEndDelimiter = [tagEndDelimiter retain];
     }
     return self;
 }

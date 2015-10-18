@@ -110,6 +110,8 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
     NSUInteger _line;
     NSRange _range;
     NSRange _tagInnerRange;
+    NSString *_tagStartDelimiter;
+    NSString *_tagEndDelimiter;
 }
 
 /**
@@ -175,7 +177,17 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
 @property (nonatomic, readonly) NSString *tagInnerContent GRMUSTACHE_API_INTERNAL;
 
 /**
+ * The opening delimiter
+ */
+@property (nonatomic, retain) NSString *tagStartDelimiter;
+
+/**
+ * The closing delimiter
+ */
+@property (nonatomic, retain) NSString *tagEndDelimiter;
+
+/**
  * Builds and return a token.
  */
-+ (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range GRMUSTACHE_API_INTERNAL;
++ (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter GRMUSTACHE_API_INTERNAL;
 @end

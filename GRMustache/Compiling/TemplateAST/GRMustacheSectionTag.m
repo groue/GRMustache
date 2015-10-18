@@ -30,18 +30,22 @@
 @synthesize expression=_expression;
 @synthesize innerTemplateAST=_innerTemplateAST;
 @synthesize inverted=_inverted;
+@synthesize tagStartDelimiter=_tagStartDelimiter;
+@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (void)dealloc
 {
     [_expression release];
     [_templateString release];
     [_innerTemplateAST release];
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
     [super dealloc];
 }
 
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange innerTemplateAST:innerTemplateAST] autorelease];
+    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange innerTemplateAST:innerTemplateAST tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter] autorelease];
 }
 
 
@@ -84,7 +88,7 @@
 
 #pragma mark - Private
 
-- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
+- (instancetype)initWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
     self = [super init];
     if (self) {
@@ -93,6 +97,8 @@
         _templateString = [templateString retain];
         _innerRange = innerRange;
         _innerTemplateAST = [innerTemplateAST retain];
+        _tagStartDelimiter = [tagStartDelimiter retain];
+        _tagEndDelimiter = [tagEndDelimiter retain];
     }
     return self;
 }

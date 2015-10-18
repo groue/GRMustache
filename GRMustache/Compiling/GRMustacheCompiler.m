@@ -232,7 +232,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:YES contentType:_contentType]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:YES contentType:_contentType tagStartDelimiter:token.tagStartDelimiter tagEndDelimiter:token.tagEndDelimiter]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -257,7 +257,7 @@
             
             // Success: append GRMustacheVariableTag
             expression.token = token;
-            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:NO contentType:_contentType]];
+            [_currentASTNodes addObject:[GRMustacheVariableTag variableTagWithExpression:expression escapesHTML:NO contentType:_contentType tagStartDelimiter:token.tagStartDelimiter tagEndDelimiter:token.tagEndDelimiter]];
             
             // lock _contentType
             _contentTypeLocked = YES;
@@ -294,7 +294,9 @@
                                                                                          inverted:YES
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                 innerTemplateAST:templateAST];
+                                                                                 innerTemplateAST:templateAST
+                                                                                tagStartDelimiter:_currentOpeningToken.tagStartDelimiter
+                                                                                  tagEndDelimiter:_currentOpeningToken.tagEndDelimiter];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -363,7 +365,9 @@
                                                                                          inverted:NO
                                                                                    templateString:token.templateString
                                                                                        innerRange:innerRange
-                                                                                 innerTemplateAST:templateAST];
+                                                                                 innerTemplateAST:templateAST
+                                                                                tagStartDelimiter:_currentOpeningToken.tagStartDelimiter
+                                                                                  tagEndDelimiter:_currentOpeningToken.tagEndDelimiter];
                 
                 [_openingTokenStack removeLastObject];
                 self.currentOpeningToken = token;
@@ -495,7 +499,9 @@
                                                                            inverted:(_currentOpeningToken.type == GRMustacheTokenTypeInvertedSectionOpening)
                                                                      templateString:token.templateString
                                                                          innerRange:innerRange
-                                                                   innerTemplateAST:templateAST];
+                                                                   innerTemplateAST:templateAST
+                                                                  tagStartDelimiter:_currentOpeningToken.tagStartDelimiter
+                                                                    tagEndDelimiter:_currentOpeningToken.tagEndDelimiter];
                 } break;
                     
                 case GRMustacheTokenTypeBlockOpening: {

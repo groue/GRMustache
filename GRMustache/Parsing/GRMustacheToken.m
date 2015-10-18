@@ -30,15 +30,19 @@
 @synthesize line=_line;
 @synthesize range=_range;
 @synthesize tagInnerRange=_tagInnerRange;
+@synthesize tagStartDelimiter=_tagStartDelimiter;
+@synthesize tagEndDelimiter=_tagEndDelimiter;
 
 - (void)dealloc
 {
     [_templateString release];
     [_templateID release];
+    [_tagStartDelimiter release];
+    [_tagEndDelimiter release];
     [super dealloc];
 }
 
-+ (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range
++ (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
     GRMustacheToken *token = [[[self alloc] init] autorelease];
     token.type = type;
@@ -46,6 +50,8 @@
     token.templateID = templateID;
     token.line = line;
     token.range = range;
+    token.tagStartDelimiter = tagStartDelimiter;
+    token.tagEndDelimiter = tagEndDelimiter;
     return token;
 }
 

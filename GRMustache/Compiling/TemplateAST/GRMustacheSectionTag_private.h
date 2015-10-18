@@ -34,6 +34,8 @@
     NSString *_templateString;
     NSRange _innerRange;
     GRMustacheTemplateAST *_innerTemplateAST;
+    NSString *_tagStartDelimiter;
+    NSString *_tagEndDelimiter;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
@@ -61,6 +63,6 @@
  *
  * @see GRMustacheExpression
  */
-+ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST GRMUSTACHE_API_INTERNAL;
++ (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter GRMUSTACHE_API_INTERNAL;
 
 @end

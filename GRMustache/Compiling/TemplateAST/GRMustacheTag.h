@@ -83,6 +83,20 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @property (nonatomic, readonly) NSString *innerTemplateString AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
+ * The opening delimiter of the tag.
+ *
+ * @since v8.0
+ */
+@property (nonatomic, readonly, retain) NSString *tagStartDelimiter AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+
+/**
+ * The closing delimiter of the tag.
+ *
+ * @since v8.0
+ */
+@property (nonatomic, readonly, retain) NSString *tagEndDelimiter AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+
+/**
  * Returns the description of the tag.
  *
  * For example:

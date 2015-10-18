@@ -27,6 +27,7 @@
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustacheContext_private.h"
 #import "GRMustacheError.h"
+#import "GRMustacheTemplate_private.h"
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheBuffer_private.h"
 
@@ -179,6 +180,76 @@ static BOOL GRMustacheBoolValueNSFastEnumeration(id<NSFastEnumeration> self, SEL
 }
 
 @end
+
+
+// =============================================================================
+#pragma mark - GRMustacheLambda
+
+/**
+ * TODO
+ */
+
+@implementation GRMustacheLambda : NSObject
+
++ (id<GRMustacheRendering>)lambda:(NSString *(^)(void))lambda
+{
+    return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        switch (tag.type) {
+            case GRMustacheTagTypeVariable: {
+                // {{ lambda }}
+                //
+                // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L73
+                // > Lambda results should be appropriately escaped
+                //
+                // Let's render a text template:
+                
+                GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+                repo.configuration.contentType = GRMustacheContentTypeText;
+                
+                NSString *templateString = lambda();
+                GRMustacheTemplate *template = [repo templateFromString:templateString error:error];
+                return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            }
+                
+            case GRMustacheTagTypeSection: {
+                // {{# lambda }}...{{/ lambda }}
+                //
+                // Behave as a true object, and render the section.
+                context = [context contextByAddingObject:[GRMustacheLambda lambda:lambda]];
+                return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            }
+        }
+    }];
+}
+
++ (id<GRMustacheRendering>)sectionLambda:(NSString *(^)(NSString *string))lambda
+{
+    return [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
+        switch (tag.type) {
+            case GRMustacheTagTypeVariable:
+                // {{ lambda }}
+                return @"(Lambda)";
+                
+            case GRMustacheTagTypeSection: {
+                // {{# lambda }}...{{/ lambda }}
+                //
+                // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L117
+                // > Lambdas used for sections should parse with the current delimiters
+                
+                GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
+                repo.configuration.tagStartDelimiter = tag.tagStartDelimiter;
+                repo.configuration.tagEndDelimiter = tag.tagEndDelimiter;
+                
+                NSString *templateString = lambda(tag.innerTemplateString);
+                GRMustacheTemplate *template = [repo templateFromString:templateString error:error];
+                return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+            }
+        }
+    }];
+}
+
+@end
+
 
 
 // =============================================================================

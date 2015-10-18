@@ -31,6 +31,8 @@
     GRMustacheExpression *_expression;
     BOOL _escapesHTML;
     GRMustacheContentType _contentType;
+    NSString *_tagStartDelimiter;
+    NSString *_tagEndDelimiter;
 }
 
 @property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
@@ -39,15 +41,17 @@
 /**
  * Builds and returns a GRMustacheVariableTag.
  *
- * @param expression   The expression that would evaluate against a rendering
- *                     contex.
- * @param escapesHTML  YES if the value should be escaped.
- * @param contentType  The content type of the tag rendering.
+ * @param expression         The expression that would evaluate against a
+ *                           rendering context.
+ * @param escapesHTML        YES if the value should be escaped.
+ * @param contentType        The content type of the tag rendering.
+ * @param tagStartDelimiter  The opening delimiter.
+ * @param tagEndDelimiter    The closing delimiter.
  *
  * @return a GRMustacheVariableTag
  *
  * @see GRMustacheExpression
  */
-+ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType GRMUSTACHE_API_INTERNAL;
++ (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter GRMUSTACHE_API_INTERNAL;
 
 @end
