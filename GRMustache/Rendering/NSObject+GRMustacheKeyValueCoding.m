@@ -125,3 +125,16 @@
 }
 
 @end
+
+@implementation NSString(GRMustacheKeyValueCoding)
+
+- (id)valueForMustacheKey:(NSString *)key
+{
+    if ([key isEqualToString:@"length"]) {
+        return @(self.length);
+    } else {
+        return nil;
+    }
+}
+
+@end

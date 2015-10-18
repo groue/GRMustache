@@ -19,7 +19,7 @@
     - [X] GRMustacheTag.templateRepository
 - [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
-- [ ] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
-- [ ] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
+- [X] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
+- [X] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
 - [ ] Have Filter and renderingObject APIs closer from GRMustache.swift
 - [ ] Drop support for else `{{#a}}{{^a}}{{/a}}`.

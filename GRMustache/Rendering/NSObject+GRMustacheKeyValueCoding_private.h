@@ -39,3 +39,6 @@
 
 @interface NSSet(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
 @end
+
+@interface NSString(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
+@end
