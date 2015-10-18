@@ -23,5 +23,4 @@
 - [X] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
 - [?] Have Filter and renderingObject APIs closer from GRMustache.swift
 - [?] Drop support for else `{{#a}}{{^a}}{{/a}}`.
-- [ ] Have rendering engine responsible for bivalence (truthy objects, or falsey, not both)
 - [X] Remove @synthesize and explicit ivars in headers
