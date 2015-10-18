@@ -33,7 +33,7 @@
  */
 @interface GRMustacheInheritedPartialNode : NSObject<GRMustacheTemplateASTNode> {
 @private
-    GRMustachePartialNode *_parentPartialNode;
+    GRMustachePartialNode *_parentPartialNode;  // TODO: replace with AST
     GRMustacheTemplateAST *_overridingTemplateAST;
 }
 

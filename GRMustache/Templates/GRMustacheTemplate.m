@@ -25,6 +25,10 @@
 #import "GRMustacheTemplateRepository_private.h"
 #import "GRMustacheTemplateAST_private.h"
 #import "GRMustacheRenderingEngine_private.h"
+#import "GRMustacheTag_private.h"
+#import "GRMustacheInheritedPartialNode_private.h"
+#import "GRMustachePartialNode_private.h"
+#import "GRMustacheSectionTag_private.h"
 
 @implementation GRMustacheTemplate
 @synthesize templateRepository=_templateRepository;
@@ -136,7 +140,31 @@
 // Allows template to render as "dynamic partials"
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
-    return [self renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+    switch (tag.type) {
+        case GRMustacheTagTypeVariable:
+            // {{ template }} behaves just like {{> partial }}
+            //
+            // Let's simply render the template:
+            return [self renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
+        case GRMustacheTagTypeSection: {
+            // {{# template }}...{{/ template }} behaves just like {{< partial }}...{{/ partial }}
+            //
+            // Let's render the template, overriding blocks with the content
+            // of the section.
+            //
+            // Overriding requires an PartialOverrideNode:
+            
+            // TODO: GRMustacheInheritedPartialNode should need an AST, not a GRMustachePartialNode.
+            GRMustachePartialNode *partialNode = [GRMustachePartialNode partialNodeWithTemplateAST:self.templateAST name:nil];
+            GRMustacheInheritedPartialNode *partialOverrideNode = [GRMustacheInheritedPartialNode inheritedPartialNodeWithParentPartialNode:partialNode overridingTemplateAST:((GRMustacheSectionTag *)tag).innerTemplateAST];
+            GRMustacheTemplateAST *AST = [GRMustacheTemplateAST templateASTWithASTNodes:@[partialOverrideNode] contentType:self.templateAST.contentType];
+            
+            // Only RenderingEngine knows how to render PartialOverrideNode.
+            // So wrap the node into a TemplateAST, and render.
+            GRMustacheRenderingEngine *renderingEngine = [GRMustacheRenderingEngine renderingEngineWithContentType:self.templateAST.contentType context:context];
+            return [renderingEngine renderTemplateAST:AST HTMLSafe:HTMLSafe error:error];
+        }
+    }
 }
 
 @end
