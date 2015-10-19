@@ -818,6 +818,8 @@ Exposed keys:
 - `{{#collection}}...{{/collection}}` renders as many times as there are elements in the collection, pushing them on top of the [context stack](#the-context-stack).
 - `{{^collection}}...{{/collection}}` renders if and only if the collection is empty.
 
+[NSArray](#nsarray), [NSDictionary](#nsdictionary), [NSOrderedSet](#nsorderedset), and [NSSet](#nsset) all conform to NSFastEnumeration, but have their own custom rendering.
+
 
 ### NSNull
 
