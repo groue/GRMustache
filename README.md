@@ -183,7 +183,7 @@ Templates may come from various sources:
     // Disable HTML escaping for Bash scripts:
     repo.configuration.contentType = GRMustacheContentTypeText;
     
-    // Load a template:
+    // Load the "script.sh" resource:
     template = [repo templateNamed:@"script" error:NULL];
     ```
 
