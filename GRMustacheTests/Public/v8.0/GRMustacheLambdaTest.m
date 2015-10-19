@@ -33,7 +33,7 @@
 - (void)testMustacheSpecInterpolation
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L15
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @"world"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @"world"; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"Hello, {{lambda}}!" error:NULL];
     id data = @{ @"lambda": lambda };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -43,7 +43,7 @@
 - (void)testMustacheSpecInterpolationExpansion
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L29
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @"{{planet}}"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @"{{planet}}"; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"Hello, {{lambda}}!" error:NULL];
     id data = @{
                 @"planet": @"world",
@@ -58,7 +58,7 @@
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L44
     // With a difference: remove the "\n" character because GRMustache does
     // not honor mustache spec white space rules.
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @"|planet| => {{planet}}"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @"|planet| => {{planet}}"; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{= | | =}}Hello, (|&lambda|)!" error:NULL];
     id data = @{
                 @"planet": @"world",
@@ -72,7 +72,7 @@
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L59
     __block NSUInteger calls = 0;
-    id lambda = [GRMustacheRendering lambda:^NSString *{
+    id lambda = [GRMustacheRendering lambda:^{
         ++calls;
         return [NSString stringWithFormat:@"%@", @(calls)];
     }];
@@ -85,7 +85,7 @@
 - (void)testMustacheSpecEscaping
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L73
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @">"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @">"; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{lambda}}{{{lambda}}}" error:NULL];
     id data = @{ @"lambda": lambda };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -95,7 +95,7 @@
 - (void)testMustacheSpecSection
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L87
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) {
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) {
         if ([string isEqualToString:@"{{x}}"]) {
             return @"yes";
         } else {
@@ -111,7 +111,7 @@
 - (void)testMustacheSpecSectionExpansion
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L102
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) {
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) {
         return [NSString stringWithFormat:@"%@{{planet}}%@", string, string];
     }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{#lambda}}-{{/lambda}}>" error:NULL];
@@ -126,7 +126,7 @@
 - (void)testMustacheSpecSectionAlternateDelimiters
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L117
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) {
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) {
         return [NSString stringWithFormat:@"%@{{planet}} => |planet|%@", string, string];
     }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{= | | =}}<|#lambda|-|/lambda|>" error:NULL];
@@ -141,7 +141,7 @@
 - (void)testMustacheSpecSectionMultipleCalls
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L132
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) {
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) {
         return [NSString stringWithFormat:@"__%@__", string];
     }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#lambda}}FILE{{/lambda}} != {{#lambda}}LINE{{/lambda}}" error:NULL];
@@ -153,7 +153,7 @@
 - (void)testMustacheSpecInvertedSection
 {
     // https://github.com/mustache/spec/blob/83b0721610a4e11832e83df19c73ace3289972b9/specs/%7Elambdas.yml#L146
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) {
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) {
         return @"";
     }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{^lambda}}{{static}}{{/lambda}}>" error:NULL];
@@ -167,7 +167,7 @@
     // Lambda can't render partials
     NSDictionary *partials = @{ @"partial" : @"success" };
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @"{{>partial}}"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @"{{>partial}}"; }];
     GRMustacheTemplate *template = [repo templateFromString:@"<{{lambda}}>" error:NULL];
     id data = @{ @"lambda": lambda };
     NSError *error;
@@ -182,7 +182,7 @@
     // Lambda can't render partials
     NSDictionary *partials = @{ @"partial" : @"success" };
     GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepositoryWithDictionary:partials];
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) { return @"{{>partial}}"; }];
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) { return @"{{>partial}}"; }];
     GRMustacheTemplate *template = [repo templateFromString:@"<{{#lambda}}...{{/lambda}}>" error:NULL];
     id data = @{ @"lambda": lambda };
     NSError *error;
@@ -194,7 +194,7 @@
 
 - (void)testArity0LambdaInSectionTag
 {
-    id lambda = [GRMustacheRendering lambda:^NSString *{ return @"success"; }];
+    id lambda = [GRMustacheRendering lambda:^{ return @"success"; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{#lambda}}<{{.}}>{{/lambda}}" error:NULL];
     id data = @{ @"lambda": lambda };
     NSString *rendering = [template renderObject:data error:NULL];
@@ -203,7 +203,7 @@
 
 - (void)testArity1LambdaInVariableTag
 {
-    id lambda = [GRMustacheRendering sectionLambda:^NSString *(NSString *string) { return string; }];
+    id lambda = [GRMustacheRendering sectionLambda:^(NSString *string) { return string; }];
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"<{{lambda}}>" error:NULL];
     id data = @{ @"lambda": lambda };
     NSString *rendering = [template renderObject:data error:NULL];
