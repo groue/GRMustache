@@ -176,7 +176,7 @@ Templates may come from various sources:
     // The repository of Bash templates, with extension ".sh":
     GRMustacheTemplateRepository *repo;
     repo = [GRMustacheTemplateRepository
-            templateRepositoryWithBundle:nil
+            templateRepositoryWithBundle:[NSBundle mainBundle]
                        templateExtension:@"sh"
                                 encoding:NSUTF8StringEncoding];
     
