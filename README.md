@@ -918,27 +918,28 @@ Mustache lambdas are functions that let you perform custom rendering. There are 
 
 ```swift
 // `{{fullName}}` renders just as `{{firstName}} {{lastName}}.`
-let fullName = Lambda { "{{firstName}} {{lastName}}" }
+id fullName = [GRMustacheRendering lambda:^{
+    return @"{{firstName}} {{lastName}}";
+}];
 
 // `{{#wrapped}}...{{/wrapped}}` renders the content of the section, wrapped in
 // a <b> HTML tag.
-let wrapped = Lambda { (string) in "<b>\(string)</b>" }
+id wrapped = [GRMustacheRendering sectionLambda:^(NSString *string) {
+    return [NSString stringWithFormat:@"<b>%@</b>", string];
+}];
 
 // <b>Frank Zappa is awesome.</b>
-let templateString = "{{#wrapped}}{{fullName}} is awesome.{{/wrapped}}"
-let template = try Template(string: templateString)
-let data = [
-    "firstName": Box("Frank"),
-    "lastName": Box("Zappa"),
-    "fullName": Box(fullName),
-    "wrapped": Box(wrapped)]
-let rendering = try template.render(Box(data))
+NSString *templateString = @"{{#wrapped}}{{fullName}} is awesome.{{/wrapped}}";
+GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:templateString error:NULL];
+id data = @{
+    @"firstName": @"Frank",
+    @"lastName": @"Zappa",
+    @"fullName": fullName,
+    @"wrapped": wrapped };
+NSString *rendering = [template renderObject:data error:NULL];
 ```
 
-Lambdas are a special case of custom rendering functions. The raw `RenderFunction` type gives you extra flexibility when you need to perform custom rendering. See [CoreFunctions.swift](Mustache/Rendering/CoreFunctions.swift) ([read on cocoadocs.org](http://cocoadocs.org/docsets/GRMustache.swift/0.11.0/Typealiases.html)).
-
-
-
+Lambdas are a special case of custom rendering objects, implemented around the [GRMustacheRendering protocol](http://cocoadocs.org/docsets/GRMustache/7.3.2/Protocols/GRMustacheRendering.html), and [GRMustacheRendering factory methods](http://cocoadocs.org/docsets/GRMustache/7.3.2/Classes/GRMustacheRendering.html). Those give you extra flexibility when you need to perform custom rendering.
 
 
 TO BE CONTINUED
