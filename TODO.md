@@ -25,4 +25,6 @@
 - [?] Have Filter and renderingObject APIs closer from GRMustache.swift
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
 - [?] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
-- [?] What happens if NSObject behaves as NSDictionary? (nil for missing keys, NSNull when present key returns nil)
+- [ ] What happens if NSObject behaves as NSDictionary? (nil for missing keys, NSNull when present key returns nil). Bad thins: it "breaks" the context stack, because when an object has a nil name, GRMustache would stop digging further for a name. Revert 48abc5a9cdf6cb41ebc89cba111078ee36d208b6.
+- [ ] Turn -[GRMustacheKeyValueCoding valueForMustacheKey:] into -[GRMustacheKeyValueCoding hasValue:forMustacheKey:]. This prevents making NSNull a magic value.
+- [ ] Drop support for unsafe contexts. GRMustacheKeyValueCoding is there if one wants to escape default behavior.
