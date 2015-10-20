@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTemplateParser_private.h"
@@ -55,21 +55,14 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_tagStartDelimiter release];
-    [_tagEndDelimiter release];
-    [super dealloc];
-}
-
 - (void)parseTemplateString:(NSString *)templateString templateID:(id)templateID
 {
     if (templateString == nil) {
-        if ([_delegate respondsToSelector:@selector(templateParser:didFailWithError:)]) {
-            [_delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
-                                                                                code:GRMustacheErrorCodeTemplateNotFound
-                                                                            userInfo:[NSDictionary dictionaryWithObject:@"Nil template string can not be parsed."
-                                                                                                                 forKey:NSLocalizedDescriptionKey]]];
+        if ([self.delegate respondsToSelector:@selector(templateParser:didFailWithError:)]) {
+            [self.delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+                                                                                    code:GRMustacheErrorCodeTemplateNotFound
+                                                                                userInfo:[NSDictionary dictionaryWithObject:@"Nil template string can not be parsed."
+                                                                                                                     forKey:NSLocalizedDescriptionKey]]];
         }
         return;
     }
@@ -506,8 +499,8 @@
  */
 - (BOOL)shouldContinueAfterParsingToken:(GRMustacheToken *)token
 {
-    if ([_delegate respondsToSelector:@selector(templateParser:shouldContinueAfterParsingToken:)]) {
-        return [_delegate templateParser:self shouldContinueAfterParsingToken:token];
+    if ([self.delegate respondsToSelector:@selector(templateParser:shouldContinueAfterParsingToken:)]) {
+        return [self.delegate templateParser:self shouldContinueAfterParsingToken:token];
     }
     return YES;
 }
@@ -528,10 +521,10 @@
         } else {
             localizedDescription = [NSString stringWithFormat:@"Parse error at line %lu: %@", (unsigned long)line, description];
         }
-        [_delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
-                                                                    code:GRMustacheErrorCodeParseError
-                                                                userInfo:[NSDictionary dictionaryWithObject:localizedDescription
-                                                                                                     forKey:NSLocalizedDescriptionKey]]];
+        [self.delegate templateParser:self didFailWithError:[NSError errorWithDomain:GRMustacheErrorDomain
+                                                                                code:GRMustacheErrorCodeParseError
+                                                                            userInfo:[NSDictionary dictionaryWithObject:localizedDescription
+                                                                                                                 forKey:NSLocalizedDescriptionKey]]];
     }
 }
 
