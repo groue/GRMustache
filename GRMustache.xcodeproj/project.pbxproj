@@ -146,7 +146,7 @@
 		56214C361BA1A6C20070C6CF /* GRMustacheAvailabilityMacros_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF375719B8EF2800854524 /* GRMustacheAvailabilityMacros_private.h */; settings = {ASSET_TAGS = (); }; };
 		56214C371BA1A6C50070C6CF /* GRMustacheAvailabilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF375619B8EF2800854524 /* GRMustacheAvailabilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56214C381BA1A6CD0070C6CF /* GRMustacheURLEscapeFilter_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF373019B8EEC700854524 /* GRMustacheURLEscapeFilter_private.h */; settings = {ASSET_TAGS = (); }; };
-		56214C5D1BA1A6F20070C6CF /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {ASSET_TAGS = (); }; };
+		56214C5D1BA1A6F20070C6CF /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
 		56214C5E1BA1A6F20070C6CF /* GRMustacheExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366119B8EE8B00854524 /* GRMustacheExpressionParser.m */; settings = {ASSET_TAGS = (); }; };
 		56214C5F1BA1A6F20070C6CF /* GRMustacheTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366319B8EE8B00854524 /* GRMustacheTemplateParser.m */; settings = {ASSET_TAGS = (); }; };
 		56214C601BA1A6F20070C6CF /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366519B8EE8B00854524 /* GRMustacheToken.m */; settings = {ASSET_TAGS = (); }; };
@@ -234,7 +234,7 @@
 		56AC8CA11BA1F67D009E4319 /* GRMustacheContextPrivateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EC152649DF008628C5 /* GRMustacheContextPrivateTest.m */; settings = {ASSET_TAGS = (); }; };
 		56AC8CA21BA1F67D009E4319 /* GRMustacheExpressionParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheExpressionParserTest.m */; settings = {ASSET_TAGS = (); }; };
 		56AC8CA31BA1F67D009E4319 /* GRMustacheTemplateGeneratorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C88929190A349B0084FC5A /* GRMustacheTemplateGeneratorTest.m */; settings = {ASSET_TAGS = (); }; };
-		56AC8CA41BA1F69B009E4319 /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {ASSET_TAGS = (); }; };
+		56AC8CA41BA1F69B009E4319 /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
 		56AC8CA51BA1F69B009E4319 /* GRMustacheExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366119B8EE8B00854524 /* GRMustacheExpressionParser.m */; settings = {ASSET_TAGS = (); }; };
 		56AC8CA61BA1F69B009E4319 /* GRMustacheTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366319B8EE8B00854524 /* GRMustacheTemplateParser.m */; settings = {ASSET_TAGS = (); }; };
 		56AC8CA71BA1F69B009E4319 /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366519B8EE8B00854524 /* GRMustacheToken.m */; settings = {ASSET_TAGS = (); }; };
@@ -303,7 +303,7 @@
 		56DAC76B1BB69FC40010FE01 /* GRMustacheContextPrivateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EC152649DF008628C5 /* GRMustacheContextPrivateTest.m */; };
 		56DAC76C1BB69FC40010FE01 /* GRMustacheExpressionParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 563D66EE152649DF008628C5 /* GRMustacheExpressionParserTest.m */; };
 		56DAC76D1BB69FC40010FE01 /* GRMustacheTemplateGeneratorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C88929190A349B0084FC5A /* GRMustacheTemplateGeneratorTest.m */; };
-		56DAC76E1BB6A0040010FE01 /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; };
+		56DAC76E1BB6A0040010FE01 /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		56DAC76F1BB6A0040010FE01 /* GRMustacheExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366119B8EE8B00854524 /* GRMustacheExpressionParser.m */; };
 		56DAC7701BB6A0040010FE01 /* GRMustacheTemplateParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366319B8EE8B00854524 /* GRMustacheTemplateParser.m */; };
 		56DAC7711BB6A0040010FE01 /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366519B8EE8B00854524 /* GRMustacheToken.m */; };
@@ -447,7 +447,7 @@
 		6586A0C01B9E2E660067C98E /* GRMustacheToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF366519B8EE8B00854524 /* GRMustacheToken.m */; };
 		6586A0C11B9E2E660067C98E /* GRMustacheToken_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF366619B8EE8B00854524 /* GRMustacheToken_private.h */; settings = {ASSET_TAGS = (); }; };
 		6586A0C21B9E2E6A0067C98E /* GRMustacheConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF365719B8EE7A00854524 /* GRMustacheConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6586A0C31B9E2E6A0067C98E /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; };
+		6586A0C31B9E2E6A0067C98E /* GRMustacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 56BF365819B8EE7A00854524 /* GRMustacheConfiguration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6586A0C41B9E2E6A0067C98E /* GRMustacheConfiguration_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF365919B8EE7A00854524 /* GRMustacheConfiguration_private.h */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 

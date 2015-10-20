@@ -20,14 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheConfiguration_private.h"
 #import "GRMustache_private.h"
 #import "GRMustacheContext_private.h"
 
+
+@interface GRMustacheConfiguration()
+@property (nonatomic, getter = isLocked) BOOL locked;
+@end
 
 @implementation GRMustacheConfiguration
 
@@ -43,32 +47,24 @@
 
 + (instancetype)configuration
 {
-    return [[[self alloc] init] autorelease];
-}
-
-- (void)dealloc
-{
-    [_tagStartDelimiter release];
-    [_tagEndDelimiter release];
-    [_baseContext release];
-    [super dealloc];
+    return [[self alloc] init];
 }
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _contentType = GRMustacheContentTypeHTML;
-        _tagStartDelimiter = [@"{{" retain];    // useless retain that matches the release in dealloc
-        _tagEndDelimiter = [@"}}" retain];      // useless retain that matches the release in dealloc
-        _baseContext = [[GRMustacheContext context] retain];
+        self.contentType = GRMustacheContentTypeHTML;
+        self.tagStartDelimiter = @"{{";
+        self.tagEndDelimiter = @"}}";
+        self.baseContext = [GRMustacheContext context];
     }
     return self;
 }
 
 - (void)lock
 {
-    _locked = YES;
+    self.locked = YES;
 }
 
 - (void)setContentType:(GRMustacheContentType)contentType
@@ -87,10 +83,7 @@
         return;
     }
     
-    if (_tagStartDelimiter != tagStartDelimiter) {
-        [_tagStartDelimiter release];
-        _tagStartDelimiter = [tagStartDelimiter copy];
-    }
+    _tagStartDelimiter = [tagStartDelimiter copy];
 }
 
 - (void)setTagEndDelimiter:(NSString *)tagEndDelimiter
@@ -102,10 +95,7 @@
         return;
     }
     
-    if (_tagEndDelimiter != tagEndDelimiter) {
-        [_tagEndDelimiter release];
-        _tagEndDelimiter = [tagEndDelimiter copy];
-    }
+    _tagEndDelimiter = [tagEndDelimiter copy];
 }
 
 - (void)setBaseContext:(GRMustacheContext *)baseContext
@@ -117,10 +107,7 @@
         return;
     }
     
-    if (_baseContext != baseContext) {
-        [_baseContext release];
-        _baseContext = [baseContext retain];
-    }
+    _baseContext = baseContext;
 }
 
 - (void)extendBaseContextWithObject:(id)object
@@ -144,10 +131,10 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     GRMustacheConfiguration *configuration = [[GRMustacheConfiguration alloc] init];
-    configuration.contentType = _contentType;
-    configuration.tagStartDelimiter = _tagStartDelimiter;
-    configuration.tagEndDelimiter = _tagEndDelimiter;
-    configuration.baseContext = _baseContext;
+    configuration.contentType = self.contentType;
+    configuration.tagStartDelimiter = self.tagStartDelimiter;
+    configuration.tagEndDelimiter = self.tagEndDelimiter;
+    configuration.baseContext = self.baseContext;
     // Do not copy the _locked flag, so that the copy is mutable.
     return configuration;
 }
@@ -157,7 +144,7 @@
 
 - (void)assertNotLocked
 {
-    if (_locked) {
+    if (self.locked) {
         [NSException raise:NSGenericException format:@"%@ was mutated after template compilation", self];
     }
 }
