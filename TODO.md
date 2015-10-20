@@ -23,7 +23,7 @@
 - [X] Turn -[GRMustacheKeyValueCoding valueForMustacheKey:] into -[GRMustacheKeyValueCoding hasValue:forMustacheKey:]. This prevents making NSNull a magic value.
 - [X] Drop support for unsafe contexts. GRMustacheKeyValueCoding is there if one wants to escape default behavior.
 
-- [ ] Drop support for else `{{#a}}{{^a}}{{/a}}`.
+- [?] Drop support for else `{{#a}}{{^a}}{{/a}}`.
 - [?] Have Filter and renderingObject APIs closer from GRMustache.swift
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
 - [?] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
