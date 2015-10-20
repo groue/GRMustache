@@ -55,7 +55,7 @@
     }
     
     @try {
-        return [self valueForKey:key];
+        return [self valueForKey:key] ?: [NSNull null];
     }
     @catch (NSException *exception) {
         // Swallow NSUndefinedKeyException only
