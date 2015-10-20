@@ -25,3 +25,4 @@
 - [?] Have Filter and renderingObject APIs closer from GRMustache.swift
 - [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
 - [?] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
+- [?] What happens if NSObject behaves as NSDictionary? (nil for missing keys, NSNull when present key returns nil)
