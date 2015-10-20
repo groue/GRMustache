@@ -20,6 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#if __has_feature(objc_arc)
+#error Manual Reference Counting required: use -fno-objc-arc.
+#endif
+
 #import "GRMustacheTemplateGenerator_private.h"
 #import "GRMustacheExpressionGenerator_private.h"
 #import "GRMustacheTemplateASTVisitor_private.h"
