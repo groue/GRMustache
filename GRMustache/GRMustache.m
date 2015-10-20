@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automaic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustache_private.h"
@@ -49,25 +49,25 @@
 // Documented in GRMustache.h
 + (id)standardEach
 {
-    return [[[GRMustacheEachFilter alloc] init] autorelease];
+    return [[GRMustacheEachFilter alloc] init];
 }
 
 // Documented in GRMustache.h
 + (id)standardHTMLEscape
 {
-    return [[[GRMustacheHTMLEscapeFilter alloc] init] autorelease];
+    return [[GRMustacheHTMLEscapeFilter alloc] init];
 }
 
 // Documented in GRMustache.h
 + (id)standardURLEscape
 {
-    return [[[GRMustacheURLEscapeFilter alloc] init] autorelease];
+    return [[GRMustacheURLEscapeFilter alloc] init];
 }
 
 // Documented in GRMustache.h
 + (id)standardJavascriptEscape
 {
-    return [[[GRMustacheJavascriptEscapeFilter alloc] init] autorelease];
+    return [[GRMustacheJavascriptEscapeFilter alloc] init];
 }
 
 // Documented in GRMustache.h

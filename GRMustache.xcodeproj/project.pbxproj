@@ -354,10 +354,10 @@
 		56DAC7B61BB6DDAB0010FE01 /* GRMustache_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DAC7B21BB6DDAB0010FE01 /* GRMustache_private.h */; settings = {ASSET_TAGS = (); }; };
 		56DAC7B71BB6DDAB0010FE01 /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DAC7B31BB6DDAB0010FE01 /* GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DAC7B81BB6DDAB0010FE01 /* GRMustache.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DAC7B31BB6DDAB0010FE01 /* GRMustache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		56DAC7B91BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); }; };
-		56DAC7BA1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); }; };
-		56DAC7BB1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); }; };
-		56DAC7BC1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); }; };
+		56DAC7B91BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
+		56DAC7BA1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
+		56DAC7BB1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
+		56DAC7BC1BB6DDAB0010FE01 /* GRMustache.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DAC7B41BB6DDAB0010FE01 /* GRMustache.m */; settings = {ASSET_TAGS = (); COMPILER_FLAGS = "-fobjc-arc"; }; };
 		56DAC7BE1BB6E85B0010FE01 /* specs in Resources */ = {isa = PBXBuildFile; fileRef = 56DAC7BD1BB6E85B0010FE01 /* specs */; settings = {ASSET_TAGS = (); }; };
 		56DAC7BF1BB6E85B0010FE01 /* specs in Resources */ = {isa = PBXBuildFile; fileRef = 56DAC7BD1BB6E85B0010FE01 /* specs */; settings = {ASSET_TAGS = (); }; };
 		6586A0691B9E2E100067C98E /* GRMustacheAvailabilityMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 56BF375619B8EF2800854524 /* GRMustacheAvailabilityMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
