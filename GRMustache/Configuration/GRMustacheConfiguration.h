@@ -128,7 +128,7 @@
  *
  * @since v6.4
  */
-@property (nonatomic) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+@property (nonatomic, strong) GRMustacheContext *baseContext AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 /**
  * Extends the base context of the receiver with the provided object, making its

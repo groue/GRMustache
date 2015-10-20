@@ -46,7 +46,7 @@
 @property (nonatomic, copy) NSString *tagEndDelimiter GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
-@property (nonatomic) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, strong) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheConfiguration.h
 - (void)extendBaseContextWithObject:(id)object GRMUSTACHE_API_PUBLIC;
