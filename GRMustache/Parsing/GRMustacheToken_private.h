@@ -112,14 +112,14 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
 /**
  * The Mustache template string this token comes from.
  */
-@property (nonatomic, retain) NSString *templateString GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong) NSString *templateString GRMUSTACHE_API_INTERNAL;
 
 /**
  * The template ID of the template this token comes from.
  *
  * @see GRMustacheTemplateRepository
  */
-@property (nonatomic, retain) id templateID GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong) id templateID GRMUSTACHE_API_INTERNAL;
 
 /**
  * The line in templateString where this token lies.
@@ -169,12 +169,12 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
 /**
  * The opening delimiter
  */
-@property (nonatomic, retain) NSString *tagStartDelimiter;
+@property (nonatomic, strong) NSString *tagStartDelimiter;
 
 /**
  * The closing delimiter
  */
-@property (nonatomic, retain) NSString *tagEndDelimiter;
+@property (nonatomic, strong) NSString *tagEndDelimiter;
 
 /**
  * Builds and return a token.

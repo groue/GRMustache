@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheToken_private.h"
@@ -29,18 +29,9 @@
 
 @implementation GRMustacheToken
 
-- (void)dealloc
-{
-    [_templateString release];
-    [_templateID release];
-    [_tagStartDelimiter release];
-    [_tagEndDelimiter release];
-    [super dealloc];
-}
-
 + (instancetype)tokenWithType:(GRMustacheTokenType)type templateString:(NSString *)templateString templateID:(id)templateID line:(NSUInteger)line range:(NSRange)range tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    GRMustacheToken *token = [[[self alloc] init] autorelease];
+    GRMustacheToken *token = [[self alloc] init];
     token.type = type;
     token.templateString = templateString;
     token.templateID = templateID;
@@ -53,12 +44,12 @@
 
 - (NSString *)templateSubstring
 {
-    return [_templateString substringWithRange:_range];
+    return [self.templateString substringWithRange:self.range];
 }
 
 - (NSString *)tagInnerContent
 {
-    return [_templateString substringWithRange:_tagInnerRange];
+    return [self.templateString substringWithRange:self.tagInnerRange];
 }
 
 @end
