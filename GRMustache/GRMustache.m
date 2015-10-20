@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 #if !__has_feature(objc_arc)
-#error Automaic Reference Counting required: use -fobjc-arc.
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustache_private.h"
