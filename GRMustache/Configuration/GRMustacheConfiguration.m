@@ -30,7 +30,7 @@
 
 
 @interface GRMustacheConfiguration()
-@property (nonatomic, getter = isLocked) BOOL locked;
+@property (nonatomic, getter=isLocked) BOOL locked;
 @end
 
 @implementation GRMustacheConfiguration
