@@ -117,7 +117,9 @@
         return NO;
     }
     
-    _value = [_value valueForMustacheKey:expression.identifier unsafeKeyAccess:_context.unsafeKeyAccess];
+    if (![_value exceptionSafeHasValue:&_value forMustacheKey:expression.identifier]) {
+        _value = nil;
+    }
     _valueIsProtected = NO;
     return YES;
 }

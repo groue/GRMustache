@@ -68,9 +68,10 @@
 - (int)intFalseMethod { return NO; }
 - (int)intTrueMethod { return YES; }
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    return [self valueForKey:key];
+    *value = [self valueForKey:key];
+    return YES;
 }
 
 @end

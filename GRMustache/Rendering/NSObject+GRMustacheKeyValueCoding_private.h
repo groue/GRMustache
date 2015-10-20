@@ -24,8 +24,8 @@
 #import "GRMustacheAvailabilityMacros.h"
 #import "GRMustacheKeyValueCoding.h"
 
-@interface NSObject(GRMustacheKeyValueCoding)
-- (id)valueForMustacheKey:(NSString *)key unsafeKeyAccess:(BOOL)unsafeKeyAccess;
+@interface NSObject(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
+- (BOOL)exceptionSafeHasValue:(id *)value forMustacheKey:(NSString *)key;
 @end
 
 @interface NSDictionary(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>

@@ -309,7 +309,7 @@
  * 1. If the object responds to the `objectForKeyedSubscript:` instance method,
  *    return the result of this method.
  *
- * 2. Otherwise, build the list of safe keys:
+ * 2. Otherwise, build the list of safe keys (TODO):
  *    a. If the object responds to the `safeMustacheKeys` class method defined
  *       by the `GRMustacheSafeKeyAccess` protocol, use this method.
  *    b. Otherwise, use the list of Objective-C properties declared with
@@ -321,8 +321,6 @@
  *    `valueForKey:` method, unless this method throws NSUndefinedKeyException.
  *
  * 4. Otherwise, return nil.
- *
- * Contexts with unsafe key access skip the key validation step.
  *
  * In this method, the following search pattern is used:
  *
@@ -341,7 +339,6 @@
  *
  * @return The value found in the context stack for the given key.
  *
- * @see contextWithUnsafeKeyAccess
  * @see hasValue:forMustacheExpression:error:
  *
  * @since v6.6
@@ -365,102 +362,5 @@
  * @since v6.8
  */
 - (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// @name Unsafe Key Access
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Returns whether this context allows unsafe key access or not.
- *
- * @since v7.0
- */
-@property (nonatomic, readonly) BOOL unsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
-
-/**
- * Returns a new context with unsafe key access.
- *
- * Unsafe key access allows this context, and all contexts derived from it, to
- * access keys that are normally forbidden: keys that are not declared as
- * Objective-C properties, or keys that do not belong to the result of the
- * `safeMustacheKeys` method.
- *
- * Compare:
- *
- * ```
- * @interface DBRecord : NSObject
- * - (void)deleteRecord;
- * @end
- *
- * @implementation DBRecord
- * - (void)deleteRecord
- * {
- *     NSLog(@"Oooops, your record was just deleted!");
- * }
- * @end
- *
- * DBRecord *record = ...;
- * NSString *templateString = @"{{ deleteRecord }}";
- * GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
- *
- * // Safe rendering of the dangerous template: record is not deleted.
- * [template renderObject:record error:NULL];
- *
- * // Unsafe rendering of the dangerous template: record is deleted.
- * template.baseContext = [GRMustacheContext contextWithUnsafeKeyAccess];
- * [template renderObject:record error:NULL];
- * ```
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
- *
- * @see GRMustacheSafeKeyAccess
- *
- * @since v7.0
- */
-+ (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
-
-/**
- * Returns a new rendering context that is the copy of the receiver, with unsafe
- * key access.
- *
- * Unsafe key access allows this context, and all contexts derived from it, to
- * access keys that are normally forbidden: keys that are not declared as
- * Objective-C properties, or keys that do not belong to the result of the
- * `safeMustacheKeys` method.
- *
- * Compare:
- *
- * ```
- * @interface DBRecord : NSObject
- * - (void)deleteRecord;
- * @end
- *
- * @implementation DBRecord
- * - (void)deleteRecord
- * {
- *     NSLog(@"Oooops, your record was just deleted!");
- * }
- * @end
- *
- * DBRecord *record = ...;
- * NSString *templateString = @"{{ deleteRecord }}";
- * GRMustacheTemplate * template = [GRMustacheTemplate templateWithString:templateString error:NULL];
- *
- * // Safe rendering of the dangerous template: record is not deleted.
- * [template renderObject:record error:NULL];
- *
- * // Unsafe rendering of the dangerous template: record is deleted.
- * template.baseContext = [template.baseContext contextWithUnsafeKeyAccess];
- * [template renderObject:record error:NULL];
- * ```
- *
- * **Companion guide:** https://github.com/groue/GRMustache/blob/master/Guides/security.md
- *
- * @see GRMustacheSafeKeyAccess
- *
- * @since v7.0
- */
-- (instancetype)contextWithUnsafeKeyAccess AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end

@@ -24,40 +24,12 @@
 #import "NSObject+GRMustacheKeyValueCoding_private.h"
 #import "GRMustacheKeyAccess_private.h"
 
-@interface NSObject(KeyedSubscripting)
-- (id)valueForMustacheKey:(id)key;
-@end
-
 @implementation NSObject(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key unsafeKeyAccess:(BOOL)unsafeKeyAccess
+- (BOOL)exceptionSafeHasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    // Try valueForMustacheKey:
-    
-    if ([self respondsToSelector:@selector(valueForMustacheKey:)]) {
-        @try {
-            return [self valueForMustacheKey:key];
-        }
-        @catch (NSException *exception) {
-            // Swallow NSUndefinedKeyException only
-            if (![[exception name] isEqualToString:NSUndefinedKeyException]) {
-                [exception raise];
-            }
-            return nil;
-        }
-    }
-    
-    
-    // Then try valueForKey: for safe keys
-    
-    if (!unsafeKeyAccess && ![GRMustacheKeyAccess isSafeMustacheKey:key forObject:self]) {
-        return nil;
-    }
-    
     @try {
-        // If there is no exception, then the key is present.
-        // Turn nil value into NSNull in order to stop contact stack lookup.
-        return [self valueForKey:key] ?: [NSNull null];
+        return [self hasValue:value forMustacheKey:key];
     }
     @catch (NSException *exception) {
         // Swallow NSUndefinedKeyException only
@@ -65,33 +37,49 @@
             [exception raise];
         }
         // Missing key
-        return nil;
+        return NO;
     }
+}
+
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+{
+    // Try valueForKey: for safe keys onlys
+    if (![GRMustacheKeyAccess isSafeMustacheKey:key forObject:self]) {
+        return NO;
+    }
+    
+    // If property is nil, behave as if the key was missing.
+    *value = [self valueForKey:key];
+    return (*value != nil);
 }
 
 @end
 
 @implementation NSDictionary(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    return [self objectForKey:key];
+    *value = [self objectForKey:key];
+    return (*value != nil);
 }
 
 @end
 
 @implementation NSArray(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
-        return @(self.count);
+        *value = @(self.count);
+        return YES;
     } else if ([key isEqualToString:@"first"]) {
-        return self.firstObject;
+        *value = self.firstObject;
+        return YES;
     } else if ([key isEqualToString:@"last"]) {
-        return self.lastObject;
+        *value = self.lastObject;
+        return YES;
     } else {
-        return nil;
+        return NO;
     }
 }
 
@@ -99,16 +87,19 @@
 
 @implementation NSOrderedSet(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
-        return @(self.count);
+        *value = @(self.count);
+        return YES;
     } else if ([key isEqualToString:@"first"]) {
-        return self.firstObject;
+        *value = self.firstObject;
+        return YES;
     } else if ([key isEqualToString:@"last"]) {
-        return self.lastObject;
+        *value = self.lastObject;
+        return YES;
     } else {
-        return nil;
+        return NO;
     }
 }
 
@@ -116,14 +107,16 @@
 
 @implementation NSSet(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
-        return @(self.count);
+        *value = @(self.count);
+        return YES;
     } else if ([key isEqualToString:@"first"]) {
-        return self.anyObject;
+        *value = self.anyObject;
+        return YES;
     } else {
-        return nil;
+        return NO;
     }
 }
 
@@ -131,12 +124,13 @@
 
 @implementation NSString(GRMustacheKeyValueCoding)
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"length"]) {
-        return @(self.length);
+        *value = @(self.length);
+        return YES;
     } else {
-        return nil;
+        return NO;
     }
 }
 

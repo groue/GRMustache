@@ -93,13 +93,13 @@
     XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
 }
 
-- (void)testNilPropertyEvaluatesToNSNullAndStopsContextStackLookup
+- (void)testNilPropertyEvaluatesToMissingKeyAndDoesNotStopContextStackLookup
 {
     GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:nil] autorelease];
     GRMustacheContext *context = [GRMustacheContext contextWithObject:@{@"property": @"root"}];
     XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"root", @"");
     context = [context contextByAddingObject:object];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], [NSNull null]);
+    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"root");
 }
 
 - (void)testMethodAreDisallowed
@@ -114,73 +114,6 @@
     // test context
     GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
     XCTAssertNil([context valueForMustacheKey:@"method"], @"");
-}
-
-- (void)testUnsafeKeyAccess
-{
-    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
-    
-    // test setup
-    XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    XCTAssertEqualObjects([object method], @"method", @"");
-    XCTAssertEqualObjects(object.property, @"property", @"");
-    XCTAssertEqualObjects([object valueForKey:@"method"], @"method", @"");
-    XCTAssertEqualObjects([object valueForKey:@"property"], @"property", @"");
-    
-    // test context
-    GRMustacheContext *context = [GRMustacheContext contextWithObject:object];
-    context = [context contextWithUnsafeKeyAccess];
-    XCTAssertEqualObjects([context valueForMustacheKey:@"method"], @"method", @"");
-    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
-}
-
-- (void)testUnsafeKeyAccessInDerivedContexts
-{
-    GRMustacheContextKeyAccess_ClassWithProperties *object1 = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
-    GRMustacheContextKeyAccess_ClassWithProperties2 *object2 = [[[GRMustacheContextKeyAccess_ClassWithProperties2 alloc] init] autorelease];
-    
-    // test setup
-    XCTAssertFalse([object1 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    XCTAssertEqualObjects([object1 method], @"method", @"");
-    XCTAssertEqualObjects(object1.property, @"property", @"");
-    XCTAssertEqualObjects([object1 valueForKey:@"method"], @"method", @"");
-    XCTAssertEqualObjects([object1 valueForKey:@"property"], @"property", @"");
-    
-    XCTAssertFalse([object2 respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
-    XCTAssertEqualObjects([object2 method2], @"method2", @"");
-    XCTAssertEqualObjects(object2.property2, @"property2", @"");
-    XCTAssertEqualObjects([object2 valueForKey:@"method2"], @"method2", @"");
-    XCTAssertEqualObjects([object2 valueForKey:@"property2"], @"property2", @"");
-    
-    // test context
-    {
-        // Context derived from unsafe context is unsafe.
-        
-        GRMustacheContext *context = [GRMustacheContext contextWithUnsafeKeyAccess];
-        context = [context contextByAddingObject:object1];
-        XCTAssertEqualObjects([context valueForMustacheKey:@"method"], @"method", @"");
-        XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
-    }
-    {
-        // Context derived from safe context is safe.
-        
-        GRMustacheContext *context = [GRMustacheContext context];
-        context = [context contextByAddingObject:object1];
-        XCTAssertNil([context valueForMustacheKey:@"method"], @"");
-        XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
-    }
-    {
-        // Derived unsafe context is fully unsafe
-        
-        GRMustacheContext *context = [GRMustacheContext contextWithObject:object1];
-        XCTAssertNil([context valueForMustacheKey:@"method"], @"");
-        context = [context contextByAddingObject:object2];
-        XCTAssertNil([context valueForMustacheKey:@"method"], @"");
-        XCTAssertNil([context valueForMustacheKey:@"methd2"], @"");
-        context = [context contextWithUnsafeKeyAccess];
-        XCTAssertEqualObjects([context valueForMustacheKey:@"method"], @"method", @"");
-        XCTAssertEqualObjects([context valueForMustacheKey:@"method2"], @"method2", @"");
-    }
 }
 
 @end

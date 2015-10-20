@@ -122,13 +122,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     return [[[self alloc] init] autorelease];
 }
 
-+ (instancetype)contextWithUnsafeKeyAccess
-{
-    GRMustacheContext *context = [[[self alloc] init] autorelease];
-    context->_unsafeKeyAccess = YES;
-    return context;
-}
-
 + (instancetype)contextWithObject:(id)object
 {
     GRMustacheContext *context = [[[self alloc] init] autorelease];
@@ -174,7 +167,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     }
     
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -193,7 +185,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     }
     
     GRMustacheContext *context = [[GRMustacheContext alloc] init];
-    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
@@ -223,7 +214,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     }
     
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(hiddenContextStack, self, context);
@@ -242,7 +232,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     }
     
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -261,7 +250,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     }
     
     GRMustacheContext *context = [GRMustacheContext context];
-    context->_unsafeKeyAccess = _unsafeKeyAccess;
     
     GRMUSTACHE_STACK_COPY(contextStack, self, context);
     GRMUSTACHE_STACK_COPY(protectedContextStack, self, context);
@@ -273,75 +261,6 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     return context;
 }
 
-- (instancetype)contextWithUnsafeKeyAccess
-{
-#define GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(stackName) \
-    GRMUSTACHE_STACK_ENUMERATE(stackName, self, __context) { \
-        GRMustacheContext *__unsafeContext = CFDictionaryGetValue(unsafeContextForContext, __context); \
-        if (!__unsafeContext) { \
-            __unsafeContext = [GRMustacheContext contextWithUnsafeKeyAccess]; \
-            GRMUSTACHE_STACK_COPY(contextStack, __context, __unsafeContext); \
-            GRMUSTACHE_STACK_COPY(protectedContextStack, __context, __unsafeContext); \
-            GRMUSTACHE_STACK_COPY(hiddenContextStack, __context, __unsafeContext); \
-            GRMUSTACHE_STACK_COPY(tagDelegateStack, __context, __unsafeContext); \
-            GRMUSTACHE_STACK_COPY(partialOverrideNodeStack, __context, __unsafeContext); \
-            CFDictionarySetValue(unsafeContextForContext, __context, __unsafeContext); \
-        } \
-    }
-
-#define GRMUSTACHE_UPDATE_UNSAFE_PARENT(stackName, context) { \
-    GRMustacheContext *__safeParent = GRMUSTACHE_STACK_PARENT(stackName, context); \
-    if (__safeParent) { \
-        GRMustacheContext *__unsafeParent = CFDictionaryGetValue(unsafeContextForContext, __safeParent); \
-        [__safeParent release]; \
-        GRMUSTACHE_STACK_PARENT(stackName, context) = [__unsafeParent retain]; \
-    } \
-}
-
-    // Duplicate contexts of all stacks into unsafe contexts.
-    // The parents of unsafe contexts are still the safe ones, that we'll update later.
-    
-    CFMutableDictionaryRef unsafeContextForContext = CFDictionaryCreateMutable(NULL, 0, NULL, NULL);
-    
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(contextStack);
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(protectedContextStack);
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(hiddenContextStack);
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(tagDelegateStack);
-    GRMUSTACHE_CREATE_DEEP_UNSAFE_CONTEXTS(partialOverrideNodeStack);
-    
-    
-    // Update safe parents of unsafe contexts with unsafe ones
-    
-    CFIndex count = CFDictionaryGetCount(unsafeContextForContext);
-    GRMustacheContext **unsafeContexts = malloc(count * sizeof(GRMustacheContext *));
-    if (unsafeContexts == NULL) {
-        // Allocation failed.
-        //
-        // This method is supposed to return a newly created object, so we can
-        // behave like failing allocating methods and return nil.
-        //
-        // And make sure we cleanup allocated memory before.
-        CFRelease(unsafeContextForContext);
-        return nil;
-    }
-    CFDictionaryGetKeysAndValues(unsafeContextForContext, NULL, (const void **)unsafeContexts);
-    for (CFIndex i = 0; i < count; ++i) {
-        GRMustacheContext *unsafeContext = unsafeContexts[i];
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(contextStack, unsafeContext);
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(protectedContextStack, unsafeContext);
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(hiddenContextStack, unsafeContext);
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(tagDelegateStack, unsafeContext);
-        GRMUSTACHE_UPDATE_UNSAFE_PARENT(partialOverrideNodeStack, unsafeContext);
-    }
-    free(unsafeContexts);
-    
-    
-    // Done
-    
-    GRMustacheContext *unsafeContext = CFDictionaryGetValue(unsafeContextForContext, self);
-    CFRelease(unsafeContextForContext);
-    return unsafeContext;
-}
 
 // =============================================================================
 #pragma mark - Context Stack
@@ -361,8 +280,8 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
     // First look for in the protected context stack
     
     GRMUSTACHE_STACK_ENUMERATE(protectedContextStack, self, context) {
-        id value = [GRMUSTACHE_STACK_TOP(protectedContextStack, context) valueForMustacheKey:key unsafeKeyAccess:context->_unsafeKeyAccess];
-        if (value != nil) {
+        id value;
+        if ([GRMUSTACHE_STACK_TOP(protectedContextStack, context) exceptionSafeHasValue:&value forMustacheKey:key]) {
             if (protected != NULL) {
                 *protected = YES;
             }
@@ -387,8 +306,8 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
             }
         }
         if (hidden) { continue; }
-        id value = [contextObject valueForMustacheKey:key unsafeKeyAccess:context->_unsafeKeyAccess];
-        if (value != nil) {
+        id value;
+        if ([contextObject exceptionSafeHasValue:&value forMustacheKey:key]) {
             if (protected != NULL) {
                 *protected = NO;
             }

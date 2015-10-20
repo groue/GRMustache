@@ -41,9 +41,10 @@
 @synthesize lastAccessedKey;
 @synthesize keys;
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    return [self valueForKey:key];
+    *value = [self valueForKey:key];
+    return YES;
 }
 
 + (instancetype)recorderWithRecognizedKeys:(NSArray *)keys
@@ -83,9 +84,10 @@
 
 @implementation ThrowingObjectFromValueForKey
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    return [self valueForKey:key];
+    *value = [self valueForKey:key];
+    return YES;
 }
 
 - (id)valueForKey:(NSString *)key
@@ -109,9 +111,10 @@
 
 @implementation ThrowingObjectFromValueForUndefinedKey
 
-- (id)valueForMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
 {
-    return [self valueForKey:key];
+    *value = [self valueForKey:key];
+    return YES;
 }
 
 - (id)valueForUndefinedKey:(NSString *)key
