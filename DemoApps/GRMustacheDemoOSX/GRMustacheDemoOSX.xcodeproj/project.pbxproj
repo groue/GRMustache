@@ -1,0 +1,328 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5626CE501BD253C90087F1C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE4F1BD253C90087F1C3 /* AppDelegate.m */; };
+		5626CE531BD253C90087F1C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE521BD253C90087F1C3 /* main.m */; };
+		5626CE561BD253C90087F1C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE551BD253C90087F1C3 /* ViewController.m */; };
+		5626CE581BD253C90087F1C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5626CE571BD253C90087F1C3 /* Assets.xcassets */; };
+		5626CE5B1BD253C90087F1C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5626CE591BD253C90087F1C3 /* Main.storyboard */; };
+		5626CE631BD253FE0087F1C3 /* GRMustache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5626CE621BD253FE0087F1C3 /* GRMustache.framework */; };
+		5626CE641BD253FE0087F1C3 /* GRMustache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5626CE621BD253FE0087F1C3 /* GRMustache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5626CE681BD255010087F1C3 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE671BD255010087F1C3 /* Model.m */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5626CE651BD253FE0087F1C3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5626CE641BD253FE0087F1C3 /* GRMustache.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5626CE4B1BD253C90087F1C3 /* GRMustacheDemoOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GRMustacheDemoOSX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5626CE4E1BD253C90087F1C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5626CE4F1BD253C90087F1C3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5626CE521BD253C90087F1C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5626CE541BD253C90087F1C3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5626CE551BD253C90087F1C3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5626CE571BD253C90087F1C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5626CE5A1BD253C90087F1C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5626CE5C1BD253C90087F1C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5626CE621BD253FE0087F1C3 /* GRMustache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GRMustache.framework; path = Carthage/Build/Mac/GRMustache.framework; sourceTree = "<group>"; };
+		5626CE661BD255010087F1C3 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		5626CE671BD255010087F1C3 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5626CE481BD253C90087F1C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5626CE631BD253FE0087F1C3 /* GRMustache.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5626CE421BD253C90087F1C3 = {
+			isa = PBXGroup;
+			children = (
+				5626CE621BD253FE0087F1C3 /* GRMustache.framework */,
+				5626CE4D1BD253C90087F1C3 /* GRMustacheDemoOSX */,
+				5626CE4C1BD253C90087F1C3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5626CE4C1BD253C90087F1C3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5626CE4B1BD253C90087F1C3 /* GRMustacheDemoOSX.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5626CE4D1BD253C90087F1C3 /* GRMustacheDemoOSX */ = {
+			isa = PBXGroup;
+			children = (
+				5626CE4E1BD253C90087F1C3 /* AppDelegate.h */,
+				5626CE4F1BD253C90087F1C3 /* AppDelegate.m */,
+				5626CE661BD255010087F1C3 /* Model.h */,
+				5626CE671BD255010087F1C3 /* Model.m */,
+				5626CE541BD253C90087F1C3 /* ViewController.h */,
+				5626CE551BD253C90087F1C3 /* ViewController.m */,
+				5626CE571BD253C90087F1C3 /* Assets.xcassets */,
+				5626CE591BD253C90087F1C3 /* Main.storyboard */,
+				5626CE5C1BD253C90087F1C3 /* Info.plist */,
+				5626CE511BD253C90087F1C3 /* Supporting Files */,
+			);
+			path = GRMustacheDemoOSX;
+			sourceTree = "<group>";
+		};
+		5626CE511BD253C90087F1C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5626CE521BD253C90087F1C3 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5626CE4A1BD253C90087F1C3 /* GRMustacheDemoOSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5626CE5F1BD253C90087F1C3 /* Build configuration list for PBXNativeTarget "GRMustacheDemoOSX" */;
+			buildPhases = (
+				5626CE471BD253C90087F1C3 /* Sources */,
+				5626CE481BD253C90087F1C3 /* Frameworks */,
+				5626CE491BD253C90087F1C3 /* Resources */,
+				5626CE651BD253FE0087F1C3 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GRMustacheDemoOSX;
+			productName = GRMustacheDemoOSX;
+			productReference = 5626CE4B1BD253C90087F1C3 /* GRMustacheDemoOSX.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5626CE431BD253C90087F1C3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Gwendal Roué";
+				TargetAttributes = {
+					5626CE4A1BD253C90087F1C3 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 5626CE461BD253C90087F1C3 /* Build configuration list for PBXProject "GRMustacheDemoOSX" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5626CE421BD253C90087F1C3;
+			productRefGroup = 5626CE4C1BD253C90087F1C3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5626CE4A1BD253C90087F1C3 /* GRMustacheDemoOSX */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5626CE491BD253C90087F1C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5626CE581BD253C90087F1C3 /* Assets.xcassets in Resources */,
+				5626CE5B1BD253C90087F1C3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5626CE471BD253C90087F1C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5626CE561BD253C90087F1C3 /* ViewController.m in Sources */,
+				5626CE531BD253C90087F1C3 /* main.m in Sources */,
+				5626CE501BD253C90087F1C3 /* AppDelegate.m in Sources */,
+				5626CE681BD255010087F1C3 /* Model.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5626CE591BD253C90087F1C3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5626CE5A1BD253C90087F1C3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5626CE5D1BD253C90087F1C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5626CE5E1BD253C90087F1C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5626CE601BD253C90087F1C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = GRMustacheDemoOSX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.groue.GRMustacheDemoOSX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5626CE611BD253C90087F1C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = GRMustacheDemoOSX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.groue.GRMustacheDemoOSX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5626CE461BD253C90087F1C3 /* Build configuration list for PBXProject "GRMustacheDemoOSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5626CE5D1BD253C90087F1C3 /* Debug */,
+				5626CE5E1BD253C90087F1C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5626CE5F1BD253C90087F1C3 /* Build configuration list for PBXNativeTarget "GRMustacheDemoOSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5626CE601BD253C90087F1C3 /* Debug */,
+				5626CE611BD253C90087F1C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5626CE431BD253C90087F1C3 /* Project object */;
+}

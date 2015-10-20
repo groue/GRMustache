@@ -1,44 +1,29 @@
-## TODO
+- [ ] #97: In commit 65a6593229ae8bad1630a82ccebb327fb4a9f1e3, Daniel removes a few tests based on Core Data. Make sure that we still have tests for Core Data: attributes are safe keys, and they should be rendered.
+- [X] See if dropping GRMustacheSafeKeyAccess and introducing GRMustacheObject could not solve two issues at the same time:
+    - [X] #66
+    - [X] Compatibility with GRMustache.swift on Arrays, Sets, and other standard collections.
+    - [X] Drop GRMustacheSafeKeyAccess
+    - [X] Drop default support for objectForKeyedSubscript:
+    - [X] Add GRMustacheKeyValueCoding
+- [X] Share JSON tests suite with GRMustache.swift.
+    - [X] Use submodule
+    - [X] Arrays should only have "count", "first" and "last" keys.
+    - [X] Sets should only have "count", and "first" keys.
+- [X] Remove standard library from default context.
+- [X] Drop +[GRMustache standardLibrary]
+- [X] Drop deprecated items:
+    - [X] GRMustacheTagTypeInvertedSection
+    - [X] +[GRMustache renderingObjectForObject:]
+    - [X] +[GRMustache renderingObjectWithBlock:]
+    - [X] GRMustacheTag.templateRepository
+- [X] Drop GRMustacheVersion and +[GRMustache libraryVersion]
+- [X] Dynamic partial overrides `{{# partial }}...{{/ partial }}`
+- [X] Check that {{ string.length }} is correctly implemented (NSObject+GRMustacheKeyValueCoding.m) and tested (https://github.com/groue/GRMustacheSpec).
+- [X] Remove @synthesize and explicit ivars in headers
+- [X] Turn -[GRMustacheKeyValueCoding valueForMustacheKey:] into -[GRMustacheKeyValueCoding hasValue:forMustacheKey:]. This prevents making NSNull a magic value.
+- [X] Drop support for unsafe contexts. GRMustacheKeyValueCoding is there if one wants to escape default behavior.
 
-
-- [ ] a Mustache template linter that can run as a build phase
-    - warns of syntax errors
-    - warns of compatibility issues:  `{{ a/b }}` syntax is deprecated, used `a.b` instead, etc.
-- [ ] Document that errors are no longer logged.
-- [X] check that {{^ [NSNull null]|@NO }}...{{.}}...{{/}} does not mess with the {{.}}
-- [X] Consider replacing GRMustacheTemplate.partialNode with GRMustacheTemplate.templateAST
-- [X] Rename `identifier` to `name`
-- [X] Fix link to filters Guide from GRMustacheFilter.h
-- [X] Document [GRMustacheTemplateRepository templateRepositoryWithDictionary:] changes (mutability of the dictionary)
-- [X] Document [GRMustacheTemplateRepository reloadTemplates] in release notes.
-- [X] Test [GRMustacheTemplateRepository reloadTemplates].
-- [X] have [GRMustacheTemplate templateFromString:error:] use current repository & content type, and deprecate GRMustacheTag.templateRepository
-- [?] have GRMustacheTemplateRepository cache template from string (for faster rendering objects)
-- [X] expose GRMustacheTemplate.templateRepository
-- [X] document dropped support for garbage collection
-- [X] pass http://twitter.github.com/hogan.js/ inheritable template tests
-- [X] pass https://github.com/spullara/mustache.java inheritable template tests
-- [X] Update the documentation to de-emphasize KVC exceptions.
-- [X] Consistent use of the "template inheritance" wording.
-- [X] Rewrite documentation for default values for any keys
-- [X] Remove all GRMustacheContext subclassing documentation
-- [X] Document secure key access to Foundation classes
-- [ ] Document the drop of support for adding context into another context
-- [X] Rename "protected context" to "Priority keys"
-- [X] change version method
-- [X] have overridable section use their own identifiers, not expressions.
-- [X] Fetch inspiration from "faster mutable strings" in fotonauts/handlebars-objc (https://github.com/fotonauts/handlebars-objc/commit/f2cbde7e12b1fb594c2807a57bd2ecd2adb839b4)
-    - [X] for escaping methods
-    - [X] for rendering buffers
-- [X] Remove GRMustacheContext subclasses.
-- [X] safe property access (https://github.com/fotonauts/handlebars-objc/blob/master/doc/ContextObjects.md#why-does-handlebars-limit-access-to-some-attributes-that-are-normally-accessible-using-key-value-coding)
-  - [X] Add GRMustacheContext.allowsAllKeys
-  - [X] Rename validMustacheKeys to allowedMustacheKeys or something like that. Be consistent with GRMustacheContext.allowsAllKeys
-  - [X] Tests for secure key access
-- [ ] examine dependencies using https://github.com/nst/objc_dep $ python objc_dep.py -x "(GRMustacheAvailabilityMacros)" ~/Documents/git/groue/GRMustache/src/classes/ > ~/Desktop/GRMustacheDeps.dot
-
-## Nice to have
-
-- [ ] document migration path from all previous versions to latest version
-- [ ] > But they do allow Xcode to see the symbols when creating the final executable and allow the static library symbols to get included in the final DSYM file thereby allowing full symoblication of crash reports. (https://github.com/RestKit/RestKit/issues/1277)
-
+- [?] Drop support for else `{{#a}}{{^a}}{{/a}}`.
+- [?] Have Filter and renderingObject APIs closer from GRMustache.swift
+- [?] Import "register" vocabulary from GRMustache.swift, instead of "protected objects".
+- [?] ARC. Since GRMustache 8 is all about framework and targetting iOS8+ and OSX10.9+, there is no longer any reason for manual memory management.
