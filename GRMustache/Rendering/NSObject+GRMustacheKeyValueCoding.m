@@ -55,6 +55,8 @@
     }
     
     @try {
+        // If there is no exception, then the key is present.
+        // Turn nil value into NSNull in order to stop contact stack lookup.
         return [self valueForKey:key] ?: [NSNull null];
     }
     @catch (NSException *exception) {
@@ -62,6 +64,7 @@
         if (![[exception name] isEqualToString:NSUndefinedKeyException]) {
             [exception raise];
         }
+        // Missing key
         return nil;
     }
 }

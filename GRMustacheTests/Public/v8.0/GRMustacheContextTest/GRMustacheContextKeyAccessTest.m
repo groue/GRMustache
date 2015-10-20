@@ -25,14 +25,24 @@
 
 
 @interface GRMustacheContextKeyAccess_ClassWithProperties : NSObject
-@property (nonatomic, readonly) NSString *property;
+@property (nonatomic, copy) NSString *property;
 @end
 
 @implementation GRMustacheContextKeyAccess_ClassWithProperties
 
-- (NSString *)property
+- (void)dealloc
 {
-    return @"property";
+    self.property = nil;
+    [super dealloc];
+}
+
+- (instancetype)initWithProperty:(NSString *)property
+{
+    self = [self init];
+    if (self) {
+        self.property = property;
+    }
+    return self;
 }
 
 - (NSString *)method
@@ -71,7 +81,7 @@
 
 - (void)testPropertiesAreAllowed
 {
-    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
+    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
     
     // test setup
     XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
@@ -83,9 +93,18 @@
     XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"property", @"");
 }
 
+- (void)testNilPropertyEvaluatesToNSNullAndStopsContextStackLookup
+{
+    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:nil] autorelease];
+    GRMustacheContext *context = [GRMustacheContext contextWithObject:@{@"property": @"root"}];
+    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], @"root", @"");
+    context = [context contextByAddingObject:object];
+    XCTAssertEqualObjects([context valueForMustacheKey:@"property"], [NSNull null]);
+}
+
 - (void)testMethodAreDisallowed
 {
-    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
+    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
     
     // test setup
     XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
@@ -99,7 +118,7 @@
 
 - (void)testUnsafeKeyAccess
 {
-    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
+    GRMustacheContextKeyAccess_ClassWithProperties *object = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
     
     // test setup
     XCTAssertFalse([object respondsToSelector:@selector(objectForKeyedSubscript:)], @"");
@@ -117,7 +136,7 @@
 
 - (void)testUnsafeKeyAccessInDerivedContexts
 {
-    GRMustacheContextKeyAccess_ClassWithProperties *object1 = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] init] autorelease];
+    GRMustacheContextKeyAccess_ClassWithProperties *object1 = [[[GRMustacheContextKeyAccess_ClassWithProperties alloc] initWithProperty:@"property"] autorelease];
     GRMustacheContextKeyAccess_ClassWithProperties2 *object2 = [[[GRMustacheContextKeyAccess_ClassWithProperties2 alloc] init] autorelease];
     
     // test setup
