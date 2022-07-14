@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheBlock_private.h"
@@ -31,14 +31,7 @@
 
 + (instancetype)blockWithName:(NSString *)name innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST
 {
-    return [[[self alloc] initWithName:name innerTemplateAST:innerTemplateAST] autorelease];
-}
-
-- (void)dealloc
-{
-    [_name release];
-    [_innerTemplateAST release];
-    [super dealloc];
+    return [[self alloc] initWithName:name innerTemplateAST:innerTemplateAST];
 }
 
 
@@ -73,8 +66,8 @@
 {
     self = [self init];
     if (self) {
-        _name = [name retain];
-        _innerTemplateAST = [innerTemplateAST retain];
+        _name = [name copy];
+        _innerTemplateAST = innerTemplateAST;
     }
     return self;
 }

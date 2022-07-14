@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustachePartialOverrideNode_private.h"
@@ -33,15 +33,9 @@
 
 + (instancetype)partialOverrideNodeWithParentPartialNode:(GRMustachePartialNode *)parentPartialNode overridingTemplateAST:(GRMustacheTemplateAST *)overridingTemplateAST
 {
-    return [[[self alloc] initWithParentPartialNode:parentPartialNode overridingTemplateAST:overridingTemplateAST] autorelease];
+    return [[self alloc] initWithParentPartialNode:parentPartialNode overridingTemplateAST:overridingTemplateAST];
 }
 
-- (void)dealloc
-{
-    [_parentPartialNode release];
-    [_overridingTemplateAST release];
-    [super dealloc];
-}
 
 
 #pragma mark - GRMustacheTemplateASTNode
@@ -97,8 +91,8 @@
 {
     self = [super init];
     if (self) {
-        _parentPartialNode = [parentPartialNode retain];
-        _overridingTemplateAST = [overridingTemplateAST retain];
+        _parentPartialNode = parentPartialNode;
+        _overridingTemplateAST = overridingTemplateAST;
     }
     return self;
 }

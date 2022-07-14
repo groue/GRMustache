@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import <objc/runtime.h>
@@ -36,23 +36,19 @@
 #import "GRMustacheExpressionInvocation_private.h"
 #import "NSObject+GRMustacheKeyValueCoding_private.h"
 
-#define GRMUSTACHE_STACK_RELEASE(stackName) \
-    [GRMUSTACHE_STACK_TOP_IVAR(stackName) release]; \
-    [GRMUSTACHE_STACK_PARENT_IVAR(stackName) release]
-
 #define GRMUSTACHE_STACK_INIT(stackName, context, object) \
-    GRMUSTACHE_STACK_TOP(stackName, context) = [object retain]
+    GRMUSTACHE_STACK_TOP(stackName, context) = object
 
 #define GRMUSTACHE_STACK_COPY(stackName, sourceContext, targetContext) \
-    GRMUSTACHE_STACK_TOP(stackName, targetContext) = [GRMUSTACHE_STACK_TOP(stackName, sourceContext) retain]; \
-    GRMUSTACHE_STACK_PARENT(stackName, targetContext) = [GRMUSTACHE_STACK_PARENT(stackName, sourceContext) retain]
+    GRMUSTACHE_STACK_TOP(stackName, targetContext) = GRMUSTACHE_STACK_TOP(stackName, sourceContext); \
+    GRMUSTACHE_STACK_PARENT(stackName, targetContext) = GRMUSTACHE_STACK_PARENT(stackName, sourceContext)
 
 #define GRMUSTACHE_STACK_PUSH(stackName, sourceContext, targetContext, object) \
     NSAssert(object, @"WTF"); \
     if (GRMUSTACHE_STACK_TOP(stackName, sourceContext)) { \
-        GRMUSTACHE_STACK_PARENT(stackName, targetContext) = [sourceContext retain]; \
+        GRMUSTACHE_STACK_PARENT(stackName, targetContext) = sourceContext; \
     } \
-    GRMUSTACHE_STACK_TOP(stackName, targetContext) = [object retain];
+    GRMUSTACHE_STACK_TOP(stackName, targetContext) = object;
 
 #define GRMUSTACHE_STACK_TOP(stackName, context) context->GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
@@ -67,7 +63,7 @@
 
 static pthread_key_t GRTagDelegateClassesKey;
 void freeTagDelegateClasses(void *objects) {
-    CFRelease((CFMutableDictionaryRef)objects);
+    CFRelease(objects);
 }
 #define setupTagDelegateClasses() pthread_key_create(&GRTagDelegateClassesKey, freeTagDelegateClasses)
 #define getCurrentThreadTagDelegateClasses() (CFMutableDictionaryRef)pthread_getspecific(GRTagDelegateClassesKey)
@@ -86,10 +82,10 @@ static BOOL objectConformsToTagDelegateProtocol(id object)
     }
     
     Class klass = [object class];
-    intptr_t conform = (intptr_t)CFDictionaryGetValue(classes, klass);
+    intptr_t conform = (intptr_t)CFDictionaryGetValue(classes, (__bridge const void *)(klass));
     if (conform == 0) {
         conform = [klass conformsToProtocol:@protocol(GRMustacheTagDelegate)] ? 1 : 2;
-        CFDictionarySetValue(classes, klass, (void *)conform);
+        CFDictionarySetValue(classes, (__bridge const void *)(klass), (void *)conform);
     }
     return (conform == 1);
 }
@@ -123,12 +119,12 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 + (instancetype)context
 {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
 
 + (instancetype)contextWithObject:(id)object
 {
-    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    GRMustacheContext *context = [[self alloc] init];
     GRMUSTACHE_STACK_INIT(contextStack, context, object);
     if (objectConformsToTagDelegateProtocol(object)) {
         GRMUSTACHE_STACK_INIT(tagDelegateStack, context, object);
@@ -138,28 +134,17 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 + (instancetype)contextWithProtectedObject:(id)object
 {
-    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    GRMustacheContext *context = [[self alloc] init];
     GRMUSTACHE_STACK_INIT(protectedContextStack, context, object);
     return context;
 }
 
 + (instancetype)contextWithTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate
 {
-    GRMustacheContext *context = [[[self alloc] init] autorelease];
+    GRMustacheContext *context = [[self alloc] init];
     GRMUSTACHE_STACK_INIT(tagDelegateStack, context, tagDelegate);
     return context;
 }
-
-- (void)dealloc
-{
-    GRMUSTACHE_STACK_RELEASE(contextStack);
-    GRMUSTACHE_STACK_RELEASE(protectedContextStack);
-    GRMUSTACHE_STACK_RELEASE(hiddenContextStack);
-    GRMUSTACHE_STACK_RELEASE(tagDelegateStack);
-    GRMUSTACHE_STACK_RELEASE(partialOverrideNodeStack);
-    [super dealloc];
-}
-
 
 // =============================================================================
 #pragma mark - Deriving Contexts
@@ -185,7 +170,7 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 - (instancetype)newContextByAddingObject:(id)object
 {
     if (object == nil) {
-        return [self retain];
+        return self;
     }
     
     GRMustacheContext *context = [[GRMustacheContext alloc] init];
@@ -208,7 +193,7 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 - (instancetype)contextByAddingObject:(id)object
 {
-    return [[self newContextByAddingObject:object] autorelease];
+    return [self newContextByAddingObject:object];
 }
 
 - (instancetype)contextByAddingProtectedObject:(id)object
@@ -271,7 +256,7 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 - (id)topMustacheObject
 {
-    return [[GRMUSTACHE_STACK_TOP(contextStack, self) retain] autorelease];
+    return GRMUSTACHE_STACK_TOP(contextStack, self);
 }
 
 - (id)valueForMustacheKey:(NSString *)key
@@ -327,10 +312,10 @@ type GRMUSTACHE_STACK_TOP_IVAR(stackName)
 
 - (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)string error:(NSError **)error
 {
-    GRMustacheExpressionParser *parser = [[[GRMustacheExpressionParser alloc] init] autorelease];
+    GRMustacheExpressionParser *parser = [[GRMustacheExpressionParser alloc] init];
     GRMustacheExpression *expression = [parser parseExpression:string empty:NULL error:error];
     
-    GRMustacheExpressionInvocation *invocation = [[[GRMustacheExpressionInvocation alloc] init] autorelease];
+    GRMustacheExpressionInvocation *invocation = [[GRMustacheExpressionInvocation alloc] init];
     invocation.context = self;
     invocation.expression = expression;
     if (![invocation invokeReturningError:error]) {

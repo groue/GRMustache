@@ -36,7 +36,7 @@
  *
  * @see GRMustacheTemplateASTNode
  */
-@property (nonatomic, retain) NSArray *templateASTNodes GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong) NSArray *templateASTNodes GRMUSTACHE_API_INTERNAL;
 
 /**
  * The content type of the AST

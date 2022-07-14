@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheLocalizer.h"
@@ -39,12 +39,6 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
 
 @implementation GRMustacheLocalizer
 
-- (void)dealloc
-{
-    [_bundle release];
-    [_tableName release];
-    [super dealloc];
-}
 
 - (instancetype)init
 {
@@ -55,8 +49,8 @@ static NSString *const GRMustacheLocalizerValuePlaceholder = @"GRMustacheLocaliz
 {
     self = [super init];
     if (self) {
-        _bundle = [(bundle ?: [NSBundle mainBundle]) retain];
-        _tableName = [tableName retain];
+        _bundle = (bundle ?: [NSBundle mainBundle]);
+        _tableName = tableName;
     }
     return self;
 }

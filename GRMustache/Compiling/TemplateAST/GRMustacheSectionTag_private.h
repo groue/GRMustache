@@ -28,8 +28,8 @@
 @class GRMustacheTemplateAST;
 
 @interface GRMustacheSectionTag : GRMustacheTag
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 
 /**

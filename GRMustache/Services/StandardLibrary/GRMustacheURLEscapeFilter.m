@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheURLEscapeFilter_private.h"
@@ -112,7 +112,7 @@
 
 - (NSString *)escape:(NSString *)string
 {
-    NSMutableCharacterSet *cs = [[[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy] autorelease];
+    NSMutableCharacterSet *cs = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
     [cs removeCharactersInString:@"?&="];
     return [string stringByAddingPercentEncodingWithAllowedCharacters: cs];
 }

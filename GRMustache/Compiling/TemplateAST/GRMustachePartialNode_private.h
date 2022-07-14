@@ -36,12 +36,12 @@
  *
  *     {{> name }}
  */
-@property (nonatomic, retain, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) NSString *name GRMUSTACHE_API_INTERNAL;
 
 /**
  * The abstract syntax tree of the partial template.
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a newly created partial node.

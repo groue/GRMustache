@@ -27,14 +27,6 @@
 @synthesize mustacheTagDidRenderAsBlock=_mustacheTagDidRenderAsBlock;
 @synthesize mustacheTagDidFailBlock=_mustacheTagDidFailBlock;
 
-- (void)dealloc
-{
-    self.mustacheTagWillRenderObjectBlock = nil;
-    self.mustacheTagDidRenderAsBlock = nil;
-    self.mustacheTagDidFailBlock = nil;
-    [super dealloc];
-}
-
 - (id)mustacheTag:(GRMustacheTag *)tag willRenderObject:(id)object
 {
     if (self.mustacheTagWillRenderObjectBlock) {

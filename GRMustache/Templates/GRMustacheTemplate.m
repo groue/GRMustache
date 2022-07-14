@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTemplate_private.h"
@@ -78,13 +78,6 @@
     return [template renderObject:object error:error];
 }
 
-- (void)dealloc
-{
-    [_templateAST release];
-    [_baseContext release];
-    [_templateRepository release];
-    [super dealloc];
-}
 
 - (void)extendBaseContextWithObject:(id)object
 {
@@ -130,8 +123,7 @@
     }
     
     if (_baseContext != baseContext) {
-        [_baseContext release];
-        _baseContext = [baseContext retain];
+        _baseContext = baseContext;
     }
 }
 

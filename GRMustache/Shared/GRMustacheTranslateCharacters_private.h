@@ -23,5 +23,5 @@
 #import <Foundation/Foundation.h>
 #import "GRMustacheAvailabilityMacros_private.h"
 
-extern NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity) GRMUSTACHE_API_INTERNAL;
+extern NSString *GRMustacheTranslateCharacters(NSString *string, NSString * __strong *escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity) GRMUSTACHE_API_INTERNAL;
 extern NSString *GRMustacheTranslateHTMLCharacters(NSString *string) GRMUSTACHE_API_INTERNAL;

@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import <objc/runtime.h>
@@ -119,7 +119,7 @@ static BOOL GRMustacheBoolValueNSFastEnumeration(id<NSFastEnumeration> self, SEL
 
 + (id<GRMustacheRenderingWithIterationSupport>)renderingObjectWithBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
 {
-    return [[[GRMustacheBlockRendering alloc] initWithRenderingBlock:renderingBlock] autorelease];
+    return [[GRMustacheBlockRendering alloc] initWithRenderingBlock:renderingBlock];
 }
 
 + (id<GRMustacheRendering>)lambda:(NSString *(^)(void))lambda
@@ -276,11 +276,6 @@ static BOOL GRMustacheBoolValueNSFastEnumeration(id<NSFastEnumeration> self, SEL
     NSString *(^_renderingBlock)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error);
 }
 
-- (void)dealloc
-{
-    [_renderingBlock release];
-    [super dealloc];
-}
 
 - (instancetype)initWithRenderingBlock:(NSString *(^)(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error))renderingBlock
 {
@@ -376,7 +371,6 @@ static NSString *GRMustacheRenderWithIterationSupportNSNull(NSNull *self, SEL _c
             if (enumerationItem) {
                 context = [context newContextByAddingObject:self];
                 NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                [context release];
                 return rendering;
             } else {
                 // {{^ null }}...{{/}}
@@ -406,7 +400,6 @@ static NSString *GRMustacheRenderWithIterationSupportNSNumber(NSNumber *self, SE
             if (enumerationItem) {
                 context = [context newContextByAddingObject:self];
                 NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                [context release];
                 return rendering;
             } else {
                 // {{^ number }}...{{/}}
@@ -447,7 +440,6 @@ static NSString *GRMustacheRenderWithIterationSupportNSString(NSString *self, SE
                 // {{# string }}...{{/}}
                 context = [context newContextByAddingObject:self];
                 NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-                [context release];
                 return rendering;
             }
     }
@@ -473,7 +465,6 @@ static NSString *GRMustacheRenderWithIterationSupportNSObject(NSObject *self, SE
             // {{^ object }}...{{/}}
             context = [context newContextByAddingObject:self];
             NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-            [context release];
             return rendering;
     }
 }
@@ -491,7 +482,6 @@ static NSString *GRMustacheRenderWithIterationSupportNSFastEnumeration(id<NSFast
     if (enumerationItem) {
         context = [context newContextByAddingObject:self];
         NSString *rendering = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-        [context release];
         return rendering;
     }
     
@@ -504,6 +494,8 @@ static NSString *GRMustacheRenderWithIterationSupportNSFastEnumeration(id<NSFast
     GRMustacheBuffer buffer;
     BOOL anyItemHTMLSafe = NO;
     BOOL anyItemHTMLUnsafe = NO;
+    
+    NSError* outerError = nil;
     
     for (id item in self) {
         if (!bufferCreated) {
@@ -528,8 +520,7 @@ static NSString *GRMustacheRenderWithIterationSupportNSFastEnumeration(id<NSFast
                 } else {
                     if (error != NULL) {
                         // make sure error is not released by autoreleasepool
-                        *error = renderingError;
-                        [*error retain];
+                        outerError = renderingError;
                     }
                     success = NO;
                     break;
@@ -552,12 +543,15 @@ static NSString *GRMustacheRenderWithIterationSupportNSFastEnumeration(id<NSFast
             
             // appending the rendering to the buffer
             
-            GRMustacheBufferAppendString(&buffer, rendering);
+            GRMustacheBufferAppendString(&buffer, (__bridge CFStringRef)rendering);
         }
     }
     
+    if (outerError != nil) {
+        *error = outerError;
+    }
+    
     if (!success) {
-        if (error != NULL) [*error autorelease];
         GRMustacheBufferRelease(&buffer);
         return nil;
     }

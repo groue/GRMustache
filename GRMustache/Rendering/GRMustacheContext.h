@@ -361,6 +361,6 @@
  *
  * @since v6.8
  */
-- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheExpression:(NSString *)expression error:(NSError **)error AVAILABLE_GRMUSTACHE_VERSION_8_0_AND_LATER;
 
 @end

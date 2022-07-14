@@ -28,7 +28,7 @@
 @class GRMustacheTemplateRepository;
 
 @interface GRMustacheTemplateGenerator : NSObject
-@property (nonatomic, retain, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_INTERNAL;
 
 + (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository GRMUSTACHE_API_INTERNAL;
 - (NSString *)stringWithTemplate:(GRMustacheTemplate *)template GRMUSTACHE_API_INTERNAL;

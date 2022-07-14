@@ -12,9 +12,8 @@
 		5626CE561BD253C90087F1C3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE551BD253C90087F1C3 /* ViewController.m */; };
 		5626CE581BD253C90087F1C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5626CE571BD253C90087F1C3 /* Assets.xcassets */; };
 		5626CE5B1BD253C90087F1C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5626CE591BD253C90087F1C3 /* Main.storyboard */; };
-		5626CE631BD253FE0087F1C3 /* GRMustache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5626CE621BD253FE0087F1C3 /* GRMustache.framework */; };
-		5626CE641BD253FE0087F1C3 /* GRMustache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5626CE621BD253FE0087F1C3 /* GRMustache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5626CE681BD255010087F1C3 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE671BD255010087F1C3 /* Model.m */; settings = {ASSET_TAGS = (); }; };
+		5626CE681BD255010087F1C3 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 5626CE671BD255010087F1C3 /* Model.m */; };
+		6505B2B62880121B00C9B2F5 /* GRMustache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6505B2B52880121B00C9B2F5 /* GRMustache.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +23,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5626CE641BD253FE0087F1C3 /* GRMustache.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,9 +39,9 @@
 		5626CE571BD253C90087F1C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5626CE5A1BD253C90087F1C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5626CE5C1BD253C90087F1C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5626CE621BD253FE0087F1C3 /* GRMustache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GRMustache.framework; path = Carthage/Build/Mac/GRMustache.framework; sourceTree = "<group>"; };
 		5626CE661BD255010087F1C3 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		5626CE671BD255010087F1C3 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
+		6505B2B52880121B00C9B2F5 /* GRMustache.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GRMustache.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5626CE631BD253FE0087F1C3 /* GRMustache.framework in Frameworks */,
+				6505B2B62880121B00C9B2F5 /* GRMustache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,9 +59,9 @@
 		5626CE421BD253C90087F1C3 = {
 			isa = PBXGroup;
 			children = (
-				5626CE621BD253FE0087F1C3 /* GRMustache.framework */,
 				5626CE4D1BD253C90087F1C3 /* GRMustacheDemoOSX */,
 				5626CE4C1BD253C90087F1C3 /* Products */,
+				6505B2B42880121B00C9B2F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +96,14 @@
 				5626CE521BD253C90087F1C3 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6505B2B42880121B00C9B2F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6505B2B52880121B00C9B2F5 /* GRMustache.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +146,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -321,6 +328,7 @@
 				5626CE611BD253C90087F1C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

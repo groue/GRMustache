@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTemplateAST_private.h"
@@ -30,21 +30,16 @@
 
 @implementation GRMustacheTemplateAST
 
-- (void)dealloc
-{
-    [_templateASTNodes release];
-    [super dealloc];
-}
 
 + (instancetype)placeholderAST
 {
-    return [[[self alloc] initWithASTNodes:nil contentType:GRMustacheContentTypeHTML] autorelease];
+    return [[self alloc] initWithASTNodes:nil contentType:GRMustacheContentTypeHTML];
 }
 
 + (instancetype)templateASTWithASTNodes:(NSArray *)templateASTNodes contentType:(GRMustacheContentType)contentType
 {
     NSAssert(templateASTNodes, @"nil templateASTNodes");
-    return [[[self alloc] initWithASTNodes:templateASTNodes contentType:contentType] autorelease];
+    return [[self alloc] initWithASTNodes:templateASTNodes contentType:contentType];
 }
 
 - (BOOL)isPlaceholder
@@ -56,7 +51,7 @@
 {
     self = [super init];
     if (self) {
-        _templateASTNodes = [templateASTNodes retain];
+        _templateASTNodes = templateASTNodes;
         _contentType = contentType;
     }
     return self;

@@ -86,7 +86,7 @@
  *
  * @see GRMustacheTemplateParserDelegate
  */
-@property (nonatomic, assign) id<GRMustacheTemplateParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, weak) id<GRMustacheTemplateParserDelegate> delegate GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an initialized parser.

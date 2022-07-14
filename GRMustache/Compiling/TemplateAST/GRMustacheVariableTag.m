@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheVariableTag_private.h"
@@ -32,15 +32,10 @@
     GRMustacheContentType _contentType;
 }
 
-- (void)dealloc
-{
-    [_expression release];
-    [super dealloc];
-}
 
 + (instancetype)variableTagWithExpression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML contentType:(GRMustacheContentType)contentType tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    return [[[self alloc] initWithExpression:expression escapesHTML:escapesHTML contentType:contentType tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter] autorelease];
+    return [[self alloc] initWithExpression:expression escapesHTML:escapesHTML contentType:contentType tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
 }
 
 
@@ -94,7 +89,7 @@
 {
     self = [super initWithTagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
     if (self) {
-        _expression = [expression retain];
+        _expression = expression;
         _escapesHTML = escapesHTML;
         _contentType = contentType;
     }

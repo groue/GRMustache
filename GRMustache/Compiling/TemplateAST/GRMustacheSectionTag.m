@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheSectionTag_private.h"
@@ -36,17 +36,10 @@
 }
 @synthesize inverted=_inverted;
 
-- (void)dealloc
-{
-    [_expression release];
-    [_templateString release];
-    [_innerTemplateAST release];
-    [super dealloc];
-}
 
 + (instancetype)sectionTagWithExpression:(GRMustacheExpression *)expression inverted:(BOOL)inverted templateString:(NSString *)templateString innerRange:(NSRange)innerRange innerTemplateAST:(GRMustacheTemplateAST *)innerTemplateAST tagStartDelimiter:(NSString *)tagStartDelimiter tagEndDelimiter:(NSString *)tagEndDelimiter
 {
-    return [[[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange innerTemplateAST:innerTemplateAST tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter] autorelease];
+    return [[self alloc] initWithExpression:expression inverted:inverted templateString:templateString innerRange:innerRange innerTemplateAST:innerTemplateAST tagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
 }
 
 
@@ -93,11 +86,11 @@
 {
     self = [super initWithTagStartDelimiter:tagStartDelimiter tagEndDelimiter:tagEndDelimiter];
     if (self) {
-        _expression = [expression retain];
+        _expression = expression;
         _inverted = inverted;
-        _templateString = [templateString retain];
+        _templateString = [templateString copy];
         _innerRange = innerRange;
-        _innerTemplateAST = [innerTemplateAST retain];
+        _innerTemplateAST = innerTemplateAST;
     }
     return self;
 }

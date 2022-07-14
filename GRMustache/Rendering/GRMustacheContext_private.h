@@ -74,14 +74,14 @@
 - (instancetype)contextByAddingTagDelegate:(id<GRMustacheTagDelegate>)tagDelegate GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
-- (BOOL)hasValue:(id *)value forMustacheExpression:(NSString *)expression error:(NSError **)error GRMUSTACHE_API_PUBLIC;
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheExpression:(NSString *)expression error:(NSError **)error GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 - (id)valueForMustacheKey:(NSString *)key GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheContext.h
 // @see -[GRMustacheImplicitIteratorExpression hasValue:withContext:protected:error:]
-@property (nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
+@property (weak, nonatomic, readonly) id topMustacheObject GRMUSTACHE_API_PUBLIC;
 
 /**
  * Same as [contextByAddingObject:object], but returns a retained object.

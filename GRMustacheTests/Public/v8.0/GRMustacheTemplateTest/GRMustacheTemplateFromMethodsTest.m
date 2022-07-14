@@ -148,7 +148,7 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString
                                                                     error:NULL];
-    GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateFromMethodsTestSupport *context = [[GRMustacheTemplateFromMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
     XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
@@ -158,7 +158,7 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfFile:self.templatePath
                                                                             error:NULL];
-    GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateFromMethodsTestSupport *context = [[GRMustacheTemplateFromMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
     XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
@@ -168,7 +168,7 @@
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromContentsOfURL:self.templateURL
                                                                            error:NULL];
-    GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateFromMethodsTestSupport *context = [[GRMustacheTemplateFromMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
     XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
@@ -179,7 +179,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromResource:self.templateName
                                                                      bundle:[NSBundle bundleForClass:[self class]]
                                                                       error:NULL];
-    GRMustacheTemplateFromMethodsTestSupport *context = [[[GRMustacheTemplateFromMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateFromMethodsTestSupport *context = [[GRMustacheTemplateFromMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
     XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);

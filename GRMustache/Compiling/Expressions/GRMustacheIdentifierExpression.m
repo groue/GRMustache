@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheIdentifierExpression_private.h"
@@ -31,14 +31,9 @@
 
 + (instancetype)expressionWithIdentifier:(NSString *)identifier
 {
-    return [[[self alloc] initWithIdentifier:identifier] autorelease];
+    return [[self alloc] initWithIdentifier:identifier];
 }
 
-- (void)dealloc
-{
-    [_identifier release];
-    [super dealloc];
-}
 
 
 #pragma mark - GRMustacheExpression
@@ -68,7 +63,7 @@
 {
     self = [super init];
     if (self) {
-        _identifier = [identifier retain];
+        _identifier = identifier;
     }
     return self;
 }

@@ -170,10 +170,9 @@ static inline void skipUTF8Character(UTF8Char **source) { *source += EncLen_UTF8
     NSData *strippedData =
         [self dataByStrippingJSONCommentsAndWhiteSpaceOfUTF8Data:data skipBytes:0];
 
-    // NSLog(@"before:\n%@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
-    // autorelease]);
-    // NSLog(@"after:\n%@", [[[NSString alloc] initWithData:strippedData
-    // encoding:NSUTF8StringEncoding] autorelease]);
+    // NSLog(@"before:\n%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    // NSLog(@"after:\n%@", [[NSString alloc] initWithData:strippedData
+    // encoding:NSUTF8StringEncoding]);
 
     return [self JSONObjectWithData:strippedData options:opt error:error];
 }
@@ -268,7 +267,6 @@ static inline void skipUTF8Character(UTF8Char **source) { *source += EncLen_UTF8
 				return nil;
             } else {
                 data = [string dataUsingEncoding:NSUTF8StringEncoding];
-                [string release];
                 bomSize = 0;
             }
         }
@@ -311,7 +309,7 @@ static inline void skipUTF8Character(UTF8Char **source) { *source += EncLen_UTF8
     if (data) {
         NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
-        return [string autorelease];
+        return string;
     } else {
         return nil;
     }
