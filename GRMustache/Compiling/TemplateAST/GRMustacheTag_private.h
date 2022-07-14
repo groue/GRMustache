@@ -40,13 +40,13 @@ typedef NS_ENUM(NSUInteger, GRMustacheTagType) {
 @property (nonatomic, readonly) GRMustacheTagType type GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
+@property (weak, nonatomic, readonly) NSString *innerTemplateString GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, retain) NSString *tagStartDelimiter GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, strong) NSString *tagStartDelimiter GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
-@property (nonatomic, retain) NSString *tagEndDelimiter GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, strong) NSString *tagEndDelimiter GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTag.h
 - (NSString *)renderContentWithContext:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error GRMUSTACHE_API_PUBLIC;

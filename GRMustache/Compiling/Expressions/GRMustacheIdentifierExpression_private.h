@@ -27,7 +27,7 @@
  * `identifier`.
  */
 @interface GRMustacheIdentifierExpression : GRMustacheExpression
-@property (nonatomic, retain, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) NSString *identifier GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns an identifier expression, given an identifier.

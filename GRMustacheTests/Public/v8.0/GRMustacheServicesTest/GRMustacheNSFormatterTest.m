@@ -30,9 +30,9 @@
 
 - (void)testFormatterIsAFilterForProcessableValues
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     // test that number is processable
     NSNumber *number = [NSNumber numberWithFloat:0.5];
@@ -48,9 +48,9 @@
 
 - (void)testFormatterIsAFilterForUnprocessableValues
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     // test that string is unprocessable
     NSString *unprocessableValue = @"foo";
@@ -66,9 +66,9 @@
 
 - (void)testFormatterSectionFormatsInnerVariableTags
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     NSNumber *number = [NSNumber numberWithFloat:0.5];
     id data = @{ @"number": number, @"percent": percentFormatter };
@@ -80,9 +80,9 @@
 
 - (void)testFormatterSectionDoesNotFormatUnprocessableInnerVariableTags
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     // test that string is unprocessable
     NSString *unprocessableValue = @"foo";
@@ -98,9 +98,9 @@
 
 - (void)testFormatterAsSectionFormatsDeepInnerVariableTags
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     NSNumber *number = [NSNumber numberWithFloat:0.5];
     XCTAssertEqualObjects([percentFormatter stringFromNumber:number], @"50%", @"");
@@ -114,9 +114,9 @@
 
 - (void)testFormatterAsSectionDoesNotFormatInnerSectionTags
 {
-    NSNumberFormatter *percentFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
     percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-    percentFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+    percentFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
     
     NSNumber *number = [NSNumber numberWithFloat:0.5];
     XCTAssertEqualObjects([percentFormatter stringFromNumber:number], @"50%", @"");
@@ -130,7 +130,7 @@
 
 - (void)testFormatterIsTruthy
 {
-    NSFormatter *formatter = [[[NSFormatter alloc] init] autorelease];
+    NSFormatter *formatter = [[NSFormatter alloc] init];
 
     id data = @{ @"formatter": formatter };
     NSString *rendering = [GRMustacheTemplate renderObject:data
@@ -141,7 +141,7 @@
 
 - (void)testFormatterRendersSelfAsSomething
 {
-    NSFormatter *formatter = [[[NSFormatter alloc] init] autorelease];
+    NSFormatter *formatter = [[NSFormatter alloc] init];
     
     id data = @{ @"formatter": formatter };
     NSString *rendering = [GRMustacheTemplate renderObject:data
@@ -154,7 +154,7 @@
 {
     // Check that NSNumberFormatter does not have surprising behavior, and
     // does not format nil.
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterPercentStyle;
     
     id data = @{ @"format":formatter };
@@ -175,7 +175,7 @@
 {
     // Check that NSNumberFormatter does not have surprising behavior, and
     // does not format NSNull.
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterPercentStyle;
     
     id data = @{ @"format":formatter, @"value": [NSNull null] };
@@ -196,7 +196,7 @@
 {
     // Check that NSNumberFormatter does not have surprising behavior, and
     // does not format NSString.
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterPercentStyle;
     
     {
@@ -247,7 +247,7 @@
 {
     // Check that NSNumberFormatter does not have surprising behavior, and
     // does not format NSDate.
-    NSNumberFormatter *formatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterPercentStyle;
     
     id data = @{ @"format":formatter, @"value": [NSDate date] };
@@ -268,7 +268,7 @@
 {
     // Check that NSDateFormatter does not have surprising behavior, and
     // does not format nil.
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterFullStyle;
     
     id data = @{ @"format":formatter };
@@ -289,7 +289,7 @@
 {
     // Check that NSDateFormatter does not have surprising behavior, and
     // does not format NSNull.
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterFullStyle;
     
     id data = @{ @"format":formatter, @"value": [NSNull null] };
@@ -310,7 +310,7 @@
 {
     // Check that NSDateFormatter does not have surprising behavior, and
     // does not format NSString.
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterFullStyle;
     
     {
@@ -361,7 +361,7 @@
 {
     // Check that NSDateFormatter does not have surprising behavior, and
     // does not format NSNumber.
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterFullStyle;
     
     id data = @{ @"format":formatter, @"value": [NSNumber numberWithInteger:0] };

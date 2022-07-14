@@ -42,7 +42,7 @@
     context = [context contextByAddingProtectedObject:protectedObject];
     XCTAssertEqual([context topMustacheObject], object, @"");
     
-    id tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    id tagDelegate = [[GRMustacheTestingDelegate alloc] init];
     context = [context contextByAddingTagDelegate:tagDelegate];
     XCTAssertEqual([context topMustacheObject], object, @"");
 

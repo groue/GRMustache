@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustachePartialNode_private.h"
@@ -31,16 +31,10 @@
 
 @implementation GRMustachePartialNode
 
-- (void)dealloc
-{
-    [_templateAST release];
-    [_name release];
-    [super dealloc];
-}
 
 + (instancetype)partialNodeWithTemplateAST:(GRMustacheTemplateAST *)templateAST name:(NSString *)name
 {
-    return [[[self alloc] initWithTemplateAST:templateAST name:name] autorelease];
+    return [[self alloc] initWithTemplateAST:templateAST name:name];
 }
 
 #pragma mark <GRMustacheTemplateASTNode>
@@ -77,8 +71,8 @@
 {
     self = [self init];
     if (self) {
-        _templateAST = [templateAST retain];
-        _name = [name retain];
+        _templateAST = templateAST;
+        _name = name;
     }
     return self;
 }

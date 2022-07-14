@@ -20,14 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTranslateCharacters_private.h"
 #import "GRMustacheBuffer_private.h"
 
-NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity)
+NSString *GRMustacheTranslateCharacters(NSString *string,  NSString * __strong* escapeForCharacter, size_t escapeForCharacterLength, NSUInteger capacity)
 {
     NSUInteger length = [string length];
     if (length == 0) {
@@ -67,7 +67,7 @@ NSString *GRMustacheTranslateCharacters(NSString *string, NSString **escapeForCh
         NSString *escape = (*characters < escapeForCharacterLength) ? escapeForCharacter[*characters] : nil;
         if (escape) {
             GRMustacheBufferAppendCharacters(&buffer, unescapedStart, unescapedLength);
-            GRMustacheBufferAppendString(&buffer, escape);
+            GRMustacheBufferAppendString(&buffer, (__bridge CFStringRef)escape);
             unescapedStart = characters+1;
             unescapedLength = 0;
         } else {

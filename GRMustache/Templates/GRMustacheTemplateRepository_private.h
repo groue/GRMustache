@@ -43,7 +43,7 @@
 @interface GRMustacheTemplateRepository : NSObject
 
 // Documented in GRMustacheTemplateRepository.h
-@property (nonatomic, assign) id<GRMustacheTemplateRepositoryDataSource> dataSource GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, weak) id<GRMustacheTemplateRepositoryDataSource> dataSource GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplateRepository.h
 @property (nonatomic, copy) GRMustacheConfiguration *configuration GRMUSTACHE_API_PUBLIC;

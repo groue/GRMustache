@@ -37,7 +37,7 @@
  * debugging his templates, using the token's ability to output its location
  * (`{{ foo }}` at line 23 of /path/to/template).
  */
-@property (nonatomic, retain) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong) GRMustacheToken *token GRMUSTACHE_API_INTERNAL;
 
 /**
  * Returns a Boolean value that indicates whether the receiver and a given

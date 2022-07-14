@@ -25,7 +25,7 @@
 #import "GRMustacheKeyValueCoding.h"
 
 @interface NSObject(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>
-- (BOOL)exceptionSafeHasValue:(id *)value forMustacheKey:(NSString *)key;
+- (BOOL)exceptionSafeHasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key;
 @end
 
 @interface NSDictionary(GRMustacheKeyValueCoding) <GRMustacheKeyValueCoding>

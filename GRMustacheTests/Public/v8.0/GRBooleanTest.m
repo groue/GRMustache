@@ -68,7 +68,7 @@
 - (int)intFalseMethod { return NO; }
 - (int)intTrueMethod { return YES; }
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     *value = [self valueForKey:key];
     return YES;
@@ -181,8 +181,8 @@
 
 - (void)testCustomGetterBOOLProperty
 {
-    GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    GRBooleanTestSupport *context = [[GRBooleanTestSupport alloc] init];
+    GRBooleanTestSupportSubClass *inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     
     context.customGetterBOOLProperty = NO;
     inheritingContext.customGetterBOOLProperty = NO;
@@ -201,8 +201,8 @@
 
 - (void)testCustomGetterboolProperty
 {
-    GRBooleanTestSupport *context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    GRBooleanTestSupportSubClass *inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    GRBooleanTestSupport *context = [[GRBooleanTestSupport alloc] init];
+    GRBooleanTestSupportSubClass *inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     
     context.customGetterboolProperty = NO;
     inheritingContext.customGetterboolProperty = NO;
@@ -221,141 +221,141 @@
 
 - (void)test_boolFalseProperty_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"boolFalseProperty" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"boolFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_boolTrueProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"boolTrueProperty" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"boolTrueProperty" inObject:inheritingContext], @"");
 }
 - (void)test_BOOLFalseProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"BOOLFalseProperty" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"BOOLFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_BOOLTrueProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"BOOLTrueProperty" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"BOOLTrueProperty" inObject:inheritingContext], @"");
 }
 - (void)test_charFalseProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"charFalseProperty" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"charFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_charTrueProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"charTrueProperty" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"charTrueProperty" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charFalseProperty_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"unsigned_charFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charTrueProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"unsigned_charTrueProperty" inObject:inheritingContext], @"");
 }
 - (void)test_intFalseProperty_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"intFalseProperty" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"intFalseProperty" inObject:inheritingContext], @"");
 }
 - (void)test_intTrueProperty_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"intTrueProperty" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"intTrueProperty" inObject:inheritingContext], @"");
 }
 - (void)test_boolFalseMethod_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"boolFalseMethod" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"boolFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_boolTrueMethod_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"boolTrueMethod" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"boolTrueMethod" inObject:inheritingContext], @"");
 }
 - (void)test_BOOLFalseMethod_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"BOOLFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_BOOLTrueMethod_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"BOOLTrueMethod" inObject:inheritingContext], @"");
 }
 - (void)test_charFalseMethod_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"charFalseMethod" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"charFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_charTrueMethod_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"charTrueMethod" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"charTrueMethod" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charFalseMethod_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"unsigned_charFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_unsigned_charTrueMethod_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"unsigned_charTrueMethod" inObject:inheritingContext], @"");
 }
 - (void)test_intFalseMethod_isFalseValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertFalse([self booleanInterpretationForKey:@"intFalseMethod" inObject:context], @"");
     XCTAssertFalse([self booleanInterpretationForKey:@"intFalseMethod" inObject:inheritingContext], @"");
 }
 - (void)test_intTrueMethod_isTrueValue
 {
-    id context = [[[GRBooleanTestSupport alloc] init] autorelease];
-    id inheritingContext = [[[GRBooleanTestSupportSubClass alloc] init] autorelease];
+    id context = [[GRBooleanTestSupport alloc] init];
+    id inheritingContext = [[GRBooleanTestSupportSubClass alloc] init];
     XCTAssertTrue([self booleanInterpretationForKey:@"intTrueMethod" inObject:context], @"");
     XCTAssertTrue([self booleanInterpretationForKey:@"intTrueMethod" inObject:inheritingContext], @"");
 }

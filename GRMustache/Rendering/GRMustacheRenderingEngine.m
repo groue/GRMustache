@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import <pthread.h>
@@ -48,16 +48,16 @@
 
 static pthread_key_t GRCurrentExpressionInvocationKey;
 void freeCurrentExpressionInvocation(void *object) {
-    [(GRMustacheExpressionInvocation *)object release];
+    CFRelease(object);
 }
 #define setupCurrentExpressionInvocation() pthread_key_create(&GRCurrentExpressionInvocationKey, freeCurrentExpressionInvocation)
-#define getCurrentThreadCurrentExpressionInvocation() (GRMustacheExpressionInvocation *)pthread_getspecific(GRCurrentExpressionInvocationKey)
+#define getCurrentThreadCurrentExpressionInvocation() (__bridge GRMustacheExpressionInvocation *)pthread_getspecific(GRCurrentExpressionInvocationKey)
 #define setCurrentThreadCurrentExpressionInvocation(object) pthread_setspecific(GRCurrentExpressionInvocationKey, object)
 static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvocation() {
     GRMustacheExpressionInvocation *expressionInvocation = getCurrentThreadCurrentExpressionInvocation();
     if (!expressionInvocation) {
         expressionInvocation = [[GRMustacheExpressionInvocation alloc] init];
-        setCurrentThreadCurrentExpressionInvocation(expressionInvocation);
+        setCurrentThreadCurrentExpressionInvocation(CFBridgingRetain(expressionInvocation));
     }
     return expressionInvocation;
 }
@@ -77,7 +77,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 
 + (instancetype)renderingEngineWithTemplateAST:(GRMustacheTemplateAST *)templateAST context:(GRMustacheContext *)context
 {
-    return [[[self alloc] initWithTemplateAST:templateAST context:context] autorelease];
+    return [[self alloc] initWithTemplateAST:templateAST context:context];
 }
 
 - (NSString *)renderHTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
@@ -135,7 +135,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
         if (_contentType == GRMustacheContentTypeHTML && !HTMLSafe) {
             rendering = GRMustacheTranslateHTMLCharacters(rendering);
         }
-        GRMustacheBufferAppendString(&_buffer, rendering);
+        GRMustacheBufferAppendString(&_buffer, (__bridge CFStringRef)rendering);
         return YES;
     }
 }
@@ -171,19 +171,12 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 
 - (BOOL)visitTextNode:(GRMustacheTextNode *)textNode error:(NSError **)error
 {
-    GRMustacheBufferAppendString(&_buffer, textNode.text);
+    GRMustacheBufferAppendString(&_buffer, (__bridge CFStringRef)textNode.text);
     return YES;
 }
 
 
 #pragma mark - Private
-
-- (void)dealloc
-{
-    [_templateAST release];
-    [_context release];
-    [super dealloc];
-}
 
 - (instancetype)initWithTemplateAST:(GRMustacheTemplateAST *)templateAST context:(GRMustacheContext *)context
 {
@@ -191,9 +184,9 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
     
     self = [super init];
     if (self) {
-        _templateAST = [templateAST retain];
+        _templateAST = templateAST;
         _contentType = templateAST.contentType;
-        _context = [context retain];
+        _context = context;
     }
     return self;
 }
@@ -201,6 +194,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
 - (BOOL)visitTag:(GRMustacheTag *)tag expression:(GRMustacheExpression *)expression escapesHTML:(BOOL)escapesHTML error:(NSError **)error
 {
     BOOL success = YES;
+    NSError* innerError = nil;
     
     @autoreleasepool {
         
@@ -211,13 +205,11 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
         GRMustacheExpressionInvocation *expressionInvocation = currentThreadCurrentExpressionInvocation();
         expressionInvocation.expression = expression;
         expressionInvocation.context = context;
-        if (![expressionInvocation invokeReturningError:error]) {
+        NSError* poolError = nil;
+        if (![expressionInvocation invokeReturningError:&poolError]) {
             
             // Error
-            
-            if (error != NULL) {
-                [*error retain];   // retain error so that it survives the @autoreleasepool block
-            }
+            innerError = poolError;
             
             success = NO;
             
@@ -327,7 +319,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
                 if ((_contentType == GRMustacheContentTypeHTML) && !HTMLSafe && escapesHTML) {
                     rendering = GRMustacheTranslateHTMLCharacters(rendering);
                 }
-                GRMustacheBufferAppendString(&_buffer, rendering);
+                GRMustacheBufferAppendString(&_buffer, (__bridge CFStringRef)rendering);
                 
                 
                 // Post-rendering hooks
@@ -341,10 +333,7 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
             else
             {
                 // Error
-                
-                if (error != NULL) {
-                    *error = [renderingError retain];   // retain error so that it survives the @autoreleasepool block
-                }
+                innerError = renderingError;
                 success = NO;
                 
                 
@@ -359,15 +348,18 @@ static inline GRMustacheExpressionInvocation *currentThreadCurrentExpressionInvo
         }
     }
     
-    if (!success && error) [*error autorelease];    // the error has been retained inside the @autoreleasepool block
+    if (error != nil) {
+        *error = innerError;
+    }
+    
     return success;
 }
 
 - (BOOL)visitTemplateASTNodes:(NSArray *)templateASTNodes error:(NSError **)error
 {
     for (id<GRMustacheTemplateASTNode> ASTNode in templateASTNodes) {
-        ASTNode = [self resolveTemplateASTNode:ASTNode];
-        if (![ASTNode acceptTemplateASTVisitor:self error:error]) {
+        id<GRMustacheTemplateASTNode> node = [self resolveTemplateASTNode:ASTNode];
+        if (![node acceptTemplateASTVisitor:self error:error]) {
             return NO;
         }
     }

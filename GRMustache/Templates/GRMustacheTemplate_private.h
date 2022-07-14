@@ -32,13 +32,13 @@
 // Documented in GRMustacheTemplate.h
 @interface GRMustacheTemplate: NSObject<GRMustacheRendering>
 
-@property (nonatomic, retain) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong) GRMustacheTemplateAST *templateAST GRMUSTACHE_API_INTERNAL;
 
 // Documented in GRMustacheTemplate.h
-@property (nonatomic, retain) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, strong) GRMustacheContext *baseContext GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
-@property (nonatomic, retain) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC;
+@property (nonatomic, strong) GRMustacheTemplateRepository *templateRepository GRMUSTACHE_API_PUBLIC;
 
 // Documented in GRMustacheTemplate.h
 - (void)extendBaseContextWithObject:(id)object GRMUSTACHE_API_PUBLIC;

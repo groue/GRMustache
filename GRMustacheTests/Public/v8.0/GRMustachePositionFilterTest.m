@@ -79,7 +79,7 @@
 - (void)testGRMustachePositionFilterRendersPositions
 {
     // GRMustachePositionFilter should do its job
-    id data = @{ @"array": @[@"foo", @"bar"], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
+    id data = @{ @"array": @[@"foo", @"bar"], @"f": [[GRMustachePositionFilter alloc] init] };
     NSString *rendering = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}{{position}}:{{.}} {{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering, @"1:foo 2:bar ", @"");
 }
@@ -87,7 +87,7 @@
 - (void)testGRMustachePositionFilterRendersArrayOfFalseValuesJustAsOriginalArray
 {
     // GRMustachePositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[[NSNull null], @NO], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
+    id data = @{ @"array": @[[NSNull null], @NO], @"f": [[GRMustachePositionFilter alloc] init] };
     NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
     NSString *rendering2 = [[GRMustacheTemplate templateFromString:@"{{#f(array)}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];
     XCTAssertEqualObjects(rendering1, rendering2, @"");
@@ -96,7 +96,7 @@
 - (void)testGRMustachePositionFilterRendersEmptyArrayJustAsOriginalArray
 {
     // GRMustachePositionFilter should not alter the way an array is rendered
-    id data = @{ @"array": @[], @"f": [[[GRMustachePositionFilter alloc] init] autorelease] };
+    id data = @{ @"array": @[], @"f": [[GRMustachePositionFilter alloc] init] };
     
     {
         NSString *rendering1 = [[GRMustacheTemplate templateFromString:@"{{#array}}<{{.}}>{{/}}" error:NULL] renderObject:data error:NULL];

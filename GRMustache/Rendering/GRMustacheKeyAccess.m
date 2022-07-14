@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import <objc/message.h>
@@ -116,14 +116,14 @@ static Class NSManagedObjectClass;
         }
         
         Class klass = [object class];
-        safeKeys = (NSSet *)CFDictionaryGetValue(safeKeysForClass, klass);
+        safeKeys = (NSSet *)CFDictionaryGetValue(safeKeysForClass, (__bridge const void *)(klass));
         if (safeKeys == nil) {
             NSMutableSet *keys = [self propertyGettersForClass:klass];
             if (NSManagedObjectClass && [object isKindOfClass:NSManagedObjectClass]) {
                 [keys unionSet:[NSSet setWithArray:[[[object entity] propertiesByName] allKeys]]];
             }
             safeKeys = keys;
-            CFDictionarySetValue(safeKeysForClass, klass, safeKeys);
+            CFDictionarySetValue(safeKeysForClass, (__bridge const void *)(klass), (__bridge const void *)(safeKeys));
         }
     }
     
@@ -153,7 +153,7 @@ static Class NSManagedObjectClass;
                 getterStart += 2;                               // "customGetter,..."
                 char *getterEnd = strstr(getterStart, ",");     // ",..." or NULL if customGetter is the last attribute
                 size_t getterLength = (getterEnd ? getterEnd : attrs + strlen(attrs)) - getterStart;
-                NSString *customGetter = [[[NSString alloc] initWithBytes:getterStart length:getterLength encoding:NSUTF8StringEncoding] autorelease];
+                NSString *customGetter = [[NSString alloc] initWithBytes:getterStart length:getterLength encoding:NSUTF8StringEncoding];
                 [safeKeys addObject:customGetter];
             }
         }

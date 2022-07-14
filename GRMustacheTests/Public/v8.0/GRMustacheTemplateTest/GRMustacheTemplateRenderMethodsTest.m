@@ -115,7 +115,7 @@
 - (void)testGRMustacheTemplate_renderObject
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
-    GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateRenderMethodsTestSupport *context = [[GRMustacheTemplateRenderMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     NSString *rendering = [template renderObject:context error:NULL];
     XCTAssertEqualObjects(@"foo", [self valueForStringPropertyInRendering:rendering]);
@@ -124,7 +124,7 @@
 - (void)testGRMustacheTemplate_renderObjectsFromArray
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:self.templateString error:NULL];
-    GRMustacheTemplateRenderMethodsTestSupport *context = [[[GRMustacheTemplateRenderMethodsTestSupport alloc] init] autorelease];
+    GRMustacheTemplateRenderMethodsTestSupport *context = [[GRMustacheTemplateRenderMethodsTestSupport alloc] init];
     context.stringProperty = @"foo";
     context.BOOLProperty = YES;
     NSDictionary *extraContext = [NSDictionary dictionaryWithObject:@"bar" forKey:@"stringProperty"];

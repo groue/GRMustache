@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTextNode_private.h"
@@ -33,14 +33,9 @@
 
 + (instancetype)textNodeWithText:(NSString *)text
 {
-    return [[[self alloc] initWithText:text] autorelease];
+    return [[self alloc] initWithText:text];
 }
 
-- (void)dealloc
-{
-    [_text release];
-    [super dealloc];
-}
 
 - (NSString *)text
 {
@@ -68,7 +63,7 @@
     NSAssert(text, @"WTF");
     self = [self init];
     if (self) {
-        _text = [text retain];
+        _text = text;
     }
     return self;
 }

@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "NSObject+GRMustacheKeyValueCoding_private.h"
@@ -29,7 +29,7 @@
 
 @implementation NSObject(GRMustacheKeyValueCoding)
 
-- (BOOL)exceptionSafeHasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)exceptionSafeHasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     @try {
         return [self hasValue:value forMustacheKey:key];
@@ -44,7 +44,7 @@
     }
 }
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     // Try valueForKey: for safe keys onlys
     if (![GRMustacheKeyAccess isSafeMustacheKey:key forObject:self]) {
@@ -60,7 +60,7 @@
 
 @implementation NSDictionary(GRMustacheKeyValueCoding)
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     *value = [self objectForKey:key];
     return (*value != nil);
@@ -70,7 +70,7 @@
 
 @implementation NSArray(GRMustacheKeyValueCoding)
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
         *value = @(self.count);
@@ -90,7 +90,7 @@
 
 @implementation NSOrderedSet(GRMustacheKeyValueCoding)
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
         *value = @(self.count);
@@ -110,7 +110,7 @@
 
 @implementation NSSet(GRMustacheKeyValueCoding)
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"count"]) {
         *value = @(self.count);
@@ -127,7 +127,7 @@
 
 @implementation NSString(GRMustacheKeyValueCoding)
 
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key
+- (BOOL)hasValue:(id __autoreleasing *)value forMustacheKey:(NSString *)key
 {
     if ([key isEqualToString:@"length"]) {
         *value = @(self.length);

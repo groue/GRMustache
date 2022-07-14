@@ -38,14 +38,14 @@
  *
  *     {{< ... }} AST {{/ }}
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *overridingTemplateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheTemplateAST *overridingTemplateAST GRMUSTACHE_API_INTERNAL;
 
 /**
  * The partial template that is inherited:
  *
  *    {{< inherited_partial_template }}...{{/ }}
  */
-@property (nonatomic, retain, readonly) GRMustachePartialNode *parentPartialNode GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustachePartialNode *parentPartialNode GRMUSTACHE_API_INTERNAL;
 
 /**
  * Builds a GRMustachePartialOverrideNode.

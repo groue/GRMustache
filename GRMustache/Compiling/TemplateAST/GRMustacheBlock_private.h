@@ -37,7 +37,7 @@
  *
  *     {{$ ... }} AST {{/ }}
  */
-@property (nonatomic, retain, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheTemplateAST *innerTemplateAST GRMUSTACHE_API_INTERNAL;
 
 /**
  * The name of the block:

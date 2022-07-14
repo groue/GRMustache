@@ -68,7 +68,7 @@
     NSString *result;
     NSError *error;
     GRMustacheTemplateRepository *repository = [GRMustacheTemplateRepository templateRepository];
-    GRMustacheTemplateRepositoryTestDataSource *dataSource = [[[GRMustacheTemplateRepositoryTestDataSource alloc] init] autorelease];
+    GRMustacheTemplateRepositoryTestDataSource *dataSource = [[GRMustacheTemplateRepositoryTestDataSource alloc] init];
     repository.dataSource = dataSource;
     
     XCTAssertEqual(dataSource.templateIDForNameCount, (NSUInteger)0, @"");

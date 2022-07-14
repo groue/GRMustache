@@ -50,7 +50,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{mustacheTagWillRenderObjectBlock}}" error:NULL];
     
     __block id value = nil;
-    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    GRMustacheTestingDelegate *tagDelegate = [[GRMustacheTestingDelegate alloc] init];
     tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
         value = object;
         return object;
@@ -83,7 +83,7 @@
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"{{foo}}" error:NULL];
     
     __block id value = nil;
-    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    GRMustacheTestingDelegate *tagDelegate = [[GRMustacheTestingDelegate alloc] init];
     tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) {
         value = object;
         return object;

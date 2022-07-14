@@ -34,7 +34,7 @@
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     [configuration extendBaseContextWithObject:@{ @"name": @"Arthur" }];
     
-    GRMustacheTemplateRepository *repository = [[[GRMustacheTemplateRepository alloc] init] autorelease];
+    GRMustacheTemplateRepository *repository = [[GRMustacheTemplateRepository alloc] init];
     repository.configuration = configuration;
     GRMustacheTemplate *template = [repository templateFromString:@"{{name}}" error:NULL];
     
@@ -53,7 +53,7 @@
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
     [configuration extendBaseContextWithProtectedObject:@{ @"precious": @"Gold" }];
     
-    GRMustacheTemplateRepository *repository = [[[GRMustacheTemplateRepository alloc] init] autorelease];
+    GRMustacheTemplateRepository *repository = [[GRMustacheTemplateRepository alloc] init];
     repository.configuration = configuration;
     GRMustacheTemplate *template = [repository templateFromString:@"{{precious}}" error:NULL];
     {
@@ -69,11 +69,11 @@
 - (void)testConfigurationExtendBaseContextWithTagDelegate
 {
     GRMustacheConfiguration *configuration = [GRMustacheConfiguration configuration];
-    GRMustacheTestingDelegate *tagDelegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    GRMustacheTestingDelegate *tagDelegate = [[GRMustacheTestingDelegate alloc] init];
     tagDelegate.mustacheTagWillRenderObjectBlock = ^(GRMustacheTag *tag, id object) { return @"delegate"; };
     [configuration extendBaseContextWithTagDelegate:tagDelegate];
     
-    GRMustacheTemplateRepository *repository = [[[GRMustacheTemplateRepository alloc] init] autorelease];
+    GRMustacheTemplateRepository *repository = [[GRMustacheTemplateRepository alloc] init];
     repository.configuration = configuration;
     GRMustacheTemplate *template = [repository templateFromString:@"{{tag}}" error:NULL];
     

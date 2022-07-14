@@ -47,7 +47,6 @@
     @autoreleasepool {
         GRMustacheTemplateRepository *repo = [GRMustacheTemplateRepository templateRepository];
         template = [repo templateFromString:@"" error:NULL];
-        [template retain];
     }
     XCTAssertNotNil(template.templateRepository);
     XCTAssertNoThrow(template.templateRepository.description);

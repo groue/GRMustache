@@ -13,8 +13,10 @@
 		566373B31BD118AB00E1B35D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 566373B11BD118AB00E1B35D /* Main.storyboard */; };
 		566373B51BD118AB00E1B35D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 566373B41BD118AB00E1B35D /* Assets.xcassets */; };
 		566373B81BD118AB00E1B35D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 566373B61BD118AB00E1B35D /* LaunchScreen.storyboard */; };
-		56A8FB461BD11AA40098CE03 /* layout.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8FB451BD11AA40098CE03 /* layout.mustache */; settings = {ASSET_TAGS = (); }; };
-		56A8FB4D1BD11AAD0098CE03 /* template.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8FB4C1BD11AAD0098CE03 /* template.mustache */; settings = {ASSET_TAGS = (); }; };
+		56A8FB461BD11AA40098CE03 /* layout.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8FB451BD11AA40098CE03 /* layout.mustache */; };
+		56A8FB4D1BD11AAD0098CE03 /* template.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 56A8FB4C1BD11AAD0098CE03 /* template.mustache */; };
+		6505B2BD2880125700C9B2F5 /* GRMustache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 566373CF1BD118DC00E1B35D /* GRMustache.framework */; };
+		6505B2BE2880125700C9B2F5 /* GRMustache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 566373CF1BD118DC00E1B35D /* GRMustache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +71,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		6505B2BF2880125700C9B2F5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6505B2BE2880125700C9B2F5 /* GRMustache.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		566373A51BD118AB00E1B35D /* GRMustacheDemoiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GRMustacheDemoiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		566373A91BD118AB00E1B35D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -90,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6505B2BD2880125700C9B2F5 /* GRMustache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +118,7 @@
 			children = (
 				566373A71BD118AB00E1B35D /* GRMustacheDemoiOS */,
 				566373A61BD118AB00E1B35D /* Products */,
+				6505B2B72880125700C9B2F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,6 +178,13 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		6505B2B72880125700C9B2F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -170,6 +195,7 @@
 				566373A11BD118AB00E1B35D /* Sources */,
 				566373A21BD118AB00E1B35D /* Frameworks */,
 				566373A31BD118AB00E1B35D /* Resources */,
+				6505B2BF2880125700C9B2F5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,6 +226,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

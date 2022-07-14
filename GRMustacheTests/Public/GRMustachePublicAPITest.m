@@ -251,8 +251,8 @@ static struct {
     NSDictionary *library = @{
                               // Standard Library
                               @"each": [GRMustache standardEach],
-                              // @"zip": [[[GRMustacheZipFilter alloc] init] autorelease],
-                              @"localize": [[[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil] autorelease],
+                              // @"zip": [[GRMustacheZipFilter alloc] init],
+                              @"localize": [[GRMustacheLocalizer alloc] initWithBundle:nil tableName:nil],
                               @"HTMLEscape": [GRMustache standardHTMLEscape],
                               @"URLEscape": [GRMustache standardURLEscape],
                               @"javascriptEscape": [GRMustache standardJavascriptEscape],

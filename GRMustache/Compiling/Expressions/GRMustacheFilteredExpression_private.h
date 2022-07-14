@@ -27,8 +27,8 @@
  * `<expression>(<expression>)`.
  */
 @interface GRMustacheFilteredExpression : GRMustacheExpression
-@property (nonatomic, retain, readonly) GRMustacheExpression *filterExpression GRMUSTACHE_API_INTERNAL;
-@property (nonatomic, retain, readonly) GRMustacheExpression *argumentExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheExpression *filterExpression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheExpression *argumentExpression GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, getter=isCurried, readonly) BOOL curried GRMUSTACHE_API_INTERNAL;
 
 /**

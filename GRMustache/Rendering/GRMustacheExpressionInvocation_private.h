@@ -44,7 +44,7 @@
 /**
  * TODO
  */
-@property (nonatomic, assign, readonly) id value GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, retain, readonly) id value GRMUSTACHE_API_INTERNAL;
 
 /**
  * TODO

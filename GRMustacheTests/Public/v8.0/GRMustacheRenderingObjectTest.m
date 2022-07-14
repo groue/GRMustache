@@ -55,11 +55,7 @@
 
 @implementation GRMustacheAttributedSectionTagHelper
 @synthesize attribute=_attribute;
-- (void)dealloc
-{
-    self.attribute = nil;
-    [super dealloc];
-}
+
 - (NSString *)renderForMustacheTag:(GRMustacheTag *)tag context:(GRMustacheContext *)context HTMLSafe:(BOOL *)HTMLSafe error:(NSError **)error
 {
     GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"attribute:{{attribute}}" error:NULL];
@@ -298,14 +294,12 @@
     {
         __block NSString *lastInnerTemplateString = nil;
         id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-            [lastInnerTemplateString release];
-            lastInnerTemplateString = [tag.innerTemplateString retain];
+            lastInnerTemplateString = tag.innerTemplateString;
             return nil;
         }];
         NSDictionary *context = @{ @"object": object };
         [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
         XCTAssertEqualObjects(lastInnerTemplateString, @"{{subject}}", @"");
-        [lastInnerTemplateString release];
     }
 }
 
@@ -313,14 +307,12 @@
 {
     __block NSString *lastRenderedContent = nil;
     id object = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        [lastRenderedContent release];
-        lastRenderedContent = [[tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error] retain];
+        lastRenderedContent = [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         return nil;
     }];
     NSDictionary *context = @{ @"object": object, @"subject": @"---" };
     [[GRMustacheTemplate templateFromString:@"{{#object}}{{subject}}==={{subject}}{{/object}}" error:nil] renderObject:context error:NULL];
     XCTAssertEqualObjects(lastRenderedContent, @"---===---", @"");
-    [lastRenderedContent release];
 }
 
 - (void)testRenderingObjectCanRenderCurrentContextInDistinctTemplate
@@ -374,13 +366,13 @@
 - (void)testRenderingObjectDoesNotAutomaticallyEntersCurrentContext
 {
     {
-        GRMustacheAttributedSectionTagHelper *object = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
+        GRMustacheAttributedSectionTagHelper *object = [[GRMustacheAttributedSectionTagHelper alloc] init];
         object.attribute = @"---";
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
         XCTAssertEqualObjects(result, @"attribute:", @"");
     }
     {
-        GRMustacheAttributedSectionTagHelper *object = [[[GRMustacheAttributedSectionTagHelper alloc] init] autorelease];
+        GRMustacheAttributedSectionTagHelper *object = [[GRMustacheAttributedSectionTagHelper alloc] init];
         object.attribute = @"---";
         NSString *result = [[GRMustacheTemplate templateFromString:@"{{#object}}{{/object}}" error:NULL] renderObject:@{ @"object": object } error:NULL];
         XCTAssertEqualObjects(result, @"attribute:", @"");
@@ -414,7 +406,7 @@
 {
     {
         __block NSUInteger tagWillRenderCount = 0;
-        GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+        GRMustacheTestingDelegate *delegate = [[GRMustacheTestingDelegate alloc] init];
         delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             ++tagWillRenderCount;
             return object;
@@ -432,7 +424,7 @@
     }
     {
         __block NSUInteger tagWillRenderCount = 0;
-        GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+        GRMustacheTestingDelegate *delegate = [[GRMustacheTestingDelegate alloc] init];
         delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             ++tagWillRenderCount;
             return object;
@@ -455,7 +447,7 @@
         return [tag renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
     }];
     
-    GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+    GRMustacheTestingDelegate *delegate = [[GRMustacheTestingDelegate alloc] init];
     delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
         if (tag.type != GRMustacheTagTypeSection) {
             return @"delegate";
@@ -479,7 +471,7 @@
             return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         }];
         
-        GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+        GRMustacheTestingDelegate *delegate = [[GRMustacheTestingDelegate alloc] init];
         delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             if (tag.type != GRMustacheTagTypeSection) {
                 return @"delegate";
@@ -500,7 +492,7 @@
             return [template renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
         }];
         
-        GRMustacheTestingDelegate *delegate = [[[GRMustacheTestingDelegate alloc] init] autorelease];
+        GRMustacheTestingDelegate *delegate = [[GRMustacheTestingDelegate alloc] init];
         delegate.mustacheTagWillRenderObjectBlock = ^id(GRMustacheTag *tag, id object) {
             if (tag.type != GRMustacheTagTypeSection) {
                 return @"delegate";
@@ -800,7 +792,7 @@
 
 - (void)testImplicitTrueRenderingObjects
 {
-    id object = [[[GRMustacheImplicitTrueRenderingObject alloc] init] autorelease];
+    id object = [[GRMustacheImplicitTrueRenderingObject alloc] init];
     
     {
         NSString *rendering = [GRMustacheTemplate renderObject:@{ @"object": object }

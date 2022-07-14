@@ -31,5 +31,5 @@
 /**
  * TODO
  */
-- (BOOL)hasValue:(id *)value forMustacheKey:(NSString *)key;
+- (BOOL)hasValue:(id __autoreleasing*)value forMustacheKey:(NSString *)key;
 @end

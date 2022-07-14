@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheTemplateGenerator_private.h"
@@ -47,16 +47,10 @@
     NSMutableString *_templateString;
 }
 
-- (void)dealloc
-{
-    [_templateRepository release];
-    [_expressionGenerator release];
-    [super dealloc];
-}
 
 + (instancetype)templateGeneratorWithTemplateRepository:(GRMustacheTemplateRepository *)templateRepository
 {
-    return [[[self alloc] initWithTemplateRepository:templateRepository] autorelease];
+    return [[self alloc] initWithTemplateRepository:templateRepository];
 }
 
 - (NSString *)stringWithTemplate:(GRMustacheTemplate *)template
@@ -165,7 +159,7 @@
 {
     self = [super init];
     if (self) {
-        _templateRepository = [templateRepository retain];
+        _templateRepository = templateRepository;
         _expressionGenerator = [[GRMustacheExpressionGenerator alloc] init];
     }
     return self;

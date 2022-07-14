@@ -42,7 +42,6 @@
 
 - (void)tearDown
 {
-    [parser release];
 }
 
 - (void)testParserParsesEscapedVariableTokenWithSingleKey

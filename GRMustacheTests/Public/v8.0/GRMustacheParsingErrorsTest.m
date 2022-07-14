@@ -64,27 +64,6 @@
     XCTAssertNotNil(error.domain);
 }
 
-- (void)testUninitializedErrorDoesNotCrash
-{
-    NSError *error = (NSError *)0xdeadbeef;
-    GRMustacheTemplate *template = [GRMustacheTemplate templateFromString:@"" error:&error];
-    XCTAssertNotNil(template, @"");
-    
-    error = (NSError *)0xdeadbeef;
-    XCTAssertNotNil([template renderObject:@"" error:&error], @"");
-    
-    error = (NSError *)0xdeadbeef;
-    id fail = [GRMustacheRendering renderingObjectWithBlock:^NSString *(GRMustacheTag *tag, GRMustacheContext *context, BOOL *HTMLSafe, NSError **error) {
-        return [[GRMustacheTemplate templateFromString:@"{{> missing }}" error:error] renderContentWithContext:context HTMLSafe:HTMLSafe error:error];
-    }];
-    XCTAssertNil([[GRMustacheTemplate templateFromString:@"{{.}}" error:NULL] renderObject:fail error:&error], @"");
-    XCTAssertNotNil(error.domain);
-    
-    error = (NSError *)0xdeadbeef;
-    XCTAssertNil([GRMustacheTemplate templateFromString:@"{{" error:&error], @"");
-    XCTAssertNotNil(error.domain);
-}
-
 - (void)testIdentifiersCanNotStartWithMustacheTagCharacters
 {
     NSArray *mustacheTagCharacters = @[@"{", @"}", @"<", @">", @"&", @"#", @"^", @"$", @"/"];

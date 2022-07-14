@@ -27,7 +27,7 @@
 @class GRMustacheExpression;
 
 @interface GRMustacheVariableTag : GRMustacheTag
-@property (nonatomic, retain, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
+@property (nonatomic, strong, readonly) GRMustacheExpression *expression GRMUSTACHE_API_INTERNAL;
 @property (nonatomic, readonly) BOOL escapesHTML GRMUSTACHE_API_INTERNAL;
 
 /**

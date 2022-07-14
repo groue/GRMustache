@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import <objc/runtime.h>
@@ -32,15 +32,9 @@
 
 + (instancetype)expressionWithFilterExpression:(GRMustacheExpression *)filterExpression argumentExpression:(GRMustacheExpression *)argumentExpression curried:(BOOL)curried
 {
-    return [[[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curried:curried] autorelease];
+    return [[self alloc] initWithFilterExpression:filterExpression argumentExpression:argumentExpression curried:curried];
 }
 
-- (void)dealloc
-{
-    [_filterExpression release];
-    [_argumentExpression release];
-    [super dealloc];
-}
 
 
 #pragma mark - GRMustacheExpression
@@ -80,8 +74,8 @@
 {
     self = [super init];
     if (self) {
-        _filterExpression = [filterExpression retain];
-        _argumentExpression = [argumentExpression retain];
+        _filterExpression = filterExpression;
+        _argumentExpression = argumentExpression;
         _curried = curried;
     }
     return self;

@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
 /**
  * @see range
  */
-@property (nonatomic, readonly) NSString *templateSubstring GRMUSTACHE_API_INTERNAL;
+@property (weak, nonatomic, readonly) NSString *templateSubstring GRMUSTACHE_API_INTERNAL;
 
 /**
  * The range of the inner content of the tag.
@@ -164,7 +164,7 @@ typedef NS_ENUM(NSInteger, GRMustacheTokenType) {
 /**
  * @see tagInnerRange
  */
-@property (nonatomic, readonly) NSString *tagInnerContent GRMUSTACHE_API_INTERNAL;
+@property (weak, nonatomic, readonly) NSString *tagInnerContent GRMUSTACHE_API_INTERNAL;
 
 /**
  * The opening delimiter

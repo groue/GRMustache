@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if __has_feature(objc_arc)
-#error Manual Reference Counting required: use -fno-objc-arc.
+#if !__has_feature(objc_arc)
+#error Automatic Reference Counting required: use -fobjc-arc.
 #endif
 
 #import "GRMustacheFilter_private.h"
@@ -57,12 +57,12 @@
 
 + (id<GRMustacheFilter>)filterWithBlock:(id(^)(id value))block
 {
-    return [[[GRMustacheBlockFilter alloc] initWithBlock:block] autorelease];
+    return [[GRMustacheBlockFilter alloc] initWithBlock:block];
 }
 
 + (id<GRMustacheFilter>)variadicFilterWithBlock:(id(^)(NSArray *arguments))block
 {
-    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:block arguments:[NSArray array]] autorelease];
+    return [[GRMustacheBlockVariadicFilter alloc] initWithBlock:block arguments:[NSArray array]];
 }
 
 - (id)transformedValue:(id)object
@@ -94,11 +94,6 @@
 }
 
 
-- (void)dealloc
-{
-    [_block release];
-    [super dealloc];
-}
 
 #pragma mark <GRMustacheFilter>
 
@@ -127,17 +122,11 @@
     self = [self init];
     if (self) {
         _block = [block copy];
-        _arguments = [arguments retain];
+        _arguments = arguments;
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [_block release];
-    [_arguments release];
-    [super dealloc];
-}
 
 
 #pragma mark <GRMustacheFilter>
@@ -151,7 +140,7 @@
 - (id<GRMustacheFilter>)filterByCurryingArgument:(id)object
 {
     NSArray *arguments = [_arguments arrayByAddingObject:(object ?: [NSNull null])];
-    return [[[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments] autorelease];
+    return [[GRMustacheBlockVariadicFilter alloc] initWithBlock:_block arguments:arguments];
 }
 
 @end
